@@ -1,7 +1,0 @@
-
-       01 x91-res		   pic 99 comp-x.
-       01 x91-fun                  pic 99 comp-x value 35.
-       01 x91-param.
-
-
-	     CALL X"91" USING X91-RES X91-FUN X91-FILE-NAME.
