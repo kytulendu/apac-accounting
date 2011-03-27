@@ -1,0 +1,34 @@
+      ******************************************************************
+      * 							       *
+      *        D E B T O R   M O N T H L Y   S T A T E M E N T S       *
+      * 							       *
+      ******************************************************************
+       OPEN-PRINTER    SECTION.
+       OPEN-PRINT-FILE.
+      *
+      *    ****   O P E N   P R I N T E R   F I L E
+      *
+	     MOVE "O"		 TO WS-COMMAND.
+	     MOVE "S"		 TO WS-PRINTER.
+	     MOVE ZERO		 TO WS-ADVANCE
+				    WS-REPORT
+				    WS-SCREEN.
+	     MOVE 7		 TO WS-REPORT.
+
+       CALL-PRINTUTL.
+      *
+      *    ****   C A L L   T H E   P R I N T / S P O O L   U T I L I T Y
+      *
+	     CALL "UTP\PRINTUTL" USING WS-PARID
+				       LS-USER-ID
+				       WS-SCREEN-PRINT
+				       W02-PRINTER-DETAILS
+		  ON EXCEPTION
+		      MOVE "Print/Spool Utility problem"
+				 TO WS-ERR-STRING
+003260		      PERFORM ERROR-MESSAGE
+		      MOVE 8	 TO WS-ERROR
+	     END-CALL.
+
+       OPEN-PRINTER-EXIT.
+	     EXIT.

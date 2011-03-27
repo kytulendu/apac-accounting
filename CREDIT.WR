@@ -1,0 +1,34 @@
+
+       REWRITE-CREDIT.
+             REWRITE P-REC.
+           IF WS-STAT1 NOT = "0"
+               MOVE 3            TO WS-F-ERROR
+               PERFORM WRITE-ERROR.
+             GO TO WRITE-CREDIT-EXIT.
+
+       REWRITE-CREDIT-UNLOCK.
+             REWRITE P-REC.
+           IF WS-STAT1 NOT = "0"
+               MOVE 3            TO WS-F-ERROR
+               PERFORM WRITE-ERROR.
+             UNLOCK CREDIT.
+             GO TO WRITE-CREDIT-EXIT.
+
+       DELETE-CREDIT-REC.
+             DELETE CREDIT.
+           IF WS-STAT1 NOT = "0"
+               MOVE 3            TO WS-F-ERROR
+               PERFORM WRITE-ERROR.
+             UNLOCK CREDIT.
+             GO TO WRITE-CREDIT-EXIT.
+
+       WRITE-CREDIT.
+             WRITE P-REC.
+           IF WS-STAT1 NOT = "0"
+               MOVE 3            TO WS-F-ERROR
+               PERFORM WRITE-ERROR.
+	     CLOSE CREDIT.
+	     OPEN I-O CREDIT.
+
+       WRITE-CREDIT-EXIT.
+             EXIT.
