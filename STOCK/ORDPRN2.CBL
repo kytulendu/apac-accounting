@@ -13,7 +13,7 @@
       *                                                                *
       *     O R D E R ' S   P R I N T   P R O G R A M                  *
       *                                                                *
-      *     VERSION 8.14.02 - January 2010			       *
+      *     VERSION 8.15.00 - April 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   MARCH 1995.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1995 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1995 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1433,7 +1433,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE STK-CODE	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE

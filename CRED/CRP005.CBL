@@ -1,4 +1,4 @@
-      $SET LINKCOUNT"320"
+      $SET LINKCOUNT"384"
       ******************************************************************
       *                                                                *
       *    ******   *******   *******	  ****	    ****    ********   *
@@ -13,7 +13,14 @@
       *                                                                *
       *       C R E D I T O R	M E M O / R E M A R K S	  M A I N T    *
       *                                                                *
-      *     VERSION 8.13.07 - January 2008			       *
+      *     VERSION 8.15.01 - August 2011			       *
+      * 							       *
+      ******************************************************************
+      * 							       *
+      * August 2011 - Amended MEMO file to have 6 character Account    *
+      * 	      Reference code.Increased sequence to 4 digits.   *
+      * 	      Included Recovery routines and file locking for  *
+      * 	      this program.				       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -68,6 +75,10 @@
 
 000120 COPY PARAM.SL.
 
+000240 COPY RECOVER.SL.
+
+       COPY SHARED.SL.
+
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
@@ -82,6 +93,10 @@
        COPY MEMCRD.FDE.
 
 000290 COPY PARAM.FDE.
+
+000390 COPY RECOVER.GFD.
+
+       COPY SHARED.FDE.
 
       /
       *         **         **    ******    *******    **    **
@@ -115,6 +130,8 @@
 001670 77  WS-NETKEY       PIC  9(06)    COMP-5.
 001660 77  WS-PARKEY       PIC  9(06)    COMP-5.
 001710 77  WS-RECKEY       PIC  9(06)    COMP-5.
+000480 77  WS-RECOVER	   PIC	9(04)	 COMP-5.
+000820 77  WS-SHARED	   PIC	9(04)	 COMP-5 VALUE 1.
 001730 77  WS-TRANS	   PIC	9(04)	 COMP-5 VALUE 1.
 001730 77  WS-FIRST	   PIC	9(04)	 COMP-5 VALUE 0.
 001730 77  WS-LAST	   PIC	9(04)	 COMP-5 VALUE 0.
@@ -228,6 +245,10 @@
 000140 COPY MEMCRD.ID.
 
        COPY PARAM.ID.
+
+       COPY RECOVER.ID.
+
+       COPY SHARED.ID.
 
 002500 01  W10-SPARES.
 002510	   03  W10-DATE	    PIC X(08).
@@ -528,6 +549,9 @@
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
 008230 AA000		       SECTION.
 008240 AA00.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      * 	       Check the security level of the USER.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 003240	   IF LS0-CRLEV < 2
 	       MOVE "Not Authorised"
 				 TO WS-ERR-STRING
@@ -570,6 +594,8 @@
 
        COPY PARAM.RD.
 
+       COPY SHARED.RD.
+
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
@@ -589,6 +615,214 @@
 
        COPY APAC.HLP.
 
+      /
+      *       ****   *****   ***    ***   *   *  *****	****   *   *
+      *       *   *  *	    *	*  *   *  *   *  *	*   *  *   *
+      *       ****   ***    *	   *   *  *   *  ***	****	* *
+      *       *   *  *	    *	*  *   *   * *	 *	*   *	 *
+      *       *   *  *****   ***    ***     *	 *****	*   *	 *
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      * 	 THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      *        ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *        ณ ORIGINAL ACTION (REC-TYPE)  ฤฤ  RECOVERY PROCESS ณ
+      *        ณ 0 = RECORD CHANGED	     ฤฤ     (REWRITE)	   ณ
+      *        ณ 1 = RECORD WAS ADDED	     ฤฤ     (DELETE)	   ณ
+      *        ณ 2 = RECORD WAS DELETED      ฤฤ     (WRITE)	   ณ
+      *        ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+007940 AY000	       SECTION.
+008000 AY06.
+008010	     MOVE 06		 TO REC-FILE.
+008020       MOVE ZERO           TO REC-KEY.
+             MOVE WS-ACTION      TO REC-TYPE
+           IF WS-ACTION = 0 OR 2
+	       PERFORM READ-CRDMEM-LOCK	THRU READ-CRDMEM-EXIT.
+008030	     MOVE CME-RECORD1	 TO REC-CRDMEM.
+008040       GO TO AY50.
+       AY39.
+             MOVE 39             TO REC-FILE.
+             MOVE WS-NETKEY      TO REC-KEY.
+	     MOVE ZERO		 TO REC-TYPE
+	     MOVE NET-RECORD	 TO REC-NETWORK.
+             GO TO AY50.
+008200 AY40.
+008210	     MOVE 99		 TO REC-FILE.
+008220	     MOVE ZERO		 TO REC-KEY.
+008230	     MOVE SPACES	 TO REC-DETAIL.
+008240       PERFORM AY50.
+008250	     ADD 1		 TO WS-TRANS.
+008260     IF WS-RECOVER > 95
+008270         CLOSE RECOVER
+008280         OPEN OUTPUT RECOVER
+008290         CLOSE RECOVER
+008300         OPEN I-O RECOVER
+008310	       MOVE ZERO	 TO WS-RECOVER.
+008320       GO TO AY59.
+008330 AY50.
+008340	     ADD 1		 TO WS-RECOVER.
+008350	     MOVE WS-RECOVER	 TO WS-RECKEY.
+008360	     MOVE WS-TRANS	 TO REC-TRAN.
+008370       WRITE REC-RECORD.
+008380     IF WS-STATUS NOT = "00"
+008390         DISPLAY "Write error Recovery file - Status " AT 2212
+008400		       WITH FOREGROUND-COLOR 6 HIGHLIGHT
+008410	       DISPLAY WS-STATUS AT 2247
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+008420         STOP RUN.
+008450 AY59.
+008460       EXIT.
+      *
+      *    ****    Start processing transaction
+      *
+012470 AY60.
+012690	     MOVE 1		 TO WS-COUNT.
+012690	     MOVE 5		 TO WS-SHARED.
+012700	     PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
+      *
+      *    ****    Read PARAM record 4 - Lock record and start recovery
+      *            file procedure.
+      *
+012500	     MOVE 4		 TO WS-PARKEY.
+012510       PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+012520     IF PAR-USERS < 24
+012530         MOVE 1            TO WS-SUB
+	       MOVE ZERO	 TO WS-WAIT
+012540         GO TO AY62.
+      *
+      *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
+      *
+012550	     DISPLAY "WAITING" AT 2551
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 4 HIGHLIGHT.
+012560	     COMMIT.
+	     ACCEPT WS-STIME FROM TIME.
+	     MOVE 400		 TO WS-WAIT.
+012580	     PERFORM LOCK-REC-LOOP.
+012590	     DISPLAY SPACE AT 2551
+		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+012600       GO TO AY60.
+
+012610 AY61.
+012620	     MOVE "CR"		 TO PAR-PROG(WS-USUB).
+012630	     MOVE LS-USER	 TO PAR-USR(WS-USUB).
+012640       PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
+      *
+      *    ****    Read the CREDITOR control record in the NETWORK file
+      *            and lock it. Log details to the RECOVERY file.
+      *
+012010       MOVE 2              TO WS-NETKEY.
+012680	     PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
+012690       PERFORM AY39 THRU AY59.
+012740	     GO TO AY999.
+      *
+      *    ****   A R E   A N Y   U P D A T E S   I N	P R O G R E S S
+      *
+012750 AY62.
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES OR
+		  PAR-USR(WS-SUB) = SPACES)
+      *
+      *    ****   A R E   D E B T O R	O R   S T O C K   F I L E S
+      * 	  B E I N G   U P D A T E D
+      *
+	       IF NOT(PAR-PROG(WS-SUB) = SPACES)
+012760		   IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
+      *
+      *    ****   Y E S   -   S E T   W A I T	P E R I O D
+      *
+		       GO TO AY62-WAIT
+		   ELSE
+		       ADD 1	 TO WS-SUB
+		       GO TO AY62
+		   END-IF
+	       ELSE
+      *
+      *    ****   I S	T H I S   P R O G R A M   I N	T H E  Q
+      *
+	       IF PAR-USR(WS-SUB) = LS-USER
+      *
+      *    ****   I S	I T   N E X T	I N   L I N E	T O   P R O C E S S
+      *
+		   IF WS-WAIT = ZERO
+		       GO TO AY63
+		   ELSE
+		       GO TO AY62-WAIT
+		   END-IF
+	       ELSE
+		   GO TO AY62-WAIT
+	       END-IF
+	   END-IF.
+	     MOVE LS-USER	 TO PAR-USR(WS-SUB).
+	     MOVE WS-SUB	 TO PAR-USERS.
+	     PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+	     GO TO AY62-CHECK.
+      *
+      *    ****   S E T   W A I T   P E R I O D
+      *
+       AY62-WAIT.
+	     MOVE 300		 TO WS-WAIT.
+	   IF NOT(PAR-USR(WS-SUB) = LS-USER)
+	       IF WS-SUB < 24
+		   ADD 1	 TO WS-SUB
+		   GO TO AY62.
+
+       AY62-CHECK.
+	   IF WS-WAIT > ZERO
+	       COMMIT
+	       DISPLAY "Waiting" AT 2572
+			WITH BACKGROUND-COLOR 3
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
+	       ACCEPT WS-STIME FROM TIME
+	       PERFORM LOCK-REC-LOOP
+	       DISPLAY "Waiting" AT 2572
+			WITH BACKGROUND-COLOR 3
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
+	       GO TO AY60.
+012880	     DISPLAY SPACE AT 2572
+		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+
+012900 AY63.
+012920	     MOVE WS-SUB	 TO WS-USUB.
+012940	     GO TO AY61.
+
+012970 AY70.
+013030	     MOVE 4		 TO WS-PARKEY.
+013040       PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
+      *
+      *    ****    Write links back and unlock PARAM record 4 and
+      * 	   NETWORK record 2.
+      *
+013010	     PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
+013020	     PERFORM AY40 THRU AY59.
+	     MOVE 1		 TO WS-USUB.
+
+       AY72.
+	   IF NOT(PAR-USR(WS-USUB) = LS-USER)
+	       ADD 1		 TO WS-USUB
+	       GO TO AY72.
+
+       AY75.
+013050	     MOVE SPACES	 TO PAR-PROG(WS-USUB)
+013060				    PAR-USR(WS-USUB).
+	   IF WS-USUB < 24
+	       ADD 1 WS-USUB	 GIVING WS-SUB
+	   ELSE
+	       GO TO AY80.
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES)
+	       MOVE PAR-PROG(WS-SUB)
+				 TO PAR-PROG(WS-USUB)
+	       MOVE PAR-USR(WS-SUB)
+				 TO PAR-USR(WS-USUB)
+	       ADD 1		 TO WS-USUB
+	       GO TO AY75.
+
+       AY80.
+013070	     SUBTRACT 1 FROM WS-USUB
+				 GIVING PAR-USERS.
+013080	     PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+013090	     COMMIT.
+
+011860 AY999.
+011870       EXIT.
       *
       *    ****    Read Creditor record - using account number.
       *
@@ -612,19 +846,22 @@
 037060 CJ00.
 020320       DISPLAY CLR-SCREEN.
 020330       DISPLAY "MEMO/REMARKS MAINTENANCE" AT 0229
-                      WITH FOREGROUND-COLOR 15.
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
 013080	     DISPLAY S05.
 013000       MOVE SPACES         TO W15-ACNO.
 
 020360 CJ02.
 	     DISPLAY "F1" AT 2501
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Help,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F2" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 		     " to do Creditor Lookup "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "Esc" WITH BACKGROUND-COLOR 3
+				FOREGROUND-COLOR 6 HIGHLIGHT
 		     " to exit"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 013010       ACCEPT S06A.
@@ -1737,7 +1974,7 @@
 	     PERFORM REWRITE-MEMCRD THRU WRITE-MEMCRD-EXIT.
 	   IF WS-F-ERROR = 62
 	       MOVE ZERO	 TO WS-F-ERROR
-	       IF NOT (MEM-DATA = SPACES)
+	       IF NOT(MEM-DATA = SPACES)
 		   PERFORM WRITE-MEMCRD THRU WRITE-MEMCRD-EXIT.
 	   IF WS-S1 < 12
 	       ADD 1		 TO WS-S1 W205-S1
@@ -1862,10 +2099,17 @@
 	     MOVE 1		 TO W205-S1.
 	     MOVE P-NUMBER	 TO CME-AC.
       *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      * 	    S T A R T	R E C O V E R Y	  L O G G I N G
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+010830	     PERFORM AY60 THRU AY999.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
       * 	      U P D A T E   T H E   M E M O   F I L E
       *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
        CN10.
 	     MOVE W205-S1	 TO CME-SEQ.
+	   IF CME-KEY = W200-KEY(WS-S6)
+	       MOVE 0		 TO WS-ACTION
+	       PERFORM AY06 THRU AY59.
 	     MOVE W205-MEM(W205-S1)
 				 TO CME-DATA.
       *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
@@ -1884,6 +2128,8 @@
       *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
        CN20.
 	     PERFORM WRITE-CRDMEM THRU WRITE-CRDMEM-EXIT.
+	     MOVE 1		 TO WS-ACTION.
+	     PERFORM AY06 THRU AY59.
 	     GO TO CN30.
       *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
       *        U P D A T E   E X I S T I N G   M E M O	 R E C O R D
@@ -1908,14 +2154,18 @@
       * 	       F I N D	 R E D U N D A N T   K E Y S
       *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
        CN35.
-	   IF NOT (W200-KEY(WS-S6) = SPACES)
+	   IF NOT(W200-KEY(WS-S6) = SPACES)
 	       MOVE W200-KEY(WS-S6)
 				 TO CME-KEY
-	       PERFORM READ-CRDMEM THRU READ-CRDMEM-EXIT
+	       MOVE 2		 TO WS-ACTION
+	       PERFORM AY06 THRU AY59
 	       PERFORM DELETE-CRDMEM-REC THRU WRITE-CRDMEM-EXIT.
 	   IF WS-S6 < WS-S9
 	       ADD 1		 TO WS-S6
 	       GO TO CN35.
+
+       CN900.
+	     PERFORM AY70 THRU AY999.
 
        CN999.
 	     EXIT.
@@ -1979,44 +2229,10 @@
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
       *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
-      *    ณ	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ณ
+      *    ณ  Setup various keys and the mouse for use with menus and  ณ
+      *    ณ  other required user interface functions and procedures.  ณ
       *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
-      *    ณ		       ESC, F1 to F10 keys		       ณ
-      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
-      *    ณ		    PAGE-UP and PAGE-DOWN keys		       ณ
-      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
-      *    ณ		   A C T I V A T E   M O U S E		       ณ
-      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
-      *    ณ	       Set MOUSE key to act as FUNCTION key	       ณ
-      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+	     COPY FUNCTION.PRO.
       *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
       *    ณ	    Setup the file ID's including path names           ณ
       *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
@@ -2057,42 +2273,70 @@
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-CREDIT.
       *    *************************************************************
+      *    ****    C R E D I T O R   M E M O   W O R K	 F I L E    ****
+      *    *************************************************************
+	     MOVE "MEMCRD"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     INSPECT AFID-PATH REPLACING FIRST "XXX"
+			       BY LS-USER.
+	     MOVE AFID-PATH	 TO W02-MEMCRD.
+      *    *************************************************************
       *    **** 	    C O N T R O L   F I L E		    ****
       *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
+	     MOVE "RECOVER"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     INSPECT AFID-PATH REPLACING FIRST "XXX"
+			       BY LS-USER.
+	     MOVE AFID-PATH	 TO W02-RECOVER.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
+	     MOVE "SHARED"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     MOVE AFID-PATH	 TO W02-SHARED.
+019930	     OPEN OUTPUT RECOVER.
+019940       CLOSE RECOVER.
+019950       OPEN I-O RECOVER.
 042720	     MOVE 1		 TO WS-PARKEY.
 042730       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
 042750       MOVE PAR-DMY        TO W12-TODAY.
 042760       MOVE PAR-YMD        TO W12-T-YMD.
 044780	     GO TO ZA999-EXIT.
+
        ZA55.
 041220       MOVE 1              TO WS-S1.
 021870	     MOVE SPACES	 TO WS-MD-LNE.
+
 041240 ZA60.
-041250	     MOVE WS-G1 	 TO WS-TCR  (WS-S1) WS-BCR  (WS-S1).
-             MOVE WS-G8          TO WS-TCH  (WS-S1) WS-BCH  (WS-S1).
-041260     IF WS-S1 < 80
-041270         ADD 1             TO WS-S1
-041280         GO TO ZA60.
-             MOVE WS-G9          TO WS-TCH  (1).
-             MOVE WS-G10         TO WS-TCH  (80).
-             MOVE WS-G11         TO WS-BCH  (1).
-             MOVE WS-G12         TO WS-BCH  (80).
-021970	     MOVE WS-G4 	 TO WS-BCR  (8)  WS-BCR (50)
-021980                              WS-BCR  (66).
-021950	     MOVE WS-G3 	 TO WS-MCR  (8)  WS-MCR (50)
-021960                              WS-MCR  (66) WS-MCR (1)
-				    WS-MCR  (80).
-051230	     MOVE WS-G14	 TO WS-TCR  (1)  WS-BCR (1).
-051260       MOVE WS-G13         TO WS-TCR (80)  WS-BCR (80).
+041250	     MOVE WS-G1 	 TO WS-TCR(WS-S1) WS-BCR(WS-S1).
+	     MOVE WS-G8 	 TO WS-TCH(WS-S1) WS-BCH(WS-S1).
+041260	   IF WS-S1 < 80
+041270	       ADD 1		 TO WS-S1
+041280	       GO TO ZA60.
+	     MOVE WS-G9 	 TO WS-TCH(1).
+	     MOVE WS-G10	 TO WS-TCH(80).
+	     MOVE WS-G11	 TO WS-BCH(1).
+	     MOVE WS-G12	 TO WS-BCH(80).
+021970	     MOVE WS-G4 	 TO WS-BCR(8)  WS-BCR(50)
+021980				    WS-BCR(66).
+021950	     MOVE WS-G3 	 TO WS-MCR(8)  WS-MCR(50)
+021960				    WS-MCR(66) WS-MCR(1)
+				    WS-MCR(80).
+051230	     MOVE WS-G14	 TO WS-TCR(1)  WS-BCR(1).
+051260	     MOVE WS-G13	 TO WS-TCR(80) WS-BCR(80).
 	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
 	   IF LS-USER = LS-SYS-ID
 	       MOVE "Supervisorฤ"  TO WS-WRKHD
 	   ELSE
 	       MOVE "Workstation"  TO WS-WRKHD
 	       MOVE LS-USER	   TO WS-WRKST.
+
 042880 ZA999-EXIT.
 042890       EXIT.
       /
@@ -2100,22 +2344,7 @@
       *   
 042900 ZB000-ERROR	     SECTION 8.
       
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-       I-O-ERROR-EXIT.
-             EXIT.
+       COPY ERRORS.PRO.
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
@@ -2130,42 +2359,23 @@
 041850     IF WS-F-ERROR = 15
 041860	       MOVE WS-PARID	 TO WS-FILE
 041870	       MOVE WS-PARKEY	 TO WS-KEY
+041840	   ELSE
+041850     IF WS-F-ERROR = 18
+041860	       MOVE W02-RECOVER  TO WS-FILE
+041870	       MOVE WS-RECKEY	 TO WS-KEY
 041840     ELSE
 041850	   IF WS-F-ERROR = 24
 041860	       MOVE W02-CRDMEM	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE CME-KEY	 TO WS-KEYX
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE
 041850	   IF WS-F-ERROR = 62
 041860	       MOVE W02-MEMCRD	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE MEM-KEY	 TO WS-KEYX.
-041880     IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

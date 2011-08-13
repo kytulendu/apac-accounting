@@ -15,7 +15,7 @@
       *                                                                *
       *    D E B T O R	 S A L E S   R E S T R I C T I O N S  I N I T  *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -23,7 +23,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   FEBRUARY	2007.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2007 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2007 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -531,22 +531,8 @@
 042750       MOVE PAR-DMY        TO W12-TODAY.
 042760       MOVE PAR-YMD        TO W12-T-YMD.
 044780	     GO TO ZA999-EXIT.
-      *    *************************************************************
-      *    ****   F I L E   L I M I T	E X C E E D E D
-      * 	  (Config.sys Dos/Win/Windows 95/98/NT/2000)
-      * 	  (Config.nt Windows XP)
-      * 	  (System.ini Windows.me)
-      *    *************************************************************
-039780 ZA49.
-039790	     DISPLAY "Too many files OPEN" AT 0708
-039800                WITH FOREGROUND-COLOR 14.
-039810	     DISPLAY "Check the FILES option in CONFIG.SYS (Dos,Windows
-      -		     "3/95/98/NT/2000)" AT 0908.
-	     DISPLAY "CONFIG.NT  (Windows XP)" AT 1034.
-	     DISPLAY "SYSTEM.INI (Windows ME)" AT 1134.
-039820	     DISPLAY "Press any key to continue" AT 1308.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-055330	     GO TO ZA205.
+
+       COPY ZA49.PRO.
 
 039850 ZA50.
 055350	   IF WS-F-ERROR = 6
@@ -594,13 +580,9 @@
 	       MOVE LS-USER	   TO WS-WRKST.
 
 055970 ZA200.
-055980       DISPLAY "Files locked - Try later" AT 2312
-055990                WITH FOREGROUND-COLOR 14
-056000               " " WS-STATUS WITH FOREGROUND-COLOR 15.
-056010       DISPLAY "Press any key" AT 2512 
-056020		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-056030	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
 056040 ZA205.
 056050       EXIT PROGRAM.
 
@@ -610,23 +592,8 @@
       *    ****    I / O   E R R O R   M E S S A G E S
       *   
 042900 ZB000-ERROR	     SECTION 8.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-       I-O-ERROR-EXIT.
-             EXIT.
+
+       COPY ERRORS.PRO.
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
@@ -636,32 +603,5 @@
 041850     IF WS-F-ERROR = 15
 041860	       MOVE WS-PARID	 TO WS-FILE
 041870	       MOVE WS-PARKEY	 TO WS-KEY.
-041880	   IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

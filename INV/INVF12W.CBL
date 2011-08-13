@@ -13,7 +13,7 @@
       *                                                                *
       * I N V O I C I N G   P R O G R A M   -	( C O N S O L - U S B) *
       * 							       *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -24,6 +24,9 @@
       * 		  the system to access the bitmap file that is *
       * 		  used for the invoice and is accessed using   *
       * 		  "INVBMP" as the key.			       *
+      * 							       *
+      *  Aug 2011	- Fix problem with remarks on an Invoice re-   *
+      * 		  print. (Columns were messed up.)	       *
       * 							       *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -38,7 +41,7 @@
 	   print process. The system will select the default invoice
 	   program for the previous printers.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2011
                                      by James William Lemmon.
                                        (Id No. 4412165050082).
 
@@ -3526,8 +3529,6 @@
 	     move W02-print-record
 				 TO Print-Buffer.
 	     MOVE 120		 to Print-Buffer-Len.
-      *	     PERFORM PRINT-DETAILS.
-026320*	     MOVE SPACES	 TO W02-PRINT-RECORD.
 	     PERFORM PRINT-DETAILS.
 026320	     MOVE SPACES	 TO W02-PRINT-RECORD.
 026330	     MOVE W40-NAME	 TO INV-NAME.
@@ -3740,7 +3741,7 @@
 	   ELSE
 027800	       MOVE SAL-DESC	 TO INV-DESC.
 	     MOVE 1		 TO WS-ADVANCE.
-	     PERFORM PRINT-DETAILS.
+	     PERFORM PRINT-ITEM.
 027820	     MOVE SPACES	 TO W02-PRINT-RECORD.
 027830       GO TO BE84.
       *
@@ -3982,9 +3983,12 @@
 				 TO TODAY-DDMMYY W12-TODAY.
 	     MOVE LS-USUB	 TO WS-USUB.
 	     MOVE LS-DRAW	 TO WS-DRAW.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	    Setup the file ID's including path names           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -4013,15 +4017,27 @@
 	     MOVE "AUDITF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-AUDITF.
+      *    *************************************************************
+      *    ****       S A L E S	  -   C A R D E X   F I L E	    ****
+      *    *************************************************************
 	     MOVE "CARDEX"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-CARDEX.
+      *    *************************************************************
+      *    ****    D E B T O R	 T R A N S A C T I O N	 F I L E    ****
+      *    *************************************************************
 	     MOVE "DBTRAN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DBTRAN.
+      *    *************************************************************
+      *    ****  D E B T O R   A C C O U N T   ( A / R )   F I L E  ****
+      *    *************************************************************
 	     MOVE "DEBTOR"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEBTOR.
+      *    *************************************************************
+      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    *************************************************************
 	     MOVE "DEPART"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEPART.
@@ -4036,15 +4052,27 @@
 	     STRING AFID-PATH DELIMITED BY " "
 		    X"00" DELIMITED SIZE
 		    INTO BmpFilename.
+      *    *************************************************************
+      *    ****        D E B T O R   I N V O I C E   F I L E	    ****
+      *    *************************************************************
 	     MOVE "INVOIC"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-INVOIC.
+      *    *************************************************************
+      *    **** 	  I N T E G R A T I O N	  F I L E	    ****
+      *    *************************************************************
 	     MOVE "LEDTRF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-LEDTRF.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
 	     MOVE "RECOVER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
@@ -4055,12 +4083,21 @@
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-SALE.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SHARED"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SHARED.
+      *	   *************************************************************
+      *    **** 	  S T O C K   P A R T S   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SPARTS"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SPARTS.
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
 	     MOVE "STOCKF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STOCKF.
@@ -4321,7 +4358,7 @@
 056730         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE

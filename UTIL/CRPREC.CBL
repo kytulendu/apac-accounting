@@ -13,7 +13,12 @@
       *                                                                *
       *       C R E D I T O R   R E C O V E R Y   P R O G R A M        *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.01 - August 2011			       *
+      * 							       *
+      ******************************************************************
+      * 							       *
+      *  Aug 2011 - Include the Creditor Memo File in the recovery     *
+      * 	    procedures. See CRP005 - Memo maintenance program. *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +26,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   DECEMBER 1986.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1986 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1986 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -82,6 +87,14 @@
 000150                    RELATIVE WS-PARKEY.
 
       $SET KEYCOMPRESS "7"
+000230	   SELECT CRDMEM  ASSIGN DISK
+                          LOCK MANUAL
+                          WITH LOCK ON MULTIPLE RECORDS
+000240                    STATUS WS-STATUS
+000250                    ACCESS DYNAMIC
+000260                    ORGANIZATION INDEXED
+000270			  RECORD CME-KEY.
+
 000230     SELECT CREDIT ASSIGN DISK
                          LOCK EXCLUSIVE
 000240                   STATUS WS-STATUS
@@ -123,7 +136,7 @@
 000130			  ALTERNATE RECORD STK-DKEY2 DUPLICATES
 000140                    ALTERNATE RECORD STK-XREF DUPLICATES.
 
-000330     SELECT PORDER  ASSIGN DISK
+000330	   SELECT PORDER  ASSIGN DISK
                           LOCK EXCLUSIVE
 000340                    STATUS WS-STATUS
 000350                    ACCESS DYNAMIC
@@ -151,8 +164,13 @@
 				    PRD-EXT-CODE PRD-DTE DUPLICATES
 			  ALTERNATE RECORD PRD-DKEY =
 				    PRD-DTE PRD-SUPP DUPLICATES
+			  ALTERNATE RECORD PRD-CDKEY =
+				    PRD-SUPP PRD-DTE DUPLICATES
 			  ALTERNATE RECORD PRD-DSKEY =
-				    PRD-DTE PRD-EXT-CODE DUPLICATES.
+				    PRD-DTE PRD-EXT-CODE DUPLICATES
+			  ALTERNATE RECORD PRD-RSKEY =
+				    PRD-SUPP PRD-REF
+				    PRD-DTE  PRD-SEQ DUPLICATES.
 
 000010	   SELECT SHARED  ASSIGN DISK
                           LOCK EXCLUSIVE
@@ -183,6 +201,8 @@
 
 000290 COPY PARAM.IFD.
 
+000140 COPY CRDMEM.FD.
+
 000140 COPY CREDIT.GFD.
 
 000160 COPY CRTRAN.FD.
@@ -205,27 +225,25 @@
 000430 WORKING-STORAGE SECTION.
        77  WS-CHECK	   PIC	X(18)	 VALUE
 			   "aeWlimemnomLalismJ".
-000440 77  WS-S1	    PIC 9(04)	  COMP-5.
-000440 77  WS-S2	    PIC 9(04)	  COMP-5.
+000440 77  WS-S1	   PIC	9(04)	 COMP-5.
+000440 77  WS-S2	   PIC	9(04)	 COMP-5.
 001890 77  WS-S3	   PIC	9(04)	 COMP-5.
 001890 77  WS-S4	   PIC	9(04)	 COMP-5.
 001890 77  WS-S6           PIC  9(04)    COMP-5.
-000440 77  WS-SUB	    PIC 9(04)	  COMP-5.
-003290 77  WS-NETKEY        PIC 9(04)     COMP-5 VALUE 1.
-003290 77  WS-STRKEY	    PIC 9(04)	  COMP-5 VALUE 1.
-003290 77  WS-DEPKEY        PIC 9(04)     COMP-5 VALUE 1.
-003300 77  WS-CTRKEY        PIC 9(04)     COMP-5 VALUE 1.
-003340 77  WS-PARKEY        PIC 9(04)     COMP-5 VALUE 1.
-003360 77  WS-RECKEY        PIC 9(04)     COMP-5.
-000520 77  WS-RECOVER       PIC 9(05)     COMP-0.
-000520 77  WS-SHARED	    PIC  9(04)	  COMP-5.
-000530 77  WS-TRANS         PIC 9(05)     COMP-0 VALUE 1.
-000540 77  WS-EKEY          PIC Z(04)9.
-000560 77  WS-ERROR         PIC 9(01)     VALUE ZERO.
-000570 77  WS-PROG          PIC X(02).
-       77  WS-OPTION        PIC X(01).
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
-       77  WS-USUB	   PIC	9(04) COMP-5.
+000440 77  WS-SUB	   PIC	9(04)	 COMP-5.
+003290 77  WS-NETKEY	   PIC	9(04)	 COMP-5 VALUE 1.
+003290 77  WS-STRKEY	   PIC	9(04)	 COMP-5 VALUE 1.
+003340 77  WS-PARKEY	   PIC	9(04)	 COMP-5 VALUE 1.
+003360 77  WS-RECKEY	   PIC	9(04)	 COMP-5.
+000520 77  WS-RECOVER	   PIC	9(05)	 COMP-0.
+000520 77  WS-SHARED	   PIC	9(04)	 COMP-5.
+000530 77  WS-TRANS	   PIC	9(05)	 COMP-0 VALUE 1.
+000540 77  WS-EKEY	   PIC	Z(04)9.
+000560 77  WS-ERROR	   PIC	9(01)	 VALUE ZERO.
+000570 77  WS-PROG	   PIC	X(02).
+       77  WS-OPTION	   PIC	X(01).
+       77  TODAY-DDMMYY	   PIC	9(08)	 COMP-5.
+       77  WS-USUB	   PIC	9(04)	 COMP-5.
 
 002420 01  WS-DB-LINE.
 003080	   03  WS-TOP-LNE2.
@@ -259,6 +277,8 @@
 000290 COPY CONTROL.ID.
 
 000290 COPY DEPART.ID.
+
+000140 COPY CRDMEM.ID.
 
 000140 COPY CREDIT.ID.
 
@@ -359,11 +379,13 @@
 	       MOVE "Workstation"  TO WS-WRKHD
 	       MOVE LS-USER	   TO WS-WRKST.
 001250	     DISPLAY CLR-SCREEN.
-001270       PERFORM ZA000.
+001270	     PERFORM ZA000.
+	   IF WS-ERROR = 9
+	       STOP RUN.
 001260       DISPLAY S00.
-      *
+      *    *************************************************************
       *    ****    R E C O V E R Y   F I L E
-      *
+      *    *************************************************************
 001320	     OPEN INPUT RECOVER.
 001330	     MOVE 1		 TO WS-RECKEY.
 001340 AA05.
@@ -371,58 +393,61 @@
 001360     IF WS-STATUS NOT = "00"
 001370         GO TO AA10.
 001380       DISPLAY S01.
-      *
+      *    *************************************************************
       *    ****    E N D   O F	 T R A N S A C T I O N	 ?
-      *
+      *    *************************************************************
 001390	   IF REC-FILE = 99
 001400	       MOVE ZERO	 TO WS-TRANS
 001410     ELSE
-      *
+      *    *************************************************************
       *    ****    S T O R E   T R A N S A C T I O N   N U M B E R
-      *
+      *    *************************************************************
 001420	       MOVE REC-TRAN	 TO WS-TRANS.
 001430	     ADD 1		 TO WS-RECKEY.
 001440       GO TO AA05.
 001450 AA10.
-      *
+      *    *************************************************************
       *    ****    A N Y T H I N G   T O   R E C O V E R   ?
-      *
+      *    *************************************************************
 001460	   IF WS-TRANS = ZERO
 001470         GO TO AA20.
-      *
+      *    *************************************************************
       *    ****    R E C O V E R Y   R E Q U I R E D
-      *
+      *    *************************************************************
 001480	     DISPLAY S02.
 
 001490 AA15.
-      *
+      *    *************************************************************
       *    ****    R E A D   R E C O V E R Y   F I L E
       * 	   F R O M   T H E   L A S T   R E C O R D
       * 	   A N D   R E W R I T E   R E C O R D S   I N
       * 	   R E V E R S E   S E Q U E N C E
-      *
+      *    *************************************************************
 001500	     SUBTRACT 1 	 FROM WS-RECKEY.
 001510     IF WS-RECKEY = ZERO
 001520         GO TO AA20.
 001530       READ RECOVER.
 001540     IF WS-STATUS NOT = "00"
 001550         GO TO AA50.
-      *
+      *    *************************************************************
       *    ****    R E C O V E R Y   C O M P L E T E   ?
       * 	   ( T R A N S A C T I O N   N U M B E R
       * 	     C H A N G E D )
-      *
+      *    *************************************************************
 001560	   IF REC-TRAN NOT = WS-TRANS
 001570         GO TO AA20.
 001580       DISPLAY S03.
-      *
+      *    *************************************************************
       *    ****    D E T E R M I N E   W H I C H   F I L E
-      *
+      *    *************************************************************
 001590	   IF REC-FILE = 01
-001600         PERFORM AY01 THRU AY999
+001600	       PERFORM AY01 THRU AY999
 001610     ELSE
 001620     IF REC-FILE = 05
-001630         PERFORM AY05 THRU AY999
+001630	       PERFORM AY05 THRU AY999
+001610     ELSE
+001620	   IF REC-FILE = 06
+001630	       PERFORM AY06 THRU AY999
 001640     ELSE
 001650     IF REC-FILE = 07
 001660         PERFORM AY07 THRU AY999
@@ -451,15 +476,15 @@
 001740	   IF REC-FILE = 56
 001750	       PERFORM AY056 THRU AY999.
 001760       GO TO AA15.
-      *
+      *    *************************************************************
       *    ****    R E S E T   R E C O V E R Y	 S T A T U S   F O R
       * 	   T H I S   W O R K   S T A T I O N
-      *
+      *    *************************************************************
 001770 AA20.
 001780	     MOVE 4		 TO WS-PARKEY.
 001790       READ PARAM.
 001800	     SUBTRACT 1 	 FROM PAR-USERS.
-001810	     MOVE SPACES	 TO PAR-USR (WS-SUB) PAR-PROG (WS-SUB).
+001810	     MOVE SPACES	 TO PAR-USR(WS-SUB) PAR-PROG(WS-SUB).
 001820       REWRITE PAR-RECORD1.
 	   IF LS0-STP = 2
 001900         CLOSE STOCK.
@@ -467,6 +492,7 @@
                    NETWORK
                    DEPART
 001860             TXTRAN
+		   CRDMEM
                    CREDIT
                    CTRANS
                    LEDTRF
@@ -485,9 +511,9 @@
       *    THIS ROUTINE REWRITES THE BEFORE IMAGES OF THE FILES.
       *
 001960 AY000           SECTION.
-      *
+      *    *************************************************************
       *    ****    P A R A M E T E R   F I L E
-      *
+      *    *************************************************************
 001970 AY01.
 001980	     MOVE REC-KEY	 TO WS-PARKEY.
 001990	     MOVE REC-PARAM	 TO PAR-RECORD1.
@@ -495,9 +521,9 @@
 002010     IF WS-STATUS NOT = "00"
 002020         PERFORM AA50.
 002030       GO TO AY999.
-      *
+      *    *************************************************************
       *    ****    S T O C K   F I L E
-      *
+      *    *************************************************************
 002280 AY05.
 002300	     MOVE REC-STOCKF	 TO STK-RECORD1.
            IF REC-TYPE = 0
@@ -509,9 +535,23 @@
            IF REC-TYPE = 2
                WRITE STK-RECORD1.
 002350	     GO TO AY999.
-      *
+      *    *************************************************************
+      *    ****    C R E D I T O R   M E M O   F I L E
+      *    *************************************************************
+011840 AY06.
+011870	     MOVE REC-CRDMEM	 TO CME-RECORD1.
+           IF REC-TYPE = 0
+002310	       REWRITE CME-RECORD1
+           ELSE
+           IF REC-TYPE = 1
+	       DELETE CRDMEM RECORD
+           ELSE
+           IF REC-TYPE = 2
+	       WRITE CME-RECORD1.
+011880	     GO TO AY999.
+      *    *************************************************************
       *    ****    C R E D I T O R   A C C O U N T   F I L E
-      *
+      *    *************************************************************
 011840 AY07.
 011870	     MOVE REC-CREDIT	 TO P-REC.
            IF REC-TYPE = 0
@@ -523,9 +563,9 @@
            IF REC-TYPE = 2
                WRITE P-REC.
 011880	     GO TO AY999.
-      *
+      *    *************************************************************
       *    ****    C R E D I T O R   T R A N S A C T I O N   F I L E
-      *
+      *    *************************************************************
 011890 AY08.
 011920	     MOVE REC-CRTRAN	 TO CT-REC.
            IF REC-TYPE = 0
@@ -537,9 +577,9 @@
            IF REC-TYPE = 2
 	       WRITE CT-REC.
 011930       GO TO AY999.
-      *
+      *    *************************************************************
       *    ****    P U R C H A S E   O R D E R	 F I L E
-      *
+      *    *************************************************************
 011940 AY10.
 011970	     MOVE REC-PORDER	 TO ORD-RECORD1.
            IF REC-TYPE = 0
@@ -551,9 +591,9 @@
            IF REC-TYPE = 2
                WRITE ORD-RECORD1.
 011980	     GO TO AY999.
-      *
+      *    *************************************************************
       *    ****   V A T   F I L E
-      *
+      *    *************************************************************
        AY19.
 002300	     MOVE REC-TXTRAN	 TO TAX-RECORD1.
            IF REC-TYPE = 0
@@ -565,9 +605,9 @@
            IF REC-TYPE = 2
                WRITE TAX-RECORD1.
 002350	     GO TO AY999.
-      *
+      *    *************************************************************
       *    ****    S H A R E D	 F I L E
-      *
+      *    *************************************************************
        AY37.
 002370	     MOVE REC-KEY	 TO WS-SHARED.
 002380	     MOVE REC-NETWORK	 TO SHR-RECORD.
@@ -575,10 +615,10 @@
 002400     IF WS-STATUS NOT = "00"
 002420         PERFORM AA50.
 002430       GO TO AY999.
-      *
+      *    *************************************************************
       *    ****   D E P A R T M E N T	/   S A L E S	L E D G E R
       * 	  F I L E
-      *
+      *    *************************************************************
        AY38.
 002380	     MOVE REC-DEPART	 TO DPT-RECORD.
            IF REC-TYPE = 0
@@ -590,9 +630,9 @@
            IF REC-TYPE = 2
 	       WRITE DPT-RECORD.
 002430       GO TO AY999.
-      *
+      *    *************************************************************
       *    ****    C O N T R O L   F I L E
-      *
+      *    *************************************************************
        AY39.
 002370	     MOVE REC-KEY	 TO WS-NETKEY.
 002380	     MOVE REC-NETWORK	 TO NET-RECORD.
@@ -600,9 +640,9 @@
 002400     IF WS-STATUS NOT = "00"
 002420         PERFORM AA50.
 002430       GO TO AY999.
-      *
+      *    *************************************************************
       *    ****   I N T E G R A T I O N   F I L E   ( G / L )
-      *
+      *    *************************************************************
        AY40.
              MOVE REC-LEDTRF     TO XFR-REC.
            IF REC-TYPE = 0
@@ -645,9 +685,12 @@
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	    Setup the file ID's including path names           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    *************************************************************
       *    ****    P A R A M E T E R   F I L E
-      *
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -669,44 +712,84 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    ***	  C R E D I T O R   M E M O   ( A / P )   F I L E    ***
+      *    *************************************************************
+	     MOVE "CRDMEM"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     MOVE AFID-PATH	 TO W02-CRDMEM.
+      *    *************************************************************
+      *    *** C R E D I T O R	 A C C O U N T	 ( A / P )   F I L E ***
+      *    *************************************************************
 	     MOVE "CREDIT"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-CREDIT.
+      *    *************************************************************
+      *    ( A / P )   C R E D I T O R	 T R A N S A C T I O N	 F I L E
+      *    *************************************************************
 	     MOVE "CRTRAN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-CRTRAN.
+      *    *************************************************************
+      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    *************************************************************
 	     MOVE "DEPART"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEPART.
+      *    *************************************************************
+      *    **** 	  I N T E G R A T I O N	  F I L E	    ****
+      *    *************************************************************
 	     MOVE "LEDTRF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-LEDTRF.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    ****    P U R C H A S E S   -   C A R D E X	 F I L E    ****
+      *    *************************************************************
 	     MOVE "PURDEX"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-PURDEX.
+      *    *************************************************************
+      *    ****        P U R C H A S E	 O R D E R   F I L E	    ****
+      *    *************************************************************
 	     MOVE "PORDER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-PORDER.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
 	     MOVE "RECOVER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-RECOVER.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SHARED"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SHARED.
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
 	     MOVE "STOCKF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STOCKF.
+      *    *************************************************************
+      *    ****      V A T   T R A N S A C T I O N S   F I L E	    ****
+      *    *************************************************************
 	     MOVE "TXTRAN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-TXTRAN.
 002480	     OPEN I-O PARAM.
 042120     IF WS-STAT1 = "9"
-042130         GO TO ZA200.
+	       MOVE "PARAM"	 TO WS-FILE
+042130	       GO TO ZA200.
 002490     IF WS-STATUS NOT = "00"
 002500	       MOVE 15		 TO WS-F-ERROR
 002510         PERFORM OPEN-ERROR.
@@ -721,42 +804,44 @@
 002540     IF WS-STATUS NOT = "00"
 002550	       MOVE 15		 TO WS-F-ERROR
 002560         PERFORM READ-ERROR.
-      *
-      *    ****    C O N T R O L   F I L E
-      *
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 042140	     OPEN I-O NETWORK.
-042150     IF WS-STAT1 = "9"
+042150	   IF WS-STAT1 = "9"
+	       MOVE "CONTROL"	 TO WS-FILE
 042160         GO TO ZA200.
 003050     IF WS-STATUS NOT = "00"
 003060	       MOVE 2		 TO WS-F-ERROR
 003070         PERFORM OPEN-ERROR.
-      *
-      *    ****    S H A R E D	 F I L E
-      *
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 002670	     OPEN I-O SHARED
 042120     IF WS-STAT1 = "9"
-	       MOVE W02-SHARED	 TO WS-FILE
+	       MOVE "SHARED"	 TO WS-FILE
 042130         GO TO ZA200.
 002680     IF WS-STATUS NOT = "00"
 002690	       MOVE 33		 TO WS-F-ERROR
 002700         PERFORM OPEN-ERROR.
-      *
-      *    ****    D E P A R T M E N T	 /   S A L E S	 L E D G E R
-      * 	   F I L E
-      *
+      *    *************************************************************
+      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    *************************************************************
 042140	     OPEN I-O DEPART.
 042150     IF WS-STAT1 = "9"
+	       MOVE "DEPART"	 TO WS-FILE
 042160         GO TO ZA200.
 003050     IF WS-STATUS NOT = "00"
 003060	       MOVE 7		 TO WS-F-ERROR
 003070         PERFORM OPEN-ERROR.
-      *
-      *    ****    P U R C H A S E   O R D E R	 F I L E
-      *
+      *    *************************************************************
+      *    ****        P U R C H A S E	 O R D E R   F I L E	    ****
+      *    *************************************************************
        ZA01.
 042170       OPEN I-O PORDER.
 042180     IF WS-STAT1 = "9"
                IF FLE-LOCKED
+		   MOVE "PORDER" TO WS-FILE
 042130		   GO TO ZA200.
 042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
 	      (WS-STATUS = "39")
@@ -770,22 +855,47 @@
 003050     IF WS-STATUS NOT = "00"
 003060	       MOVE 16		 TO WS-F-ERROR
 003070         PERFORM OPEN-ERROR.
-      *
-      *    ****    C R E D I T O R   T R A N S A C T I O N   F I L E
-      *
+      *    *************************************************************
+      *    ( A / P )   C R E D I T O R	 T R A N S A C T I O N	 F I L E
+      *    *************************************************************
 042210	     OPEN I-O CTRANS.
 042220     IF WS-STAT1 = "9"
+	       MOVE "CTRANS"	 TO WS-FILE
 042230         GO TO ZA200.
 003050     IF WS-STATUS NOT = "00"
 003060	       MOVE 4		 TO WS-F-ERROR
 003070         PERFORM OPEN-ERROR.
-      *
-      *    ****    C R E D I T O R    A C C O U N T   F I L E
-      *
+      *    *************************************************************
+      *    *** C R E D I T O R	 A C C O U N T	 ( A / P )   F I L E ***
+      *    *************************************************************
+       ZA01A.
+042240	     OPEN I-O CRDMEM.
+042250     IF WS-STAT1 = "9"
+               IF FLE-LOCKED
+		   MOVE "CR-MEMO"
+				 TO WS-FILE
+042130		   GO TO ZA200.
+042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
+	      (WS-STATUS = "39")
+	       CLOSE PARAM
+	       CALL "UTP\CRMREB"
+		     USING LS-PARID LS-USER-ID LS0-PROGRAMS
+			   LS0-SECURITY
+	       CANCEL "UTP\CRMREB"
+	       OPEN I-O PARAM NETWORK
+	       GO TO ZA01A.
+003050     IF WS-STATUS NOT = "00"
+003060	       MOVE 6		 TO WS-F-ERROR
+003070         PERFORM OPEN-ERROR.
+      *    *************************************************************
+      *    *** C R E D I T O R	 A C C O U N T	 ( A / P )   F I L E ***
+      *    *************************************************************
        ZA02.
 042240       OPEN I-O CREDIT.
 042250     IF WS-STAT1 = "9"
                IF FLE-LOCKED
+		   MOVE "CR-ACNT"
+				 TO WS-FILE
 042130		   GO TO ZA200.
 042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
 	      (WS-STATUS = "39")
@@ -799,13 +909,15 @@
 003050     IF WS-STATUS NOT = "00"
 003060	       MOVE 3		 TO WS-F-ERROR
 003070         PERFORM OPEN-ERROR.
-      *
-      *    ****   V A T   F I L E   ( C U R R E N T   R A T E )
-      *
+      *    *************************************************************
+      *    ****      V A T   T R A N S A C T I O N S   F I L E	    ****
+      *    *************************************************************
        ZA03A.
 002670	     OPEN I-O TXTRAN.
 042120     IF WS-STAT1 = "9"
                IF FLE-LOCKED
+		   MOVE "VAT-FILE"
+				 TO WS-FILE
 042130		   GO TO ZA200.
 042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
 	      (WS-STATUS = "39")
@@ -821,13 +933,14 @@
 002700         PERFORM OPEN-ERROR.
 	   IF LS0-STP NOT = 2
                GO TO ZA04A.
-      *
-      *    ****    S T O C K   F I L E
-      *
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
        ZA04.
 003040       OPEN I-O STOCK.
 042120     IF WS-STAT1 = "9"
                IF FLE-LOCKED
+		   MOVE "STOCK"  TO WS-FILE
 042130		   GO TO ZA200.
 042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
 	      (WS-STATUS = "39")
@@ -841,13 +954,14 @@
 003050     IF WS-STATUS NOT = "00"
 003060	       MOVE 22		 TO WS-F-ERROR
 003070         PERFORM OPEN-ERROR.
-      *
-      *    ****   C A R D E X	F I L E   ( P U R C H A S E S )
-      *
+      *    *************************************************************
+      *    ****    P U R C H A S E S   -   C A R D E X	 F I L E    ****
+      *    *************************************************************
        ZA04-A.
 003040	     OPEN I-O PURDEX.
 042120     IF WS-STAT1 = "9"
                IF FLE-LOCKED
+		   MOVE "CARDEX" TO WS-FILE
 042130		   GO TO ZA200.
 042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
 	      (WS-STATUS = "39")
@@ -861,13 +975,14 @@
 003050     IF WS-STATUS NOT = "00"
 003060	       MOVE 56		 TO WS-F-ERROR
 003070         PERFORM OPEN-ERROR.
-      *
-      *    ****    I N T E G R A T I O N   F I L E   ( G / L )
-      *
+      *    *************************************************************
+      *    **** 	  I N T E G R A T I O N	  F I L E	    ****
+      *    *************************************************************
        ZA04A.
 002670       OPEN I-O LEDTRF.
 042120     IF WS-STAT1 = "9"
                IF FLE-LOCKED
+		   MOVE "LEDTRF" TO WS-FILE
 042130		   GO TO ZA200.
 042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
 	      (WS-STATUS = "39")
@@ -890,6 +1005,7 @@
 002850	       MOVE 9		 TO WS-ERROR
 002860         GO TO ZA999-EXIT.
 002870	     MOVE 1		 TO WS-SUB.
+
 002880 ZA05.
 002890	   IF PAR-USR (WS-SUB) = LS-USER
 002900	       MOVE PAR-PROG (WS-SUB)
@@ -900,34 +1016,20 @@
 002940         GO TO ZA05.
 002950	     MOVE 9		 TO WS-ERROR.
 002960       GO TO ZA999-EXIT.
+
 020110 ZA200.
-020120	     DISPLAY "Files locked - Try later" AT 2312
-020130                WITH FOREGROUND-COLOR 14.
-020140       DISPLAY "Press any key" AT 2512 
-020150		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-020160	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
-	     MOVE 9		 TO WS-ERROR.
+
+       COPY LOCKED.PRO.
+
+002950	     MOVE 9		 TO WS-ERROR.
+
 003080 ZA999-EXIT.
 003090       EXIT.
       /
 003100 ZB000-ERROR           SECTION.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
+
+       COPY ERRORS.PRO.
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620	       MOVE W02-NETWORK  TO WS-FILE
@@ -936,16 +1038,23 @@
 041650     IF WS-F-ERROR = 3
 041660	       MOVE W02-CREDIT	 TO WS-FILE
 041670	       MOVE ZERO	 TO WS-KEY
-               MOVE P-NUMBER     TO WS-KEYX
+	       MOVE P-NUMBER	 TO WS-KEYX
 041680     ELSE
 041690     IF WS-F-ERROR = 4
 041700	       MOVE W02-CRTRAN	 TO WS-FILE
-041710	       MOVE WS-CTRKEY	 TO WS-KEY
-041800     ELSE
+041710	       MOVE ZERO	 TO WS-KEY
+	       MOVE CT-KEY	 TO WS-KEYX
+041680     ELSE
+041690	   IF WS-F-ERROR = 6
+041700	       MOVE W02-CRDMEM	 TO WS-FILE
+041710	       MOVE ZERO	 TO WS-KEY
+	       MOVE CME-KEY	 TO WS-KEYX
+041800	   ELSE
 041810     IF WS-F-ERROR = 7
 041820	       MOVE W02-DEPART	 TO WS-FILE
-041830	       MOVE WS-DEPKEY	 TO WS-KEY
-041840     ELSE
+041870	       MOVE ZERO	 TO WS-KEY
+041830	       MOVE DPT-CODE	 TO WS-KEYX
+041840	   ELSE
 041850     IF WS-F-ERROR = 15
 041860	       MOVE WS-PARID	 TO WS-FILE
 041870	       MOVE WS-PARKEY	 TO WS-KEY
@@ -969,7 +1078,7 @@
 041870	       MOVE ZERO	 TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE
@@ -982,36 +1091,5 @@
 041860	       MOVE W02-PURDEX	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE PRD-KEY	 TO WS-KEYX.
-041880     IF WS-STATUS = "10"
-041890	       MOVE "End of FILE"
-				 TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920	       MOVE "Duplicate record number"
-				 TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950	       MOVE "Invalid record number"
-				 TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980	       MOVE "DISK full"  TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040	       MOVE "FILE locked"
-				 TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

@@ -1,4 +1,4 @@
-      $SET LINKCOUNT"772"
+      $SET LINKCOUNT"800"
       ******************************************************************
       *                                                                *
       *   ********   ******   *******	********      **      ******   *
@@ -13,7 +13,7 @@
       *                                                                *
       *   P R I N T   I N V O I C E   P R O G R A M   (Ask Agencies)   *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -29,7 +29,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   NOVEMBER 1992.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -3011,7 +3011,7 @@
 056730         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE

@@ -13,7 +13,7 @@
       *                                                                *
       *     G / L E D G E R   B U D G E T T I N G		       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.                 J.W. LEMMON (APAC).
 000040 DATE-WRITTEN.           JUNE 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -956,8 +956,9 @@
 012210       WRITE REC-RECORD.
 012220     IF WS-STATUS NOT = "00"
 012230         DISPLAY "Write error Recovery file - Status " AT 2312
-                        WITH FOREGROUND-COLOR 14 
-                        WS-STATUS WITH FOREGROUND-COLOR 15
+			WITH FOREGROUND-COLOR 6 HIGHLIGHT
+			WS-STATUS
+			WITH FOREGROUND-COLOR 7 HIGHLIGHT
 012250         STOP RUN.
 
 012280 AY59.
@@ -986,7 +987,8 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
       *
 012550	     DISPLAY "WAITING" AT 2551
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 4 HIGHLIGHT.
 012560	     COMMIT.
 	     ACCEPT WS-STIME FROM TIME.
 	     MOVE 400		 TO WS-WAIT.
@@ -1063,12 +1065,12 @@
 	       COMMIT
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       ACCEPT WS-STIME FROM TIME
 	       PERFORM LOCK-REC-LOOP
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       GO TO AY60.
 012880	     DISPLAY SPACE AT 2572
 		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
@@ -1274,13 +1276,16 @@
 
 025490 IB15.
 	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Help,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F2" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 		     " to do Account Lookup - "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "Esc" WITH BACKGROUND-COLOR 3
+				FOREGROUND-COLOR 6 HIGHLIGHT
 		     "ape to exit"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 025500       ACCEPT S17 AT 0527.
@@ -1326,7 +1331,7 @@
 025730         GO TO IB00.
 025740     IF G-IND = 1
 025750         DISPLAY "Figures for this A/C are calculated" AT 1429
-025760                  WITH FOREGROUND-COLOR 14
+025760			WITH FOREGROUND-COLOR 6 HIGHLIGHT
 025770         GO TO IB15.
              MOVE 1401           TO CPOS.
              PERFORM ERASE-SCREEN-LOOP UNTIL CLIN = 23.
@@ -1376,7 +1381,7 @@
 026210 IC00.
 026220       DISPLAY CLR-SCREEN.
 026230	     DISPLAY "Busy with calcs - Please be patient" AT 0612
-026240                WITH FOREGROUND-COLOR 14
+026240		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
 026250	     MOVE 1		 TO WS-S2.
 
 026260 IC03.
@@ -1772,7 +1777,7 @@
 026210 IE00.
 026220       DISPLAY CLR-SCREEN.
 026230	     DISPLAY "Busy clearing bugets - Please be patient" AT 0612
-026240                WITH FOREGROUND-COLOR 14
+026240		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
 	     MOVE 100000	 TO G-AC.
 	     PERFORM START-AT-LEDG-AC THRU READ-GACCNT-EXIT.
 	   IF WS-F-ERROR = 8
@@ -1809,46 +1814,14 @@
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
 035290	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	     COPY FUNCTION.PRO.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	    Setup the file ID's including path names           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *
       *    ****    P A R A M E T E R   F I L E
       *
@@ -1873,14 +1846,23 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    *** G E N E R A L   L E D G E R   A C C O U N T   F I L E ***
+      *    *************************************************************
 	     MOVE "GACCNT"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-GACCNT.
+      *    *************************************************************
+      *    *** G E N E R A L   L E D G E R   J O U R N A L   F I L E ***
+      *    *************************************************************
 	     MOVE "GLJRN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-GLJRN.
+      *    *************************************************************
+      *    ***	 G / L E D G E R   T R A N S A C T I O N   F I L E   ***
+      *    *************************************************************
 	     MOVE "GLTRAN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-GLTRAN.
@@ -1889,14 +1871,23 @@
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-LEDTRN.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
 	     MOVE "RECOVER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-RECOVER.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SHARED"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SHARED.
@@ -1951,8 +1942,9 @@
 036030	     MOVE ZERO		 TO WS-ERROR.
 036040     IF W70-BNKGL = ZERO
 036050	       DISPLAY "Parameters not set up - " AT 2020
-		       "ENTER" WITH FOREGROUND-COLOR 14
-036070         ACCEPT WS-OPTION AT 2050 WITH FOREGROUND-COLOR 15 AUTO
+		       "ENTER" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+036070	       ACCEPT WS-OPTION AT 2050
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO
 036080	       MOVE 1		 TO WS-ERROR.
 036120	     MOVE WS-Y-END	 TO WS-S1.
 036130	     MOVE W05-CY	 TO WS-S2.
@@ -2051,7 +2043,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE

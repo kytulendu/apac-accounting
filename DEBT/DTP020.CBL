@@ -13,7 +13,7 @@
       *                                                                *
       *    D E B T O R	 T R I A L   B A L A N C E   R E P O R T       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -35,7 +35,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   April 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2009
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

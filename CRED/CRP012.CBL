@@ -13,7 +13,7 @@
       *                                                                *
       *     C R E D I T O R   D E B I T   N O T E S   ( S T O C K )    *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.		       James William Lemmon.
 000040 DATE-WRITTEN.	       JUNE, 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -2953,14 +2953,14 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
-041860	       MOVE W02-SHARED	 TO WS-FILE
-041870	       MOVE WS-SHARED	 TO WS-KEY
-041840	   ELSE
 041850	   IF WS-F-ERROR = 35
 041860	       MOVE W02-CRETRN	 TO WS-FILE
 041870	       MOVE ZERO	 TO WS-KEY
 	       MOVE CRT-KEY	 TO WS-KEYX
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE
 041850     IF WS-F-ERROR = 40
 041860         MOVE W02-LEDTRF   TO WS-FILE

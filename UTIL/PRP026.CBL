@@ -13,7 +13,7 @@
       *                                                                *
       * P A R A M E T E R   I N V / S T A T E M E N T	H E A D I N G S*
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -494,7 +494,7 @@
       *
 008640 YA000		       SECTION 5.
 011760 YA290-STMINV.
-011770       MOVE 1 TO WS-PARKEY.
+011770	     MOVE 1		 TO WS-PARKEY.
 011780       DISPLAY CLR-SCREEN.
 011790       PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
 011800     IF NOT (PAR-STMINV = "I" OR "S" OR "X")
@@ -695,19 +695,22 @@
       
 041560 DISPLAY-FILE-NAME.
 041850     IF WS-F-ERROR = 15
-041860         MOVE WS-PARID TO WS-FILE
-041870         MOVE WS-PARKEY TO WS-KEY.
+041860	       MOVE WS-PARID	 TO WS-FILE
+041870	       MOVE WS-PARKEY	 TO WS-KEY.
 041880     IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
+041890	       MOVE "End of FILE"
+				 TO WS-STAT-MESSAGE
 041900     ELSE
 041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
+041920	       MOVE "Duplicate record number"
+				 TO WS-STAT-MESSAGE
 041930     ELSE
 041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
+041950	       MOVE "Invalid record number"
+				 TO WS-STAT-MESSAGE
 041960     ELSE
 041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
+041980	       MOVE "DISK full"  TO WS-STAT-MESSAGE
 041990     ELSE
 042000     IF WS-STATUS = "30"
 042010         MOVE "DISK error" TO WS-STAT-MESSAGE

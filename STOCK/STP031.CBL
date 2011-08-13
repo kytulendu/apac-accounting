@@ -13,7 +13,7 @@
       *                                                                *
       *     T R A N S F E R   S T O C K   I N	 (BRANCH TO BRANCH)    *
       *                                                                *
-      *     VERSION 8.14.03 - October 2010			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -320,7 +320,7 @@
 001530	       05  ORD-H4	   PIC	X(11).
 001540	       05  ORD-H5	   PIC	X(10).
 001550	       05  ORD-H6	   PIC	X(10).
-001560	   03  ORD-LINE2.
+001560	   03  ORD-LINE2 REDEFINES W02-PRN-LINE.
 001570	       05  ORD-ITEM	   PIC	X(18).
 	       05  ORD-ITM REDEFINES ORD-ITEM
 				   PIC	X(14)/X(03).
@@ -334,12 +334,12 @@
 001650	       05  ORD-SELL	   PIC	Z(06)9.99.
 001660	       05  FILLER	   PIC	X(01).
 001670	       05  ORD-VALUE	   PIC	Z(06)9.99.
-	   03  TOT-LINE1.
+	   03  TOT-LINE1 REDEFINES W02-PRN-LINE.
 	       05  TOT-H1	   PIC	X(14).
 	       05  TOT-H2	   PIC	X(32).
 	       05  TOT-H3	   PIC	X(12).
 	       05  TOT-H4	   PIC	X(38).
-	   03  TOT-LINE2.
+	   03  TOT-LINE2 REDEFINES W02-PRN-LINE.
 	       05  FILLER	   PIC	X(04).
 	       05  TOT-SL-NO	   PIC	9(03).
 	       05  FILLER	   PIC	X(07).
@@ -560,7 +560,12 @@
       *    Ё the window. An example of a message request follows:      Ё
       *    Ё							       Ё
       *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      Ё
-      *    Ё   PERFORM OPT-MESSAGE.				       Ё
+      *    Ё   PERFORM OPT-MESSAGE (Use this format if function or any Ё
+      *    Ё	       other keys are to be tested on exit)	       Ё
+      *    Ё			     OR 			       Ё
+      *    Ё   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       Ё
+      *    Ё   (Use TEST AFTER if WS-OPTION is preloaded with a        Ё
+      *    Ё   default option)					       Ё
       *    Ё							       Ё
       *    Ё This would be displayed as:			       Ё
       *    Ё	здддддддддддддддддддддддддддддддддддддддддддддддд©     Ё
@@ -572,7 +577,8 @@
       *    Ё							       Ё
       *    Ё To display the request message higher or lower (default   Ё
       *    Ё is line 13) move the line number to be used to SLIN and   Ё
-      *    Ё then PEFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё then PERFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё (The UNTIL and TEST AFTER options also apply here)        Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY OPTION.CRT.
@@ -748,13 +754,13 @@
       *    ****   A R E   A N Y   U P D A T E S   I N	P R O G R E S S
       *
 012750 AY62.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-		   PAR-USR(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES OR
+		  PAR-USR(WS-SUB) = SPACES)
       *
       *    ****   A R E   D E B T O R	O R   S T O C K   F I L E S
       * 	  B E I N G   U P D A T E D
       *
-	       IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	       IF NOT(PAR-PROG(WS-SUB) = SPACES)
 012760		   IF PAR-PROG(WS-SUB) = "DB" OR "DS" OR "CS" OR "ST"
       *
       *    ****   Y E S   -   S E T   W A I T	P E R I O D
@@ -790,7 +796,7 @@
       *
        AY62-WAIT.
 	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-SUB) = LS-USER)
 	       IF WS-SUB < 24
 		   ADD 1	 TO WS-SUB
 		   GO TO AY62.
@@ -830,7 +836,7 @@
 	     MOVE 1		 TO WS-USUB.
 
        AY72.
-	   IF NOT (PAR-USR(WS-USUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-USUB) = LS-USER)
 	       IF WS-USUB < 24
 		   ADD 1	 TO WS-USUB
 		   GO TO AY72
@@ -844,7 +850,7 @@
 	       ADD 1 WS-USUB	 GIVING WS-SUB
 	   ELSE
 	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES)
 	       MOVE PAR-PROG(WS-SUB)
 				 TO PAR-PROG(WS-USUB)
 	       MOVE PAR-USR(WS-SUB)
@@ -986,6 +992,7 @@
 028030 BI000	       SECTION 51.
        BI0.
 	     MOVE WS-OPTION	 TO WS-TYPE.
+
 028040 BI00.
 028050       DISPLAY CLR-SCREEN.
 	     DISPLAY "TRANSFER STOCK IN" AT 0232
@@ -1037,7 +1044,7 @@
       *
       *    ****   1 2	C P I	( C O N D E N S E D   P R I N T )
       *
-	   IF NOT (WS-PRINTER = "S")
+	   IF NOT(WS-PRINTER = "S")
 	       MOVE 0		 TO WS-ADVANCE
 	       MOVE 2		 TO W02-PRN-TYPE
 	       PERFORM CALL-PRINTUTL
@@ -1077,15 +1084,16 @@
 	     MOVE SPACE 	 TO WS-SELL.
 
        BI09A.
-	     ACCEPT WS-SELL AT 0838
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5
-			 UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-SELL
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-SELL = "N" OR "Y")
-	       GO TO BI09A.
+	     PERFORM WITH TEST AFTER
+		     UNTIL WS-SELL = "N" OR "Y"
+	       ACCEPT WS-SELL AT 0838
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5
+			   UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-SELL
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 	     DISPLAY "Stock Code:" AT 1012.
 
 036040 BI10.
@@ -1143,6 +1151,8 @@
 		       UNTIL WS-OPTION = "Y" OR "N"
 	       IF WS-OPTION = "Y"
 		   GO TO BI35.
+	   IF WS-OPTION = "N"
+	       DELETE TRFRIN.
 	     MOVE TODAY-DDMMYY	 TO SIN-DATE.
 	     MOVE LS0-NO	 TO SIN-USER.
 	     MOVE LS-USER	 TO SIN-WS.
@@ -1152,14 +1162,11 @@
 	     MOVE WS-BR-NTO	 TO SIN-BR-TO.
 	     MOVE ZERO		 TO SIN-LINES
 				    SIN-VALUE.
-	   IF WS-OPTION = "N"
-	       PERFORM REWRITE-TRFRIN THRU WRITE-TRFRIN-EXIT
-	   ELSE
-	       PERFORM WRITE-TRFRIN THRU WRITE-TRFRIN-EXIT.
+	     PERFORM WRITE-TRFRIN THRU WRITE-TRFRIN-EXIT.
 
        BI18.
-             PERFORM READ-STKTRF THRU READ-STKTRF-EXIT.
-           IF WS-F-ERROR = 33
+	     PERFORM READ-STKTRF THRU READ-STKTRF-EXIT.
+	   IF WS-F-ERROR = 33
                GO TO BI65.
 	     DISPLAY TRF-EXT-CODE AT 1024
 		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
@@ -1297,7 +1304,7 @@
       *
 	     MOVE STK-LDG	 TO STW-DEPT.
 	     READ STKWRK KEY IS STW-DEPT.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       MOVE ZERO	 TO STW-SL-TOTAL
 	       MOVE STK-LDG	 TO STW-DEPT
 	       WRITE STW-RECORD
@@ -1370,9 +1377,8 @@
 		     SIN-TO-CDE DELIMITED SIZE
 		     " [N]" DELIMITED SIZE
 		     INTO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO BI45.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N".
 	   IF WS-OPTION = "N"
 	       GO TO BI55.
 	     PERFORM SAVE-SCREEN-2.
@@ -1392,8 +1398,8 @@
 018880	     PERFORM READ-PARAM THRU READ-PARAM-EXIT.
 018890	     MOVE PAR-PW	 TO W85-PASS.
 	     PERFORM RESTORE-SCREEN-2.
-018900	   IF NOT (WS-OPASSWORD = W85-SUPER (1) OR
-018940				  W85-SUPER (7) OR
+018900	   IF NOT(WS-OPASSWORD = W85-SUPER(1) OR
+018940				 W85-SUPER(7) OR
 018990				 "BRANCH")
 048290	       MOVE "Invalid password"
 				 TO WS-ERR-STRING
@@ -1431,12 +1437,12 @@
 037460	     PERFORM BI10.
 	     MOVE "!"		 TO STW-DEPT.
 	     START STKWRK KEY >= STW-DEPT.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       GO TO BI75.
 
        BI70.
 	     READ STKWRK NEXT.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       CLOSE STKWRK
 	       OPEN OUTPUT STKWRK
 	       CLOSE STKWRK
@@ -1445,7 +1451,7 @@
 	     MOVE STW-DEPT	 TO DPT-CODE
 				    TOT-SL-NO.
 	     PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-	   IF NOT (DPT-DESC = SPACES)
+	   IF NOT(DPT-DESC = SPACES)
 	       MOVE DPT-DESC	 TO TOT-SL-NAME
 	   ELSE
 	       MOVE "No Depart/Sales Ledger Name"
@@ -1477,7 +1483,7 @@
        BI80.
 	     MOVE 99		 TO WS-ADVANCE.
 	     PERFORM CALL-PRINTUTL.
-	   IF NOT (WS-PRINTER = "S")
+	   IF NOT(WS-PRINTER = "S")
 	       MOVE 0		 TO WS-ADVANCE
 	       MOVE 1		 TO W02-PRN-TYPE
 	       PERFORM CALL-PRINTUTL
@@ -1502,46 +1508,15 @@
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
-044150	     DISPLAY CLR-SCREEN.
+042000	     DISPLAY CLR-SCREEN.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	   S e t   u p	 t h e	 F U N C T I O N   k e y s     Ё
+      *    Ё  Setup various keys and the mouse for use with menus and  Ё
+      *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
+	     COPY FUNCTION.PRO.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		       ESC, F1 to F10 keys		       Ё
+      *    Ё	    Setup the file ID's including path names           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		    PAGE-UP and PAGE-DOWN keys		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		   A C T I V A T E   M O U S E		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	       Set MOUSE key to act as FUNCTION key	       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    *************************************************************
       *    ****    P A R A M E T E R   F I L E
       *    *************************************************************
@@ -1570,23 +1545,38 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    *************************************************************
 	     MOVE "DEPART"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEPART.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
 	     MOVE "RECOVER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-RECOVER.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SHARED"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SHARED.
 	     MOVE "STKDEX"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STKDEX.
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
 	     MOVE "STOCKF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STOCKF.
@@ -1601,7 +1591,7 @@
 	   ELSE
 	       MOVE "N" 	 TO WS-HND-FEE
 	       MOVE ZERO	 TO WS-HFEE.
-	   IF NOT (PAR-STOCK = "A" OR "N")
+	   IF NOT(PAR-STOCK = "A" OR "N")
 	       MOVE "A" 	 TO W10-STCK
 	   ELSE
 	       MOVE PAR-STOCK	 TO W10-STCK.
@@ -1654,37 +1644,31 @@
 	       GO TO ZA05-VAT.
 	     GO TO ZA999-EXIT.
 
-       ZA49.
-             DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
-             DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-             DISPLAY "Press any key to continue" AT 1212.
-	     ACCEPT WS-OPTION AT 1238
-		    WITH FOREGROUND-COLOR 15 BACKGROUND-COLOR 5 AUTO.
-             GO TO ZA205.
+       COPY ZA49.PRO.
+
        ZA55.
 041220       MOVE 1              TO WS-S1.
 021870	     MOVE SPACES	 TO WS-MID-LNE WS-MID-LNE2.
 041240 ZA60.
-041250       MOVE WS-G1 TO WS-TCHR (WS-S1) WS-BCHR (WS-S1).
-             MOVE WS-G8 TO WS-TCH  (WS-S1) WS-BCH  (WS-S1).
+041250	     MOVE WS-G1 TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
+	     MOVE WS-G8 TO WS-TCH(WS-S1)  WS-BCH(WS-S1).
 041260     IF WS-S1 < 80
 041270         ADD 1 TO WS-S1
 041280         GO TO ZA60.
-             MOVE WS-G9          TO WS-TCH  (1).
-             MOVE WS-G10         TO WS-TCH  (80).
-             MOVE WS-G11         TO WS-BCH  (1).
-             MOVE WS-G12         TO WS-BCH  (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
-             MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-021930       MOVE WS-G2          TO WS-TCHR (18) WS-TCHR (49)
-021940                              WS-TCHR (60) WS-TCHR (70).
-021950       MOVE WS-G3          TO WS-MCHR (18) WS-MCHR (49)
-021960                              WS-MCHR (60) WS-MCHR (70)
-                                    WS-MCHR (1)  WS-MCHR (80) 
-                                    WS-MCH  (1)  WS-MCH  (80).
-021970       MOVE WS-G4          TO WS-BCHR (18) WS-BCHR (49)
-021980                              WS-BCHR (60) WS-BCHR (70).
+	     MOVE WS-G9 	 TO WS-TCH(1).
+	     MOVE WS-G10	 TO WS-TCH(80).
+	     MOVE WS-G11	 TO WS-BCH(1).
+	     MOVE WS-G12	 TO WS-BCH(80).
+	     MOVE WS-G14	 TO WS-TCHR(1)	WS-BCHR(1).
+	     MOVE WS-G13	 TO WS-TCHR(80) WS-BCHR(80).
+021930	     MOVE WS-G2 	 TO WS-TCHR(18) WS-TCHR(49)
+021940				    WS-TCHR(60) WS-TCHR(70).
+021950	     MOVE WS-G3 	 TO WS-MCHR(18) WS-MCHR(49)
+021960				    WS-MCHR(60) WS-MCHR(70)
+				    WS-MCHR(1)	WS-MCHR(80)
+				    WS-MCH(1)	WS-MCH(80).
+021970	     MOVE WS-G4 	 TO WS-BCHR(18) WS-BCHR(49)
+021980				    WS-BCHR(60) WS-BCHR(70).
 	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
 	   IF LS-USER = LS-SYS-ID
 	       MOVE "Supervisorд"  TO WS-WRKHD
@@ -1692,35 +1676,19 @@
 	       MOVE "Workstation"  TO WS-WRKHD
 	       MOVE LS-USER	   TO WS-WRKST.
 044790 ZA200.
-044800       DISPLAY "Files locked - Try later" AT 2312
-044810                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-044820       DISPLAY "Press any key" AT 2512 
-044830		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-044840	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
        ZA205.
-             EXIT PROGRAM.
+	     EXIT PROGRAM.
+
 044870 ZA999-EXIT.
 044880       EXIT.
       /
 044890 ZB000-ERROR	       SECTION 91.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
+
+       COPY ERRORS.PRO.
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -1747,6 +1715,10 @@
 041850     IF WS-F-ERROR = 33
 041860         MOVE W02-STKTRF   TO WS-FILE
 041870	       MOVE WS-TRFKEY	 TO WS-KEY
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE
 041850	   IF WS-F-ERROR = 46
 041860	       MOVE W02-STKDEX	 TO WS-FILE
@@ -1757,32 +1729,5 @@
 041860	       MOVE W02-STKDEX	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE STX-KEY	 TO WS-KEYX.
-041880     IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170	     STOP RUN.
+
+       COPY DISPERR.PRO.

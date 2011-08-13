@@ -17,7 +17,7 @@
       * 							       *
       * 	       ( C O N S O L - U S B)			       *
       *                                                                *
-      *     VERSION 8.14.03 - March 2010			       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -61,7 +61,7 @@
       * 		  via the Windows print using the relavent     *
       * 		  print API's supplied with MF COBOL. An entry *
       * 		  in the APACFIDS file has been included for   *
-      * 		  the system to access the bitmap file that is *
+      *			  the system to access the bitmap file that is *
       * 		  used for the statement and is accessed using *
       * 		  "STMBMP" as the key.			       *
       * 							       *
@@ -71,7 +71,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   DECEMBER 1994.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1994 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1994 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -178,7 +178,7 @@
 000820 77  WS-SHARED	   PIC	9(04)	 COMP-5 VALUE 1.
 002940 77  WS-WRKEY	   PIC	9(04)	 COMP-5.
 002960 77  WS-NTP	   PIC	9(01).
-002970 77  WS-LINES	   PIC	9(02).
+002970 77  WS-LINES	   PIC	9(02)	 VALUE 34.
 002980 77  WS-PAGE	   PIC	9(04)	 COMP-5.
 002990 77  WS-OPTION	   PIC	X(01).
 002990 77  WS-AGE	   PIC	X(01).
@@ -221,6 +221,19 @@
 003420 77  WS-AC	   PIC	X(07)	 VALUE "Account".
        77  TODAY-DDMMYY	   PIC	9(08)	 COMP-5.
        77  WS-USUB	   PIC	9(04)	 COMP-5.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё Banking details for Clients to use for payments via EFT.  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+       01  WS-BANK-DETAILS.
+	   03  WS-PRINT-BNK	 PIC  X(01)    VALUE "N".
+	   03  WS-BNK-NME	 PIC  X(30).
+	   03  WS-BRANCH.
+	       05  FILLER	 PIC  X(13)    VALUE "Branch Code: ".
+	       05  WS-BR-CODE	 PIC  9(06).
+	   03  WS-ACT-TYP	 PIC  X(01).
+	   03  WS-BANK-ACCOUNT.
+	       05  WS-ACT-TYPE	 PIC  X(13)   VALUE SPACES.
+	       05  WS-ACT-NO	 PIC  X(12).
       /
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
@@ -1260,11 +1273,11 @@
       * здддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       * Ё  Check if paper must be advanced? (WS-ADVANCE will be > 0)   Ё
       * юдддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	   if WS-ADVANCE > 0
-	       perform advance-printer WS-ADVANCE times
-	   else
 	   if WS-ADVANCE = 99
-	       perform Throw-a-page.
+	       perform Throw-a-page
+	   else
+	   if WS-ADVANCE > 0
+	       perform advance-printer WS-ADVANCE times.
       * ______________________________________________________________ *
       * PC_PRINTER_WRITE					       *
       * 							       *
@@ -1891,7 +1904,12 @@
       *    Ё the window. An example of a message request follows:      Ё
       *    Ё							       Ё
       *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      Ё
-      *    Ё   PERFORM OPT-MESSAGE.				       Ё
+      *    Ё   PERFORM OPT-MESSAGE (Use this format if function or any Ё
+      *    Ё	       other keys are to be tested on exit)	       Ё
+      *    Ё			     OR 			       Ё
+      *    Ё   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       Ё
+      *    Ё   (Use TEST AFTER if WS-OPTION is preloaded with a        Ё
+      *    Ё   default option)					       Ё
       *    Ё							       Ё
       *    Ё This would be displayed as:			       Ё
       *    Ё	здддддддддддддддддддддддддддддддддддддддддддддддд©     Ё
@@ -1903,7 +1921,8 @@
       *    Ё							       Ё
       *    Ё To display the request message higher or lower (default   Ё
       *    Ё is line 13) move the line number to be used to SLIN and   Ё
-      *    Ё then PEFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё then PERFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё (The UNTIL and TEST AFTER options also apply here)        Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY OPTION.CRT.
@@ -1977,21 +1996,21 @@
 
 009120 CA165-NAME              SECTION 2.
 009130 CA165-EXTRACT.
-009140       MOVE ZERO TO WS-ERROR.
+009140	     MOVE ZERO		 TO WS-ERROR.
 009150       UNSTRING W60-NAME DELIMITED BY "*" OR "!"
 009160         INTO W40-SURNAME W40-FNAME W40-SNAME
 009170         OVERFLOW
-009180           MOVE 1 TO WS-ERROR.
+009180		 MOVE 1 	 TO WS-ERROR.
 009190 CA170-EXIT.
 009200       EXIT.
 
 009210 CA175-ADDRESS           SECTION 2.
 009220 CA175-EXTRACT.
-009230       MOVE 0 TO WS-ERROR.
+009230	     MOVE 0		 TO WS-ERROR.
 009240       UNSTRING W60-ADDRESS DELIMITED BY "*"
 009250         INTO W40-ADD1 W40-ADD2 W40-ADD3 W40-ADD4
 009260         OVERFLOW
-009270           MOVE 1 TO WS-ERROR.
+009270		 MOVE 1 	 TO WS-ERROR.
 009280 CA180-EXIT.
 009290       EXIT.
       /    *************************************************************
@@ -2063,14 +2082,15 @@
 	     PERFORM SCREEN-SHADOW.
 
        XA02.
-	     ACCEPT WS-OPTION AT 1352
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 4 UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT(WS-OPTION = "Y" OR "N")
-	       GO TO XA02.
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N"
+	       ACCEPT WS-OPTION AT 1352
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 4 UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 	     PERFORM RESTORE-SCREEN-3.
 	   IF WS-OPTION = "N"
 014970	       MOVE 9		 TO WS-STM
@@ -2273,12 +2293,15 @@
 019030 XB00-INIT.
 019040       DISPLAY CLR-SCREEN.
 019050       DISPLAY S15B.
-019060	     ACCEPT WS-OPTION AT 0532
-019070		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N"
+019060	       ACCEPT WS-OPTION AT 0532
+019070		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 019130	   IF WS-OPTION = "N"
 019140	       GO TO XB299-EXIT.
       *
@@ -2376,7 +2399,7 @@
 019730	     DISPLAY "Statement message" AT 0402.
 019740	     DISPLAY "English" AT 0603.
 019860	     DISPLAY "Afrikaans" AT 1003.
-019980	     MOVE SPACES TO W30-MESS-A (1) W30-MESS-A (2).
+019980	     MOVE SPACES	 TO W30-MESS-A(1) W30-MESS-A(2).
 
 019990 XB11.
 020000	     ACCEPT W30-SMES(2, 1) AT 0614
@@ -2419,24 +2442,22 @@
 	     MOVE 2		 TO WS-LENGTH.
 
 020400 XB11A.
-020410	     ACCEPT WS-MESS AT 1859
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-MESS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-020420	   IF NOT (WS-MESS = "30" OR "60" OR "90" OR "XX")
-020430	       GO TO XB11A.
+	     PERFORM TEST AFTER
+		     UNTIL WS-MESS = "30" OR "60" OR "90" OR "XX"
+020410	       ACCEPT WS-MESS AT 1859
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-MESS
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 	     MOVE 1		 TO WS-LENGTH.
-
-       XB11B.
 	     MOVE "Print 'I'nvoice or 'O'ther reference  [I]"
 				 TO WS-ERR-MES.
 	     MOVE "I"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "I" OR "O".
 	     MOVE WS-OPTION	 TO WS-REF.
-020250	   IF NOT (WS-REF = "I" OR "O")
-	       GO TO XB11B.
 
 020440 XB12.
 020450       MOVE 1              TO WS-SUB-3.
@@ -2457,12 +2478,15 @@
 		      AT 0612
 		     "Y" WITH FOREGROUND-COLOR 6 HIGHLIGHT "/"
 		     "N" WITH FOREGROUND-COLOR 6 HIGHLIGHT ")".
-020630	     ACCEPT WS-OPTION AT 0661
-020640		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N"
+020630	       ACCEPT WS-OPTION AT 0661
+020640		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 020700	   IF WS-OPTION = "N"
 020710         MOVE 1            TO WS-S8
 020720     ELSE
@@ -2470,17 +2494,16 @@
 020740	     DISPLAY "Selective print (" AT 0812
 		     "Y" WITH FOREGROUND-COLOR 6 HIGHLIGHT "/"
 		     "N" WITH FOREGROUND-COLOR 6 HIGHLIGHT ")".
-
-020750 XB13.
-020760	     ACCEPT WS-OPTION AT 0834
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-020830	   IF NOT (WS-OPTION = "N" OR "Y")
-020840	       GO TO XB13.
-020850     IF WS-OPTION = "Y"
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N"
+020760	       ACCEPT WS-OPTION AT 0834
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+020850	   IF WS-OPTION = "Y"
 020860         MOVE 1            TO WS-NTP
 020870	       GO TO XB125
 020880     ELSE
@@ -2488,26 +2511,24 @@
 020900	     DISPLAY "Is this a restart (" AT 1012
 		     "Y" WITH FOREGROUND-COLOR 6 HIGHLIGHT "/"
 		     "N" WITH FOREGROUND-COLOR 6 HIGHLIGHT ")".
-
-020910 XB13A.
-020920	     ACCEPT WS-OPTION AT 1036
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-020990	   IF NOT (WS-OPTION = "Y" OR "N")
-021000	       GO TO XB13A.
-021010     IF WS-OPTION = "Y"
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N"
+020920	       ACCEPT WS-OPTION AT 1036
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+021010	   IF WS-OPTION = "Y"
 021020	       GO TO XB130.
 
        XB14.
 	     MOVE "'A'll statements or 'R'ange of statements [A]"
 				 TO WS-ERR-MES.
 	     MOVE "A"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT(WS-OPTION = "A" OR "R")
-	       GO TO XB14.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "A" OR "R".
 	     MOVE WS-OPTION	 TO WS-RANGE.
 	     DISPLAY "Debtor account:" AT 1412.
 021030       MOVE 1              TO WS-SUB-2.
@@ -2618,7 +2639,7 @@
 021330       MOVE 7              TO WS-SUB-6.
 
 021340 XB25-TITLE.
-021350     IF W60-NCHAR (WS-SUB-6) NOT = SPACE
+021350	   IF W60-NCHAR(WS-SUB-6) NOT = SPACE
 021360	       GO TO XB30-INIT.
 021370       SUBTRACT 1          FROM WS-SUB-6.
 021380     IF WS-SUB-6 > 0
@@ -2627,22 +2648,22 @@
 021400 XB30-INIT.
 021410       MOVE 1              TO WS-SUB-5.
 021420       ADD 2               TO WS-SUB-6.
-021430       MOVE W40-NCHAR (25) TO W60-NCHAR (WS-SUB-6).
-021440       ADD 1               TO WS-SUB-6.
-021450       MOVE "."            TO W60-NCHAR (WS-SUB-6).
-021460     IF W40-NCHAR (49) = SPACE
+021430	     MOVE W40-NCHAR(25)  TO W60-NCHAR(WS-SUB-6).
+021440	     ADD 1		 TO WS-SUB-6.
+021450	     MOVE "."		 TO W60-NCHAR(WS-SUB-6).
+021460	   IF W40-NCHAR(49) = SPACE
 021470	       GO TO XB35-SURNAME.
 021480       ADD 1               TO WS-SUB-6.
-021490       MOVE W40-NCHAR (49) TO W60-NCHAR (WS-SUB-6).
+021490	     MOVE W40-NCHAR(49)  TO W60-NCHAR(WS-SUB-6).
 021500       ADD 1               TO WS-SUB-6.
-021510       MOVE "."            TO W60-NCHAR (WS-SUB-6).
+021510	     MOVE "."		 TO W60-NCHAR(WS-SUB-6).
 
 021520 XB35-SURNAME.
 021530       ADD 2               TO WS-SUB-6.
 
 021540 XB40-LOOP.
-021550       MOVE W40-NCHAR (WS-SUB-5) 
-                                 TO W60-NCHAR (WS-SUB-6).
+021550	     MOVE W40-NCHAR(WS-SUB-5)
+				 TO W60-NCHAR(WS-SUB-6).
 021560     IF WS-SUB-5 < 24
 021570         ADD 1             TO WS-SUB-5
 021580         ADD 1             TO WS-SUB-6
@@ -2711,7 +2732,7 @@
 022260	     MOVE W40-ADD2	 TO ST7-NAME.
 022430     IF W40-ADD2 = SPACES
 022440         MOVE 1            TO WS-ERROR
-022450	       IF NOT (DEB-POST = "0000" OR "9999")
+022450	       IF NOT(DEB-POST = "0000" OR "9999")
 022460		   MOVE DEB-POST TO ST7-PC2.
 023440	     MOVE W30-STL(3)	 TO ST7-MESS.
 	     move st7-det	 to Print-Buffer.
@@ -2732,14 +2753,14 @@
 022610     IF WS-ERROR = 0
 022630         IF W40-ADD4 = SPACES
 022640             MOVE 1        TO WS-ERROR
-022650		   IF NOT (DEB-POST = "0000" OR "9999")
+022650		   IF NOT(DEB-POST = "0000" OR "9999")
 022660                 MOVE DEB-POST 
 				 TO ST7-PC2.
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
 022690	     MOVE SPACES	 TO ST7-DET.
 022700     IF WS-ERROR = 0
-022710	       IF NOT (DEB-POST = "0000" OR "9999")
+022710	       IF NOT(DEB-POST = "0000" OR "9999")
 022720		   MOVE DEB-POST TO ST7-PC2.
 	     move st7-det	 to Print-Buffer.
 	     move 2		 to WS-ADVANCE.
@@ -2749,7 +2770,7 @@
       *    Ё The use of letter heads is not yet available in this ver- Ё
       *    Ё sion and will be included later.			       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-021680*	   IF NOT (WS-HEAD = "N")
+021680*	   IF NOT(WS-HEAD = "N")
 	       MOVE "ACCOUNT NO:"
 				 TO ST7-AH1
 	       MOVE "DATE:"	 TO ST7-AH2
@@ -2764,7 +2785,7 @@
       *    Ё The use of letter heads is not yet available in this ver- Ё
       *    Ё sion and will be included later.			       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-021680*	   IF NOT (WS-HEAD = "N")
+021680*	   IF NOT(WS-HEAD = "N")
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		      Switch on bold printing		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
@@ -2855,19 +2876,19 @@
                                  FROM TRA-VALUE
                    MOVE ZERO     TO TRA-PAID.
 	   IF TRA-VALUE > ZERO
-	       IF NOT (TRA-DATE > W30-120)
+	       IF NOT(TRA-DATE > W30-120)
 		   MOVE 5	 TO TRA-AGE
 	       ELSE
-	       IF NOT (TRA-DATE > W30-90)
+	       IF NOT(TRA-DATE > W30-90)
 		   MOVE 4	 TO TRA-AGE
 	       ELSE
-	       IF NOT (TRA-DATE > W30-60)
+	       IF NOT(TRA-DATE > W30-60)
 		   MOVE 3	 TO TRA-AGE
 	       ELSE
-	       IF NOT (TRA-DATE > W30-30)
+	       IF NOT(TRA-DATE > W30-30)
 		   MOVE 2	 TO TRA-AGE
 	       ELSE
-	       IF NOT (TRA-DATE > W30-CUR)
+	       IF NOT(TRA-DATE > W30-CUR)
 		   MOVE 1	 TO TRA-AGE
 	       ELSE
 		   MOVE ZERO	 TO TRA-AGE.
@@ -2930,24 +2951,24 @@
 	     MOVE W22-DD2	 TO W22-DD3.
 	     MOVE W22-DTE3	 TO ST7-TDTE.
 	   IF WS-REF = "O"
-	      IF NOT (TRA-REG = SPACES)
+	      IF NOT(TRA-REG = SPACES)
 		  MOVE TRA-REG	 TO ST7-TREF
 	      ELSE
 		  MOVE TRA-REF	    TO ST7-TREF
 	      END-IF
 	   ELSE
-023050	   IF NOT (TRA-REF = "00000000" OR SPACES)
+023050	   IF NOT(TRA-REF = "00000000" OR SPACES)
 023130	       MOVE TRA-REF	 TO ST7-TREF.
 023070     IF DEB-LANG = "A"
-023080	       MOVE W00-A-DESC (TRA-CODE) TO ST7-TDESC
+023080	       MOVE W00-A-DESC(TRA-CODE) TO ST7-TDESC
 023090     ELSE
-023100	       MOVE W00-E-DESC (TRA-CODE) TO ST7-TDESC.
+023100	       MOVE W00-E-DESC(TRA-CODE) TO ST7-TDESC.
            IF TRA-VALUE > ZERO
 023220	       MOVE TRA-VALUE	 TO ST7-TDBT
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		       A L L O C A T I O N S		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	       IF NOT (TRA-ALLOCATED = ZERO)
+	       IF NOT(TRA-ALLOCATED = ZERO)
                    MULTIPLY -1 BY TRA-ALLOCATED
 				 GIVING ST7-TCRD
 		   MOVE " Cr["	 TO ST7-PD
@@ -2960,7 +2981,7 @@
 	     PERFORM PRINT-TRANSACTION-LINE.
 023240	     MOVE SPACES	 TO ST7-DET.
 023250       ADD 1               TO W25-WHOLE.
-023260	   IF W25-WHOLE > 34
+023260	   IF W25-WHOLE > WS-LINES
 023270	       GO TO XB120-MULTI.
 023310	     GO TO XB85-TLOOP.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -2969,8 +2990,8 @@
       *    Ё  the headings and carried forward balance. 	       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 023320 XB90-SEND.
-023330	     MOVE 35		 TO W25-DECIMAL.
-023340       SUBTRACT W25-WHOLE FROM W25-DECIMAL.
+023330	     ADD 1 WS-LINES	 GIVING W25-DECIMAL.
+023340	     SUBTRACT W25-WHOLE  FROM W25-DECIMAL.
 	   IF W25-DECIMAL > ZERO
 023350	       PERFORM PRINT-TRANSACTION-LINE W25-DECIMAL TIMES.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -2993,13 +3014,15 @@
 	     perform printer-colour.
 019250	     MOVE "REMITTANCE ADVICE"
 				 TO ST7-HEADER.
+	     MOVE 0		 TO WS-ERROR
+				    WS-ERROR1.
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
 023240	     MOVE SPACES	 TO ST7-DET.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		      Set to print Я 12cpi		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     move 10		 to font-size.
+	     move font-12-CPI	 to font-size.
 	     move 0		 to font-style.
 	     perform set-printer-font.
 	     MOVE 96		 to Print-Buffer-Len.
@@ -3008,65 +3031,82 @@
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
 021840	     MOVE SPACES	 TO ST7-DET.
-021850	     MOVE W95-ADD1	 TO ST7-NAME.
+	   IF WS-PRINT-BNK = "Y"
+	       MOVE "Banking Details"
+				 TO ST7-NAME
+	   ELSE
+021850	       MOVE W95-ADD1	 TO ST7-NAME.
 022220	     MOVE W40-ADD1	 TO ST7-MESS.
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
 021880	     MOVE SPACES	 TO ST7-DET.
-021920	     MOVE W95-ADD2	 TO ST7-NAME.
-022430	   IF W95-ADD2 = SPACES
-022440	       MOVE 1	     TO WS-ERROR1
-022450	       IF NOT (W95-POST = ZERO)
-022460		   MOVE W95-POST
+	   IF WS-PRINT-BNK = "Y"
+	       MOVE WS-BNK-NME	 TO ST7-NAME
+	   ELSE
+021920	       MOVE W95-ADD2	 TO ST7-NAME
+022430	       IF W95-ADD2 = SPACES
+022440		   MOVE 1	 TO WS-ERROR1
+022450		   IF NOT(W95-POST = ZERO)
+022460		       MOVE W95-POST
 			     TO ST7-PC2.
 022220	     MOVE W40-ADD2	 TO ST7-MESS.
 022430	   IF W40-ADD2 = SPACES
 022440         MOVE 1            TO WS-ERROR
-022450	       IF NOT (DEB-POST = "0000" OR "9999")
+022450	       IF NOT(DEB-POST = "0000" OR "9999")
 022460		   MOVE DEB-POST TO ST7-MESS.
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
 021880	     MOVE SPACES	 TO ST7-DET.
-021970	     MOVE W95-ADD3	 TO ST7-NAME.
-022500	   IF WS-ERROR1 = 0
-022520	       IF W95-ADD3 = SPACES
-022530		   MOVE 1    TO WS-ERROR1
-022540		   IF NOT (W95-POST = ZERO)
-022550		       MOVE W95-POST
-			     TO ST7-PC2.
+	   IF WS-PRINT-BNK = "Y"
+	       MOVE WS-BRANCH	 TO ST7-NAME
+	   ELSE
+021970	       MOVE W95-ADD3	 TO ST7-NAME
+022500	       IF WS-ERROR1 = 0
+022520		   IF W95-ADD3 = SPACES
+022530		       MOVE 1	 TO WS-ERROR1
+022540		       IF NOT(W95-POST = ZERO)
+022550			   MOVE W95-POST
+				 TO ST7-PC2.
 022220	     MOVE W40-ADD3	 TO ST7-MESS.
 022500	   IF WS-ERROR = 0
 022520         IF W40-ADD3 = SPACES
 022530             MOVE 1        TO WS-ERROR
-022540		   IF NOT (DEB-POST = "0000" OR "9999")
+022540		   IF NOT(DEB-POST = "0000" OR "9999")
 022550                 MOVE DEB-POST 
 				 TO ST7-MESS.
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
 021880	     MOVE SPACES	 TO ST7-DET.
-022020	     MOVE W95-ADD4     TO ST7-NAME.
-022500	   IF WS-ERROR1 = 0
-022520	       IF W95-ADD4 = SPACES
-022530		   MOVE 1    TO WS-ERROR1
-022540		   IF NOT (W95-POST = ZERO)
-022550		       MOVE W95-POST
-			     TO ST7-PC2.
+	   IF WS-PRINT-BNK = "Y"
+	       MOVE WS-BANK-ACCOUNT
+				 TO ST7-NAME
+	   ELSE
+022020	       MOVE W95-ADD4	 TO ST7-NAME
+022500	       IF WS-ERROR1 = 0
+022520		   IF W95-ADD4 = SPACES
+022530		       MOVE 1	 TO WS-ERROR1
+022540		       IF NOT(W95-POST = ZERO)
+022550			   MOVE W95-POST
+				 TO ST7-PC2.
 022220	     MOVE W40-ADD4	 TO ST7-MESS.
 022500	   IF WS-ERROR = 0
 022520         IF W40-ADD3 = SPACES
 022530             MOVE 1        TO WS-ERROR
-022540		   IF NOT (DEB-POST = "0000" OR "9999")
+022540		   IF NOT(DEB-POST = "0000" OR "9999")
 022550                 MOVE DEB-POST 
 				 TO ST7-MESS.
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
 021880	     MOVE SPACES	 TO ST7-DET.
+	   IF WS-PRINT-BNK = "Y"
+	       MOVE SPACES	 TO ST7-NAME
+	   ELSE
 022700	   IF WS-ERROR1 = 0
-022710	       IF NOT (W95-POST = ZERO)
+022710	       IF NOT(W95-POST = ZERO)
 022720		   MOVE W95-POST
 			     TO ST7-PC2.
 022700	   IF WS-ERROR = 0
-022710	       IF NOT (DEB-POST = "0000" OR "9999")
+022710	       IF NOT(DEB-POST = "0000" OR "9999")
 022720		   MOVE DEB-POST TO ST7-PC2.
 	     move st7-det	 to Print-Buffer.
 	     PERFORM PRINT-DETAILS.
@@ -3129,18 +3169,18 @@
 023850     IF WS-MESS = "90"
 023860	       GO TO XB112.
 023870     IF DEB-60 > ZERO
-023880		MOVE W30-60D (WS-MSUB)
+023880		MOVE W30-60D(WS-MSUB)
 				  TO W30-STM
 023890	       GO TO XB115.
 023900     IF WS-MESS = "60"
 023910	       GO TO XB112.
 023920     IF DEB-30 > ZERO
-023930		MOVE W30-30D (WS-MSUB)
+023930		MOVE W30-30D(WS-MSUB)
 				  TO W30-STM
 023940	       GO TO XB115.
 
 023950 XB112.
-023960       MOVE W30-MESS-A (WS-MSUB) 
+023960	     MOVE W30-MESS-A(WS-MSUB)
                                  TO W30-STM.
 
 023970 XB115.
@@ -3149,7 +3189,7 @@
 023990 XB120-MULTI.
 024020	     PERFORM XB90-SEND.
 024030	     PERFORM XB50-STM THRU XB60-DEBT.
-024040       MOVE ZERO TO W25-WHOLE.
+024040	     MOVE ZERO		 TO W25-WHOLE.
 024060	     GO TO XB85-TLOOP.
 
 024070 XB125.
@@ -3404,10 +3444,9 @@
 	     MOVE "'P'revious or 'C'urrent statements  [C]"
 				 TO WS-ERR-MES.
 	     MOVE "C"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "P".
 	     MOVE WS-OPTION	 TO WS-STMT.
-020250	   IF NOT (WS-STMT = "C" OR "P")
-	       GO TO YA05.
 	   IF NOT PREVIOUS-STATEMENT
 	       GO TO YA999.
 
@@ -3557,52 +3596,11 @@
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    D O	 N O T	 D I S P L A Y	 E R R O R
-      * 	   M E S S A G E S
-      *
-	     MOVE 44		 TO USER-NUMBER.
-	     MOVE 1		 TO USER-SETTING.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	   S e t   u p	 t h e	 F U N C T I O N   k e y s     Ё
+      *    Ё  Setup various keys and the mouse for use with menus and  Ё
+      *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		       ESC, F1 to F10 keys		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		    PAGE-UP and PAGE-DOWN keys		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		   A C T I V A T E   M O U S E		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	       Set MOUSE key to act as FUNCTION key	       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+	     COPY FUNCTION.PRO.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	    Setup the file ID's including path names           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
@@ -3696,8 +3694,16 @@
 	       MOVE "S" 	 TO PAR-CON-TYPE.
 	     MOVE PAR-CON-STM	 TO W05-CON-STM.
 	     MOVE PAR-CON-TYPE	 TO W05-CON-TYPE.
-025430	     MOVE 11 TO WS-PARKEY.
-025440       MOVE 1 TO WS-SUB-2.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё Test if the system has been setup for USB/WINDOWS printer Ё
+      *    Ё and if not set default detail lines per statement to 34.  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	   IF PAR-STM-DET< 25 OR > 38
+	       MOVE 34		 TO PAR-STM-DET
+	       REWRITE PAR-RECORD1.
+	     MOVE PAR-STM-DET	 TO WS-LINES.
+025430	     MOVE 11		 TO WS-PARKEY.
+025440	     MOVE 1		 TO WS-SUB-2.
 
 025450 ZA15-READ-TRANS.
 025460       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
@@ -3756,6 +3762,34 @@
 	     MOVE DEB-60D-DTE	 TO W30-60.
 	     MOVE DEB-90D-DTE	 TO W30-90.
 	     MOVE DEB-120-DTE	 TO W30-120.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё Get the banking details to be used for payments via EFT.  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+025730	     MOVE 4		 TO WS-NETKEY.
+025740       PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
+	     MOVE G-BANK-NAME	 TO WS-BNK-NME.
+	     MOVE G-BANK-AC-TYP  TO WS-ACT-TYP.
+	     MOVE G-BANK-CDE	 TO WS-BR-CODE.
+	   IF G-BNK-AC-LNGTH = 10
+	       MOVE G-BANK-AC2	 TO WS-ACT-NO
+	   ELSE
+	       MOVE G-BANK-AC	 TO WS-ACT-NO.
+	   IF WS-ACT-TYP = "C" OR "T" OR "S" OR "R"
+	       MOVE "Y" 	 TO WS-PRINT-BNK
+	       IF WS-ACT-TYP = "C"
+		   MOVE "Cheque" TO WS-ACT-TYPE
+	       ELSE
+	       IF WS-ACT-TYP = "T"
+		   MOVE "Transmission"
+				 TO WS-ACT-TYPE
+	       ELSE
+	       IF WS-ACT-TYP = "S"
+		   MOVE "Savings"
+				 TO WS-ACT-TYPE
+	       ELSE
+	       IF WS-ACT-TYP = "R"
+		   MOVE "Credit Card"
+				 TO WS-ACT-TYPE.
 025830	     GO TO ZA999-EXIT.
 
        COPY ZA49.PRO.
@@ -3767,26 +3801,26 @@
 041220       MOVE 1              TO WS-S1.
 021870	     MOVE SPACES	 TO WS-MID-LNE.
 041240 ZA60.
-041250       MOVE WS-G1          TO WS-TCHR (WS-S1) WS-BCHR (WS-S1).
-             MOVE WS-G8          TO WS-TCH  (WS-S1) WS-BCH  (WS-S1).
+041250	     MOVE WS-G1 	 TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
+	     MOVE WS-G8 	 TO WS-TCH(WS-S1)  WS-BCH(WS-S1).
 041260     IF WS-S1 < 80
 041270         ADD 1             TO WS-S1
 041280         GO TO ZA60.
-             MOVE WS-G9          TO WS-TCH  (1).
-             MOVE WS-G10         TO WS-TCH  (80).
-             MOVE WS-G11         TO WS-BCH  (1).
-             MOVE WS-G12         TO WS-BCH  (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
-             MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-021930       MOVE WS-G2          TO WS-TCHR (8)  WS-TCHR (49)
-021940                              WS-TCHR (61) WS-TCHR (72).
-021950       MOVE WS-G3          TO WS-MCHR (8)  WS-MCHR (49)
-021960                              WS-MCHR (61) WS-MCHR (72)
-021960				    WS-MCHR (1)  WS-MCHR (80).
-021970       MOVE WS-G4          TO WS-BCHR (8)  WS-BCHR (49)
-021980                              WS-BCHR (61) WS-BCHR (72).
-             MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
+	     MOVE WS-G9 	 TO WS-TCH(1).
+	     MOVE WS-G10	 TO WS-TCH(80).
+	     MOVE WS-G11	 TO WS-BCH(1).
+	     MOVE WS-G12	 TO WS-BCH(80).
+	     MOVE WS-G14	 TO WS-TCHR(1)	WS-BCHR(1).
+	     MOVE WS-G13	 TO WS-TCHR(80) WS-BCHR(80).
+021930	     MOVE WS-G2 	 TO WS-TCHR(8)	WS-TCHR(49)
+021940				    WS-TCHR(61) WS-TCHR(72).
+021950	     MOVE WS-G3 	 TO WS-MCHR(8)	WS-MCHR(49)
+021960				    WS-MCHR(61) WS-MCHR(72)
+021960				    WS-MCHR(1)	WS-MCHR(80).
+021970	     MOVE WS-G4 	 TO WS-BCHR(8)	WS-BCHR(49)
+021980				    WS-BCHR(61) WS-BCHR(72).
+	     MOVE WS-G13	 TO WS-TCHR(80) WS-BCHR(80).
+	     MOVE WS-G14	 TO WS-TCHR(1)	WS-BCHR(1).
 	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
 	   IF LS-USER = LS-SYS-ID
 	       MOVE "Supervisorд"
@@ -3802,6 +3836,7 @@
 
        ZA205.
              EXIT PROGRAM.
+
 025920 ZA999-EXIT.
 025930       EXIT.
       /
@@ -3832,6 +3867,10 @@
 041860         MOVE W02-DEBMEM   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DME-KEY	 TO WS-KEYX
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041640     ELSE
 041650     IF WS-F-ERROR = 55
 041660	       MOVE W02-DTHIST	 TO WS-FILE

@@ -13,10 +13,10 @@
       *                                                                *
       *      R E C U R I N G   T R A N S A C T I O N S	(CREATE)       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       * This program is still under development and is scheduled to be *
-      * completed during 2008. (This is a nice to have, but not a must *
+      * completed during 2011. (This is a nice to have, but not a must *
       * have or critical requirement). This program will allow for the *
       * User to setup recurring transactions for an account. Provision *
       * will be made for weekly, monthly, by-monthly, quarterly, six-  *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 2002.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2002 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2002 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

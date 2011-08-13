@@ -13,7 +13,7 @@
       *                                                                *
       *  D E B T O R ' S   S A L E S   R E S T R I C T I O N S   P R G *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -30,7 +30,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   FEBRUARY 2007.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2007 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2007 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1204,7 +1204,7 @@
 	     PERFORM SCREEN-SHADOW.
 	     MOVE DEB-ACNO	 TO DBD-ACNO.
 	     PERFORM READ-DEBDEP THRU READ-DEBDEP-EXIT.
-	   IF WS-F-ERROR = 18
+	   IF WS-F-ERROR = 33
 	       IF WS-RESTRICT = "N"
 		   GO TO BA45
 	       END-IF
@@ -1912,10 +1912,10 @@
                    GO TO ZA49
                ELSE
 	       IF IDX-CORRUPT
-		   MOVE 18	 TO WS-F-ERROR
+		   MOVE 33	 TO WS-F-ERROR
                    GO TO ZA50.
 042240     IF WS-STATUS NOT = "00"
-042250	       MOVE 18		 TO WS-F-ERROR
+042250	       MOVE 33		 TO WS-F-ERROR
 	       IF WS-STATUS = "39"
 038770		   GO TO ZA50
 	       ELSE
@@ -1993,23 +1993,8 @@
       *    ****    I / O   E R R O R   M E S S A G E S
       *   
 042900 ZB000-ERROR	     SECTION 81.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-       I-O-ERROR-EXIT.
-             EXIT.
+
+       COPY ERRORS.PRO.
 
 041560 DISPLAY-FILE-NAME.
 041610	   IF WS-F-ERROR = 2
@@ -2031,48 +2016,21 @@
 041870	       MOVE WS-PARKEY	 TO WS-KEY
 041760	   ELSE
 041770	   IF WS-F-ERROR = 18
-041780	       MOVE W02-DEBDEP	 TO WS-FILE
-041790         MOVE ZERO         TO WS-KEY
-	       MOVE DBD-ACNO	 TO WS-KEYX
+041170	       MOVE W02-RECOVER  TO WS-FILE
+041180         MOVE WS-RECKEY    TO WS-KEY
 041840	   ELSE
 041850     IF WS-F-ERROR = 27
 041860         MOVE W02-DEBMEM   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DME-KEY	 TO WS-KEYX
+041760	   ELSE
+041770	   IF WS-F-ERROR = 33
+041780	       MOVE W02-DEBDEP	 TO WS-FILE
+041790         MOVE ZERO         TO WS-KEY
+	       MOVE DBD-ACNO	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY.
-041880	   IF WS-STATUS = "10"
-041890	       MOVE "End of FILE"
-				 TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920	       MOVE "Duplicate record number"
-				 TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950	       MOVE "Invalid record number"
-				 TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980	       MOVE "DISK full"  TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040	       MOVE "FILE locked"
-				 TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

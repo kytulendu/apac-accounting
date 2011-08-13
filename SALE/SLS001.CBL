@@ -13,21 +13,44 @@
       *                                                                *
       *      S A L E S   O R D E R S   P R O G R A M                   *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
-      *
-      * August 2008    - New file (STKALT) - Stock alternate index
-      * 		 included for lookups, using any word con-
-      * 		 tained in the Stock description.
-      *
+      * 							       *
+      *  Feb 2007	- New file (DEBDEP/AR_REST.DAT) - Debtor sales *
+      * 		  restrictions file has been included which    *
+      * 		  will allow for departments to be excluded or *
+      * 		  only selected departments allowed. This will *
+      * 		  allow the user the abillity to allow or bar  *
+      * 		  sales of selected departments.	       *
+      * 							       *
+      * August 2008    - New file (STKALT) - Stock alternate index     *
+      * 		 included for lookups, using any word con-     *
+      * 		 tained in the Stock description.	       *
+      * 							       *
+      * November 2009	- Include words from Description 2 and from    *
+      * 		  the Item code (Some item codes are comprised *
+      * 		  of individual words and these will be        *
+      * 		  included in the alternate Index)	       *
+      * 							       *
+      *  Jan 2010 - Allow for two discounts for a Debtor on the same   *
+      * 	    Sales Ledger code. Included two additional Debtor  *
+      * 	    discount codes (11 and 12) each with a field to    *
+      * 	    define which debtor discount code uses this as an  *
+      * 	    alternate discount. The relevant Stock Item will   *
+      * 	    have an indicator field to instruct the system to  *
+      * 	    use the alternate discount. The alternate discount *
+      * 	    is only applicable if the discount code for which  *
+      * 	    this alternate discount is applicable is the code  *
+      * 	    on the Debtor account record.		       *
+      * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     SLS001.
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -66,6 +89,10 @@
 
 000130 COPY CONTROL.SL.
 
+000140 COPY DEBALT.SL.
+
+000160 COPY DEBDEP.SL.
+
 000170 COPY DEBTOR.ISL.
 
 000140 COPY DEBMEM.SL.
@@ -103,6 +130,10 @@
        COPY APACFIDS.FDE.
 
 000360 COPY CONTROL.FDE.
+
+000310 COPY DEBALT.FDE.
+
+000330 COPY DEBDEP.FDE.
 
 000400 COPY DEBTOR.FDE.
 
@@ -241,8 +272,8 @@
 000850 77  WS-RECOVER      PIC  9(06)    COMP-5.
 000820 77  WS-SHARED	   PIC	9(04)	 COMP-5 VALUE 1.
 002440 77  WS-TRANS        PIC  9(06)    COMP-5 VALUE 1.
-000870 77  WS-PRN1	   PIC	9(01) VALUE 0.
-000880 77  WS-PRN2         PIC  9(01) VALUE 0.  
+000870 77  WS-PRN1	   PIC	9(01)	 VALUE 0.
+000880 77  WS-PRN2	   PIC	9(01)	 VALUE 0.
 002190 77  WS-USE-PACKS    PIC	X(01).
        77  WS-USE-ITM	   PIC	X(01).
        77  WS-EXT-STK	   PIC	X(01).
@@ -250,15 +281,15 @@
 000900 77  WS-START	   PIC	9(08).
 000910 77  WS-END          PIC  9(08).
 000930 77  WS-TME2         PIC  9(08).
-000940 77  WS-PORT         PIC  9(05) VALUE 1004.
-000950 77  WS-OPEN         PIC  X(01) VALUE X"01".
-000960 77  WS-CLOSE        PIC  X(01) VALUE X"00".
-000970 77  WS-PAR          PIC  9(01) VALUE 0.
-000980 77  WS-INO	   PIC	9(03) VALUE 0.
-000990 77  WS-LINES        PIC  9(02) VALUE 0.
-001000 77  WS-FIRST	   PIC	9(03) VALUE 0.
-       77  WS-SALPOS	   PIC	9(03) VALUE 0.
-001010 77  WS-LAST	   PIC	9(03) VALUE 0.
+000940 77  WS-PORT	   PIC	9(05)	 VALUE 1004.
+000950 77  WS-OPEN	   PIC	X(01)	 VALUE X"01".
+000960 77  WS-CLOSE	   PIC	X(01)	 VALUE X"00".
+000970 77  WS-PAR	   PIC	9(01)	 VALUE 0.
+000980 77  WS-INO	   PIC	9(03)	 VALUE 0.
+000990 77  WS-LINES	   PIC	9(02)	 VALUE 0.
+001000 77  WS-FIRST	   PIC	9(03)	 VALUE 0.
+       77  WS-SALPOS	   PIC	9(03)	 VALUE 0.
+001010 77  WS-LAST	   PIC	9(03)	 VALUE 0.
 001020 77  WS-LASTINV      PIC  9(04)    COMP-5.
 001030 77  WS-LINE         PIC  9(04)    COMP-5.
 001040 77  WS-PAGE         PIC  9(02)    COMP-5.
@@ -275,41 +306,44 @@
        77  WS-12CPI	   PIC	X(06).
        77  WS-17CPI	   PIC	X(06).
 001060 77  WS-OPTION	   PIC	X(01).
-001070 77  WS-PGADV        PIC  X(01) VALUE "Y".
-001070 77  WS-SKIP         PIC  X(01) VALUE " ".
-001080 77  WS-LOOK         PIC  X(01) VALUE "S".
-002620 77  WS-ETYPE        PIC  X(01) VALUE "I".
-       77  WS-IN-OPT       PIC  X(01) VALUE "N".
+001070 77  WS-PGADV	   PIC	X(01)	 VALUE "Y".
+001070 77  WS-SKIP	   PIC	X(01)	 VALUE " ".
+001080 77  WS-LOOK	   PIC	X(01)	 VALUE "S".
+002620 77  WS-ETYPE	   PIC	X(01)	 VALUE "I".
+       77  WS-IN-OPT	   PIC	X(01)	 VALUE "N".
 001110 77  WS-NUM          PIC  Z9.
 001120 77  WS-ERROR        PIC  9(01).
 003150 77  WS-PRN-NO	   PIC	X(01)	 COMP-X VALUE 9.
 003160 77  WS-PRN-STAT	   PIC	X(01)	 COMP-X.
 001160 77  WS-COMP         PIC  9(01).
-001170 77  WS-UPDATE       PIC  9(01) VALUE ZERO.
-001180 77  WS-CONREC       PIC  9(01) VALUE ZERO.
+001170 77  WS-UPDATE	   PIC	9(01)	 VALUE ZERO.
+001180 77  WS-CONREC	   PIC	9(01)	 VALUE ZERO.
 002730 77  WS-DELIV	   PIC	X(01).
        77  WS-ITMPRC	   PIC	X(01).
-       77  WS-RT-HD	   PIC	X(10) VALUE "-Retail   ".
-       77  WS-WS-HD	   PIC	X(10) VALUE "-Wholesale".
-       77  WS-CS-HD	   PIC	X(10) VALUE "-Cash sale".
+       77  WS-RT-HD	   PIC	X(10)	 VALUE "-Retail   ".
+       77  WS-WS-HD	   PIC	X(10)	 VALUE "-Wholesale".
+       77  WS-CS-HD	   PIC	X(10)	 VALUE "-Cash sale".
+000750 77  WS-TYP	   PIC	X(01).
 001200 77  WS-TYPE	   PIC	X(01).
-001210 77  WS-AGE          PIC  X(01).
-001220 77  WS-PRC          PIC  X(01).
-       77  WS-MEASURE	   PIC	X(01) VALUE "N".
-       77  PRG-NAME	   PIC	X(12) VALUE "STP\STPLOOK".
-001280 77  WS-A 	   PIC	X(19) VALUE "Any key to continue".
-001290 77  WS-E            PIC  X(15) VALUE "**END** - ENTER".
-001300 77  WS-ERR1         PIC  X(22) VALUE "Invalid Account Number".
-001310 77  WS-ERR2         PIC  X(09) VALUE "No Record".
+001210 77  WS-AGE	   PIC	X(01).
+001220 77  WS-PRC	   PIC	X(01).
+       77  WS-RESTRICT	   PIC	X(01).
+       77  WS-RESTCODE	   PIC	X(01).
+       77  WS-MEASURE	   PIC	X(01)	 VALUE "N".
+       77  PRG-NAME	   PIC	X(12)	 VALUE "STP\STPLOOK".
+001280 77  WS-A 	   PIC	X(19)	 VALUE "Any key to continue".
+001290 77  WS-E 	   PIC	X(15)	 VALUE "**END** - ENTER".
+001300 77  WS-ERR1	   PIC	X(22)	 VALUE "Invalid Account Number".
+001310 77  WS-ERR2	   PIC	X(09)	 VALUE "No Record".
 001320 77  WS-PER          PIC  Z(02)9.99.
-001330 77  WS-CR           PIC  X(01) VALUE "I".
+001330 77  WS-CR	   PIC	X(01)	 VALUE "I".
 001340 77  WS-TAXRES       PIC  S9(07)V9(08) COMP-3.
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
-       77  WS-USUB	   PIC	9(04) COMP-5.
+       77  TODAY-DDMMYY	   PIC	9(08)	 COMP-5.
+       77  WS-USUB	   PIC	9(04)	 COMP-5.
       /
        01  PRG-NAME3.
-	   03  FILLER	   PIC	X(08) VALUE "INV\INVF".
-	   03  PRG-NUMBER  PIC	9(02) VALUE ZERO.
+	   03  FILLER	   PIC	X(08)	 VALUE "INV\INVF".
+	   03  PRG-NUMBER  PIC	9(02)	 VALUE ZERO.
 
 001350 01  WS-DB-LINE.
 003060	   03  WS-TOP-LINE.
@@ -447,6 +481,10 @@
        COPY APACFIDS.ID.
 
 002060 COPY CONTROL.ID.
+
+       COPY DEBALT.ID.
+
+000330 COPY DEBDEP.ID.
 
 002100 COPY DEBTOR.ID.
 
@@ -1090,14 +1128,17 @@
 
        01  S40.
 	   03  LINE  8 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "Ú".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "Ú".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14
+				 FOREGROUND-COLOR 6 HIGHLIGHT
                                  PIC X(50) USING WS-SRT-LINE.
 	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "¿".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "¿".
 007450	   03  LINE  9 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 PIC  X(18) FROM WS-SPACE.
 	   03	       COLUMN 34 BACKGROUND-COLOR 2
@@ -1106,9 +1147,11 @@
 	   03	       COLUMN 48 BACKGROUND-COLOR 2
 				 PIC  X(18) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 10 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 7
                                  VALUE "Name    >".
@@ -1116,9 +1159,11 @@
 				 FOREGROUND-COLOR 7
                                  VALUE "<".     
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 11 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 7
                                  VALUE "Address >".
@@ -1128,9 +1173,11 @@
 	   03	       COLUMN 56 BACKGROUND-COLOR 2
 				 PIC  X(10) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 12 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 PIC  X(08) FROM WS-SPACE.
 	   03	       COLUMN 24 BACKGROUND-COLOR 2
@@ -1142,9 +1189,11 @@
 	   03	       COLUMN 56 BACKGROUND-COLOR 2
 				 PIC  X(10) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 13 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 PIC  X(08) FROM WS-SPACE.
 	   03	       COLUMN 24 BACKGROUND-COLOR 2
@@ -1156,9 +1205,11 @@
 	   03	       COLUMN 56 BACKGROUND-COLOR 2
 				 PIC  X(10) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 14 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 PIC  X(08) FROM WS-SPACE.
 	   03	       COLUMN 24 BACKGROUND-COLOR 2
@@ -1170,9 +1221,11 @@
 	   03	       COLUMN 56 BACKGROUND-COLOR 2
 				 PIC  X(10) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 15 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 PIC  X(08) FROM WS-SPACE.
 	   03	       COLUMN 24 BACKGROUND-COLOR 2
@@ -1184,9 +1237,11 @@
 	   03	       COLUMN 30 BACKGROUND-COLOR 2
 				 PIC  X(36) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 16 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 7
                                  VALUE "Tel.    >".
@@ -1196,9 +1251,11 @@
 	   03	       COLUMN 40 BACKGROUND-COLOR 2
 				 PIC  X(26) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 007450	   03  LINE 17 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 7
                                  VALUE "Id.No.  >".
@@ -1208,14 +1265,17 @@
 	   03	       COLUMN 40 BACKGROUND-COLOR 2
 				 PIC  X(26) FROM WS-SPACE.
 007460	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "³".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "³".
 	   03  LINE 18 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "À".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "À".
 	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14
+				 FOREGROUND-COLOR 6 HIGHLIGHT
                                  PIC X(50) USING WS-SRT-LINE.
 	   03	       COLUMN 66 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 14 VALUE "Ù".
+				 FOREGROUND-COLOR 6 HIGHLIGHT
+				 VALUE "Ù".
 
        01  S41.
 	   03  LINE 10 COLUMN 25 BACKGROUND-COLOR 2
@@ -1375,6 +1435,9 @@
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
 010580 AA000-MAIN	       SECTION.
 010590 AA000-INIT.
+      *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+      * 	       Check the security level of the USER.
+      *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
 003240	   IF LS0-SALEV < 1
 	       MOVE "Not Authorised"
 				 TO WS-ERR-STRING
@@ -1396,7 +1459,7 @@
       *    able if the workstation happens to have apac on a local drive
       *    other than C.
       *    *************************************************************
-      *        IF NOT (WS-LOCAL-DRIVE = "C")
+      *        IF NOT(WS-LOCAL-DRIVE = "C")
 		   OPEN I-O SYSUSER
 	       END-IF
 	       MOVE LS0-NO	 TO USE-NO
@@ -1413,7 +1476,7 @@
       *    able if the workstation happens to have apac on a local drive
       *    other than C.
       *    *************************************************************
-      *		  IF NOT (WS-LOCAL-DRIVE = "C")
+      *		  IF NOT(WS-LOCAL-DRIVE = "C")
 		     CLOSE SYSUSER
 		  END-IF
 		  GO TO AZ000-EOJ.
@@ -1424,8 +1487,9 @@
       *    able if the workstation happens to have apac on a local drive
       *    other than C.
       *    *************************************************************
-      *	   IF NOT (WS-LOCAL-DRIVE = "C")
+      *	   IF NOT(WS-LOCAL-DRIVE = "C")
 	       CLOSE SYSUSER.
+	     CLOSE DEBDEP.
 010760	     GO TO BA00.
 
        AA49.
@@ -1492,7 +1556,12 @@
       *    ³ the window. An example of a message request follows:      ³
       *    ³							       ³
       *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
-      *    ³   PERFORM OPT-MESSAGE.				       ³
+      *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
+      *    ³	       other keys are to be tested on exit)	       ³
+      *    ³			     OR 			       ³
+      *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
+      *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
+      *    ³   default option)					       ³
       *    ³							       ³
       *    ³ This would be displayed as:			       ³
       *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
@@ -1504,7 +1573,8 @@
       *    ³							       ³
       *    ³ To display the request message higher or lower (default   ³
       *    ³ is line 13) move the line number to be used to SLIN and   ³
-      *    ³ then PEFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY OPTION.CRT.
@@ -1561,16 +1631,20 @@
 011570 AA400              SECTION.
 011580 AA401.
 011590	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Help,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F2" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 011600		     " Order no./ "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011610		     "F3" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+011610		     "F3" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 011620		     " Account no./ "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F4" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F4" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
                      " From specified date Lookup" 
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 011630 AA405.
@@ -1581,6 +1655,10 @@
 011650 AC000		  SECTION.
 
 011670 COPY CONTROL.RD.
+
+       COPY DEBALT.RD.
+
+011190 COPY DEBDEP.RD.
 
 011710 COPY DEBTOR.RD.
 
@@ -1681,7 +1759,7 @@
 012300       WRITE REC-RECORD.
 012310     IF WS-STATUS NOT = "00"
 012320         DISPLAY "Write error Recovery file - Status " AT 2212
-012330                  WITH FOREGROUND-COLOR 14
+012330			WITH FOREGROUND-COLOR 6 HIGHLIGHT
 012340			WS-STATUS WITH FOREGROUND-COLOR 7 HIGHLIGHT
 012350         STOP RUN.
 012360       CLOSE RECOVER.
@@ -1711,7 +1789,8 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
       *    *************************************************************
 012550	     DISPLAY "WAITING" AT 2551
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 4 HIGHLIGHT.
 012560	     COMMIT.
 	     ACCEPT WS-STIME FROM TIME.
 	     MOVE 400		 TO WS-WAIT.
@@ -1737,13 +1816,13 @@
       *    ****   A R E   A N Y   U P D A T E S   I N	P R O G R E S S
       *    *************************************************************
 012750 AY62.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-		   PAR-USR(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES OR
+		  PAR-USR(WS-SUB) = SPACES)
       *    *************************************************************
       *    ****   A R E   D E B T O R	O R   S T O C K   F I L E S
       * 	  B E I N G   U P D A T E D
       *    *************************************************************
-	       IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	       IF NOT(PAR-PROG(WS-SUB) = SPACES)
 012760		   IF PAR-PROG(WS-SUB) = "DB" OR "DS" OR "CS" OR "ST"
       *    *************************************************************
       *    ****   Y E S   -   S E T   W A I T	P E R I O D
@@ -1779,7 +1858,7 @@
       *    *************************************************************
        AY62-WAIT.
 	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-SUB) = LS-USER)
 	       IF WS-SUB < 24
 		   ADD 1	 TO WS-SUB
 		   GO TO AY62.
@@ -1789,12 +1868,12 @@
 	       COMMIT
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       ACCEPT WS-STIME FROM TIME
 	       PERFORM LOCK-REC-LOOP
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       GO TO AY60.
 012880	     DISPLAY SPACE AT 2572
 		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
@@ -1817,7 +1896,7 @@
 	     MOVE 1		 TO WS-USUB.
 
        AY72.
-	   IF NOT (PAR-USR(WS-USUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-USUB) = LS-USER)
 	       ADD 1		 TO WS-USUB
 	       GO TO AY72.
 
@@ -1828,7 +1907,7 @@
 	       ADD 1 WS-USUB	 GIVING WS-SUB
 	   ELSE
 	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES)
 	       MOVE PAR-PROG(WS-SUB)
 				 TO PAR-PROG(WS-USUB)
 	       MOVE PAR-USR(WS-SUB)
@@ -1884,14 +1963,14 @@
 017370       MOVE 30             TO WS-S3.
 017380       MOVE SPACES         TO W60-ADDRESS.
 017390 CA115.
-017460	   IF W40-PCHAR (WS-S3) NOT = SPACE
+017460	   IF W40-PCHAR(WS-S3) NOT = SPACE
 017470         GO TO CA120.
 017480     IF WS-S3 > WS-S2
 017490         SUBTRACT 1        FROM WS-S3
 017500         GO TO CA115.
 017510 CA120.
-017550	     MOVE W40-PCHAR (WS-S2)
-                                 TO W60-ACHAR (WS-S1).
+017550	     MOVE W40-PCHAR(WS-S2)
+				 TO W60-ACHAR(WS-S1).
 017560     IF WS-S2 = WS-S3
 017570         GO TO CA125.
 017580       ADD 1               TO WS-S1.
@@ -1905,7 +1984,7 @@
 017660         GO TO CA130.
 017670     IF WS-S1 < 70
 017680         ADD 1             TO WS-S1
-017690         MOVE "*"          TO W60-ACHAR (WS-S1).
+017690	       MOVE "*" 	 TO W60-ACHAR(WS-S1).
 017700 CA130.
 017710       ADD 1               TO WS-S1.
 017720 CA135.
@@ -2124,7 +2203,7 @@
       *    ³			     T E X T			       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 015170	   IF SOR-TYPE = 8
-	       MOVE SOR-TEXT	 TO W32-REMARKS (WS-S7)
+	       MOVE SOR-TEXT	 TO W32-REMARKS(WS-S7)
 	       ADD 1		 TO WS-S7
 015220	   ELSE
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -2163,11 +2242,12 @@
 	   IF LS-DAYS > 65
 	       COMPUTE WS-NUM = 15 - (LS-DAYS - 65)
                DISPLAY "This package must be registered within " AT 2502
-			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12
+			WITH BACKGROUND-COLOR 3
+			     FOREGROUND-COLOR 4 HIGHLIGHT
 			WS-NUM WITH BACKGROUND-COLOR 3
 				    FOREGROUND-COLOR 7 HIGHLIGHT BLINK
 		       " days" WITH BACKGROUND-COLOR 3
-				    FOREGROUND-COLOR 12.
+				    FOREGROUND-COLOR 4 HIGHLIGHT.
 015500 BA05.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 	   IF USER-FUNC
@@ -2225,10 +2305,9 @@
 	     MOVE "Enter client details Y/N  [Y]"
 				 TO WS-ERR-MES.
 	     MOVE "Y"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-020250	   IF NOT (WS-OPTION = "N" OR "Y")
-               GO TO BB05.
-           IF WS-OPTION = "N"
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
+	   IF WS-OPTION = "N"
                GO TO BB20.
        BB06.
 	     PERFORM SAVE-SCREEN.
@@ -2276,29 +2355,29 @@
 017700 BB50.
              MOVE WS-EXPP        TO REP-DETAIL2.
              MOVE ZERO           TO REP-LN.
-             WRITE REP-L2 BEFORE 0 LINES.
+	     WRITE REP-L2.
 	     MOVE W95-COMP	 TO REP-DETAIL2.
              MOVE 2              TO REP-LN.
-             WRITE REP-L2 BEFORE 2 LINES.
+	     WRITE REP-L2.
 017710	     MOVE SPACES	 TO REP-DETAIL2.
 017750       MOVE "PICKING SLIP - REFERENCE NO:"
                                  TO REP-H1.
              MOVE W90-PS         TO REP-REF.
              MOVE ZERO           TO REP-LN.
-             WRITE REP-L2 BEFORE 0 LINES.
+	     WRITE REP-L2.
              MOVE 2              TO REP-LN.
-017760       WRITE REP-L2 BEFORE 2 LINES.
+017760	     WRITE REP-L2.
            IF W90-PICK > 01
                MOVE SPACES       TO REP-DETAIL2
                MOVE "REPLACE PREVIOUS PICKING SLIP"              
                                  TO REP-H1
                MOVE 2            TO REP-LN
-               WRITE REP-L2 BEFORE 2 LINES.
+	       WRITE REP-L2.
 
        BB60.
              MOVE WS-ECAN        TO REP-DETAIL2.
              MOVE ZERO           TO REP-LN.
-             WRITE REP-L2 BEFORE 0 LINES.
+	     WRITE REP-L2.
 017710       MOVE SPACES         TO REP-DETAIL2.
              MOVE "Account :"    TO REP-AC.
 017770       MOVE W80-ACNO       TO REP-ACNO.
@@ -2306,7 +2385,7 @@
              MOVE "Date:"        TO REP-DATE.
              MOVE W12-TODAY      TO REP-DTE.
              MOVE 1              TO REP-LN.
-017760       WRITE REP-L2 BEFORE 1 LINES.
+017760	     WRITE REP-L2.
 017790       MOVE SPACES         TO REP-DETAIL2.
              MOVE " Contact:"    TO REP-CNTCT.
              MOVE W40-CONTACT    TO REP-CONTACT.
@@ -2319,7 +2398,7 @@
              MOVE W25-SS         TO W95-SS.
              MOVE W95-TIME       TO REP-TIME.
 	     MOVE 1		 TO REP-LN.
-017760	     WRITE REP-L2 BEFORE 1 LINES.
+017760	     WRITE REP-L2.
 017790       MOVE SPACES         TO REP-DETAIL2.
 	   IF WS-DELIV = "Y"
 	       IF NOT(W40-PADDRESS = SPACES)
@@ -2328,11 +2407,11 @@
 		   MOVE 1	 TO REP-LN
 		   MOVE W60-ADDRESS
 				 TO REP-DETAIL2
-		   WRITE REP-L2 BEFORE 1 LINES
+		   WRITE REP-L2
 		   MOVE SPACES	       TO REP-DETAIL2.
 	     MOVE ALL "="	 TO REP-DETAIL1.
              MOVE 2              TO REP-LN.
-017760       WRITE REP-L2 BEFORE 2 LINES.
+017760	     WRITE REP-L2.
 017790       MOVE SPACES         TO REP-DETAIL2.
 017800	     MOVE "Item Code"	 TO REP-H2.
 017820	     MOVE "Description"  TO REP-H3.
@@ -2345,7 +2424,7 @@
 	   ELSE
 	       MOVE "Remarks"	 TO REP-H5.
 	     MOVE 2		 TO REP-LN.
-017850       WRITE REP-L2 BEFORE 2 LINES.
+017850	     WRITE REP-L2.
              MOVE SPACES         TO REP-DETAIL2.
 017950 BB65.
 017960       EXIT.
@@ -2369,15 +2448,13 @@
            ELSE
            IF STK-SELL NOT > W10-SPAPRC
                GO TO BB110.
-	   IF NOT (W10-SPAPRC = ZERO)
+	   IF NOT(W10-SPAPRC = ZERO)
 	       GO TO BB104.
 	BB103.
 	     MOVE "Is this a no-charge item Y/N"
 				 TO WS-ERR-MES.
 	     MOVE SPACE		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-016020	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO BB103.
+	     PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".
 	     GO TO BB110.
        BB104.
 015890       COMPUTE W10-MARG = ((W10-SPAPRC - W10-COST) / W10-SPAPRC)
@@ -2388,32 +2465,31 @@
 018110	     MOVE "Margin less than allowed - Override Y/N?"
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-016020	   IF NOT (WS-OPTION = "N" OR "Y")
-016030         GO TO BB105.
-016040     IF WS-OPTION = "N"
+	     PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".
+016040	   IF WS-OPTION = "N"
 016050         MOVE 1 TO WS-ERROR
 016060         GO TO BB110.
 016070 BB106.
 016080	     DISPLAY "Enter password" AT 2551
-016090		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+016090		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT.
 016100	     ACCEPT W40-CSHPASS AT 2567
 		    WITH BACKGROUND-COLOR 5
 			 FOREGROUND-COLOR 7 HIGHLIGHT
 016110			 AUTO NO-ECHO.
-016120       MOVE 6 TO WS-LENGTH.
+016120	     MOVE 6		 TO WS-LENGTH.
 	     CALL "CBL_TOUPPER" USING W40-CSHPASS
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
-016180	     MOVE 1 TO WS-LENGTH.
+016180	     MOVE 1		 TO WS-LENGTH.
        BB107.
            IF W40-CSHPASS = "!@$^*)"
                MOVE 10           TO WS-SUPER
            ELSE
-           IF W40-CSHPASS = W85-SUPER (1)
+	   IF W40-CSHPASS = W85-SUPER(1)
                MOVE 1            TO WS-SUPER
            ELSE
-           IF W40-CSHPASS = W85-SUPER (9)
+	   IF W40-CSHPASS = W85-SUPER(9)
                MOVE 9            TO WS-SUPER
            ELSE
 018470         MOVE 1            TO WS-ERROR
@@ -2423,10 +2499,10 @@
            IF W40-CSHPASS = "!#%&()"
                MOVE 10           TO WS-SUPER
            ELSE
-           IF W40-CSHPASS = W85-SUPER (1)
+	   IF W40-CSHPASS = W85-SUPER(1)
                MOVE 1            TO WS-SUPER
            ELSE
-           IF W40-CSHPASS = W85-SUPER (6)
+	   IF W40-CSHPASS = W85-SUPER(6)
                MOVE 6            TO WS-SUPER
            ELSE
 018470         MOVE 1            TO WS-ERROR
@@ -2505,25 +2581,25 @@
 	       MOVE SOR-SELL	 TO REP-PRICE.
 020530	     PERFORM READ-SPARTS THRU READ-SPARTS-EXIT.
 020510     IF WS-F-ERROR = 21
-               MOVE SOR-QNT      TO REP-QNT
+      * 	MOVE SOR-QNT	  TO REP-QNT
                PERFORM BB280
 021310         GO TO BB275.
 
        BB280.
 	   IF LINAGE-COUNTER OF PRNDSK < WS-PRN-LENGTH
                MOVE 1            TO REP-LN
-               WRITE REP-L2 BEFORE 1 LINES
+	       WRITE REP-L2
            ELSE
                MOVE "PAGE"       TO REP-PG
-               WRITE REP-L2 BEFORE PAGE
+	       WRITE REP-L2
                MOVE WS-EXPP      TO REP-DETAIL2
                MOVE ZERO         TO REP-LN
-               WRITE REP-L2 BEFORE 0 LINES
+	       WRITE REP-L2
                MOVE "PICKING SLIP - CONTINUED ..."
                                  TO REP-H1
-               WRITE REP-L2 BEFORE 0 LINES
+	       WRITE REP-L2
                MOVE 2            TO REP-LN
-               WRITE REP-L2 BEFORE 2 LINES
+	       WRITE REP-L2
                PERFORM BB60 THRU BB65.
              MOVE SPACES         TO REP-DETAIL2.
       *    *************************************************************
@@ -2554,7 +2630,7 @@
 021520         GO TO BB295.
 021540       MOVE STK-DESC       TO REP-DSCR.
              PERFORM BB280
-021600       ADD 1 TO WS-S6.
+021600	     ADD 1		 TO WS-S6.
 
 021660 BB295.
 021670     IF WS-S6 < 31
@@ -2566,7 +2642,7 @@
        BB300.
              MOVE SPACES         TO REP-DETAIL2.
 	     MOVE 1		 TO REP-LN.
-             WRITE REP-L2 BEFORE 1 LINES.
+	     WRITE REP-L2.
 	     MOVE ALL "="	 TO REP-DETAIL1.
 026330	     MOVE W90-REF	 TO SOR-REF.
              MOVE 100            TO SOR-SQN.
@@ -2578,7 +2654,7 @@
 	     MOVE "Y"		 TO WS-OPTION.
 	     MOVE WS-OPTION	 TO WS-PGADV.
 	     MOVE "PAGE"	 TO REP-PG.
-	     WRITE REP-L2 BEFORE PAGE.
+	     WRITE REP-L2.
 	     CLOSE PRNDSK.
 	     PERFORM BB400.
              MOVE SPACES         TO REP-DETAIL2.
@@ -2647,17 +2723,21 @@
 016500	     MOVE SPACES	 TO W80-ACNO.
 
 016510 BC11.
-016520	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+016520	     DISPLAY "F1" AT 2502 WITH BACKGROUND-COLOR 3
+				       FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Help,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-016530		     " to do Debtor Lookup"
+		     "F2" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
+		     "=Debtor Lookup,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     " to exit"
+		     "=Create,"
+		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+		     "F9" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
+		     "=Debtor Lookup (Any Word)"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
-016540       ACCEPT S36 AT 0308.
+016540	     ACCEPT S36 AT 0308.
 	   IF USER-FUNC
 	       EVALUATE KEY-CODE-1
 		 WHEN ESC-KEY
@@ -2666,6 +2746,15 @@
 016550		 WHEN F1-KEY
 		     PERFORM HELP-ROUTINE
 		 WHEN F2-KEY
+016560		     PERFORM AA50D THRU AA59
+		 WHEN F8-KEY
+003240		     IF LS0-DBLEV > 0
+			 PERFORM GA000
+			 MOVE LS0-DBT
+				 TO W80-ACNO
+		     END-IF
+		 WHEN F9-KEY
+		     MOVE "A"	 TO WS-TYP
 016560		     PERFORM AA50D THRU AA59
 		 WHEN OTHER
 		     CALL X"E5"
@@ -2763,7 +2852,7 @@
 
        BC18A.
              MOVE DME-SEQ        TO WS-S1.
-             MOVE DME-DATA       TO W200-MEM (WS-S1).
+	     MOVE DME-DATA	 TO W200-MEM(WS-S1).
              PERFORM READ-DEBMEM-NEXT THRU READ-DEBMEM-EXIT.
            IF WS-F-ERROR = ZERO
                IF DME-AC = W80-ACNO
@@ -2794,7 +2883,7 @@
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
-016970	   IF NOT (WS-OPTION = "C" OR "E" OR "R")
+016970	   IF NOT(WS-OPTION = "C" OR "E" OR "R")
 016980         GO TO BC18.
 016990       MOVE 8              TO LIN.
 017000       PERFORM BC115 UNTIL LIN > 18.
@@ -2813,28 +2902,29 @@
 019360	       MOVE "Arrears > 30 days - Override Y/N"
 				 TO WS-ERR-MES
 	       MOVE SPACE	 TO WS-OPTION
-	       PERFORM OPT-MESSAGE
+	       PERFORM OPT-MESSAGE TEST AFTER
+		       UNTIL WS-OPTION = "Y" OR "N"
 017180	       IF WS-OPTION = "Y"
 017190             MOVE ZERO     TO WS-ERROR
 017200             PERFORM BB106
 019470             PERFORM BB108
 017210             IF WS-ERROR = 1
 017220                 MOVE "N"  TO WS-OPTION.                       
-017240     IF WS-OPTION NOT = "Y"
+017240	   IF WS-OPTION = "N"
 017250         GO TO BC05.
 017260     IF DEB-CRL > ZERO
 017270         IF DEB-BAL > DEB-CRL
 019550		   MOVE "Credit limit exceded - Override Y/N"
 				 TO WS-ERR-MES
 		   MOVE SPACE	 TO WS-OPTION
-		   PERFORM OPT-MESSAGE
+		   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "Y" OR "N"
 017370	       IF WS-OPTION = "Y"
 017380             MOVE ZERO     TO WS-ERROR
 017390             PERFORM BB106
 019470             PERFORM BB108
 017400             IF WS-ERROR = 1
 017410                 MOVE "N"  TO WS-OPTION.                       
-017430     IF WS-OPTION NOT = "Y"
+017430	   IF WS-OPTION = "N"
 017440         GO TO BC05.   
            IF DEB-NCASH = "CASH SALE" OR
                              "KONTANT V"
@@ -2847,6 +2937,17 @@
 	   IF NOT VALID-PRICE
 	       MOVE "1" 	 TO DEB-PRICE.
              MOVE DEB-PRICE      TO WS-PRC.
+	     MOVE SPACES	 TO WS-RESTRICT.
+	     MOVE "N"		 TO WS-RESTCODE.
+      *    *************************************************************
+      *    ****   D E B T O R	S A L E S   R E S T R I C T I O N S
+      *    *************************************************************
+	   IF DEB-RESTRICT = "A" OR "E"
+	       MOVE DEB-ACNO	 TO DBD-ACNO
+	       PERFORM READ-DEBDEP THRU READ-DEBDEP-EXIT
+	       IF WS-F-ERROR = 0
+		   MOVE DEB-RESTRICT
+				 TO WS-RESTRICT.
 
 017620 BC25.
 017630       MOVE SPACES         TO W90-ORD W90-REG.
@@ -2860,7 +2961,7 @@
       *    *************************************************************
 017680       MOVE DEB-SMAN       TO W10-SMAN.
              MOVE DEB-CONTACT    TO W40-CONTACT.
-           IF NOT (DEB-NCASH = "CASH SALE" OR "KONTANT V")
+	   IF NOT(DEB-NCASH = "CASH SALE" OR "KONTANT V")
                IF DEB-TYPE = 1
                    MOVE DEB-H-TEL 
                                  TO W40-TEL
@@ -2914,10 +3015,9 @@
 		    WS-OPTION DELIMITED SIZE
 		    "]" DELIMITED SIZE
 			     INTO WS-ERR-MES.
-033910	     PERFORM OPT-MESSAGE.
-018140	   IF NOT (WS-OPTION = "Y" OR "N" OR "X")
-018150         GO TO BC42.
-018160       MOVE WS-OPTION      TO W90-EXP.
+033910	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y" OR "X".
+018160	     MOVE WS-OPTION	 TO W90-EXP.
            IF WS-OPTION = "Y"
                MOVE "E"          TO W90-EXP.
 020600     IF WS-OPTION = "N"
@@ -3096,6 +3196,17 @@
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO BC60.
+      *    *************************************************************
+      *    **** C H E C K   F O R   S A L E S	R E S T R I C T I O N S
+      *    *************************************************************
+	   IF WS-RESTRICT = "A" OR "E"
+	       PERFORM MA000
+	       IF ((WS-RESTCODE = "Y") AND (WS-RESTRICT = "E")) OR
+		  ((WS-RESTCODE = "N") AND (WS-RESTRICT = "A"))
+		   MOVE "Restricted for this Department"
+                                 TO WS-ERR-STRING
+003260		   PERFORM ERROR-MESSAGE
+020140		   GO TO BC60.
 018730	     MOVE WS-LAST	 TO WS-SALKEY.
 018740       INITIALIZE SAL-RECORD1.
 018750       MOVE WS-LAST        TO SAL-CODE.
@@ -3107,17 +3218,17 @@
 018780	     DISPLAY CLEAR-L25.
 018800     IF STK-IND = 3
 018810         MOVE ZERO         TO STK-AVGE
-018820	       ACCEPT (LIN, 21) W10-SDSC
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-018830			    BACKGROUND-COLOR 0 UPDATE AUTO
+018820	       ACCEPT W10-SDSC AT LINE LIN COLUMN 21
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+018830			   BACKGROUND-COLOR 0 UPDATE AUTO
 018840         DISPLAY "Index Unit cost" AT 2512
 018850			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
 018860         ACCEPT S26-AVGE AT LINE 25
 018870     ELSE
 018880         MOVE STK-DESC     TO W10-DESC
-018890	       DISPLAY (LIN, 21) W10-SDSC
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			     BACKGROUND-COLOR 0.
+018890	       DISPLAY W10-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			    BACKGROUND-COLOR 0.
 018900     IF STK-IND = 3
 018910         IF STK-AVGE = ZERO
 021070		   MOVE "Unit cost is zero"
@@ -3146,7 +3257,7 @@
 	     GO TO BC66.
 
        BC65-PACK.
-	   IF NOT (STK-UNT(WS-P1) = ZERO)
+	   IF NOT(STK-UNT(WS-P1) = ZERO)
 	       DISPLAY STK-PR(WS-P1) AT 0751
 		       WITH BACKGROUND-COLOR 5
 			    FOREGROUND-COLOR 6 HIGHLIGHT
@@ -3203,16 +3314,50 @@
 	   IF USER-FUNC
 	       EVALUATE KEY-CODE-1
 		 WHEN ESC-KEY
-021390		     DISPLAY (LIN, 2) WS-INV78 WITH FOREGROUND-COLOR 3
+021390		     DISPLAY WS-INV78 AT LINE LIN COLUMN 2
+			     WITH FOREGROUND-COLOR 3
 021400		     GO TO BC55
 		 WHEN F6-KEY
 		     PERFORM BB050
 021370		     DISPLAY S26-QNT AT LINE LIN
 		 END-EVALUATE.
 021150	   IF W10-QUANT = ZERO
-021160	       DISPLAY (LIN, 2) WS-INV78
-			WITH FOREGROUND-COLOR 3 BACKGROUND-COLOR 1
-021170         GO TO BC55.
+021160	       DISPLAY WS-INV78 AT LINE LIN COLUMN 2
+		       WITH FOREGROUND-COLOR 3 BACKGROUND-COLOR 1
+021170	       GO TO BC55.
+      ******************************************************************
+      *    T O	 B E   I N C L U D E D	 A T   A   L A T E R   D A T E
+      *    *************************************************************
+      *    ****    C H E C K   S T O C K   Q U A N T I T I E S
+      *    *************************************************************
+      *	   IF W10-QUANT > STK-QUANT
+      *	       IF STK-QUANT < .01
+      *		   MOVE ZERO	 TO W100-QNT
+      *	       ELSE
+      *		   MOVE STK-QUANT
+      *				 TO W100-QNT
+      *	       END-IF
+      *	       MOVE SPACES	 TO WS-ERR-MES
+      *	       STRING "Available " W100-V2 " "
+      *		      "Accept/Override A/O [ ]"
+      *				 INTO WS-ERR-MES
+      *	       MOVE "A" 	 TO WS-OPTION
+003260*	       PERFORM OPT-MESSAGE TEST AFTER
+      *		       UNTIL WS-OPTION = "A" OR "O"
+      *	       IF (WS-OPTION = "A")
+      *		   IF (STK-QUANT < .01)
+      *		       DISPLAY WS-INV78 AT LINE LIN COLUMN 2
+      *			       WITH FOREGROUND-COLOR 3
+      *				    BACKGROUND-COLOR 1
+021400*		       GO TO BC55
+      *		   ELSE
+      *		       MOVE STK-QUANT
+      *				TO W10-QUANT
+      *		   END-IF
+      *	       ELSE
+      *		   PERFORM
+      *
+030810* 	GO TO BC325.
 	     MOVE W10-QUANT	 TO W10-QORD.
 	     MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
 				 GIVING W10-QNT.
@@ -3316,9 +3461,9 @@
 	     MOVE WS-P1 	 TO SAL-PACK.
 019430       COMPUTE W25-VALUE ROUNDED = (1.000 * W10-SELL * W10-QUANT).
 019440       MOVE W25-VALUE      TO W100-EXT SAL-VAL.
-019450	     DISPLAY (LIN, 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+019450	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    L I N E   D I S C O U N T   ( PERCENTAGE )
       *    *************************************************************
@@ -3335,7 +3480,23 @@
 019490	       MOVE STK-LDG	 TO DPT-CODE
 019500         PERFORM READ-DEPART THRU READ-DEPART-EXIT
 019510	       MOVE DPT-DSETT(DEB-DISC)
-019520                           TO WS-DISC.
+019520				 TO WS-DISC
+      *    *************************************************************
+      *    **  M U S T	 T H E	 A L T E R N A T E   D I S C O U N T  **
+      *    **  B E   U S E D   F O R   T H I S	D E B T O R	      **
+      *    *************************************************************
+	       IF STK-ALT-DISC = "Y"
+		   IF DPT-ALT-DD1 = DEB-DISC
+		       MOVE DPT-DD11
+				 TO DPT-DSETT(DEB-DISC)
+				    WS-DISC
+		   ELSE
+		   IF DPT-ALT-DD2 = DEB-DISC
+		       MOVE DPT-DD12
+				 TO DPT-DSETT(DEB-DISC)
+				    WS-DISC
+		   END-IF
+	       END-IF.
 
 019530 BC85.
 019540       ACCEPT S26-DSC AT LINE 25.
@@ -3470,12 +3631,11 @@
       *            A C C E P T E D.
       *    *************************************************************
 020310 BC110.
-	     PERFORM OPT-MESSAGE.
-020390	   IF NOT (WS-OPTION = "A" OR "C")
-020400	       GO TO BC105.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "A" OR "C".
 020420     IF WS-OPTION = "C"
-020430	       DISPLAY (LIN, 2) WS-INV78
-			WITH FOREGROUND-COLOR 3 BACKGROUND-COLOR 1
+020430	       DISPLAY WS-INV78 AT LINE LIN COLUMN 2
+		       WITH FOREGROUND-COLOR 3 BACKGROUND-COLOR 1
 020440         PERFORM BC114
 020450         PERFORM BC100 THRU BC102
 020460         GO TO BC55.               
@@ -3512,9 +3672,9 @@
 023790	       MOVE W10-REMKS	 TO SAL-MSER
 	       MOVE WS-SUPER	 TO SAL-SUPER
 023390	       PERFORM WRITE-SALE THRU WRITE-SALE-EXIT
-023710	       DISPLAY (LIN, 21) W10-REMKS
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			     BACKGROUND-COLOR 0 UPDATE AUTO
+023710	       DISPLAY W10-REMKS AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			    BACKGROUND-COLOR 0 UPDATE AUTO
 023400	       ADD 1		 TO WS-LAST.
       *    *************************************************************
       *    ****    T E S T   I F   S C R E E N   F U L L
@@ -3529,10 +3689,10 @@
       *    *************************************************************
        BC111-SHIFT.
 	     ADD 1 WS-S7	 GIVING WS-S8.
-	     MOVE W42-LINES (WS-S8)
-				 TO W42-LINES (WS-S7).
-	     MOVE W43-LINE (WS-S8)
-				 TO W43-LINE (WS-S7).
+	     MOVE W42-LINES(WS-S8)
+				 TO W42-LINES(WS-S7).
+	     MOVE W43-LINE(WS-S8)
+				 TO W43-LINE(WS-S7).
 	   IF WS-S8 < 18
 	       ADD 1		 TO WS-S7
 	       GO TO BC111-SHIFT.
@@ -3540,11 +3700,11 @@
       *    *************************************************************
       *    ****    C L E A R   L A S T	 D E T A I L   L I N E
       *    *************************************************************
-023890	     DISPLAY (LIN, 1) WS-INV1 WITH BACKGROUND-COLOR 0
-					   FOREGROUND-COLOR 3
-			      WS-INV78 WITH FOREGROUND-COLOR 3
-			      WS-INV80 WITH BACKGROUND-COLOR 0
-					    FOREGROUND-COLOR 3.
+023890	     DISPLAY WS-INV1 AT LINE LIN COLUMN 1
+		     WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
+		     WS-INV78 WITH FOREGROUND-COLOR 3
+		     WS-INV80 WITH BACKGROUND-COLOR 0
+				   FOREGROUND-COLOR 3.
 	     ADD 1		 TO WS-SALPOS.
 
 020560 BC112.
@@ -3555,9 +3715,8 @@
 		    "]" DELIMITED SIZE
 				 INTO WS-ERR-MES.
 023180	     MOVE WS-IN-OPT	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-020710	   IF NOT (WS-OPTION = "I" OR "R" OR "N" OR "E")
-020720         GO TO BC112.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "I" OR "R" OR "N" OR "E".
              MOVE WS-OPTION      TO WS-IN-OPT.
 020740     IF WS-OPTION = "N"
 020750         GO TO BC55.
@@ -3565,9 +3724,9 @@
 020770         SUBTRACT 1        FROM WS-LAST
 020780         GO TO BC120.
 020790       MOVE SPACES         TO W10-REMKS.
-020800	     ACCEPT (LIN, 21) W10-REMKS
-		     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-020810			  BACKGROUND-COLOR 0 UPDATE AUTO.
+020800	     ACCEPT W10-REMKS AT LINE LIN COLUMN 21
+		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
+020810			 BACKGROUND-COLOR 0 UPDATE AUTO.
 020820     IF W10-REMKS = SPACES
 020830         GO TO BC112.
 020850	     MOVE WS-LAST	 TO WS-SALKEY.
@@ -3575,10 +3734,12 @@
 020870       MOVE WS-LAST        TO SAL-CODE.
 020880       MOVE W10-REMKS      TO SAL-MSER.
            IF WS-OPTION = "I"
-	       DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+	       DISPLAY "(I)" AT LINE LIN COLUMN 5
+			WITH FOREGROUND-COLOR 6 HIGHLIGHT
                MOVE 1            TO SAL-SUPER
            ELSE
-	       DISPLAY (LIN, 5) "(R)" WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+	       DISPLAY "(R)" AT LINE LIN COLUMN 5
+			WITH FOREGROUND-COLOR 7 HIGHLIGHT.
 020890       GO TO BC111.
 
 020900 BC114.
@@ -3594,11 +3755,11 @@
       *    ****   C L E A R   S C R E E N   L I N E / S
       *    *************************************************************
 020970 BC115.
-036820	     DISPLAY (LIN, 1) WS-INV1 WITH BACKGROUND-COLOR 0
-					   FOREGROUND-COLOR 3
-			      WS-INV78 WITH FOREGROUND-COLOR 3
-			      WS-INV80 WITH BACKGROUND-COLOR 0
-					    FOREGROUND-COLOR 3.
+036820	     DISPLAY WS-INV1 AT LINE LIN COLUMN 1
+		     WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
+		     WS-INV78 WITH FOREGROUND-COLOR 3
+		     WS-INV80 WITH BACKGROUND-COLOR 0
+				   FOREGROUND-COLOR 3.
 020990	     ADD 1		 TO LIN.
       *    *************************************************************
       *    ****    W A S   T H E R E   A N   E N T R Y
@@ -3615,9 +3776,8 @@
 	     MOVE SPACE 	 TO WS-OPTION.
 
 021130 BC130.
-	     PERFORM OPT-MESSAGE.
-021200	   IF NOT (WS-OPTION = "P" OR "A" OR "C" OR "M")
-021210	       GO TO BC125.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "P" OR "A" OR "C" OR "M".
 021230     IF WS-OPTION = "M"
 021240         ADD 1             TO WS-LAST
 021250         GO TO BC112.
@@ -3696,15 +3856,15 @@
       *    ****    T I T L E
       *    *************************************************************
 021770     IF DEB-LANG = "A"
-021780         MOVE W75-ATITLE (DEB-TITLE) 
+021780	       MOVE W75-ATITLE(DEB-TITLE)
 021790                           TO W60-NAME
 021800     ELSE
-021810         MOVE W75-ETITLE (DEB-TITLE) 
+021810	       MOVE W75-ETITLE(DEB-TITLE)
 021820                           TO W60-NAME.
 021830       MOVE 7              TO WS-S6.
 
 021840 BC190.
-021850     IF W60-NCHAR (WS-S6) NOT = SPACE
+021850	   IF W60-NCHAR(WS-S6) NOT = SPACE
 021860         GO TO BC195.
 021870       SUBTRACT 1          FROM WS-S6.
 021880     IF WS-S6 > 0
@@ -3715,18 +3875,18 @@
 021900 BC195.
 021910	     MOVE 1		 TO WS-S5.
 021920       ADD 2               TO WS-S6.
-021930       MOVE W40-NCHAR (25) TO W60-NCHAR (WS-S6).
+021930	     MOVE W40-NCHAR(25) TO W60-NCHAR(WS-S6).
 021940       ADD 1               TO WS-S6.
-021950       MOVE "."            TO W60-NCHAR (WS-S6).
-021960     IF W40-NCHAR (49) = SPACE
+021950	     MOVE "."		 TO W60-NCHAR(WS-S6).
+021960	   IF W40-NCHAR(49) = SPACE
 021970         GO TO BC200.
       *    *************************************************************
       *    ****    S E C O N D   I N I T I A L
       *    *************************************************************
 021980       ADD 1               TO WS-S6.
-021990       MOVE W40-NCHAR (49) TO W60-NCHAR (WS-S6).
+021990	     MOVE W40-NCHAR(49) TO W60-NCHAR(WS-S6).
 022000       ADD 1               TO WS-S6.
-022010       MOVE "."            TO W60-NCHAR (WS-S6).
+022010	     MOVE "."		 TO W60-NCHAR(WS-S6).
 
 022020 BC200.
 022030       ADD 2               TO WS-S6.
@@ -3734,8 +3894,8 @@
       *    ****    S U R N A M E
       *    *************************************************************
 022040 BC205.
-022050	     MOVE W40-NCHAR (WS-S5)
-022060                           TO W60-NCHAR (WS-S6).
+022050	     MOVE W40-NCHAR(WS-S5)
+022060				 TO W60-NCHAR(WS-S6).
 022070     IF WS-S5 < 24
 022080         ADD 1             TO WS-S5
 022090         ADD 1             TO WS-S6
@@ -3747,7 +3907,7 @@
 025980       MOVE SPACES         TO W40-PC1 W40-PC2.
 025990       MOVE DEB-ADDRESS    TO W60-ADDRESS.
 026000	     PERFORM CA175-ADDRESS.
-026010     IF NOT (DEB-POST = ZERO OR 9999)
+026010	   IF NOT(DEB-POST = ZERO OR 9999)
 026020         MOVE DEB-POST     TO W40-PC1.
 026030     IF W40-ADD4 = SPACES
 026040         MOVE W40-PC1      TO W40-ADD4
@@ -3763,7 +3923,7 @@
 026140         MOVE SPACES       TO W40-ADD2.
 026150       MOVE DEB-PADDR      TO W60-ADDRESS1.
 026160       PERFORM CA185-ADDRESS.
-026170     IF NOT (DEB-PPOST = ZERO OR 9999)
+026170	   IF NOT(DEB-PPOST = ZERO OR 9999)
 026180         MOVE DEB-PPOST    TO W40-PC2.
 026190     IF W40-PADD4 = SPACES
 026200         MOVE W40-PC2      TO W40-PADD4
@@ -3957,9 +4117,8 @@
 022810	     MOVE "Print picking slip (Y/N)?  [ ]"
 				 TO WS-ERR-MES.
 022870	     MOVE "Y"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-022960	   IF NOT (WS-OPTION = "Y" OR "N")
-022970         GO TO BC260.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N".
 022980     IF WS-OPTION = "Y"
 022990         DISPLAY CLR-SCREEN
 023000	       DISPLAY "NEW ORDER" AT 0236
@@ -3998,9 +4157,8 @@
 	     MOVE "S"		 TO WS-OPTION.
 
        BC271.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "E" OR "H" OR "S")
-	       GO TO BC270.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "E" OR "H" OR "S".
 	   IF WS-OPTION = "S"
                GO TO BC272
            ELSE
@@ -4013,9 +4171,8 @@
 	     MOVE SPACE 	 TO WS-OPTION.
 
        BC271B.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "C" OR "E" OR "O" OR "S" OR "T")
-	       GO TO BC271A.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "C" OR "E" OR "O" OR "S" OR "T".
            IF WS-OPTION = "E"
 	       GO TO BC582.
            IF WS-OPTION = "C"
@@ -4082,14 +4239,15 @@
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
 023470	   IF SAL-EXT-ITEM = SPACES
-023480	       DISPLAY (LIN, 21) SAL-SDSC
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			     BACKGROUND-COLOR 0
+023480	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			    BACKGROUND-COLOR 0
                IF SAL-SUPER = 1
-		   DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 14
+		   DISPLAY "(I)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 14
                ELSE
-		   DISPLAY (LIN, 5) "(R)"
-			   WITH FOREGROUND-COLOR 7 HIGHLIGHT
+		   DISPLAY "(R)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 7 HIGHLIGHT
                END-IF
 023490         GO TO BC282.
       *    *************************************************************
@@ -4106,18 +4264,18 @@
 		   DISPLAY S07-ITM AT LINE LIN
 	       ELSE
 021070		   DISPLAY S07 AT LINE LIN.
-023510	     DISPLAY (LIN, 21) SAL-SDSC
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+023510	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 023520       MOVE SAL-QNT        TO W10-QUANT.
       *	     MOVE SAL-ORD	 TO W10-QORD.
 023530       DISPLAY S26-QNT AT LINE LIN.
 023540       MOVE SAL-SELL       TO W10-SELL.
 023550       DISPLAY S26-PRC AT LINE LIN.
 023560       MOVE SAL-VAL        TO W100-EXT.
-023570	     DISPLAY ( , 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+023570	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    I S   T H E   S C R E E N   F U L L
       *    *************************************************************
@@ -4234,10 +4392,10 @@
        BC292-LOOP.
 	     SUBTRACT 1 FROM WS-S7
 				 GIVING WS-S8.
-	     MOVE W42-LINES (WS-S8)
-				 TO W42-LINES (WS-S7).
-	     MOVE W43-LINE (WS-S8)
-				 TO W43-LINE (WS-S7).
+	     MOVE W42-LINES(WS-S8)
+				 TO W42-LINES(WS-S7).
+	     MOVE W43-LINE(WS-S8)
+				 TO W43-LINE(WS-S7).
 	   IF WS-S7 > 9
 	       SUBTRACT 1	 FROM WS-S7
 	       GO TO BC292-LOOP.
@@ -4248,11 +4406,11 @@
       *    *************************************************************
        BC292-DISPLAY.
 	     PERFORM RESTORE-SCREEN-2.
-023890	     DISPLAY (LIN, 1) WS-INV1 WITH BACKGROUND-COLOR 0
-					   FOREGROUND-COLOR 3
-			      WS-INV78 WITH FOREGROUND-COLOR 3
-			      WS-INV80 WITH BACKGROUND-COLOR 0
-					    FOREGROUND-COLOR 3.
+023890	     DISPLAY WS-INV1 AT LINE LIN COLUMN 1
+		     WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
+		     WS-INV78 WITH FOREGROUND-COLOR 3
+		     WS-INV80 WITH BACKGROUND-COLOR 0
+				   FOREGROUND-COLOR 3.
       *    *************************************************************
       *    ****    G E T   N E X T   O R   P R E V I O U S
       * 	   D E T A I L	 L I N E.
@@ -4263,14 +4421,15 @@
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
 030100	   IF SAL-EXT-ITEM = SPACES
-030110	       DISPLAY (LIN, 21) SAL-SDSC
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			     BACKGROUND-COLOR 0
+030110	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			    BACKGROUND-COLOR 0
 	       IF SAL-SUPER = 1
-		   DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 14
+		   DISPLAY "(I)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 6 HIGHLIGHT
                ELSE
-		   DISPLAY (LIN, 5) "(R)"
-			   WITH FOREGROUND-COLOR 7 HIGHLIGHT
+		   DISPLAY "(R)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 7 HIGHLIGHT
 	       END-IF
 030120	       GO TO BC292-END-DISP.
       *    *************************************************************
@@ -4287,18 +4446,18 @@
 		   DISPLAY S07-ITM AT LINE LIN
 	       ELSE
 021070		   DISPLAY S07 AT LINE LIN.
-030140	     DISPLAY ( , 21) SAL-SDSC
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+030140	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 030150       MOVE SAL-QNT        TO W10-QUANT.
       *	     MOVE SAL-ORD	 TO W10-QORD.
 030160       DISPLAY S26-QNT AT LINE LIN.
 030170       MOVE SAL-SELL       TO W10-SELL.
 030180       DISPLAY S26-PRC AT LINE LIN.
 030190       MOVE SAL-VAL        TO W100-EXT.
-030200	     DISPLAY ( , 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+030200	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 
        BC292-END-DISP.
 	     PERFORM SAVE-SCREEN-2.
@@ -4325,10 +4484,10 @@
       *    *************************************************************
        BC293-LOOP.
 	     ADD 1 WS-S7	 GIVING WS-S8.
-	     MOVE W42-LINES (WS-S8)
-				 TO W42-LINES (WS-S7).
-	     MOVE W43-LINE (WS-S8)
-				 TO W43-LINE (WS-S7).
+	     MOVE W42-LINES(WS-S8)
+				 TO W42-LINES(WS-S7).
+	     MOVE W43-LINE(WS-S8)
+				 TO W43-LINE(WS-S7).
 	   IF WS-S8 < 18
 	       ADD 1		 TO WS-S7
 	       GO TO BC293-LOOP.
@@ -4341,8 +4500,8 @@
 001980 BC294.
 001990	     PERFORM BC289.
 	   IF LIN > 7
-002000	       DISPLAY (LIN, 1) W43-DET (LIN)
-			WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+002000	       DISPLAY W43-DET(LIN) AT LINE LIN COLUMN 1
+		       WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
 002010	     GO TO BC290.
       *    *************************************************************
       *    ****    C L E A R   S C R E E N
@@ -4387,9 +4546,8 @@
 043780	     MOVE "Are you sure Y/N?  [ ]"
 				 TO WS-ERR-MES.
 030880	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-024610	   IF NOT (WS-OPTION = "N" OR "Y")
-024620	       GO TO BC315.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "N" OR "Y".
 024640     IF WS-OPTION = "N"
 024660         GO TO BC285.
 024670       MOVE "D"            TO WS-OPTION.
@@ -4455,9 +4613,9 @@
 025230 BC325.
 	     PERFORM BC289.
 025240	   IF SAL-EXT-ITEM = SPACES
-030720	       ACCEPT (LIN, 21) SAL-SDSC
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-025260			    BACKGROUND-COLOR 0 UPDATE AUTO
+030720	       ACCEPT SAL-SDSC AT LINE LIN COLUMN 21
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+025260			   BACKGROUND-COLOR 0 UPDATE AUTO
 030740	       GO TO BC581.
 
        BC330.
@@ -4600,6 +4758,22 @@
 020800		   GO TO BC330
                ELSE
 		   GO TO BC335.
+	   IF STK-IND = 4
+	       MOVE "Header Record"
+				 TO WS-ERR-STRING
+003260	       PERFORM ERROR-MESSAGE
+	       GO TO BC330.
+      *    *************************************************************
+      *    **** C H E C K   F O R   S A L E S	R E S T R I C T I O N S
+      *    *************************************************************
+	   IF WS-RESTRICT = "A" OR "E"
+	       PERFORM MA000
+	       IF ((WS-RESTCODE = "Y") AND (WS-RESTRICT = "E")) OR
+		  ((WS-RESTCODE = "N") AND (WS-RESTRICT = "A"))
+		   MOVE "Restricted for this Department"
+                                 TO WS-ERR-STRING
+003260		   PERFORM ERROR-MESSAGE
+020140		   GO TO BC330.
 020920	     MOVE STK-CODE	 TO SAL-EXT-ITEM.
 020930	     DISPLAY CLEAR-L25.
       *    *************************************************************
@@ -4608,17 +4782,17 @@
 020940 BC340.
 020950     IF STK-IND = 3
 020960         MOVE ZERO         TO STK-AVGE
-020970	       ACCEPT (LIN, 21) W10-SDSC
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-020980			    BACKGROUND-COLOR 0 UPDATE AUTO
+020970	       ACCEPT W10-SDSC AT LINE LIN COLUMN 21
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+020980			   BACKGROUND-COLOR 0 UPDATE AUTO
 020990         DISPLAY "Index Unit cost" AT 2512
 021000			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
 021010         ACCEPT S26-AVGE AT LINE 25
 021020     ELSE
 021030         MOVE STK-DESC     TO W10-DESC
-021040	       DISPLAY (LIN, 21) W10-SDSC
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			     BACKGROUND-COLOR 0.
+021040	       DISPLAY W10-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			    BACKGROUND-COLOR 0.
 021050     IF STK-IND = 3
 021060         IF STK-AVGE = ZERO
 021070		   MOVE "Unit cost is zero"
@@ -4742,7 +4916,12 @@
 030070	       GO TO BC583.
 
 031060 BC590.
-031070       EXIT.
+031070	     EXIT.
+      /    *************************************************************
+      *    ****  G E T	 O V E R R I D E   F O R   Q U A N T I T Y  ****
+      *    *************************************************************
+       BC600	     SECTION 50.
+       BC601.
       /    *************************************************************
       *    ****    A M E N D   O R D E R
       *    *************************************************************
@@ -4863,7 +5042,18 @@
 			  BACKGROUND-COLOR 5.
 026180       MOVE 1              TO WS-FIRST WS-SALKEY.
 026190       SUBTRACT 1          FROM WS-LAST.
-026200       PERFORM BD100 THRU BD102.
+	     MOVE SPACES	 TO WS-RESTRICT.
+	     MOVE "N"		 TO WS-RESTCODE.
+      *    *************************************************************
+      *    ****   D E B T O R	S A L E S   R E S T R I C T I O N S
+      *    *************************************************************
+	   IF DEB-RESTRICT = "A" OR "E"
+	       MOVE DEB-ACNO	 TO DBD-ACNO
+	       PERFORM READ-DEBDEP THRU READ-DEBDEP-EXIT
+	       IF WS-F-ERROR = 0
+		   MOVE DEB-RESTRICT
+				 TO WS-RESTRICT.
+026200	     PERFORM BD100 THRU BD102.
 
 026210 BD15.
 026220	     PERFORM BD270A.
@@ -5014,6 +5204,17 @@
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO BD60.
+      *    *************************************************************
+      *    **** C H E C K   F O R   S A L E S	R E S T R I C T I O N S
+      *    *************************************************************
+	   IF WS-RESTRICT = "A" OR "E"
+	       PERFORM MA000
+	       IF ((WS-RESTCODE = "Y") AND (WS-RESTRICT = "E")) OR
+		  ((WS-RESTCODE = "N") AND (WS-RESTRICT = "A"))
+		   MOVE "Restricted for this Department"
+                                 TO WS-ERR-STRING
+003260		   PERFORM ERROR-MESSAGE
+020140		   GO TO BD60.
 026520	     MOVE WS-LAST	 TO WS-SALKEY.
 026530       INITIALIZE SAL-RECORD1.
 026540       MOVE WS-LAST        TO SAL-CODE.
@@ -5026,17 +5227,17 @@
 026590     IF STK-IND = 3
 026600         MOVE ZERO         TO STK-AVGE
                MOVE SPACES       TO W10-DESC
-026610	       ACCEPT (LIN, 21) W10-SDSC
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-026620			    BACKGROUND-COLOR 0 UPDATE AUTO
+026610	       ACCEPT W10-SDSC AT LINE LIN COLUMN 21
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+026620			   BACKGROUND-COLOR 0 UPDATE AUTO
 026630         DISPLAY "Index Unit cost" AT 2512
 026640			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
 026650         ACCEPT S26-AVGE AT LINE 25
 026660     ELSE
 026670         MOVE STK-DESC     TO W10-DESC
-026680	       DISPLAY (LIN, 21) W10-SDSC
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			     BACKGROUND-COLOR 0.
+026680	       DISPLAY W10-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			    BACKGROUND-COLOR 0.
 026690     IF STK-IND = 3
 026700         IF STK-AVGE = ZERO
 021070		   MOVE "Unit cost is zero"
@@ -5250,7 +5451,23 @@
 027280	       MOVE STK-LDG	 TO DPT-CODE
 027290         PERFORM READ-DEPART THRU READ-DEPART-EXIT
 027300	       MOVE DPT-DSETT(DEB-DISC)
-027310                           TO WS-DISC.
+027310				 TO WS-DISC
+      *    *************************************************************
+      *    **  M U S T	 T H E	 A L T E R N A T E   D I S C O U N T  **
+      *    **  B E   U S E D   F O R   T H I S	D E B T O R	      **
+      *    *************************************************************
+	       IF STK-ALT-DISC = "Y"
+		   IF DPT-ALT-DD1 = DEB-DISC
+		       MOVE DPT-DD11
+				 TO DPT-DSETT(DEB-DISC)
+				    WS-DISC
+		   ELSE
+		   IF DPT-ALT-DD2 = DEB-DISC
+		       MOVE DPT-DD12
+				 TO DPT-DSETT(DEB-DISC)
+				    WS-DISC
+		   END-IF
+	       END-IF.
 
 027320 BD85.
 027330       ACCEPT S26-DSC AT LINE 25.
@@ -5372,9 +5589,8 @@
       *            A C C E P T E D.
       *    *************************************************************
 028100 BD110.
-	     PERFORM OPT-MESSAGE.
-028180	   IF NOT (WS-OPTION = "A" OR "C")
-028190	       GO TO BD105.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "A" OR "C".
 028210	   IF WS-OPTION = "C"
 028220	       DISPLAY (LIN, 2) WS-INV78
 			WITH FOREGROUND-COLOR 3 BACKGROUND-COLOR 1
@@ -5457,13 +5673,12 @@
 		    "]" DELIMITED SIZE
 				 INTO WS-ERR-MES.
 023180	     MOVE WS-IN-OPT	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "I" OR "R" OR "N" OR "E" OR "C".
       *    *************************************************************
       *    ****  "C"   M A Y   B E   U S E D   T O   C H A N G E
       * 	  C L I E N T	D E T A I L S
       *    *************************************************************
-023260	   IF NOT (WS-OPTION = "I" OR "R" OR "N" OR "E" OR "C")
-023270         GO TO BD112.
 	   IF WS-OPTION = "C"
 	       PERFORM BD591A
 	       GO TO BD112.
@@ -5474,9 +5689,9 @@
 028560         SUBTRACT 1        FROM WS-LAST
 028570         GO TO BD120.
 028580       MOVE SPACES         TO W10-REMKS.
-028590	     ACCEPT (LIN, 21) W10-REMKS
-		     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-028600			  BACKGROUND-COLOR 0 UPDATE AUTO.
+028590	     ACCEPT W10-REMKS AT LINE LIN COLUMN 21
+		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
+028600			 BACKGROUND-COLOR 0 UPDATE AUTO.
 028610     IF W10-REMKS = SPACES
 028620         GO TO BD112.
 028640	     MOVE WS-LAST	 TO WS-SALKEY.
@@ -5484,11 +5699,12 @@
 028660       MOVE WS-LAST        TO SAL-CODE.
 028670       MOVE W10-REMKS      TO SAL-MSER.
            IF WS-OPTION = "I"
-	       DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 14
+	       DISPLAY "(I)" AT LINE LIN COLUMN 5
+			WITH FOREGROUND-COLOR 14
                MOVE 1            TO SAL-SUPER
            ELSE
-	       DISPLAY (LIN, 5) "(R)"
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+	       DISPLAY "(R)" AT LINE LIN COLUMN 5
+			WITH FOREGROUND-COLOR 7 HIGHLIGHT.
 028680       GO TO BD111.
 
 028690 BD114.
@@ -5525,9 +5741,8 @@
 	     MOVE SPACE 	 TO WS-OPTION.
 
 023680 BD130.
-	     PERFORM OPT-MESSAGE.
-023750	   IF NOT (WS-OPTION = "U" OR "A" OR "C" OR "M" OR "P")
-023760	       GO TO BD125.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "U" OR "A" OR "C" OR "M" OR "P".
 029020	   IF WS-OPTION = "M"
 029030         ADD 1             TO WS-LAST
 029040         GO TO BD112.
@@ -5916,9 +6131,8 @@
 022810	     MOVE "Print picking slip (Y/N)?  [ ]"
 				 TO WS-ERR-MES.
 022870	     MOVE "Y"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-030620	   IF NOT (WS-OPTION = "Y" OR "N")
-030630         GO TO BD260.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "Y" OR "N".
 030640     IF WS-OPTION = "Y"
 030650         DISPLAY CLR-SCREEN
 030660	       DISPLAY "AMEND ORDER" AT 0235
@@ -5957,9 +6171,8 @@
 	     MOVE "S"		 TO WS-OPTION.
 
        BD271.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "E" OR "H" OR "S")
-	       GO TO BD270.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "E" OR "H" OR "S".
            IF WS-OPTION = "S"
                GO TO BD272
            ELSE
@@ -5976,9 +6189,8 @@
 	     MOVE SPACE 	 TO WS-OPTION.
 
        BD271B.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "C" OR "E" OR "O" OR "S" OR "T")
-	       GO TO BD271A.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "C" OR "E" OR "O" OR "S" OR "T".
            IF WS-OPTION = "E"
 	       GO TO BD582.
 014610	     PERFORM READ-SORDER THRU READ-SORDER-EXIT.
@@ -6053,13 +6265,14 @@
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
 029240	   IF SAL-EXT-ITEM = SPACES
-029250	       DISPLAY (LIN, 21) SAL-SDSC
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			     BACKGROUND-COLOR 0
-               IF SAL-SUPER = 1
-		   DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 14
+029250	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			    BACKGROUND-COLOR 0
+	       IF SAL-SUPER = 1
+		   DISPLAY "(I)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 6 HIGHLIGHT
                ELSE
-		   DISPLAY (LIN, 5) "(R)"
+		   DISPLAY "(R)" AT LINE LIN COLUMN 5
 			    WITH FOREGROUND-COLOR 7 HIGHLIGHT
                END-IF
 029260         GO TO BD282.
@@ -6077,17 +6290,17 @@
 		   DISPLAY S07-ITM AT LINE LIN
 	       ELSE
 021070		   DISPLAY S07 AT LINE LIN.
-031160	     DISPLAY ( , 21) SAL-SDSC
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+031160	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 031170       MOVE SAL-QNT        TO W10-QUANT.
 031180       DISPLAY S26-QNT AT LINE LIN.
 031190       MOVE SAL-SELL       TO W10-SELL.
 031200       DISPLAY S26-PRC AT LINE LIN.
 031210       MOVE SAL-VAL        TO W100-EXT.
-031220	     DISPLAY ( , 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+031220	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    I S   T H E   S C R E E N   F U L L
       *    *************************************************************
@@ -6205,10 +6418,10 @@
        BD292-LOOP.
 	     SUBTRACT 1 FROM WS-S7
 				 GIVING WS-S8.
-	     MOVE W42-LINES (WS-S8)
-				 TO W42-LINES (WS-S7).
-	     MOVE W43-LINE (WS-S8)
-				 TO W43-LINE (WS-S7).
+	     MOVE W42-LINES(WS-S8)
+				 TO W42-LINES(WS-S7).
+	     MOVE W43-LINE(WS-S8)
+				 TO W43-LINE(WS-S7).
 	   IF WS-S7 > 9
 	       SUBTRACT 1	 FROM WS-S7
 	       GO TO BD292-LOOP.
@@ -6219,11 +6432,11 @@
       *    *************************************************************
        BD292-DISPLAY.
 	     PERFORM RESTORE-SCREEN-2.
-023890	     DISPLAY (LIN, 1) WS-INV1 WITH BACKGROUND-COLOR 0
-					   FOREGROUND-COLOR 3
-			      WS-INV78 WITH FOREGROUND-COLOR 3
-			      WS-INV80 WITH BACKGROUND-COLOR 0
-					    FOREGROUND-COLOR 3.
+023890	     DISPLAY WS-INV1 AT LINE LIN COLUMN 1
+		     WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
+		     WS-INV78 WITH FOREGROUND-COLOR 3
+		     WS-INV80 WITH BACKGROUND-COLOR 0
+				   FOREGROUND-COLOR 3.
       *    *************************************************************
       *    ****    G E T   N E X T   O R   P R E V I O U S
       * 	   D E T A I L	 L I N E.
@@ -6234,14 +6447,15 @@
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
 030100	   IF SAL-EXT-ITEM = SPACES
-030110	       DISPLAY (LIN, 21) SAL-SDSC
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			     BACKGROUND-COLOR 0
+030110	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			    BACKGROUND-COLOR 0
 	       IF SAL-SUPER = 1
-		   DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 14
+		   DISPLAY "(I)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 6 HIGHLIGHT
                ELSE
-		   DISPLAY (LIN, 5) "(R)"
-			   WITH FOREGROUND-COLOR 7 HIGHLIGHT
+		   DISPLAY "(R)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 7 HIGHLIGHT
 	       END-IF
 030120	       GO TO BD292-END-DISP.
       *    *************************************************************
@@ -6258,17 +6472,17 @@
 		   DISPLAY S07-ITM AT LINE LIN
 	       ELSE
 021070		   DISPLAY S07 AT LINE LIN.
-030140	     DISPLAY ( , 21) SAL-SDSC
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+030140	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 030150       MOVE SAL-QNT        TO W10-QUANT.
 030160       DISPLAY S26-QNT AT LINE LIN.
 030170       MOVE SAL-SELL       TO W10-SELL.
 030180       DISPLAY S26-PRC AT LINE LIN.
 030190       MOVE SAL-VAL        TO W100-EXT.
-030200	     DISPLAY ( , 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+030200	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 
        BD292-END-DISP.
 	     PERFORM SAVE-SCREEN-2.
@@ -6295,10 +6509,10 @@
       *    *************************************************************
        BD293-LOOP.
 	     ADD 1 WS-S7	 GIVING WS-S8.
-	     MOVE W42-LINES (WS-S8)
-				 TO W42-LINES (WS-S7).
-	     MOVE W43-LINE (WS-S8)
-				 TO W43-LINE (WS-S7).
+	     MOVE W42-LINES(WS-S8)
+				 TO W42-LINES(WS-S7).
+	     MOVE W43-LINE(WS-S8)
+				 TO W43-LINE(WS-S7).
 	   IF WS-S8 < 18
 	       ADD 1		 TO WS-S7
 	       GO TO BD293-LOOP.
@@ -6311,8 +6525,8 @@
 001980 BD294.
 001990	     PERFORM BD289.
 	   IF LIN > 7
-002000	       DISPLAY (LIN, 1) W43-DET (LIN)
-			WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+002000	       DISPLAY W43-DET(LIN) AT LINE LIN COLUMN 1
+		       WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
 002010	     GO TO BD290.
       *    *************************************************************
       *    ****    C L E A R   S C R E E N
@@ -6357,9 +6571,8 @@
 043780	     MOVE "Are you sure Y/N?  [ ]"
 				 TO WS-ERR-MES.
 030880	     MOVE SPACE		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-030970	   IF NOT (WS-OPTION = "N" OR "Y")
-030980	       GO TO BD315.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "N" OR "Y".
 031000     IF WS-OPTION = "N"
 031010	       GO TO BD285.
 031020       MOVE "D"            TO WS-OPTION.
@@ -6403,7 +6616,7 @@
       *    *************************************************************
       *    ****   U P D A T E	S T O C K   Q U A N T I T Y
       *    *************************************************************
-032570	   IF NOT (SAL-EXT-ITEM = SPACES)
+032570	   IF NOT(SAL-EXT-ITEM = SPACES)
 	       IF SAL-INSTRUCT = "Y"
 		   ADD SAL-QNT	 TO STK-QUANT
 		   SUBTRACT SAL-QNT
@@ -6418,7 +6631,7 @@
       *    ****    D E L E T E   I T E M   F R O M   O R D E R   F I L E 
       *    *************************************************************
 032780       ADD 1               TO W14-SUB.
-032790       MOVE SAL-SQN        TO W14-SQN (W14-SUB).
+032790	     MOVE SAL-SQN	 TO W14-SQN(W14-SUB).
       *    *************************************************************
       *    ****    D E L E T E   I T E M   F R O M   S A L E   F I L E
       *    *************************************************************
@@ -6438,9 +6651,9 @@
 032920 BD325.
 	     PERFORM BD289.
 032930	   IF SAL-EXT-ITEM = SPACES
-032940	       ACCEPT (LIN, 21) SAL-SDSC
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-032950			    BACKGROUND-COLOR 0 UPDATE AUTO
+032940	       ACCEPT SAL-SDSC AT LINE LIN COLUMN 21
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+032950			   BACKGROUND-COLOR 0 UPDATE AUTO
 032960	       GO TO BD581.
 
        BD330.
@@ -6591,17 +6804,17 @@
 020940 BD340.
 020950     IF STK-IND = 3
 020960         MOVE ZERO         TO STK-AVGE
-020970	       ACCEPT (LIN, 21) W10-SDSC
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-020980			    BACKGROUND-COLOR 0 UPDATE AUTO
+020970	       ACCEPT W10-SDSC AT LINE LIN COLUMN 21
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+020980			   BACKGROUND-COLOR 0 UPDATE AUTO
 020990         DISPLAY "Index Unit cost" AT 2512
 021000			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
 021010         ACCEPT S26-AVGE AT LINE 25
 021020     ELSE
 021030         MOVE STK-DESC     TO W10-DESC
-021040	       DISPLAY (LIN, 21) W10-SDSC
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			     BACKGROUND-COLOR 0.
+021040	       DISPLAY W10-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			    BACKGROUND-COLOR 0.
 021050     IF STK-IND = 3
 021060         IF STK-AVGE = ZERO
 021070		   MOVE "Unit cost is zero"
@@ -6636,9 +6849,9 @@
 030820       MULTIPLY W10-SELL BY W10-QUANT 
                                  GIVING W25-VALUE.
 030830       MOVE W25-VALUE      TO W100-EXT.
-030840	     DISPLAY (LIN, 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+030840	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 	     PERFORM CHECK-CORRECT.
 030930	   IF WS-OPTION = "N"
 030940	       GO TO BD325.
@@ -6683,14 +6896,15 @@
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
 030100	   IF SAL-EXT-ITEM = SPACES
-030110	       DISPLAY (LIN, 21) SAL-SDSC
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			     BACKGROUND-COLOR 0
+030110	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			    BACKGROUND-COLOR 0
 	       IF SAL-SUPER = 1
-		   DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 14
+		   DISPLAY "(I)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 6 HIGHLIGHT
                ELSE
-		   DISPLAY (LIN, 5) "(R)"
-			   WITH FOREGROUND-COLOR 7 HIGHLIGHT
+		   DISPLAY "(R)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 7 HIGHLIGHT
 	       END-IF
 030120	       GO TO BD584.
       *    *************************************************************
@@ -6707,17 +6921,17 @@
 		   DISPLAY S07-ITM AT LINE LIN
 	       ELSE
 021070		   DISPLAY S07 AT LINE LIN.
-030140	     DISPLAY ( , 21) SAL-SDSC
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+030140	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 030150	     MOVE SAL-QNT	 TO W10-QUANT.
 030160       DISPLAY S26-QNT AT LINE LIN.
 030170       MOVE SAL-SELL       TO W10-SELL.
 030180       DISPLAY S26-PRC AT LINE LIN.
 030190       MOVE SAL-VAL        TO W100-EXT.
-030200	     DISPLAY ( , 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+030200	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
        BD584.
 	     ADD 1		 TO LIN.
 030060	   IF WS-SALKEY < WS-LAST
@@ -6903,14 +7117,15 @@
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
 034280	   IF SAL-EXT-ITEM = SPACES
-034290	       DISPLAY (LIN, 21) SAL-SDSC
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			     BACKGROUND-COLOR 0
+034290	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			    BACKGROUND-COLOR 0
                IF SAL-SUPER = 1
-		   DISPLAY (LIN, 5) "(I)" WITH FOREGROUND-COLOR 14
+		   DISPLAY "(I)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 6 HIGHLIGHT
                ELSE
-		   DISPLAY (LIN, 5) "(R)"
-			   WITH FOREGROUND-COLOR 7 HIGHLIGHT
+		   DISPLAY "(R)" AT LINE LIN COLUMN 5
+			    WITH FOREGROUND-COLOR 7 HIGHLIGHT
                END-IF
 034300         GO TO BE40.
       *    *************************************************************
@@ -6927,17 +7142,17 @@
 		   DISPLAY S07-ITM AT LINE LIN
 	       ELSE
 021070		   DISPLAY S07 AT LINE LIN.
-034320	     DISPLAY ( , 21) SAL-SDSC
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+034320	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
 034330       MOVE SAL-QNT        TO W10-QUANT.
 034340       DISPLAY S26-QNT AT LINE LIN.
 034350       MOVE SAL-SELL       TO W10-SELL.
 034360       DISPLAY S26-PRC AT LINE LIN.
 034370       MOVE SAL-VAL        TO W100-EXT.
-034380	     DISPLAY ( , 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+034380	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			  BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    I S   T H E   S C R E E N   F U L L
       *    *************************************************************
@@ -6975,9 +7190,8 @@
 				 TO WS-ERR-MES.
 034880 BE55.
 	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-034950	   IF NOT (WS-OPTION = "D" OR "E" OR "N" OR "P")
-034960	       GO TO BE50.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "D" OR "E" OR "N" OR "P".
 034970     IF WS-OPTION = "E"
 034980         GO TO BE05.
 034990     IF WS-OPTION = "D"
@@ -7061,14 +7275,45 @@
 	     EXIT.
 
 035490 BE115.
-036820	     DISPLAY (LIN, 1) WS-INV1 WITH BACKGROUND-COLOR 0
-					   FOREGROUND-COLOR 3
-			      WS-INV78 WITH FOREGROUND-COLOR 3
-			      WS-INV80 WITH BACKGROUND-COLOR 0
-					    FOREGROUND-COLOR 3.
+036820	     DISPLAY WS-INV1 AT LINE LIN COLUMN 1
+		     WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
+		     WS-INV78 WITH FOREGROUND-COLOR 3
+		     WS-INV80 WITH BACKGROUND-COLOR 0
+				   FOREGROUND-COLOR 3.
 035510	     ADD 1		 TO LIN.
+
 035520 BE599.
 035530       EXIT.
+      *    *************************************************************
+      *    ****    C A L L   D E B T O R   C R E A T I O N
+      *    *************************************************************
+       GA000	       SECTION 53.
+       GA00.
+	     PERFORM SAVE-SCREEN.
+004200	     CALL "DTP\DTP001"
+		   USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+	     CANCEL "DTP\DTP001".
+	     PERFORM RESTORE-SCREEN.
+       GA99.
+             EXIT.
+      /    *************************************************************
+      *    **** 	S A L E S   R E S T R I C T I O N S	    ****
+      *    *************************************************************
+       MA000	       SECTION 54.
+       MA00.
+	     MOVE 1		 TO WS-S3.
+	     MOVE "N"		 TO WS-RESTCODE.
+
+       MA05.
+	   IF STK-LDG = DBD-DEPT-CDE(WS-S3)
+	       MOVE "Y" 	 TO WS-RESTCODE
+	   ELSE
+	   IF WS-S3 < 10
+	       ADD 1		 TO WS-S3
+	       GO TO MA05.
+
+       MA999.
+	     EXIT.
       /    *************************************************************
       * 		I N I T I A L I S E   P R O G R A M
       *    *************************************************************
@@ -7081,46 +7326,12 @@
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
-038170	     DISPLAY CLR-SCREEN.
+042000	     DISPLAY CLR-SCREEN.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		       ESC, F1 to F10 keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    PAGE-UP and PAGE-DOWN keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   A C T I V A T E   M O U S E		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set MOUSE key to act as FUNCTION key	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+	     COPY FUNCTION.PRO.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	    Setup the file ID's including path names           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -7148,6 +7359,18 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    *** D E B T O R   A L T E R N A T E	 I N D E X   F I L E ***
+      *    *************************************************************
+	     MOVE "DEBALT"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     MOVE AFID-PATH	 TO W02-DEBALT.
+      *    *************************************************************
+      *    **** D E B T O R   S A L E S   R E S T R I T I O N	F I L E 	  ****
+      *    *************************************************************
+	     MOVE "DEBDEP"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     MOVE AFID-PATH	 TO W02-DEBDEP.
       *    *************************************************************
       *    **** 	  D E B T O R	M E M O	  F I L E	    ****
       *    *************************************************************
@@ -7234,7 +7457,7 @@
 	     MOVE AFID-PATH	 TO W02-SYSUSER.
 049320	     MOVE 3		 TO WS-PARKEY.
 049330       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-STOCK = "A" OR "N")
+	   IF NOT(PAR-STOCK = "A" OR "N")
 	       MOVE "A" 	 TO PAR-STOCK.
 	     MOVE PAR-STOCK	 TO W10-STCK.
 	   IF PAR-STOCK = "N"
@@ -7260,58 +7483,76 @@
              MOVE W25-KEY        TO WS-PARKEY.
              ADD 1 W25-SUB       GIVING WS-S6.
 014250       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-           IF TRM-PICP (WS-S6) = 1
+	   IF TRM-PICP(WS-S6) = 1
                MOVE "LPT1"       TO W02-PRINTER
 	       MOVE ZERO	 TO WS-PRN-NO
            ELSE
-           IF TRM-PICP (WS-S6) = 2
+	   IF TRM-PICP(WS-S6) = 2
                MOVE "LPT2"       TO W02-PRINTER
 	       MOVE 1		 TO WS-PRN-NO
            ELSE
-           IF TRM-PICP (WS-S6) = 3
+	   IF TRM-PICP(WS-S6) = 3
                MOVE "LPT3"       TO W02-PRINTER
 	       MOVE 2		 TO WS-PRN-NO
            ELSE
-           IF TRM-PICP (WS-S6) = 4
+	   IF TRM-PICP(WS-S6) = 4
                MOVE "COM1"       TO W02-PRINTER
            ELSE
-           IF TRM-PICP (WS-S6) = 5
+	   IF TRM-PICP(WS-S6) = 5
                MOVE "COM2"       TO W02-PRINTER
            ELSE
-           IF TRM-PICP (WS-S6) = 9
+	   IF TRM-PICP(WS-S6) = 9
 	       MOVE LS-USER	 TO W02-USER.
-             ADD 501 TRM-PRN1 (WS-S6)
+	     ADD 501 TRM-PRN1(WS-S6)
                                  GIVING W25-RESULT.
              DIVIDE W25-RESULT BY 2
                                  GIVING WS-PARKEY
                                  REMAINDER WS-S6.
              ADD 1               TO WS-S6.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE TRM-CONP (WS-S6)
+	     MOVE TRM-CONP(WS-S6)
                                  TO WS-COND.
-             MOVE TRM-NORP (WS-S6)
+	     MOVE TRM-NORP(WS-S6)
                                  TO WS-NORM.
-             MOVE TRM-EXPP (WS-S6)
+	     MOVE TRM-EXPP(WS-S6)
 				 TO WS-EXPP.
-             MOVE TRM-ECAN (WS-S6)
+	     MOVE TRM-ECAN(WS-S6)
                                  TO WS-ECAN.
-             MOVE TRM-8LPI (WS-S6)
+	     MOVE TRM-8LPI(WS-S6)
                                  TO WS-8LPI.
-             MOVE TRM-6LPI (WS-S6)
+	     MOVE TRM-6LPI(WS-S6)
                                  TO WS-6LPI.
-             MOVE TRM-10CPI (WS-S6)
+	     MOVE TRM-10CPI(WS-S6)
                                  TO WS-10CPI.
-             MOVE TRM-12CPI (WS-S6)
+	     MOVE TRM-12CPI(WS-S6)
                                  TO WS-12CPI.
-             MOVE TRM-17CPI (WS-S6)
+	     MOVE TRM-17CPI(WS-S6)
                                  TO WS-17CPI.
-	     MOVE TRM-LENGTH (WS-S6)
+	     MOVE TRM-LENGTH(WS-S6)
 				 TO WS-PRN-LENGTH.
-	     MOVE TRM-PAGE (WS-S6)
+	     MOVE TRM-PAGE(WS-S6)
 				 TO WS-PGE-LENGTH.
 
        ZA01B.
 038430       MOVE PAR-VAT-REG    TO W05-VATNO.
+	     OPEN I-O DEBDEP.
+042220	   IF RUNTIME-ERROR
+               IF FLE-LOCKED
+042230             GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49
+               ELSE
+	       IF IDX-CORRUPT
+		   MOVE 33	 TO WS-F-ERROR
+                   GO TO ZA50.
+042240     IF WS-STATUS NOT = "00"
+042250	       MOVE 33		 TO WS-F-ERROR
+	       IF WS-STATUS = "39"
+038770		   GO TO ZA50
+	       ELSE
+	       IF NOT (WS-STATUS = "41")
+050210		   PERFORM OPEN-ERROR.
 038440	     OPEN OUTPUT RECOVER.
 038450       CLOSE RECOVER.
 038460       OPEN I-O RECOVER.
@@ -7338,11 +7579,11 @@
 	     MOVE PAR-PS-PRC	 TO WS-ITMPRC.
 042520	     MOVE 8		 TO WS-PARKEY.
 042550       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-WS-HD = X"00000000000000000000")
+	   IF NOT(PAR-WS-HD = X"00000000000000000000")
 	       MOVE PAR-WS-HD	 TO WS-WS-HD.
-	   IF NOT (PAR-CS-HD = X"00000000000000000000")
+	   IF NOT(PAR-CS-HD = X"00000000000000000000")
 	       MOVE PAR-CS-HD	 TO WS-CS-HD.
-	   IF NOT (PAR-RT-HD = X"00000000000000000000")
+	   IF NOT(PAR-RT-HD = X"00000000000000000000")
 	       MOVE PAR-RT-HD	 TO WS-RT-HD.
 	     INSPECT WS-CS-HD REPLACING LEADING "-" BY " ".
 	     INSPECT WS-WS-HD REPLACING LEADING "-" BY " ".
@@ -7449,22 +7690,21 @@
 		   OPEN I-O SORDER
 		   OPEN I-O SYSUSER.
 039770	     GO TO ZA999.
-      *    *************************************************************
-      *    ****   F I L E   L I M I T	E X C E E D E D
-      * 	  (Config.sys Dos/Win/Windows 95/98/NT/2000)
-      * 	  (Config.nt Windows XP)
-      * 	  (System.ini Windows.me)
-      *    *************************************************************
-039780 ZA49.
-039790	     DISPLAY "Too many files OPEN" AT 0708
-039800                WITH FOREGROUND-COLOR 14.
-039810	     DISPLAY "Check the FILES option in CONFIG.SYS (Dos,Windows
-      -		     "3/95/98/NT/2000)" AT 0908.
-	     DISPLAY "CONFIG.NT  (Windows XP)" AT 1034.
-	     DISPLAY "SYSTEM.INI (Windows ME)" AT 1134.
-039820	     DISPLAY "Press any key to continue" AT 1308.
+
+       COPY ZA49.PRO.
+
+039850 ZA50.
+055350	   IF WS-F-ERROR = 33
+055360	       MOVE "DEBDEP file"
+055370				 TO WS-FILE
+	   END-IF.
+039980       DISPLAY "Rebuild " AT 0812
+039990                WS-FILE WITH FOREGROUND-COLOR 14.
+040000       DISPLAY "Press any key to continue" AT 1012.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-039840	     GO TO ZA205.
+040020 ZA51.
+040030       EXIT PROGRAM.
+
       *    *************************************************************
       *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
       *    *************************************************************
@@ -7473,22 +7713,22 @@
 040060	     MOVE SPACES	 TO WS-MD-LINE.
 
 040090 ZA60.
-040130	     MOVE WS-G1 	 TO WS-TCA (WS-S1)   WS-BCA (WS-S1).
+040130	     MOVE WS-G1 	 TO WS-TCA(WS-S1)   WS-BCA(WS-S1).
 040150	   IF WS-S1 < 80
 040160         ADD 1 TO WS-S1
 040170         GO TO ZA60.
-040220	     MOVE WS-G14	 TO WS-TCA   (1)  WS-BCA   (1).
-040260	     MOVE WS-G13	 TO WS-TCA   (80) WS-BCA   (80).
-040300	     MOVE WS-G2 	 TO WS-TCA   (10) WS-TCA   (17)
-040360                              WS-TCA   (47) WS-TCA   (56)
-040370				    WS-TCA   (59) WS-TCA   (68).
-040400	     MOVE WS-G3 	 TO WS-MCA   (1)  WS-MCA   (80)
-040470                              WS-MCA   (10) WS-MCA   (17)
-040480				    WS-MCA   (45) WS-MCA   (56)
-040490				    WS-MCA   (59) WS-MCA   (68).
-040550	     MOVE WS-G4 	 TO WS-BCA   (10) WS-BCA   (17)
-040610                              WS-BCA   (47) WS-BCA   (56)
-040620				    WS-BCA   (59) WS-BCA   (68).
+040220	     MOVE WS-G14	 TO WS-TCA(1)  WS-BCA(1).
+040260	     MOVE WS-G13	 TO WS-TCA(80) WS-BCA(80).
+040300	     MOVE WS-G2 	 TO WS-TCA(10) WS-TCA(17)
+040360				    WS-TCA(47) WS-TCA(56)
+040370				    WS-TCA(59) WS-TCA(68).
+040400	     MOVE WS-G3 	 TO WS-MCA(1)  WS-MCA(80)
+040470				    WS-MCA(10) WS-MCA(17)
+040480				    WS-MCA(45) WS-MCA(56)
+040490				    WS-MCA(59) WS-MCA(68).
+040550	     MOVE WS-G4 	 TO WS-BCA(10) WS-BCA(17)
+040610				    WS-BCA(47) WS-BCA(56)
+040620				    WS-BCA(59) WS-BCA(68).
 040650	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
 	   IF LS-USER = LS-SYS-ID
 	       MOVE "SupervisorÄ"  TO WS-WRKHD
@@ -7497,14 +7737,8 @@
 	       MOVE LS-USER	   TO WS-WRKST.
 
 040660 ZA200.
-040670       DISPLAY "Files locked - Try later" AT 2312
-040680                WITH FOREGROUND-COLOR 14
-040690		     " " WS-STATUS WITH FOREGROUND-COLOR 7 HIGHLIGHT.
-040700       DISPLAY "Press any key" AT 2512 
-040710		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-040720	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3
-			 FOREGROUND-COLOR 7 HIGHLIGHT AUTO.
+
+       COPY LOCKED.PRO.
 
 040730 ZA205.
 040740       EXIT PROGRAM.
@@ -7549,17 +7783,17 @@
 		     "A" WITH FOREGROUND-COLOR 7 HIGHLIGHT
 		     "bort".
        ZA212.
-	     ACCEPT WS-OPTION AT 2334
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     IF NOT (WS-OPTION = "A" OR "R")
-		 GO TO ZA212.
-	     IF WS-OPTION = "A"
-		 MOVE 1 	 TO WS-ERROR
-		 GO TO ZA215.
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "A" OR "R"
+	       ACCEPT WS-OPTION AT 2334
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+	   IF WS-OPTION = "R"
 	       GO TO ZA210.
+	     MOVE 1		 TO WS-ERROR.
 
        ZA215.
 	     EXIT.
@@ -7568,21 +7802,8 @@
 040760       EXIT.
 
 040780 I-O-ERRORS      SECTION  91.
-040790 OPEN-ERROR.
-040800       DISPLAY CLR-SCREEN.
-040810       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-040820       PERFORM DISPLAY-FILE-NAME.
-040830
-040840 READ-ERROR.
-040850       DISPLAY CLR-SCREEN.
-040860       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-040870       PERFORM DISPLAY-FILE-NAME.
-040880
-040890 WRITE-ERROR.
-040900       DISPLAY CLR-SCREEN.
-040910       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-040920       PERFORM DISPLAY-FILE-NAME.
-040930
+
+       COPY ERRORS.PRO.
 
 040950 DISPLAY-FILE-NAME.
 040960	   IF WS-F-ERROR = 2
@@ -7604,7 +7825,7 @@
 041140         MOVE WS-PARKEY    TO WS-KEY
 041150     ELSE
 041160     IF WS-F-ERROR = 18
-041170         MOVE W02-RECOVER  TO WS-FILE
+041170	       MOVE W02-RECOVER  TO WS-FILE
 041180         MOVE WS-RECKEY    TO WS-KEY
 041190     ELSE
 041200     IF WS-F-ERROR = 19
@@ -7635,40 +7856,23 @@
 041860         MOVE W02-DEBMEM   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DME-KEY	 TO WS-KEYX
+041760	   ELSE
+041770	   IF WS-F-ERROR = 33
+041780	       MOVE W02-DEBDEP	 TO WS-FILE
+041790         MOVE ZERO         TO WS-KEY
+	       MOVE DBD-ACNO	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
+041840	   ELSE
+041850	   IF WS-F-ERROR = 47
+041860	       MOVE W02-DEBALT	 TO WS-FILE
+041870         MOVE ZERO         TO WS-KEY
+	       MOVE DAL-KEY	 TO WS-KEYX
 	   ELSE
 041120	   IF WS-F-ERROR = 64
 041130	       MOVE W02-SYSUSER	 TO WS-FILE
 041140	       MOVE USE-NO	 TO WS-KEY.
-041350	   IF WS-STATUS = "10"
-041360         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041370     ELSE
-041380     IF WS-STATUS = "22"
-041390         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041400     ELSE
-041410     IF WS-STATUS = "23"
-041420         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041430     ELSE
-041440     IF WS-STATUS = "24"
-041450         MOVE "DISK full" TO WS-STAT-MESSAGE
-041460     ELSE
-041470     IF WS-STATUS = "30"
-041480         MOVE "DISK error" TO WS-STAT-MESSAGE
-041490     ELSE
-041500     IF WS-STATUS = "94"
-041510         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-041520       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-041530       DISPLAY "Status " AT 1212 
-041540                WS-STATUS WITH FOREGROUND-COLOR 11
-041550               ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-041560     IF WS-STATUS NOT = "94" 
-041570         DISPLAY "Key    " AT 1412 
-041580                  WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-041590         DISPLAY "Reverse backup or contact program Support"
-041600                  AT 1612.
-041610         DISPLAY "Please make a note of these details" AT 1812.
-041620       STOP RUN.
+
+       COPY DISPERR.PRO.

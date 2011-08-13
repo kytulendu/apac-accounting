@@ -13,7 +13,7 @@
       *                                                                *
       *     B U S I N E S S   S Y S T E M   M E N U  P R O G R A M     *
       *                                                                *
-      *     VERSION 8.14.03 - March 2010			       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   APRIL 1993.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2011
 				     by James William Lemmon.
 
 		   All rights reserved.
@@ -992,7 +992,7 @@
 038520         IF FLE-LIMIT
 038530             GO TO ZA49.
 038540     IF WS-STATUS NOT = "00"
-038550	       MOVE 33		 TO WS-F-ERROR
+038550	       MOVE 37		 TO WS-F-ERROR
 038560         PERFORM OPEN-ERROR.
 038810	     OPEN I-O DEPART.
 038820	   IF RUNTIME-ERROR
@@ -1096,7 +1096,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041110	   ELSE
-041120	   IF WS-F-ERROR = 33
+041120	   IF WS-F-ERROR = 37
 041130	       MOVE W02-SHARED	 TO WS-FILE
 041140	       MOVE WS-SHARED	 TO WS-KEY.
 

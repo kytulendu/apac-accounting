@@ -15,7 +15,7 @@
       *                                                                *
       *    D E B T O R	 S A L E S   T R A C K I N G   P R O G R A M   *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.01 - December 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,13 +28,19 @@
       * 		  included for lookups, using any word con-    *
       * 		  tained in the Debtor name.		       *
       * 							       *
+      *  Jul 2011    - Fixed error with Keying in an account number.   *
+      * 	       Fixed problem with the date and reference numb. *
+      * 	       on the report (item line). Expanded date to be  *
+      * 	       shown as dd/mm/yyyy. Display the Item code with *
+      * 	       18 characters and not 14.		       *
+      * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTPSAL.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -646,7 +652,7 @@
 
 007910 01  S36.
 007920	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
-				  PIC X(14) USING W10-ITEM AUTO.
+				  PIC X(18) USING W10-EXT-ITEM AUTO.
 
 005530 01  S36-3.
 007920	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
@@ -1010,7 +1016,7 @@
 				    WS-TOT-INCL
 				    WS-PAGE.
 	   IF WS-ENQ = "S"
-	       MOVE W10-ITEM	 TO CRD-CODE.
+	       MOVE W10-EXT-ITEM TO CRD-EXT-CODE.
 	     MOVE W80-ACNO	 TO CRD-AC.
 	     MOVE W15-S-YMD	 TO CRD-DTE.
 
@@ -1076,13 +1082,13 @@
 	   IF (CRD-DTE > W15-E-YMD)
 	       GO TO MOVE-FULL-SCREEN.
 	   IF (WS-ENQ = "S") AND
-	      (W10-ITEM NOT = CRD-CODE)
+	      (W10-EXT-ITEM NOT = CRD-EXT-CODE)
 	       GO TO MOVE-FULL-SCREEN.
 	   IF (WS-ENQ = "L") AND
 	      (CRD-SUPP NOT = "-LAB-")
 	       GO TO MOVE-GET-CARDEX-REC.
-	   IF NOT (CRD-CODE = STK-CODE)
-	       MOVE CRD-CODE	 TO STK-CODE
+	   IF NOT(CRD-CODE = STK-CODE)
+	       MOVE CRD-EXT-CODE TO STK-CODE
 	       PERFORM READ-STOCK THRU READ-STOCK-EXIT.
 	   IF (WS-ENQ = "A") AND
 	      (WS-REF = SPACES)
@@ -1262,7 +1268,7 @@
 
        INVOICE-TOTAL		 SECTION.
        INV-GET-DETAILS.
-	   IF NOT (WS-PRN = "Y")
+	   IF NOT(WS-PRN = "Y")
 	       GO TO INVOICE-TOTAL-EXIT.
 	     MOVE WS-REF	 TO DOC-REF.
 	     MOVE 9		 TO DOC-TYPE.
@@ -1398,6 +1404,11 @@
 021010 BA00.
 021020       DISPLAY CLR-SCREEN.
 	     DISPLAY S10D.
+      *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
+      *      ALLOW USER TO KEYIN AN ACCOUNT NUMBER THAT IS LESS THAN 6
+      *      CHARACTERS LONG.
+      *    컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커
+	     MOVE SPACES	 TO W80-ACNO.
 
        BA05.
 018790	     DISPLAY "F1" AT 2502
@@ -1484,7 +1495,7 @@
 	       GO TO BA20.
 	     MOVE 0401	  TO CPOS.
 020430       PERFORM ERASE-SCREEN-LOOP UNTIL CLIN > 23.
-	     MOVE SPACES	 TO W10-ITEM.
+	     MOVE SPACES	 TO W10-EXT-ITEM.
 	   IF W10-STCK = "N"
 	       IF W10-SLNGTH = 3
 		   MOVE ZERO	 TO W10-I3
@@ -1578,7 +1589,7 @@
 	   IF USER-FUNC
 	       EVALUATE KEY-CODE-1
 		 WHEN ESC-KEY
-		     MOVE SPACES TO W10-ITEM
+		     MOVE SPACES TO W10-EXT-ITEM
 018870		     DISPLAY CLEAR-L25
 		     GO TO BA05
 		 WHEN F1-KEY
@@ -1613,7 +1624,7 @@
 		   DISPLAY S36 AT 0361.
 
        BA30.
-021040	   IF W10-ITEM = SPACES
+021040	   IF W10-EXT-ITEM = SPACES
 021060	       GO TO BA25.
 
        BA35.
@@ -1650,7 +1661,7 @@
 	       ELSE
 		   DISPLAY S36 AT 0361
 	       END-IF
-018640	       IF W10-ITEM = SPACES
+018640	       IF W10-EXT-ITEM = SPACES
 018720		   GO TO BA25
                ELSE
 		   GO TO BA35.
@@ -1754,18 +1765,18 @@
       *    *************************************************************
 013300 CA000	     SECTION 50.
 013310 CA00.
-013320       MOVE 14             TO W50-LENGTH.
+013320	     MOVE 18		 TO W50-LENGTH.
 013330 CA05.
-013340       MOVE W10-ITEM       TO W50-DATA.
+013340	     MOVE W10-EXT-ITEM	 TO W50-DATA.
 013350     IF W50-1 = SPACE
-013360         MOVE W50-13       TO W10-ITEM
+013360	       MOVE W50-17	 TO W10-EXT-ITEM
 013370         GO TO CA05.      
 	     CALL "CBL_TOUPPER" USING W50-DATA
 				BY VALUE W50-LENGTH
 				RETURNING W50-STATUS.
-013430	     MOVE W50-ITEM	 TO W10-ITEM.
+013430	     MOVE W50-EXT-ITEM	 TO W10-EXT-ITEM.
 013440 CA06.
-013450       MOVE W50-ITEM       TO STK-CODE.
+013450	     MOVE W50-EXT-ITEM	 TO STK-CODE.
 013460 CA10.
 013470       PERFORM READ-STOCK THRU READ-STOCK-EXIT.
 013480     IF WS-F-ERROR = 0
@@ -2090,16 +2101,9 @@
       * 	  (Config.nt Windows XP)
       * 	  (System.ini Windows.me)
       *    *************************************************************
-039780 ZA49.
-039790	     DISPLAY "Too many files OPEN" AT 0708
-039800                WITH FOREGROUND-COLOR 14.
-039810	     DISPLAY "Check the FILES option in CONFIG.SYS (Dos,Windows
-      -		     "3/95/98/NT/2000)" AT 0908.
-	     DISPLAY "CONFIG.NT  (Windows XP)" AT 1034.
-	     DISPLAY "SYSTEM.INI (Windows ME)" AT 1134.
-039820	     DISPLAY "Press any key to continue" AT 1308.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-039840	     GO TO ZA205.
+
+       COPY ZA49.PRO.
+
 039850 ZA50.
 041850	   IF WS-F-ERROR = 22
 041860	       MOVE "STOCK File"
@@ -2142,13 +2146,9 @@
 	       MOVE "Workstation"  TO WS-WRKHD
 	       MOVE LS-USER	   TO WS-WRKST.
 042800 ZA200.
-042810       DISPLAY "Files locked - Try later" AT 2312
-042820                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-042830       DISPLAY "Press any key" AT 2512 
-042840		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-042850	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
        ZA205.
              EXIT PROGRAM.
 042880 ZA999-EXIT.
@@ -2157,23 +2157,8 @@
       *    ****    I / O   E R R O R   M E S S A G E S
       *    *************************************************************
 042900 ZB000-ERROR	     SECTION 81.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-       I-O-ERROR-EXIT.
-             EXIT.
+
+       COPY ERRORS.PRO.
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
@@ -2222,32 +2207,5 @@
 041860	       MOVE W02-DEBALT	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DAL-KEY	 TO WS-KEYX.
-041880	   IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

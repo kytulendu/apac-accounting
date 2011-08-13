@@ -13,8 +13,8 @@
       *                                                                *
       *     ( A P A C )   S T A R T   &   I N I T    P R O G R A M     *
       *                                                                *
-      *     VERSION 8.14.03 - March 2010			       *
-      * 							       *
+      *     VERSION 8.15.01 - August 2011			       *
+      *                                                                *
       ******************************************************************
       * 							       *
       *  Feb 2007	- New file (DEBDEP/AR_REST.DAT) - Debtor sales *
@@ -90,7 +90,7 @@
 000030 AUTHOR.         J W LEMMON  (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -463,12 +463,12 @@
 	   03	       COLUMN 74 FOREGROUND-COLOR 0 VALUE "©".
 002900	   03  LINE  5 COLUMN  6 FOREGROUND-COLOR 1 HIGHLIGHT VALUE "Ё".
 	   03	       COLUMN  7 FOREGROUND-COLOR 4 HIGHLIGHT VALUE
-002910	    "APAC - Business System (Version 2010).
+002910	    "APAC - Business System (Version 2011).
       -     "        ".
 002920	   03	       COLUMN 74 FOREGROUND-COLOR 0 VALUE "Ё".
 002920	   03  LINE  6 COLUMN  6 FOREGROUND-COLOR 1 HIGHLIGHT VALUE "Ё".
 	   03	       COLUMN  7 FOREGROUND-COLOR 7 HIGHLIGHT VALUE
-002930	    "Copyright (C) 1982 - 2010  JW Lemmon.
+002930	    "Copyright (C) 1982 - 2011  JW Lemmon.
       -     "        ".
 002920	   03	       COLUMN 74 FOREGROUND-COLOR 0 VALUE "Ё".
 002940	   03  LINE  7 COLUMN  6 FOREGROUND-COLOR 1 HIGHLIGHT VALUE "Ё".
@@ -1554,14 +1554,19 @@
 006170         GO TO AD05.
 	     MOVE SEC-COMP	 TO WS-COMPANY.
 	     MOVE SEC-SYS	 TO APAC-SYSTEM WS-APAC-SYSTEM.
+      *
+      *     The following if statement will be removed with the next
+      *     release as any systems prior to version 8 will need major
+      *     file convertions.
+      *
 	   IF NOT (SEC-VER = "8.00" OR "8.01" OR "8.02"
 			  OR "2001" OR "2002" OR "2003"
 			  OR "2004" OR "2005" OR "2006"
 			  OR "2007" OR "2008" OR "2009"
-			  OR "2010")
+			  OR "2010" OR "2011")
 	       PERFORM APAC-SETUP-PATHS.
-	   IF NOT (SEC-VER = "2010")
-	       MOVE "2010"	 TO SEC-VER
+	   IF NOT (SEC-VER = "2011")
+	       MOVE "2011"	 TO SEC-VER
 008570	       REWRITE SEC-REC2.
 	     MOVE SEC-VER	 TO APAC-VERSION WS-APAC-VERSION.
 006180	     DISPLAY CLEAR-L25.
@@ -1603,7 +1608,7 @@
 006820        (SEC-JCP NOT = 2) AND (SEC-VHP NOT = 2)
                MOVE "LPT1"       TO W02-PRINTER
 006830         GO TO AD08.
-006840       OPEN I-O PARAM.
+006840	     OPEN I-O PARAM.
 006850	   IF RUNTIME-ERROR
 	       IF FLE-LOCKED
 006860		   DISPLAY "Files locked - try later - Press ENTER"
@@ -1613,8 +1618,8 @@
 006880		   ACCEPT WS-OPTION AT 2351
 			  WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO
 006890		   STOP RUN.
-006900       MOVE 2              TO WS-INIT.
-006910     IF WS-STATUS NOT = "00"
+006900	     MOVE 2		 TO WS-INIT.
+006910	   IF WS-STATUS NOT = "00"
 006920         GO TO AD06.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		CHECK IF LAST RUN ENDED CORRECTLY	       Ё
@@ -1626,7 +1631,7 @@
 006960     IF RUNTIME-ERROR
 006970         IF RECORD-LOCKED
 006980             GO TO AD05-PAR.
-006990     IF PAR-USERS = 0
+006990	   IF PAR-USERS = 0
 007020	       MOVE 1		 TO WS-PAR PAR-LOGON
 007030         GO TO AD07U.
 007040	     MOVE 1		 TO WS-S1.
@@ -1713,8 +1718,8 @@
       *    Ё	    New Systems - already correct		       Ё
       *    Ё	    (This ROUTINE updating older versions)	       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	   IF NOT (PAR-VER = "2010")
-	       MOVE "2010"	 TO PAR-VER
+	   IF NOT (PAR-VER = "2011")
+	       MOVE "2011"	 TO PAR-VER
 007540	       REWRITE PAR-RECORD3.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	  S E R I A L	N U M B E R   A N D   S Y S T E M      Ё
@@ -2357,7 +2362,7 @@
       *    *************************************************************
 	     MOVE "SHARED"	 TO APAC-KEY.
 	     MOVE "SHARED.DAT"	 TO APAC-NAME.
-	     MOVE 33		 TO APAC-FILE.
+	     MOVE 37		 TO APAC-FILE.
 	     PERFORM OFFL-WRITE-APACFILE.
       *    *************************************************************
       *    **** 	   S A L E S   O R D E R   F I L E	    ****
@@ -4932,13 +4937,18 @@
       *
       * 	Get the path used for the existing files.
       *
-	     MOVE APAC-PATH	 TO W10-CURRENT-PATH
-				    W10-WRK-PATH.
-	     INSPECT W10-WRK-PATH REPLACING FIRST "_DATA" BY "_WORK".
+	     MOVE APAC-PATH	 TO W10-CURRENT-PATH.
 	     MOVE SPACES	 TO W02-PARAM.
 	     STRING APAC-PATH DELIMITED BY " "
 		    APAC-NAME DELIMITED BY " "
 		    INTO W02-PARAM.
+      *
+      * 	Get the path used for the WORK files.
+      *
+	     MOVE "CORDER"	 TO APAC-KEY.
+000030	     READ APACFILE WITH IGNORE LOCK
+	       KEY IS APAC-KEY.
+	     MOVE APAC-PATH	 TO W10-WRK-PATH.
       *    *************************************************************
       *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
       *    *************************************************************
@@ -4966,6 +4976,29 @@
       *    Ё CHECK FOR THE PRESENCE OF NEW FILES THAT ARE ADDED TO THE Ё
       *    Ё SYSTEM AND UPDATE THE PATH FILE WITH MISSING FILE NAMES.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *    *************************************************************
+      *    ****   C R E D I T O R S   M E M O	W O R K   F I L E   ****
+      * 	       Version 8.15.01
+      *    *************************************************************
+	     MOVE "MEMCRD"	 TO APAC-KEY.
+000030	     READ APACFILE WITH IGNORE LOCK
+	       KEY IS APAC-KEY.
+	   IF NOT(WS-STATUS = "00")
+	       MOVE "MEMCRD"	 TO APAC-KEY
+	       MOVE "CRDM_XXX.WRK"
+				 TO APAC-NAME
+	       MOVE ZERO	 TO APAC-FILE
+	       MOVE W10-WRK-PATH TO APAC-PATH
+	       WRITE APAC-RECORD1
+	       MOVE WS-SYS-ID	 TO W02-SYSID
+	       OPEN I-O APACFIDS
+	       MOVE APAC-KEY	 TO AFID-KEY
+	       MOVE SPACES	 TO AFID-PATH
+	       STRING APAC-PATH DELIMITED BY " "
+		      APAC-NAME DELIMITED BY " "
+		      INTO AFID-PATH
+	       WRITE AFID-RECORD1
+	       CLOSE APACFIDS.
       *    *************************************************************
       *    ****        I N V O I C E   B I T M A P   F I L E	    ****
       * 	       Version 8.14.03

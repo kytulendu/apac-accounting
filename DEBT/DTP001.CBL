@@ -15,8 +15,8 @@
       *                                                                *
       *       D E B T O R   C R E A T I O N S	P R O G R A M	       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
-      * 							       *
+      *     VERSION 8.15.00 - November 2010			       *
+      *                                                                *
       ******************************************************************
       * 							       *
       *  May 2006	- New field included in Accounts Receivable    *
@@ -41,7 +41,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   March 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1621,44 +1621,10 @@
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	   S e t   u p	 t h e	 F U N C T I O N   k e y s     Ё
+      *    Ё  Setup various keys and the mouse for use with menus and  Ё
+      *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		       ESC, F1 to F10 keys		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		    PAGE-UP and PAGE-DOWN keys		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		   A C T I V A T E   M O U S E		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	       Set MOUSE key to act as FUNCTION key	       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+	     COPY FUNCTION.PRO.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	    Setup the file ID's including path names           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
@@ -1784,23 +1750,8 @@
       *    ****    I / O   E R R O R   M E S S A G E S
       *   
 042900 ZB000-ERROR	     SECTION 81.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-       I-O-ERROR-EXIT.
-             EXIT.
+
+       COPY ERRORS.PRO.
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
@@ -1825,7 +1776,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DME-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE
@@ -1833,32 +1784,5 @@
 041860	       MOVE W02-DEBALT	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DAL-KEY	 TO WS-KEYX.
-041880     IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

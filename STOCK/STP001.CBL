@@ -13,7 +13,7 @@
       *                                                                *
       *        S T O C K   C R E A T E	 N E W	 R E C O R D	       *
       *                                                                *
-      *     VERSION 8.14.02 - January 2010			       *
+      *     VERSION 8.15.00 - April 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -43,7 +43,7 @@
 000030 AUTHOR.         J.W.LEMMON (CSS).
 000040 DATE-WRITTEN.   JANUARY 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -562,6 +562,9 @@
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
 007740 AA000-MAIN	       SECTION.
 007750 AA000-INIT.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      * 	       Check the security level of the USER.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 003240	   IF LS0-STLEV < 1
 	       MOVE "Not Authorised"
 				 TO WS-ERR-STRING
@@ -2567,7 +2570,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE SME-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE

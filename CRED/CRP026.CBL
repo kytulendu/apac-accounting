@@ -1,4 +1,4 @@
-      $set LINKCOUNT"320"
+      $set LINKCOUNT"384"
       ******************************************************************
       *                                                                *
       *    ******   *******   *******	  ****	   ******    ******    *
@@ -13,7 +13,7 @@
       *                                                                *
       *     C R E D I T O R ' S   P O S T   D A T E D   C H E Q U E S  *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.               J.W. LEMMON (APAC).
 000040 DATE-WRITTEN.         AUGUST, 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

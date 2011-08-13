@@ -13,7 +13,7 @@
       *                                                                *
       *     P A R A M E T E R	B R A N C H   D E T A I L S	       *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   MARCH 2001.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2001 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2001 - 2010
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

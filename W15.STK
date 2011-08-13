@@ -20,7 +20,7 @@
 000100	       05 FILLER	 PIC  X(16).
 000110	   03  W15-QUANT	 PIC S9(09)V9(04) COMP-3.
 000120	   03  W15-LEVEL	 PIC S9(07)V99	COMP-3.
-000130	   03  W15-COST 	 PIC S9(06)V999 COMP-3.
+000130	   03  W15-COST 	 PIC S9(07)V9999 COMP-3.
 	   03  W15-SALES-FIELDS.
 	       05  W15-UNIT	 PIC S9(04)V999 COMP-3.
 	       05  W15-PER	 PIC  X(08).
@@ -67,9 +67,9 @@
 000160	   03  W15-PCOST	 PIC S9(08)V999 COMP-3.
 000160	   03  W15-SELL4 REDEFINES W15-PCOST
 				 PIC S9(08)V999 COMP-3.
-000170	   03  W15-AVGE 	 PIC S9(06)V999 COMP-3.
+000170	   03  W15-AVGE 	 PIC S9(07)V9999 COMP-3.
 	   03  W15-O-AVGE REDEFINES W15-AVGE
-				 PIC S9(07)V99	COMP-3.
+				 PIC S9(08)V999 COMP-3.
 000180	   03  W15-ORD		 PIC S9(07)V99	COMP-3.
 000190	   03  W15-LTIME	 PIC  9(01)V99	COMP-3.
 000200	   03  W15-MTD		 PIC S9(09)V99	COMP-3.
@@ -121,4 +121,34 @@
 	   03  W15-EXEMPT	 PIC  X(01).
 	       88  TAX-CERT	 VALUE "Y".
 	   03  W15-FACT 	 PIC  9(06)V999 COMP-3.
-	   03  FILLER		 PIC  X(08).
+      ******************************************************************
+      *								       *
+      *  Jan 2010 - Allow for two discounts for a Debtor on the same   *
+      * 	    Sales Ledger code. Included two additional Debtor  *
+      * 	    discount codes (11 and 12) each with a field to    *
+      * 	    define which debtor discount code uses this as an  *
+      * 	    alternate discount. The relevant Stock Item will   *
+      * 	    have an indicator field to instruct the system to  *
+      * 	    use the alternate discount. The alternate discount *
+      * 	    is only applicable if the discount code for which  *
+      * 	    this alternate discount is applicable is the code  *
+      * 	    on the Debtor account record.		       *
+      * 							       *
+      ******************************************************************
+	   03  W15-ALT-DISC	 PIC  X(01).
+      ******************************************************************
+      * 							       *
+      *  Nov 2010 - When placing an order the system checks the stock  *
+      * 	    available and if the quantity required is more the *
+      * 	    system only allows for the quantity available to   *
+      * 	    be ordered. To allow for stock descrepencies the   *
+      * 	    system has allowed for an override allowing the    *
+      * 	    quantity requested to be ordered.		       *
+      * 	    If an override is requested the person who has the *
+      * 	    authority may set the override indicator. If this  *
+      * 	    indicator is set the system allows the order to be *
+      * 	    placed and turns the indicator off. 	       *
+      * 							       *
+      ******************************************************************
+	   03  W15-QNT-OVER	 PIC  X(01).
+	   03  FILLER		 PIC  X(05).

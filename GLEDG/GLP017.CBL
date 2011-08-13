@@ -13,7 +13,7 @@
       *                                                                *
       * G / L E D G E R   R E C O N C I L A T I O N   S T A T E M E N T*
       *                                                                *
-      *     VERSION 8.14.03 - October 2010			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.                 J.W. LEMMON (APAC).
 000040 DATE-WRITTEN.           JUNE 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -975,15 +975,15 @@
              MOVE "A"            TO WS-OPTION.
 
        IA03.
-	     ACCEPT WS-OPTION AT 0646
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "A" OR "U")
-               GO TO IA03.
-             MOVE WS-OPTION      TO WS-RECON.
+	     PERFORM TEST AFTER UNTIL WS-OPTION = "A" OR "U"
+	       ACCEPT WS-OPTION AT 0646
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+	     MOVE WS-OPTION	 TO WS-RECON.
              GO TO IA10.
 
 019330 IA05.
@@ -1032,13 +1032,16 @@
 
 019720 IA12.
 	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Help,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F2" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 		     " to do Account Lookup - "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "Esc" WITH BACKGROUND-COLOR 3
+				FOREGROUND-COLOR 6 HIGHLIGHT
 		     "ape to exit"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 019750	     ACCEPT S17 AT 0821.
@@ -1080,9 +1083,8 @@
 	     MOVE "'C'ontinue or 'R'ekey  [C]"
 				 TO WS-ERR-MES.
              MOVE "C"            TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "C" OR "R")
-               GO TO IA15.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "R".
            IF WS-OPTION = "R"
                GO TO IA12.
 	     MOVE "N"		 TO WS-SCH.
@@ -1093,9 +1095,8 @@
 	     MOVE "Is this a banking account Y/N  [N]"
 				 TO WS-ERR-MES.
 	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "Y" OR "N")
-               GO TO IA16.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N".
            IF WS-OPTION = "N"
                GO TO IA20.
 
@@ -1103,13 +1104,10 @@
 	     MOVE "Start - 'C'ash book or 'S'tatement balance  [C]"
 				 TO WS-ERR-MES.
 	     MOVE "C"		 TO WS-OPTION.
-
-       IA18A.
-	     PERFORM OPT-MESSAGE.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "S" OR "C".
 	     MOVE WS-OPTION	 TO WS-SCH.
-	   IF NOT (WS-SCH = "S" OR "C")
-	       GO TO IA18.
-           IF WS-SCH = "C"
+	   IF WS-SCH = "C"
 	       GO TO IA19A.
       *
       *    ****     C A S H   B O O K	B A L A N C E
@@ -1327,11 +1325,11 @@
 	     MOVE "'C'ontinue or 'E'xit  [E]"
 				 TO WS-ERR-MES.
              MOVE "C"            TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "C" OR "E")
-	       GO TO IA45.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "E".
            IF WS-OPTION = "C"
-020690         GO TO IA00.
+020690	       GO TO IA00.
+
 020720 IA50.
 	     MOVE "C"		 TO WS-COMMAND.
 	     PERFORM CALL-PRINTUTL.
@@ -1348,50 +1346,18 @@
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
-033950	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+042000	     DISPLAY CLR-SCREEN.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	     COPY FUNCTION.PRO.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	    Setup the file ID's including path names           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -1413,12 +1379,21 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    *** G E N E R A L   L E D G E R   A C C O U N T   F I L E ***
+      *    *************************************************************
 	     MOVE "GACCNT"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-GACCNT.
+      *    *************************************************************
+      *    ***	 G / L E D G E R   T R A N S A C T I O N   F I L E   ***
+      *    *************************************************************
 	     MOVE "GLTRAN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-GLTRAN.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
@@ -1445,44 +1420,39 @@
 034570 ZA05.
 034620	     MOVE ZERO		 TO WS-ERROR.
 034630     IF W70-BNKGL = ZERO
-034640         DISPLAY (20, 20) "Parameters not Set up - ENTER"
-034650                           WITH FOREGROUND-COLOR 14
-034660         ACCEPT (20, 50) WS-OPTION WITH FOREGROUND-COLOR 15 AUTO
+034640	       DISPLAY "Parameters not Set up - ENTER" AT 2020
+034650			WITH FOREGROUND-COLOR 6 HIGHLIGHT
+034660	       ACCEPT WS-OPTION AT 2050
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO
 034670	       MOVE 1		 TO WS-ERROR.
 	     DISPLAY SPACES AT 2525
 		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 034700	     GO TO ZA999.
 
-       ZA49.
-             DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
-             DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-             DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
-             GO TO ZA205.
+       COPY ZA49.PRO.
 
 034710 ZA55.
 034720	     MOVE 1		 TO WS-S1.
 034730	     MOVE SPACES	 TO WS-MID-LNE.
 034740 ZA60.
-034750       MOVE WS-G1 TO WS-TCHR (WS-S1) WS-BCHR (WS-S1).
-034760       MOVE WS-G8 TO WS-TCH  (WS-S1) WS-BCH  (WS-S1).
+034750	     MOVE WS-G1 	 TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
+034760	     MOVE WS-G8 	 TO WS-TCH(WS-S1)  WS-BCH(WS-S1).
 034770     IF WS-S1 < 80
-034780         ADD 1 TO WS-S1
+034780	       ADD 1		 TO WS-S1
 034790         GO TO ZA60.
-034800       MOVE WS-G9  TO WS-TCH  (1).
-034810       MOVE WS-G10 TO WS-TCH  (80).
-034820       MOVE WS-G11 TO WS-BCH  (1).
-034830       MOVE WS-G12 TO WS-BCH  (80).
-034840       MOVE WS-G14 TO WS-TCHR (1)  WS-BCHR (1).
-034850       MOVE WS-G13 TO WS-TCHR (80) WS-BCHR (80).
-034860       MOVE WS-G2  TO WS-TCHR (11) WS-TCHR (45)
-034870                      WS-TCHR (63).
-034880       MOVE WS-G3  TO WS-MCHR (11) WS-MCHR (45)
-034890                      WS-MCHR (63)
-034900			    WS-MCHR (1)  WS-MCHR (80).
-034920       MOVE WS-G4  TO WS-BCHR (11) WS-BCHR (45)
-034930                      WS-BCHR (63).
+034800	     MOVE WS-G9 	 TO WS-TCH(1).
+034810	     MOVE WS-G10	 TO WS-TCH(80).
+034820	     MOVE WS-G11	 TO WS-BCH(1).
+034830	     MOVE WS-G12	 TO WS-BCH(80).
+034840	     MOVE WS-G14	 TO WS-TCHR(1)	WS-BCHR(1).
+034850	     MOVE WS-G13	 TO WS-TCHR(80) WS-BCHR(80).
+034860	     MOVE WS-G2 	 TO WS-TCHR(11) WS-TCHR(45)
+034870				    WS-TCHR(63).
+034880	     MOVE WS-G3 	 TO WS-MCHR(11) WS-MCHR(45)
+034890				    WS-MCHR(63)
+034900				    WS-MCHR(1)	WS-MCHR(80).
+034920	     MOVE WS-G4 	 TO WS-BCHR(11) WS-BCHR(45)
+034930				    WS-BCHR(63).
 	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
 	   IF LS-USER = LS-SYS-ID
 	       MOVE "SupervisorÄ"  TO WS-WRKHD
@@ -1490,13 +1460,9 @@
 	       MOVE "Workstation"  TO WS-WRKHD
 	       MOVE LS-USER	   TO WS-WRKST.
 034940 ZA200.
-034950       DISPLAY "Files locked - Try later" AT 2312
-034960                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-034970       DISPLAY "Press any key" AT 2512 
-034980		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-034990	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
 035000 ZA205.
 035010       EXIT PROGRAM.
 
@@ -1504,22 +1470,9 @@
 035030       EXIT.
       /
 035040 ZB000	     SECTION 9.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
+
+       COPY ERRORS.PRO.
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK TO WS-FILE
@@ -1538,32 +1491,5 @@
 041850     IF WS-F-ERROR = 15
 041860         MOVE WS-PARID TO WS-FILE
 041870	       MOVE WS-PARKEY TO WS-KEY.
-036720     IF WS-STATUS = "10"
-036730         MOVE "End of FILE" TO WS-STAT-MESSAGE
-036740     ELSE
-036750     IF WS-STATUS = "22"
-036760         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-036770     ELSE
-036780     IF WS-STATUS = "23"
-036790         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-036800     ELSE
-036810     IF WS-STATUS = "24"
-036820         MOVE "DISK full" TO WS-STAT-MESSAGE
-036830     ELSE
-036840     IF WS-STATUS = "30"
-036850         MOVE "DISK error" TO WS-STAT-MESSAGE
-036860     ELSE
-036870     IF WS-STATUS = "94"
-036880         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

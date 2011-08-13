@@ -15,7 +15,7 @@
       *                                                                *
       *     A G E   A C C O U N T S				       *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -23,7 +23,7 @@
 000030 AUTHOR.		       J.W.LEMMON (CSS).
 000040 DATE-WRITTEN.	       JUNE, 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -515,7 +515,12 @@
       *    Ё the window. An example of a message request follows:      Ё
       *    Ё							       Ё
       *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      Ё
-      *    Ё   PERFORM OPT-MESSAGE.				       Ё
+      *    Ё   PERFORM OPT-MESSAGE (Use this format if function or any Ё
+      *    Ё	       other keys are to be tested on exit)	       Ё
+      *    Ё			     OR 			       Ё
+      *    Ё   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       Ё
+      *    Ё   (Use TEST AFTER if WS-OPTION is preloaded with a        Ё
+      *    Ё   default option)					       Ё
       *    Ё							       Ё
       *    Ё This would be displayed as:			       Ё
       *    Ё	здддддддддддддддддддддддддддддддддддддддддддддддд©     Ё
@@ -527,7 +532,8 @@
       *    Ё							       Ё
       *    Ё To display the request message higher or lower (default   Ё
       *    Ё is line 13) move the line number to be used to SLIN and   Ё
-      *    Ё then PEFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё then PERFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё (The UNTIL and TEST AFTER options also apply here)        Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY OPTION.CRT.
@@ -659,7 +665,8 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
       *
 012550	     DISPLAY "WAITING" AT 2551
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 4 HIGHLIGHT.
 012560	     COMMIT.
 	     ACCEPT WS-STIME FROM TIME.
 	     MOVE 400		 TO WS-WAIT.
@@ -684,13 +691,13 @@
       *    ****   A R E   A N Y   U P D A T E S   I N	P R O G R E S S
       *
 012750 AY62.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-		   PAR-USR(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES OR
+		  PAR-USR(WS-SUB) = SPACES)
       *
       *    ****   A R E   D E B T O R	O R   S T O C K   F I L E S
       * 	  B E I N G   U P D A T E D
       *
-	       IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	       IF NOT(PAR-PROG(WS-SUB) = SPACES)
 012760		   IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
       *
       *    ****   Y E S   -   S E T   W A I T	P E R I O D
@@ -726,7 +733,7 @@
       *
        AY62-WAIT.
 	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-SUB) = LS-USER)
 	       IF WS-SUB < 24
 		   ADD 1	 TO WS-SUB
 		   GO TO AY62.
@@ -736,12 +743,12 @@
 	       COMMIT
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       ACCEPT WS-STIME FROM TIME
 	       PERFORM LOCK-REC-LOOP
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       GO TO AY60.
 012880	     DISPLAY SPACE AT 2572
 		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
@@ -762,7 +769,7 @@
 	     MOVE 1		 TO WS-USUB.
 
        AY72.
-	   IF NOT (PAR-USR(WS-USUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-USUB) = LS-USER)
 	       ADD 1		 TO WS-USUB
 	       GO TO AY72.
 
@@ -773,7 +780,7 @@
 	       ADD 1 WS-USUB	 GIVING WS-SUB
 	   ELSE
 	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES)
 	       MOVE PAR-PROG(WS-SUB)
 				 TO PAR-PROG(WS-USUB)
 	       MOVE PAR-USR(WS-SUB)
@@ -815,69 +822,74 @@
 036570       DISPLAY S39.
 
 036580 HA05.
-036590	     ACCEPT WS-OPTION AT 0942
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-036650	   IF NOT (WS-OPTION = "N" OR "Y")
-036660	       GO TO HA05.
-036670     IF WS-OPTION = "N"
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+036590	       ACCEPT WS-OPTION AT 0942
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+036670	   IF WS-OPTION = "N"
 036680         GO TO HA999.
 034160	     DISPLAY "Have BACKUP copies of files been made (Y/N)"
 		      AT 1112.
 
        HA10.
-034180	     ACCEPT WS-OPTION AT 1156
-		    WITH FOREGROUND-COLOR 15
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "Y" OR "N")
-	       GO TO HA10.
-034240     IF WS-OPTION = "N"
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+034180	       ACCEPT WS-OPTION AT 1156
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+034240	   IF WS-OPTION = "N"
 034250	       GO TO HA999.
 034260	     DISPLAY "Have Remittance Advices been printed (Y/N)"
 		      AT 1312.
 
        HA15.
-034270	     ACCEPT WS-OPTION AT 1355
-		    WITH FOREGROUND-COLOR 15
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "Y" OR "N")
-	       GO TO HA15.
-034330     IF WS-OPTION = "N"
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+034270	       ACCEPT WS-OPTION AT 1355
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+034330	   IF WS-OPTION = "N"
 034340	       GO TO HA999.
 034350	     DISPLAY "Are you sure (Y/N)" AT 1512.
 
        HA20.
-034360	     ACCEPT WS-OPTION AT 1531
-		    WITH FOREGROUND-COLOR 15
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO HA20.
-034420     IF WS-OPTION = "N"
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+034360	       ACCEPT WS-OPTION AT 1531
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+034420	   IF WS-OPTION = "N"
 034430	       GO TO HA999.
 	     DISPLAY "Is this a restart (Y/N)" AT 1712.
 	     MOVE "N"		 TO WS-REST.
 
        HA22.
-034460	     ACCEPT WS-REST AT 1736
-		    WITH FOREGROUND-COLOR 15
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-REST
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-034520	   IF NOT (WS-REST = "Y" OR "N")
-034530	       GO TO HA22.
+	     PERFORM TEST AFTER
+		     UNTIL WS-REST = "N" OR "Y"
+034460	       ACCEPT WS-REST AT 1736
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-REST
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 	   IF WS-REST = "Y"
 	       PERFORM HA90 THRU HA100.
 	     MOVE ZERO		 TO W70-DUE-NOW W70-DUE-30
@@ -990,13 +1002,14 @@
 		     "ontinue [ ]".
 
        HA45.
-	     ACCEPT WS-OPTION AT 0850
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "C")
-	       GO TO HA45.
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "C"
+	       ACCEPT WS-OPTION AT 0850
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 037050	     CLOSE CTRANS.
 	     DISPLAY "Reading :" AT 1012.
              DISPLAY "Writing :" AT 1212.
@@ -1018,7 +1031,7 @@
 				 FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 		   PERFORM LOCK-REC-LOOP THRU LOCK-REC-EXIT
 		   GO TO HA50.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       MOVE 4		 TO WS-F-ERROR
 	       PERFORM OPEN-ERROR.
 	     DISPLAY CLEAR-L25.
@@ -1032,7 +1045,7 @@
 				 FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 		   PERFORM LOCK-REC-LOOP THRU LOCK-REC-EXIT
 		   GO TO HA50.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       MOVE 4		 TO WS-F-ERROR
 	       PERFORM OPEN-ERROR.
 	     DISPLAY CLEAR-L25.
@@ -1123,13 +1136,16 @@
 
        HA95.
 	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Help,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F2" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 		     " to do Creditor Lookup "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "Esc" WITH BACKGROUND-COLOR 3
+				FOREGROUND-COLOR 6 HIGHLIGHT
 		     " to exit"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 	     ACCEPT W15-ACNO AT 2031
@@ -1172,9 +1188,8 @@
 032920	     MOVE "'C'ontinue or 'R'ekey  [ ]"
 				 TO WS-ERR-MES.
 	     MOVE "C"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-024860	   IF NOT (WS-OPTION = "C" OR "R")
-024870	       GO TO HA96.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "R".
 	   IF WS-OPTION = "R"
 	       GO TO HA95.
 
@@ -1194,49 +1209,17 @@
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
 019660	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё  Setup various keys and the mouse for use with menus and  Ё
+      *    Ё  other required user interface functions and procedures.  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	     COPY FUNCTION.PRO.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	    Setup the file ID's including path names           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -1293,14 +1276,8 @@
 020030       PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
 020100       GO TO ZA999-EXIT.
 
-       ZA49.
-             DISPLAY "Too many files OPEN" AT 0812
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-             DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-             DISPLAY "Press any key to continue" AT 1212.
-	     ACCEPT WS-OPTION AT 1238
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT.
-             GO TO ZA205.
+       COPY ZA49.PRO.
+
       *
       *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
       *
@@ -1337,40 +1314,19 @@
 				 TO WS-WRKHD
 	       MOVE LS-USER	 TO WS-WRKST.
 020110 ZA200.
-020120       DISPLAY "Files locked - Try later" AT 2312
-020130		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     " " WS-STATUS WITH FOREGROUND-COLOR 7 HIGHLIGHT.
-020140       DISPLAY "Press any key" AT 2512 
-020150		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
-020160	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3
-			 FOREGROUND-COLOR 7 HIGHLIGHT AUTO.
+
+       COPY LOCKED.PRO.
+
        ZA205.
              EXIT PROGRAM.
+
 020190 ZA999-EXIT.
 020200       EXIT.
       /
 020210 ZB000-I-O-ERROR SECTION 9.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500	     DISPLAY "Open error" AT 0812
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500	     DISPLAY "Read error" AT 0812
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540	     DISPLAY "Write error" AT 0812
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
+
+       COPY ERRORS.PRO.
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620	       MOVE W02-NETWORK  TO WS-FILE
@@ -1398,41 +1354,8 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE CME-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY.
-041880     IF WS-STATUS = "10"
-041890	       MOVE "End of FILE"
-				 TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920	       MOVE "Duplicate record number"
-				 TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950	       MOVE "Invalid record number"
-				 TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980	       MOVE "DISK full"  TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040	       MOVE "FILE locked"
-				 TO WS-STAT-MESSAGE.
-045380	     DISPLAY "File - " AT 1012 WS-FILE
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT.
-045390       DISPLAY "Status " AT 1212 
-		      WS-STATUS WITH FOREGROUND-COLOR 3 HIGHLIGHT
-		     ": " WS-STAT-MESSAGE
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-			WS-KEY WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			" " WS-KEYX WITH FOREGROUND-COLOR 3 HIGHLIGHT
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

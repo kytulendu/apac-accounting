@@ -13,7 +13,7 @@
       *                                                                *
       *     D E B T O R	  S T A T E M E N T S	P R O G R A M	       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -62,7 +62,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   DECEMBER 1990.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
 				     by James William Lemmon.
 
 		   All rights reserved.
@@ -3163,6 +3163,10 @@
 041860         MOVE W02-DEBMEM   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DME-KEY	 TO WS-KEYX
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041640     ELSE
 041650     IF WS-F-ERROR = 55
 041660	       MOVE W02-DTHIST	 TO WS-FILE

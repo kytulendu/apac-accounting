@@ -13,7 +13,7 @@
       *                                                                *
       *   O U T S T A N D I N G   O R D E R S	R E P O R T   P R O G  *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.01 - July 2011 			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -296,11 +296,11 @@
 000390	   03  REP-LINE3 REDEFINES W02-PRN-LINE.
 000400	       05  REP-PAGE    PIC  X(06).
 000410	       05  REP-P-NO    PIC  Z(03)9.
-000420	       05  FILLER      PIC  X(10).
+000420	       05  FILLER      PIC  X(09).
 000430	       05  REP-COMPANY PIC  X(40).
-000440	       05  FILLER      PIC  X(06).
+000440	       05  FILLER      PIC  X(05).
 000450	       05  REP-DATE    PIC  X(06).
-000460	       05  REP-DTE     PIC  Z9/99/99.
+000460	       05  REP-DTE     PIC  Z9/99/9999.
 
 000470	   03  REP-LINE4 REDEFINES W02-PRN-LINE.
 000480	       05  FILLER      PIC  X(28).
@@ -309,57 +309,57 @@
 
 001810	   03  ORD-L1 REDEFINES W02-PRN-LINE.
 001820	       05  ORD-H1      PIC  X(07).
-001830	       05  ORD-H2      PIC  X(41).
-001840	       05  ORD-H3      PIC  X(18).
+001830	       05  ORD-H2      PIC  X(40).
+001840	       05  ORD-H3      PIC  X(17).
 001850	       05  ORD-H4      PIC  X(13).
 001860	       05  ORD-H5      PIC  X(09).
-	       05  ORD-H6      PIC  X(08).
+	       05  ORD-H6      PIC  X(10).
 
 001870	   03  ORD-L2 REDEFINES W02-PRN-LINE.
 001880	       05  ORD-AC1     PIC  X(06).
 001890	       05  FILLER      PIC  X(01).
-001900	       05  ORD-NME1    PIC  X(40).
+001900	       05  ORD-NME1    PIC  X(39).
 001910	       05  FILLER      PIC  X(01).
-	       05  ORD-CONTACT PIC  X(17).
+	       05  ORD-CONTACT PIC  X(16).
 	       05  FILLER      PIC  X(01).
 	       05  ORD-TEL1    PIC  X(12).
 	       05  FILLER      PIC  X(01).
 001920	       05  ORD-REF1    PIC  X(08).
 001930	       05  FILLER      PIC  X(01).
-001940	       05  ORD-DATE1   PIC  Z9/99/99.
+001940	       05  ORD-DATE1   PIC  Z9/99/9999.
 
 001810	   03  ORD-L3 REDEFINES W02-PRN-LINE.
 001820	       05  ORD-H7      PIC  X(09).
-001830	       05  ORD-H8      PIC  X(09).
+001830	       05  ORD-H8      PIC  X(11).
 001840	       05  ORD-H9      PIC  X(07).
-001850	       05  ORD-H10     PIC  X(41).
-001860	       05  ORD-H11     PIC  X(18).
+001850	       05  ORD-H10     PIC  X(40).
+001860	       05  ORD-H11     PIC  X(17).
 	       05  ORD-H12     PIC  X(12).
 
 001870	   03  ORD-L4 REDEFINES W02-PRN-LINE.
 001920	       05  ORD-REF2    PIC  X(08).
 001930	       05  FILLER      PIC  X(01).
-001940	       05  ORD-DATE2   PIC  Z9/99/99.
+001940	       05  ORD-DATE2   PIC  Z9/99/9999.
 	       05  FILLER      PIC  X(01).
 001880	       05  ORD-AC2     PIC  X(06).
 001890	       05  FILLER      PIC  X(01).
-001900	       05  ORD-NME2    PIC  X(40).
+001900	       05  ORD-NME2    PIC  X(39).
 001910	       05  FILLER      PIC  X(01).
-	       05  ORD-CONT2   PIC  X(17).
+	       05  ORD-CONT2   PIC  X(16).
 	       05  FILLER      PIC  X(01).
 	       05  ORD-TEL2    PIC  X(12).
 
 	   03  ORD-L5 REDEFINES W02-PRN-LINE.
-	       05  FILLER      PIC  X(15).
-	       05  ORD-H13     PIC  X(15).
+	       05  FILLER      PIC  X(11).
+	       05  ORD-H13     PIC  X(19).
 	       05  ORD-H14     PIC  X(31).
 	       05  ORD-H15     PIC  X(10).
 	       05  ORD-H16     PIC  X(12).
 	       05  ORD-H17     PIC  X(13).
 
 001990	   03  ORD-L6 REDEFINES W02-PRN-LINE.
-002000	       05  FILLER      PIC  X(15).
-002010	       05  ORD-ITEM    PIC  X(14).
+002000	       05  FILLER      PIC  X(11).
+002010	       05  ORD-ITEM    PIC  X(18).
 002020	       05  FILLER      PIC  X(01).
 002030	       05  ORD-DESC    PIC  X(30).
 002040	       05  FILLER      PIC  X(01).
@@ -384,6 +384,8 @@
 	       05  ORD-TOTAL   PIC  Z(08)9.99.
 
        COPY W12.WS.
+
+       COPY W20.WS.
 
        COPY W40.WS.
 
@@ -582,7 +584,15 @@
 	   IF NOT SOR-ORDER
 	       GO TO BA10.
 	     MOVE SOR-REF	 TO ORD-REF2.
-	     MOVE SOR-DTE	 TO ORD-DATE2.
+      *
+      *    ****   Switch date from YYYYMMDD to DDMMYYYY
+      *
+	     MOVE SOR-DTE	 TO W22-DTE2.
+	     MOVE W22-CC2	 TO W22-CC3.
+002770	     MOVE W22-YY2	 TO W22-YY3.
+002780	     MOVE W22-MM2	 TO W22-MM3.
+002790	     MOVE W22-DD2	 TO W22-DD3.
+	     MOVE W22-DTE3	 TO ORD-DATE2.
 	     MOVE SOR-AC	 TO ORD-AC2.
 	     MOVE SOR-NAME	 TO ORD-NME2.
 	     MOVE SOR-CONTACT	 TO ORD-CONT2.
@@ -620,7 +630,7 @@
 	       GO TO BA25.
 	   IF NOT (SOR-TYPE = 1)
 	       GO TO BA20.
-002010	     MOVE SOR-ITM	 TO ORD-ITEM.
+002010	     MOVE SOR-EXT-ITEM	 TO ORD-ITEM.
 002030	     MOVE SOR-DESC	 TO ORD-DESC.
 002050	     MOVE SOR-QNT	 TO ORD-QNT.
 002070	     MOVE SOR-SELL	 TO ORD-PRC.
@@ -700,7 +710,15 @@
 	     MOVE SOR-CONTACT	 TO ORD-CONTACT.
 	     MOVE SOR-TEL	 TO ORD-TEL1.
 	     MOVE SOR-REF	 TO ORD-REF1.
-	     MOVE SOR-DTE	 TO ORD-DATE1.
+      *
+      *    ****   Switch date from YYYYMMDD to DDMMYYYY
+      *
+	     MOVE SOR-DTE	 TO W22-DTE2.
+	     MOVE W22-CC2	 TO W22-CC3.
+002770	     MOVE W22-YY2	 TO W22-YY3.
+002780	     MOVE W22-MM2	 TO W22-MM3.
+002790	     MOVE W22-DD2	 TO W22-DD3.
+	     MOVE W22-DTE3	 TO ORD-DATE1.
 	   IF NOT (WS-PRINTER = "S")
 	       MOVE 0		 TO WS-ADVANCE
 	       PERFORM CALL-PRINTUTL.

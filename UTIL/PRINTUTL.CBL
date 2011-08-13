@@ -13,7 +13,7 @@
       *                                                                *
       * 	  P R I N T   U T I L I T Y   P R O G R A M	       *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -37,7 +37,7 @@
 	   printed on a printer and are unaware of the Users request to
 	   spool or display the report.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -142,8 +142,9 @@
        77  WS-17CPI	   PIC	X(06)	 VALUE X"000000000000".
 003150 77  WS-PRN-NO	   PIC	X(01)	 COMP-X VALUE 9.
 003160 77  WS-PRN-STAT	   PIC	X(01)	 COMP-X.
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
-       77  WS-USUB	   PIC	9(04) COMP-5.
+       77  TODAY-DDMMYY	   PIC	9(08)	 COMP-5.
+       77  WS-USUB	   PIC	9(04)	 COMP-5.
+       77  WS-SKIP	   PIC	X(01)	 VALUE "N".
 
 003050 01  WS-DB-LINE.
 003080	   03  WS-TOP-LNE2.
@@ -287,7 +288,7 @@
 	   03  LS-SCREEN-LIN   PIC  9(02).
 	   03  LS-LINAGE       PIC  9(02).
 	   03  LS-PAPER        PIC  X(01).
-	   03  FILLER	       PIC  X(01).
+	   03  LS-ORIENTATION  PIC  X(01).
 
        01  L02-PRINTER-DETAILS.
 	   03  L02-PRINTER     PIC  X(12).
@@ -320,135 +321,135 @@
 				 VALUE "цддддддддддддддддддддддддддддддд
       -        "ддддддддддддддддддддддддддддддддддддддддддддддд╢".
 	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (1).
+				 PIC  X(78) FROM W05-SLA(1).
 	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (2).
+				 PIC  X(78) FROM W05-SLA(2).
 	   03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (3).
+				 PIC  X(78) FROM W05-SLA(3).
 	   03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (4).
+				 PIC  X(78) FROM W05-SLA(4).
 	   03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (5).
+				 PIC  X(78) FROM W05-SLA(5).
 	   03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (6).
+				 PIC  X(78) FROM W05-SLA(6).
 	   03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (7).
+				 PIC  X(78) FROM W05-SLA(7).
 	   03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (8).
+				 PIC  X(78) FROM W05-SLA(8).
 	   03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (9).
+				 PIC  X(78) FROM W05-SLA(9).
 	   03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (10).
+				 PIC  X(78) FROM W05-SLA(10).
 	   03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (11).
+				 PIC  X(78) FROM W05-SLA(11).
 	   03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (12).
+				 PIC  X(78) FROM W05-SLA(12).
 	   03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (13).
+				 PIC  X(78) FROM W05-SLA(13).
 	   03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (14).
+				 PIC  X(78) FROM W05-SLA(14).
 	   03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (15).
+				 PIC  X(78) FROM W05-SLA(15).
 	   03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (16).
+				 PIC  X(78) FROM W05-SLA(16).
 	   03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (17).
+				 PIC  X(78) FROM W05-SLA(17).
 	   03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (18).
+				 PIC  X(78) FROM W05-SLA(18).
 	   03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (19).
+				 PIC  X(78) FROM W05-SLA(19).
 	   03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA (20).
+				 PIC  X(78) FROM W05-SLA(20).
 
        01  SD-RIGHT.
 	   03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
 				 VALUE "цддддддддддддддддддддддддддддддд
       -        "ддддддддддддддддддддддддддддддддддддддддддддддд╢".
 	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (1).
+				 PIC  X(78) FROM W05-SLB(1).
 	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (2).
+				 PIC  X(78) FROM W05-SLB(2).
 	   03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (3).
+				 PIC  X(78) FROM W05-SLB(3).
 	   03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (4).
+				 PIC  X(78) FROM W05-SLB(4).
 	   03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (5).
+				 PIC  X(78) FROM W05-SLB(5).
 	   03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (6).
+				 PIC  X(78) FROM W05-SLB(6).
 	   03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (7).
+				 PIC  X(78) FROM W05-SLB(7).
 	   03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (8).
+				 PIC  X(78) FROM W05-SLB(8).
 	   03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (9).
+				 PIC  X(78) FROM W05-SLB(9).
 	   03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (10).
+				 PIC  X(78) FROM W05-SLB(10).
 	   03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (11).
+				 PIC  X(78) FROM W05-SLB(11).
 	   03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (12).
+				 PIC  X(78) FROM W05-SLB(12).
 	   03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (13).
+				 PIC  X(78) FROM W05-SLB(13).
 	   03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (14).
+				 PIC  X(78) FROM W05-SLB(14).
 	   03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (15).
+				 PIC  X(78) FROM W05-SLB(15).
 	   03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (16).
+				 PIC  X(78) FROM W05-SLB(16).
 	   03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (17).
+				 PIC  X(78) FROM W05-SLB(17).
 	   03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (18).
+				 PIC  X(78) FROM W05-SLB(18).
 	   03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (19).
+				 PIC  X(78) FROM W05-SLB(19).
 	   03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB (20).
+				 PIC  X(78) FROM W05-SLB(20).
 
        01  SD-RANDOM.
 	   03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
 				 VALUE "цддддддддддддддддддддддддддддддд
       -        "ддддддддддддддддддддддддддддддддддддддддддддддд╢".
 	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (1).
+				 PIC  X(78) FROM W06-LINE(1).
 	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (2).
+				 PIC  X(78) FROM W06-LINE(2).
 	   03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (3).
+				 PIC  X(78) FROM W06-LINE(3).
 	   03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (4).
+				 PIC  X(78) FROM W06-LINE(4).
 	   03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (5).
+				 PIC  X(78) FROM W06-LINE(5).
 	   03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (6).
+				 PIC  X(78) FROM W06-LINE(6).
 	   03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (7).
+				 PIC  X(78) FROM W06-LINE(7).
 	   03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (8).
+				 PIC  X(78) FROM W06-LINE(8).
 	   03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (9).
+				 PIC  X(78) FROM W06-LINE(9).
 	   03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (10).
+				 PIC  X(78) FROM W06-LINE(10).
 	   03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (11).
+				 PIC  X(78) FROM W06-LINE(11).
 	   03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (12).
+				 PIC  X(78) FROM W06-LINE(12).
 	   03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (13).
+				 PIC  X(78) FROM W06-LINE(13).
 	   03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (14).
+				 PIC  X(78) FROM W06-LINE(14).
 	   03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (15).
+				 PIC  X(78) FROM W06-LINE(15).
 	   03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (16).
+				 PIC  X(78) FROM W06-LINE(16).
 	   03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (17).
+				 PIC  X(78) FROM W06-LINE(17).
 	   03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (18).
+				 PIC  X(78) FROM W06-LINE(18).
 	   03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (19).
+				 PIC  X(78) FROM W06-LINE(19).
 	   03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE (20).
+				 PIC  X(78) FROM W06-LINE(20).
 
 004870 COPY S99.CRT.
 
@@ -468,9 +469,12 @@
 	     MOVE WS-SYS-ID	 TO W02-SYSID.
 	     MOVE LS-SCREEN-PRINT
 				 TO WS-SCREEN-PRINT.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	    Setup the file ID's including path names           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        AA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -492,8 +496,13 @@
 
        AA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+
+       AA10-OPTIONS.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	 Must the Screen be cleared - Already been opened.     Ё
+      *    Ё If a USER selects the screen as output WS-COMMAND is set  Ё
+      *    Ё to 'I' and this test will clear the screen to a white     Ё
+      *    Ё background and then exit.				       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	   IF WS-COMMAND = "I"
 	       PERFORM OPEN-SCREEN THRU OPEN-SCREEN-EXIT
@@ -503,7 +512,7 @@
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	    Printer/Screen/Disk has not been opened yet.       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	   IF NOT (L02-PRN-STATUS = "O")
+	   IF NOT(L02-PRN-STATUS = "O")
 	       PERFORM SAVE-SCREEN-3.
 	     PERFORM PRINT-SCREEN.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -522,6 +531,41 @@
 
        COPY FUNCTION.CRT.
 
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё			  OPT-MESSAGE			       Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё This routine is used to allow the OPERATOR to respond to  Ё
+      *    Ё a request for an option, so that the correct action can   Ё
+      *    Ё be performed by the program. The routine will display the Ё
+      *    Ё message in a pop-up window and allow the OPERATOR to      Ё
+      *    Ё respond to the 'question'. 			       Ё
+      *    Ё							       Ё
+      *    Ё The option request must be placed in WS-ERR-MES and may   Ё
+      *    Ё not exceed 48 characters. The message will be centred in  Ё
+      *    Ё the window. An example of a message request follows:      Ё
+      *    Ё							       Ё
+      *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      Ё
+      *    Ё   PERFORM OPT-MESSAGE (Use this format if function or any Ё
+      *    Ё	       other keys are to be tested on exit)	       Ё
+      *    Ё			     OR 			       Ё
+      *    Ё   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       Ё
+      *    Ё   (Use TEST AFTER if WS-OPTION is preloaded with a        Ё
+      *    Ё   default option)					       Ё
+      *    Ё							       Ё
+      *    Ё This would be displayed as:			       Ё
+      *    Ё	здддддддддддддддддддддддддддддддддддддддддддддддд©     Ё
+      *    Ё	Ё	   Print transactions (Y/N) [ ] 	 Ё╟╟   Ё
+      *    Ё	юдддддддддддддддддддддддддддддддддддддддддддддддды╟╟   Ё
+      *    Ё	  ╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟   Ё
+      *    Ё							       Ё
+      *    Ё The response is returned in WS-OPTION (in upper case).    Ё
+      *    Ё							       Ё
+      *    Ё To display the request message higher or lower (default   Ё
+      *    Ё is line 13) move the line number to be used to SLIN and   Ё
+      *    Ё then PERFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё (The UNTIL and TEST AFTER options also apply here)        Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY OPTION.CRT.
 
 011390 COPY LOCKED.RC2.
@@ -537,32 +581,32 @@
 
        PRINT-SCREEN    SECTION.
        PRINT-STATUS-TEST.
+	   EVALUATE WS-COMMAND
       *
       *    ****   O P E N   T H E   P R I N T E R   F I L E
       *
-	   IF WS-COMMAND = "O"
+	     WHEN "O"
 	       IF L02-PRN-STATUS = "C"
 		   PERFORM OPEN-PRINT-FILE
 	       END-IF
 	       GO TO PRINT-SCREEN-EXIT
-	   ELSE
       *
       *    ****   C L O S E   T H E   P R I N T E R   F I L E
       *
-	   IF WS-COMMAND = "C"
+	     WHEN "C"
 	       IF L02-PRN-STATUS = "O"
 		   PERFORM CLOSE-PRINT-FILE
 	       END-IF
 	       GO TO PRINT-SCREEN-EXIT
-	   ELSE
       *
       *    ****   S K I P   T O   A   N E W   P A G E
       *
-	   IF WS-COMMAND = "S"
+	     WHEN "S"
 	       IF L02-PRN-STATUS = "O"
 		   PERFORM NEW-PAGE
 	       END-IF
-	       GO TO PRINT-SCREEN-EXIT.
+	       GO TO PRINT-SCREEN-EXIT
+	   END-EVALUATE.
 	     MOVE L02-PRN-LINE	TO REP-DETAIL1.
       *
       *    ****	  C H E C K   I F   P R I N T E R   F I L E   O P E N
@@ -599,20 +643,16 @@
 		      WS-OPTION DELIMITED SIZE
 		      "]" DELIMITED SIZE
 				 INTO WS-ERR-MES
+	       PERFORM OPT-MESSAGE TEST AFTER
+		       UNTIL WS-OPTION = "P" OR "D"
 	   ELSE
 	       STRING "'P'rinter,'S'creen or 'D'isk  ["
 		      DELIMITED SIZE
 		      WS-OPTION DELIMITED SIZE
 		      "]" DELIMITED SIZE
-				 INTO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE.
-	   IF LS-PRINTER = "S"
-	       IF NOT (WS-OPTION = "P" OR "D")
-		   GO TO OPEN-PRINTER-NO
-	       END-IF
-	   ELSE
-	   IF NOT (WS-OPTION = "P" OR "D" OR "S")
-	       GO TO OPEN-PRINTER-NO.
+				 INTO WS-ERR-MES
+	       PERFORM OPT-MESSAGE TEST AFTER
+		       UNTIL WS-OPTION = "P" OR "D" OR "S".
 	     MOVE WS-OPTION	 TO WS-PRINTER.
 	   IF WS-OPTION = "S"
 	       PERFORM OPEN-SCREEN THRU OPEN-SCREEN-EXIT
@@ -629,59 +669,59 @@
              MOVE W25-KEY        TO WS-PARKEY.
              ADD 1 W25-SUB       GIVING WS-S6.
 014250       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF WS-REPORT = 1
+	   EVALUATE WS-REPORT
+	     WHEN 1
 	       PERFORM OPEN-REPORT-1
-	   ELSE
-	   IF WS-REPORT = 2
+	     WHEN 2
 	       PERFORM OPEN-REPORT-2
-	   ELSE
-	   IF WS-REPORT = 3 OR 4 OR 5 OR 6
+	     WHEN 3
+	     WHEN 4
+	     WHEN 5
+	     WHEN 6
 	       PERFORM OPEN-REPORT-3
-	   ELSE
-	   IF WS-REPORT = 7
+	     WHEN 7
 	       PERFORM OPEN-REPORT-4
-	   ELSE
-	   IF WS-REPORT = 8
+	     WHEN 8
 	       PERFORM OPEN-REPORT-5
-	   ELSE
-	   IF WS-REPORT = 9
-	       PERFORM OPEN-REPORT-6.
+	     WHEN 9
+	       PERFORM OPEN-REPORT-6
+	   END-EVALUATE.
 	     DIVIDE W25-RESULT BY 2
                                  GIVING WS-PARKEY
                                  REMAINDER WS-S6.
              ADD 1               TO WS-S6.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE TRM-CONP (WS-S6)
+	     MOVE TRM-CONP(WS-S6)
                                  TO WS-COND.
-             MOVE TRM-NORP (WS-S6)
+	     MOVE TRM-NORP(WS-S6)
                                  TO WS-NORM.
-             MOVE TRM-EXPP (WS-S6)
+	     MOVE TRM-EXPP(WS-S6)
 				 TO WS-EXPP W08-EXPD.
-             MOVE TRM-ECAN (WS-S6)
+	     MOVE TRM-ECAN(WS-S6)
                                  TO WS-ECAN.
-             MOVE TRM-8LPI (WS-S6)
+	     MOVE TRM-8LPI(WS-S6)
                                  TO WS-8LPI.
-             MOVE TRM-6LPI (WS-S6)
+	     MOVE TRM-6LPI(WS-S6)
                                  TO WS-6LPI.
-             MOVE TRM-10CPI (WS-S6)
+	     MOVE TRM-10CPI(WS-S6)
                                  TO WS-10CPI.
-             MOVE TRM-12CPI (WS-S6)
+	     MOVE TRM-12CPI(WS-S6)
                                  TO WS-12CPI.
-             MOVE TRM-17CPI (WS-S6)
+	     MOVE TRM-17CPI(WS-S6)
                                  TO WS-17CPI.
-	     MOVE TRM-LENGTH (WS-S6)
+	     MOVE TRM-LENGTH(WS-S6)
 				 TO WS-PRN-LENGTH
 				    L02-PRN-LENGTH.
-	     MOVE TRM-PAGE (WS-S6)
+	     MOVE TRM-PAGE(WS-S6)
 				 TO WS-PGE-LENGTH
 				    L02-PGE-LENGTH.
 	     MOVE TRM-SINGLE(WS-S6)
 				 TO WS-PAPER.
-	   IF TRM-PRN-TYPE (WS-S6) = "H"
+	   IF TRM-PRN-TYPE(WS-S6) = "H"
 	       MOVE 77		 TO WS-SCREEN-LIN
 	       MOVE WS-COND	 TO WS-ECAN
-	       MOVE 048		 TO W08-DEC (4)
-	       MOVE 056		 TO W08-DEC (5)
+	       MOVE 048		 TO W08-DEC(4)
+	       MOVE 056		 TO W08-DEC(5)
 	       MOVE W08-EXPD	 TO WS-EXPP.
 	   IF WS-PRINTER = "D"
 	       MOVE "WS"	 TO W02-WS
@@ -691,7 +731,10 @@
 	       MOVE "."		 TO W02-P
 	       MOVE LS-SYS-ID	 TO W02-USER
 	       MOVE 9		 TO WS-PRN-NO.
-	   IF WS-PRN-NO < 3
+      *
+      *      Is the printer LPT1, 2 or 3
+      *
+	   IF WS-PRN-NO < 4
 	       PERFORM CHECK-PRINTER THRU CHECK-PRINTER-EXIT
 	       IF WS-ERROR = 1
 		   MOVE "D"	TO WS-OPTION
@@ -716,7 +759,7 @@
 		   SUBTRACT 6 FROM WS-PGE-LENGTH
 				 GIVING WS-PRN-LENGTH
 					L02-PRN-LENGTH.
-	   IF NOT (WS-LINAGE = ZERO OR WS-PGE-LENGTH)
+	   IF NOT(WS-LINAGE = ZERO OR WS-PGE-LENGTH)
 	       COMPUTE WS-PRN-LENGTH = WS-LINAGE -
 				      (WS-PGE-LENGTH - WS-PRN-LENGTH)
 	       MOVE WS-LINAGE	 TO WS-PGE-LENGTH L02-PGE-LENGTH
@@ -770,138 +813,138 @@
 	     GO TO OPEN-PRINTER-STATUS.
 
        OPEN-REPORT-1.
-	   IF TRM-PICP (WS-S6) = 1
+	   IF TRM-PICP(WS-S6) = 1
                MOVE "LPT1"       TO W02-PRINTER
 	       MOVE ZERO	 TO WS-PRN-NO
            ELSE
-           IF TRM-PICP (WS-S6) = 2
+	   IF TRM-PICP(WS-S6) = 2
                MOVE "LPT2"       TO W02-PRINTER
 	       MOVE 1		 TO WS-PRN-NO
            ELSE
-           IF TRM-PICP (WS-S6) = 3
+	   IF TRM-PICP(WS-S6) = 3
                MOVE "LPT3"       TO W02-PRINTER
 	       MOVE 2		 TO WS-PRN-NO
            ELSE
-           IF TRM-PICP (WS-S6) = 4
+	   IF TRM-PICP(WS-S6) = 4
                MOVE "COM1"       TO W02-PRINTER
            ELSE
-           IF TRM-PICP (WS-S6) = 5
+	   IF TRM-PICP(WS-S6) = 5
                MOVE "COM2"       TO W02-PRINTER
            ELSE
-           IF TRM-PICP (WS-S6) = 9
+	   IF TRM-PICP(WS-S6) = 9
 	       MOVE LS-USER	 TO W02-USER.
-             ADD 501 TRM-PRN1 (WS-S6)
+	     ADD 501 TRM-PRN1(WS-S6)
                                  GIVING W25-RESULT.
 
        OPEN-REPORT-2.
-	   IF TRM-INVP (WS-S6) = 1
+	   IF TRM-INVP(WS-S6) = 1
                MOVE "LPT1"       TO W02-PRINTER
 	       MOVE ZERO	 TO WS-PRN-NO
            ELSE
-           IF TRM-INVP (WS-S6) = 2
+	   IF TRM-INVP(WS-S6) = 2
                MOVE "LPT2"       TO W02-PRINTER
 	       MOVE 1		 TO WS-PRN-NO
            ELSE
-           IF TRM-INVP (WS-S6) = 3
+	   IF TRM-INVP(WS-S6) = 3
                MOVE "LPT3"       TO W02-PRINTER
 	       MOVE 2		 TO WS-PRN-NO
            ELSE
-           IF TRM-INVP (WS-S6) = 4
+	   IF TRM-INVP(WS-S6) = 4
                MOVE "COM1"       TO W02-PRINTER
            ELSE
-           IF TRM-INVP (WS-S6) = 5
+	   IF TRM-INVP(WS-S6) = 5
                MOVE "COM2"       TO W02-PRINTER
            ELSE
-           IF TRM-INVP (WS-S6) = 9
+	   IF TRM-INVP(WS-S6) = 9
 	       MOVE LS-USER	 TO W02-USER.
-             ADD 501 TRM-PRN2 (WS-S6)
+	     ADD 501 TRM-PRN2(WS-S6)
                                  GIVING W25-RESULT.
 
        OPEN-REPORT-3.
-	   IF TRM-STDP (WS-S6) = 1 OR 9
+	   IF TRM-STDP(WS-S6) = 1 OR 9
                MOVE "LPT1"       TO W02-PRINTER
 	       MOVE ZERO	 TO WS-PRN-NO
            ELSE
-           IF TRM-STDP (WS-S6) = 2
+	   IF TRM-STDP(WS-S6) = 2
                MOVE "LPT2"       TO W02-PRINTER
 	       MOVE 1		 TO WS-PRN-NO
            ELSE
-           IF TRM-STDP (WS-S6) = 3
+	   IF TRM-STDP(WS-S6) = 3
                MOVE "LPT3"       TO W02-PRINTER
 	       MOVE 2		 TO WS-PRN-NO
            ELSE
-           IF TRM-STDP (WS-S6) = 4
+	   IF TRM-STDP(WS-S6) = 4
 	       MOVE "COM1"	 TO W02-PRINTER
            ELSE
-           IF TRM-STDP (WS-S6) = 5
+	   IF TRM-STDP(WS-S6) = 5
 	       MOVE "COM2"	 TO W02-PRINTER.
-             ADD 501 TRM-PRN3 (WS-S6)
+	     ADD 501 TRM-PRN3(WS-S6)
                                  GIVING W25-RESULT.
 
        OPEN-REPORT-4.
-	   IF TRM-STMP (WS-S6) = 1
+	   IF TRM-STMP(WS-S6) = 1
 	       MOVE "LPT1"	 TO W02-PRINTER
            ELSE
-           IF TRM-STMP (WS-S6) = 2
+	   IF TRM-STMP(WS-S6) = 2
 	       MOVE "LPT2"	 TO W02-PRINTER
            ELSE
-           IF TRM-STMP (WS-S6) = 3
+	   IF TRM-STMP(WS-S6) = 3
 	       MOVE "LPT3"	 TO W02-PRINTER
            ELSE
-           IF TRM-STMP (WS-S6) = 4
+	   IF TRM-STMP(WS-S6) = 4
 	       MOVE "COM1"	 TO W02-PRINTER
            ELSE
-           IF TRM-STMP (WS-S6) = 5
+	   IF TRM-STMP(WS-S6) = 5
 	       MOVE "COM2"	 TO W02-PRINTER
            ELSE
-           IF TRM-STMP (WS-S6) = 9
+	   IF TRM-STMP(WS-S6) = 9
 	       MOVE LS-USER	 TO W02-USER.
-             ADD 501 TRM-PRN4 (WS-S6)
+	     ADD 501 TRM-PRN4(WS-S6)
                                  GIVING W25-RESULT.
 
        OPEN-REPORT-5.
-	   IF TRM-CSHP (WS-S6) = 1
+	   IF TRM-CSHP(WS-S6) = 1
                MOVE "LPT1"       TO W02-PRINTER
 	       MOVE ZERO	 TO WS-PRN-NO
            ELSE
-	   IF TRM-CSHP (WS-S6) = 2
+	   IF TRM-CSHP(WS-S6) = 2
                MOVE "LPT2"       TO W02-PRINTER
 	       MOVE 1		 TO WS-PRN-NO
            ELSE
-	   IF TRM-CSHP (WS-S6) = 3
+	   IF TRM-CSHP(WS-S6) = 3
                MOVE "LPT3"       TO W02-PRINTER
 	       MOVE 2		 TO WS-PRN-NO
            ELSE
-	   IF TRM-CSHP (WS-S6) = 4
+	   IF TRM-CSHP(WS-S6) = 4
                MOVE "COM1"       TO W02-PRINTER
            ELSE
-	   IF TRM-CSHP (WS-S6) = 5
+	   IF TRM-CSHP(WS-S6) = 5
                MOVE "COM2"       TO W02-PRINTER
            ELSE
-	   IF TRM-CSHP (WS-S6) = 9
+	   IF TRM-CSHP(WS-S6) = 9
 	       MOVE LS-USER	 TO W02-USER.
-	     ADD 501 TRM-PRN5 (WS-S6)
+	     ADD 501 TRM-PRN5(WS-S6)
                                  GIVING W25-RESULT.
 
        OPEN-REPORT-6.
-	   IF TRM-POS (WS-S6) = 1
+	   IF TRM-POS(WS-S6) = 1
                MOVE "LPT1"       TO W02-PRINTER
            ELSE
-           IF TRM-POS (WS-S6) = 2
+	   IF TRM-POS(WS-S6) = 2
                MOVE "LPT2"       TO W02-PRINTER
            ELSE
-           IF TRM-POS (WS-S6) = 3
+	   IF TRM-POS(WS-S6) = 3
                MOVE "LPT3"       TO W02-PRINTER
            ELSE
-           IF TRM-POS (WS-S6) = 4
+	   IF TRM-POS(WS-S6) = 4
                MOVE "COM1"       TO W02-PRINTER
            ELSE
-           IF TRM-POS (WS-S6) = 5
+	   IF TRM-POS(WS-S6) = 5
                MOVE "COM2"       TO W02-PRINTER
            ELSE
-           IF TRM-POS (WS-S6) = 9
+	   IF TRM-POS(WS-S6) = 9
 	       MOVE LS-USER	 TO W02-USER.
-	     ADD 501 TRM-PRN6 (WS-S6)
+	     ADD 501 TRM-PRN6(WS-S6)
                                  GIVING W25-RESULT.
 
 
@@ -942,13 +985,11 @@
        PRINTER-NOT-READY.
 	     MOVE "Check printer! - 'R'etry or 'A'bort  [ ] "
 				 TO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "R" OR "A")
-	       GO TO PRINTER-NOT-READY.
-	     IF WS-OPTION = "A"
-		 MOVE 1 	 TO WS-ERROR
-		 GO TO CHECK-PRINTER-EXIT.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "R" OR "A".
+	   IF WS-OPTION = "R"
 	       GO TO CHECK-PRINTER.
+	     MOVE 1		 TO WS-ERROR.
 
        CHECK-PRINTER-EXIT.
 	     EXIT.
@@ -957,7 +998,7 @@
 	     MOVE 1		 TO WS-S8.
 
        OPEN-SCREEN-LOOP.
-	     MOVE SPACES	 TO W05-LINE (WS-S8).
+	     MOVE SPACES	 TO W05-LINE(WS-S8).
 	   IF WS-S8 < 20
 	       ADD 1		 TO WS-S8
 	       GO TO OPEN-SCREEN-LOOP.
@@ -1149,8 +1190,8 @@
 	       GO TO SCREEN-PRINT-SCROLL.
 
        DISPLAY-A-PRINT-LINE.
-	     MOVE L02-PRN-TYPE	 TO W05-TYPE (WS-S8).
-	     MOVE L02-PRN-LINE	 TO W05-DETAIL (WS-S8).
+	     MOVE L02-PRN-TYPE	 TO W05-TYPE(WS-S8).
+	     MOVE L02-PRN-LINE	 TO W05-DETAIL(WS-S8).
 	   IF WS-LEFT > 1 AND < 60
 	       PERFORM SCREEN-SHIFT-DATA THRU SCREEN-SHIFT-LOOP
 	   ELSE
@@ -1177,8 +1218,8 @@
 	     MOVE WS-LEFT	 TO WS-S3.
 
        SCREEN-SHIFT-LOOP.
-	     MOVE W05-CHAR (WS-S1, WS-S3)
-				 TO W06-CHAR (WS-S1, WS-S2).
+	     MOVE W05-CHAR(WS-S1, WS-S3)
+				 TO W06-CHAR(WS-S1, WS-S2).
 	   IF WS-S2 < 78
 	       ADD 1		 TO WS-S2 WS-S3
 	       GO TO SCREEN-SHIFT-LOOP.
@@ -1194,8 +1235,8 @@
 	     MOVE 2		 TO WS-S8.
 
        SCREEN-PRINT-LOOP.
-	     MOVE W05-LINE (WS-S8)
-				 TO W05-LINE (WS-S7).
+	     MOVE W05-LINE(WS-S8)
+				 TO W05-LINE(WS-S7).
 	   IF WS-S8 < 20
 	       ADD 1		 TO WS-S7 WS-S8
 	       GO TO SCREEN-PRINT-LOOP.
@@ -1273,7 +1314,7 @@
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "L" OR "N" OR "R" OR "P")
+	   IF NOT(WS-OPTION = "L" OR "N" OR "R" OR "P")
 	       GO TO SCREEN-CONTROL-OPT.
 	   IF WS-OPTION = "R"
 	       MOVE 2		 TO WS-SCREEN
@@ -1300,7 +1341,7 @@
 	     MOVE 1		 TO WS-S8.
 
        SCREEN-CLEAR-LOOP.
-	     MOVE SPACES	 TO W05-LINE (WS-S8).
+	     MOVE SPACES	 TO W05-LINE(WS-S8).
 	   IF WS-S8 < 20
 	       ADD 1		 TO WS-S8
 	       GO TO SCREEN-CLEAR-LOOP.

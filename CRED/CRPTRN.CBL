@@ -13,7 +13,7 @@
       *                                                                *
       *    C R E D I T O R   D E L E T E   T R A N S A C T I O N S     *
       *                                                                *
-      *     VERSION 8.13.09 - October 2008			       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 2006.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2006 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2006 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

@@ -13,7 +13,7 @@
       *                                                                *
       *    D E B T O R	 P A T C H   A G E   D A T E S	 P A T C H     *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 2006.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2006 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2006 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

@@ -13,7 +13,7 @@
       *                                                                *
       *   D E B T O R S   E X P O R T	P R I C E   L I S T   P R G    *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   SEPTEMBER 2000.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2000 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2000 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

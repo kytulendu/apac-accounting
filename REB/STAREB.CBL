@@ -13,7 +13,7 @@
       *                                                                *
       *   S T K A L T	F I L E   R E B U I L D   P R O G R A M        *
       * 							       *
-      *     VERSION 8.13.08 - August 2008			       *
+      *     VERSION 8.15.00 - April 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

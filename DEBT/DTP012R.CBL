@@ -16,7 +16,7 @@
       *     D E B T O R   R E C E I P T   R E V E R S A L S	       *
       *     P R O G R A M					       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -31,7 +31,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   JULY 2004.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2004 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2004 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -2462,16 +2462,16 @@
 041860         MOVE W02-TXTRAN   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
-041840	   ELSE
-041850	   IF WS-F-ERROR = 33
-041860	       MOVE W02-SHARED	 TO WS-FILE
-041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE
 041850	   IF WS-F-ERROR = 36
 041860         MOVE W02-CHEQUE   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
                MOVE CHQ-TR-NUMBER
 				 TO WS-KEYX
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE
 041850     IF WS-F-ERROR = 40
 041860         MOVE W02-LEDTRF   TO WS-FILE

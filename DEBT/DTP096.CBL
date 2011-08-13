@@ -13,7 +13,7 @@
       *                                                                *
       *  C H E C K   U P D A T E   -   T R A N / V A T / I N V / I N T *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   MARCH 1995.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1995 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1995 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

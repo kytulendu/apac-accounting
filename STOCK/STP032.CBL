@@ -13,7 +13,7 @@
       *                                                                *
       *     S T O C K	-   T R A N S F E R S	O U T	P R O G .      *
       *                                                                *
-      *     VERSION 8.14.03 - October 2010			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.	       J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2009
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -500,13 +500,16 @@
 				 PIC ZZ9.999 USING WS-HFEE AUTO.
 
        01  S35.
-           03  FOREGROUND-COLOR 11 PIC Z(05)9.9999 USING W10-QUANT AUTO.
+	   03  FOREGROUND-COLOR 3 HIGHLIGHT
+				  PIC Z(05)9.9999 USING W10-QUANT AUTO.
 
        01  S36.
-           03  FOREGROUND-COLOR 11 PIC Z(06)9.99 USING W10-SELL AUTO.
+	   03  FOREGROUND-COLOR 3 HIGHLIGHT
+				  PIC Z(06)9.99 USING W10-SELL AUTO.
 
        01  S37.
-           03  FOREGROUND-COLOR 11 PIC Z(05)9.999 USING W10-COST AUTO.
+	   03  FOREGROUND-COLOR 3 HIGHLIGHT
+				  PIC Z(05)9.999 USING W10-COST AUTO.
 
 009930 01  S38.
 009940	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 0
@@ -701,8 +704,8 @@
 011860       WRITE REC-RECORD.
 011870     IF WS-STATUS NOT = "00"
 011310         DISPLAY "Write error Recovery file - Status " AT 2212
-011320                  WITH FOREGROUND-COLOR 14 WS-STATUS 
-011330                  WITH FOREGROUND-COLOR 15
+011320			WITH FOREGROUND-COLOR 6 HIGHLIGHT WS-STATUS
+011330			WITH FOREGROUND-COLOR 7 HIGHLIGHT
 011900         STOP RUN.
 011930 AY59.
 011940       EXIT.
@@ -728,7 +731,8 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
       *    *************************************************************
 012550	     DISPLAY "WAITING" AT 2551
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 4 HIGHLIGHT.
 012560	     COMMIT.
 	     ACCEPT WS-STIME FROM TIME.
 	     MOVE 400		 TO WS-WAIT.
@@ -811,12 +815,12 @@
 	       COMMIT
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       ACCEPT WS-STIME FROM TIME
 	       PERFORM LOCK-REC-LOOP
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       GO TO AY60.
 012880	     DISPLAY SPACE AT 2572
 		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
@@ -1022,34 +1026,36 @@
 	     PERFORM CHECK-CORRECT.
 028650	   IF WS-OPTION = "N"
 028660         GO TO BH05.
-             DISPLAY "A" AT 0612 WITH FOREGROUND-COLOR 14 
+	     DISPLAY "A" AT 0612 WITH FOREGROUND-COLOR 6 HIGHLIGHT
                      "dd details to existing or " 
                       WITH FOREGROUND-COLOR 7
-                     "C" WITH FOREGROUND-COLOR 14
+		     "C" WITH FOREGROUND-COLOR 6 HIGHLIGHT
                      "reate new TRANSFER file" WITH FOREGROUND-COLOR 7.
              MOVE SPACE          TO WS-OPTION.
 
        BH10.
-             ACCEPT WS-OPTION AT 0664 
-		    WITH FOREGROUND-COLOR 15
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-                                BY VALUE WS-LENGTH
-                                RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "A" OR "C" OR "P")
-               GO TO BH10.
-           IF WS-OPTION = "C"
+	     PERFORM UNTIL WS-OPTION = "A" OR "C" OR "P"
+	       ACCEPT WS-OPTION AT 0664
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+	   IF WS-OPTION = "C"
                GO TO BH20.
 
        BH15.
              OPEN I-O STKTRF.
            IF WS-STATUS = "00"
                MOVE ZERO         TO WS-TRFKEY
-               GO TO BH25.
+	       GO TO BH25.
+	   IF WS-STATUS = "05"
+	       CLOSE STKTRF.
 
        BH20.
              OPEN OUTPUT STKTRF.
-           IF WS-STATUS NOT = "00"
+	   IF WS-STATUS NOT = "00"
 	       MOVE "Invalid drive"
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
@@ -1105,8 +1111,6 @@
       *
 	     PERFORM OPEN-PRINTER.
 	     MOVE "P"		 TO WS-COMMAND.
-
-
       *
       *    ****   1 2	C P I	( C O N D E N S E D   P R I N T )
       *
@@ -1118,7 +1122,7 @@
 009860	       MOVE SPACES	 TO REP-DETAIL1.
 036020	     DISPLAY CLR-SCREEN.
              DISPLAY "TRANSFER STOCK OUT" AT 0232 
-                      WITH FOREGROUND-COLOR 15.
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
 	     DISPLAY "Transfer to:" AT 0412.
 
        BH26.
@@ -1169,15 +1173,16 @@
 036090       ADD 1               TO WS-PAGE.
 036100       MOVE WS-PAGE        TO REP-P-NO.
 036110       MOVE W12-TODAY      TO REP-DTE.
-036120       WRITE REP-LINE1 BEFORE 2 LINES.
-036130       MOVE SPACES         TO REP-DETAIL2.
+	     MOVE 2		 TO WS-ADVANCE.
+	     PERFORM CALL-PRINTUTL.
+036130	     MOVE SPACES	 TO REP-DETAIL2.
 036140       MOVE "TRANSFER OUT" TO REP-HEAD10.
-036150       WRITE REP-LINE1 BEFORE 2 LINES.
-036160       MOVE SPACES         TO REP-DETAIL2.
+	     PERFORM CALL-PRINTUTL.
+036160	     MOVE SPACES	 TO REP-DETAIL2.
 	     MOVE "TRANSFER TO:" TO REP-TRF-HD.
 	     MOVE WS-BRANCH	 TO REP-BRANCH.
-036150	     WRITE REP-LINE1 BEFORE 2 LINES.
-036160       MOVE SPACES         TO REP-DETAIL2.
+	     PERFORM CALL-PRINTUTL.
+036160	     MOVE SPACES	 TO REP-DETAIL2.
 	   IF WS-TOTAL = "N"
 036170	       MOVE "ITEM CODE"	 TO ORD-H1
 036180	       MOVE "DESCRIPTION"
@@ -1193,8 +1198,8 @@
 				 TO TOT-H2
 	       MOVE "STOCK G/L"  TO TOT-H3
 	       MOVE "TRF VALUE"  TO TOT-H4.
-036230       WRITE REP-LINE1 BEFORE 2 LINES.
-036250       MOVE SPACES         TO REP-DETAIL2.
+	     PERFORM CALL-PRINTUTL.
+036250	     MOVE SPACES	 TO REP-DETAIL2.
 
 036260 BH40.
 036270	     MOVE SPACES	 TO W10-EXT-ITEM.
@@ -1497,11 +1502,13 @@
 	     ADD W10-QUANT	 TO W25-TSELL.
              ADD W10-COST        TO W25-TOTAL.
 036910	     ADD W10-COST	 TO STK-MTDC STK-MTDV STK-YTDC STK-YTDV.
-037400	   IF LINAGE-COUNTER < WS-PRN-LENGTH
-037410         WRITE REP-LINE1 BEFORE 1 LINES
-037430     ELSE
-037440         WRITE REP-LINE1 BEFORE PAGE
-037460         PERFORM BH35.
+	   IF W02-LINAGE < W02-PRN-LENGTH
+	       MOVE 1		 TO WS-ADVANCE
+	       PERFORM CALL-PRINTUTL
+009780     ELSE
+	       MOVE 99		 TO WS-ADVANCE
+	       PERFORM CALL-PRINTUTL
+037460	       PERFORM BH35.
 037470       MOVE SPACES         TO REP-DETAIL2.
 037480       PERFORM REWRITE-STOCK THRU WRITE-STOCK-EXIT.
 037630       SUBTRACT W10-COST   FROM STK-TOTAL.
@@ -1532,13 +1539,15 @@
 037520	     GO TO BH40.
 
 037530 BH65.
-037540       WRITE REP-LINE1 BEFORE 2 LINES.
-037550       MOVE "TOTAL"        TO ORD-DESC.
+	     MOVE 2		 TO WS-ADVANCE.
+	     PERFORM CALL-PRINTUTL.
+037550	     MOVE "TOTAL"	 TO ORD-DESC.
 037560       MOVE W25-TSELL      TO ORD-QUANT.
 037560       MOVE W25-TOTAL      TO ORD-VALUE.
-037570	     WRITE REP-LINE1 BEFORE 2 LINES.
+	     PERFORM CALL-PRINTUTL.
 037580	     MOVE "***** END TRANSFER *****" TO REP-DETAIL2.
-037590	     WRITE REP-LINE1 BEFORE PAGE.
+	     MOVE 99		 TO WS-ADVANCE.
+	     PERFORM CALL-PRINTUTL.
 	     MOVE "Y"		 TO WS-TOTAL.
 	     MOVE ZERO		 TO WS-PAGE.
 037460	     PERFORM BH35.
@@ -1565,24 +1574,29 @@
 				 TO TOT-SL-NAME.
 	     MOVE DPT-PUR-GL	 TO TOT-STK-GL.
 	     MOVE STW-SL-TOTAL	 TO TOT-SL-VALUE.
-037400	   IF LINAGE-COUNTER < WS-PRN-LENGTH
-037410         WRITE REP-LINE1 BEFORE 1 LINES
-037430     ELSE
-037440         WRITE REP-LINE1 BEFORE PAGE
-037460         PERFORM BH35.
+	   IF W02-LINAGE < W02-PRN-LENGTH
+	       MOVE 1		 TO WS-ADVANCE
+	       PERFORM CALL-PRINTUTL
+009780     ELSE
+	       MOVE 99		 TO WS-ADVANCE
+	       PERFORM CALL-PRINTUTL
+037460	       PERFORM BH35.
 037470       MOVE SPACES         TO REP-DETAIL2.
 	     DELETE STKWRK.
 	     GO TO BH70.
 
        BH75.
-037570	     WRITE REP-LINE1 BEFORE 1 LINES.
+	     MOVE 1		 TO WS-ADVANCE.
+	     PERFORM CALL-PRINTUTL.
 	   IF WS-HND-FEE = "Y"
 	       MOVE "HANDLING FEE"
 				 TO TOT-SL-NAME
 	       MOVE W25-TH-FEE	 TO TOT-SL-VALUE
-037570	       WRITE REP-LINE1 BEFORE 2 LINES.
+	       MOVE 2		 TO WS-ADVANCE
+	       PERFORM CALL-PRINTUTL.
 037580	     MOVE "***** END REPORT *****" TO REP-DETAIL2.
-037590	     WRITE REP-LINE1 BEFORE PAGE.
+	     MOVE 99		 TO WS-ADVANCE.
+	     PERFORM CALL-PRINTUTL.
 	   IF NOT (WS-PRINTER = "S")
 	       MOVE 0		 TO WS-ADVANCE
 	       MOVE 1		 TO W02-PRN-TYPE
@@ -1651,44 +1665,13 @@
 	     MOVE LS-USUB	 TO WS-USUB.
 044150	     DISPLAY CLR-SCREEN.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
+	     COPY FUNCTION.PRO.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		       ESC, F1 to F10 keys		       ³
+      *    ³	    Setup the file ID's including path names           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    PAGE-UP and PAGE-DOWN keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   A C T I V A T E   M O U S E		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set MOUSE key to act as FUNCTION key	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    *************************************************************
       *    ****    P A R A M E T E R   F I L E
       *    *************************************************************
@@ -1717,17 +1700,29 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    *************************************************************
 	     MOVE "DEPART"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEPART.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
 	     MOVE "RECOVER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-RECOVER.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SHARED"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SHARED.
@@ -1739,6 +1734,9 @@
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-STKWRK.
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
 	     MOVE "STOCKF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STOCKF.
@@ -1819,13 +1817,7 @@
 044760       MOVE STK-PASSWORD   TO WS-PASSWORD.
 	     GO TO ZA999-EXIT.
 
-       ZA49.
-             DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
-             DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-             DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
-             GO TO ZA205.
+       COPY ZA49.PRO.
 
        ZA55.
 041220       MOVE 1              TO WS-S1.
@@ -1856,13 +1848,9 @@
 	       MOVE LS-USER	   TO WS-WRKST.
 
 044790 ZA200.
-044800       DISPLAY "Files locked - Try later" AT 2312
-044810                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-044820       DISPLAY "Press any key" AT 2512 
-044830		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-044840	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
        ZA205.
              EXIT PROGRAM.
 
@@ -1870,22 +1858,9 @@
 044880       EXIT.
       /
 044890 ZB000-ERROR	       SECTION 91.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
+
+       COPY ERRORS.PRO.
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -1912,37 +1887,19 @@
 041850     IF WS-F-ERROR = 33
 041860         MOVE W02-STKTRF   TO WS-FILE
 041870	       MOVE WS-TRFKEY	 TO WS-KEY
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE
 041850	   IF WS-F-ERROR = 46
 041860	       MOVE W02-STKDEX	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
-	       MOVE STX-KEY	 TO WS-KEYX.
-041880     IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170	     STOP RUN.
+	       MOVE STX-KEY	 TO WS-KEYX
+041840     ELSE
+041850	   IF WS-F-ERROR = 63
+041860	       MOVE W02-TRFOUT	 TO WS-FILE
+041870         MOVE ZERO         TO WS-KEY
+	       MOVE SOT-KEY	 TO WS-KEYX.
+
+       COPY DISPERR.PRO.

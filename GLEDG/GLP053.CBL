@@ -1,4 +1,4 @@
-      $set LINKCOUNT"384"
+      $set LINKCOUNT"448"
       ******************************************************************
       *                                                                *
       *    ******   **	      *******	  ****	  ********   ******    *
@@ -13,7 +13,7 @@
       *                                                                *
       *   G / L E D G E R   P O S T   I N T E G R A T .   B A T C H    *
       *                                                                *
-      *     VERSION 8.13.07 - January 2008			       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.                 J.W. LEMMON (APAC).
 000040 DATE-WRITTEN.	       NOVEMBER 1992.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1504,7 +1504,7 @@
 041860	       MOVE WS-PARID	 TO WS-FILE
 041870	       MOVE WS-PARKEY	 TO WS-KEY
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE

@@ -13,7 +13,7 @@
       *                                                                *
       *     P R I N T	S P O O L   F I L E   U T I L I T Y   P R O G  *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - January 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -29,7 +29,7 @@
 	       Print the selected file.
 	       View the selected file on the screen.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

@@ -357,7 +357,12 @@
       *    ЁP R I N T	A L L	I N V O I C E S   O R	T R F	O N L YЁ
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	   03  PAR-CON-TYPE    PIC  X(01).
-	   03  FILLER	       PIC  X(03).
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	 D e t a i l   L i n e s  -  U S B / W I N D O W S     Ё
+      *    Ё		 D E B T O R   S T A T E M E N T S	       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	   03  PAR-STM-DET     PIC  9(02)    COMP-5.
+	   03  FILLER	       PIC  X(02).
       *    ****    (STAFF/WAISTAGE)
 001070	   03  PAR-SWPGL       PIC  9(06)    COMP-5.
 001070	   03  PAR-PETGL       PIC  9(06)    COMP-3.
@@ -569,7 +574,9 @@
 002280	   05  PAR-CSO	       PIC  X(01).
 002290	   05  PAR-6LPI        PIC  X(01).
 002300	   05  PAR-8LPI        PIC  X(01).
-002310	   05  PAR-NUL	       PIC  X(01).
+002310	   05  PAR-SLP	       PIC  9(02)    COMP-X.
+002310	   05  PAR-NUL REDEFINES PAR-SLP
+			       PIC  X(01).
 002320	   05  PAR-ADVANCE     PIC  9(02)    COMP-5.
 002330	   05  PAR-CPRN        PIC  9(01).
 002340	   05  PAR-ITMS        PIC S9(07)    COMP-3.

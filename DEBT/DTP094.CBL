@@ -13,10 +13,10 @@
       *                                                                *
       *       D E B T O R  B A L A N C I N G   U T I L I T Y	       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       * This program is still under development and is scheduled to be *
-      * completed during 2008 (This is a nice to have, but not a must  *
+      * completed during 2011 (This is a nice to have, but not a must  *
       * have or critical requirement). The G/L balancing program has   *
       * been copied and the necessary amendments are being made to     *
       * adapt it for Debtors/Accounts receivable.		       *
@@ -33,7 +33,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

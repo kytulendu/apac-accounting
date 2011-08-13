@@ -13,7 +13,7 @@
       *                                                                *
       *     C O N S O L O D A T E D   S T A T E M E N T S	       *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 2003.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2003 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2003 - 2010
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -231,7 +231,8 @@
 		     WS-BLNK78 WITH FOREGROUND-COLOR 3
 		     "�" WITH BACKGROUND-COLOR 0
 			      FOREGROUND-COLOR 3.
-019260	     ADD 1 TO CLIN.
+019260	     ADD 1		 TO CLIN.
+
        AA205.
              EXIT.
       /    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�

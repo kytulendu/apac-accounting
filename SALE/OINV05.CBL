@@ -13,7 +13,7 @@
       *                                                                *
       *      P R I N T   I N V O I C E   P R O G R A M                 *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - January 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -249,6 +249,139 @@
        77  TODAY-DDMMYY	   PIC	9(06) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
 000070 77  WS-DRAW	   PIC	9(02).
+      *    ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+      *    บ	   V A T   C A L C U L A T I O N   P R O B L E M       บ
+      *    ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ Value Added Tax (VAT) is calculated per item and because  ณ
+      *    ณ some rates cause the calculation of tax to have more than ณ
+      *    ณ two decimals, results must be rounded per tax percentage. ณ
+      *    ณ Some Users require more detailed analysis of their sales  ณ
+      *    ณ and split their Inventory accross more than one category. ณ
+      *    ณ							       ณ
+      *    ณ As the integration of sales into the General Ledger from  ณ
+      *    ณ the sales modules is processed per Sales Ledger, which    ณ
+      *    ณ requires the tax to be rounded per integration entry and  ณ
+      *    ณ rounding per sales integration entry which on occasion    ณ
+      *    ณ will result in the entries for the transaction to be out  ณ
+      *    ณ of balance.					       ณ
+      *    ณ							       ณ
+      *    ณ To minimise this problem the system stores the exclusive  ณ
+      *    ณ price with three decimals. This only serves to minimise   ณ
+      *    ณ the amount by which the calculation may vary, which when  ณ
+      *    ณ incorrect is normally 0.01 too much or too little.        ณ
+      *    ณ							       ณ
+      *    ณ EXAMPLE:						       ณ
+      *    ณ   VAT rate = 14%.					       ณ
+      *    ณ   Item one has an exclusive price of:		14.25  ณ
+      *    ณ		       sales category	 :		0001   ณ
+      *    ณ   This would result in the inclusive price being calcula- ณ
+      *    ณ   ed as:	       14.25 + VAT 1.995 =		16.245 ณ
+      *    ณ   As inclusive prices may only have two decimals the      ณ
+      *    ณ   system will round this price to 16.25, when the item is ณ
+      *    ณ   first loaded or if this was the last price, resulting   ณ
+      *    ณ   in an exclusive price of 			14.254 ณ
+      *    ณ   Item two has an inclusive price of:	       151.90  ณ
+      *    ณ		       sales category	 :		0002   ณ
+      *    ณ   This item will have an exclusive price recorded as      ณ
+      *    ณ   133.246 after being rounded to three decimals.	       ณ
+      *    ณ							       ณ
+      *    ณ   1. Invoice for 1 of item one.			       ณ
+      *    ณ	  Using the inclusive price, calculate the VAT and     ณ
+      *    ณ	  the other values as follows:			       ณ
+      *    ณ	  Inclusive price ๖ (100 + VAT Rate) x VAT rate        ณ
+      *    ณ		    16.25 ๖ (100 + 14) x 14  =	1.9956	       ณ
+      *    ณ	  Round VAT to 2 decimals	     =	2.00	       ณ
+      *    ณ	  Subtract VAT from inclusive price  = 14.25 (excl)    ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont	 16.25	       ณ
+      *    ณ				    Income		14.25- ณ
+      *    ณ				    VAT			 2.00- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	 16.25	16.25- ณ
+      *    ณ							       ณ
+      *    ณ   2. Invoice for 1 of item one and 1 of item two.	       ณ
+      *    ณ	  VAT is calculated as the total on both items and     ณ
+      *    ณ	  rounded to two decimals: This can be done, by using  ณ
+      *    ณ	  the total inclusive or excluse value. 	       ณ
+      *    ณ	  Exclusive: 14.254 + 133.246 = 147.50 x 14% = 20.65   ณ
+      *    ณ	  Inclusive: 16.25 + 151.90 = 168.15 ๖ (100 + 14)      ณ
+      *    ณ		     x 14 = 20.65.			       ณ
+      *    ณ	  As the two items are from different catergories, two ณ
+      *    ณ	  integration entries are required.		       ณ
+      *    ณ	  These entries must be rounded to two decimals.       ณ
+      *    ณ		     14.254 rounded =  14.25		       ณ
+      *    ณ		    133.246 rounded = 133.25		       ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont 168.15	       ณ
+      *    ณ				    Income 1		14.25- ณ
+      *    ณ				    Income 2	       133.25- ณ
+      *    ณ				    VAT			20.65- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	168.15 168.15- ณ
+      *    ณ							       ณ
+      *    ณ	  From these examples, it is clear that the procedure  ณ
+      *    ณ	  being used is correct. However, if both items had    ณ
+      *    ณ	  either the first or second price the result would be ณ
+      *    ณ	  as follows:					       ณ
+      *    ณ	  1 - price 16.25 inclusive - VAT calculated as 3.99   ณ
+      *    ณ	  Both items would have their integration entries      ณ
+      *    ณ	  rounded to 14.25.				       ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont	 32.50	       ณ
+      *    ณ				    Income 1		14.25- ณ
+      *    ณ				    Income 2		14.25- ณ
+      *    ณ				    VAT			 3.99- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	 32.50	32.49- ณ
+      *    ณ							       ณ
+      *    ณ	  2 - price 151.90 inclusive - VAT calculated as 37.31 ณ
+      *    ณ	  Both items would have their integration entries      ณ
+      *    ณ	  rounded to 133.25.				       ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont	303.80	       ณ
+      *    ณ				    Income 1	       133.25- ณ
+      *    ณ				    Income 2	       133.25- ณ
+      *    ณ				    VAT			37.31- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	303.80 303.81- ณ
+      *    ณ							       ณ
+      *    ณ The system can either, if required, process a balancing   ณ
+      *    ณ entry to a suspense account at the end of each day or     ณ
+      *    ณ balance each set of integration entries. The suspense     ณ
+      *    ณ account would need to have manual adjustment entries pro- ณ
+      *    ณ cessed and as the system already processes balancing      ณ
+      *    ณ entries if there has been a problem, it would not be a    ณ
+      *    ณ straight-forward procedure.			       ณ
+      *    ณ							       ณ
+      *    ณ From the above examples, it would seem that when the cre- ณ
+      *    ณ dit side is more, then the income should be reduced and   ณ
+      *    ณ when the debit side is more, the income should be	       ณ
+      *    ณ increased. 					       ณ
+      *    ณ							       ณ
+      *    ณ The system will have to choose one of the income entries  ณ
+      *    ณ randomly when income needs to be adjusted. This will need ณ
+      *    ณ the details of the first sales (income) integration entry ณ
+      *    ณ to be stored and add sales (income) values of subsequent  ณ
+      *    ณ sales entries and VAT (tax) values to this value and on   ณ
+      *    ณ completing the transaction this balancing value will be   ณ
+      *    ณ checked and if not zero it will be used as the balancing  ณ
+      *    ณ entry by changing the sign.			       ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+       77  WS-BAL-ENTRY		PIC  X(01) VALUE "N".
+	   88  BALANCING-ENTRY-STORED	   VALUE "Y".
+
+       01  WXT-LEDTRF.
+	   03  WXT-DATE	      PIC  9(08)    COMP-3.
+	   03  WXT-TYPE       PIC  9(02)    COMP-5.
+	   03  WXT-LEDG.
+	       05  WXT-TRN    PIC  9(02).
+	       05  FILLER     PIC  X(02).
+	   03  WXT-AC	      PIC  9(06)    COMP-3.
+	   03  WXT-NAR.
+	       05  WXT-DESC   PIC  X(13).
+	       05  WXT-BOOK   PIC  X(27).
+	   03  WXT-VALUE      PIC S9(09)V99 COMP-3.
       /
 002910 01  WS-DB-LINE.
 003080	   03  WS-TOP-LNE2.
@@ -1371,7 +1504,12 @@
              MOVE TRA-VALUE      TO WX-VALUE.
              MOVE WX-DEBGL       TO WX-AC.
              MOVE 01             TO WX-TYPE.
-             PERFORM GL-TRF-UPDATE.
+      *
+      *    ****    Balancing the Integration entries
+      * 	   DEBTOR/ACCOUNTS RECEIVABLE
+      *
+	     ADD WX-VALUE	 TO WXT-VALUE
+	     PERFORM GL-TRF-UPDATE.
 015550
 015560 DEBTOR-CR-TRANS.
 015570	     SUBTRACT W90-CR	 FROM DEB-CRED
@@ -2756,7 +2894,7 @@
 056730         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE

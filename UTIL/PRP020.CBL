@@ -13,7 +13,7 @@
       *                                                                *
       *     P R I N T E R   S P E C I F I C A T I O N S 	       *
       *                                                                *
-      *     VERSION 8.14.02 - January 2010			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.

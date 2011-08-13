@@ -13,7 +13,7 @@
       *                                                                *
       *     D E B T O R	  /   D I S C O U N T	S T R U C T U R E      *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   June 2004.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2004 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2004 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

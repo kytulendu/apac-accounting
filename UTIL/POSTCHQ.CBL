@@ -1,4 +1,4 @@
-      $set LINKCOUNT"384"
+      $set LINKCOUNT"448"
       ******************************************************************
       *                                                                *
       * *******   ******   ******  ********  ******  **    **  ******  *
@@ -2794,7 +2794,7 @@
 041860         MOVE W02-RECOVER  TO WS-FILE
 041870	       MOVE WS-RECKEY	 TO WS-KEY
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE

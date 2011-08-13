@@ -13,7 +13,7 @@
       *                                                                *
       *    P A R A M E T E R   S U P E R V I S O R   P R I N T E R S   *
       *                                                                *
-      *     VERSION 8.14.02 - January 2010			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.

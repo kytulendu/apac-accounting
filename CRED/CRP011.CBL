@@ -13,7 +13,7 @@
       *                                                                *
       *     C R E D I T O R   I N V O I C E S	( S T O C K )	       *
       *                                                                *
-      *     VERSION 8.13.07 - January 2008			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       *
@@ -27,7 +27,7 @@
 000030 AUTHOR.		       James William Lemmon.
 000040 DATE-WRITTEN.	       JUNE, 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1027,7 +1027,7 @@
 
        AA05.
 004940	     PERFORM BA000.
-	   IF NOT (WS-OPTION = "X")
+	   IF NOT(WS-OPTION = "X")
 	       PERFORM BA036
 	       MOVE "Y" 	 TO WS-LOOP
 019720	       GO TO AA05.
@@ -1107,7 +1107,12 @@
       *    ³ the window. An example of a message request follows:      ³
       *    ³							       ³
       *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
-      *    ³   PERFORM OPT-MESSAGE.				       ³
+      *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
+      *    ³	       other keys are to be tested on exit)	       ³
+      *    ³			     OR 			       ³
+      *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
+      *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
+      *    ³   default option)					       ³
       *    ³							       ³
       *    ³ This would be displayed as:			       ³
       *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
@@ -1119,7 +1124,8 @@
       *    ³							       ³
       *    ³ To display the request message higher or lower (default   ³
       *    ³ is line 13) move the line number to be used to SLIN and   ³
-      *    ³ then PEFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY OPTION.CRT.
@@ -1614,13 +1620,13 @@
       *    ****   A R E   A N Y   U P D A T E S   I N	P R O G R E S S
       *    *************************************************************
 012750 AY62.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-		   PAR-USR(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES OR
+		  PAR-USR(WS-SUB) = SPACES)
       *    *************************************************************
       *    ****   A R E   D E B T O R	O R   S T O C K   F I L E S
       * 	  B E I N G   U P D A T E D
       *    *************************************************************
-	       IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	       IF NOT(PAR-PROG(WS-SUB) = SPACES)
 012760		   IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
 					  OR "ST" OR "DS"
       *    *************************************************************
@@ -1657,7 +1663,7 @@
       *    *************************************************************
        AY62-WAIT.
 	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-SUB) = LS-USER)
 	       IF WS-SUB < 24
 		   ADD 1	 TO WS-SUB
 		   GO TO AY62.
@@ -1700,7 +1706,7 @@
 	     MOVE 1		 TO WS-USUB.
 
        AY72.
-	   IF NOT (PAR-USR(WS-USUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-USUB) = LS-USER)
 	       ADD 1		 TO WS-USUB
 	       GO TO AY72.
 
@@ -1711,7 +1717,7 @@
 	       ADD 1 WS-USUB	 GIVING WS-SUB
 	   ELSE
 	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES)
 	       MOVE PAR-PROG(WS-SUB)
 				 TO PAR-PROG(WS-USUB)
 	       MOVE PAR-USR(WS-SUB)
@@ -1865,7 +1871,7 @@
 014490       MOVE 1              TO WS-S.
 
 014500 BA10.
-014510       MOVE ZERO           TO W65-CFLOW (WS-S).
+014510	     MOVE ZERO		 TO W65-CFLOW(WS-S).
 014520     IF WS-S < 6
 014530         ADD 1             TO WS-S
 014540         GO TO BA10.
@@ -1912,7 +1918,7 @@
       *    *************************************************************
       *    ****   W A R E H O U S I N G   A P P L I C A B L E	?
       *    *************************************************************
-	   IF NOT (LS0-WHS = 2)
+	   IF NOT(LS0-WHS = 2)
 	       GO TO BA14-A.
 
        BA14.
@@ -1925,7 +1931,7 @@
                  WHEN ESC-KEY
 		     GO TO BA13
                END-EVALUATE.
-014920	   IF NOT (WS-OPTION = "N" OR "Y")
+014920	   IF NOT(WS-OPTION = "N" OR "Y")
 014930	       GO TO BA14.
 	   IF WS-OPTION = "Y"
                PERFORM HA000.
@@ -1951,10 +1957,9 @@
 	     MOVE "N"		 TO WS-OPTION.
 
 014850 BA16.
-033910	     PERFORM OPT-MESSAGE.
+033910	     PERFORM OPT-MESSAGE
+		     TEST AFTER UNTIL WS-OPTION = "N" OR "Y".
 	     MOVE WS-OPTION	 TO WS-ORD.
-014920	   IF NOT (WS-ORD = "N" OR "Y")
-014930	       GO TO BA15.
 014940	     DISPLAY CLEAR-L25.
 
 014950 BA20.
@@ -2200,7 +2205,7 @@
 	       IF (STK-PCOST = ZERO) OR (STK-PRC = 1)
 		   MOVE STK-COST TO STK-PCOST.
 	     MOVE W05-SRTE	 TO W05-RATE.
-015330	   IF NOT (WS-F-ERROR = ZERO)
+015330	   IF NOT(WS-F-ERROR = ZERO)
 	       MOVE "Z"		 TO W10-ETYPE
 018620	       PERFORM AA50 THRU AA59
 014320	       PERFORM BF155-GET-CREDITOR
@@ -2645,21 +2650,20 @@
 	     MOVE "Use new selling prices Y/N  [ ]"
 				 TO WS-ERR-MES.
 	     MOVE 17		 TO SLIN.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-	   IF NOT (WS-OPTION = "Y" OR "N")
-               GO TO BA32C.
+	     PERFORM OPT-SETUP THRU OPT-EXIT
+		     TEST AFTER UNTIL WS-OPTION = "Y" OR "N".
 014730     IF WS-OPTION = "Y"
 014740	       GO TO BA32D.
-	   IF NOT (STK-WSALE = ZERO)
+	   IF NOT(STK-WSALE = ZERO)
 017510	       MOVE STK-WSALE	 TO W15-UWSALE.
-	   IF NOT (STK-CASH = ZERO)
+	   IF NOT(STK-CASH = ZERO)
 017510	       MOVE STK-CASH	 TO W15-UCASH.
-	   IF NOT (STK-SELL = ZERO)
+	   IF NOT(STK-SELL = ZERO)
 017510	       MOVE STK-SELL	 TO W15-USELL.
 	     PERFORM BA32A.
 
        BA32D.
-	   IF NOT (STK-TAX = ZERO)
+	   IF NOT(STK-TAX = ZERO)
 	       GO TO BA32E.
 
        BA32DA.
@@ -2667,9 +2671,8 @@
 				 TO WS-ERR-MES.
 	     MOVE "N"		 TO WS-OPTION.
 	     MOVE 16		 TO SLIN.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-	   IF NOT (WS-OPTION = "Y" OR "N")
-	       GO TO BA32E.
+	     PERFORM OPT-SETUP THRU OPT-EXIT
+		     TEST AFTER UNTIL WS-OPTION = "Y" OR "N".
 	   IF WS-OPTION = "N"
 	       GO TO BA33B-1.
 	     GO TO BA33.
@@ -2679,9 +2682,8 @@
 				 TO WS-ERR-MES.
 	     MOVE "E"		 TO WS-OPTION.
 	     MOVE 16		 TO SLIN.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-	   IF NOT (WS-OPTION = "E" OR "I" OR "N")
-	       GO TO BA32E.
+	     PERFORM OPT-SETUP THRU OPT-EXIT
+		     TEST AFTER UNTIL WS-OPTION = "E" OR "I" OR "N".
 	   IF WS-OPTION = "N"
 	       GO TO BA33B-1.
 	   IF WS-OPTION = "E"
@@ -2767,7 +2769,7 @@
 016120       ADD W15-IUN         TO W15-QUANT.
 016130       ADD W15-COST        TO W15-TCOST.
 016140       ADD W15-SELL        TO W15-TSELL.
-	   IF NOT (WS-VAT-SUB = ZERO)
+	   IF NOT(WS-VAT-SUB = ZERO)
 	       ADD W15-COST	 TO W15-TAXVAL(WS-VAT-SUB)
 	       ADD W15-IVAT	 TO W15-VATVAL(WS-VAT-SUB).
 016150       MOVE WS-PURLAST     TO WS-PURKEY.
@@ -2776,9 +2778,8 @@
 	     MOVE "'P'rice,'B'arcode,'N'o labels  [ ]"
 				 TO WS-ERR-MES.
              MOVE SPACE          TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "B" OR "N" OR "P")
-               GO TO BA33C.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "B" OR "N" OR "P".
 016160	     INITIALIZE PUR-RECORD1.
 016170     IF W15-ORD NOT = ZERO
 016180         MOVE W15-ORD      TO PUR-ORD.
@@ -2842,10 +2843,9 @@
 	     MOVE "N"		 TO WS-OPTION.
 
 016420 BA34A.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "N" OR "E" OR "V")
-	       GO TO BA34-CHK.
-016490     IF WS-OPTION = "E"
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "E" OR "V".
+016490	   IF WS-OPTION = "E"
 016500         GO TO BA35.
 	   IF WS-OPTION = "V"
 	       PERFORM BE000
@@ -2872,10 +2872,9 @@
 		    WS-OPTION DELIMITED SIZE
 		    "]" DELIMITED SIZE
 			     INTO WS-ERR-MES.
-033910	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "C" OR "P" OR "M")
-               GO TO BA35A.
-016690     IF WS-OPTION = "C"
+033910	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "P" OR "M".
+016690	   IF WS-OPTION = "C"
 016700         GO TO BA00.
 016710     IF WS-OPTION = "M"
 016720	       GO TO BA34-CHK.
@@ -2941,14 +2940,14 @@
       *    ³   If VAT has been adjusted -			       ³
       *    ³		  Re-allocate to the various VAT percentages   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF NOT (W15-VAT = W55-VAT)
+	       IF NOT(W15-VAT = W55-VAT)
 		   PERFORM BA00C
 	       END-IF
 	   ELSE
       *
       *    ***** No VAT *****
       *
-	   IF NOT (P-TAX = "I")
+	   IF NOT(P-TAX = "I")
       *	       COMPUTE W15-VAT ROUNDED = W15-VAT +
       * 	     ((W15-RAIL + W15-DISCOUNT) * W05-RTE)
       *    ELSE
@@ -3029,13 +3028,13 @@
       *
       *    ****    W A R E H O U S E   S T O C K
       *
-	   IF NOT (W15-WHSE = SPACES)
+	   IF NOT(W15-WHSE = SPACES)
 	       MOVE W15-WHSE	 TO WST-WAR
 	       MOVE PUR-EXT-STOCK
 				 TO WST-EXT-CODE
       *	       MOVE SPACES	 TO WST-ITM
 	       PERFORM READ-WSTOCK THRU READ-WSTOCK-EXIT
-	       IF NOT (WS-STATUS = "00")
+	       IF NOT(WS-STATUS = "00")
       *
       *    ****    C R E A T E	 W / H	 S T O C K   R E C O R D
       *
@@ -3143,7 +3142,7 @@
 	       MOVE W10-CASH-4	 TO STK-CASH-4
 	       MOVE W10-SELL-4	 TO STK-SELL-4.
 	     ADD W10-CASES	 TO STK-CASES.
-	   IF NOT (P-NUMBER = STK-SUPP)
+	   IF NOT(P-NUMBER = STK-SUPP)
 	       MOVE STK-SUPP	 TO STK-PSUPP
 	       MOVE P-NUMBER	 TO STK-SUPP.
       *
@@ -3160,7 +3159,7 @@
 				(STK-QUANT + W15-WQUANT + W15-IUN).
 017650     IF STK-AVGE < ZERO
 017660         COMPUTE STK-AVGE = STK-AVGE * -1.
-	   IF NOT (W15-WHSE = SPACES)
+	   IF NOT(W15-WHSE = SPACES)
 	       ADD W15-IUN	 TO WST-QUANT
 	   ELSE
 017670	       ADD W15-IUN	 TO STK-QUANT.
@@ -3206,8 +3205,8 @@
 017900       MOVE 1              TO WS-S2.
 
 017910 BA45.
-017920       MOVE ZERO           TO W25-CFLOW (WS-S2).
-017930     IF W15-MONTH (WS-S2) > 0
+017920	     MOVE ZERO		 TO W25-CFLOW(WS-S2).
+017930	   IF W15-MONTH(WS-S2) > 0
 017940	       ADD 1		 TO WS-S.
 017950     IF WS-S2 < 6
 017960         ADD 1             TO WS-S2
@@ -3228,21 +3227,21 @@
 018080       ADD 1               TO WS-S.
 
 018090 BA50.
-018100     IF W15-MONTH (WS-S3) = ZERO
+018100	   IF W15-MONTH(WS-S3) = ZERO
 018110         ADD 1             TO WS-S3
 018120         GO TO BA50.
 018130     IF WS-S > 1
-018140         MOVE W25-V1       TO W25-CFLOW (WS-S3)
+018140	       MOVE W25-V1	 TO W25-CFLOW(WS-S3)
 018150         SUBTRACT 1        FROM WS-S
 018160         ADD 1             TO WS-S3
 018170         GO TO BA50.
-018180       MOVE W25-V2         TO W25-CFLOW (WS-S3).
+018180	     MOVE W25-V2	 TO W25-CFLOW(WS-S3).
 
        BA54.
 018190       MOVE 1              TO WS-S2.
 
 018200 BA55.
-018210     IF W25-CFLOW (WS-S2) = ZERO
+018210	   IF W25-CFLOW(WS-S2) = ZERO
 018220         GO TO BA60.
 018230       ADD W05-MM WS-S2    GIVING WS-S3.
 018240     IF WS-S3 > 12
@@ -3278,7 +3277,7 @@
 	       PERFORM CALL-PRINTUTL
 018440	       PERFORM BA00B.
 018450       MOVE SPACES         TO R-DET.
-	   IF NOT (W15-WHSE = SPACES)
+	   IF NOT(W15-WHSE = SPACES)
 	       PERFORM REWRITE-WSTOCK THRU WRITE-WSTOCK-EXIT.
 018460	     PERFORM REWRITE-STOCK THRU WRITE-STOCK-EXIT.
 	     MOVE P-NUMBER	 TO PRD-SUPP.
@@ -3369,15 +3368,15 @@
 018960	     MOVE 1		 TO WS-S2.
 
 018970 BA86.
-018980       MOVE W25-CFLOW (WS-S2) 
-                                 TO W65-CFLOW (WS-S2).
+018980	     MOVE W25-CFLOW(WS-S2)
+				 TO W65-CFLOW(WS-S2).
 018990	   IF WS-S2 < 6
 019000         ADD 1             TO WS-S2
 019010         GO TO BA86.
 019020       MOVE 1              TO WS-S2.
 
 019030 BA90.
-019040     IF W65-CFLOW (WS-S) NOT = ZERO
+019040	   IF W65-CFLOW(WS-S) NOT = ZERO
 019050         ADD WS-S2         TO CT-AGE.
 019060     IF WS-S < 6
 019070         ADD 1             TO WS-S
@@ -3385,12 +3384,12 @@
 019090         GO TO BA90.
 019100       ADD W15-TCOST       TO P-BAL.
 019110       ADD W15-TCOST       TO P-CR.
-019120       ADD W65-CFLOW (6)   TO P-180D.
-019130       ADD W65-CFLOW (5)   TO P-150D.
-019140       ADD W65-CFLOW (4)   TO P-120D.
-019150       ADD W65-CFLOW (3)   TO P-90D.
-019160       ADD W65-CFLOW (2)   TO P-60D.
-019170       ADD W65-CFLOW (1)   TO P-30D.
+019120	     ADD W65-CFLOW(6)	 TO P-180D.
+019130	     ADD W65-CFLOW(5)	 TO P-150D.
+019140	     ADD W65-CFLOW(4)	 TO P-120D.
+019150	     ADD W65-CFLOW(3)	 TO P-90D.
+019160	     ADD W65-CFLOW(2)	 TO P-60D.
+019170	     ADD W65-CFLOW(1)	 TO P-30D.
 	  IF CT-AGE = ZERO
 	      ADD W15-TCOST	 TO P-OUT W70-DUE-NOW.
 019180	     PERFORM WRITE-CRTRAN THRU WRITE-CRTRAN-EXIT.
@@ -3399,12 +3398,12 @@
 019200	     PERFORM REWRITE-CREDIT-UNLOCK THRU WRITE-CREDIT-EXIT.
 019290       ADD W15-TCOST       TO W70-CLOSE.
 019300       ADD W15-TCOST       TO W70-CRED.
-019120       ADD W65-CFLOW (6)   TO W70-DUE-180.
-019130       ADD W65-CFLOW (5)   TO W70-DUE-150.
-019140       ADD W65-CFLOW (4)   TO W70-DUE-120.
-019150       ADD W65-CFLOW (3)   TO W70-DUE-90.
-019160       ADD W65-CFLOW (2)   TO W70-DUE-60.
-019170       ADD W65-CFLOW (1)   TO W70-DUE-30.
+019120	     ADD W65-CFLOW(6)	 TO W70-DUE-180.
+019130	     ADD W65-CFLOW(5)	 TO W70-DUE-150.
+019140	     ADD W65-CFLOW(4)	 TO W70-DUE-120.
+019150	     ADD W65-CFLOW(3)	 TO W70-DUE-90.
+019160	     ADD W65-CFLOW(2)	 TO W70-DUE-60.
+019170	     ADD W65-CFLOW(1)	 TO W70-DUE-30.
       *       ADD W65-V2	  TO W70-DUE-NOW.
       *
       *    ****    VAT Control 
@@ -3588,7 +3587,7 @@
 	     MOVE W15-VAT	 TO W55-VAT.
 
        BA05C.
-	   IF NOT (W15-VATVAL(WS-S9) = ZERO)
+	   IF NOT(W15-VATVAL(WS-S9) = ZERO)
 	       IF W15-VATVAL(WS-S9) > W55-VAT
 		    MOVE W55-VAT TO W15-VATVAL(WS-S9)
 	       END-IF
@@ -3627,7 +3626,7 @@
 019850       MOVE 1              TO WS-S2.
 
 019860 BB10.
-019870       MULTIPLY -1         BY W25-CFLOW (WS-S2).
+019870	     MULTIPLY -1	 BY W25-CFLOW(WS-S2).
 019880     IF WS-S2 < 6
 019890         ADD 1             TO WS-S2
 019900         GO TO BB10.
@@ -3880,7 +3879,7 @@
       *
 001980 BE55.
 001990	     PERFORM BE35.
-002000	     DISPLAY W43-DET (CLIN) AT CPOS
+002000	     DISPLAY W43-DET(CLIN) AT CPOS
 		     WITH FOREGROUND-COLOR 7 BACKGROUND-COLOR 0.
 002010	     GO TO BE40.
       *
@@ -3950,7 +3949,7 @@
 	     MOVE PUR-CASH-4	 TO W10-CASH-4.
 	     MOVE PUR-SELL-4	 TO W10-SELL-4.
 	     MOVE PUR-CASES	 TO W10-CASES.
-	   IF NOT (WS-VAT-SUB = ZERO)
+	   IF NOT(WS-VAT-SUB = ZERO)
 	       MOVE W05-VAT(WS-VAT-SUB)
 				 TO W05-RATE
 	   ELSE
@@ -4139,11 +4138,11 @@
       *
        BE89.
 	     MOVE "'A'mend/'D'elete or 'E'xit"
-				 TO WS-ERR-MES
-	     PERFORM OPT-MESSAGE.
-030590	   IF NOT (WS-OPTION = "A" OR "D" OR "E")
-030600	       GO TO BE89.
-030610     IF WS-OPTION = "E"
+				 TO WS-ERR-MES.
+	     MOVE SPACE 	 TO WS-OPTION.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "A" OR "D" OR "E".
+030610	   IF WS-OPTION = "E"
 	       ADD W15-IVAT	 TO W15-VATVAL(WS-VAT-SUB)
 	       ADD W15-COST	 TO W15-TAXVAL(WS-VAT-SUB)
 030620	       GO TO BE990.
@@ -4224,7 +4223,7 @@
 016090	   IF WS-OPTION = "N"
 	       PERFORM BE85A
 016100	       GO TO BE85C.
-	   IF NOT (WS-VAT-SUB = ZERO)
+	   IF NOT(WS-VAT-SUB = ZERO)
 	       ADD W15-COST	 TO W15-TAXVAL(WS-VAT-SUB)
 	       ADD W15-IVAT	 TO W15-VATVAL(WS-VAT-SUB).
 
@@ -4232,9 +4231,8 @@
 	     MOVE "'P'rice,'B'arcode,'N'o labels  [ ]"
 				 TO WS-ERR-MES.
              MOVE SPACE          TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "B" OR "N" OR "P")
-	       GO TO BE100.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "B" OR "N" OR "P".
 	     MOVE W15-PUN	 TO PUR-PUN.
 016230       MOVE W15-IUN        TO PUR-IUN.
 016240       MOVE W15-ICOST      TO PUR-ICOST.
@@ -4259,7 +4257,7 @@
       *    ****    S H I F T   R E C O R D S   U P
       *
        BE110.
-016970	   IF NOT (WS-V-LAST > WS-PURLAST)
+016970	   IF NOT(WS-V-LAST > WS-PURLAST)
 	       MOVE WS-V-LAST	 TO WS-PURKEY
 017000	       PERFORM READ-PURCH THRU READ-PURCH-EXIT
 	       MOVE WS-V-FIRST	 TO WS-PURKEY
@@ -4411,7 +4409,7 @@
 	   IF WS-F-ERROR = 16
                SUBTRACT 1        FROM W75-S
 	       GO TO PORDER-FULL-SCREEN.
-	   IF NOT (ORD-CRED = P-NUMBER)
+	   IF NOT(ORD-CRED = P-NUMBER)
 	       SUBTRACT 1	 FROM W75-S
 	       GO TO PORDER-FULL-SCREEN.
 
@@ -4426,7 +4424,7 @@
 		   GO TO PORDER-GET-ORD-RECORD
 	       END-IF
 	       PERFORM READ-STOCK-NEXT THRU READ-STOCK-EXIT
-	       IF NOT (STK-XREF = ORD-EXT-ITEM)
+	       IF NOT(STK-XREF = ORD-EXT-ITEM)
 		   GO TO PORDER-GET-ORD-RECORD
 	       ELSE
 		   MOVE STK-CODE TO ORD-EXT-ITEM
@@ -4437,7 +4435,7 @@
 	     MOVE STK-XREF	 TO W75-XCODE(W75-S).
 	     DISPLAY SD-POR AT LINE CLIN.
 	   IF (W75-X-C = "X")
-	       IF NOT (STK-XREF = SPACES)
+	       IF NOT(STK-XREF = SPACES)
 		   DISPLAY SD-XREF AT LINE CLIN.
 027700	   IF CLIN < 20
 027710	       ADD 1		 TO CLIN W75-S
@@ -4531,7 +4529,7 @@
        PORDER-XREF-LOOP.
 	     DISPLAY SD-ITEM AT LINE CLIN.
 	   IF (W75-X-C = "X")
-	       IF NOT (W75-XCODE(W75-S2) = SPACES)
+	       IF NOT(W75-XCODE(W75-S2) = SPACES)
 		   DISPLAY SD-XCDE AT LINE CLIN.
 	   IF W75-S2 < W75-S
 027710	       ADD 1		 TO CLIN W75-S2
@@ -4563,7 +4561,7 @@
 	   IF WS-F-ERROR = 16
 	       MOVE SPACE	 TO WS-OPTION
 	       GO TO PORDER-NEW-PAGE.
-	   IF NOT (ORD-CRED = P-NUMBER)
+	   IF NOT(ORD-CRED = P-NUMBER)
 	       MOVE SPACE	 TO WS-OPTION
 	       GO TO PORDER-NEW-PAGE.
 	   IF WS-IXS1 < 24
@@ -4594,7 +4592,7 @@
 
        PORDER-HIGHLIGHT.
 	     PERFORM PORDER-CRT-ATTRIB.
-	     DISPLAY W43-DET2 (CLIN) AT CPOS
+	     DISPLAY W43-DET2(CLIN) AT CPOS
 		     WITH BACKGROUND-COLOR 5
 			  FOREGROUND-COLOR 7.
 	     GO TO PORDER-GET-USER-OPT.
@@ -4934,7 +4932,7 @@
 	     MOVE 1		 TO W75-S W75-S1.
 
        CREDIT-LUP-TAB-LOOP.
-             MOVE SPACES         TO W75-CNO (W75-S1).
+	     MOVE SPACES	 TO W75-CNO(W75-S1).
            IF W75-S1 < 18
                ADD 1             TO W75-S1
                GO TO CREDIT-LUP-TAB-LOOP.
@@ -4963,7 +4961,7 @@
                GO TO CREDIT-FULL-SCREEN.
 
        CREDIT-SKIP-CRED-READ.
-             MOVE P-NUMBER       TO W75-CNO (W75-S).
+	     MOVE P-NUMBER	 TO W75-CNO(W75-S).
 	     DISPLAY SD-CRD AT LINE CLIN.
 027700	   IF CLIN < 21
 027710         ADD 1 TO CLIN W75-S
@@ -5064,16 +5062,16 @@
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 
        CREDIT-GET-USER-OPT-2.
-027990	     ACCEPT WS-OPTION AT 2538
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
-027750       CALL "_MSUPCASE" USING WS-OPTION
-023170                        LENGTH WS-OPTION
-023180                               WS-LENGTH
-023190                        LENGTH WS-LENGTH
-023200                               WS-STATUS.
-           IF NOT (WS-OPTION = "N" OR "Q")
-               GO TO CREDIT-GET-USER-OPT-2.
-027800     IF WS-OPTION = "N"
+	     PERFORM WITH TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Q"
+027990	       ACCEPT WS-OPTION AT 2538
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 15 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+027800	   IF WS-OPTION = "N"
 027810         GO TO CREDIT-LUP-SCREEN.
              MOVE SPACES         TO W15-ACNO.
 028000       GO TO CREDIT-LOOKUP-EXIT.
@@ -5092,14 +5090,14 @@
 
        CREDIT-HIGHLIGHT.
              PERFORM CREDIT-CRT-ATTRIB.
-             DISPLAY W43-DET (CLIN) AT CPOS WITH REVERSE-VIDEO.
+	     DISPLAY W43-DET(CLIN) AT CPOS WITH REVERSE-VIDEO.
              GO TO CREDIT-GET-USER-OPT.
 
        CREDIT-CHK-SELECT.
            IF W75-S1 = ZERO
                GO TO CREDIT-GET-USER-OPT.
              MOVE CSTART TO WS1-CURSOR.
-             MOVE W75-CNO (W75-S1) TO P-NUMBER.
+	     MOVE W75-CNO(W75-S1) TO P-NUMBER.
              PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
 	     MOVE ZERO		 TO COL-AND-LINE.
              MOVE P-NUMBER       TO W15-ACNO.
@@ -5227,9 +5225,9 @@
 	     PERFORM READ-WSTOCK-NEXT THRU READ-WSTOCK-EXIT.
 	   IF WS-F-ERROR = 52
 	       GO TO IA999.
-	   IF NOT (WST-EXT-CODE = W10-EXT-ITEM)
+	   IF NOT(WST-EXT-CODE = W10-EXT-ITEM)
 	       GO TO IA999.
-	   IF NOT (WST-QUANT < 0.01)
+	   IF NOT(WST-QUANT < 0.01)
 	       ADD WST-QUANT	 TO W15-WQUANT.
 	     GO TO IA05.
 
@@ -5270,7 +5268,7 @@
 000200       MOVE 1              TO W75-S W75-S1.
 
        WHSE-LUP-TAB-LOOP.
-	     MOVE ZERO		 TO W75-WHCDE (W75-S1).
+	     MOVE ZERO		 TO W75-WHCDE(W75-S1).
 	   IF W75-S1 < 18
 	       ADD 1		 TO W75-S1
 	       GO TO WHSE-LUP-TAB-LOOP.
@@ -5299,7 +5297,7 @@
 000950	       GO TO WHSE-FULL-SCREEN.
 
        WHSE-SKIP-WHSE-READ.
-000960	     MOVE WAR-CODE	 TO W75-WHCDE (W75-S).
+000960	     MOVE WAR-CODE	 TO W75-WHCDE(W75-S).
 
        WHSE-DISP-DET.
 	     DISPLAY WAR-CODE AT LINE CLIN COLUMN 2
@@ -5415,14 +5413,16 @@
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 
 001720 WHSE-GET-USER-OPT-2.
-001730	     ACCEPT WS-OPTION AT 2538
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-001790	   IF NOT (WS-OPTION = "N" OR "Q")
-001800	       GO TO WHSE-GET-USER-OPT-2.
-001810     IF WS-OPTION = "N"
+	     PERFORM WITH TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Q"
+027990	       ACCEPT WS-OPTION AT 2538
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 15 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+001810	   IF WS-OPTION = "N"
 001820	       GO TO WHSE-LUP-SCREEN.
 001830	     MOVE SPACES	 TO W15-WHSE.
 001840	     GO TO WHSE-RESET-LIN.
@@ -5441,14 +5441,14 @@
 
 001980 WHSE-HIGHLIGHT.
 001990	     PERFORM WHSE-CRT-ATTRIB.
-002000       DISPLAY W43-DET (CLIN) AT CPOS WITH REVERSE-VIDEO.
+002000	     DISPLAY W43-DET(CLIN) AT CPOS WITH REVERSE-VIDEO.
 002010	     GO TO WHSE-GET-USER-OPT.
 
 002030 WHSE-CHK-SELECT.
 002040     IF W75-S1 = ZERO
 002050	       GO TO WHSE-GET-USER-OPT.
 002060	     MOVE CSTART	 TO WS1-CURSOR.
-002070	     MOVE W75-WHCDE (W75-S1)
+002070	     MOVE W75-WHCDE(W75-S1)
 				 TO W15-WHSE WAR-CODE.
 002080	     PERFORM READ-WARHSE THRU READ-WARHSE-EXIT.
 002090	     MOVE ZERO		 TO COL-AND-LINE.
@@ -5476,46 +5476,12 @@
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
-019660	     DISPLAY CLR-SCREEN.
+042000	     DISPLAY CLR-SCREEN.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		       ESC, F1 to F10 keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    PAGE-UP and PAGE-DOWN keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   A C T I V A T E   M O U S E		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set MOUSE key to act as FUNCTION key	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+	     COPY FUNCTION.PRO.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	    Setup the file ID's including path names           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -5641,7 +5607,7 @@
 	     MOVE AFID-PATH	 TO W02-WSTOCK.
 049320	     MOVE 3		 TO WS-PARKEY.
 049330       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-STOCK = "A" OR "N")
+	   IF NOT(PAR-STOCK = "A" OR "N")
 	       MOVE "A" 	 TO PAR-STOCK.
 	     MOVE PAR-STOCK	 TO W10-STCK.
 	   IF PAR-STOCK = "N"
@@ -5654,7 +5620,7 @@
 	   IF W10-SLNGTH > 14
 	       MOVE 14		 TO W10-SLNGTH.
 	     MOVE PAR-USE-3-DEC  TO WS-USE-3.
-	   IF NOT (PAR-USE-3-DEC = "Y")
+	   IF NOT(PAR-USE-3-DEC = "Y")
 	       MOVE "N" 	 TO WS-USE-3.
 	     MOVE PAR-BAR-CODE	 TO WS-BAR-CODE.
 	     MOVE PAR-CASES	 TO WS-USE-CASES.
@@ -5662,7 +5628,7 @@
 	     MOVE PAR-USE-ITM	 TO WS-USE-ITM.
 	     MOVE PAR-EXT-STK	 TO WS-EXT-STK.
 	     OPEN I-O PRCLAB.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
                CLOSE PRCLAB
                OPEN OUTPUT PRCLAB
                INITIALIZE PLB-REC1
@@ -5732,43 +5698,22 @@
 042540	     DISPLAY CLR-SCREEN.
 020100       GO TO ZA999-EXIT.
 
-       ZA49.
-             DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
-             DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-             DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
-             GO TO ZA205.
+       COPY ZA49.PRO.
+
 020110 ZA200.
-020120       DISPLAY "Files locked - Try later" AT 2312
-020130                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-020140       DISPLAY "Press any key" AT 2512 
-020150		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-020160	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
        ZA205.
              EXIT PROGRAM.
+
 020190 ZA999-EXIT.
 020200       EXIT.
       /
 020210 ZB000-I-O-ERROR SECTION 92.
-      
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       PERFORM DISPLAY-FILE-NAME.
-      
+
+       COPY ERRORS.PRO.
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620	       MOVE W02-NETWORK  TO WS-FILE
@@ -5815,13 +5760,9 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
-041840	   ELSE
-041850     IF WS-F-ERROR = 37
-041860         MOVE W02-PRCLAB   TO WS-FILE
-041870         MOVE WS-PRCKEY    TO WS-KEY
 041840	   ELSE
 041850     IF WS-F-ERROR = 40
 041860         MOVE W02-LEDTRF   TO WS-FILE
@@ -5841,33 +5782,10 @@
 041850	   IF WS-F-ERROR = 56
 041860	       MOVE W02-PURDEX	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
-	       MOVE PRD-KEY	 TO WS-KEYX.
-041880     IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+	       MOVE PRD-KEY	 TO WS-KEYX
+041840	   ELSE
+041850	   IF WS-F-ERROR = 64
+041860         MOVE W02-PRCLAB   TO WS-FILE
+041870	       MOVE WS-PRCKEY	 TO WS-KEY.
+
+       COPY DISPERR.PRO.

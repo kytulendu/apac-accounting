@@ -3,7 +3,6 @@
 000020		     VALUE OF FILE-ID W02-CRDMEM.
 000030 01  CME-RECORD1.
 	   03  CME-KEY.
-	       05  CME-AC      PIC  X(05).
-	       05  CME-SEQ     PIC  9(02).
-	   03  FILLER	       PIC  X(01).
+	       05  CME-AC      PIC  X(06).
+	       05  CME-SEQ     PIC  9(04).
 	   03  CME-DATA        PIC  X(60).

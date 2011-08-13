@@ -2534,7 +2534,7 @@
   8689         MOVE ZERO         TO WS-KEY
   8690         MOVE TAX-KEY      TO WS-KEYX
   8691     ELSE
-  8692     IF WS-F-ERROR = 33
+  8692	   IF WS-F-ERROR = 37
   8693         MOVE W02-SHARED   TO WS-FILE
   8694         MOVE WS-SHARED    TO WS-KEY
   8695     ELSE

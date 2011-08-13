@@ -13,7 +13,7 @@
       *                                                                *
       *      P R I N T	 I N V O I C E	 P R O G R A M		       *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -420,6 +420,139 @@
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
 000070 77  WS-DRAW	   PIC	9(02).
+      *    ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+      *    บ	   V A T   C A L C U L A T I O N   P R O B L E M       บ
+      *    ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ Value Added Tax (VAT) is calculated per item and because  ณ
+      *    ณ some rates cause the calculation of tax to have more than ณ
+      *    ณ two decimals, results must be rounded per tax percentage. ณ
+      *    ณ Some Users require more detailed analysis of their sales  ณ
+      *    ณ and split their Inventory accross more than one category. ณ
+      *    ณ							       ณ
+      *    ณ As the integration of sales into the General Ledger from  ณ
+      *    ณ the sales modules is processed per Sales Ledger, which    ณ
+      *    ณ requires the tax to be rounded per integration entry and  ณ
+      *    ณ rounding per sales integration entry which on occasion    ณ
+      *    ณ will result in the entries for the transaction to be out  ณ
+      *    ณ of balance.					       ณ
+      *    ณ							       ณ
+      *    ณ To minimise this problem the system stores the exclusive  ณ
+      *    ณ price with three decimals. This only serves to minimise   ณ
+      *    ณ the amount by which the calculation may vary, which when  ณ
+      *    ณ incorrect is normally 0.01 too much or too little.        ณ
+      *    ณ							       ณ
+      *    ณ EXAMPLE:						       ณ
+      *    ณ   VAT rate = 14%.					       ณ
+      *    ณ   Item one has an exclusive price of:		14.25  ณ
+      *    ณ		       sales category	 :		0001   ณ
+      *    ณ   This would result in the inclusive price being calcula- ณ
+      *    ณ   ed as:	       14.25 + VAT 1.995 =		16.245 ณ
+      *    ณ   As inclusive prices may only have two decimals the      ณ
+      *    ณ   system will round this price to 16.25, when the item is ณ
+      *    ณ   first loaded or if this was the last price, resulting   ณ
+      *    ณ   in an exclusive price of 			14.254 ณ
+      *    ณ   Item two has an inclusive price of:	       151.90  ณ
+      *    ณ		       sales category	 :		0002   ณ
+      *    ณ   This item will have an exclusive price recorded as      ณ
+      *    ณ   133.246 after being rounded to three decimals.	       ณ
+      *    ณ							       ณ
+      *    ณ   1. Invoice for 1 of item one.			       ณ
+      *    ณ	  Using the inclusive price, calculate the VAT and     ณ
+      *    ณ	  the other values as follows:			       ณ
+      *    ณ	  Inclusive price ๖ (100 + VAT Rate) x VAT rate        ณ
+      *    ณ		    16.25 ๖ (100 + 14) x 14  =	1.9956	       ณ
+      *    ณ	  Round VAT to 2 decimals	     =	2.00	       ณ
+      *    ณ	  Subtract VAT from inclusive price  = 14.25 (excl)    ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont	 16.25	       ณ
+      *    ณ				    Income		14.25- ณ
+      *    ณ				    VAT			 2.00- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	 16.25	16.25- ณ
+      *    ณ							       ณ
+      *    ณ   2. Invoice for 1 of item one and 1 of item two.	       ณ
+      *    ณ	  VAT is calculated as the total on both items and     ณ
+      *    ณ	  rounded to two decimals: This can be done, by using  ณ
+      *    ณ	  the total inclusive or excluse value. 	       ณ
+      *    ณ	  Exclusive: 14.254 + 133.246 = 147.50 x 14% = 20.65   ณ
+      *    ณ	  Inclusive: 16.25 + 151.90 = 168.15 ๖ (100 + 14)      ณ
+      *    ณ		     x 14 = 20.65.			       ณ
+      *    ณ	  As the two items are from different catergories, two ณ
+      *    ณ	  integration entries are required.		       ณ
+      *    ณ	  These entries must be rounded to two decimals.       ณ
+      *    ณ		     14.254 rounded =  14.25		       ณ
+      *    ณ		    133.246 rounded = 133.25		       ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont 168.15	       ณ
+      *    ณ				    Income 1		14.25- ณ
+      *    ณ				    Income 2	       133.25- ณ
+      *    ณ				    VAT			20.65- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	168.15 168.15- ณ
+      *    ณ							       ณ
+      *    ณ	  From these examples, it is clear that the procedure  ณ
+      *    ณ	  being used is correct. However, if both items had    ณ
+      *    ณ	  either the first or second price the result would be ณ
+      *    ณ	  as follows:					       ณ
+      *    ณ	  1 - price 16.25 inclusive - VAT calculated as 3.99   ณ
+      *    ณ	  Both items would have their integration entries      ณ
+      *    ณ	  rounded to 14.25.				       ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont	 32.50	       ณ
+      *    ณ				    Income 1		14.25- ณ
+      *    ณ				    Income 2		14.25- ณ
+      *    ณ				    VAT			 3.99- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	 32.50	32.49- ณ
+      *    ณ							       ณ
+      *    ณ	  2 - price 151.90 inclusive - VAT calculated as 37.31 ณ
+      *    ณ	  Both items would have their integration entries      ณ
+      *    ณ	  rounded to 133.25.				       ณ
+      *    ณ						  Dt	 Cr    ณ
+      *    ณ	  Integration entries are:  Debtor Cont	303.80	       ณ
+      *    ณ				    Income 1	       133.25- ณ
+      *    ณ				    Income 2	       133.25- ณ
+      *    ณ				    VAT			37.31- ณ
+      *    ณ						______________ ณ
+      *    ณ				    Totals	303.80 303.81- ณ
+      *    ณ							       ณ
+      *    ณ The system can either, if required, process a balancing   ณ
+      *    ณ entry to a suspense account at the end of each day or     ณ
+      *    ณ balance each set of integration entries. The suspense     ณ
+      *    ณ account would need to have manual adjustment entries pro- ณ
+      *    ณ cessed and as the system already processes balancing      ณ
+      *    ณ entries if there has been a problem, it would not be a    ณ
+      *    ณ straight-forward procedure.			       ณ
+      *    ณ							       ณ
+      *    ณ From the above examples, it would seem that when the cre- ณ
+      *    ณ dit side is more, then the income should be reduced and   ณ
+      *    ณ when the debit side is more, the income should be	       ณ
+      *    ณ increased. 					       ณ
+      *    ณ							       ณ
+      *    ณ The system will have to choose one of the income entries  ณ
+      *    ณ randomly when income needs to be adjusted. This will need ณ
+      *    ณ the details of the first sales (income) integration entry ณ
+      *    ณ to be stored and add sales (income) values of subsequent  ณ
+      *    ณ sales entries and VAT (tax) values to this value and on   ณ
+      *    ณ completing the transaction this balancing value will be   ณ
+      *    ณ checked and if not zero it will be used as the balancing  ณ
+      *    ณ entry by changing the sign.			       ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+       77  WS-BAL-ENTRY		PIC  X(01) VALUE "N".
+	   88  BALANCING-ENTRY-STORED	   VALUE "Y".
+
+       01  WXT-LEDTRF.
+	   03  WXT-DATE	      PIC  9(08)    COMP-3.
+	   03  WXT-TYPE       PIC  9(02)    COMP-5.
+	   03  WXT-LEDG.
+	       05  WXT-TRN    PIC  9(02).
+	       05  FILLER     PIC  X(02).
+	   03  WXT-AC	      PIC  9(06)    COMP-3.
+	   03  WXT-NAR.
+	       05  WXT-DESC   PIC  X(13).
+	       05  WXT-BOOK   PIC  X(27).
+	   03  WXT-VALUE      PIC S9(09)V99 COMP-3.
       /
 002910 01  WS-DB-LINE.
 003080	   03  WS-TOP-LNE2.
@@ -648,13 +781,14 @@
        COPY BLANK.CRT.
 
 007420 01  S02.
-007430     03  LINE 2  COLUMN 27 FOREGROUND-COLOR 15
+007430	   03  LINE 2  COLUMN 27 FOREGROUND-COLOR 7 HIGHLIGHT
 007440                           VALUE "SALES/ORDER PROGRAM CONTROL".
 
        COPY INVOICE.CRT.
 
 009930 01  S36.
-009940     03  FOREGROUND-COLOR 11 PIC X(06) USING W80-ACNO AUTO.
+009940	   03  FOREGROUND-COLOR 3 HIGHLIGHT
+				  PIC X(06) USING W80-ACNO AUTO.
 
        COPY ERROR.CRT.
 
@@ -858,8 +992,8 @@
 012370       WRITE REC-RECORD.
 012380     IF WS-STATUS NOT = "00"
 012390         DISPLAY "Write error Recovery file - Status " AT 2212
-012400                  WITH FOREGROUND-COLOR 14
-012410                  WS-STATUS WITH FOREGROUND-COLOR 15
+012400			WITH FOREGROUND-COLOR 6 HIGHLIGHT
+012410			WS-STATUS WITH FOREGROUND-COLOR 7 HIGHLIGHT
 012420         STOP RUN.
 012430       CLOSE RECOVER.
 012440       OPEN I-O RECOVER.
@@ -889,7 +1023,8 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
       *
 012550	     DISPLAY "WAITING" AT 2551
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 4 HIGHLIGHT.
 012560	     COMMIT.
 	     ACCEPT WS-STIME FROM TIME.
 	     MOVE 400		 TO WS-WAIT.
@@ -924,13 +1059,13 @@
       *    ****   A R E   A N Y   U P D A T E S   I N	P R O G R E S S
       *
 012750 AY62.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-		   PAR-USR(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES OR
+		  PAR-USR(WS-SUB) = SPACES)
       *
       *    ****   A R E   D E B T O R	O R   S T O C K   F I L E S
       * 	  B E I N G   U P D A T E D
       *
-	       IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	       IF NOT(PAR-PROG(WS-SUB) = SPACES)
 012760		   IF PAR-PROG(WS-SUB) = "DB" OR "DS" OR "CS" OR "ST"
       *
       *    ****   Y E S   -   S E T   W A I T	P E R I O D
@@ -966,7 +1101,7 @@
       *
        AY62-WAIT.
 	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-SUB) = LS-USER)
 	       IF WS-SUB < 24
 		   ADD 1	 TO WS-SUB
 		   GO TO AY62.
@@ -976,12 +1111,12 @@
 	       COMMIT
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       ACCEPT WS-STIME FROM TIME
 	       PERFORM LOCK-REC-LOOP
 	       DISPLAY "Waiting" AT 2572
 			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 	       GO TO AY60.
 012880	     DISPLAY SPACE AT 2572
 		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
@@ -1009,7 +1144,7 @@
 	     MOVE 1		 TO WS-USUB.
 
        AY72.
-	   IF NOT (PAR-USR(WS-USUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-USUB) = LS-USER)
 	       ADD 1		 TO WS-USUB
 	       GO TO AY72.
 
@@ -1020,7 +1155,7 @@
 	       ADD 1 WS-USUB	 GIVING WS-SUB
 	   ELSE
 	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES)
 	       MOVE PAR-PROG(WS-SUB)
 				 TO PAR-PROG(WS-USUB)
 	       MOVE PAR-USR(WS-SUB)
@@ -1219,7 +1354,7 @@
 	   ELSE
       * 		     T E X T
 015170	   IF SOR-TYPE = 8
-	       MOVE SOR-TEXT	 TO W32-REMARKS (WS-S7)
+	       MOVE SOR-TEXT	 TO W32-REMARKS(WS-S7)
 	       ADD 1		 TO WS-S7
 	   ELSE
       *                      T R A I L E R
@@ -1316,7 +1451,7 @@
 015510	     ADD W90-DB 	 TO DEB-DEBT
 015520                              DEB-BAL
 015530                              DEB-PURYTD
-                                    DEB-MTHPUR (W20-MONTH).
+				    DEB-MTHPUR(W20-MONTH).
 015540	     GO TO DEBTOR-TRAN-EXIT.
 
        DEBTOR-INTEGRATE.
@@ -1328,7 +1463,12 @@
              MOVE TRA-VALUE      TO WX-VALUE.
              MOVE WX-DEBGL       TO WX-AC.
              MOVE 01             TO WX-TYPE.
-             PERFORM GL-TRF-UPDATE.
+      *
+      *    ****    Balancing the Integration entries
+      * 	   DEBTOR/ACCOUNTS RECEIVABLE
+      *
+	     ADD WX-VALUE	 TO WXT-VALUE
+	     PERFORM GL-TRF-UPDATE.
 015550
 015560 DEBTOR-CR-TRANS.
 015570	     SUBTRACT W90-CR	 FROM DEB-CRED
@@ -1557,9 +1697,11 @@
              PERFORM GET-SORDER.
            IF WS-ERROR NOT = ZERO
                DISPLAY "Database corrupted - Press ANY KEY" AT 2502 
-			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+			WITH BACKGROUND-COLOR 3
+			     FOREGROUND-COLOR 6 HIGHLIGHT
 	       ACCEPT WS-OPTION AT 2537
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 7 HIGHLIGHT AUTO
                GO TO BC599.
              MOVE W10-SORD       TO W90-REG.
            IF W90-EXP = "E" OR "X"
@@ -1567,29 +1709,36 @@
            ELSE
                MOVE SPACES       TO W90-TAX.
 018820       DISPLAY S36 AT 0308
-019040       DISPLAY W40-NAME AT 0320 WITH FOREGROUND-COLOR 11.
-019900       DISPLAY W90-ORD AT 0368 WITH FOREGROUND-COLOR 11.
-019970       DISPLAY W10-SMAN AT 0411 WITH FOREGROUND-COLOR 11.
+019040	     DISPLAY W40-NAME AT 0320
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+019900	     DISPLAY W90-ORD AT 0368
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+019970	     DISPLAY W10-SMAN AT 0411
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
 020010     IF W10-SMAN NOT = ZERO
 020030         ADD 100 W10-SMAN    GIVING WS-PARKEY
 020040         PERFORM READ-PARAM THRU READ-PARAM-EXIT
-020100         DISPLAY PAR-SALESMAN AT 0420 WITH FOREGROUND-COLOR 11
+020100	       DISPLAY PAR-SALESMAN AT 0420
+		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
                MOVE PAR-SALESMAN TO W40-ASSIST
            ELSE
                MOVE SPACES       TO W40-ASSIST.
 	     DISPLAY W40-CONTACT AT 0529
 		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
-020760       DISPLAY W90-REG AT 0554 WITH FOREGROUND-COLOR 11.
+020760	     DISPLAY W90-REG AT 0554
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
              MOVE 1              TO WS-SALKEY.
              SUBTRACT 1          FROM WS-LAST.
        BC15.
 022610       MOVE W90-DB         TO W90-TOTAL.
 022620       SUBTRACT W90-LDISC  FROM W90-TOTAL.
 022630       MOVE W90-DB         TO W100-BAL.
-022640       DISPLAY W100-BAL AT 2015 WITH FOREGROUND-COLOR 11.
+022640	     DISPLAY W100-BAL AT 2015
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
 022650       MULTIPLY -1 BY W90-LDISC 
 022660                           GIVING W100-BAL.
-022670       DISPLAY W100-BAL AT 2115 WITH FOREGROUND-COLOR 11.
+022670	     DISPLAY W100-BAL AT 2115
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
       *
       *    ****    C A L C U L A T E   T A X   ( RUNNING TOTAL )
       *
@@ -1614,14 +1763,15 @@
 			  BACKGROUND-COLOR 5.
 022770 BC20.
 022780	     MOVE W90-TOTAL	 TO W100-BAL.
-022790       DISPLAY W100-BAL AT 2315 WITH FOREGROUND-COLOR 11.
+022790	     DISPLAY W100-BAL AT 2315
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
              GO TO BC185.
 023880 BC115.
-036820	     DISPLAY (LIN, 1) WS-MIV1 WITH BACKGROUND-COLOR 0
-					   FOREGROUND-COLOR 3
-			      WS-MIV78 WITH FOREGROUND-COLOR 3
-			      WS-MIV80 WITH BACKGROUND-COLOR 0
-					    FOREGROUND-COLOR 3.
+036820	     DISPLAY WS-MIV1 AT LINE LIN COLUMN 1
+		     WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
+		     WS-MIV78 WITH FOREGROUND-COLOR 3
+		     WS-MIV80 WITH BACKGROUND-COLOR 0
+				   FOREGROUND-COLOR 3.
 023900	     ADD 1		 TO LIN.
 025130 BC185.
       *
@@ -1636,16 +1786,19 @@
       *
 025410 BC188.
 025420     IF DEB-TERMS NOT = "3"
-025430         DISPLAY "Processing Invoice" AT 2520 WITH
-025440			BACKGROUND-COLOR 3 FOREGROUND-COLOR 14 BLINK
+025430	       DISPLAY "Processing Invoice" AT 2520
+			WITH BACKGROUND-COLOR 3
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
 025450     ELSE
-025460         DISPLAY "Processing COD sale" AT 2520 WITH
-025470			BACKGROUND-COLOR 3 FOREGROUND-COLOR 14 BLINK.
+025460	       DISPLAY "Processing COD sale" AT 2520
+			WITH BACKGROUND-COLOR 3
+			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
 025480       MOVE 1              TO WS-SALKEY.
 025490       PERFORM AY60 THRU AY999.
 025500       PERFORM AY02 THRU AY59.
 025510       MOVE W70-INVOICE    TO W90-REF.
-025520       DISPLAY W90-REF AT 0510 WITH FOREGROUND-COLOR 11.
+025520	     DISPLAY W90-REF AT 0510
+		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
 025530     IF W70-INVOICE = 99999999
 025540         MOVE 1            TO W70-INVOICE
 025550     ELSE
@@ -1661,14 +1814,14 @@
       *    ****    T I T L E
       *
 025610     IF DEB-LANG = "A"
-025620         MOVE W75-ATITLE (DEB-TITLE) 
+025620	       MOVE W75-ATITLE(DEB-TITLE)
 025630                           TO W60-NAME
 025640     ELSE
-025650         MOVE W75-ETITLE (DEB-TITLE) 
+025650	       MOVE W75-ETITLE(DEB-TITLE)
 025660                           TO W60-NAME.
 025670       MOVE 7              TO WS-S6.
 025680 BC190.
-025690     IF W60-NCHAR (WS-S6) NOT = SPACE
+025690	   IF W60-NCHAR(WS-S6) NOT = SPACE
 025700         GO TO BC195.
 025710       SUBTRACT 1          FROM WS-S6.
 025720     IF WS-S6 > 0
@@ -1679,26 +1832,26 @@
       *
 025750       MOVE 1              TO WS-S5.
 025760       ADD 2               TO WS-S6.
-025770       MOVE W40-NCHAR (25) TO W60-NCHAR (WS-S6).
+025770	     MOVE W40-NCHAR(25) TO W60-NCHAR(WS-S6).
 025780       ADD 1               TO WS-S6.
-025790       MOVE "."            TO W60-NCHAR (WS-S6).
-025800     IF W40-NCHAR (49) = SPACE
+025790	     MOVE "."		 TO W60-NCHAR(WS-S6).
+025800	   IF W40-NCHAR(49) = SPACE
 025810         GO TO BC200.
       *
       *    ****    S E C O N D   I N I T I A L
       *
 025820       ADD 1               TO WS-S6.
-025830       MOVE W40-NCHAR (49) TO W60-NCHAR (WS-S6).
+025830	     MOVE W40-NCHAR(49)  TO W60-NCHAR(WS-S6).
 025840       ADD 1               TO WS-S6.
-025850       MOVE "."            TO W60-NCHAR (WS-S6).
+025850	     MOVE "."		 TO W60-NCHAR(WS-S6).
 025860 BC200.
 025870       ADD 2               TO WS-S6.
 025880 BC205.
       *
       *    ****    S U R N A M E
       *
-025890       MOVE W40-NCHAR (WS-S5) 
-025900                           TO W60-NCHAR (WS-S6).
+025890	     MOVE W40-NCHAR(WS-S5)
+025900				 TO W60-NCHAR(WS-S6).
 025910     IF WS-S5 < 24
 025920         ADD 1             TO WS-S5
 025930         ADD 1             TO WS-S6
@@ -1709,7 +1862,7 @@
 025980       MOVE SPACES         TO W40-PC1 W40-PC2.
 025990       MOVE DEB-ADDRESS    TO W60-ADDRESS.
 026000       PERFORM CA175-ADDRESS.
-026010     IF NOT (DEB-POST = ZERO OR 9999)
+026010	   IF NOT(DEB-POST = ZERO OR 9999)
 026020         MOVE DEB-POST     TO W40-PC1.
 026030     IF W40-ADD4 = SPACES
 026040         MOVE W40-PC1      TO W40-ADD4
@@ -1725,7 +1878,7 @@
 026140         MOVE SPACES       TO W40-ADD2.
 026150       MOVE DEB-PADDR      TO W60-ADDRESS1.
 026160       PERFORM CA185-ADDRESS.
-026170     IF NOT (DEB-PPOST = ZERO OR 9999)
+026170	   IF NOT(DEB-PPOST = ZERO OR 9999)
 026180         MOVE DEB-PPOST    TO W40-PC2.
 026190     IF W40-PADD4 = SPACES
 026200         MOVE W40-PC2      TO W40-PADD4
@@ -1739,8 +1892,9 @@
 026280     IF W40-PADD1 = SPACES
 026290         MOVE W40-PADD2    TO W40-PADD1
 026300         MOVE SPACES       TO W40-PADD2.
-038660	     DISPLAY "Processing Invoice" AT 2520 WITH
-038670		      BACKGROUND-COLOR 3 FOREGROUND-COLOR 14 BLINK.
+038660	     DISPLAY "Processing Invoice" AT 2520
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
 026310 BC215.
       *
       *    ****    P R I N T   I N V O I C E   H E A D I N G S
@@ -2046,13 +2200,12 @@
              PERFORM BC225.
 027830       GO TO BC246.
        BC248.
-             MOVE SAL-SNO (WS-S1)
-                                 TO W10-SERNO.
+	     MOVE SAL-SNO(WS-S1) TO W10-SERNO.
              MOVE ZERO           TO WS-GAR.
              PERFORM BB070.
              ADD 1               TO WS-S1.
 	   IF WS-S1 < 3
-               IF SAL-SNO (WS-S1) NOT = SPACES
+	       IF SAL-SNO(WS-S1) NOT = SPACES
                    GO TO BC248.
 027840 BC250.
       *
@@ -2091,7 +2244,7 @@
 028070       MOVE W90-DB         TO DOC-SUBTOT.
 028090       MOVE SPACES         TO REP-DETAIL2.
 028100	   IF DEB-SDISC NOT = ZERO
-028110	       MOVE W15-DISC (DEB-SDISC)
+028110	       MOVE W15-DISC(DEB-SDISC)
 028120                           TO W30-PERC
 028130	       MOVE W30-MESSAGE  TO INV-NADD.
       *
@@ -2253,8 +2406,8 @@
 029220       ADD 1               TO W90-CS.
 029230       MOVE W90-CATKEY     TO WS-PARKEY.
 029240       PERFORM AY01 THRU AY59.
-029250       ADD W90-DB          TO PAR-CDRMTD (W90-CS).
-029260       ADD W90-DB          TO PAR-CDRYTD (W90-CS).
+029250	     ADD W90-DB 	 TO PAR-CDRMTD(W90-CS).
+029260	     ADD W90-DB 	 TO PAR-CDRYTD(W90-CS).
 029270	     PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
       *
       *    ****    U P D A T E   T H E   S A L E S M A N   R E C O R D
@@ -2374,7 +2527,7 @@
 	     MOVE LS-DRAW	 TO WS-DRAW.
 049200	     DISPLAY WS-BLNK78 AT 1202 WITH FOREGROUND-COLOR 3.
 049210       DISPLAY "PRINT INVOICE PROGRAM" AT 1231
-049220                WITH FOREGROUND-COLOR 15.
+049220		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
       *
       *    ****    P A R A M E T E R   F I L E
       *
@@ -2402,30 +2555,54 @@
 	     MOVE "AUDITF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-AUDITF.
+      *    *************************************************************
+      *    ****       S A L E S	  -   C A R D E X   F I L E	    ****
+      *    *************************************************************
 	     MOVE "CARDEX"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-CARDEX.
+      *    *************************************************************
+      *    ****    D E B T O R	 T R A N S A C T I O N	 F I L E    ****
+      *    *************************************************************
 	     MOVE "DBTRAN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DBTRAN.
+      *    *************************************************************
+      *    ****  D E B T O R   A C C O U N T   ( A / R )   F I L E  ****
+      *    *************************************************************
 	     MOVE "DEBTOR"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEBTOR.
+      *    *************************************************************
+      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    *************************************************************
 	     MOVE "DEPART"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEPART.
 	     MOVE "GARTEE"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-GARTEE.
+      *    *************************************************************
+      *    ****        D E B T O R   I N V O I C E   F I L E	    ****
+      *    *************************************************************
 	     MOVE "INVOIC"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-INVOIC.
+      *    *************************************************************
+      *    **** 	  I N T E G R A T I O N	  F I L E	    ****
+      *    *************************************************************
 	     MOVE "LEDTRF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-LEDTRF.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
 	     MOVE "RECOVER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
@@ -2436,12 +2613,18 @@
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-SALE.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SHARED"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SHARED.
 	     MOVE "SORDER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SORDER.
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
 	     MOVE "STOCKF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STOCKF.
@@ -2452,7 +2635,7 @@
        ZA01.
 049320       MOVE 3              TO WS-PARKEY.
 049330       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-STOCK = "A" OR "N")
+	   IF NOT(PAR-STOCK = "A" OR "N")
 	       MOVE "A" 	 TO PAR-STOCK.
 	     MOVE PAR-STOCK	 TO W10-STCK.
 	     MOVE PAR-INV	 TO WS-INV.
@@ -2469,47 +2652,47 @@
              MOVE W25-KEY        TO WS-PARKEY.
              ADD 1 W25-SUB       GIVING WS-S6.
 014250       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-           IF TRM-INVP (WS-S6) = 1
+	   IF TRM-INVP(WS-S6) = 1
                MOVE "LPT1"       TO W02-PRINTER
            ELSE
-           IF TRM-INVP (WS-S6) = 2
+	   IF TRM-INVP(WS-S6) = 2
                MOVE "LPT2"       TO W02-PRINTER
            ELSE
-           IF TRM-INVP (WS-S6) = 3
+	   IF TRM-INVP(WS-S6) = 3
                MOVE "LPT3"       TO W02-PRINTER
            ELSE
-           IF TRM-INVP (WS-S6) = 4
+	   IF TRM-INVP(WS-S6) = 4
                MOVE "COM1"       TO W02-PRINTER
            ELSE
-           IF TRM-INVP (WS-S6) = 5
+	   IF TRM-INVP(WS-S6) = 5
                MOVE "COM2"       TO W02-PRINTER
            ELSE
-           IF TRM-INVP (WS-S6) = 9
+	   IF TRM-INVP(WS-S6) = 9
 	       MOVE LS-USER	 TO W02-USER.
-             ADD 501 TRM-PRN2 (WS-S6)
+	     ADD 501 TRM-PRN2(WS-S6)
                                  GIVING W25-RESULT.
              DIVIDE W25-RESULT BY 2
                                  GIVING WS-PARKEY
                                  REMAINDER WS-S6.
              ADD 1               TO WS-S6.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE TRM-CONP (WS-S6)
+	     MOVE TRM-CONP(WS-S6)
                                  TO WS-COND.
-             MOVE TRM-NORP (WS-S6)
+	     MOVE TRM-NORP(WS-S6)
                                  TO WS-NORM.
-             MOVE TRM-EXPP (WS-S6)
+	     MOVE TRM-EXPP(WS-S6)
                                  TO WS-EXPP.
-             MOVE TRM-ECAN (WS-S6)
+	     MOVE TRM-ECAN(WS-S6)
                                  TO WS-ECAN.
-             MOVE TRM-8LPI (WS-S6)
+	     MOVE TRM-8LPI(WS-S6)
                                  TO WS-8LPI.
-             MOVE TRM-6LPI (WS-S6)
+	     MOVE TRM-6LPI(WS-S6)
                                  TO WS-6LPI.
-             MOVE TRM-10CPI (WS-S6)
+	     MOVE TRM-10CPI(WS-S6)
                                  TO WS-10CPI.
-             MOVE TRM-12CPI (WS-S6)
+	     MOVE TRM-12CPI(WS-S6)
                                  TO WS-12CPI.
-             MOVE TRM-17CPI (WS-S6)
+	     MOVE TRM-17CPI(WS-S6)
                                  TO WS-17CPI.
        ZA01B.
 049880       OPEN OUTPUT PRNREP.
@@ -2586,13 +2769,9 @@
              MOVE PAR-RLGL       TO WX-RLGL.
              MOVE PAR-DSGL       TO WX-DSGL.
 051530	     GO TO ZA999.
-       ZA49.
-             DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
-             DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-             DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
-             GO TO ZA205.
+
+       COPY ZA49.PRO.
+
        ZA50.
 041850     IF WS-F-ERROR = 5
 041860         MOVE "DEBTOR TRANS"
@@ -2628,35 +2807,20 @@
              ACCEPT WS-OPTION AT 1038 WITH FOREGROUND-COLOR 15.
        ZA51.
              EXIT PROGRAM.
+
 051540 ZA200.
-051550       DISPLAY "Files locked - Try later" AT 2312
-051560                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-051570       DISPLAY "Press any key" AT 2512 
-051580		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-051590	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
        ZA205.
 051600       EXIT PROGRAM.
+
 051610 ZA999.
 051620       EXIT.
 
 051640 I-O-ERRORS      SECTION 91.
-051650 OPEN-ERROR.
-051660       DISPLAY CLR-SCREEN.
-051670       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-051680       PERFORM DISPLAY-FILE-NAME.
-051690
-051700 READ-ERROR.
-051710       DISPLAY CLR-SCREEN.
-051720       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-051730       PERFORM DISPLAY-FILE-NAME.
-051740
-051750 WRITE-ERROR.
-051760       DISPLAY CLR-SCREEN.
-051770       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-051730       PERFORM DISPLAY-FILE-NAME.
-051780
+
+       COPY ERRORS.PRO.
 
 051790 DISPLAY-FILE-NAME.
 056270     IF WS-F-ERROR = 1
@@ -2719,7 +2883,7 @@
 056730         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE
@@ -2732,32 +2896,5 @@
 041860	       MOVE W02-CARDEX	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE CRD-KEY	 TO WS-KEYX.
-052310     IF WS-STATUS = "10"
-052320         MOVE "End of FILE" TO WS-STAT-MESSAGE
-052330     ELSE
-052340     IF WS-STATUS = "22"
-052350         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-052360     ELSE
-052370     IF WS-STATUS = "23"
-052380         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-052390     ELSE
-052400     IF WS-STATUS = "24"
-052410         MOVE "DISK full" TO WS-STAT-MESSAGE
-052420     ELSE
-052430     IF WS-STATUS = "30"
-052440         MOVE "DISK error" TO WS-STAT-MESSAGE
-052450     ELSE
-052460     IF WS-STATUS = "94"
-052470         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-052480       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-052490       DISPLAY "Status " AT 1212 
-052500                WS-STATUS WITH FOREGROUND-COLOR 11
-052510               ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-052520     IF WS-STATUS NOT = "94" 
-052530         DISPLAY "Key    " AT 1412 
-052540                  WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-052550         DISPLAY "Reverse backup or contact program Support"
-052560                  AT 1612.
-052570         DISPLAY "Please make a note of these details" AT 1812.
-052580       STOP RUN.
+
+       COPY DISPERR.PRO.

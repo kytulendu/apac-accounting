@@ -13,7 +13,7 @@
       *                                                                *
       *      P R I N T   P I C K I N G   S L I P   P R O G R A M       *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -585,7 +585,7 @@
        COPY BLANK.CRT.
 
 007420 01  S02.
-007430     03  LINE 2  COLUMN 27 FOREGROUND-COLOR 15
+007430	   03  LINE 2  COLUMN 27 FOREGROUND-COLOR 7 HIGHLIGHT
 007440                           VALUE "SALES/ORDER PROGRAM CONTROL".
 
        COPY SORLUP.CRT.
@@ -635,10 +635,10 @@
 
 009890 01  S28.
 009900	   03  LINE 25 COLUMN 25 BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 15
+				 FOREGROUND-COLOR 7 HIGHLIGHT
 009910                           PIC ZZ9 USING WS-SALKEY AUTO.
 009290 01  S30.
-009300     03  LINE  2 COLUMN 35 FOREGROUND-COLOR 15 
+009300	   03  LINE  2 COLUMN 35 FOREGROUND-COLOR 7 HIGHLIGHT
                                  VALUE "PICKING SLIP".
 009310     03  LINE  3 COLUMN  2 VALUE "Ac No".
 009320     03          COLUMN 15 VALUE "Name".
@@ -669,7 +669,8 @@
 009500     03  LINE 23 COLUMN  3 VALUE "AMOUNT DUE".
 
        01  S30A.
-           03  FOREGROUND-COLOR 11 PIC Z(08) USING W10-SORD AUTO.
+	   03  FOREGROUND-COLOR 3 HIGHLIGHT
+				  PIC Z(08) USING W10-SORD AUTO.
 
 009950 01  S36.
 009960	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
@@ -711,6 +712,41 @@
 
        COPY ERROR.SCR.
 
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³			  OPT-MESSAGE			       ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine is used to allow the OPERATOR to respond to  ³
+      *    ³ a request for an option, so that the correct action can   ³
+      *    ³ be performed by the program. The routine will display the ³
+      *    ³ message in a pop-up window and allow the OPERATOR to      ³
+      *    ³ respond to the 'question'. 			       ³
+      *    ³							       ³
+      *    ³ The option request must be placed in WS-ERR-MES and may   ³
+      *    ³ not exceed 48 characters. The message will be centred in  ³
+      *    ³ the window. An example of a message request follows:      ³
+      *    ³							       ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
+      *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
+      *    ³	       other keys are to be tested on exit)	       ³
+      *    ³			     OR 			       ³
+      *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
+      *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
+      *    ³   default option)					       ³
+      *    ³							       ³
+      *    ³ This would be displayed as:			       ³
+      *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
+      *    ³	³	   Print transactions (Y/N) [ ] 	 ³°°   ³
+      *    ³	ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°   ³
+      *    ³	  °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°   ³
+      *    ³							       ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³							       ³
+      *    ³ To display the request message higher or lower (default   ³
+      *    ³ is line 13) move the line number to be used to SLIN and   ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
        COPY OPTION.CRT.
 
 010950 COPY LOCKED.RC2.
@@ -723,16 +759,20 @@
 011010 AA400              SECTION.
 011020 AA401.
 011590	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Help,"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F2" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 011600		     " Order no./ "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011610		     "F3" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+011610		     "F3" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
 011620		     " Account no./ "
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F4" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F4" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
                      " From specified date Lookup" 
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 011110 AA405.
@@ -979,20 +1019,22 @@
        BA05.
 016080       DISPLAY CLR-SCREEN.
 016090       DISPLAY S02.
-016100       DISPLAY "P" AT 1212 WITH FOREGROUND-COLOR 14
+016100	     DISPLAY "P" AT 1212
+		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
                      "rint a picking slip or " WITH FOREGROUND-COLOR 7
-                     "E" WITH FOREGROUND-COLOR 14
+		     "E" WITH FOREGROUND-COLOR 6 HIGHLIGHT
                      "xit > <" WITH FOREGROUND-COLOR 7.
              MOVE " "            TO WS-OPTION.
 016150 BA10.
-016160       ACCEPT WS-OPTION AT 1242 
-                    WITH FOREGROUND-COLOR 15 UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-                                BY VALUE WS-LENGTH
-                                RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "P" OR "E")
-               GO TO BA10.
-      *                            E X I T   P R O G R A M
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "P" OR "E"
+016160	       ACCEPT WS-OPTION AT 1242
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+      * 			   E X I T   P R O G R A M
 016240     IF WS-OPTION = "E"
 016250         GO TO AZ000-EOJ.
       *                            P R I N T   P I C K I N G   S L I P
@@ -1337,9 +1379,8 @@
 				 TO WS-ERR-MES.
 029660 BC55.
 	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-029730	   IF NOT (WS-OPTION = "S" OR "E" OR "N" OR "P")
-029740         GO TO BC55.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "S" OR "E" OR "N" OR "P".
 029750     IF WS-OPTION = "E"
 029760         GO TO BC05.
 029770     IF WS-OPTION = "S"
@@ -1377,8 +1418,9 @@
 	       OPEN OUTPUT PRNDSK
 	       CALL X"91" USING X91-RES X91-FUN PRNDSK.
 	     DISPLAY CLEAR-L25.
-025200       DISPLAY "Printing Picking Slip" AT 2502 WITH
-025210		      BACKGROUND-COLOR 3 FOREGROUND-COLOR 14 BLINK.
+025200	     DISPLAY "Printing Picking Slip" AT 2502
+		      WITH BACKGROUND-COLOR 3
+			   FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
 025220       MOVE ZERO           TO WS-SALKEY.
 025230       PERFORM AY60 THRU AY999.
       *
@@ -1562,8 +1604,9 @@
       *    ****    R E A D   D E T A I L S   A N D   P R I N T   S L I P
       *
        BD65.
-025200      DISPLAY "Printing Picking Slip" AT 2502 WITH
-025210		     BACKGROUND-COLOR 3 FOREGROUND-COLOR 14 BLINK.
+025200	    DISPLAY "Printing Picking Slip" AT 2502
+		     WITH BACKGROUND-COLOR 3
+			  FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
 025220       MOVE ZERO           TO WS-SALKEY.
 025230       PERFORM AY60 THRU AY999.
       *
@@ -1689,9 +1732,8 @@
 	     MOVE "Advance to next page (Y/N)  [Y]"
 				 TO WS-ERR-MES.
              MOVE "Y"            TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-029730	   IF NOT (WS-OPTION = "N" OR "Y")
-               GO TO BD110.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
            IF WS-OPTION = "N"
 	       IF LINAGE-COUNTER OF PRNDSK < (WS-PRN-LENGTH - 8)
                    MOVE 2        TO REP-LN
@@ -1954,7 +1996,7 @@
 		   GO TO ZA205
 	   ELSE
 	       DISPLAY "Waiting for printer response" AT 1412
-			WITH FOREGROUND-COLOR 14 BLINK.
+			WITH FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
 049880	     OPEN OUTPUT PRNREP.
 	     CALL X"91" USING X91-RES X91-FUN PRNREP.
 	     MOVE WS-10CPI	 TO PRN-DETAIL2.
@@ -1980,22 +2022,9 @@
 				 TO W02-SORDER
 		   OPEN I-O SORDER.
 051530	     GO TO ZA999.
-      *    *************************************************************
-      *    ****   F I L E   L I M I T	E X C E E D E D
-      * 	  (Config.sys Dos/Win/Windows 95/98/NT/2000)
-      * 	  (Config.nt Windows XP)
-      * 	  (System.ini Windows.me)
-      *    *************************************************************
-039780 ZA49.
-039790	     DISPLAY "Too many files OPEN" AT 0708
-039800                WITH FOREGROUND-COLOR 14.
-039810	     DISPLAY "Check the FILES option in CONFIG.SYS (Dos,Windows
-      -		     "3/95/98/NT/2000)" AT 0908.
-	     DISPLAY "CONFIG.NT  (Windows XP)" AT 1034.
-	     DISPLAY "SYSTEM.INI (Windows ME)" AT 1134.
-039820	     DISPLAY "Press any key to continue" AT 1308.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-055330	     GO TO ZA205.
+
+       COPY ZA49.PRO.
+
       *
       *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
       *
@@ -2004,22 +2033,22 @@
 040060	     MOVE SPACES	 TO WS-MD-LINE.
 
 040090 ZA60.
-040130	     MOVE WS-G1 	 TO WS-TCA (WS-S1)   WS-BCA (WS-S1).
+040130	     MOVE WS-G1 	 TO WS-TCA(WS-S1) WS-BCA(WS-S1).
 040150	   IF WS-S1 < 80
-040160         ADD 1 TO WS-S1
-040170         GO TO ZA60.
-040220	     MOVE WS-G14	 TO WS-TCA   (1)  WS-BCA   (1).
-040260	     MOVE WS-G13	 TO WS-TCA   (80) WS-BCA   (80).
-040300	     MOVE WS-G2 	 TO WS-TCA   (10) WS-TCA   (17)
-040360                              WS-TCA   (47) WS-TCA   (56)
-040370				    WS-TCA   (59) WS-TCA   (68).
-040400	     MOVE WS-G3 	 TO WS-MCA   (1)  WS-MCA   (80)
-040470                              WS-MCA   (10) WS-MCA   (17)
-040480				    WS-MCA   (45) WS-MCA   (56)
-040490				    WS-MCA   (59) WS-MCA   (68).
-040550	     MOVE WS-G4 	 TO WS-BCA   (10) WS-BCA   (17)
-040610                              WS-BCA   (47) WS-BCA   (56)
-040620				    WS-BCA   (59) WS-BCA   (68).
+040160	       ADD 1		 TO WS-S1
+040170	       GO TO ZA60.
+040220	     MOVE WS-G14	 TO WS-TCA(1)  WS-BCA(1).
+040260	     MOVE WS-G13	 TO WS-TCA(80) WS-BCA(80).
+040300	     MOVE WS-G2 	 TO WS-TCA(10) WS-TCA(17)
+040360				    WS-TCA(47) WS-TCA(56)
+040370				    WS-TCA(59) WS-TCA(68).
+040400	     MOVE WS-G3 	 TO WS-MCA(1)  WS-MCA(80)
+040470				    WS-MCA(10) WS-MCA(17)
+040480				    WS-MCA(45) WS-MCA(56)
+040490				    WS-MCA(59) WS-MCA(68).
+040550	     MOVE WS-G4 	 TO WS-BCA(10) WS-BCA(17)
+040610				    WS-BCA(47) WS-BCA(56)
+040620				    WS-BCA(59) WS-BCA(68).
 040650	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
 	   IF LS-USER = LS-SYS-ID
 	       MOVE "SupervisorÄ"  TO WS-WRKHD
@@ -2028,13 +2057,8 @@
 	       MOVE LS-USER	   TO WS-WRKST.
 
 051540 ZA200.
-051550       DISPLAY "Files locked - Try later" AT 2312
-051560                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-051570       DISPLAY "Press any key" AT 2512 
-051580		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-051590	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
 
        ZA205.
 051600       EXIT PROGRAM.
@@ -2079,38 +2103,28 @@
 		     "A" WITH FOREGROUND-COLOR 7 HIGHLIGHT
 		     "bort".
        ZA212.
-	     ACCEPT WS-OPTION AT 2334
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     IF NOT (WS-OPTION = "A" OR "R")
-		 GO TO ZA212.
-	     IF WS-OPTION = "A"
-		 MOVE 1 	 TO WS-ERROR
-		 GO TO ZA215.
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "A" OR "R"
+	       ACCEPT WS-OPTION AT 2334
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+	   IF WS-OPTION = "A"
+		MOVE 1		 TO WS-ERROR
+		GO TO ZA215.
 	       GO TO ZA210.
+
        ZA215.
 	     EXIT.
+
 051610 ZA999.
 051620       EXIT.
 
 051640 I-O-ERRORS      SECTION	9.
-051650 OPEN-ERROR.
-051660       DISPLAY CLR-SCREEN.
-051670       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-051680       PERFORM DISPLAY-FILE-NAME.
-051690
-051700 READ-ERROR.
-051710       DISPLAY CLR-SCREEN.
-051720       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-051730       PERFORM DISPLAY-FILE-NAME.
-051740
-051750 WRITE-ERROR.
-051760       DISPLAY CLR-SCREEN.
-051770       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-051730       PERFORM DISPLAY-FILE-NAME.
-051780
+
+       COPY ERRORS.PRO.
 
 051790 DISPLAY-FILE-NAME.
 051840     IF WS-F-ERROR = 2
@@ -2150,34 +2164,8 @@
 041340         MOVE ZERO         TO WS-KEY
 	       MOVE STK-CODE	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY.
-052310     IF WS-STATUS = "10"
-052320         MOVE "End of FILE" TO WS-STAT-MESSAGE
-052330     ELSE
-052340     IF WS-STATUS = "22"
-052350         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-052360     ELSE
-052370     IF WS-STATUS = "23"
-052380         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-052390     ELSE
-052400     IF WS-STATUS = "24"
-052410         MOVE "DISK full" TO WS-STAT-MESSAGE
-052420     ELSE
-052430     IF WS-STATUS = "30"
-052440         MOVE "DISK error" TO WS-STAT-MESSAGE
-052450     ELSE
-052460     IF WS-STATUS = "94"
-052470         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-052480       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-052490       DISPLAY "Status " AT 1212 
-052500                WS-STATUS WITH FOREGROUND-COLOR 11
-052510               ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-052520     IF WS-STATUS NOT = "94" 
-052530         DISPLAY "Key    " AT 1412 
-052540                  WS-KEY WITH FOREGROUND-COLOR 11
-052550         DISPLAY "Reverse backup or contact program Support"
-052560                  AT 1612.
-052570         DISPLAY "Please make a note of these details" AT 1812.
-052580       STOP RUN.
+
+       COPY DISPERR.PRO.

@@ -12,7 +12,7 @@
       *                                                                *
       *     B U S I N E S S  S Y S T E M  N E W   C O M P A N Y        *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -35,6 +35,11 @@
       * 		  via the Windows print using the relavent     *
       * 		  print API's supplied with MF COBOL. Allow    *
       * 		  BMP files in APACFILE (INVBMP & STMBMP).     *
+      * 							       *
+      * August 2011 - Amended MEMO file to have 6 character Account    *
+      * 	      Reference code.Increased sequence to 4 digits.   *
+      * 	      Included Recovery routines and file locking for  *
+      * 	      this program. (Creditors)			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -1339,6 +1344,10 @@
 	     PERFORM APAC-WRITE-APACFILE.
 	     MOVE "LEDTRN"	 TO APAC-KEY.
 	     MOVE "LTRN_XXX.WRK" TO APAC-NAME.
+	     MOVE ZERO		 TO APAC-FILE.
+	     PERFORM APAC-WRITE-APACFILE.
+	     MOVE "MEMCRD"	 TO APAC-KEY.
+	     MOVE "CRDM_XXX.WRK" TO APAC-NAME.
 	     MOVE ZERO		 TO APAC-FILE.
 	     PERFORM APAC-WRITE-APACFILE.
 	     MOVE "MEMDEB"	 TO APAC-KEY.

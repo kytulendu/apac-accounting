@@ -13,7 +13,7 @@
       *                                                                *
       *     U S E R   L O G I N   A N D   L O G O U T	P R O G R A M  *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - January 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.

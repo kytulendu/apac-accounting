@@ -13,7 +13,7 @@
       *                                                                *
       *     C R E D I T O R   E X P O R T   P R O G R A M	       *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (CSS).
 000040 DATE-WRITTEN.   SEPTEMBER 1992.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

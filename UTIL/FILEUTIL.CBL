@@ -93,6 +93,7 @@
 000720 77  WS-SECKEY	   PIC	9(04)	 COMP-5.
 000820 77  WS-SHARED	   PIC	9(04)	 COMP-5 VALUE 1.
 000960 77  WS-ERROR	   PIC	9(01).
+000960 77  WS-ERRLOC	   PIC	9(01).
 000930 77  WS-OPTION	   PIC	X(01).
 000930 77  WS-LOCAL-DRIVE  PIC	X(01).
        77  WS-SPACE	   PIC	X(54) VALUE SPACES.
@@ -181,8 +182,8 @@
       *  available as a special register. This is only required for the
       *  32 bit system.
       *
-       01  WS-SPECIAL-REGISTER.
-	   03  LIN	       PIC S9(04) COMP VALUE ZERO.
+      * 01  WS-SPECIAL-REGISTER.
+      *	   03  LIN	       PIC S9(04) COMP VALUE ZERO.
 
 000210 01  WS1-CURSOR.
 000220     03  CPOS            PIC  9(04) VALUE ZERO.
@@ -748,7 +749,8 @@
 007730 PROCEDURE DIVISION.
 007740 AA000-MAIN              SECTION.
 007750 AA000-INIT.
-	     MOVE ZERO		 TO WS-ERROR.
+	     MOVE ZERO		 TO WS-ERROR
+				    WS-ERRLOC.
 	     PERFORM AB000.
 	   IF WS-ERROR = 9
 	       GO TO AA99.
@@ -1065,13 +1067,16 @@
 	       GO TO AC25.
 
        AC20.
-	     MOVE SPACES	 TO WS-ERR-MES.
-006260	     STRING "Invalid or file not on disk - "
-		     DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
+      *	     MOVE SPACES	 TO WS-ERR-MES.
+006260*	     STRING "Invalid or file not on disk - "
+      *		     DELIMITED SIZE
+      *		     WS-STATUS DELIMITED SIZE
+      *		     INTO WS-ERR-MES.
+      *	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
+006370*	     STOP RUN.
+	     MOVE "System files not at current Location"
+				 TO SEC-COMP.
+	     MOVE 1		 TO WS-ERRLOC.
 
        AC25.
 	     DISPLAY SEC-COMP AT 1425
@@ -1084,6 +1089,8 @@
 		     APACFIDS
 		     SECUR
 	       GO TO AC00.
+	   IF WS-ERRLOC = 1
+	       GO TO AC99.
 	     OPEN INPUT NETWORK.
 	   IF NOT (WS-STATUS = "00")
 	       GO TO AC20.
@@ -1342,9 +1349,10 @@
 001980 AD85.
 001990	     PERFORM AD45.
 	   IF LIN > 4
-	       MOVE LIN 	 TO CLIN
-	       MOVE 1		 TO CCOL
-002000	       DISPLAY W43-DET (LIN) AT CPOS
+      *	       MOVE LIN 	 TO CLIN
+      *	       MOVE 1		 TO CCOL
+002000*	       DISPLAY W43-DET (LIN) AT CPOS
+002000	       DISPLAY (LIN, 1) W43-DET (LIN)
 			WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
 002010	     GO TO AD50.
       *    *************************************************************
@@ -1405,9 +1413,10 @@
 001990	     PERFORM AD45.
 	     PERFORM SAVE-SCREEN-2.
 	   IF LIN > 4
-	       MOVE LIN 	 TO CLIN
-	       MOVE 1		 TO CCOL
-002000	       DISPLAY W43-DET (LIN) AT CPOS
+      *	       MOVE LIN 	 TO CLIN
+      *	       MOVE 1		 TO CCOL
+002000*	       DISPLAY W43-DET (LIN) AT CPOS
+002000	       DISPLAY (LIN, 1) W43-DET (LIN)
 		       WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
 	     PERFORM AD40.
 002010	     GO TO AD50.
@@ -1447,9 +1456,10 @@
        AD130.
 	     CLOSE APACFILE
 		   APACFIDS
-		   NETWORK
-		   SECUR
-		   SHARED.
+		   SECUR.
+	   IF NOT (WS-ERRLOC = 1)
+	       CLOSE NETWORK
+		     SHARED.
 
        AD999.
 	     EXIT.
@@ -1471,8 +1481,10 @@
 	       CLOSE APACFILE
 		     APACFIDS
 		     SECUR
-		     NETWORK
-		     SHARED
+	       IF NOT(WS-ERRLOC = 1)
+		   CLOSE NETWORK
+			 SHARED
+	       END-IF
 	       MOVE "OFFLINE\"   TO W02-L-OR-N
 	       PERFORM AF000
 	       IF WS-ERROR = 9
@@ -1797,8 +1809,9 @@
 	       OPEN I-O APACFILE
 			APACFIDS
 			SECUR
-			NETWORK
-			SHARED.
+	       IF NOT(WS-ERRLOC = 1)
+		   CLOSE NETWORK
+			 SHARED.
 	     GO TO AE999.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Display the I-O error description, status, the record key ³

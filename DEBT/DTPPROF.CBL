@@ -13,7 +13,7 @@
       *                                                                *
       *     D E B T O R	  S A L E S   P E R   A C C O U N T	       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   June 1992.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

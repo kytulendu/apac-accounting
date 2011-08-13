@@ -13,7 +13,7 @@
       *                                                                *
       *     P U R C H A C E S	T R A C K I N G   P R O G R A M	       *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * NB -- To do list:					       *
@@ -25,7 +25,7 @@
 000030 AUTHOR.	       James William Lemmon.
 000040 DATE-WRITTEN.   OCTOBER 2005.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2006 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2006 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

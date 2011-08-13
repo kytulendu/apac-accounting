@@ -15,7 +15,7 @@
       *                                                                *
       *     P O S  -   U S I N G   P R O G R A M M A B L E   K E Y S   *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -31,7 +31,7 @@
 000030 AUTHOR.	       James William Lemmon.
 000040 DATE-WRITTEN.   JUNE 1990.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1287,7 +1287,12 @@
       *    ³ the window. An example of a message request follows:      ³
       *    ³							       ³
       *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
-      *    ³   PERFORM OPT-MESSAGE.				       ³
+      *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
+      *    ³	       other keys are to be tested on exit)	       ³
+      *    ³			     OR 			       ³
+      *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
+      *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
+      *    ³   default option)					       ³
       *    ³							       ³
       *    ³ This would be displayed as:			       ³
       *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
@@ -1299,7 +1304,8 @@
       *    ³							       ³
       *    ³ To display the request message higher or lower (default   ³
       *    ³ is line 13) move the line number to be used to SLIN and   ³
-      *    ³ then PEFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY OPTION.CRT.
@@ -2035,10 +2041,9 @@
 		      WS-WS-HD DELIMITED "  "
 		      " [1]" DELIMITED SIZE
 		      INTO WS-ERR-MES
-	       PERFORM OPT-MESSAGE.
+	       PERFORM OPT-MESSAGE TEST AFTER
+		       UNTIL WS-OPTION = "1" OR "2" OR "3".
 	     MOVE WS-OPTION	 TO WS-PRC.
-017600	   IF NOT (WS-PRC = "1" OR "2" OR "3")
-017610	       GO TO DA10A.
 	   IF WS-PRC = "3"
 018260	       DISPLAY "Enter password" AT 2551
 018270			WITH BACKGROUND-COLOR 3
@@ -3062,11 +3067,14 @@
 			     FOREGROUND-COLOR 6 HIGHLIGHT
 010860	       DISPLAY "'Y' will make stock holding negative" AT 2542
 010870			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-010880	       ACCEPT WS-OPTION AT 2539
-		      WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15 AUTO
-	       CALL "CBL_TOUPPER" USING WS-OPTION
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
+010880	       PERFORM TEST AFTER
+		       UNTIL WS-OPTION = "Y" OR "N"
+		 ACCEPT WS-OPTION AT 2539
+			WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15 AUTO
+		 CALL "CBL_TOUPPER" USING WS-OPTION
+				    BY VALUE WS-LENGTH
+				    RETURNING WS-STATUS
+	       END-PERFORM
 010940	       DISPLAY CLEAR-L25
 010950         IF WS-OPTION = "N"
 022040		   MOVE W10-QNT  TO W10-REORD
@@ -3230,9 +3238,8 @@
       *    ****    M U S T   T H E   L A S T   E N T R Y   B E  
       *            A C C E P T E D.
       *    *************************************************************
-	     PERFORM OPT-MESSAGE.
-011900	   IF NOT (WS-OPTION = "A" OR "C")
-011910	       GO TO DA45C.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "A" OR "C".
 011930     IF WS-OPTION = "C"
 011940	       DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
 				WITH FOREGROUND-COLOR 3
@@ -3510,9 +3517,8 @@
 	     MOVE SPACE 	 TO WS-OPTION.
 
 012150 DA51.
-	     PERFORM OPT-MESSAGE.
-012220	   IF NOT (WS-OPTION = "P" OR "A" OR "C" OR "M" OR "*")
-012230	       GO TO DA50.
+	     PERFORM OPT-MESSAGE
+		     UNTIL WS-OPTION = "P" OR "A" OR "C" OR "M" OR "*".
 023780     IF WS-OPTION = "M"
 023790         ADD 1             TO WS-LAST
 023800	       GO TO DA15.
@@ -3769,9 +3775,8 @@
 024810	     MOVE "'C'orrect or 'R'ekey payment  [C]"
 				 TO WS-ERR-MES.
 012950 DA75.
-	     PERFORM OPT-MESSAGE.
-013020	   IF NOT (WS-OPTION = "C" OR "R")
-013030	       GO TO DA74.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "R".
 013050     IF WS-OPTION = "R"
 013060         GO TO DA65.           
 
@@ -3878,10 +3883,9 @@
 		    WS-OPTION DELIMITED SIZE
 		    "]" DELIMITED SIZE
 			     INTO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N".
 	     MOVE WS-OPTION	 TO WS-PRNINV.
-	   IF NOT (WS-PRNINV = "Y" OR "N")
-	       GO TO DA79-LOOP.
       *    *************************************************************
       *    ****    P R O C E S S   T H E   S A L E
       *    *************************************************************
@@ -5036,9 +5040,8 @@
 018110	     MOVE "Margin less than allowed - Override Y/N?"
 				 TO WS-ERR-MES.
 	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-015860	   IF NOT (WS-OPTION = "N" OR "Y")
-015870         GO TO DA115.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
 015880     IF WS-OPTION = "N"
 015890	       MOVE 1		 TO WS-ERROR
 015900         GO TO DA120.
@@ -5409,9 +5412,8 @@
 043780	     MOVE "Are you sure Y/N?"
 				 TO WS-ERR-MES.
 030880	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-030970	   IF NOT (WS-OPTION = "N" OR "Y")
-030980	       GO TO DA225.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
 031000     IF WS-OPTION = "N"
 	       PERFORM RESTORE-SCREEN-2
 031010	       GO TO DA210.
@@ -5764,10 +5766,9 @@
       *    ****    Must the Name and VAT number of the purchaser be
       * 	   data captured and printed on the cash slip.
       *    *************************************************************
-	     PERFORM OPT-MESSAGE.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N".
 	     MOVE WS-OPTION	 TO WS-CLNT-VAT.
-	   IF NOT (WS-CLNT-VAT = "Y" OR "N")
-	       GO TO DA405-LOOP.
 	   IF WS-CLNT-VAT = "N"
 	       GO TO DA999.
 	     PERFORM SAVE-SCREEN-3.
@@ -7646,22 +7647,8 @@
 	       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
 	     UNLOCK PARAM.
 	     GO TO ZA999.
-      *    *************************************************************
-      *    ****   F I L E   L I M I T	E X C E E D E D
-      * 	  (Config.sys Dos/Win/Windows 95/98/NT/2000)
-      * 	  (Config.nt Windows XP)
-      * 	  (System.ini Windows.me)
-      *    *************************************************************
-055270 ZA49.
-039790	     DISPLAY "Too many files OPEN" AT 0708
-039800		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-039810	     DISPLAY "Check the FILES option in CONFIG.SYS (Dos,Windows
-      -		     "3/95/98/NT)" AT 0908.
-	     DISPLAY "CONFIG.NT  (Windows XP/2000)" AT 1034.
-	     DISPLAY "SYSTEM.INI (Windows ME)" AT 1134.
-039820	     DISPLAY "Press any key to continue" AT 1308.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-055330	     GO TO ZA205.
+
+       COPY ZA49.PRO.
 
        ZA50.
 041850	   IF WS-F-ERROR = 36
@@ -7676,39 +7663,18 @@
              EXIT PROGRAM.
 
 022010 ZA200.
-022020       DISPLAY "Files locked - Try later" AT 2312
-022030		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-022040       DISPLAY "Press any key" AT 2512 
-022050		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
-022060	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
        ZA205.
              EXIT PROGRAM.
+
 022090 ZA999.
 022100       EXIT.
       /
 022110 ZB000-ERROR	     SECTION 92.
 
-051650 OPEN-ERROR.
-051660       DISPLAY CLR-SCREEN.
-051670	     DISPLAY "Open error" AT 0812
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-051680       PERFORM DISPLAY-FILE-NAME.
-051690
-051700 READ-ERROR.
-051710       DISPLAY CLR-SCREEN.
-051720	     DISPLAY "Read error" AT 0812
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-051730       PERFORM DISPLAY-FILE-NAME.
-051740
-051750 WRITE-ERROR.
-051760       DISPLAY CLR-SCREEN.
-051770	     DISPLAY "Write error" AT 0812
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-051730       PERFORM DISPLAY-FILE-NAME.
-051780
+       COPY ERRORS.PRO.
 
 051790 DISPLAY-FILE-NAME.
 051800     IF WS-F-ERROR = 1
@@ -7756,10 +7722,6 @@
 052300         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
-041860	       MOVE W02-SHARED	 TO WS-FILE
-041870	       MOVE WS-SHARED	 TO WS-KEY
-041840     ELSE
 041850	   IF WS-F-ERROR = 34
 041860         MOVE W02-PSLIP    TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
@@ -7769,7 +7731,11 @@
 041860         MOVE W02-CHEQUE   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
                MOVE CHQ-TR-NUMBER
-                                 TO WS-KEYX
+				 TO WS-KEYX
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE
 041850	   IF WS-F-ERROR = 38
 041860	       MOVE W02-SLIP	 TO WS-FILE
@@ -7790,37 +7756,5 @@
 041860	       MOVE W02-POSPLU	 TO WS-FILE
 041870	       MOVE ZERO	 TO WS-KEY
 	       MOVE PLU-KEY	 TO WS-KEYX.
-052310     IF WS-STATUS = "10"
-052320	       MOVE "End of FILE"
-				 TO WS-STAT-MESSAGE
-052330     ELSE
-052340     IF WS-STATUS = "22"
-052350	       MOVE "Duplicate record number"
-				 TO WS-STAT-MESSAGE
-052360     ELSE
-052370     IF WS-STATUS = "23"
-052380	       MOVE "Invalid record number"
-				 TO WS-STAT-MESSAGE
-052390     ELSE
-052400     IF WS-STATUS = "24"
-052410	       MOVE "DISK full"  TO WS-STAT-MESSAGE
-052420     ELSE
-052430     IF WS-STATUS = "30"
-052440         MOVE "DISK error" TO WS-STAT-MESSAGE
-052450     ELSE
-052460     IF WS-STATUS = "94"
-052470	       MOVE "FILE locked"
-				 TO WS-STAT-MESSAGE.
-052480       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-052490       DISPLAY "Status " AT 1212 
-052500                WS-STATUS WITH FOREGROUND-COLOR 11
-052510		     ": " WS-STAT-MESSAGE
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-052520     IF WS-STATUS NOT = "94" 
-052530         DISPLAY "Key    " AT 1412 
-052540                  WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-052550         DISPLAY "Reverse backup or contact program Support"
-052560                  AT 1612.
-052570         DISPLAY "Please make a note of these details" AT 1812.
-052580       STOP RUN.
+
+       COPY DISPERR.PRO.

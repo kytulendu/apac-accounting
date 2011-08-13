@@ -13,7 +13,7 @@
       *                                                                *
       *     S T O C K	A M E N D   E X I S T I N G   R E C O R D      *
       *                                                                *
-      *     VERSION 8.14.02 - January 2010			       *
+      *     VERSION 8.15.00 - April 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -43,7 +43,7 @@
 000030 AUTHOR.	       J.W.LEMMON.
 000040 DATE-WRITTEN.   JANUARY 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -632,6 +632,9 @@
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
 007740 AA000-MAIN	       SECTION.
 007750 AA000-INIT.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      * 	       Check the security level of the USER.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 003240	   IF LS0-STLEV < 2
 	       MOVE "Not Authorised"
 				 TO WS-ERR-STRING
@@ -2019,7 +2022,7 @@
 020820       MOVE ZERO           TO W10-MCOST.
 020830	     PERFORM BC63 THRU BC99.
 	   IF WS-INDB = 1
-	       PERFORM BC200 THRU BC210
+	       PERFORM BC200 THRU BC210.
 020960	     PERFORM AY70 THRU AY999.
       *
       *    ****    C H E C K   F O R   C A S E S   O R	 P A C K S
@@ -2898,7 +2901,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE SME-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840     ELSE

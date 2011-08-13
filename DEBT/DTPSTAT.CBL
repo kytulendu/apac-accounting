@@ -13,7 +13,7 @@
       *                                                                *
       *    D E B T O R ' S   C H A N G E   D A T E S   P R O G R A M   *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -33,7 +33,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   April 2005.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2005 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2005 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

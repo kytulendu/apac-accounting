@@ -13,7 +13,7 @@
       *                                                                *
       *  D E B T O R ' S   S A L E S   P E R   D E P T A R T M E N T   *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.01 - July 2011 			       *
       *								       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   MAY 2010.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2010 -
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -860,7 +860,12 @@
       *    Ё the window. An example of a message request follows:      Ё
       *    Ё							       Ё
       *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      Ё
-      *    Ё   PERFORM OPT-MESSAGE.				       Ё
+      *    Ё   PERFORM OPT-MESSAGE (Use this format if function or any Ё
+      *    Ё	       other keys are to be tested on exit)	       Ё
+      *    Ё			     OR 			       Ё
+      *    Ё   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       Ё
+      *    Ё   (Use TEST AFTER if WS-OPTION is preloaded with a        Ё
+      *    Ё   default option)					       Ё
       *    Ё							       Ё
       *    Ё This would be displayed as:			       Ё
       *    Ё	здддддддддддддддддддддддддддддддддддддддддддддддд©     Ё
@@ -872,7 +877,8 @@
       *    Ё							       Ё
       *    Ё To display the request message higher or lower (default   Ё
       *    Ё is line 13) move the line number to be used to SLIN and   Ё
-      *    Ё then PEFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё then PERFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё (The UNTIL and TEST AFTER options also apply here)        Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY OPTION.CRT.
@@ -1036,9 +1042,8 @@
 	     MOVE ZERO		 TO WS-ERROR.
 	     MOVE "Print 'D'etail or 'T'otals (D/T) [ ]"
 				 TO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE.
-014920	   IF NOT (WS-OPTION = "D" OR "T")
-014930	       GO TO BA08.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "D" OR "T".
 	     MOVE WS-OPTION	 TO WS-RTYPE.
 	     MOVE W15-SMM	 TO WS-CRDX.
 	     MOVE W15-START	 TO W22-DTE1.
@@ -1080,7 +1085,7 @@
 000840	     PERFORM READ-CARDEX-NEXT THRU READ-CARDEX-EXIT.
 	   IF WS-F-ERROR = 43
 	       GO TO BA15.
-	   IF NOT (CRD-DEPT = W10-LEDG)
+	   IF NOT(CRD-DEPT = W10-LEDG)
 	       GO TO BA10.
 	   IF CRD-DTE > W15-E-YMD
 	       GO TO BA15.
@@ -1106,11 +1111,11 @@
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	   IF CRD-QNT < ZERO
 	       MOVE "N" 	 TO WS-WRT
-	       IF NOT (CRD-SELL < ZERO)
+	       IF NOT(CRD-SELL < ZERO)
 		   MULTIPLY -1	 BY CRD-SELL
 		   MOVE "Y"	 TO WS-WRT
 	       END-IF
-	       IF NOT (CRD-COST < ZERO)
+	       IF NOT(CRD-COST < ZERO)
 		   MULTIPLY -1	 BY CRD-COST
 		   MOVE "Y"	 TO WS-WRT
 	       END-IF
@@ -1231,7 +1236,7 @@
       *	     MOVE SPACE 	 TO WS-OPTION.
       *	     MOVE 14		 TO SLIN.
       *	     PERFORM OPT-SETUP THRU OPT-EXIT.
-050260*	   IF NOT (WS-OPTION = "P" OR "S")
+050260*	   IF NOT(WS-OPTION = "P" OR "S")
 050270*	       GO TO BA35.
 	   IF WS-OPTION = "P"
       *
@@ -1264,7 +1269,7 @@
 	       GO TO BA45.
 	   IF CRD-DTE > W15-E-YMD
 	       GO TO BA45.
-	   IF NOT (CRD-DEPT = W10-LEDG)
+	   IF NOT(CRD-DEPT = W10-LEDG)
 	       GO TO BA40.
 	     DISPLAY CRD-EXT-CODE AT 1436
 		     WITH BACKGROUND-COLOR 5
@@ -1277,11 +1282,11 @@
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	   IF CRD-QNT < ZERO
 	       MOVE "N" 	 TO WS-WRT
-	       IF NOT (CRD-SELL < ZERO)
+	       IF NOT(CRD-SELL < ZERO)
 		   MULTIPLY -1	 BY CRD-SELL
 		   MOVE "Y"	 TO WS-WRT
 	       END-IF
-	       IF NOT (CRD-COST < ZERO)
+	       IF NOT(CRD-COST < ZERO)
 		   MULTIPLY -1	 BY CRD-COST
 		   MOVE "Y"	 TO WS-WRT
 	       END-IF
@@ -1341,7 +1346,7 @@
       *	     MOVE SPACE 	 TO WS-OPTION.
       *	     MOVE 14		 TO SLIN.
       *	     PERFORM OPT-SETUP THRU OPT-EXIT.
-050260*	   IF NOT (WS-OPTION = "P" OR "S")
+050260*	   IF NOT(WS-OPTION = "P" OR "S")
 050270*	       GO TO BA50.
 	   IF WS-OPTION = "P"
       *
@@ -1565,7 +1570,7 @@
 	       PERFORM CALL-PRINTUTL
 014990	       GO TO BB999.
 	     MOVE DEL-DTE	 TO W95-DTE.
-	   IF NOT (WS-PRINTER = "S")
+	   IF NOT(WS-PRINTER = "S")
 	       DISPLAY DEL-SMAN AT 1227
 		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
 			    BACKGROUND-COLOR 5
@@ -1604,7 +1609,7 @@
 014990	       GO TO BB999.
 012990	     MOVE SPACES	 TO R-DETAIL.
 	     PERFORM READ-DEALER-NEXT THRU READ-DEALER-EXIT.
-	   IF NOT (WS-F-ERROR = 44)
+	   IF NOT(WS-F-ERROR = 44)
 	       IF DEL-ACCNT = W35-ACNO
 		   GO TO BB20.
 	     PERFORM BB25.
@@ -1824,7 +1829,7 @@
 	       MOVE 99		 TO WS-ADVANCE
 	       PERFORM CALL-PRINTUTL
 014990	       GO TO BB999.
-	   IF NOT (WS-PRINTER = "S")
+	   IF NOT(WS-PRINTER = "S")
 	       DISPLAY DET-ACCNT AT 1227
 		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
 			    BACKGROUND-COLOR 5
@@ -1884,6 +1889,8 @@
        BE000	       SECTION 53.
        BE00.
 
+       BE999.
+	     EXIT.
 
 
 
@@ -1902,44 +1909,10 @@
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	   S e t   u p	 t h e	 F U N C T I O N   k e y s     Ё
+      *    Ё  Setup various keys and the mouse for use with menus and  Ё
+      *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		       ESC, F1 to F10 keys		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		    PAGE-UP and PAGE-DOWN keys		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		   A C T I V A T E   M O U S E		       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	       Set MOUSE key to act as FUNCTION key	       Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+	     COPY FUNCTION.PRO.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	    Setup the file ID's including path names           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
@@ -1967,6 +1940,9 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    ****       S A L E S	  -   C A R D E X   F I L E	    ****
+      *    *************************************************************
 	     MOVE "CARDEX"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-CARDEX.
@@ -2051,6 +2027,9 @@
 050210	       PERFORM OPEN-ERROR.
 	     CLOSE DEATOT.
 	     OPEN I-O DEATOT.
+      *    *************************************************************
+      *    ****       S A L E S	  -   C A R D E X   F I L E	    ****
+      *    *************************************************************
 053830	     OPEN I-O CARDEX.
 053840	   IF RUNTIME-ERROR
 053850         IF FLE-LOCKED
@@ -2067,7 +2046,7 @@
 	       IF WS-STATUS = "39"
 038770		   GO TO ZA50
 	       ELSE
-	       IF NOT (WS-STATUS = "41")
+	       IF NOT(WS-STATUS = "41")
 053920		   PERFORM OPEN-ERROR.
 054300	     OPEN I-O STOCK.
 054310     IF RUNTIME-ERROR
@@ -2085,7 +2064,7 @@
 	       IF WS-STATUS = "39"
 038770		   GO TO ZA50
 	       ELSE
-	       IF NOT (WS-STATUS = "41")
+	       IF NOT(WS-STATUS = "41")
 054430		   PERFORM OPEN-ERROR.
 044780	     GO TO ZA999-EXIT.
 
@@ -2106,23 +2085,23 @@
 041220       MOVE 1              TO WS-S1.
 
 041240 ZA60.
-041250       MOVE WS-G1          TO WS-TCHR (WS-S1) WS-BCHR (WS-S1).
-             MOVE WS-G8          TO WS-TCH  (WS-S1) WS-BCH  (WS-S1).
+041250	     MOVE WS-G1 	 TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
+	     MOVE WS-G8 	 TO WS-TCH(WS-S1)  WS-BCH(WS-S1).
 041260     IF WS-S1 < 80
 041270         ADD 1             TO WS-S1
 041280         GO TO ZA60.
-             MOVE WS-G9          TO WS-TCH  (1).
-             MOVE WS-G10         TO WS-TCH  (80).
-             MOVE WS-G11         TO WS-BCH  (1).
-             MOVE WS-G12         TO WS-BCH  (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
-             MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-021930       MOVE WS-G2          TO WS-TCHR (8)  WS-TCHR (49)
-021940                              WS-TCHR (61) WS-TCHR (72).
-021970       MOVE WS-G4          TO WS-BCHR (8)  WS-BCHR (49)
-021980                              WS-BCHR (61) WS-BCHR (72).
-             MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
+	     MOVE WS-G9 	 TO WS-TCH(1).
+	     MOVE WS-G10	 TO WS-TCH(80).
+	     MOVE WS-G11	 TO WS-BCH(1).
+	     MOVE WS-G12	 TO WS-BCH(80).
+	     MOVE WS-G14	 TO WS-TCHR(1)	WS-BCHR(1).
+	     MOVE WS-G13	 TO WS-TCHR(80) WS-BCHR(80).
+021930	     MOVE WS-G2 	 TO WS-TCHR(8)	WS-TCHR(49)
+021940				    WS-TCHR(61) WS-TCHR(72).
+021970	     MOVE WS-G4 	 TO WS-BCHR(8)	WS-BCHR(49)
+021980				    WS-BCHR(61) WS-BCHR(72).
+	     MOVE WS-G13	 TO WS-TCHR(80) WS-BCHR(80).
+	     MOVE WS-G14	 TO WS-TCHR(1)	WS-BCHR(1).
 	     MOVE "Supervisorд"  TO WS-WRKHD.
 
 055970 ZA200.
@@ -2170,7 +2149,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DME-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE

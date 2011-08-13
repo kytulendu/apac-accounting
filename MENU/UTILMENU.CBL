@@ -13,7 +13,7 @@
       *                                                                *
       *     U T I L I T I E S	M E N U   P R O G R A M 	       *
       *                                                                *
-      *     VERSION 8.13.07 - January 2008			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -59,7 +59,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1191,11 +1191,21 @@
 	   03	       COLUMN 49 BACKGROUND-COLOR 7
 				 FOREGROUND-COLOR 7
 				 HIGHLIGHT
+				 VALUE "7".
+	   03	       COLUMN 50 BACKGROUND-COLOR 7
+				 FOREGROUND-COLOR 0
+				 VALUE " Bank Details      ³".
+	   03  LINE 17 COLUMN 47 BACKGROUND-COLOR 7
+				 FOREGROUND-COLOR 7 HIGHLIGHT
+				 VALUE "³ ".
+	   03	       COLUMN 49 BACKGROUND-COLOR 7
+				 FOREGROUND-COLOR 7
+				 HIGHLIGHT
 				 VALUE "0".
 	   03	       COLUMN 50 BACKGROUND-COLOR 7
 				 FOREGROUND-COLOR 0
 				 VALUE " Exit              ³".
-	   03  LINE 17 COLUMN 47 BACKGROUND-COLOR 7
+	   03  LINE 18 COLUMN 47 BACKGROUND-COLOR 7
 				 FOREGROUND-COLOR 7 HIGHLIGHT
 				 VALUE "À".
 	   03	       COLUMN 48 BACKGROUND-COLOR 7
@@ -1359,11 +1369,21 @@
 	   03	       COLUMN 49 BACKGROUND-COLOR 7
 				 FOREGROUND-COLOR 7
 				 HIGHLIGHT
+				 VALUE "A".
+	   03	       COLUMN 50 BACKGROUND-COLOR 7
+				 FOREGROUND-COLOR 0
+				 VALUE " Stm Det. Lines USB/WIN ³".
+	   03  LINE 19 COLUMN 47 BACKGROUND-COLOR 7
+				 FOREGROUND-COLOR 7 HIGHLIGHT
+				 VALUE "³ ".
+	   03	       COLUMN 49 BACKGROUND-COLOR 7
+				 FOREGROUND-COLOR 7
+				 HIGHLIGHT
 				 VALUE "0".
 	   03	       COLUMN 50 BACKGROUND-COLOR 7
 				 FOREGROUND-COLOR 0
 				 VALUE " Exit                   ³".
-	   03  LINE 19 COLUMN 47 BACKGROUND-COLOR 7
+	   03  LINE 20 COLUMN 47 BACKGROUND-COLOR 7
 				 FOREGROUND-COLOR 7 HIGHLIGHT
 				 VALUE "À".
 	   03	       COLUMN 48 BACKGROUND-COLOR 7
@@ -3350,12 +3370,12 @@
 	     MOVE 9		 TO SHADE-ROW.
 	     MOVE 49		 TO SHADE-COL.
 	     MOVE 21		 TO SHADE-WIDTH.
-	     MOVE 9		 TO SHADE-LINES.
+	     MOVE 10		 TO SHADE-LINES.
 	     DISPLAY S13.
 	     DISPLAY MENU-INSTRUCT.
 	     PERFORM SCREEN-SHADOW.
 	     MOVE 9		 TO TOP-ROW.
-	     MOVE 15		 TO BOTTOM-ROW.
+	     MOVE 16		 TO BOTTOM-ROW.
 	     MOVE 8		 TO SCREEN-LIN.
 	     MOVE 49		 TO SCREEN-COL.
 	     MOVE 19		 TO STRING-LENGTH.
@@ -3409,7 +3429,7 @@
 	   ELSE
 	   IF DATA-8BIT
 	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 6
+	       IF WS-OPTION < 0 OR > 7
 		   CALL X"E5"
 		   GO TO GB05
 	       END-IF
@@ -3442,13 +3462,16 @@
 	       MOVE "6"		 TO WS-OPTION
 	   ELSE
 	   IF SCREEN-LIN = 15
+	       MOVE "7"		 TO WS-OPTION
+	   ELSE
+	   IF SCREEN-LIN = 16
 	       MOVE "0"		 TO WS-OPTION.
 	   GO TO GB18.
 
        GB16.
 	     PERFORM CLEAR-BLOCK.
 	   IF WS-OPTION = "0"
-	       MOVE 15		 TO SCREEN-LIN
+	       MOVE 16		 TO SCREEN-LIN
 	   ELSE
 	   IF WS-OPTION = "1"
 	       MOVE 9		 TO SCREEN-LIN
@@ -3466,7 +3489,10 @@
 	       MOVE 13		 TO SCREEN-LIN
 	   ELSE
 	   IF WS-OPTION = "6"
-	       MOVE 14		 TO SCREEN-LIN.
+	       MOVE 14		 TO SCREEN-LIN
+	   ELSE
+	   IF WS-OPTION = "7"
+	       MOVE 15		 TO SCREEN-LIN.
 	     PERFORM SAVE-ATTR.
 	     PERFORM MARK-BLOCK.
 
@@ -3476,7 +3502,7 @@
 				RETURNING WS-STATUS.
 	   IF WS-OPTION = "0"
 	       GO TO GB999.
-	   IF WS-OPTION < 1 OR > 6
+	   IF WS-OPTION < 1 OR > 7
 	       CALL X"E5"
 	       GO TO GB05.
 	   IF WS-OPTION = "1"
@@ -3495,7 +3521,10 @@
 	       MOVE "UTP\PRP005" TO PRG-NAME
 	   ELSE
 	   IF WS-OPTION = "6"
-	       MOVE "UTP\PRP006" TO PRG-NAME.
+	       MOVE "UTP\PRP006" TO PRG-NAME
+	   ELSE
+	   IF WS-OPTION = "7"
+	       MOVE "UTP\PRP007" TO PRG-NAME.
 	     PERFORM AA100.
 	     DISPLAY MENU-INSTRUCT.
 	     GO TO GB05.
@@ -3630,12 +3659,12 @@
 	     MOVE 9		 TO SHADE-ROW.
 	     MOVE 49		 TO SHADE-COL.
 	     MOVE 26		 TO SHADE-WIDTH.
-	     MOVE 11		 TO SHADE-LINES.
+	     MOVE 12		 TO SHADE-LINES.
 	     DISPLAY S15.
 	     DISPLAY MENU-INSTRUCT.
 	     PERFORM SCREEN-SHADOW.
 	     MOVE 9		 TO TOP-ROW.
-	     MOVE 17		 TO BOTTOM-ROW.
+	     MOVE 18		 TO BOTTOM-ROW.
 	     MOVE 8		 TO SCREEN-LIN.
 	     MOVE 49		 TO SCREEN-COL.
 	     MOVE 24		 TO STRING-LENGTH.
@@ -3689,7 +3718,8 @@
 	   ELSE
 	   IF DATA-8BIT
 	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 8
+	       IF (WS-OPTION < 0 OR > 8) AND
+		  NOT(WS-OPTION = "A")
 		   CALL X"E5"
 		   GO TO GD05
 	       END-IF
@@ -3728,13 +3758,16 @@
 	       MOVE "8"		 TO WS-OPTION
 	   ELSE
 	   IF SCREEN-LIN = 17
+	       MOVE "A"		 TO WS-OPTION
+	   ELSE
+	   IF SCREEN-LIN = 18
 	       MOVE "0"		 TO WS-OPTION.
 	   GO TO GD18.
 
        GD16.
 	     PERFORM CLEAR-BLOCK.
 	   IF WS-OPTION = "0"
-	       MOVE 17		 TO SCREEN-LIN
+	       MOVE 18		 TO SCREEN-LIN
 	   ELSE
 	   IF WS-OPTION = "1"
 	       MOVE 9		 TO SCREEN-LIN
@@ -3758,7 +3791,10 @@
 	       MOVE 15		 TO SCREEN-LIN
 	   ELSE
 	   IF WS-OPTION = "8"
-	       MOVE 16		 TO SCREEN-LIN.
+	       MOVE 16		 TO SCREEN-LIN
+	   ELSE
+	   IF WS-OPTION = "A"
+	       MOVE 17		 TO SCREEN-LIN.
 	     PERFORM SAVE-ATTR.
 	     PERFORM MARK-BLOCK.
 
@@ -3768,7 +3804,8 @@
 				RETURNING WS-STATUS.
 	   IF WS-OPTION = "0"
 	       GO TO GD999.
-	   IF WS-OPTION < 1 OR > 8
+	   IF (WS-OPTION < 1 OR > 8) AND
+	      (WS-OPTION NOT = "A")
 	       CALL X"E5"
 	       GO TO GD05.
 	   IF WS-OPTION = "1"
@@ -3793,7 +3830,10 @@
 	       MOVE "UTP\PRP026" TO PRG-NAME
 	   ELSE
 	   IF WS-OPTION = "8"
-	       MOVE "UTP\PRP027" TO PRG-NAME.
+	       MOVE "UTP\PRP027" TO PRG-NAME
+	   ELSE
+	   IF WS-OPTION = "A"
+	       MOVE "UTP\PRP028" TO PRG-NAME.
 	     PERFORM AA100.
 	     DISPLAY MENU-INSTRUCT.
 	     GO TO GD05.
@@ -4393,45 +4433,18 @@
 	     MOVE WS-SYS-ID	 TO W02-SYSID.
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+042000	     DISPLAY CLR-SCREEN.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	     COPY FUNCTION.PRO.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	    Setup the file ID's including path names           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -4473,52 +4486,12 @@
 040760       EXIT.
 
 040780 I-O-ERRORS      SECTION  91.
-040790 OPEN-ERROR.
-040800       DISPLAY CLR-SCREEN.
-040810       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-040820       PERFORM DISPLAY-FILE-NAME.
-040830
-040840 READ-ERROR.
-040850       DISPLAY CLR-SCREEN.
-040860       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-040870       PERFORM DISPLAY-FILE-NAME.
-040880
-040890 WRITE-ERROR.
-040900       DISPLAY CLR-SCREEN.
-040910       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-040920       PERFORM DISPLAY-FILE-NAME.
-040930
+
+       COPY ERRORS.PRO.
 
 040950 DISPLAY-FILE-NAME.
 041120*	   IF WS-F-ERROR = 15
 041130*        MOVE WS-PARID	 TO WS-FILE
 041140*        MOVE WS-PARKEY	 TO WS-KEY.
-041350	   IF WS-STATUS = "10"
-041360         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041370     ELSE
-041380     IF WS-STATUS = "22"
-041390         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041400     ELSE
-041410     IF WS-STATUS = "23"
-041420         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041430     ELSE
-041440     IF WS-STATUS = "24"
-041450         MOVE "DISK full" TO WS-STAT-MESSAGE
-041460     ELSE
-041470     IF WS-STATUS = "30"
-041480         MOVE "DISK error" TO WS-STAT-MESSAGE
-041490     ELSE
-041500     IF WS-STATUS = "94"
-041510         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-041520       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-041530       DISPLAY "Status " AT 1212 
-041540                WS-STATUS WITH FOREGROUND-COLOR 11
-041550               ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-041560     IF WS-STATUS NOT = "94" 
-041570         DISPLAY "Key    " AT 1412 
-041580                  WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-041590         DISPLAY "Reverse backup or contact program Support"
-041600                  AT 1612.
-041610         DISPLAY "Please make a note of these details" AT 1812.
-041620       STOP RUN.
+
+       COPY DISPERR.PRO.

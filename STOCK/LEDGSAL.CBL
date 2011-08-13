@@ -14,7 +14,7 @@
       *     S A L E S	P E R	S A L E S   L E D G E R   F O R   A    *
       *     S P E C I F I C   P E R I O D			       *
       *                                                                *
-      *     VERSION 8.09 - July 2003				       *
+      *     VERSION 8.15.00 - April 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -30,7 +30,7 @@
 	   stock item. Invoices are accumulated for the sales and credit notes
 	   are deducted.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2003
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2011
 				     by James William Lemmon.
 
 		   All rights reserved.

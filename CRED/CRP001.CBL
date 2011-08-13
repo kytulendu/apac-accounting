@@ -13,7 +13,7 @@
       *                                                                *
       *     C R E D I T O R   M A I N T E N A N C E   P R O G R A M    *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.                         J.W.LEMMON (CSS).
 000040 DATE-WRITTEN.                   JUNE, 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -582,7 +582,7 @@
       *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 007940 AY000	       SECTION.
 008000 AY07.
-008010       MOVE 07 TO REC-FILE.
+008010	     MOVE 07		 TO REC-FILE.
 008020       MOVE ZERO           TO REC-KEY.
              MOVE WS-ACTION      TO REC-TYPE
            IF WS-ACTION = 0 OR 2
@@ -669,13 +669,13 @@
       *    ****   A R E   A N Y   U P D A T E S   I N	P R O G R E S S
       *
 012750 AY62.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-		   PAR-USR(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES OR
+		  PAR-USR(WS-SUB) = SPACES)
       *
       *    ****   A R E   D E B T O R	O R   S T O C K   F I L E S
       * 	  B E I N G   U P D A T E D
       *
-	       IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	       IF NOT(PAR-PROG(WS-SUB) = SPACES)
 012760		   IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
       *
       *    ****   Y E S   -   S E T   W A I T	P E R I O D
@@ -711,7 +711,7 @@
       *
        AY62-WAIT.
 	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-SUB) = LS-USER)
 	       IF WS-SUB < 24
 		   ADD 1	 TO WS-SUB
 		   GO TO AY62.
@@ -747,7 +747,7 @@
 	     MOVE 1		 TO WS-USUB.
 
        AY72.
-	   IF NOT (PAR-USR(WS-USUB) = LS-USER)
+	   IF NOT(PAR-USR(WS-USUB) = LS-USER)
 	       ADD 1		 TO WS-USUB
 	       GO TO AY72.
 
@@ -758,7 +758,7 @@
 	       ADD 1 WS-USUB	 GIVING WS-SUB
 	   ELSE
 	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
+	   IF NOT(PAR-PROG(WS-SUB) = SPACES)
 	       MOVE PAR-PROG(WS-SUB)
 				 TO PAR-PROG(WS-USUB)
 	       MOVE PAR-USR(WS-SUB)
@@ -780,12 +780,12 @@
 011060       MOVE W15-ACNO       TO P-NUMBER.
 011130       PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
 011140     IF WS-F-ERROR = 3 
-011150         MOVE 1 TO WS-ERROR
+011150	       MOVE 1		 TO WS-ERROR
 011160     ELSE
 011170     IF P-NUMBER NOT = W15-ACNO
-011180         MOVE 2 TO WS-ERROR
+011180	       MOVE 2		 TO WS-ERROR
 011190     ELSE
-011200         MOVE 0 TO WS-ERROR.
+011200	       MOVE 0		 TO WS-ERROR.
 011210 CA160-EXIT.
 011220       EXIT.
       /
@@ -856,7 +856,8 @@
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO CB035.
-012160       ACCEPT S06B.
+012160	     ACCEPT S06B.
+
 012170 CB020.
 	     PERFORM CHECK-CORRECT.
 012250	   IF WS-OPTION = "N"
@@ -877,11 +878,11 @@
 	     CALL "CBL_TOUPPER" USING W15-TAX
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
-	   IF NOT (W15-TAX = "E" OR "I" OR "N")
+	   IF NOT(W15-TAX = "E" OR "I" OR "N")
 	       MOVE "VAT code must be E, I or N"
 				 TO WS-ERR-STRING
 	       GO TO CB035.
-      *	   IF NOT (W15-STM = "O" OR "B")
+      *	   IF NOT(W15-STM = "O" OR "B")
       *	       MOVE "Account type must be O, or B"
       *				 TO WS-ERR-STRING
       *	       GO TO CB035.
@@ -938,26 +939,27 @@
       *
 014670 CE000	     SECTION 50.
 014680 CE00.
-014690       MOVE ZERO TO WS-ERROR.
-014700       MOVE 1 TO WS-S1 WS-S2.
-014710       MOVE 30 TO WS-S3.
-014720       MOVE SPACES TO W40-ADD.
+014690	     MOVE ZERO		 TO WS-ERROR.
+014700	     MOVE 1		 TO WS-S1 WS-S2.
+014710	     MOVE 30		 TO WS-S3.
+014720	     MOVE SPACES	 TO W40-ADD.
 
 014730 CE05.
-014740     IF W15-ACHAR (WS-S3) NOT = SPACE
+014740	   IF NOT(W15-ACHAR(WS-S3) = SPACE)
 014750         GO TO CE10.
 014760     IF WS-S3 > WS-S2
-014770         SUBTRACT 1 FROM WS-S3
+014770	       SUBTRACT 1	 FROM WS-S3
 014780         GO TO CE05.
 
 014790 CE10.
-014800       MOVE W15-ACHAR (WS-S2) TO W40-ACHAR (WS-S1).
+014800	     MOVE W15-ACHAR(WS-S2)
+				 TO W40-ACHAR(WS-S1).
 014810     IF WS-S2 = WS-S3
 014820         GO TO CE15.
-014830       ADD 1 TO WS-S1.
-014840       ADD 1 TO WS-S2.
+014830	     ADD 1		 TO WS-S1.
+014840	     ADD 1		 TO WS-S2.
 014850     IF WS-S1 > 70
-014860         MOVE 1 TO WS-ERROR
+014860	       MOVE 1		 TO WS-ERROR
 014870     ELSE
 014880         GO TO CE10.
 
@@ -965,25 +967,25 @@
 014900     IF WS-ERROR = 1
 014910         GO TO CE20.
 014920     IF WS-S1 < 70
-014930         ADD 1 TO WS-S1
-014940         MOVE "*" TO W40-ACHAR (WS-S1).
+014930	       ADD 1		 TO WS-S1
+014940	       MOVE "*" 	 TO W40-ACHAR(WS-S1).
 
 014950 CE20.
-014960       ADD 1 TO WS-S1.
+014960	     ADD 1		 TO WS-S1.
 
 014970 CE25.
-014980       MOVE 31 TO WS-S2.
-014990       MOVE 60 TO WS-S3.
+014980	     MOVE 31		 TO WS-S2.
+014990	     MOVE 60		 TO WS-S3.
 015000       PERFORM CE05 THRU CE20.
 015010     IF WS-ERROR = 1
 015020         GO TO CE999.
-015030       MOVE 61 TO WS-S2.
-015040       MOVE 90 TO WS-S3.
+015030	     MOVE 61		 TO WS-S2.
+015040	     MOVE 90		 TO WS-S3.
 015050       PERFORM CE05 THRU CE20.
 015060     IF WS-ERROR = 1
 015070         GO TO CE999.
-015080       MOVE 91 TO WS-S2.
-015090       MOVE 120 TO WS-S3.
+015080	     MOVE 91		 TO WS-S2.
+015090	     MOVE 120		 TO WS-S3.
 015100       PERFORM CE05 THRU CE20.
 
 015110 CE999.
@@ -1117,23 +1119,23 @@
 041220       MOVE 1              TO WS-S1.
 021870	     MOVE SPACES	 TO WS-MD-LNE WS-MID-LNE.
 041240 ZA60.
-041250       MOVE WS-G1          TO WS-TCR  (WS-S1) WS-BCR  (WS-S1).
-             MOVE WS-G8          TO WS-TCHR (WS-S1) WS-BCHR (WS-S1)
-                                    WS-TCH  (WS-S1) WS-BCH  (WS-S1).
-041260     IF WS-S1 < 80
-041270         ADD 1             TO WS-S1
-041280         GO TO ZA60.
-021970	     MOVE WS-G4 	 TO WS-BCR  (8)  WS-BCR (50)
-021980                              WS-BCR  (66).
-021950	     MOVE WS-G3 	 TO WS-MCR  (8)  WS-MCR (50)
-021960                              WS-MCR  (66) WS-MCR (1)
-				    WS-MCR  (80).
-051190       MOVE WS-G9          TO WS-TCH  (1).
-051200       MOVE WS-G10         TO WS-TCH  (80).
-051210       MOVE WS-G11         TO WS-BCH  (1).
-051220       MOVE WS-G12         TO WS-BCH  (80).
-051230       MOVE WS-G14         TO WS-TCR  (1)  WS-BCR (1).
-051260       MOVE WS-G13         TO WS-TCR (80)  WS-BCR (80).
+041250	     MOVE WS-G1 	 TO WS-TCR(WS-S1)  WS-BCR(WS-S1).
+	     MOVE WS-G8 	 TO WS-TCHR(WS-S1) WS-BCHR(WS-S1)
+				    WS-TCH(WS-S1)  WS-BCH(WS-S1).
+041260	   IF WS-S1 < 80
+041270	       ADD 1		 TO WS-S1
+041280	       GO TO ZA60.
+021970	     MOVE WS-G4 	 TO WS-BCR(8)  WS-BCR(50)
+021980				    WS-BCR(66).
+021950	     MOVE WS-G3 	 TO WS-MCR(8)  WS-MCR(50)
+021960				    WS-MCR(66) WS-MCR(1)
+				    WS-MCR(80).
+051190	     MOVE WS-G9 	 TO WS-TCH(1).
+051200	     MOVE WS-G10	 TO WS-TCH(80).
+051210	     MOVE WS-G11	 TO WS-BCH(1).
+051220	     MOVE WS-G12	 TO WS-BCH(80).
+051230	     MOVE WS-G14	 TO WS-TCR(1)  WS-BCR(1).
+051260	     MOVE WS-G13	 TO WS-TCR(80) WS-BCR(80).
 	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
 	   IF LS-USER = LS-SYS-ID
 	       MOVE "SupervisorÄ"  TO WS-WRKHD
@@ -1177,7 +1179,7 @@
 041860	       MOVE W02-RECOVER  TO WS-FILE
 041870	       MOVE WS-RECKEY	 TO WS-KEY
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY.
 

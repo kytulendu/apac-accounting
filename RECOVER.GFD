@@ -27,7 +27,7 @@
       * 		       03 = DBFOTO	     112 Bytes
       * 		       04 = DBTRAN	      82 Bytes
       * 		       05 = STOCKF	     512 Bytes
-      * 		       06 = CRDMEM	      68 Bytes
+      * 		       06 = CRDMEM	      70 Bytes
       * 		       07 = CREDIT	     300 Bytes
       * 		       08 = CRTRAN	      86 Bytes
       * 		       09 = GARTEE	     146 Bytes
@@ -121,8 +121,8 @@
 000240         05  REC-STOCKM  PIC  X(190).
 000250	       05  FILLER      PIC  X(560).
 000260     03  REC-DETAIL6 REDEFINES REC-DETAIL.
-000270	       05  REC-CRDMEM  PIC  X(68).
-000280	       05  FILLER      PIC  X(682).
+000270	       05  REC-CRDMEM  PIC  X(70).
+000280	       05  FILLER      PIC  X(680).
 000290     03  REC-DETAIL7 REDEFINES REC-DETAIL.
 000300	       05  REC-CREDIT  PIC  X(300).
 000310	       05  FILLER      PIC  X(450).

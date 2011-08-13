@@ -13,7 +13,7 @@
       *                                                                *
       *     S T O C K	M O D U L E   M E N U	P R O G R A M	       *
       *                                                                *
-      *     VERSION 8.13.08 - August 2008			       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -64,7 +64,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -2408,66 +2408,53 @@
 	       GO TO CC05.
 
        CC15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO CC05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "7"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 16
-	       MOVE "8"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 17
-	       MOVE "0"		 TO WS-OPTION.
+	     EVALUATE SCREEN-LIN
+	       WHEN 9
+		   MOVE "1"	 TO WS-OPTION
+	       WHEN 10
+		   MOVE "2"	 TO WS-OPTION
+	       WHEN 11
+		   MOVE "3"	 TO WS-OPTION
+	       WHEN 12
+		   MOVE "4"	 TO WS-OPTION
+	       WHEN 13
+		   MOVE "5"	 TO WS-OPTION
+	       WHEN 14
+		   MOVE "6"	 TO WS-OPTION
+	       WHEN 15
+		   MOVE "7"	 TO WS-OPTION
+	       WHEN 16
+		   MOVE "8"	 TO WS-OPTION
+	       WHEN 17
+		   MOVE "0"	 TO WS-OPTION
+	       WHEN OTHER
+		   CALL X"E5" CALL X"E5" CALL X"E5"
+		   GO TO CC05
+	     END-EVALUATE.
 	   GO TO CC18.
 
        CC16.
 	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = 0
-	       MOVE 17		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 1
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 2
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 3
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 4
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 5
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 6
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 7
-	       MOVE 15		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = 8
-	       MOVE 16		 TO SCREEN-LIN.
+	     EVALUATE WS-OPTION
+	       WHEN "0"
+		   MOVE 17	 TO SCREEN-LIN
+	       WHEN "1"
+		   MOVE 9	 TO SCREEN-LIN
+	       WHEN "2"
+		   MOVE 10	 TO SCREEN-LIN
+	       WHEN "3"
+		   MOVE 11	 TO SCREEN-LIN
+	       WHEN "4"
+		   MOVE 12	 TO SCREEN-LIN
+	       WHEN "5"
+		   MOVE 13	 TO SCREEN-LIN
+	       WHEN "6"
+		   MOVE 14	 TO SCREEN-LIN
+	       WHEN "7"
+		   MOVE 15	 TO SCREEN-LIN
+	       WHEN "8"
+		   MOVE 16	 TO SCREEN-LIN
+	     END-EVALUATE.
 	     PERFORM SAVE-ATTR.
 	     PERFORM MARK-BLOCK.
 
@@ -2475,70 +2462,67 @@
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO CC999.
-	   IF WS-OPTION < 1 OR > 8
-	       CALL X"E5"
-	       GO TO CC05.
-	   IF WS-OPTION = "1"
+	     EVALUATE WS-OPTION
+	       WHEN "0"
+		   GO TO CC999
+	       WHEN "1"
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё			   Price Changes		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	       MOVE "STP\STP011" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
+		   MOVE "STP\STP011" TO PRG-NAME
+	       WHEN "2"
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		    Price Changes (Department)		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	       MOVE "STP\STP012" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
+		   MOVE "STP\STP012" TO PRG-NAME
+	       WHEN "3"
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		     Price Adjust (Department)		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	       MOVE "STP\STP013" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
+		   MOVE "STP\STP013" TO PRG-NAME
+	       WHEN "4"
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё			 Stock Quantities		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	       MOVE "STP\STP014" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       IF LS0-LEV < 3
+		   MOVE "STP\STP014" TO PRG-NAME
+	       WHEN "5"
+		   IF LS0-LEV < 3
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		   Not available in this version	       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-		   MOVE "MNU\NOPMENU" TO PRG-NAME
-	       ELSE
+		       MOVE "MNU\NOPMENU"  TO PRG-NAME
+		   ELSE
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		     Quantities per Department		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-		   MOVE "STP\STP015" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "6"
-	       IF LS0-LEV < 3
+		       MOVE "STP\STP015"   TO PRG-NAME
+		   END-IF
+	       WHEN "6"
+		   IF LS0-LEV < 3
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		   Not available in this version	       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-		   MOVE "MNU\NOPMENU" TO PRG-NAME
-	       ELSE
+		       MOVE "MNU\NOPMENU"  TO PRG-NAME
+		   ELSE
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		  Adjust Lead-Time/ReOrder levels	       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-		   MOVE "STP\STP016" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "7"
+		       MOVE "STP\STP016"   TO PRG-NAME
+		   END-IF
+	       WHEN "7"
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё			     Enquiries			       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	       MOVE "STP\STPENQ" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "8"
+		   MOVE "STP\STPENQ" TO PRG-NAME
+	       WHEN "8"
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё			 Adjust Quantities		       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	       MOVE "STP\STP018" TO PRG-NAME.
+		   MOVE "STP\STP018" TO PRG-NAME.
+	       WHEN OTHER
+		   CALL X"E5" CALL X"E5" CALL X"E5"
+		   GO TO CC05
+	     END-EVALUATE.
 	     PERFORM AA100.
 	     DISPLAY MENU-INSTRUCT.
 	     GO TO CC05.

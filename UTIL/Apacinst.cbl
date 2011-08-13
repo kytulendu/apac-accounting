@@ -13,7 +13,7 @@
       *                                                                *
       *     A P A C   I N I T I A L I Z E   P R O G R A M              *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       *                                                                *
@@ -42,7 +42,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   APRIL 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -493,7 +493,7 @@
 				    PAR-CHQ-PRN
 				    PAR-CHQ-SPC.
 	     MOVE 6		 TO PAR-STM.
-	     MOVE "8.14"	 TO PAR-VERSION.
+	     MOVE "8.15"	 TO PAR-VERSION.
 	     MOVE "PASSWORD"	 TO PAR-PASSWORD.
 	     MOVE "******"	 TO PAR-CSHCODE.
 	     MOVE "IPRINT"	 TO PAR-INVPASS.
@@ -531,33 +531,29 @@
 	     MOVE "Record stock sales on a CARDEX file Y/N  [N]"
 				 TO WS-ERR-MES.
 	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO AC05A.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
 	     MOVE WS-OPTION	 TO PAR-CRDX.
        AC05B.
 	     MOVE "Update quantities on a PRICED item Y/N  [N]"
 				 TO WS-ERR-MES.
 	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO AC05B.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
 	     MOVE WS-OPTION	 TO PAR-PRICED-IND.
        AC05C.
 	     MOVE "Use the BANK DEPOSIT module Y/N  [N]"
 				 TO WS-ERR-MES.
 	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO AC05C.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
 	     MOVE WS-OPTION	 TO PAR-BANK-IND.
        AC05D.
 	     MOVE "Use PROMPTS with sales Y/N  [Y]"
 				 TO WS-ERR-MES.
 	     MOVE "Y"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO AC05D.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
 	     MOVE WS-OPTION	 TO PAR-PROMPT.
 	     DISPLAY CLEAR-L25.
 002380       WRITE PAR-RECORD3.
@@ -608,6 +604,7 @@
                                     PAR-ADJGL  PAR-RLGL
                                     PAR-DSGL.
 	     MOVE 1		 TO PAR-TRF-REF.
+	     MOVE 34		 TO PAR-STM-DET.
 003500       WRITE PAR-RECORD6.
 003510       PERFORM AC00.
 003520	     ADD 1		 TO WS-PARKEY.

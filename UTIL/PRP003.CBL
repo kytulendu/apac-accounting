@@ -13,7 +13,7 @@
       *                                                                *
       *    P A R A M E T E R   S A L E S   L E D G E R		       *
       *                                                                *
-      *     VERSION 8.14.02 - January 2010			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -34,7 +34,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

@@ -201,6 +201,9 @@
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
 007740 AA000		       SECTION.
 007750 AA00.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      * 	       Check the security level of the USER.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
 003240	   IF LS0-STLEV < 9
 	       MOVE "Not Authorised"
 				 TO WS-ERR-STRING

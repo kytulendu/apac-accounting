@@ -13,7 +13,7 @@
       *                                                                *
       *     D E B T O R   R E C E I P T I N G	R E P O R T S	       *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   June 2002.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2002 - 2009
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2002 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

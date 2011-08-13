@@ -1,4 +1,4 @@
-      $set LINKCOUNT"468"
+      $set LINKCOUNT"576"
       ******************************************************************
       *                                                                *
       * *******  ******** *******  **	  ** ******* **     ** **   ** *
@@ -13,7 +13,7 @@
       *                                                                *
       *     D E B T O R S   M O D U L E   M E N U   P R O G R A M      *
       *                                                                *
-      *     VERSION 8.14.03 - March 2010			       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -88,7 +88,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -141,6 +141,8 @@
 
 000210 COPY PARAM.SL.
 
+000330 COPY STOCK.SL.
+
       /
 000330 DATA DIVISION.
 000340 FILE SECTION.
@@ -162,6 +164,8 @@
        COPY LEDTRF.FDE.
 
 000440 COPY PARAM.FDE.
+
+000620 COPY STOCK.FDE.
 
       /
 000560 WORKING-STORAGE SECTION.
@@ -227,6 +231,8 @@
        COPY LEDTRF.ID.
 
        COPY PARAM.ID.
+
+003860 COPY STOCK.ID.
 
        01  BLOCK-DETAIL1.
 	   03  ORIGINAL-VID1.
@@ -389,16 +395,15 @@
 	   03	       COLUMN 10 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 0
 				 VALUE " Export Options    Ё".
-001570	   03  LINE 11 COLUMN  7 BACKGROUND-COLOR 2
+	   03  LINE 11 COLUMN  7 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 2 HIGHLIGHT
 				 VALUE "Ё ".
 	   03	       COLUMN  9 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7
-				 HIGHLIGHT
+				 FOREGROUND-COLOR 7 HIGHLIGHT
 				 VALUE "6".
 	   03	       COLUMN 10 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 0
-				 VALUE " Balance Take-On   Ё".
+				 VALUE " Lookup/RePrint InvЁ".
 001570	   03  LINE 12 COLUMN  7 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 2 HIGHLIGHT
 				 VALUE "Ё ".
@@ -622,6 +627,16 @@
 				 FOREGROUND-COLOR 0
 				 VALUE " A/C Enquiry (Hist)  Ё".
 001570	   03  LINE 18 COLUMN 26 BACKGROUND-COLOR 3
+				 FOREGROUND-COLOR 3 HIGHLIGHT
+				 VALUE "Ё ".
+	   03	       COLUMN 28 BACKGROUND-COLOR 3
+				 FOREGROUND-COLOR 7
+				 HIGHLIGHT
+				 VALUE "C".
+	   03	       COLUMN 29 BACKGROUND-COLOR 3
+				 FOREGROUND-COLOR 0
+				 VALUE " Balance Take-On     Ё".
+001570	   03  LINE 19 COLUMN 26 BACKGROUND-COLOR 3
 				 FOREGROUND-COLOR 3 HIGHLIGHT
 				 VALUE "Ё ".
 	   03	       COLUMN 28 BACKGROUND-COLOR 3
@@ -1395,6 +1410,13 @@
 				MOUSE-PARAM
 	   END-IF.
 	     PERFORM SAVE-SCREEN-3.
+	     MOVE SPACES       TO LS-PRG-NAME.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё Strip the path from the program name and put the program  Ё
+      *    Ё name into LS-PRG-NAME.				       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	     UNSTRING PRG-NAME DELIMITED BY "\" OR " "
+		      INTO WS-STAT-MESSAGE LS-PRG-NAME.
 	     CALL PRG-NAME
 		  USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY
 		  ON EXCEPTION
@@ -1683,7 +1705,7 @@
 	     MOVE 7		 TO SHADE-ROW.
 	     MOVE 28		 TO SHADE-COL.
 	     MOVE 23		 TO SHADE-WIDTH.
-	     MOVE 13		 TO SHADE-LINES.
+	     MOVE 14		 TO SHADE-LINES.
 	     DISPLAY S03.
 	   IF LS0-LEV < 3
 	       DISPLAY " No. (N/A)" AT 1139
@@ -1696,7 +1718,7 @@
 	     DISPLAY MENU-INSTRUCT.
 	     PERFORM SCREEN-SHADOW.
 	     MOVE 7		 TO TOP-ROW.
-	     MOVE 18		 TO BOTTOM-ROW.
+	     MOVE 19		 TO BOTTOM-ROW.
 	     MOVE 6		 TO SCREEN-LIN.
 	     MOVE 28		 TO SCREEN-COL.
 	     MOVE 21		 TO STRING-LENGTH.
@@ -1751,7 +1773,7 @@
 	   IF DATA-8BIT
 	       MOVE KEY-CODE-1X  TO WS-OPTION
 	       IF WS-OPTION < 0 OR > 8 AND
-		  NOT (WS-OPTION = "A" OR "B")
+		  NOT (WS-OPTION = "A" OR "C")
 		   CALL X"E5"
 		   GO TO CA05
 	       END-IF
@@ -1784,6 +1806,8 @@
 	       WHEN 16
 		   MOVE "B"	 TO WS-OPTION
 	       WHEN 17
+		   MOVE "C"	 TO WS-OPTION
+	       WHEN 18
 		   MOVE "0"	 TO WS-OPTION
 	       WHEN OTHER
 		   CALL X"E5" CALL X"E5" CALL X"E5"
@@ -1795,7 +1819,7 @@
 	     PERFORM CLEAR-BLOCK.
 	     EVALUATE WS-OPTION
 	       WHEN "0"
-		   MOVE 17	 TO SCREEN-LIN
+		   MOVE 18	 TO SCREEN-LIN
 	       WHEN "1"
 		   MOVE 7	 TO SCREEN-LIN
 	       WHEN "2"
@@ -1816,6 +1840,8 @@
 		   MOVE 15	 TO SCREEN-LIN
 	       WHEN "B"
 		   MOVE 16	 TO SCREEN-LIN
+	       WHEN "C"
+		   MOVE 17	 TO SCREEN-LIN
 	     END-EVALUATE.
 	     PERFORM SAVE-ATTR.
 	     PERFORM MARK-BLOCK.
@@ -1874,6 +1900,11 @@
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	       WHEN "B"
 		   MOVE "DTP\DTPENH" TO PRG-NAME
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё			 Balance Take-on		       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	       WHEN "C"
+		   MOVE "DTP\DTP099" TO PRG-NAME
 	     END-EVALUATE.
 	     PERFORM AA100.
 	     DISPLAY MENU-INSTRUCT.
@@ -2817,7 +2848,7 @@
        GA999.
 	     EXIT.
       /
-      *    ****   D E B T O R	B A L A N C E	T A K E - O N
+      *    ****   L O O K U P	R E - P R I N T   I N V O I C E
       *
        HA000	       SECTION 55.
        HA00.
@@ -2827,8 +2858,10 @@
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO HA999
 	   END-IF.
-	     MOVE "DTP\DTP099"	 TO PRG-NAME.
+	     OPEN I-O STOCK.
+	     MOVE "INV\INVDUP"	 TO PRG-NAME.
 	     PERFORM AA100.
+	     CLOSE STOCK.
 
        HA999.
 	     EXIT.
@@ -3690,6 +3723,12 @@
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
+	     MOVE "STOCKF"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     MOVE AFID-PATH	 TO W02-STOCKF.
 025110	     MOVE 3		 TO WS-PARKEY.
 	     READ PARAM.
 	   IF PAR-STM = ZERO

@@ -13,7 +13,7 @@
       *                                                                *
       *     P O S T   C O N T R A C T	T R A N S A C T I O N S        *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   February 1985.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -2116,7 +2116,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE

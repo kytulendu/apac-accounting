@@ -12,7 +12,7 @@
       *                                                                *
       *     C R E A T E   S T A T E M E N T   F O R M A T   A / R      *
       *                                                                *
-      *     VERSION 8.13.09 - November 2008			       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -20,7 +20,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 2006.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2005 - 2009
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2005 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

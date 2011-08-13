@@ -13,7 +13,7 @@
       *                                                                *
       *     B U S I N E S S   S Y S T E M   M E N U   P R O G R A M    *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
@@ -59,7 +59,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   APRIL 1993.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1415,7 +1415,7 @@
 	   IF WS-STATUS = "05"
 	       PERFORM ZA05 THRU ZA15.
 038540	   IF WS-STATUS NOT = "00"
-038550	       MOVE 33		 TO WS-F-ERROR
+038550	       MOVE 37		 TO WS-F-ERROR
 038560         PERFORM OPEN-ERROR.
 	     MOVE 5		 TO WS-SHARED.
 	     READ SHARED WITH LOCK.
@@ -1529,8 +1529,8 @@
 	       PERFORM RESTORE-SCREEN-3.
 	   IF STK-VER < "8.14"
 	       PERFORM SAVE-SCREEN-3
-	       CALL "CNV\SRDCON" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\SRDCON"
+	       CALL "CNV\CARCON" USING WS-PARID WS-USER-ID
+	       CANCEL "CNV\CARCON"
 	       CALL "UTP\CARREB"
 		  USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
 	       PERFORM RESTORE-SCREEN-3.
@@ -1626,7 +1626,7 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041110	   ELSE
-041120	   IF WS-F-ERROR = 33
+041120	   IF WS-F-ERROR = 37
 041130	       MOVE W02-SHARED	 TO WS-FILE
 041140	       MOVE WS-SHARED	 TO WS-KEY.
 

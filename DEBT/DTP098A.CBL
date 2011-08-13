@@ -13,7 +13,7 @@
       *                                                                *
       *  D E B T O R   R E - A G E   A C C O U N T S   P R O G R A M   *
       *                                                                *
-      *     VERSION 8.14.03 - July 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
 				     by James William Lemmon.
 
 		   All rights reserved.
@@ -1060,26 +1060,30 @@
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
-041620         MOVE W02-NETWORK TO WS-FILE
-041630         MOVE WS-NETKEY TO WS-KEY
+041620	       MOVE W02-NETWORK  TO WS-FILE
+041630	       MOVE WS-NETKEY	 TO WS-KEY
 041640     ELSE
 041730     IF WS-F-ERROR = 5
-041740         MOVE W02-DBTRAN TO WS-FILE
+041740	       MOVE W02-DBTRAN	 TO WS-FILE
 041750         MOVE ZERO         TO WS-KEY
                MOVE TRA-KEY      TO WS-KEYX
 041760     ELSE
 041770     IF WS-F-ERROR = 6
-041780         MOVE W02-DEBTOR TO WS-FILE
+041780	       MOVE W02-DEBTOR	 TO WS-FILE
 041790         MOVE ZERO         TO WS-KEY
                MOVE DEB-ACNO     TO WS-KEYX
 041840	   ELSE
 041850     IF WS-F-ERROR = 15
-041860         MOVE WS-PARID TO WS-FILE
-041870         MOVE WS-PARKEY TO WS-KEY
+041860	       MOVE WS-PARID	 TO WS-FILE
+041870	       MOVE WS-PARKEY	 TO WS-KEY
 041840     ELSE
 041850     IF WS-F-ERROR = 18
-041860         MOVE W02-RECOVER TO WS-FILE
-041870	       MOVE WS-RECKEY TO WS-KEY.
+041860	       MOVE W02-RECOVER  TO WS-FILE
+041870	       MOVE WS-RECKEY	 TO WS-KEY
+041840	   ELSE
+041850	   IF WS-F-ERROR = 37
+041860	       MOVE W02-SHARED	 TO WS-FILE
+041870	       MOVE WS-SHARED	 TO WS-KEY .
 041880	   IF WS-STATUS = "10"
 041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
 041900     ELSE

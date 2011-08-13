@@ -13,7 +13,7 @@
       *                                                                *
       *               I N V O I C I N G   P R O G R A M                *
       *                                                                *
-      *     VERSION 8.13.08 - June 2008				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -27,7 +27,7 @@
 000030 AUTHOR.	       James William Lemmon.
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -2574,9 +2574,12 @@
 				 TO TODAY-DDMMYY W12-TODAY.
 	     MOVE LS-USUB	 TO WS-USUB.
 	     MOVE LS-DRAW	 TO WS-DRAW.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	    Setup the file ID's including path names           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -2598,33 +2601,60 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    **** 	D A I L Y   -	A U D I T   F I L E	    ****
+      *    *************************************************************
 	     MOVE "AUDITF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-AUDITF.
+      *    *************************************************************
+      *    ****       S A L E S	  -   C A R D E X   F I L E	    ****
+      *    *************************************************************
 	     MOVE "CARDEX"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-CARDEX.
+      *    *************************************************************
+      *    ****    D E B T O R	 T R A N S A C T I O N	 F I L E    ****
+      *    *************************************************************
 	     MOVE "DBTRAN"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DBTRAN.
+      *    *************************************************************
+      *    ****  D E B T O R   A C C O U N T   ( A / R )   F I L E  ****
+      *    *************************************************************
 	     MOVE "DEBTOR"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEBTOR.
+      *    *************************************************************
+      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    *************************************************************
 	     MOVE "DEPART"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-DEPART.
 	     MOVE "GARTEE"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-GARTEE.
+      *    *************************************************************
+      *    ****        D E B T O R   I N V O I C E   F I L E	    ****
+      *    *************************************************************
 	     MOVE "INVOIC"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-INVOIC.
+      *    *************************************************************
+      *    **** 	  I N T E G R A T I O N	  F I L E	    ****
+      *    *************************************************************
 	     MOVE "LEDTRF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-LEDTRF.
+      *    *************************************************************
+      *    **** 	    C O N T R O L   F I L E		    ****
+      *    *************************************************************
 	     MOVE "NETWORK"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-NETWORK.
+      *    *************************************************************
+      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    *************************************************************
 	     MOVE "RECOVER"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
@@ -2635,12 +2665,21 @@
 	     INSPECT AFID-PATH REPLACING FIRST "XXX"
 			       BY LS-USER.
 	     MOVE AFID-PATH	 TO W02-SALE.
+      *    *************************************************************
+      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SHARED"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SHARED.
+      *	   *************************************************************
+      *    **** 	  S T O C K   P A R T S   F I L E	    ****
+      *    *************************************************************
 	     MOVE "SPARTS"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-SPARTS.
+      *    *************************************************************
+      *    **** 	       S T O C K   F I L E		    ****
+      *    *************************************************************
 	     MOVE "STOCKF"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STOCKF.
@@ -2788,42 +2827,22 @@
              MOVE W25-MM         TO W95-MM.
              MOVE W25-SS         TO W95-SS.
 055260	     GO TO ZA999.
-055270 ZA49.
-055280       DISPLAY "Too many files OPEN" AT 0812
-055290                WITH FOREGROUND-COLOR 14.
-055300       DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-055310       DISPLAY "Press any key to continue" AT 1212.
-055320       ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
-055330       GO TO ZA205.
+
+       COPY ZA49.PRO.
+
 055970 ZA200.
-055980       DISPLAY "Files locked - Try later" AT 2312
-055990                WITH FOREGROUND-COLOR 14
-056000               " " WS-STATUS WITH FOREGROUND-COLOR 15.
-056010       DISPLAY "Press any key" AT 2512 
-056020		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-056030	     ACCEPT WS-OPTION AT 2526
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY LOCKED.PRO.
+
 056040 ZA205.
 056050       EXIT PROGRAM.
+
 056060 ZA999.
 056070       EXIT.
 
 056090 I-O-ERRORS      SECTION	91.
-056100 OPEN-ERROR.
-056110       DISPLAY CLR-SCREEN.
-056120       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-056130       PERFORM DISPLAY-FILE-NAME.
-056140
-056150 READ-ERROR.
-056160       DISPLAY CLR-SCREEN.
-056170       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-056180       PERFORM DISPLAY-FILE-NAME.
-056190
-056200 WRITE-ERROR.
-056210       DISPLAY CLR-SCREEN.
-056220       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-056230       PERFORM DISPLAY-FILE-NAME.
-056240
+
+       COPY ERRORS.PRO.
 
 056260 DISPLAY-FILE-NAME.
 056270     IF WS-F-ERROR = 1
@@ -2886,7 +2905,7 @@
 056730         MOVE ZERO         TO WS-KEY
 	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 041840	   ELSE
@@ -2904,31 +2923,5 @@
 041780	       MOVE W02-WSTOCK	 TO WS-FILE
 041790         MOVE ZERO         TO WS-KEY
 	       MOVE WST-KEY	 TO WS-KEYX.
-056740	   IF WS-STATUS = "10"
-056750         MOVE "End of FILE" TO WS-STAT-MESSAGE
-056760     ELSE
-056770     IF WS-STATUS = "22"
-056780         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-056790     ELSE
-056800     IF WS-STATUS = "23"
-056810         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-056820     ELSE
-056830     IF WS-STATUS = "24"
-056840         MOVE "DISK full" TO WS-STAT-MESSAGE
-056850     ELSE
-056860     IF WS-STATUS = "30"
-056870         MOVE "DISK error" TO WS-STAT-MESSAGE
-056880     ELSE
-056890     IF WS-STATUS = "94"
-056900         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-056910       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-056920       DISPLAY "Status " AT 1212 
-056930                WS-STATUS WITH FOREGROUND-COLOR 11
-056940               ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-056950     IF WS-STATUS NOT = "94" 
-056960         DISPLAY "Key    " AT 1412 
-056970                  WS-KEY WITH FOREGROUND-COLOR 11
-056980         DISPLAY "Reverse backup or contact program Support"
-056990                  AT 1612.
-057000         DISPLAY "Please make a note of these details" AT 1812.
-057010       STOP RUN.
+
+       COPY DISPERR.PRO.

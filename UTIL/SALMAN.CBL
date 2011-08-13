@@ -13,7 +13,7 @@
       *                                                                *
       *     S A L E S M A N   R E P O R T   -	R E   C A R D E X      *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - December 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -807,6 +807,41 @@
 
        COPY FUNCTION.CRT.
 
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё			  OPT-MESSAGE			       Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё This routine is used to allow the OPERATOR to respond to  Ё
+      *    Ё a request for an option, so that the correct action can   Ё
+      *    Ё be performed by the program. The routine will display the Ё
+      *    Ё message in a pop-up window and allow the OPERATOR to      Ё
+      *    Ё respond to the 'question'. 			       Ё
+      *    Ё							       Ё
+      *    Ё The option request must be placed in WS-ERR-MES and may   Ё
+      *    Ё not exceed 48 characters. The message will be centred in  Ё
+      *    Ё the window. An example of a message request follows:      Ё
+      *    Ё							       Ё
+      *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      Ё
+      *    Ё   PERFORM OPT-MESSAGE (Use this format if function or any Ё
+      *    Ё	       other keys are to be tested on exit)	       Ё
+      *    Ё			     OR 			       Ё
+      *    Ё   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       Ё
+      *    Ё   (Use TEST AFTER if WS-OPTION is preloaded with a        Ё
+      *    Ё   default option)					       Ё
+      *    Ё							       Ё
+      *    Ё This would be displayed as:			       Ё
+      *    Ё	здддддддддддддддддддддддддддддддддддддддддддддддд©     Ё
+      *    Ё	Ё	   Print transactions (Y/N) [ ] 	 Ё╟╟   Ё
+      *    Ё	юдддддддддддддддддддддддддддддддддддддддддддддддды╟╟   Ё
+      *    Ё	  ╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟   Ё
+      *    Ё							       Ё
+      *    Ё The response is returned in WS-OPTION (in upper case).    Ё
+      *    Ё							       Ё
+      *    Ё To display the request message higher or lower (default   Ё
+      *    Ё is line 13) move the line number to be used to SLIN and   Ё
+      *    Ё then PERFORM OPT-SETUP THRU OPT-EXIT.		       Ё
+      *    Ё (The UNTIL and TEST AFTER options also apply here)        Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY OPTION.CRT.
 
 011390 COPY LOCKED.RC2.
@@ -987,13 +1022,10 @@
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO BA05.
-
-       BA08.
 	     MOVE "Print 'D'etail or 'T'otals (D/T) [ ]"
 				 TO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE.
-014920	   IF NOT (WS-OPTION = "D" OR "T")
-014930	       GO TO BA08.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "D" OR "T".
 	     MOVE WS-OPTION	 TO WS-RTYPE.
 	     MOVE W15-SMM	 TO WS-CRDX.
 	     MOVE W15-START	 TO W22-DTE1.
@@ -1200,20 +1232,17 @@
        BA32.
 	     EXIT.
 
-       BA33.
+       BA35.
 	   IF WS-ERROR = 9
 	       MOVE ZERO	 TO WS-ERROR
 	       GO TO BA999.
 	     PERFORM BA100 THRU BA199.
-
-       BA35.
 050150	     MOVE "'P'rinter or 'S'creen"
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
 	     MOVE 14		 TO SLIN.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-050260	   IF NOT (WS-OPTION = "P" OR "S")
-050270	       GO TO BA35.
+	     PERFORM OPT-SETUP THRU OPT-EXIT TEST AFTER
+		     UNTIL WS-OPTION = "P" OR "S".
 	   IF WS-OPTION = "P"
       *
       *  ***  ****  ***** *   *   ****	****  *** *   * ***** ***** ****
@@ -1307,9 +1336,8 @@
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
 	     MOVE 14		 TO SLIN.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-050260	   IF NOT (WS-OPTION = "P" OR "S")
-050270	       GO TO BA50.
+	     PERFORM OPT-SETUP THRU OPT-EXIT TEST AFTER
+		     UNTIL WS-OPTION = "P" OR "S".
 	   IF WS-OPTION = "P"
       *
       *  ***  ****  ***** *   *   ****	****  *** *   * ***** ***** ****
@@ -1340,9 +1368,8 @@
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
 	     MOVE 14		 TO SLIN.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-050260	   IF NOT (WS-OPTION = "Y" OR "N")
-050270	       GO TO BA100.
+	     PERFORM OPT-SETUP THRU OPT-EXIT TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N".
 	     MOVE SPACES	 TO W10-LEDG
 				    WS-LEDG.
 	   IF WS-OPTION = "N"
@@ -1896,49 +1923,17 @@
 				 TO TODAY-DDMMYY W12-TODAY.
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё  Setup various keys and the mouse for use with menus and  Ё
+      *    Ё  other required user interface functions and procedures.  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	     COPY FUNCTION.PRO.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	    Setup the file ID's including path names           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 

@@ -13,7 +13,7 @@
       *                                                                *
       *      C O N V E R T   Q U O T A T I O N	 T O   O R D E R       *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -1735,17 +1735,18 @@
 018070       COMPUTE W10-MARG = ((W10-SPAPRC - W10-COST) / W10-SPAPRC)
 018080                          * 100.00.
 018090     IF W10-MARG NOT < W85-MARG
-018100         GO TO BB110.
+018100	       GO TO BB110.
+
 018130 BB105.
 018110	     MOVE "Margin less than allowed - Override Y/N?"
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-018200	   IF NOT (WS-OPTION = "N" OR "Y")
-018210         GO TO BB105.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
 018220     IF WS-OPTION = "N"
-018230         MOVE 1 TO WS-ERROR
-018240         GO TO BB110.
+018230	       MOVE 1		 TO WS-ERROR
+018240	       GO TO BB110.
+
 018250 BB106.
 	     DISPLAY SPACE AT 2551
 		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
@@ -2042,9 +2043,8 @@
 				 TO WS-ERR-MES.
 029660 BF55.
 	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-029730	   IF NOT (WS-OPTION = "C" OR "E" OR "N" OR "P")
-029740	       GO TO BF50.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "E" OR "N" OR "P".
 029750     IF WS-OPTION = "E"
 029760         GO TO BF05.
 029770     IF WS-OPTION = "C"
@@ -2087,50 +2087,47 @@
 019310	       MOVE "Arrears > 30 days - Override Y/N"
 				 TO WS-ERR-MES
 	       MOVE SPACE	 TO WS-OPTION
-	       PERFORM OPT-MESSAGE
-019390	       IF WS-OPTION = "Y"
+	       PERFORM OPT-MESSAGE TEST AFTER
+		       UNTIL WS-OPTION = "Y" OR "N"
+	       IF WS-OPTION = "Y"
 019400             MOVE ZERO     TO WS-ERROR
 019410             PERFORM BB106
 019410             PERFORM BB108
 019420             IF WS-ERROR = 1
 019430                 MOVE "N"  TO WS-OPTION.                       
-019450     IF WS-OPTION NOT = "Y"
+019450	   IF WS-OPTION = "N"
 019460         GO TO BF05.
 019470     IF DEB-CRL > ZERO
 019480         IF (DEB-BAL + W90-TOTAL) > DEB-CRL
 019490		   MOVE "Credit limit exceded - Override Y/N"
 				 TO WS-ERR-MES
-	       MOVE SPACE	 TO WS-OPTION
-	       PERFORM OPT-MESSAGE
-                   MOVE DEB-CRL TO W100-CRL
-                   MOVE DEB-BAL TO W100-BAL
+		   MOVE SPACE	 TO WS-OPTION
+		   MOVE DEB-CRL  TO W100-CRL
+		   MOVE DEB-BAL TO W100-BAL
 		   DISPLAY "Balance: " AT 2540
 			    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
 			    W100-BAL WITH BACKGROUND-COLOR 3
-					  FOREGROUND-COLOR 15
+					  FOREGROUND-COLOR 7 HIGHLIGHT
 			   " Limit: "
-			     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+			    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
 			    W100-CRL WITH BACKGROUND-COLOR 3
-					  FOREGROUND-COLOR 15
-019510             ACCEPT WS-OPTION AT 2538
-019520			  WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
-			       UPDATE AUTO
-		   CALL "CBL_TOUPPER" USING WS-OPTION
-                                      BY VALUE WS-LENGTH
-                                      RETURNING WS-STATUS
-019580	       IF WS-OPTION = "Y"
-019590             MOVE ZERO     TO WS-ERROR
-019600             PERFORM BB106
-019410             PERFORM BB108
-019610             IF WS-ERROR = 1
-019620                 MOVE "N"  TO WS-OPTION.                       
+					  FOREGROUND-COLOR 7 HIGHLIGHT
+		   PERFORM OPT-MESSAGE TEST AFTER
+			   UNTIL WS-OPTION = "Y" OR "N"
+019580		   IF WS-OPTION = "Y"
+019590		       MOVE ZERO TO WS-ERROR
+019600		       PERFORM BB106
+019410		       PERFORM BB108
+019610		       IF WS-ERROR = 1
+019620			   MOVE "N" TO WS-OPTION.
 019630	     DISPLAY CLEAR-L25.
-019640     IF WS-OPTION NOT = "Y"
+019640	   IF WS-OPTION = "N"
 019650         GO TO BF05.   
 025200       DISPLAY "Converting Quote" AT 2520 WITH
 025210		     BACKGROUND-COLOR 3 FOREGROUND-COLOR 14 BLINK.
 025220       MOVE ZERO           TO WS-SALKEY.
-025230       PERFORM AY60 THRU AY999.
+025230	     PERFORM AY60 THRU AY999.
+
 026210 BF70.
       *
       *    ****    U P D A T E   O R D E R   F I L E 
@@ -2174,7 +2171,7 @@
       * 	  T O T A L S.
       *
 
-      QWERTY
+      *QWERTY
 	   IF SOR-TYPE = 9
 
 	       GO TO BF75.
@@ -2214,9 +2211,8 @@
 	     MOVE "Print picking slip (Y/N)?  [ ]"
 				 TO WS-ERR-MES.
 	     MOVE "Y"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-	   IF NOT (WS-OPTION = "Y" OR "N")
-               GO TO BF80.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "Y" OR "N".
 005930     IF WS-OPTION = "Y"
 	       MOVE W90-REF	 TO LS-SLS-ORDNO
                MOVE "O"          TO WS-DOC
@@ -2362,9 +2358,8 @@
 	     MOVE "Advance to next page (Y/N)"
 				 TO WS-ERR-MES.
 	     MOVE "Y"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE.
-029730	   IF NOT (WS-OPTION = "N" OR "Y")
-               GO TO BF310.
+	     PERFORM OPT-MESSAGE TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y".
              MOVE WS-OPTION      TO WS-PGADV.
            IF WS-OPTION = "N"
 	       IF LINAGE-COUNTER OF PRNDSK < (WS-PRN-LENGTH - 8)
@@ -2415,50 +2410,18 @@
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
-049200	     DISPLAY CLR-SCREEN.
+042000	     DISPLAY CLR-SCREEN.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-                                    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-             MOVE ZERO           TO USER-NUMBER.
-             MOVE 11             TO USER-KEYS.
-             CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-             MOVE 53             TO USER-NUMBER.
-             MOVE 2              TO USER-KEYS.
-             CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-             MOVE 64             TO MOUSE-FUNC.
-             MOVE 1              TO MOUSE-PARAM.
-             CALL X"AF" USING MOUSE-FUNC
-                              MOUSE-PARAM.
-           IF MOUSE-FUNC NOT = 255
-               MOVE "Y"          TO MOUSE-ATTACHED
-               MOVE 66           TO MOUSE-FUNC
-               MOVE 0            TO MOUSE-PARAM
-               CALL X"AF" USING MOUSE-FUNC
-                                MOUSE-PARAM
-           ELSE
-               GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      *            A S   F U N C T I O N   K E Y
-      *
-             MOVE 3              TO USER-ACTION.
-             MOVE 27             TO USER-NUMBER.
-             MOVE 2              TO USER-KEYS.
-             CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
+	     COPY FUNCTION.PRO.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	    Setup the file ID's including path names           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    *************************************************************
+      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    *************************************************************
        ZA00A.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
@@ -2673,13 +2636,9 @@
 		   OPEN I-O SORDER
 		   OPEN I-O SYSUSER.
 051530	     GO TO ZA999.
-       ZA49.
-             DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
-             DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-             DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
-             GO TO ZA205.
+
+       COPY ZA49.PRO.
+
       *
       *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
       *
@@ -2725,21 +2684,8 @@
 051620       EXIT.
 
 051640 I-O-ERRORS      SECTION  91.
-051650 OPEN-ERROR.
-051660       DISPLAY CLR-SCREEN.
-051670       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-051680       PERFORM DISPLAY-FILE-NAME.
-051690
-051700 READ-ERROR.
-051710       DISPLAY CLR-SCREEN.
-051720       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-051730       PERFORM DISPLAY-FILE-NAME.
-051740
-051750 WRITE-ERROR.
-051760       DISPLAY CLR-SCREEN.
-051770       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-051730       PERFORM DISPLAY-FILE-NAME.
-051780
+
+       COPY ERRORS.PRO.
 
 051790 DISPLAY-FILE-NAME.
 051840     IF WS-F-ERROR = 2
@@ -2783,43 +2729,12 @@
 041340         MOVE ZERO         TO WS-KEY
 	       MOVE STK-CODE	 TO WS-KEYX
 041840	   ELSE
-041850	   IF WS-F-ERROR = 33
+041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE
 041870	       MOVE WS-SHARED	 TO WS-KEY
 	   ELSE
 041120	   IF WS-F-ERROR = 64
 041130	       MOVE W02-SYSUSER	 TO WS-FILE
 041140	       MOVE USE-NO	 TO WS-KEY.
-052310     IF WS-STATUS = "10"
-052320	       MOVE "End of FILE"
-				 TO WS-STAT-MESSAGE
-052330     ELSE
-052340     IF WS-STATUS = "22"
-052350	       MOVE "Duplicate record number"
-				 TO WS-STAT-MESSAGE
-052360     ELSE
-052370     IF WS-STATUS = "23"
-052380	       MOVE "Invalid record number"
-				 TO WS-STAT-MESSAGE
-052390     ELSE
-052400     IF WS-STATUS = "24"
-052410	       MOVE "DISK full"  TO WS-STAT-MESSAGE
-052420     ELSE
-052430     IF WS-STATUS = "30"
-052440         MOVE "DISK error" TO WS-STAT-MESSAGE
-052450     ELSE
-052460     IF WS-STATUS = "94"
-052470	       MOVE "FILE locked"
-				 TO WS-STAT-MESSAGE.
-052480       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-052490       DISPLAY "Status " AT 1212 
-052500                WS-STATUS WITH FOREGROUND-COLOR 11
-052510               ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-052520     IF WS-STATUS NOT = "94" 
-052530         DISPLAY "Key    " AT 1412 
-052540                  WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-052550         DISPLAY "Reverse backup or contact program Support"
-052560                  AT 1612.
-052570         DISPLAY "Please make a note of these details" AT 1812.
-052580       STOP RUN.
+
+       COPY DISPERR.PRO.

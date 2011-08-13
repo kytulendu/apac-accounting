@@ -12,7 +12,7 @@
       *                                                                *
       *     ( A P A C )   T E R M I N A L   S T A R T   &   I N I T    *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.01 - August 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -65,7 +65,7 @@
 000030 AUTHOR.         J W LEMMON  (APAC).
 000040 DATE-WRITTEN.   JUNE 1990.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -484,7 +484,7 @@
 				 TO WS-ERR-STRING
 003260		       PERFORM ERROR-MESSAGE
 		       STOP RUN.
-002490	   IF NOT (WS-STATUS = "00")
+002490	   IF NOT(WS-STATUS = "00")
 002500	       MOVE "Invalid or file not on disk"
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
@@ -598,14 +598,15 @@
 	     MOVE "N"		 TO WS-OPTION.
 
        AA110.
-	     ACCEPT WS-OPTION AT 1341
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO AA110.
+	     PERFORM WITH TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+	       ACCEPT WS-OPTION AT 1341
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			   BACKGROUND-COLOR 5 UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 	     PERFORM RESTORE-SCREEN-3.
 
 007710 AA199.
@@ -752,16 +753,16 @@
 002020	     MOVE 0		 TO WS-S2 WS-S3.
 
 002030 AD05-CHECK.
-002040     IF PAR-USR (WS-S1) = WS-USER
-002050         IF PAR-PROG (WS-S1) = SPACES
-		   MOVE SPACES	 TO PAR-USR (WS-S1)
+002040	   IF PAR-USR(WS-S1) = WS-USER
+002050	       IF PAR-PROG(WS-S1) = SPACES
+		   MOVE SPACES	 TO PAR-USR(WS-S1)
 		   SUBTRACT 1	 FROM PAR-USERS
 002100         ELSE
 002120             GO TO AD06.
 002160     IF WS-S1 < 24
 002170	       ADD 1		 TO WS-S1
 002180         GO TO AD05-CHECK.
-	   IF NOT (LS-INSTR = "X")
+	   IF NOT(LS-INSTR = "X")
 002280	       GO TO AD07U.
 	   IF PAR-LOGON = 1
 	       MOVE "Y" 	 TO WS-REPLY
@@ -800,15 +801,16 @@
 	     GO TO AD999.
 
        AD10.
-	     ACCEPT WS-OPTION AT 1430
-		    WITH BACKGROUND-COLOR 5
-			 FOREGROUND-COLOR 6 HIGHLIGHT AUTO
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS
-	   IF NOT (WS-OPTION = "C" OR "N" OR "E")
-	       GO TO AD10.
-	   IF NOT (WS-OPTION = "N")
+	     PERFORM WITH TEST AFTER
+		     UNTIL WS-OPTION = "C" OR "N" OR "E"
+	       ACCEPT WS-OPTION AT 1430
+		      WITH BACKGROUND-COLOR 5
+			   FOREGROUND-COLOR 6 HIGHLIGHT AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+	   IF NOT(WS-OPTION = "N")
 	       GO TO AD99.
 014670	     MOVE 1		 TO WS-PARKEY.
 
@@ -855,19 +857,20 @@
 015060	     DISPLAY WS-BLNK78 AT 1802 WITH FOREGROUND-COLOR 3.
 015060	     DISPLAY WS-BLNK78 AT 2002 WITH FOREGROUND-COLOR 3.
 015070	     DISPLAY "Todays date - " AT 1829 W12-DD " "
-015080		      W30-MONTH (W12-MM) "," W12-CC W12-YY.
+015080		      W30-MONTH(W12-MM) "," W12-CC W12-YY.
 015090	     DISPLAY "Is date correct (Y/N) ?" AT 2029
 		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
 	     MOVE "Y"		 TO WS-OPTION.
 
        AD25.
-015100	     ACCEPT WS-OPTION AT 2053 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-                                          UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "N" OR "Y")
-	       GO TO AD25.
+	     PERFORM WITH TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+015100	       ACCEPT WS-OPTION AT 2053
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT UPDATE AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
 015160	   IF WS-OPTION = "N"
 015170	       GO TO AD20.
 015180	     MOVE W12-TODAY	 TO PAR-DMY.
@@ -896,15 +899,15 @@
 002670         STOP RUN.
 	     MOVE SEC-COMP	 TO WS-COMPANY.
 	     MOVE SEC-SYS	 TO APAC-SYSTEM WS-APAC-SYSTEM.
-	   IF NOT (SEC-VER = "2010")
-		 PERFORM AF000
-		 MOVE "2010"	 TO SEC-VER.
+	   IF NOT(SEC-VER = "2010" OR "2011")
+	       PERFORM AF000
+	       MOVE "2011"	 TO SEC-VER.
 	     MOVE SEC-VER	 TO APAC-VERSION WS-APAC-VERSION.
 	     MOVE 40		 TO WS-S1.
 
        AE05.
-           IF WS-COMPCHR (WS-S1) = SPACE
-               MOVE WS-G8        TO WS-COMPCHR (WS-S1)
+	   IF WS-COMPCHR(WS-S1) = SPACE
+	       MOVE WS-G8	  TO WS-COMPCHR(WS-S1)
                IF WS-S1 > 1
                    SUBTRACT 1    FROM WS-S1
                    GO TO AE05.
@@ -932,13 +935,38 @@
 	     MOVE "PARAM"	 TO APAC-KEY.
 000030	     READ APACFILE WITH IGNORE LOCK
 	       KEY IS APAC-KEY.
-	     MOVE APAC-PATH	 TO W10-CURRENT-PATH
-				    W10-WRK-PATH.
-	     INSPECT W10-WRK-PATH REPLACING FIRST "_DATA" BY "_WORK".
+	     MOVE APAC-PATH	 TO W10-CURRENT-PATH.
+	     MOVE "CORDER"	 TO APAC-KEY.
+000030	     READ APACFILE WITH IGNORE LOCK
+	       KEY IS APAC-KEY.
+	     MOVE APAC-PATH	 TO W10-WRK-PATH.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё CHECK FOR THE PRESENCE OF NEW FILES THAT ARE ADDED TO THE Ё
       *    Ё SYSTEM AND UPDATE THE PATH FILE WITH MISSING FILE NAMES.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *    *************************************************************
+      *    ****   C R E D I T O R S   M E M O	W O R K   F I L E   ****
+      * 	       Version 8.15.01
+      *    *************************************************************
+	     MOVE "MEMCRD"	 TO APAC-KEY.
+000030	     READ APACFILE WITH IGNORE LOCK
+	       KEY IS APAC-KEY.
+	   IF NOT(WS-STATUS = "00")
+	       MOVE "MEMCRD"	 TO APAC-KEY
+	       MOVE "CRDM_XXX.WRK"
+				 TO APAC-NAME
+	       MOVE ZERO	 TO APAC-FILE
+	       MOVE W10-WRK-PATH TO APAC-PATH
+	       WRITE APAC-RECORD1
+	       MOVE WS-SYS-ID	 TO W02-SYSID
+	       OPEN I-O APACFIDS
+	       MOVE APAC-KEY	 TO AFID-KEY
+	       MOVE SPACES	 TO AFID-PATH
+	       STRING APAC-PATH DELIMITED BY " "
+		      APAC-NAME DELIMITED BY " "
+		      INTO AFID-PATH
+	       WRITE AFID-RECORD1
+	       CLOSE APACFIDS.
       *    *************************************************************
       *    ****        I N V O I C E   B I T M A P   F I L E	    ****
       * 	       Version 8.14.03
@@ -946,15 +974,14 @@
 	     MOVE "INVBMP"	 TO APAC-KEY.
 000030	     READ APACFILE WITH IGNORE LOCK
 	       KEY IS APAC-KEY.
-	   IF NOT (WS-STATUS = "00")
-	       MOVE "INVBMP"	 TO APAC-KEY
-	       MOVE SPACES	 TO APAC-NAME
+	   IF NOT(WS-STATUS = "00")
 	       STRING WS-SYS-ID DELIMITED SIZE
 		      "_INV.BMP" DELIMITED SIZE
 		      INTO APAC-NAME
 	       MOVE W10-CURRENT-PATH
 				 TO APAC-PATH
 	       WRITE APAC-RECORD1
+	       MOVE WS-SYS-ID	 TO W02-SYSID
 	       OPEN I-O APACFIDS
 	       MOVE APAC-KEY	 TO AFID-KEY
 	       MOVE SPACES	 TO AFID-PATH
@@ -970,7 +997,7 @@
 	     MOVE "STMBMP"	 TO APAC-KEY.
 000030	     READ APACFILE WITH IGNORE LOCK
 	       KEY IS APAC-KEY.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       MOVE "STMBMP"	 TO APAC-KEY
 	       MOVE SPACES	 TO APAC-NAME
 	       STRING WS-SYS-ID DELIMITED SIZE
@@ -979,6 +1006,7 @@
 	       MOVE W10-CURRENT-PATH
 				 TO APAC-PATH
 	       WRITE APAC-RECORD1
+	       MOVE WS-SYS-ID	 TO W02-SYSID
 	       OPEN I-O APACFIDS
 	       MOVE APAC-KEY	 TO AFID-KEY
 	       MOVE SPACES	 TO AFID-PATH
@@ -993,12 +1021,13 @@
 	     MOVE "DEALER"	 TO APAC-KEY.
 000030	     READ APACFILE WITH IGNORE LOCK
 	       KEY IS APAC-KEY.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       MOVE "DEALER"	 TO APAC-KEY
 	       MOVE "DEAL_XXX.WRK"
 				 TO APAC-NAME
 	       MOVE W10-WRK-PATH TO APAC-PATH
 	       WRITE APAC-RECORD1
+	       MOVE WS-SYS-ID	 TO W02-SYSID
 	       OPEN I-O APACFIDS
 	       MOVE APAC-KEY	 TO AFID-KEY
 	       MOVE SPACES	 TO AFID-PATH
@@ -1010,7 +1039,7 @@
 	     MOVE "DEATOT"	 TO APAC-KEY.
 000030	     READ APACFILE WITH IGNORE LOCK
 	       KEY IS APAC-KEY.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       MOVE "DEATOT"	 TO APAC-KEY
 	       MOVE "DEAT_XXX.WRK"
 				 TO APAC-NAME
@@ -1032,7 +1061,7 @@
 	     MOVE "DEBALT"	 TO APAC-KEY.
 000030	     READ APACFILE WITH IGNORE LOCK
 	       KEY IS APAC-KEY.
-	   IF NOT (WS-STATUS = "00")
+	   IF NOT(WS-STATUS = "00")
 	       MOVE "DEBALT"	 TO APAC-KEY
 	       MOVE "AR_NAME.DAT"
 				 TO APAC-NAME
@@ -1047,7 +1076,7 @@
 		      INTO AFID-PATH
 	       WRITE AFID-RECORD1
 	       CLOSE APACFIDS.
-
+	     CLOSE APACFILE.
 	     OPEN INPUT APACFIDS.
        AF999.
 	     EXIT.
@@ -1062,26 +1091,26 @@
 	     MOVE 44		 TO USER-NUMBER.
 	     MOVE 1		 TO USER-SETTING.
 	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	   S e t   u p	 t h e	 F U N C T I O N   k e y s     Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	     MOVE 1		 TO USER-ACTION
 				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё		       ESC, F1 to F10 keys		       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	     MOVE ZERO		 TO USER-NUMBER.
 	     MOVE 11		 TO USER-KEYS.
 	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё		    PAGE-UP and PAGE-DOWN keys		       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	     MOVE 53		 TO USER-NUMBER.
 	     MOVE 2		 TO USER-KEYS.
 	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё		   A C T I V A T E   M O U S E		       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	     MOVE 64		 TO MOUSE-FUNC.
 	     MOVE 1		 TO MOUSE-PARAM.
 	     CALL X"AF" USING MOUSE-FUNC
@@ -1094,10 +1123,9 @@
 				MOUSE-PARAM
 	   ELSE
 	       GO TO AL02.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	       Set MOUSE key to act as FUNCTION key	       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 	     MOVE 3		 TO USER-ACTION.
 	     MOVE 27		 TO USER-NUMBER.
 	     MOVE 2		 TO USER-KEYS.
@@ -1108,30 +1136,30 @@
 002900	     MOVE 1		 TO WS-S1.
 
 002910 AL05.
-002920	     MOVE W40-CHAR	 TO WS-GCHAR (WS-S1).
+002920	     MOVE W40-CHAR	 TO WS-GCHAR(WS-S1).
 002930     IF WS-S1 < 20
 002940	       ADD 1		 TO WS-S1
 002950         GO TO AL05.
 014170	     MOVE 2		 TO WS-S1.
 
 014180 AL05A.
-014190	     MOVE WS-G1 	 TO WS-TCHAR (WS-S1) WS-BCHAR (WS-S1).
-	     MOVE WS-G8 	 TO WS-TCH   (WS-S1) WS-BCH   (WS-S1).
+014190	     MOVE WS-G1 	 TO WS-TCHAR(WS-S1) WS-BCHAR(WS-S1).
+	     MOVE WS-G8 	 TO WS-TCH(WS-S1) WS-BCH(WS-S1).
 014200     IF WS-S1 < 79
 014210	       ADD 1		 TO WS-S1
 014220         GO TO AL05A.
-	     MOVE WS-G9 	 TO WS-TCH  (1).
-	     MOVE WS-G10	 TO WS-TCH  (80).
-	     MOVE WS-G11	 TO WS-BCH  (1).
-	     MOVE WS-G12	 TO WS-BCH  (80).
-014230	     MOVE WS-G15	 TO WS-TCHAR (1).
-014240	     MOVE WS-G16	 TO WS-TCHAR (80).
-014250	     MOVE WS-G17	 TO WS-BCHAR (1).
-014260	     MOVE WS-G18	 TO WS-BCHAR (80).
-	   IF NOT (LS-INSTR = "X")
+	     MOVE WS-G9 	 TO WS-TCH(1).
+	     MOVE WS-G10	 TO WS-TCH(80).
+	     MOVE WS-G11	 TO WS-BCH(1).
+	     MOVE WS-G12	 TO WS-BCH(80).
+014230	     MOVE WS-G15	 TO WS-TCHAR(1).
+014240	     MOVE WS-G16	 TO WS-TCHAR(80).
+014250	     MOVE WS-G17	 TO WS-BCHAR(1).
+014260	     MOVE WS-G18	 TO WS-BCHAR(80).
+	   IF NOT(LS-INSTR = "X")
 002960	       DISPLAY APAC.
 021870	     MOVE ALL "╟"	 TO WS-MID-LINE.
-	     MOVE WS-G3 	 TO WS-MCHR (1) WS-MCHR (80).
+	     MOVE WS-G3 	 TO WS-MCHR(1) WS-MCHR(80).
 
 002990 AL05B.
 	   IF LS-INSTR = "X"
@@ -1140,7 +1168,7 @@
 003060	     MOVE 1		 TO WS-S1 WS-S2.
 
 003070 AL10.
-003080     IF W05-CHAR (WS-S1) = "*"
+003080	   IF W05-CHAR(WS-S1) = "*"
 003090         GO TO AL15.
 003100     IF WS-S1 < 117
 003110	       ADD 1		 TO WS-S1
@@ -1152,10 +1180,10 @@
 003160	     ADD 2		 TO WS-S1.
 
 003170 AL20.
-003180     IF W05-CHAR (WS-S1) = " "
+003180	   IF W05-CHAR(WS-S1) = " "
 003190         GO TO AL25.
-003200	     MOVE W05-CHAR (WS-S1)
-				 TO W05-DC (WS-S2).
+003200	     MOVE W05-CHAR(WS-S1)
+				 TO W05-DC(WS-S2).
 003210     IF WS-S2 < 15
 003220	       ADD 1		 TO WS-S2
 003230     ELSE
@@ -1168,7 +1196,7 @@
 
        AL26.
              MOVE SPACES         TO W05-STRINGS.
-             MOVE ","            TO W05-DC (WS-S2).
+	     MOVE ","		 TO W05-DC(WS-S2).
              UNSTRING W05-DETAIL DELIMITED BY ","
                                  INTO W05-DSK
                                       W05-EX
@@ -1199,9 +1227,9 @@
              MOVE ZERO           TO W05-NUM2.
 
        AL28.
-           IF W05-NCHR (WS-S1) NUMERIC
-               MOVE W05-NCHR (WS-S1) 
-                                 TO W05-NCHR2 (WS-S2)
+	   IF W05-NCHR(WS-S1) NUMERIC
+	       MOVE W05-NCHR(WS-S1)
+				 TO W05-NCHR2(WS-S2)
                SUBTRACT 1        FROM WS-S1 WS-S2
            ELSE
                SUBTRACT 1        FROM WS-S1.
@@ -1308,7 +1336,7 @@
 000360	     MOVE 1		 TO W75-S W75-S1.
 
        COMPANY-LUP-TAB-LOOP.
-	     MOVE SPACES	 TO W75-COM (W75-S1).
+	     MOVE SPACES	 TO W75-COM(W75-S1).
            IF W75-S1 < 18
                ADD 1             TO W75-S1
 	       GO TO COMPANY-LUP-TAB-LOOP.
@@ -1316,7 +1344,7 @@
 	     MOVE "  !" 	 TO COM-CODE.
 006850	     START APCCOM
 	       KEY >= COM-CODE.
-006860	   IF NOT (WS-STATUS = "00")
+006860	   IF NOT(WS-STATUS = "00")
 	       GO TO COMPANY-NO-RECORD.
 
        COMPANY-GET-COM-RECORD.
@@ -1324,12 +1352,12 @@
 	       MOVE SPACE	 TO WS-REPLY
 	       GO TO COMPANY-SKIP-COM-READ.
 006850	     READ APCCOM NEXT	 WITH IGNORE LOCK.
-009900	   IF NOT (WS-STATUS = "00")
+009900	   IF NOT(WS-STATUS = "00")
 	       SUBTRACT 1	 FROM W75-S
 	       GO TO COMPANY-FULL-SCREEN.
 
        COMPANY-SKIP-COM-READ.
-	     MOVE COM-CODE	 TO W75-COM (W75-S).
+	     MOVE COM-CODE	 TO W75-COM(W75-S).
 	     DISPLAY SD-COM AT LINE CLIN.
 027700	   IF CLIN < 20
 027710         ADD 1 TO CLIN W75-S
@@ -1416,7 +1444,7 @@
        COMPANY-GET-PREV-LOOP.
 006850	     READ APCCOM PREVIOUS
 				 WITH IGNORE LOCK.
-009900	   IF NOT (WS-STATUS = "00")
+009900	   IF NOT(WS-STATUS = "00")
 	       MOVE SPACE	 TO WS-REPLY
 	       GO TO COMPANY-NEW-PAGE.
 	   IF WS-IXS1 < 24
@@ -1448,7 +1476,7 @@
 
        COMPANY-HIGHLIGHT.
 	     PERFORM COMPANY-CRT-ATTRIB.
-	     DISPLAY W43-DET3 (CLIN) AT CPOS
+	     DISPLAY W43-DET3(CLIN) AT CPOS
 		     WITH BACKGROUND-COLOR 5
 			  FOREGROUND-COLOR 7.
 	     GO TO COMPANY-GET-USER-OPT.
@@ -1460,8 +1488,8 @@
 019260	     ADD 1		 TO CLIN.
 
        COMPANY-RESTORE-SCREEN.
-	   IF NOT (W75-S1 = ZERO)
-	       MOVE W75-COM (W75-S1) TO W05-EXT.
+	   IF NOT(W75-S1 = ZERO)
+	       MOVE W75-COM(W75-S1) TO W05-EXT.
 011320	     PERFORM RESTORE-SCREEN.
 
        COMPANY-LOOKUP-EXIT.

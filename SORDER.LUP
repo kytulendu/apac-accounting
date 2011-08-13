@@ -56,9 +56,14 @@
 	       END-EVALUATE
 	       GO TO SORD-LUP-DATA.
 	   IF WS-ETYPE = "T"
-               MOVE W21-DD       TO W20-DD
-               MOVE W21-MM       TO W20-MM
-	       MOVE W21-CCYY	 TO W20-CCYY.
+      *
+      *    ****    C H A N G E	 D A T E   T O	 CCYYMMDD  (W20-DTE)
+      *
+	       MOVE W21-DTE	 TO W22-DTE3
+	       MOVE W22-DD3	 TO W20-DAY
+	       MOVE W22-MM3	 TO W20-MONTH
+	       MOVE W22-CC3	 TO W20-CENT
+	       MOVE W22-YY3	 TO W20-YEAR.
 	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
 000340	     DISPLAY SPACE AT 2501 WITH BACKGROUND-COLOR 3.
 000350       MOVE 6              TO CLIN.

@@ -13,7 +13,7 @@
       *                                                                *
       *     S A L E S	A N D	O R D E R   M O D U L E   M E N U      *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.00 - November 2010			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -24,6 +24,11 @@
       *  Aug 2008	- New file (STKALT) - Stock alternate index    *
       * 		  included for lookups, using any word con-    *
       * 		  tained in the Stock description.	       *
+      * 							       *
+      * November 2009	- Include words from Description 2 and from    *
+      * 		  the Item code (Some item codes are comprised *
+      * 		  of individual words and these will be        *
+      * 		  included in the alternate Index)	       *
       * 							       *
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		    VERSIONS OF THE APAC SYSTEM		       ³
@@ -68,7 +73,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -794,7 +799,7 @@
 				  RETURNING WS-STATUS
 	       IF (WS-OPTION < 0 OR > 8) AND
 		  (WS-OPTION < "A" OR > "H") AND
-		  (WS-OPTION NOT = ">")
+		  NOT(WS-OPTION = ">" OR "@")
 		   CALL X"E5"
 		   GO TO BA05
 	       END-IF
@@ -859,7 +864,7 @@
 
        BA16.
 	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0" OR ">" OR "H"
+	   IF WS-OPTION = "0" OR ">" OR "H" OR "@"
 	       MOVE 20		 TO SCREEN-LIN
 	   ELSE
 	   IF WS-OPTION = "1"
@@ -965,7 +970,10 @@
 	       PERFORM RA000
 	   ELSE
 	   IF WS-OPTION = "H"
-	       PERFORM SA000.
+	       PERFORM SA000
+	   ELSE
+	   IF WS-OPTION = "@"
+	       PERFORM TA000.
 	     PERFORM RESTORE-SCREEN.
 	     MOVE BLOCK-DETAIL1  TO BLOCK-DETAIL.
 	     MOVE SHADOW-DETAIL1 TO SHADOW-DETAIL.
@@ -2991,6 +2999,28 @@
        SA999.
 	     EXIT.
 
+      /
+      *    ****    D E L E T E	 N O - S A L E	 I N V O I C E
+      * 	   H I S T O R Y
+      *
+       TA000	       SECTION 64.
+       TA00.
+	   IF LS-DSKDRV = "L"
+	       MOVE "Not available on Local drive"
+				 TO WS-ERR-STRING
+003260	       PERFORM ERROR-MESSAGE
+	       GO TO SA999.
+003240	   IF LS0-DBLEV < 1
+	       MOVE "Not Authorised"
+				 TO WS-ERR-STRING
+003260	       PERFORM ERROR-MESSAGE
+	       GO TO SA999.
+	     MOVE "INV\INVDEL"	 TO PRG-NAME.
+	     PERFORM AA100.
+
+       TA999.
+	     EXIT.
+
       /    *************************************************************
       * 		I N I T I A L I S E   P R O G R A M
       *    *************************************************************
@@ -3599,7 +3629,7 @@
 041860	       MOVE "STOCK LOCATION"
 				 TO WS-FILE.
 039980       DISPLAY "Rebuild " AT 0812
-039990		      WS-FILE WITH FOREGROUND-COLOR 6 HIGHLIGHT.
+039990                WS-FILE WITH FOREGROUND-COLOR 14.
 040000       DISPLAY "Press any key to continue" AT 1012.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 040020 ZA51.
@@ -3624,9 +3654,9 @@
 040760       EXIT.
 
 040780 I-O-ERRORS      SECTION  91.
-040830
-040880 COPY ERRORS.PRO.
-040930
+
+       COPY ERRORS.PRO.
+
 040950 DISPLAY-FILE-NAME.
 056270	   IF WS-F-ERROR = 1
 056280         MOVE W02-AUDITF TO WS-FILE
