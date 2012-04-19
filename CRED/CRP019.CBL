@@ -156,6 +156,7 @@
 003940                     "30  60  90 120 150 180".
 003950 77  WS-H1           PIC X(05)     VALUE "DATE:".
 003960 77  WS-H3           PIC X(05)     VALUE "PAGE:".
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /

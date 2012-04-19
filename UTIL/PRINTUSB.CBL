@@ -1,19 +1,19 @@
       $SET LINKCOUNT"256"
       ******************************************************************
       *                                                                *
-      *      *******	*******	   ******   **	   **	********       *
-      *      **	   **	**    **     **	    ***	   **	   **	       *
-      *      **	   **	**    **     **	    ** *   **	   **	       *
-      *      *******	*******	     **	    **	*  **	   **	       *
-      *      **		**    **     **	    **	 * **	   **	       *
-      *      **		**    **     **	    **	  ***	   **	       *
-      *      **		**    **   ******   **	   **	   **	       *
+      *      *******	*******    ******   **	   **	********       *
+      *      **    **	**    **     **     ***    **	   **	       *
+      *      **    **	**    **     **     ** *   **	   **	       *
+      *      *******	*******      **     **	*  **	   **	       *
+      *      ** 	**    **     **     **	 * **	   **	       *
+      *      ** 	**    **     **     **	  ***	   **	       *
+      *      ** 	**    **   ******   **	   **	   **	       *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       * 	  P R I N T   U T I L I T Y   P R O G R A M	       *
-      *                                                                *
-      *     VERSION 8.15.00 - January 2011			       *
+      * 							       *
+      *     VERSION 8.15.03 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -50,7 +50,7 @@
 	   printed on a printer and are unaware of the Users request to
 	   spool or display the report.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2009 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2009 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -80,8 +80,8 @@
 000060 CONFIGURATION SECTION.
 000070 SPECIAL-NAMES.
 000080                 CURSOR IS CSTART
-000090		       CONSOLE IS CRT
-		       CRT STATUS IS KEY-STATUS.
+000090                 CONSOLE IS CRT
+                       CRT STATUS IS KEY-STATUS.
 
 000100 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
@@ -91,7 +91,7 @@
 000120 COPY PARAM.SL.
 
 000200	   SELECT PRNSPL  ASSIGN W02-SPOOLER
-                          ORGANIZATION LINE SEQUENTIAL.
+                              ORGANIZATION LINE SEQUENTIAL.
 
 000220 DATA DIVISION.
 000230 FILE SECTION.
@@ -105,64 +105,64 @@
 	   03  SPL-CONT.
 	       05  SPL-ADV     PIC  9(02).
 	       05  SPL-LIN     PIC  9(02).
-000360	   03  SPL-DETAIL1     PIC  X(136).
+000360	   03  SPL-DETAIL1     PIC  X(194).
 
       /
 001690 WORKING-STORAGE SECTION.
-       77  WS-CHECK	   PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
-003260 77  WS-S1	   PIC	9(04)	 COMP-5.
-003270 77  WS-S2	   PIC	9(04)	 COMP-5.
-003280 77  WS-S3	   PIC	9(04)	 COMP-5.
-003290 77  WS-S4	   PIC	9(04)	 COMP-5.
-003300 77  WS-S5	   PIC	9(04)	 COMP-5.
-003310 77  WS-S6	   PIC	9(04)	 COMP-5.
-003320 77  WS-S7	   PIC	9(04)	 COMP-5.
-003330 77  WS-S8	   PIC	9(04)	 COMP-5.
-003330 77  WS-LEFT	   PIC	9(04)	 COMP-5.
-003330 77  WS-RIGHT	   PIC	9(04)	 COMP-5.
-001670 77  WS-NETKEY	   PIC	9(06)	 COMP-5.
-001660 77  WS-PARKEY       PIC  9(06)    COMP-5.
-001820 77  WS-OPTION	   PIC	X(01).
-001820 77  WS-SINGLE	   PIC	X(01).
-       77  WS-ERROR	   PIC	9(01)	 VALUE ZERO.
-       77  WS-LINES	   PIC	9(02)	 VALUE ZERO.
-003150 77  WS-PRN-NO	   PIC	X(01)	 COMP-X VALUE 9.
-003160 77  WS-PRN-STAT	   PIC	X(01)	 COMP-X.
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
-       77  WS-USUB	   PIC	9(04) COMP-5.
+       77  WS-CHECK	 PIC  X(18)    VALUE
+			       "aeWlimemnomLalismJ".
+003260 77  WS-S1	 PIC  9(04)    COMP-5.
+003270 77  WS-S2	 PIC  9(04)    COMP-5.
+003280 77  WS-S3	 PIC  9(04)    COMP-5.
+003290 77  WS-S4	 PIC  9(04)    COMP-5.
+003300 77  WS-S5	 PIC  9(04)    COMP-5.
+003310 77  WS-S6	 PIC  9(04)    COMP-5.
+003320 77  WS-S7	 PIC  9(04)    COMP-5.
+003330 77  WS-S8	 PIC  9(04)    COMP-5.
+003330 77  WS-LEFT	 PIC  9(04)    COMP-5.
+003330 77  WS-RIGHT	 PIC  9(04)    COMP-5.
+001670 77  WS-NETKEY	 PIC  9(06)    COMP-5.
+001660 77  WS-PARKEY	 PIC  9(06)    COMP-5.
+001820 77  WS-OPTION	 PIC  X(01).
+001820 77  WS-SINGLE	 PIC  X(01).
+       77  WS-ERROR	 PIC  9(01)    VALUE ZERO.
+       77  WS-LINES	 PIC  9(02)    VALUE ZERO.
+003150 77  WS-PRN-NO	 PIC  X(01)    COMP-X VALUE 9.
+003160 77  WS-PRN-STAT	 PIC  X(01)    COMP-X.
+       77  TODAY-DDMMYY  PIC  9(08)    COMP-5.
+       77  WS-USUB	 PIC  9(04)    COMP-5.
 
 003050 01  WS-DB-LINE.
-003080	   03  WS-TOP-LNE2.
-001390	       05  WS-TCR   PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+003080     03  WS-TOP-LNE2.
+001390	       05  WS-TCR    PIC X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
       -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-003100	   03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-003110         05  FILLER      PIC  X(01).
-003120         05  WS-TOP-COMP PIC  X(40).
+003100     03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
+003110	       05  FILLER      PIC  X(01).
+003120	       05  WS-TOP-COMP PIC  X(40).
 001430	       05  FILLER      PIC  X(23).
 	       05  WS-WRKHD    PIC  X(11).
 001430	       05  FILLER      PIC  X(01).
 	       05  WS-WRKST    PIC  X(03).
 001430	       05  FILLER      PIC  X(01).
-003160	   03  WS-MID-LNE2.
+003160     03  WS-MID-LNE2.
 	       05  FILLER      PIC  X(01) VALUE "³".
 	       05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
 	       05  FILLER      PIC  X(01) VALUE "³".
-003200	   03  WS-BOT-LNE2.
+003200     03  WS-BOT-LNE2.
 001510	       05  WS-BCR   PIC  X(80) VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
       -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
-003240	   03  WS-B-LINE REDEFINES WS-BOT-LNE2.
+003240     03  WS-B-LINE REDEFINES WS-BOT-LNE2.
 003250	       05  FILLER      PIC X(01).
-               05  WS-MEM-LINE.
-003260            07  WS-SRT-LINE
+	       05  WS-MEM-LINE.
+003260		   07  WS-SRT-LINE
 003270			       PIC X(50).
-		  07  FILLER   PIC X(10).
+		   07  FILLER  PIC X(10).
 003280	       05  FILLER      PIC X(19).
 
        COPY WS.WS.
 
 000290 01  WS-PARID.
-000020	   03  WS-SYS-ID       PIC  X(03).
+000020     03  WS-SYS-ID     PIC  X(03).
 
        01  W02-FILE-IDS.
 
@@ -172,36 +172,40 @@
 
       *  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *  ³  PRINTER ROUTINES FOR USB & WINDOWS PRINTERS THAT DO NOT  ³
-      *  ³  USE STANDARD RAW CODE FOR FORMATING 		     ³
+      *  ³  USE STANDARD RAW CODE FOR FORMATING.                     ³
+      *  ³  INITIALLY ALL PARAMETERS AND LAYOUTS HAVE BEEN CODED AND ³
+      *  ³  INCLUDED. ONCE THE SYSTEM IS RUNNING AND ALL REQUIRED    ³
+      *  ³  OPTIONS HAVE BEEN INCLUDED, ALL UNECESSARY DEFINITIONS   ³
+      *  ³  AND CODE WILL BE REMOVED.                                ³
       *  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       ******************************************************************
       * KEY							       *
-      * 							       *
+      *                                                                *
       * Descriptions for all of the call-by-name routines appear       *
       * alphabetically. Each description contains the routine name and *
-      * function followed by these sections (as appropriate):	       *
-      * 							       *
-      * SYNTAX:     Shows the CALL statement you could use to call     *
-      * 	    the	routine.				       *
-      * 							       *
-      * 	    The optional RETURNING clause is also shown. Every *
-      * 	    routine returns a value showing the result of the  *
-      * 	    operation. Unless otherwise indicated, zero        *
-      * 	    indicates success, nonzero indicates failure. This *
-      * 	    value is left in the data item specified in the    *
-      * 	    RETURNING clause, in this reference, status-code.  *
-      * 	    If this clause is omitted, the value is left in    *
-      * 	    the special register RETURN-CODE. (If call-        *
-      * 	    convention bit two is set, RETURN-CODE is not      *
-      * 	    changed.)					       *
-      * 							       *
-      * 	    status-code must be a numeric data item capable of *
-      * 			holding positive values from 0 to      *
-      * 			65535; for example, PIC X(2) COMP-5.   *
-      * 							       *
-      * 	    The name of the routine must be coded in upper     *
+      * function followed by these sections (as appropriate):          *
+      *                                                                *
+      * SYNTAX:     Shows the CALL statement you could use to call the *
+      * 	    routine.					       *
+      *                                                                *
+      *             The optional RETURNING clause is also shown. Every *
+      *             routine returns a value showing the result of the  *
+      *             operation. Unless otherwise indicated, zero        *
+      *             indicates success, nonzero indicates failure. This *
+      *             value is left in the data item specified in the    *
+      *             RETURNING clause, in this reference, status-code.  *
+      *             If this clause is omitted, the value is left in    *
+      *             the special register RETURN-CODE. (If call-        *
+      *             convention bit two is set, RETURN-CODE is not      *
+      *             changed.)                                          *
+      *                                                                *
+      *             status-code must be a numeric data item capable of *
+      *             of holding positive values from 0 to 65535; for    *
+      * 	    example, PIC X(2) COMP-5.			       *
+      *                                                                *
+      *             The name of the routine must be coded in upper     *
       * 	    case.					       *
-      * 							       *
+      *                                                                *
       * PARAMETERS: Describes any parameters shown in the RETURNING    *
       * 	    and USING clause. A parameter enclosed in brackets,*
       * 	    for example, [parameter1] is optional and might    *
@@ -209,271 +213,274 @@
       * 							       *
       * ON ENTRY:   Indicates which of the parameters shown are passed *
       * 	    on entry.					       *
-      * 							       *
+      *                                                                *
       * ON EXIT:    Indicates which of the parameters shown are        *
-      * 	    returned on exit.				       *
-      * 							       *
-      * 	    Where bits of one or more bytes are referenced,    *
-      * 	    bit 0 is the least significant (rightmost) bit.    *
-      * 							       *
+      *             returned on exit.                                  *
+      *                                                                *
+      *             Where bits of one or more bytes are referenced,    *
+      *             bit 0 is the least significant (rightmost) bit.    *
+      *                                                                *
       * COMMENTS:   Provides any additional information necessary for  *
-      * 	    the successful use of the routine.		       *
-      *								       *
-      *    PC_PRINT_FILE	Print a file			       *
-      *    PC_PRINTER_CLOSE	Close a printer channel 	       *
-      *    PC_PRINTER_CONTROL	Send a printer command to a printer    *
-      *    PC_PRINTER_FREE_BMP	Free bitmap from memory 	       *
-      *    PC_PRINTER_INFO	Get printer information 	       *
-      *    PC_PRINTER_LOAD_BMP	Load bitmap into memory 	       *
-      *    PC_PRINTER_OPEN	Open a printer channel		       *
-      *    PC_PRINTER_SET_COLOR	Set printer color		       *
-      *    PC_PRINTER_SET_FONT	Set printer font		       *
-      *    PC_PRINTER_WRITE	Write text to a printer 	       *
-      *    PC_PRINTER_WRITE_BMP	Write bitmap to a printer	       *
-      * 							       *
+      *             the successful use of the routine.                 *
+      *                                                                *
+      *    PC_PRINT_FILE           Print a file                        *
+      *    PC_PRINTER_CLOSE	   Close a printer channel	       *
+      *    PC_PRINTER_CONTROL	   Send a printer command to a printer *
+      *    PC_PRINTER_FREE_BMP	   Free bitmap from memory	       *
+      *    PC_PRINTER_INFO	   Get printer information	       *
+      *    PC_PRINTER_LOAD_BMP	   Load bitmap into memory	       *
+      *    PC_PRINTER_OPEN	   Open a printer channel	       *
+      *    PC_PRINTER_SET_COLOR    Set printer color		       *
+      *    PC_PRINTER_SET_FONT	   Set printer font		       *
+      *    PC_PRINTER_WRITE	   Write text to a printer	       *
+      *    PC_PRINTER_WRITE_BMP    Write bitmap to a printer	       *
+      *                                                                *
       *================================================================*
-      * 							       *
-      *    PC_WIN_CLOSE_PRINTER	   Close a printer channel	       *
-      *    PC_WIN_FREE_PBMP	   Free bitmap from memory	       *
-      *    PC_WIN_LOAD_PBMP	   Load bitmap into memory	       *
-      *    PC_WIN_OPEN_PRINTER	   Open a printer channel	       *
+      *                                                                *
+      *    PC_WIN_CLOSE_PRINTER    Close a printer channel             *
+      *    PC_WIN_FREE_PBMP        Free bitmap from memory             *
+      *    PC_WIN_LOAD_PBMP        Load bitmap into memory             *
+      *    PC_WIN_OPEN_PRINTER     Open a printer channel              *
       *    PC_WIN_OPEN_PRINTER_EXT Extended open a printer channel     *
-      *    PC_WIN_PRINT_FILE	   Print a file 		       *
-      *    PC_WIN_PRINT_FILE_EXT   Extended print a file	       *
-      *    PC_WIN_PRINTER_CONTROL  Send a printer control	       *
-      *    PC_WIN_PRINTER_INFO	   Get printer information	       *
-      *    PC_WIN_SET_PCOLOR	   Set printer color		       *
-      *    PC_WIN_SET_PDEFAULT	   Set or reset default printer        *
-      *    PC_WIN_SET_PFONT	   Set printer font		       *
-      *    PC_WIN_WRITE_PBMP	   Write bitmap to a printer	       *
-      *    PC_WIN_WRITE_PRINTER	   Write to a printer		       *
-      * 							       *
+      *    PC_WIN_PRINT_FILE       Print a file                        *
+      *    PC_WIN_PRINT_FILE_EXT   Extended print a file               *
+      *    PC_WIN_PRINTER_CONTROL  Send a printer control              *
+      *    PC_WIN_PRINTER_INFO     Get printer information             *
+      *    PC_WIN_SET_PCOLOR       Set printer color                   *
+      *    PC_WIN_SET_PDEFAULT     Set or reset default printer        *
+      *    PC_WIN_SET_PFONT        Set printer font                    *
+      *    PC_WIN_WRITE_PBMP       Write bitmap to a printer           *
+      *    PC_WIN_WRITE_PRINTER    Write to a printer		       *
+      *                                                                *
       * ______________________________________________________________ *
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	      Parameters for PC_PRINTER_DEFAULT_NAME	       ³
+      *    ³          Parameters for PC_PRINTER_DEFAULT_NAME           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        01  Default-Printer-Flags           pic x(04) comp-5  Value 1.
        01  Default-Printer-Name.
-	   03  Default-Printer-Name-Len    pic x(02) comp-5.
-	   03  Default-Printer-Name-Text   pic x(80).
+           03  Default-Printer-Name-Len    pic x(02) comp-5.
+           03  Default-Printer-Name-Text   pic x(80).
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	      Parameters for PC_PRINTER_DEFAULT_FONT	       ³
+      *    ³           Parameters for PC_PRINTER_DEFAULT_FONT          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        01  Default-Font-Family-Name.
-	   03  Default-Font-Name-Len	   pic x(02) comp-5.
-	   03  Default-Font-Name-Text	   pic x(80).
+           03  Default-Font-Name-Len       pic x(02) comp-5.
+           03  Default-Font-Name-Text      pic x(80).
        01  Default-Font-Size               pic x(04) comp-5.
        01  Default-Font-Style              pic x(04) comp-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Parameters for PC_PRINTER_DEFAULT_PROPERTIES       ³
+      *    ³       Parameters for PC_PRINTER_DEFAULT_PROPERTIES        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-       01  Default-Properties-Flags	 pic x(04) comp-5.
+       01  Default-Properties-Flags  pic x(04) comp-5.
        01  Default-Properties.
-	   03 pr-len	       pic  x(02) comp-5.
-	   03 pr-papersize     pic s9(04) comp-5.
-	   03 pr-paperlength   pic s9(04) comp-5.
-	   03 pr-paperwidth    pic s9(04) comp-5.
-	   03 pr-scale	       pic s9(04) comp-5.
-	   03 pr-copies        pic s9(04) comp-5.
-	   03 pr-papertray     pic s9(04) comp-5.
-	   03 pr-printquality  pic s9(04) comp-5.
-	   03 pr-color	       pic s9(04) comp-5.
-	   03 pr-duplex        pic s9(04) comp-5.
-	   03 pr-orientation   pic s9(04) comp-5.
-	   03 pr-yresolution   pic s9(04) comp-5.
+           03 pr-len           pic  x(02) comp-5.
+           03 pr-papersize     pic s9(04) comp-5.
+           03 pr-paperlength   pic s9(04) comp-5.
+           03 pr-paperwidth    pic s9(04) comp-5.
+           03 pr-scale	       pic s9(04) comp-5.
+           03 pr-copies        pic s9(04) comp-5.
+           03 pr-papertray     pic s9(04) comp-5.
+           03 pr-printquality  pic s9(04) comp-5.
+           03 pr-color	       pic s9(04) comp-5.
+           03 pr-duplex        pic s9(04) comp-5.
+           03 pr-orientation   pic s9(04) comp-5.
+           03 pr-yresolution   pic s9(04) comp-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Parameters for PC_PRINTER_OPEN	       ³
+      *    ³              Parameters for PC_PRINTER_OPEN               ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-       01  Printer-Handle     pic x(04) comp-5.
+       01  Printer-Handle      pic x(04) comp-5.
        01  Document-Title.
-	   03  Title-Len      pic x(02) comp-5.
-	   03  Title-Text     pic x(80).
-       01  Printer-Flags      pic x(04) comp-5.
-       01  Window-Handle      pic x(04) comp-5.
+           03  Title-Len       pic x(02) comp-5.
+           03  Title-Text      pic x(80).
+       01  Printer-Flags       pic x(04) comp-5.
+       01  Window-Handle       pic x(04) comp-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Parameters for PC_PRINTER_WRITE	       ³
+      *    ³              Parameters for PC_PRINTER_WRITE              ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       * ---Printer-Handle (same as above)
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Allow for Lanscape printing on USB printers        ³
+      *    ³        Allow for Lanscape printing on USB printers        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        01  Print-Buffer.
-	   03  Print-Cond pic x(136).
+	   03  Print-Cond      pic x(194).
 
-       01  Print-Buffer-N
-       01  Print-Buffer-Len   pic x(04) comp-5.
+       01  Print-Buffer-Len    pic x(04) comp-5.
 
-      *  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *  ³ As there is no File Definition for the print file, the   ³
-      *  ³ following layout will be used for control of the screen  ³
-      *  ³ display and print line setup.			    ³
-      *  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ As there is no File Definition for the print file, the   ³
+      *    ³ following layout will be used for control of the screen  ³
+      *    ³ display and print line setup.                            ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 000350 01  Rep-line.
-000360	   03  Rep-detail      pic  x(136).
+000360	   03  Rep-detail      pic  x(194).
        01  R-sl1 redefines Rep-Line.
-	   03  R-sla	       pic  x(78).
-	   03  filler	       pic  x(58).
+           03  R-sla	       pic  x(78).
+           03  filler	       pic  x(58).
        01  R-sl2 redefines Rep-line.
-	   03  filler	       pic  x(58).
+           03  filler	       pic  x(58).
 	   03  R-slb	       pic  x(78).
+       01  R-CHARACTERS REDEFINES REP-LINE.
+	   03  Rep-char        pic  x(01) occurs 194.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Parameters for PC_PRINTER_LOAD_BMP	       ³
+      *    ³             Parameters for PC_PRINTER_LOAD_BMP            ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       * ---Printer-Handle (same as above)
-       01  BmpFilename	      pic x(64).
-       01  BmpID	      pic x(04) comp-5.
+       01  BmpFilename         pic x(64).
+       01  BmpID               pic x(04) comp-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Parameters for PC_PRINTER_WRITE_BMP	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      * ---Printer-Handle (same as above)
-      * ---BmpID	  (same as above)
-       01  WriteBmpReserved   pic x(04) comp-5 value 0.
-       01  BmpRow	      pic x(04) comp-5 value 1.
-       01  BmpCol	      pic x(04) comp-5 value 1.
-       01  BmpWidth	      pic x(04) comp-5 value 92.
-       01  BmpHeigth	      pic x(04) comp-5 value 12.
-
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Parameters for PC_PRINTER_WRITE_BMP	       ³
+      *    ³             Parameters for PC_PRINTER_WRITE_BMP           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       * ---Printer-Handle (same as above)
       * ---BmpID	  (same as above)
+       01  WriteBmpReserved    pic x(04) comp-5 value 0.
+       01  BmpRow	             pic x(04) comp-5 value 1.
+       01  BmpCol	             pic x(04) comp-5 value 1.
+       01  BmpWidth	       pic x(04) comp-5 value 92.
+       01  BmpHeigth	       pic x(04) comp-5 value 12.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Parameters for PC_PRINTER_SET_COLOR	       ³
+      *    ³            Parameters for PC_PRINTER_WRITE_BMP            ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      * ---Printer-Handle (same as above)
+      * ---BmpID	  (same as above)
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³            Parameters for PC_PRINTER_SET_COLOR            ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
       * ---Printer-Handle (same as above)
-       01  fore-or-back       pic x(02) comp-5.
-       01  color-red	      pic x(02) comp-5.
-       01  color-green	      pic x(02) comp-5.
-       01  color-blue	      pic x(02) comp-5.
+       01  fore-or-back        pic x(02) comp-5.
+       01  color-red	       pic x(02) comp-5.
+       01  color-green	       pic x(02) comp-5.
+       01  color-blue	       pic x(02) comp-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		 Parameters for PC_PRINTER_CONTROL	       ³
+      *    ³             Parameters for PC_PRINTER_CONTROL             ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
       * ---Printer-Handle (same as above)
       * ---print-command:  1 - Abort printing and close printer
-      * 		   2 - Throw a page
-      * 		   3 - Flush the print buffers
-      * 		   4 - Start a new line
+      *                    2 - Throw a page
+      *                    3 - Flush the print buffers
+      *                    4 - Start a new line
       *
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Parameters for PC_PRINTER_CLOSE	       ³
+      *    ³              Parameters for PC_PRINTER_CLOSE              ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       * ---Printer-Handle (same as above)
       *
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    Parameters for PC_PRINT_FILE	       ³
+      *    ³               Parameters for PC_PRINT_FILE                ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        01  Filename.
-	   03  Filename-Len		 pic x(02) comp-5.
-	   03  Filename-Text		 pic x(80).
+           03  Filename-Len        pic x(02) comp-5.
+           03  Filename-Text	     pic x(80).
 
        01  DocumentTitle.
-	   03  DocumentTitle-Len	 pic x(02) comp-5.
-	   03  DocumentTitle-Text	 pic x(15).
+           03  DocumentTitle-Len   pic x(02) comp-5.
+           03  DocumentTitle-Text  pic x(15).
       * --- Printer-Flags (same as above)
       * --- Window-Handle (Same as above)
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Parameters for PC_PRINTER_INFO	       ³
+      *    ³               Parameters for PC_PRINTER_INFO              ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-       78 PrinterNameBufferBegin	value next.
-       01 PrinterNameBuffer         pic x(255).
-       78 PrinterNameBufferLength       value next
+       78 PrinterNameBufferBegin             value next.
+       01 PrinterNameBuffer              pic x(255).
+       78 PrinterNameBufferLength            value next
           - PrinterNameBufferBegin.
-       78 PrinterTypeBufferBegin        value next.
-       01 PrinterTypeBuffer         pic x(255).
-       78 PrinterTypeBufferLength       value next
+       78 PrinterTypeBufferBegin             value next.
+       01 PrinterTypeBuffer              pic x(255).
+       78 PrinterTypeBufferLength            value next
           - PrinterTypeBufferBegin.
-       78 PrinterDeviceBufferBegin      value next.
-       01 PrinterDeviceBuffer       pic x(255).
-       78 PrinterDeviceBufferLength     value next
+       78 PrinterDeviceBufferBegin           value next.
+       01 PrinterDeviceBuffer            pic x(255).
+       78 PrinterDeviceBufferLength          value next
           - PrinterDeviceBufferBegin.
-       78 PrinterLocationBufferBegin    value next.
-       01 PrinterLocationBuffer     pic x(255).
-       78 PrinterLocationBufferLength   value next
+       78 PrinterLocationBufferBegin         value next.
+       01 PrinterLocationBuffer          pic x(255).
+       78 PrinterLocationBufferLength         value next
           - PrinterLocationBufferBegin.
-       78 PrinterCommentBufferBegin     value next.
-       01 PrinterCommentBuffer      pic x(255).
-       78 PrinterCommentBufferLength    value next
+       78 PrinterCommentBufferBegin          value next.
+       01 PrinterCommentBuffer           pic x(255).
+       78 PrinterCommentBufferLength         value next
           - PrinterCommentBufferBegin.
-       78 PrinterPaperSizeBufferBegin   value next.
-       01 PrinterPaperSizeBuffer    pic x(255).
-       78 PrinterPaperSizeBufferLength  value next
+       78 PrinterPaperSizeBufferBegin        value next.
+       01 PrinterPaperSizeBuffer         pic x(255).
+       78 PrinterPaperSizeBufferLength       value next
           - PrinterPaperSizeBufferBegin.
 
        01  PrinterInformation.
-	   03  PrinterInformationLength  pic x(04) comp-5.
-	   03  DeviceContextHandle	 pic x(04) comp-5.
+           03  PrinterInformationLength  pic x(04) comp-5.
+           03  DeviceContextHandle       pic x(04) comp-5.
 	   03  reserved 		 pic x(04) comp-5.
-	   03  Orientation		 pic x(04) comp-5.
-	   03  PageRowsCurrentFont	 pic x(04) comp-5.
-	   03  PageColsCurrentFont	 pic x(04) comp-5.
-	   03  RowsRemainingCurrentFont  pic x(04) comp-5.
-	   03  MaxGraphicsHorizontalAxis pic x(04) comp-5.
-	   03  MaxGraphicsVerticalAxis	 pic x(04) comp-5.
-	   03  MinGraphicsHorizontalAxis pic x(04) comp-5.
-	   03  MinGraphicsVerticalAxis	 pic x(04) comp-5.
+           03  Orientation               pic x(04) comp-5.
+           03  PageRowsCurrentFont       pic x(04) comp-5.
+           03  PageColsCurrentFont       pic x(04) comp-5.
+           03  RowsRemainingCurrentFont  pic x(04) comp-5.
+           03  MaxGraphicsHorizontalAxis pic x(04) comp-5.
+           03  MaxGraphicsVerticalAxis   pic x(04) comp-5.
+           03  MinGraphicsHorizontalAxis pic x(04) comp-5.
+           03  MinGraphicsVerticalAxis   pic x(04) comp-5.
       *
       *    -------  Horizontal
       *
-	   03  CurrentCooridinateX	 pic x(04) comp-5.
+           03  CurrentCooridinateX	 pic x(04) comp-5.
       *
       *    -------  Vertical
       *
 	   03  CurrentCooridinateY	 pic x(04) comp-5.
-	   03  NumberOfCopies		 pic x(02)   comp-5.
+
+       01  PrinterInfoNotForAbove.
+           03  NumberOfCopies		 pic x(02)   comp-5.
       *
       *    -------  Draft, Low,Medium, High, Default or DPI
       *
-	   03  PrintQuality		 pic x(02)   comp-5.
+           03  PrintQuality		 pic x(02)   comp-5.
       *
       *    -------  Monochrome or Color
       *
-	   03  Color			 pic x	  comp-5.
-	   03  reserved 		 pic x	  comp-5.
-	   03  DriverVersionNumber	 pic x(02)   comp-5.
-	   03  PrinterName.
-	       05  PrinterNameLength	 pic x(04) comp-5
+           03  Color                   pic x     comp-5.
+           03  reserved                pic x     comp-5.
+           03  DriverVersionNumber     pic x(02) comp-5.
+           03  PrinterName.
+               05  PrinterNameLength pic x(04) comp-5
                    value PrinterNameBufferLength.
-	       05  p-PrinterNameBuffer	 pointer.
-	   03  PrinterType.
-	       05  PrinterTypeLength	 pic x(04) comp-5
+               05  p-PrinterNameBuffer pointer.
+           03  PrinterType.
+               05  PrinterTypeLength	 pic x(04) comp-5
                    value PrinterTypeBufferLength.
-	       05  p-PrinterTypeBuffer	 pointer.
-	   03  PrinterDevice.
-	       05 PrinterDeviceLength	 pic x(04) comp-5
+               05  p-PrinterTypeBuffer	 pointer.
+           03  PrinterDevice.
+               05 PrinterDeviceLength    pic x(04) comp-5
                   value PrinterDeviceBufferLength.
-	       05 p-PrinterDeviceBuffer  pointer.
-	   03  PrinterLocation.
-	       05 PrinterLocationLength  pic x(04) comp-5
+               05 p-PrinterDeviceBuffer  pointer.
+           03  PrinterLocation.
+               05 PrinterLocationLength  pic x(04) comp-5
                   value PrinterLocationBufferLength.
-	       05 p-PrinterLocationBuffer  pointer.
-	   03  PrinterComment.
-	       05 PrinterCommentLength	 pic x(04) comp-5
+               05 p-PrinterLocationBuffer  pointer.
+           03  PrinterComment.
+               05 PrinterCommentLength	 pic x(04) comp-5
                   value PrinterCommentBufferLength.
-	       05 p-PrinterCommentBuffer pointer.
-	   03  PrinterPaperSize.
-	       05 PrinterPaperSizeLength pic x(04) comp-5
+               05 p-PrinterCommentBuffer pointer.
+           03  PrinterPaperSize.
+               05 PrinterPaperSizeLength pic x(04) comp-5
                  value PrinterPaperSizeBufferLength.
-	       05 p-PrinterPaperSizeBuffer pointer.
+               05 p-PrinterPaperSizeBuffer pointer.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Used to display error messages for the Print Routines.   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -481,133 +488,136 @@
 
        01   printer-control.
 
-	   03  Default-Printer-Name.
-	       05  Default-Printer-Name-Len  pic x(02) comp-5.
-	       05  Default-Printer-Name-Text pic x(80).
+           03  Default-Printer-Name.
+               05  Default-Printer-Name-Len  pic x(02) comp-5.
+               05  Default-Printer-Name-Text pic x(80).
 
-	   03  Font-family.
-	       05  Font-family-namelen	pic x(02) comp-5 value 80.
-	       05  Font-family-name	pic x(80).
+           03  Font-family.
+               05  Font-family-namelen	pic x(02) comp-5 value 80.
+               05  Font-family-name	      pic x(80).
 
-	   03  FontTypeFace    pic x(20) value spaces.
-	   03  FontTypeFaceC   pic x(13) value "Courier New" & x"00".
-	   03  FontTypeFaceL   pic x(18)
-			       value "Letter Gothic Std" & x"00".
-	   03  font-style      pic x(04) comp-5 value 0.
-	   03  font-size       pic x(04) comp-5 value 0.
+           03  FontTypeFace    pic x(20) value spaces.
+           03  FontTypeFaceC   pic x(13) value "Courier New" & x"00".
+           03  FontTypeFaceL   pic x(18)
+                                   value "Letter Gothic Std" & x"00".
+           03  font-style      pic x(04) comp-5 value 0.
+           03  font-size       pic x(04) comp-5 value 0.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 5 characters per inch	       ³
+      *    ³            Set to print ñ 5 characters per inch           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-5-CPI      pic x(04) comp-5 value 24.
+           03  font-5-CPI      pic x(04) comp-5 value 24.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 5.2 characters per inch	       ³
+      *    ³           Set to print ñ 5.2 characters per inch          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-7p5-CPI    pic x(04) comp-5 value 23.
+           03  font-5p2-CPI    pic x(04) comp-5 value 23.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 5.5 characters per inch	       ³
+      *    ³           Set to print ñ 5.5 characters per inch          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-7p5-CPI    pic x(04) comp-5 value 22.
+           03  font-5p5-CPI    pic x(04) comp-5 value 22.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 5.8 characters per inch	       ³
+      *    ³           Set to print ñ 5.8 characters per inch          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-7p5-CPI    pic x(04) comp-5 value 21.
+           03  font-5p8-CPI    pic x(04) comp-5 value 21.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 6 characters per inch	       ³
+      *    ³     Set to print ñ 6 characters per inch: P=47; L=68      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-5-CPI      pic x(04) comp-5 value 20.
+           03  font-6-CPI      pic x(04) comp-5 value 20.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 6.5 characters per inch	       ³
+      *    ³           Set to print ñ 6.5 characters per inch          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-7p5-CPI    pic x(04) comp-5 value 19.
+           03  font-6p5-CPI    pic x(04) comp-5 value 19.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 6.8 characters per inch	       ³
+      *    ³     Set to print ñ 6.8 characters per inch: P=52; L=75    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-7p5-CPI    pic x(04) comp-5 value 18.
+           03  font-6p8-CPI    pic x(04) comp-5 value 18.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 7 characters per inch	       ³
+      *    ³     Set to print ñ 7 characters per inch: P=55; L=80      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-7-CPI      pic x(04) comp-5 value 17.
+           03  font-7-CPI      pic x(04) comp-5 value 17.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 7.5 characters per inch	       ³
+      *    ³     Set to print ñ 7.5 characters per inch: P=59; L=84    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-7p5-CPI    pic x(04) comp-5 value 16.
+           03  font-7p5-CPI    pic x(04) comp-5 value 16.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 8 characters per inch	       ³
+      *    ³    Set to print ñ 8 characters per inch: P=63; L=90       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-8-CPI      pic x(04) comp-5 value 15.
+           03  font-8-CPI      pic x(04) comp-5 value 15.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 8.5 characters per inch	       ³
+      *    ³    Set to print ñ 8.5 characters per inch: P=67; L=97     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-8p5-CPI	pic x(04) comp-5 value 14.
+           03  font-8p5-CPI	pic x(04) comp-5 value 14.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 9 characters per inch	       ³
+      *    ³    Set to print ñ 9 characters per inch: P=72; L=104      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-9-CPI      pic x(04) comp-5 value 13.
+           03  font-9-CPI      pic x(04) comp-5 value 13.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 10 characters per inch	       ³
+      *    ³    Set to print ñ 10 characters per inch: P=78; L=113     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-10-CPI     pic x(04) comp-5 value 12.
+           03  font-10-CPI     pic x(04) comp-5 value 12.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 11 characters per inch	       ³
+      *    ³    Set to print ñ 11 characters per inch: P=86; L=123     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-11-CPI     pic x(04) comp-5 value 11.
+           03  font-11-CPI     pic x(04) comp-5 value 11.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 12 characters per inch	       ³
+      *    ³    Set to print ñ 12 characters per inch: P=94; L=135     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-12-CPI     pic x(04) comp-5 value 10.
+           03  font-12-CPI     pic x(04) comp-5 value 10.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 13/14 characters per inch       ³
+      *    ³   Set to print ñ 13/14 characters per inch: P=105; L=151  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-13-CPI     pic x(04) comp-5 value 9.
+           03  font-13-CPI     pic x(04) comp-5 value 9.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 15 characters per inch	       ³
+      *    ³    Set to print ñ 15 characters per inch: P=118; L=169    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-15-CPI     pic x(04) comp-5 value 8.
+           03  font-15-CPI     pic x(04) comp-5 value 8.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 17 characters per inch	       ³
+      *    ³    Set to print ñ 17 characters per inch: P=135; L=194    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-17-CPI     pic x(04) comp-5 value 7.
+           03  font-17-CPI     pic x(04) comp-5 value 7.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set to print ñ 20 characters per inch	       ³
+      *    ³    Set to print ñ 20 characters per inch: P=157; L=226    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-20-CPI     pic x(04) comp-5 value 6.
+           03  font-20-CPI     pic x(04) comp-5 value 6.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Set to print ñ 24 characters per inch	       ³
+      *    ³           Set to print ñ 24 characters per inch           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   03  font-24-CPI     pic x(04) comp-5 value 5.
+           03  font-24-CPI     pic x(04) comp-5 value 5.
 
-	   03  abort	       pic x(04) comp-5 value 1.
-	   03  prn-control     pic x(04) comp-5 value 2.
-	   03  prn-flags       pic x(04) comp-5 value 1.
-	   03  prn-command     pic x(04) comp-5 value 4.
-	   03  prn-handle      pic x(04) comp-5.
+           03  abort	       pic x(04) comp-5 value 1.
+           03  prn-control     pic x(04) comp-5 value 2.
+           03  prn-flags       pic x(04) comp-5 value 1.
+           03  prn-command     pic x(04) comp-5 value 4.
+           03  prn-handle      pic x(04) comp-5.
 
-	   03  prn-line-size   pic x(04) comp-5 value 0.
-	   03  prn-line-94     pic x(04) comp-5 value 94.
+           03  prn-line-size   pic x(04) comp-5 value 0.
+           03  prn-line-94     pic x(04) comp-5 value 94.
 	   03  prn-line-136    pic x(04) comp-5 value 136.
+	   03  prn-line-194    pic x(04) comp-5 value 194.
       *
       *    -------    The buffer used for printing
-      * 	      Formatted data is moved to this buffer for
-      * 	      printing. This buffer may be redefined to
-      * 	      represent different buffer sizes (Font size)
+      *               Formatted data is moved to this buffer for
+      *               printing. This buffer may be redefined to
+      *               represent different buffer sizes (Font size)
       *
        01  W01-Print-Detail.
       *
       *    -------    Font size 7
       *
-	   03  W01-Print-Line-136.
-	     05  W01-Detail-136.
+	   03  W01-Print-Line-194.
+	   05  W01-Print-Line-136.
+	     07  W01-Detail-136.
       *
       *    -------    Font size 10
       *
-	       07  W01-Print-Line-94.
-		 09  W01-Detail-94 pic	x(94).
-	       07  filler	   pic	x(42).
+	       09  W01-Print-Line-94.
+		 11 W01-Detail-94 pic	x(94).
+	       09  filler	  pic	x(42).
+	     07  filler 	  pic	x(58).
 
-	   03  W02-PRINTER.
-	       05  W02-PRN     PIC  X(06).
+           03  W02-PRINTER.
+               05  W02-PRN     PIC  X(06).
 
-	   03  W02-SPOOLER.
+           03  W02-SPOOLER.
 	       05  W02-WS      PIC  X(02).
 	       05  W02-US      PIC  X(01).
 	       05  W02-TERM    PIC  X(03).
@@ -617,48 +627,90 @@
 	       05  W02-USER    PIC  X(03).
 
        01  W05-SCREEN.
-	   03  W05-PRINT-DETAIL.
-	     05  W05-LINE OCCURS 20.
-	       07  W05-TYPE    PIC  X(01).
-	       07  W05-DETAIL  PIC  X(136).
-	   03  W05-PRINT-DETAIL2 REDEFINES W05-PRINT-DETAIL.
-	     05  W05-LINE2 OCCURS 20.
-	       07  FILLER      PIC  X(01).
-	       07  W05-SLA     PIC  X(78).
-	       07  FILLER      PIC  X(58).
-	   03  W05-PRINT-DETAIL2 REDEFINES W05-PRINT-DETAIL.
-	     05  W05-LINE3 OCCURS 20.
-	       07  FILLER      PIC  X(01).
-	       07  FILLER      PIC  X(58).
-	       07  W05-SLB     PIC  X(78).
-	   03  W05-PRINT-DETAIL3 REDEFINES W05-PRINT-DETAIL.
-	     05  W05-LINE4 OCCURS 20.
-	       07  FILLER      PIC  X(01).
-	       07  W05-CHAR    PIC  X(01) OCCURS 136.
+           03  W05-PRINT-DETAIL.
+             05  W05-LINE OCCURS 20.
+               07  W05-TYPE    PIC  X(01).
+               07  W05-DETAIL  PIC  X(136).
+           03  W05-PRINT-DETAIL2 REDEFINES W05-PRINT-DETAIL.
+             05  W05-LINE2 OCCURS 20.
+               07  FILLER      PIC  X(01).
+               07  W05-SLA     PIC  X(78).
+               07  FILLER      PIC  X(58).
+           03  W05-PRINT-DETAIL2 REDEFINES W05-PRINT-DETAIL.
+             05  W05-LINE3 OCCURS 20.
+               07  FILLER      PIC  X(01).
+               07  FILLER      PIC  X(58).
+               07  W05-SLB     PIC  X(78).
+           03  W05-PRINT-DETAIL3 REDEFINES W05-PRINT-DETAIL.
+             05  W05-LINE4 OCCURS 20.
+               07  FILLER      PIC  X(01).
+               07  W05-CHAR    PIC  X(01) OCCURS 136.
 
        01  W06-SCREEN.
-	   03  W06-PRINT-DETAIL.
-	     05  W06-LINE OCCURS 20.
-	       07  W06-CHAR    PIC  X(01) OCCURS 78.
+           03  W06-PRINT-DETAIL.
+             05  W06-LINE OCCURS 20.
+               07  W06-CHAR     PIC  X(01) OCCURS 78.
 
 001270 01  W08-EXPD.
-	   03  W08-CHAR        PIC  X(06).
-001280	   03  W08-DEC REDEFINES W08-CHAR
-			       PIC  X(01) COMP-X OCCURS 6.
+           03  W08-CHAR       PIC  X(06).
+001280     03  W08-DEC REDEFINES W08-CHAR
+	                        PIC  X(01) COMP-X OCCURS 6.
 
 003930 01  W25-CALCS.
-002860	   03  W25-RESULT      PIC 9(05)V99.
+002860	   03  W25-RESULT   PIC 9(05)V99.
 002870     03  W25-RESULT1 REDEFINES W25-RESULT.
-002880         05  W25-WHOLE   PIC 9(05).
-002890         05  W25-DECIMAL PIC 9(02).
+002880         05  W25-WHOLE    PIC 9(05).
+002890         05  W25-DECIMAL  PIC 9(02).
            03  W25-RESULT2 REDEFINES W25-RESULT.
-	       05  W25-KEY     PIC 9(04).
-	       05  W25-SUB     PIC 9(01).
-	       05  FILLER      PIC 9(02).
+               05  W25-KEY        PIC 9(04).
+               05  W25-SUB        PIC 9(01).
+               05  FILLER         PIC 9(02).
 
        COPY W40.WS.
 
        COPY FUNCTION.WS.
+
+       01  W100-STORE-DATA.
+	   03  W100-PRINT-DETAIL  PIC X(136).
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ The redefinition below has been include as a temporary    ³
+      *    ³ solution for some of the Accounts receivable report       ³
+      *    ³ headings, that work with a dot matrix p[rinter but need   ³
+      *    ³ to be amended to work with the Windows spooler.	       ³
+      *    ³ The date and page numbers which appear at the beggining & ³
+      *    ³ end of the line are printed with a 17cpi font, while the  ³
+      *    ³ headings between these two fields are printed with an ex- ³
+      *    ³ panded font.					       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	   03  w100-print-line redefines w100-print-detail.
+	       05  w100-page.
+      * 				     PAGE:
+		   07  w100-pgh   pic  x(06).
+      * 				     ZZZ9
+		   07  w100-pgn   pic  x(04).
+	       05  w100-hdg	  pic  x(105).
+	       05  w100-date.
+      * 				     DATE:
+		   07  w100-dth   pic  x(06).
+      * 				    Z9/99/9999
+		   07  w100-dte   pic  x(10).
+	   03  w100-print-heading.
+	       05  filler	  pic  x(03).
+      *
+      *  Company/Business name and report heading.
+      *
+      *  CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+      *
+	       05  w100-rep-hdg   pic  x(62).
+	       05  filler	  pic  x(03).
+      *
+      *  Special heading for Accounts Receivable.
+      *
+	   03  w100-headings	  pic  x(01).
+      *
+      *  Heading line has been stored.
+      *
+	   03  W100-STORE-IND	  PIC  X(01).
 
        LINKAGE SECTION.
 
@@ -667,69 +719,69 @@
        01  LS-SCREEN-PRINT.
       *
       *    COMMAND: C = Close printer
-      * 	    E = End of report
-      *		    O = Open printer
-      * 	    P = Print a line
-      * 	    S = Skip to new page
+      *             E = End of report
+      *             O = Open printer
+      *             P = Print a line
+      *             S = Skip to new page
       *
-	   03  LS-COMMAND      PIC  X(01).
+	     03  LS-COMMAND      PIC  X(01).
       *
       *    PRINTER: D = Disk
-      * 	    S = Screen
-      * 	    1 = Lpt1
-      * 	    2 = Lpt2
-      * 	    3 = Lpt3
-      * 	    4 = Com1
-      * 	    5 = Com2
-      * 	    8 = USB/WINDOWS
+      *             S = Screen
+      *             1 = Lpt1
+      *             2 = Lpt2
+      *             3 = Lpt3
+      *             4 = Com1
+      *             5 = Com2
+      *             8 = USB/WINDOWS
       *
-	   03  LS-PRINTER.
-	       05  LS-PRINT-NO PIC  9(01).
+           03  LS-PRINTER.
+               05  LS-PRINT-NO PIC  9(01).
       *
       *    ADVANCE:   0 = Print - No advance
-      * 	    1-3 = Print advance lines specified
-      * 	    4-? = Print advance 1 line, then use a loop
-      * 		  to advance the remaining lines.
-      * 	     99 = Print and advance to a new page.
+      *             1-3 = Print advance lines specified
+      *             4-? = Print advance 1 line, then use a loop
+      *                	  to advance the remaining lines.
+      *              99 = Print and advance to a new page.
       *
-	   03  LS-ADVANCE      PIC  9(02).
+           03  LS-ADVANCE      PIC  9(02).
       *
       *    REPORT: 1 = Picking Slips
-      * 	   2 = Invoices/Credit Notes
-      * 	   3 = General Reports (Stock)
-      * 	   4 = General Reports (Creditors)
-      * 	   5 = General Reports (Debtors)
-      * 	   6 = General Reports (G/Ledger)
-      * 	   7 = Statements
-      * 	   8 = Labels
-      * 	   9 = Quotations
+      *            2 = Invoices/Credit Notes
+      *            3 = General Reports (Stock)
+      *            4 = General Reports (Creditors)
+      *            5 = General Reports (Debtors)
+      *            6 = General Reports (G/Ledger)
+      *            7 = Statements
+      *            8 = Labels
+      *            9 = Quotations
       *
-	   03  LS-REPORT       PIC  9(01).
-	   03  LS-SCREEN       PIC  9(01).
-	   03  LS-SCREEN-LIN   PIC  9(02).
-	   03  LS-LINAGE       PIC  9(02).
-	   03  LS-PAPER        PIC  X(01).
-	   03  LS-ORIENTATION  PIC  X(01).
+           03  LS-REPORT       PIC  9(01).
+           03  LS-SCREEN       PIC  9(01).
+           03  LS-SCREEN-LIN   PIC  9(02).
+           03  LS-LINAGE       PIC  9(02).
+           03  LS-PAPER        PIC  X(01).
+           03  LS-ORIENTATION  PIC  X(01).
 
        01  L02-PRINTER-DETAILS.
-	   03  L02-PRINTER     PIC  X(12).
-002570	   03  L02-PGE-LENGTH  PIC  9(02).
-001870	   03  L02-PRN-LENGTH  PIC  9(02).
-	   03  L02-LINAGE      PIC  9(02).
-	   03  L02-PRN-STATUS  PIC  X(01).
+           03  L02-PRINTER     PIC  X(12).
+002570     03  L02-PGE-LENGTH  PIC  9(02).
+001870     03  L02-PRN-LENGTH  PIC  9(02).
+           03  L02-LINAGE      PIC  9(02).
+           03  L02-PRN-STATUS  PIC  X(01).
       *
       *    ****    D  =  Detail line
-      * 	   C  =  Condensed print
-      * 	   E  =  Expanded print
-      * 	   H  =  Header line
-      * 	   X  =  Cancel expanded print
-      * 	   1  =  10 Characters per inch
-      * 	   2  =  12 Characters per inch
-      * 	   3  =  17 Characters per inch
-      * 	   6  =  6 Lines per inch
-      * 	   8  =  8 Lines per inch
+      *            C  =  Condensed print
+      *            E  =  Expanded print
+      *            H  =  Header line
+      *            X  =  Cancel expanded print
+      *            1  =  10 Characters per inch
+      *            2  =  12 Characters per inch
+      *            3  =  17 Characters per inch
+      *            6  =  6 Lines per inch
+      *            8  =  8 Lines per inch
       *
-	   03  L02-PRN-TYPE    PIC  X(01).
+           03  L02-PRN-TYPE    PIC  X(01).
 	   03  L02-PRN-LINE    PIC  X(136).
 
       /
@@ -738,139 +790,139 @@
        COPY BLANK.CRT.
 
        01  SD-LEFT.
-	   03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
-				 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+           03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
+                                 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
       -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(1).
-	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(2).
-	   03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(3).
-	   03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(4).
-	   03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(5).
-	   03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(6).
-	   03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(7).
-	   03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(8).
-	   03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(9).
-	   03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(10).
-	   03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(11).
-	   03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(12).
-	   03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(13).
-	   03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(14).
-	   03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(15).
-	   03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(16).
-	   03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(17).
-	   03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(18).
-	   03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(19).
-	   03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLA(20).
+           03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(1).
+           03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(2).
+           03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(3).
+           03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(4).
+           03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(5).
+           03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(6).
+           03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(7).
+           03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(8).
+           03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(9).
+           03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(10).
+           03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(11).
+           03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(12).
+           03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(13).
+           03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(14).
+           03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(15).
+           03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(16).
+           03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(17).
+           03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(18).
+           03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(19).
+           03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLA(20).
 
        01  SD-RIGHT.
-	   03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
-				 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+           03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
+                                 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
       -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(1).
-	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(2).
-	   03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(3).
-	   03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(4).
-	   03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(5).
-	   03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(6).
-	   03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(7).
-	   03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(8).
-	   03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(9).
-	   03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(10).
-	   03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(11).
-	   03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(12).
-	   03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(13).
-	   03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(14).
-	   03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(15).
-	   03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(16).
-	   03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(17).
-	   03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(18).
-	   03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(19).
-	   03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W05-SLB(20).
+           03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(1).
+           03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(2).
+           03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(3).
+           03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(4).
+           03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(5).
+           03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(6).
+           03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(7).
+           03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(8).
+           03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(9).
+           03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(10).
+           03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(11).
+           03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(12).
+           03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(13).
+           03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(14).
+           03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(15).
+           03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(16).
+           03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(17).
+           03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(18).
+           03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W05-SLB(19).
+           03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                	               PIC  X(78) FROM W05-SLB(20).
 
        01  SD-RANDOM.
-	   03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
-				 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+           03  LINE  3 COLUMN  1 FOREGROUND-COLOR 3 BACKGROUND-COLOR 0
+                                 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
       -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(1).
-	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(2).
-	   03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(3).
-	   03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(4).
-	   03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(5).
-	   03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(6).
-	   03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(7).
-	   03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(8).
-	   03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(9).
-	   03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(10).
-	   03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(11).
-	   03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(12).
-	   03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(13).
-	   03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(14).
-	   03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(15).
-	   03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(16).
-	   03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(17).
-	   03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(18).
-	   03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(19).
-	   03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-				 PIC  X(78) FROM W06-LINE(20).
+           03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(1).
+           03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(2).
+           03  LINE  6 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(3).
+           03  LINE  7 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(4).
+           03  LINE  8 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(5).
+           03  LINE  9 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(6).
+           03  LINE 10 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(7).
+           03  LINE 11 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(8).
+           03  LINE 12 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(9).
+           03  LINE 13 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(10).
+           03  LINE 14 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(11).
+           03  LINE 15 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(12).
+           03  LINE 16 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(13).
+           03  LINE 17 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(14).
+           03  LINE 18 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(15).
+           03  LINE 19 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(16).
+           03  LINE 20 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(17).
+           03  LINE 21 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                	               PIC  X(78) FROM W06-LINE(18).
+           03  LINE 22 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(19).
+           03  LINE 23 COLUMN  2 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                                 PIC  X(78) FROM W06-LINE(20).
 
 004870 COPY S99.CRT.
 
@@ -1019,13 +1071,15 @@
 	       END-IF
 	       GO TO PRINT-SCREEN-EXIT
 	   END-EVALUATE.
-	     MOVE L02-PRN-LINE	TO REP-DETAIL1.
+	     MOVE L02-PRN-LINE	TO Rep-detail
+				   W01-Print-Line-194
+				   SPL-DETAIL1.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	C H E C K   I F	  P R I N T E R	  F I L E   O P E N    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	   IF L02-PRN-STATUS = "C"
 	       MOVE "Printer file not open"
-				 TO WS-ERR-STRING
+                                 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO PRINT-SCREEN-EXIT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -1045,241 +1099,118 @@
        OPEN-PRINTER.
 	   IF L02-LINAGE = 99
 	       OPEN INPUT PARAM.
-	     MOVE "P"		 TO WS-OPTION.
+           MOVE "P"              TO WS-OPTION.
 
        OPEN-PRINTER-NO.
-	     MOVE SPACES	 TO WS-ERR-MES.
-	   IF LS-PRINTER = "S"
-	       STRING "'P'rinter or 'D'isk  ["
-		      DELIMITED SIZE
-		      WS-OPTION DELIMITED SIZE
-		      "]" DELIMITED SIZE
-				 INTO WS-ERR-MES
-	       PERFORM OPT-MESSAGE TEST AFTER
-		       UNTIL WS-OPTION = "P" OR "D"
-	   ELSE
-	       STRING "'P'rinter,'S'creen or 'D'isk  ["
-		      DELIMITED SIZE
-		      WS-OPTION DELIMITED SIZE
-		      "]" DELIMITED SIZE
-				 INTO WS-ERR-MES
-	       PERFORM OPT-MESSAGE TEST AFTER
-		       UNTIL WS-OPTION = "P" OR "D" OR "S".
-	     MOVE WS-OPTION	 TO WS-PRINTER.
-	   IF WS-OPTION = "S"
+             MOVE SPACES	   TO WS-ERR-MES.
+           IF LS-PRINTER = "S"
+               STRING "'P'rinter or 'D'isk  ["
+                      DELIMITED SIZE
+                      WS-OPTION DELIMITED SIZE
+                      "]" DELIMITED SIZE
+                                 INTO WS-ERR-MES
+               PERFORM OPT-MESSAGE TEST AFTER
+                       UNTIL WS-OPTION = "P" OR "D"
+           ELSE
+               STRING "'P'rinter,'S'creen or 'D'isk  ["
+                      DELIMITED SIZE
+                      WS-OPTION DELIMITED SIZE
+                      "]" DELIMITED SIZE
+                                 INTO WS-ERR-MES
+               PERFORM OPT-MESSAGE TEST AFTER
+	               UNTIL WS-OPTION = "P" OR "D" OR "S".
+             MOVE WS-OPTION      TO WS-PRINTER.
+           IF WS-OPTION = "S"
 	       PERFORM OPEN-SCREEN THRU OPEN-SCREEN-EXIT
-	       MOVE 62		 TO L02-PRN-LENGTH
-	       MOVE 66		 TO L02-PGE-LENGTH
+	       MOVE 62             TO L02-PRN-LENGTH
+	       MOVE 66             TO L02-PGE-LENGTH
 	       GO TO OPEN-PRINTER-STATUS.
-	   IF LS-USER NUMERIC
-	       IF LS-USE > ZERO AND < 110
-		   MOVE LS-USE	 TO WS-USUB
-	       END-IF
-	   ELSE
-	       MOVE 110		 TO WS-USUB.
-014240       ADD 2549 WS-USUB    GIVING W25-RESULT.
-             MOVE W25-KEY        TO WS-PARKEY.
+           IF LS-USER NUMERIC
+               IF LS-USE > ZERO AND < 110
+                   MOVE LS-USE   TO WS-USUB
+               END-IF
+           ELSE
+	       MOVE 110		 TO WS-USUB
+	   END-IF.
+014240	     ADD 2549 WS-USUB	 GIVING W25-RESULT.
+	     MOVE W25-KEY	 TO WS-PARKEY.
              ADD 1 W25-SUB       GIVING WS-S6.
 014250       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    REPORT: 1 = Picking Slips			       ³
-      *    ³		    2 = Invoices/Credit Notes		       ³
-      *    ³		    3 = General Reports (Stock) 	       ³
-      *    ³		    4 = General Reports (Creditors)	       ³
-      *    ³		    5 = General Reports (Debtors)	       ³
-      *    ³		    6 = General Reports (G/Ledger)	       ³
-      *    ³		    7 = Statements			       ³
-      *    ³		    8 = Labels				       ³
-      *    ³		    9 = Quotations			       ³
+      *    ³            REPORT: 1 = Picking Slips                      ³
+      *    ³                    2 = Invoices/Credit Notes              ³
+      *    ³			3 = General Reports (Stock)	       ³
+      *    ³                    4 = General Reports (Creditors)        ³
+      *    ³                    5 = General Reports (Debtors)          ³
+      *    ³                    6 = General Reports (G/Ledger)         ³
+      *    ³                    7 = Statements	                       ³
+      *    ³                    8 = Labels                             ³
+      *    ³                    9 = Quotations                         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   EVALUATE WS-REPORT
-	     WHEN 1
-	       PERFORM OPEN-REPORT-1
-	     WHEN 2
-	       PERFORM OPEN-REPORT-2
+	     EVALUATE WS-REPORT
+               WHEN 1
+                    PERFORM OPEN-REPORT-1
+               WHEN 2
+                    PERFORM OPEN-REPORT-2
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ As printing is now using the windows drivers, the system  ³
       *    ³ will now allow for Landscape printing and the orientation ³
       *    ³ setting is now included. The detail line is now allowing  ³
       *    ³ for more characters to be printed and the number of lines ³
       *    ³ is reduced when printing landscape.		       ³
-      *    ³ This program will provide the facility for the follwing 4 ³
+      *    ³ This program will provide the facility for the following  ³
       *    ³ reports. Over the next year the reports will be studied   ³
       *    ³ and this feature will be included where required.	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     WHEN 3
-	     WHEN 4
-	     WHEN 5
-	     WHEN 6
-	       PERFORM OPEN-REPORT-3
-	     WHEN 7
-	       PERFORM OPEN-REPORT-4
-	     WHEN 8
-	       PERFORM OPEN-REPORT-5
-	     WHEN 9
-	       PERFORM OPEN-REPORT-6
-	   END-EVALUATE.
+               WHEN 3
+               WHEN 4
+               WHEN 5
+               WHEN 6
+		    PERFORM OPEN-REPORT-3
+               WHEN 7
+                    PERFORM OPEN-REPORT-4
+               WHEN 8
+                    PERFORM OPEN-REPORT-5
+               WHEN 9
+                    PERFORM OPEN-REPORT-6
+             END-EVALUATE.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³ If the printer being used is a USB printer or a printer   ³
-      *    ³ being accessed via the WINDOWS spool routine then the in- ³
-      *    ³ line printer control characters are not used.	       ³
+      *    ³ The program will initially only handle USB and will later ³
+      *    ³ be amended to handle the Dot Matrix Printers as well. The ³
+      *    ³ following code is the original Dot Matrix Printer code.   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF W02-PRINTER = "USB/WINDOWS"
-	       GO TO OPEN-WIN-USB-PRINTER.
-	     DIVIDE W25-RESULT BY 2
-                                 GIVING WS-PARKEY
-                                 REMAINDER WS-S6.
-             ADD 1               TO WS-S6.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	     MOVE TRM-CONP(WS-S6)
-                                 TO WS-COND.
-	     MOVE TRM-NORP(WS-S6)
-                                 TO WS-NORM.
-	     MOVE TRM-EXPP(WS-S6)
-				 TO WS-EXPP W08-EXPD.
-	     MOVE TRM-ECAN(WS-S6)
-                                 TO WS-ECAN.
-	     MOVE TRM-8LPI(WS-S6)
-                                 TO WS-8LPI.
-	     MOVE TRM-6LPI(WS-S6)
-                                 TO WS-6LPI.
-	     MOVE TRM-10CPI(WS-S6)
-                                 TO WS-10CPI.
-	     MOVE TRM-12CPI(WS-S6)
-                                 TO WS-12CPI.
-	     MOVE TRM-17CPI(WS-S6)
-                                 TO WS-17CPI.
-	     MOVE TRM-LENGTH(WS-S6)
-				 TO WS-PRN-LENGTH
-				    L02-PRN-LENGTH.
-	     MOVE TRM-PAGE(WS-S6)
-				 TO WS-PGE-LENGTH
-				    L02-PGE-LENGTH.
-	     MOVE TRM-SINGLE(WS-S6)
-				 TO WS-PAPER.
-	   IF TRM-PRN-TYPE(WS-S6) = "H"
-	       MOVE 77		 TO WS-SCREEN-LIN
-	       MOVE WS-COND	 TO WS-ECAN
-	       MOVE 048		 TO W08-DEC(4)
-	       MOVE 056		 TO W08-DEC(5)
-	       MOVE W08-EXPD	 TO WS-EXPP.
-	   IF WS-PRINTER = "D"
-	       MOVE "WS"	 TO W02-WS
-	       MOVE "_"		 TO W02-US W02-US2
-	       MOVE LS-USER	 TO W02-TERM
-	       MOVE WS-REPORT	 TO W02-REP
-	       MOVE "."		 TO W02-P
-	       MOVE LS-SYS-ID	 TO W02-USER
-	       MOVE 9		 TO WS-PRN-NO.
-	   IF WS-PRN-NO < 3
-	       PERFORM CHECK-PRINTER THRU CHECK-PRINTER-EXIT
-	       IF WS-ERROR = 1
-		   MOVE "D"	TO WS-OPTION
-		   GO TO OPEN-PRINTER-NO
-	       END-IF
-	   ELSE
-	       MOVE "Waiting for printer response"
-				 TO WS-ERR-MES
-	       PERFORM OPT-CURSOR THRU OPT-REPLY.
-	   IF L02-PRN-TYPE = 8
-      *
-      *    ****    SET PRINTER TO 8 LPI
-      *
-	       COMPUTE WS-PGE-LENGTH = WS-PGE-LENGTH / 6 * 8
-	       MOVE WS-PGE-LENGTH
-				 TO L02-PGE-LENGTH
-	       IF WS-PGE-LENGTH > 88
-		   SUBTRACT 7 FROM WS-PGE-LENGTH
-				 GIVING WS-PRN-LENGTH
-					L02-PRN-LENGTH
-	       ELSE
-		   SUBTRACT 6 FROM WS-PGE-LENGTH
-				 GIVING WS-PRN-LENGTH
-					L02-PRN-LENGTH.
-	   IF NOT(WS-LINAGE = ZERO OR WS-PGE-LENGTH)
-	       COMPUTE WS-PRN-LENGTH = WS-LINAGE -
-				      (WS-PGE-LENGTH - WS-PRN-LENGTH)
-	       MOVE WS-LINAGE	 TO WS-PGE-LENGTH L02-PGE-LENGTH
-	       MOVE WS-PRN-LENGTH
-				 TO L02-PRN-LENGTH.
-	   IF WS-PRINTER = "D"
-	       OPEN EXTEND PRNSPL
-	   ELSE
-019890	       OPEN OUTPUT PRNREP.
-	     PERFORM RESTORE-SCREEN.
-	     CALL X"91" USING X91-RES X91-FUN PRNSPL.
-	     CALL X"91" USING X91-RES X91-FUN PRNREP.
-	   IF WS-PRINTER = "D"
-	       MOVE SPACES	 TO SPL-DETAIL1
-	       MOVE WS-PGE-LENGTH
-				 TO SPL-LIN
-	       MOVE ZERO	 TO SPL-ADV
-	       WRITE SPL-L1 BEFORE 0 LINES
-	       MOVE ZERO	 TO SPL-LIN.
-	   IF L02-PRN-TYPE = 8
-      *
-      *    ****    SET PRINTER TO 8 LPI
-      *
-	       MOVE WS-8LPI	 TO REP-DETAIL1
-	       IF WS-PRINTER = "D"
-		   MOVE ZERO	 TO SPL-ADV
-		   MOVE REP-DETAIL1
-				 TO SPL-DETAIL1
-		   WRITE SPL-L1
-	       ELSE
-011380		   WRITE REP-LINE1 BEFORE 0 LINES.
-	     MOVE WS-10CPI	 TO REP-DETAIL1.
-	   IF (WS-PGE-LENGTH > 66 AND < 88) OR
-	      (WS-PGE-LENGTH > 88)
-	       IF WS-PRINTER = "D"
-		   MOVE 2	 TO SPL-ADV
-		   MOVE REP-DETAIL1
-				 TO SPL-DETAIL1
-		   WRITE SPL-L1
-	       ELSE
-		   WRITE REP-LINE1 BEFORE 2 LINES
-	       END-IF
-	   ELSE
-	       IF WS-PRINTER = "D"
-		   MOVE ZERO	 TO SPL-ADV
-		   MOVE REP-DETAIL1
-				 TO SPL-DETAIL1
-		   WRITE SPL-L1
-	       ELSE
-		   WRITE REP-LINE1 BEFORE 0 LINES.
-	     GO TO OPEN-PRINTER-STATUS.
 
        OPEN-WIN-USB-PRINTER.
       *
-      *  ***  ****  ***** *   *   ****	****  *** *   * ***** ***** ****
+      *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *	  **  *   *   * *   *  *  **  *   *   *     *	*
-      * *   * ****  ***   * * *   ****	****   *  * * *   *   ***   ****
-      * *   * *     *	  *  **   *	*   *  *  *  **   *   *     *	*
-      *  ***  *     ***** *   *   *	*   * *** *   *   *   ***** *	*
+      * *   * ****  ***   * * *   ****  ****   *  * * *   *   ***   ****
+      * *   * *     *	  *  **   *	*   *  *  *  **   *   *	    *	*
+      *  ***  *     ***** *   *   *	*   * *** *   *	  *   ***** *	*
       *
       * ______________________________________________________________ *
-      * PC_PRINTER_OPEN 					       *
-      * 							       *
+      * PC_PRINTER_OPEN                                                *
+      *                                                                *
       * Opens a printer channel, giving it a document title, and       *
       * optionally displaying the dialog boxes for printer control,    *
-      * font selection, and progress indication.		       *
-      * 							       *
-      * SYNTAX: 						       *
-      * 							       *
-      * 	call "PC_PRINTER_OPEN" using	 printer-handle        *
-      * 					 document-title        *
-      * 			       by value  flags		       *
-      * 			       by value  window-handle	       *
-      * 			       returning status-code	       *
-      * 							       *
-      * PARAMETERS:						       *
-      * 	printer-handle	pic x(4) comp-5.		       *
-      * 	document-title	Group item defined as:		       *
-      * 	    title-len	pic x(2) comp-5.		       *
-      * 	    title-text	pic x.				       *
-      * 	    flags	Numeric literal or pic x(4) comp-5.    *
-      * 	    window-handle Numeric literal or pic x(4) comp-5.  *
-      * 	status-code	See Key 			       *
+      * font selection, and progress indication.                       *
+      *                                                                *
+      * SYNTAX:                                                        *
+      *                                                                *
+      *         call "PC_PRINTER_OPEN" using printer-handle            *
+      *                                      document-title            *
+      *                                by value  flags                 *
+      *                                by value  window-handle         *
+      *                                returning status-code           *
+      *                                                                *
+      * PARAMETERS:                                                    *
+      *             printer-handle pic x(4) comp-5.                    *
+      *             document-title Group item defined as:              *
+      *                            title-len pic x(2) comp-5.          *
+      * 			   title-text pic x.		       *
+      *             flags          Numeric literal or pic x(4) comp-5. *
+      *             window-handle  Numeric literal or pic x(4) comp-5. *
+      *             status-code    See Key                             *
       * 							       *
       * ON ENTRY:						       *
       * 	title-len	The length of the document title.      *
@@ -1343,196 +1274,134 @@
 	   EVALUATE WS-REPORT
 	     WHEN 1
 	       move 23		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Picking Slips" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Picking Slips" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
 	     WHEN 2
 	       move 17		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Invoice" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Invoice" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
 	     WHEN 3
 	       move 22		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Stock Report" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Stock Report" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		    Check orientatiom of Report		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       if LS-ORIENTATION = "L"
-		   call "PC_PRINTER_CLOSE" using by reference prn-handle
-		   end-call
-		   move 4	 to prn-command
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Change orientatiom to Landscape	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   move 8	 to prn-flags
-		   call "PC_PRINTER_OPEN" using by reference prn-handle
-                                          by reference document-title
-                                          by value prn-flags
-                                          by value 0
-		   end-call
+	       perform Check-printer-orientation
 	     WHEN 4
 	       move 26		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Creditors Report" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Creditors Report" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		    Check orientatiom of Report		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       if LS-ORIENTATION = "L"
-		   call "PC_PRINTER_CLOSE" using by reference prn-handle
-		   end-call
-		   move 4	 to prn-command
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Change orientatiom to Landscape	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   move 8	 to prn-flags
-		   call "PC_PRINTER_OPEN" using by reference prn-handle
-                                          by reference document-title
-                                          by value prn-flags
-                                          by value 0
-		   end-call
+	       perform Check-printer-orientation
 	     WHEN 5
 	       move 24		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Debtors Report" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Debtors Report" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		    Check orientatiom of Report		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       if LS-ORIENTATION = "L"
-		   call "PC_PRINTER_CLOSE" using by reference prn-handle
-		   end-call
-		   move 4	 to prn-command
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Change orientatiom to Landscape	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   move 8	 to prn-flags
-		   call "PC_PRINTER_OPEN" using by reference prn-handle
-                                          by reference document-title
-                                          by value prn-flags
-                                          by value 0
-		   end-call
+	       perform Check-printer-orientation
 	     WHEN 6
 	       move 25		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- G-Ledger Report" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- G-Ledger Report" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		    Check orientatiom of Report		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       if LS-ORIENTATION = "L"
-		   call "PC_PRINTER_CLOSE" using by reference prn-handle
-		   end-call
-		   move 4	 to prn-command
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  Change orientatiom to Landscape	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   move 8	 to prn-flags
-		   call "PC_PRINTER_OPEN" using by reference prn-handle
-                                          by reference document-title
-                                          by value prn-flags
-                                          by value 0
-		   end-call
+	       perform Check-printer-orientation
 	     WHEN 7
 	       move 27		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Debtor Statements" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Debtor Statements" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
 	     WHEN 8
 	       move 22		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Stock Labels" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Stock Labels" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
 	     WHEN 9
 	       move 20		 to title-len
-	       string LS-PRG-NAME delimited length
-		      "- Quotations" delimited length
-		      x"00" delimited length into to title-text
+	       string LS-PRG-NAME delimited size
+		      "- Quotations" delimited size
+		      x"00" delimited size into title-text
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	      Allow User to select printer to be used	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       move 1		 to prn-flags
-	       call "PC_PRINTER_OPEN" using by reference prn-handle
-					    by reference document-title
-					    by value prn-flags
-					    by value 0
-	       end-call
+	       perform Select-printer
 	   END-EVALUATE.
-
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Setup the printer font so as to adavance the paper for the³
+      *    ³ top border.					       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	     move FontTypeFace	 to Font-family-name.
+	     move 12		 to Font-family-namelen.
+	     move font-12-CPI	 to font-size.
+	     move 0		 to font-style.
+	     perform set-printer-font.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Setup the page and print lengths as USB/WIN printing has ³
+      *    ³  no LINAGE-COUNTER and the length depends on the current  ³
+      *    ³  font that is being used.				       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	     perform Get-Printer-Info.
+	     move PageRowsCurrentFont
+				 to L02-PGE-LENGTH.
+	     compute L02-PRN-LENGTH = (PageRowsCurrentFont - 4).
+	     move zero		 to L02-LINAGE.
+      *
+      *    ****  Top of page border
+      *
+	     perform advance-printer 2 times.
+      *
+      *    ****  Set the printer status to "O"pen
+      *
+	     GO TO OPEN-PRINTER-STATUS.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Setup printer description or ID for disk file (printer 9) ³
+      *    ³ The system allows for a printer allocation 9 which then   ³
+      *    ³ writes the print file to disk. (Used for testing).        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        OPEN-REPORT-1.
 	   IF TRM-PICP(WS-S6) = 8
 	       MOVE "USB/WINDOWS"
@@ -1552,13 +1421,6 @@
 	       MOVE LS-USER	 TO W02-USER.
 	     ADD 501 TRM-PRN2(WS-S6)
                                  GIVING W25-RESULT.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³ As printing is now using the windows drivers, the system  ³
-      *    ³ will now allow for Landscape printing and the orientation ³
-      *    ³ setting is now included. The detail line is now allowing  ³
-      *    ³ for more characters to be printed and the number of lines ³
-      *    ³ is reduced when printing landscape.		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        OPEN-REPORT-3.
 	   IF TRM-STDP(WS-S6) = 8
 	       MOVE "USB/WINDOWS"
@@ -1599,52 +1461,10 @@
 	     ADD 501 TRM-PRN6(WS-S6)
                                  GIVING W25-RESULT.
 
-       CHECK-PRINTER.
-	     MOVE ZERO		 TO WS-ERROR
-				    WS-S1 WS-S2 WS-S3 WS-S4
-				    WS-S5 WS-S6 WS-S7 WS-S8.
-	     CALL "PC_TEST_PRINTER" USING WS-PRN-NO
-					  WS-PRN-STAT
-				    RETURNING WS-STATUS.
-	   IF WS-PRN-STAT > 127
-	       MOVE 1		 TO WS-S1
-	       SUBTRACT 128	 FROM WS-PRN-STAT.
-	   IF WS-PRN-STAT > 63
-	       MOVE 1		 TO WS-S2
-	       SUBTRACT 64	 FROM WS-PRN-STAT.
-	   IF WS-PRN-STAT > 31
-	       MOVE 1		 TO WS-S3
-	       SUBTRACT 32	 FROM WS-PRN-STAT.
-	   IF WS-PRN-STAT > 15
-	       MOVE 1		 TO WS-S4
-	       SUBTRACT 16	 FROM WS-PRN-STAT.
-	   IF WS-PRN-STAT > 7
-	       MOVE 1		 TO WS-S5
-	       SUBTRACT 8	 FROM WS-PRN-STAT.
-	   IF WS-PRN-STAT > 3
-	       MOVE 1		 TO WS-S6
-	       SUBTRACT 4	 FROM WS-PRN-STAT.
-	   IF WS-PRN-STAT > 1
-	       MOVE 1		 TO WS-S7
-	       SUBTRACT 2	 FROM WS-PRN-STAT.
-	     MOVE WS-PRN-STAT	 TO WS-S8.
-	   IF WS-S3 = 0 AND
-	      WS-S5 = 0 AND
-	      WS-S8 = 0
-	       GO TO CHECK-PRINTER-EXIT.
-
-       PRINTER-NOT-READY.
-	     MOVE "Check printer! - 'R'etry or 'A'bort  [ ] "
-				 TO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE TEST AFTER
-		     UNTIL WS-OPTION = "R" OR "A".
-	   IF WS-OPTION = "R"
-	       GO TO CHECK-PRINTER.
-	     MOVE 1		 TO WS-ERROR.
-
-       CHECK-PRINTER-EXIT.
-	     EXIT.
-
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Setup to redirect printing to the console and not to the  ³
+      *    ³ printer or spool file.				       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        OPEN-SCREEN.
 	     MOVE 1		 TO WS-S8.
 
@@ -1660,7 +1480,9 @@
 
        OPEN-SCREEN-EXIT.
 	     EXIT.
-
+      *
+      *    ****  Set the printer status to "O"pen
+      *
        OPEN-PRINTER-STATUS.
 	     MOVE SPACES	 TO L02-PRN-LINE.
 	     MOVE "O"		 TO L02-PRN-STATUS.
@@ -1669,29 +1491,67 @@
 
        OPEN-PRINTER-EXIT.
 	     EXIT.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	      Allow User to select printer to be used	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       Select-printer	 section 50.
+	     move 1		 to prn-flags.
+	     call "PC_PRINTER_OPEN" using by reference prn-handle
+					  by reference document-title
+					  by value prn-flags
+					  by value 0
+	     end-call.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ As printing is now using the windows drivers, the system  ³
+      *    ³ will now allow for Landscape printing and the orientation ³
+      *    ³ setting is now included. The detail line is now allowing  ³
+      *    ³ for more characters to be printed and the number of lines ³
+      *    ³ is reduced when printing landscape.		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		    Check orientatiom of Report		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       Check-printer-orientation section 50.
+	   if LS-ORIENTATION = "L"
+	       call "PC_PRINTER_CLOSE" using by reference prn-handle
+	       end-call
+	       move 4	     to prn-command
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		  Change orientatiom to Landscape	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	       move 8	     to prn-flags
+	       call "PC_PRINTER_OPEN" using by reference prn-handle
+				      by reference document-title
+				      by value prn-flags
+				      by value 0
+	       end-call.
+
 
        CLOSE-PRINT-FILE  SECTION 51.
        CLOSE-PRINTER.
 	   IF WS-PRINTER = "S"
-	       GO TO CLOSE-PRINTER-STATUS.
-	     MOVE WS-10CPI	 TO REP-DETAIL1.
+	       GO TO CLOSE-PRINTER-STATUS
+	   END-IF.
+	     MOVE SPACES	 TO Rep-detail.
 	   IF WS-PRINTER = "D"
-	       MOVE ZERO	 TO SPL-ADV
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
+	       MOVE "10CP"	 TO SPL-CONT
+	       MOVE Rep-detail	 TO SPL-DETAIL1
 	       WRITE SPL-L1
 	   ELSE
-	       WRITE REP-LINE1 BEFORE 0 LINES.
-	     MOVE WS-6LPI	 TO REP-DETAIL1.
+	       move font-10-CPI  to font-size
+	       perform set-printer-font
+	   END-IF.
 	   IF WS-PRINTER = "D"
-	       MOVE ZERO	 TO SPL-ADV
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
+	       MOVE "6LPI"	 TO SPL-CONT
+	       MOVE Rep-detail	 TO SPL-DETAIL1
 	       WRITE SPL-L1
-	   ELSE
-	       WRITE REP-LINE1 BEFORE 0 LINES.
+	   END-IF.
 	   IF WS-PRINTER = "D"
 	       CLOSE PRNSPL
 	   ELSE
-	       CLOSE PRNREP.
+	       perform close-down-printer
+	   END-IF.
 
        CLOSE-PRINTER-STATUS.
 	     MOVE "C"		 TO L02-PRN-STATUS.
@@ -1703,36 +1563,47 @@
       *
        NEW-PAGE        SECTION 52.
        SKIP-TO-NEW-PAGE.
-	     MOVE SPACES	 TO REP-DETAIL1.
+	     MOVE SPACES	 TO Rep-detail.
       *
       *    ****   I G N O R E	S K I P   I F	S C R E E N   I S
       * 	  S E L E C T E D
       *
 	   IF WS-PRINTER = "S"
-	       GO TO NEW-PAGE-EXIT.
+	       GO TO NEW-PAGE-EXIT
+	   END-IF.
 	   IF WS-PRINTER = "D"
 	       MOVE "PAGE"	 TO SPL-CONT
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
+	       MOVE Rep-detail	 TO SPL-DETAIL1
 	       WRITE SPL-L1
 	       MOVE ZERO	 TO SPL-LIN
 	   ELSE
-
-028700	       WRITE REP-LINE1 BEFORE PAGE.
+	       perform Throw-a-page
+	   END-IF.
 	   IF WS-COMMAND NOT = "E"
-	       IF (WS-PGE-LENGTH > 66 AND < 88) OR
-		  (WS-PGE-LENGTH > 88)
+	       IF (L02-PGE-LENGTH > 66 AND < 88) OR
+		  (L02-PGE-LENGTH > 88)
 		   IF WS-PRINTER = "D"
 		       MOVE 2	 TO SPL-ADV
-		       MOVE REP-DETAIL1
+		       MOVE Rep-detail
 				 TO SPL-DETAIL1
 		       WRITE SPL-L1
 		   ELSE
-		       WRITE REP-LINE1 BEFORE 2 LINES.
+		       perform advance-printer 2 times
+		   END-IF
+	       END-IF
+	   END-IF.
 
        NEW-PAGE-EXIT.
 	    EXIT.
 
        LINE-PRINT-SPOOL	 SECTION 53.
+       CHECK-PRINT-INFO.
+	   IF NOT(WS-PRINTER = "D")
+	       if (w100-headings = "Y") OR
+		  (L02-PRN-TYPE = "H") OR
+		  (W100-STORE-IND = "Y")
+		   perform PRINT-HEADING-LINE.
+
        PRINT-A-LINE.
 	   IF WS-ADVANCE = 0
 	       PERFORM PRINT-ZERO
@@ -1748,32 +1619,105 @@
 	   ELSE
 	       MOVE WS-ADVANCE	 TO WS-LINES
 	       PERFORM PRINT-ADVANCE.
-	     MOVE LINAGE-COUNTER TO L02-LINAGE.
+	     perform Get-Printer-Info
+      *
+      *    ****   Has number of lines per page changed due to font
+      * 	  size being changed?
+      *
+	   if not(PageRowsCurrentFont = L02-PGE-LENGTH)
+	       move PageRowsCurrentFont
+				 to L02-PGE-LENGTH
+	       compute L02-PRN-LENGTH = (PageRowsCurrentFont - 4)
+	   else
+	       COMPUTE L02-LINAGE = (L02-prn-length -
+		      (RowsRemainingCurrentFont + 2))
+	   end-if.
+      *	     MOVE LINAGE-COUNTER TO L02-LINAGE.
 	     GO TO LINE-PRINT-EXIT.
 
        PRINT-ZERO.
-	   IF L02-PRN-TYPE = "C"
+	   EVALUATE L02-PRN-TYPE
+	     WHEN "C"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		      Set to print ñ 17cpi		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	       move font-17-CPI	 to font-size
 	       move 0		 to font-style
 	       perform set-printer-font
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		    Check orientatiom of Report		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	       if LS-ORIENTATION = "L"
-		   move
+		   move 194	 to Print-Buffer-Len
 	       else
-		   MOVE 136	 to Print-Buffer-Len
+		   MOVE 135	 to Print-Buffer-Len
 	       end-if
-
-	       MOVE WS-COND	 TO REP-DETAIL1
-	   ELSE
-	   IF L02-PRN-TYPE = "E"
-	       MOVE WS-EXPP	 TO REP-DETAIL1
-	   ELSE
-	   IF L02-PRN-TYPE = "X"
-	       MOVE WS-ECAN	 TO REP-DETAIL1
-	   ELSE
-	   IF L02-PRN-TYPE = "1"
+	     WHEN "E"
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Test current font size and then set expanded to twice the ³
+      *    ³ size and set bold print. Initially only font sizes 10, 12 ³
+      *    ³ and 17 will be tested as these are the fonts used on the  ³
+      *    ³ dot matrix printers. Future enhancements will allow for   ³
+      *    ³ additional font sizes to be used on the USB/WINDOWS/CUPS  ³
+      *    ³ printers.						       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	       if font-size = font-10-CPI
+		   move font-5-CPI to font-size
+	       else
+	       if font-size = font-11-CPI
+		   move font-5p5-CPI
+				   to font-size
+	       else
+	       if font-size = font-12-CPI
+		   move font-6-CPI to font-size
+      *	       else
+      *	       if font-size = font-13-CPI
+      *		   move font-6p5-CPI
+      * 			   to font-size
+      *	       else
+      *	       if font-size = font-15-CPI
+      *		   move font-7p5-CPI
+      * 			   to font-size
+	       else
+	       if font-size = font-17-CPI
+		   move font-8p5-CPI
+				   to font-size
+	       end-if
+	       perform Set-bold-print
+	     WHEN "X"
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Test current font size and then set contracted to half the³
+      *    ³ size. Initially only font sizes 5, 6 and 8.5 will be test-³
+      *    ³ ed as these are the fonts used on the dot matrix printers.³
+      *    ³ Switch off bold printing. Future enhancements will allow  ³
+      *    ³ for additional font sizes to be used on the USB/WINDOWS/  ³
+      *    ³ CUPS printers.					       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	       if font-size = font-5-CPI
+		   move font-10-CPI
+				   to font-size
+	       else
+	       if font-size = font-5p5-CPI
+		   move font-11-CPI
+				   to font-size
+	       else
+	       if font-size = font-6-CPI
+		   move font-12-CPI to font-size
+      *	       else
+      *	       if font-size = font-6p5-CPI
+      *		   move font-13-CPI
+      * 			   to font-size
+      *	       else
+      *	       if font-size = font-7p5-CPI
+      *		   move font-15-CPI
+      * 			   to font-size
+	       else
+	       if font-size = font-8p5-CPI
+		   move font-17-CPI
+				   to font-size
+	       end-if
+	       perform set-printer-font
+	     WHEN "1"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		      Set to print ñ 11cpi		       ³
       *    ³ As there is a margin on the USB/WINDOWS printers, 10cpi   ³
@@ -1785,15 +1729,15 @@
 	       move font-11-CPI	 to font-size
 	       move 0		 to font-style
 	       perform set-printer-font
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		    Check orientatiom of Report		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	       if LS-ORIENTATION = "L"
 		   move 123	 to Print-Buffer-Len
 	       else
 		   MOVE 86	 to Print-Buffer-Len
 	       end-if
-
-	       MOVE WS-10CPI	 TO REP-DETAIL1
-	   ELSE
-	   IF L02-PRN-TYPE = "2"
+	     WHEN "2"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		      Set to print ñ 12cpi		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -1801,90 +1745,129 @@
 	       move 0		 to font-style
 	       perform set-printer-font
 	       if LS-ORIENTATION = "L"
-		   move
+		   move 135	 to Print-Buffer-Len
 	       else
 		   MOVE 96	 to Print-Buffer-Len
 	       end-if
-	       MOVE WS-12CPI	 TO REP-DETAIL1
-	   ELSE
-	   IF L02-PRN-TYPE = "3"
+	     WHEN "3"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		      Set to print ñ 17cpi		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	       move font-17-CPI	 to font-size
 	       move 0		 to font-style
 	       perform set-printer-font
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		    Check orientatiom of Report		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	       if LS-ORIENTATION = "L"
-		   move
+		   move 194	 to Print-Buffer-Len
 	       else
-		   MOVE 136	 to Print-Buffer-Len
+		   MOVE 135	 to Print-Buffer-Len
 	       end-if
-
-	       MOVE WS-17CPI	 TO REP-DETAIL1
-	   ELSE
-	   IF L02-PRN-TYPE = "6"
-	       MOVE WS-6LPI	 TO REP-DETAIL1
-	   ELSE
-	   IF L02-PRN-TYPE = "8"
-	       MOVE WS-8LPI	 TO REP-DETAIL1.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ The system will ignore the lines per inch requests until  ³
+      *    ³ line hight commands have been worked out. This will only  ³
+      *    ³ have an effect on the day-end reports that use 8 lines    ³
+      *    ³ per inch.						       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *	   IF L02-PRN-TYPE = "6"
+      *	       MOVE WS-6LPI	 TO REP-DETAIL1
+      *	   ELSE
+      *	   IF L02-PRN-TYPE = "8"
+      *	       MOVE WS-8LPI	 TO REP-DETAIL1.
 	   IF WS-PRINTER = "D"
 	       MOVE ZERO	 TO SPL-ADV
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
 	       WRITE SPL-L1
 	   ELSE
-028700	       WRITE REP-LINE1 BEFORE 0 LINES.
-
+	       move 0		 to ws-advance
+	       perform PRINT-DETAILS.
        PRINT-SINGLE.
 	   IF WS-PRINTER = "D"
 	       MOVE 1		 TO SPL-ADV
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
 	       WRITE SPL-L1
 	   ELSE
-028700	       WRITE REP-LINE1 BEFORE 1 LINES.
+	       perform PRINT-DETAILS.
 
        PRINT-DOUBLE.
+	     perform Set-bold-print.
 	   IF WS-PRINTER = "D"
 	       MOVE 2		 TO SPL-ADV
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
 	       WRITE SPL-L1
 	   ELSE
-028700	       WRITE REP-LINE1 BEFORE 2 LINES.
+	       perform PRINT-DETAILS.
 
        PRINT-PAGE.
 	   IF WS-PRINTER = "D"
 	       MOVE "PAGE"	 TO SPL-CONT
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
 	       WRITE SPL-L1
 	       MOVE ZERO	 TO SPL-LIN
 	   ELSE
-028700
-	       WRITE REP-LINE1 BEFORE PAGE.
+	       perform PRINT-DETAILS.
 	   IF WS-COMMAND NOT = "E"
-	       IF (WS-PGE-LENGTH > 66 AND < 88) OR
-		  (WS-PGE-LENGTH > 88)
-		   MOVE SPACES	 TO REP-DETAIL1
+	       IF (L02-PGE-LENGTH > 66 AND < 88) OR
+		  (L02-PGE-LENGTH > 88)
+		   MOVE SPACES	 TO W01-Print-Line-194
+				    SPL-DETAIL1
 		   IF WS-PRINTER = "D"
 		       MOVE 2	 TO SPL-ADV
-		       MOVE REP-DETAIL1
+		       MOVE Rep-detail
 				 TO SPL-DETAIL1
 		       WRITE SPL-L1
 		   ELSE
-		       WRITE REP-LINE1 BEFORE 2 LINES.
+		       MOVE 2	 TO WS-ADVANCE
+		       PERFORM PRINT-DETAILS.
 
        PRINT-ADVANCE.
 	   IF WS-PRINTER = "D"
 	       MOVE 1		 TO SPL-ADV
-	       MOVE REP-DETAIL1  TO SPL-DETAIL1
 	       WRITE SPL-L1
 	   ELSE
-028700	       WRITE REP-LINE1 BEFORE 1 LINES.
-	     MOVE SPACES	 TO REP-DETAIL1.
+028700	       PERFORM PRINT-DETAILS.
+	     MOVE SPACES	 TO Rep-detail.
 	     SUBTRACT 1		 FROM WS-LINES.
 	   IF WS-LINES > ZERO
 	       GO TO PRINT-ADVANCE.
 
        LINE-PRINT-EXIT.
 	     EXIT.
+
+       PRINT-HEADING-LINE SECTION 53.
+       PRINT-HDG-LINE.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Is this a HEADER line? If it is then check if it must be  ³
+      *    ³ be printed in bold (0 line advance). Store the details    ³
+      *    ³ and wait for the next call to determine if the data is the³
+      *    ³ same or not. If the data is the same - PRINT BOLD!        ³
+      *    ³	  Set indicator that data has been stored.	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	   IF L02-PRN-TYPE = "H"
+	       IF W100-STORE-IND = "Y"
+      *
+      *    ****    Must it be printed in bold?
+      *
+		   IF W100-PRINT-DETAIL = L02-PRN-LINE
+		       perform Set-bold-print
+
+		       move "N"  TO W100-STORE-IND
+		   end-if
+	       ELSE
+		   MOVE L02-PRN-LINE
+				 TO W100-PRINT-DETAIL
+		   MOVE "Y"	 TO W100-STORE-IND
+      *
+      *  Check if this is the first line of the Accounts Receivable
+      *  heading that needs special processing.
+      *
+		   if w100-pgh = "PAGE:"
+		       if w100-dth = "DATE:"
+			   if w100-hdg = spaces
+			       move "Y"	to w100-headings
+			   end-if
+		       end-if
+		   end-if
+
+
+
 
        SCREEN-PRINT    SECTION 54.
        SCREEN-PRINT-INIT.
@@ -2059,9 +2042,9 @@
 	     EXIT.
       /
       *    ****    I / O   E R R O R   M E S S A G E S
-      *   
+      *
 042900 ZB000-ERROR	     SECTION 91.
-      
+
        COPY ERRORS.PRO.
 
 041560 DISPLAY-FILE-NAME.
@@ -2070,16 +2053,6 @@
 041870	       MOVE WS-PARKEY	 TO WS-KEY.
 
        COPY DISPERR.PRO.
-
-
-
-
-
-
-
-
-
-
 
       * ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       * ³ The following routines are used for printing via the WINDOWS ³
@@ -2486,14 +2459,14 @@
       * 				    returning status-code      *
       * 							       *
       * PARAMETERS:						       *
-      * 	printer-handle	pic x(4) comp-5.		       *
-      * 	reserved	pic x(4) comp-5 value 0.	       *
-      * 	bmp-id		pic x(4) comp-5.		       *
-      * 	bmp-row 	pic x(4) comp-5.		       *
-      * 	bmp-col 	pic x(4) comp-5.		       *
-      * 	bmp-width	pic x(4) comp-5.		       *
-      * 	bmp-height	pic x(4) comp-5.		       *
-      * 	status-code	See Key 			       *
+      * 	        printer-handle	pic x(4) comp-5.		       *
+      * 	        reserved	      pic x(4) comp-5 value 0.	       *
+      * 	        bmp-id		pic x(4) comp-5.		       *
+      * 	        bmp-row 	      pic x(4) comp-5.		       *
+      * 	        bmp-col 	      pic x(4) comp-5.		       *
+      * 	        bmp-width	      pic x(4) comp-5.		       *
+      * 	        bmp-height	pic x(4) comp-5.		       *
+      * 	        status-code	See Key 			       *
       * 							       *
       * ON ENTRY:						       *
       * 	printer-handle	The printer handle returned when the   *
@@ -2594,6 +2567,49 @@
                perform 9999-Display-Error
 	   end-if.
 
+      * ______________________________________________________________ *
+      * PC_PRINTER_INFO						       *
+      * 							       *
+      * To allow the calling program to know when a page is full, this *
+      * procedure has been introduced to replace the LINAGE-COUNTER    *
+      * used by the line printers (Dot Matrix). 		       *
+      * 							       *
+      * SYNTAX: 						       *
+      * 							       *
+      * 	call "PC_PRINTER_INFO"				       *
+      * 	     using by reference Printer-Handle		       *
+      * 		   by reference PrinterInformation	       *
+      * 	end-call					       *
+      * ______________________________________________________________ *
+
+
+       Get-Printer-Info  Section.
+
+	     move length of PrinterInformation
+				 to PrinterInformationLength
+	     set p-PrinterNameBuffer
+				 to address of PrinterNameBuffer
+	     set p-PrinterTypeBuffer
+				 to address of PrinterTypeBuffer
+	     set p-PrinterDeviceBuffer
+				 to address of PrinterDeviceBuffer
+	     set p-PrinterLocationBuffer
+				 to address of PrinterLocationBuffer
+	     set p-PrinterCommentBuffer
+				 to address of PrinterCommentBuffer
+	     set p-PrinterPaperSizeBuffer
+				 to address of PrinterPaperSizeBuffer
+
+	     call "PC_PRINTER_INFO"
+		   using by reference prn-handle
+			 by reference PrinterInformation
+	     end-call
+
+           if Return-Code not = 0
+	       move "PC_PRINTER_INFO"
+				 to Operation
+               perform 9999-Display-Error
+	   end-if.
 
        9999-Errors	       section.
        9999-Display-Error.

@@ -144,6 +144,7 @@
        77  WS-CARDEX	   PIC	X(01).
        77  WS-ETYPE	    PIC X(01).
 002010 77  WS-PAGE          PIC 9(04)     COMP-5.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
 002020 77  WS-OPTION	    PIC X(01).
 002020 77  WS-SKIP          PIC X(01).
 002040 77  WS-ADJ           PIC X(01).

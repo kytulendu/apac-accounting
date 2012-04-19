@@ -13,7 +13,7 @@
       *                                                                *
       *     S A L E S	A N D	O R D E R   M O D U L E   M E N U      *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -73,7 +73,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

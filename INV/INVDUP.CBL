@@ -13,7 +13,7 @@
       *                                                                *
       *     I N V O I C E   L O O K U P   A N D   R E P R I N T        *
       *                                                                *
-      *     VERSION 8.14.03 - March 2010			       *
+      *     VERSION 8.15.02 - December 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -34,7 +34,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1989.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1989 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1989 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

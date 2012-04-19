@@ -13,7 +13,7 @@
       *                                                                *
       *  C R E D I T O R   M E M O   F I L E   R E B U I L D   P R O G *
       *                                                                *
-      *     VERSION 8.15.01 - August 2011			       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   FEBRUARY 1995.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1995 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1995 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

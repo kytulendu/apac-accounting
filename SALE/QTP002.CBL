@@ -13,7 +13,18 @@
       *                                                                *
       *      A M E N D	 Q U O T A T I O N			       *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.02 - November 2011			       *
+      * 							       *
+      ******************************************************************
+      * 							       *
+      *  Aug 2011	- The file (DEBDEP/AR_REST.DAT) - Debtor sales *
+      * 		  restrictions file has been included which    *
+      * 		  will allow for departments to be excluded or *
+      * 		  only selected departments allowed. This will *
+      * 		  allow the user the abillity to allow or bar  *
+      * 		  sales of selected departments. This file has *
+      * 		  been in invoicing since 2007 and is only now *
+      * 		  being uincluded i quotations. 	       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +32,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -60,6 +71,8 @@
 
 000150 COPY CONTROL.SL.
 
+000160 COPY DEBDEP.SL.
+
 000190 COPY DEBTOR.ISL.
 
 000210 COPY DEPART.SL.
@@ -89,6 +102,8 @@
        COPY APACFIDS.FDE.
 
 000440 COPY CONTROL.FDE.
+
+000330 COPY DEBDEP.FDE.
 
 000480 COPY DEBTOR.FDE.
 
@@ -163,7 +178,8 @@
 002490 77  WS-CLOSE        PIC  X(01) VALUE X"00".
 002500 77  WS-PAR          PIC  9(01) VALUE 0.
 002510 77  WS-INO	   PIC	9(03) VALUE 0.
-002520 77  WS-LINES        PIC  9(02) VALUE 0.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
+002520 77  WS-LINES	   PIC	9(02) VALUE 0.
 002530 77  WS-FIRST	   PIC	9(03) VALUE 0.
        77  WS-SALPOS	   PIC	9(03) VALUE 0.
 002540 77  WS-LAST	   PIC	9(03) VALUE 0.
@@ -199,6 +215,8 @@
 002740 77  WS-TYPE         PIC  X(01).
 002750 77  WS-AGE          PIC  X(01).
 002760 77  WS-PRC          PIC  X(01).
+       77  WS-RESTRICT	   PIC	X(01).
+       77  WS-RESTCODE	   PIC	X(01).
        77  WS-MEASURE	   PIC	X(01) VALUE "N".
        77  PRG-NAME	   PIC	X(12) VALUE "STP\STPLOOK".
 002830 77  WS-BATCH	   PIC	9(05).
@@ -335,6 +353,8 @@
        COPY APACFIDS.ID.
 
 003570 COPY CONTROL.ID.
+
+000330 COPY DEBDEP.ID.
 
 003610 COPY DEBTOR.ID.
 
@@ -1311,6 +1331,7 @@
 028960	       GO TO AA05.
        AA10.
 013120	     CLOSE RECOVER
+		   DEBDEP
 		   SALE.
 	   IF W70-ORD-SYS = "Y"
 	       IF WS-LOCAL-DRIVE = "C"
@@ -1438,6 +1459,8 @@
 011130 AC000              SECTION.
 
 011170 COPY CONTROL.RD.
+
+011190 COPY DEBDEP.RD.
 
 011210 COPY DEBTOR.RD.
 
@@ -2580,6 +2603,17 @@
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
                GO TO BD10.
+	     MOVE SPACES	 TO WS-RESTRICT.
+	     MOVE "N"		 TO WS-RESTCODE.
+      *    *************************************************************
+      *    ****   D E B T O R	S A L E S   R E S T R I C T I O N S
+      *    *************************************************************
+	   IF DEB-RESTRICT = "A" OR "E"
+	       MOVE DEB-ACNO	 TO DBD-ACNO
+	       PERFORM READ-DEBDEP THRU READ-DEBDEP-EXIT
+	       IF WS-F-ERROR = 0
+		   MOVE DEB-RESTRICT
+				 TO WS-RESTRICT.
 	     INITIALIZE W14-DELETE.
 	     MOVE 0		 TO W14-SUB.
 
@@ -2637,7 +2671,7 @@
 020680       MOVE 8              TO LIN.
 
 020690 BD55.
-020700	     MOVE SPACES	 TO W10-ITEM.
+020700	     MOVE SPACES	 TO W10-EXT-ITEM.
 
        BD56.
 020700	     MOVE SPACES	 TO W10-DESC.
@@ -2798,6 +2832,17 @@
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO BD60.
+      *    *************************************************************
+      *    **** C H E C K   F O R   S A L E S	R E S T R I C T I O N S
+      *    *************************************************************
+	   IF WS-RESTRICT = "A" OR "E"
+	       PERFORM MA000
+	       IF ((WS-RESTCODE = "Y") AND (WS-RESTRICT = "E")) OR
+		  ((WS-RESTCODE = "N") AND (WS-RESTRICT = "A"))
+		   MOVE "Restricted for this Department"
+                                 TO WS-ERR-STRING
+003260		   PERFORM ERROR-MESSAGE
+020140		   GO TO BD60.
 020880	     MOVE WS-LAST	 TO WS-SALKEY.
 020890       INITIALIZE SAL-RECORD1.
 020900       MOVE WS-LAST        TO SAL-CODE.
@@ -4370,6 +4415,22 @@
 020800		   GO TO BD330
                ELSE
 		   GO TO BD335.
+	   IF STK-IND = 4
+	       MOVE "Header Record"
+				 TO WS-ERR-STRING
+003260	       PERFORM ERROR-MESSAGE
+	       GO TO BD330.
+      *    *************************************************************
+      *    **** C H E C K   F O R   S A L E S	R E S T R I C T I O N S
+      *    *************************************************************
+	   IF WS-RESTRICT = "A" OR "E"
+	       PERFORM MA000
+	       IF ((WS-RESTCODE = "Y") AND (WS-RESTRICT = "E")) OR
+		  ((WS-RESTCODE = "N") AND (WS-RESTRICT = "A"))
+		   MOVE "Restricted for this Department"
+                                 TO WS-ERR-STRING
+003260		   PERFORM ERROR-MESSAGE
+020140		   GO TO BD330.
 020920	     MOVE STK-CODE	 TO SAL-EXT-ITEM.
 020930	     DISPLAY CLEAR-L25.
       *
@@ -4645,6 +4706,24 @@
        BE999.
 	     EXIT.
 
+      /    *************************************************************
+      *    **** 	S A L E S   R E S T R I C T I O N S	    ****
+      *    *************************************************************
+       MA000	       SECTION 54.
+       MA00.
+	     MOVE 1		 TO WS-S3.
+	     MOVE "N"		 TO WS-RESTCODE.
+
+       MA05.
+	   IF STK-LDG = DBD-DEPT-CDE(WS-S3)
+	       MOVE "Y" 	 TO WS-RESTCODE
+	   ELSE
+	   IF WS-S3 < 10
+	       ADD 1		 TO WS-S3
+	       GO TO MA05.
+
+       MA999.
+	     EXIT.
       /
 049180 ZA000-INIT              SECTION 90.
 049190 ZA000-OPEN.
@@ -4688,6 +4767,12 @@
 
        ZA00A-CONTINUE.
 	     MOVE AFID-PATH	 TO W02-PARAM.
+      *    *************************************************************
+      *    **** D E B T O R   S A L E S   R E S T R I T I O N	F I L E 	  ****
+      *    *************************************************************
+	     MOVE "DEBDEP"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     MOVE AFID-PATH	 TO W02-DEBDEP.
       *    *************************************************************
       *    ****  D E B T O R   A C C O U N T   ( A / R )   F I L E  ****
       *    *************************************************************
@@ -4776,6 +4861,24 @@
 
        ZA01B.
              MOVE PAR-VAT-REG    TO W05-VATNO.
+	     OPEN I-O DEBDEP.
+042220	   IF RUNTIME-ERROR
+               IF FLE-LOCKED
+042230             GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49
+               ELSE
+	       IF IDX-CORRUPT
+		   MOVE 33	 TO WS-F-ERROR
+                   GO TO ZA50.
+042240     IF WS-STATUS NOT = "00"
+042250	       MOVE 33		 TO WS-F-ERROR
+	       IF WS-STATUS = "39"
+038770		   GO TO ZA50
+	       ELSE
+	       IF NOT (WS-STATUS = "41")
+050210		   PERFORM OPEN-ERROR.
 049890	     OPEN OUTPUT RECOVER.
 049900       CLOSE RECOVER.
 049910       OPEN I-O RECOVER.
@@ -4920,6 +5023,18 @@
 
        COPY ZA49.PRO.
 
+039850 ZA50.
+055350	   IF WS-F-ERROR = 33
+055360	       MOVE "DEBDEP file"
+055370				 TO WS-FILE
+	   END-IF.
+039980       DISPLAY "Rebuild " AT 0812
+039990                WS-FILE WITH FOREGROUND-COLOR 14.
+040000       DISPLAY "Press any key to continue" AT 1012.
+	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+040020 ZA51.
+040030       EXIT PROGRAM.
+
       *
       *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
       *
@@ -5009,6 +5124,11 @@
 041860         MOVE W02-STKMEM   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE SME-KEY	 TO WS-KEYX
+041760	   ELSE
+041770	   IF WS-F-ERROR = 33
+041780	       MOVE W02-DEBDEP	 TO WS-FILE
+041790         MOVE ZERO         TO WS-KEY
+	       MOVE DBD-ACNO	 TO WS-KEYX
 041840	   ELSE
 041850	   IF WS-F-ERROR = 37
 041860	       MOVE W02-SHARED	 TO WS-FILE

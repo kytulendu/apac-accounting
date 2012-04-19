@@ -13,7 +13,13 @@
       *                                                                *
       *    P A R A M E T E R   S T M / I N V O I C E   F O R M A T S   *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.04 - January 2012			       *
+      * 							       *
+      ******************************************************************
+      * 							       *
+      *  Jan 2012 - Include Format 99 which calls the INVF12W/CRNF12W  *
+      * 	    program to produce either an Invoice or Credit Note*
+      * 	    via the Windows spooller.			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -381,16 +387,19 @@
        YA360-FORMATS.
              DISPLAY CLR-SCREEN.
              DISPLAY "INVOICE/CASH SLIP/STATEMENT FORMATS" AT 0224
-                      WITH FOREGROUND-COLOR 15.
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
 	     DISPLAY "INVOICE      " AT 0406
-                     "Format (" "1" WITH FOREGROUND-COLOR 11
-		     " to " "22" WITH FOREGROUND-COLOR 11 ")".
+		     "Format (" "1" WITH FOREGROUND-COLOR 3 HIGHLIGHT
+		     " to " "22" WITH FOREGROUND-COLOR 3 HIGHLIGHT ")"
+		     " or (" "99" WITH FOREGROUND-COLOR 3 HIGHLIGHT
+		     " for USB/WINDOWS)".
 	     DISPLAY "CASH SLIP    " AT 0606
-                     "Format (" "1" WITH FOREGROUND-COLOR 11
-                     ") Format (" "2" WITH FOREGROUND-COLOR 11 ")".
+		     "Format (" "1" WITH FOREGROUND-COLOR 3 HIGHLIGHT
+		     ") Format (" "2" WITH FOREGROUND-COLOR 3
+					   HIGHLIGHT ")".
 	     DISPLAY "STATEMENT    " AT 0806
-                     "Format (" "1" WITH FOREGROUND-COLOR 11
-		     " to " "9" WITH FOREGROUND-COLOR 11 ")".
+		     "Format (" "1" WITH FOREGROUND-COLOR 3 HIGHLIGHT
+		     " to " "9" WITH FOREGROUND-COLOR 3 HIGHLIGHT ")".
 	   IF LS0-LEV < 4
 	       DISPLAY "Valid Invoice formats for this level are:"
 			AT 1006 WITH FOREGROUND-COLOR 6 HIGHLIGHT
@@ -423,22 +432,22 @@
 	   IF LS0-LEV < 4
 	       IF LS0-LEV = 3
 		   IF NOT (PAR-INV = 1 OR 5 OR 6 OR 7 OR
-				     9 OR 12 OR 15 OR 21)
+				     9 OR 12 OR 15 OR 21 OR 99)
 		       MOVE "Invoice selection not valid"
 				 TO WS-ERR-STRING
 003260		       PERFORM ERROR-MESSAGE
 		       GO TO YA365
 		   END-IF
 	       ELSE
-	       IF NOT (PAR-INV = 1 OR 5 OR 7 OR 9)
+	       IF NOT (PAR-INV = 1 OR 5 OR 7 OR 9 OR 99)
 		   MOVE "Invoice selection not valid"
 				 TO WS-ERR-STRING
 003260		   PERFORM ERROR-MESSAGE
 		   GO TO YA365
 	       END-IF
 	   ELSE
-	   IF (PAR-INV < 1 OR > 22)
-	       MOVE "Invoice format MUST be 1 to 22"
+	   IF (PAR-INV < 1 OR > 22) AND (PAR-INV NOT = 99)
+	       MOVE "Invoice format MUST be 1 to 22 or 99"
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO YA365.

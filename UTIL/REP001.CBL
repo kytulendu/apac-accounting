@@ -13,7 +13,7 @@
       *                                                                *
       *       P E R I O D - E N D   &   S T A T S   P R O G R A M      *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.02 - December 2011			       *
       * 							       *
       ******************************************************************
       /
@@ -22,7 +22,7 @@
 000030 AUTHOR.	       James William Lemmon.
 000040 DATE-WRITTEN.   AUGUST 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -141,6 +141,10 @@
 000270                    RECORD TAX-KEY.
       $SET NOKEYCOMPRESS
 
+000200	   SELECT VATREP  ASSIGN W02-VATREP
+000040                    STATUS WS-STATUS
+                          ORGANIZATION LINE SEQUENTIAL.
+
 000490 DATA DIVISION.
 000500 FILE SECTION.
 
@@ -165,6 +169,10 @@
 000560 COPY STOCK.GFD.
 
        COPY TXTRAN.IFD.
+
+       FD  VATREP    LABEL RECORD OMITTED.
+       01  VAT-REC1.
+	   03  EXP-DATA     PIC  X(136).
 
       /
       *         **         **    ******    *******    **    **
@@ -196,6 +204,7 @@
        77  WS-USE-ITM	   PIC	X(01).
 003390 77  WS-LINES        PIC 9(02) VALUE 66.
 003400 77  WS-PAGE         PIC 9(04)     COMP-5.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
 002570 77  WS-PGE-LENGTH   PIC	9(02)	 VALUE 66.
 001870 77  WS-PRN-LENGTH   PIC	9(02)	 VALUE 62.
 003430 77  WS-GST-RATE	   PIC	9(02)V99   COMP-3.
@@ -303,6 +312,9 @@
        COPY STOCK.ID.
 
        COPY TXTRAN.ID.
+
+       01  W02-VATREP.
+	   03  W02-VATNAME     PIC  X(12) VALUE "VATXXXXX.CSV".
 
        01  W02-PRINTER-DETAILS.
 	   03  W02-PRINTER     PIC  X(12).
@@ -759,6 +771,61 @@
 
        COPY W05.VAT.
 
+       01  VTD-RECORD.
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  VTD-DATE.
+	       05  VTD-DAT     PIC  99/99/9999.
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  VTD-REFER.
+	       05  VTD-REF     PIC  X(08).
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  VTD-TRAN        PIC  X(11).
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  VTD-NAME.
+	       05  FILLER      PIC  X(04).
+	       05  VTD-CDE     PIC  9(01).
+	       05  FILLER      PIC  X(03).
+	       05  VTD-RTE     PIC  Z9.99.
+	       05  VTD-PERC    PIC  X(01).
+	       05  FILLER      PIC  X(16).
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-TRAN-AMT    PIC  -(08)9.99  BLANK WHEN ZERO.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-NO-TAX      PIC  -(07)9.99  BLANK WHEN ZERO.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-TXBL-AMT    PIC  -(08)9.99  BLANK WHEN ZERO.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-VAT-AMT     PIC  -(07)9.99  BLANK WHEN ZERO.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+
+       01  VTD-RECORD2.
+	   03  VTD-H1	       PIC  X(11).
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-H2A.
+	       05  VTD-H2      PIC  X(09).
+	       05  FILLER      PIC  X(01)   VALUE ",".
+	       05  VTD-H3      PIC  X(12).
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  VTD-H3A	       PIC  X(30).
+	   03  FILLER	       PIC  X(01)   VALUE QUOTE.
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-H4	       PIC  X(13).
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-H5	       PIC  X(16).
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-H6	       PIC  X(09).
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+	   03  VTD-H7	       PIC  X(11).
+	   03  FILLER	       PIC  X(01)   VALUE ",".
+
        01  W10-DATE.
 	   03  W10-DTE	       PIC 99/99/9999.
 
@@ -1145,7 +1212,27 @@
 	   03	       COLUMN 32 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 0
 				 VALUE " Value Added Tax Report ³".
-001570	   03  LINE 18 COLUMN 29 BACKGROUND-COLOR 2
+001470	   03  LINE 18 COLUMN 29 BACKGROUND-COLOR 2
+				 FOREGROUND-COLOR 2 HIGHLIGHT
+				 VALUE "³ ".
+	   03	       COLUMN 31 BACKGROUND-COLOR 2
+				 FOREGROUND-COLOR 7
+				 HIGHLIGHT
+				 VALUE "E".
+	   03	       COLUMN 32 BACKGROUND-COLOR 2
+				 FOREGROUND-COLOR 0
+				 VALUE " Orders and Quotations  ³".
+001570	   03  LINE 19 COLUMN 29 BACKGROUND-COLOR 2
+				 FOREGROUND-COLOR 2 HIGHLIGHT
+				 VALUE "³ ".
+	   03	       COLUMN 31 BACKGROUND-COLOR 2
+				 FOREGROUND-COLOR 7
+				 HIGHLIGHT
+				 VALUE "F".
+	   03	       COLUMN 32 BACKGROUND-COLOR 2
+				 FOREGROUND-COLOR 0
+				 VALUE " Export VAT             ³".
+001570	   03  LINE 20 COLUMN 29 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 2 HIGHLIGHT
 				 VALUE "³ ".
 	   03	       COLUMN 31 BACKGROUND-COLOR 2
@@ -1155,7 +1242,7 @@
 	   03	       COLUMN 32 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 0
 				 VALUE " Exit                   ³".
-	   03  LINE 19 COLUMN 29 BACKGROUND-COLOR 2
+	   03  LINE 21 COLUMN 29 BACKGROUND-COLOR 2
 				 FOREGROUND-COLOR 2 HIGHLIGHT
 				 VALUE "À".
 	   03	       COLUMN 30 BACKGROUND-COLOR 2 FOREGROUND-COLOR 0
@@ -1510,14 +1597,14 @@
 	     MOVE 5		 TO SHADE-ROW.
 	     MOVE 31		 TO SHADE-COL.
 	     MOVE 26		 TO SHADE-WIDTH.
-	     MOVE 15		 TO SHADE-LINES.
+	     MOVE 17		 TO SHADE-LINES.
 	     DISPLAY S-MENU.
 	     DISPLAY MENU-INSTRUCT.
 	     PERFORM SCREEN-SHADOW.
 
        AA02.
 	     MOVE 5		 TO TOP-ROW.
-	     MOVE 17		 TO BOTTOM-ROW.
+	     MOVE 19		 TO BOTTOM-ROW.
 	     MOVE 4		 TO SCREEN-LIN.
 	     MOVE 31		 TO SCREEN-COL.
 	     MOVE 24		 TO STRING-LENGTH.
@@ -1575,7 +1662,7 @@
 				  BY VALUE WS-LENGTH
 				  RETURNING WS-STATUS
 	       IF (WS-OPTION < "0" OR > "8") AND
-		  (WS-OPTION < "A" OR > "D") AND
+		  (WS-OPTION < "A" OR > "F") AND
 		  (WS-OPTION NOT = "$")
 		   CALL X"E5"
 		   GO TO AA05
@@ -1586,90 +1673,77 @@
 	       GO TO AA05.
 
        AA15.
-	   IF SCREEN-LIN < 5
-	       CALL X"E5"
-	       GO TO AA05
-	   ELSE
-	   IF SCREEN-LIN = 5
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 6
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 7
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 8
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "7"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "8"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "A"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "B"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "C"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 16
-	       MOVE "D"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 17
-	       MOVE "0"		 TO WS-OPTION.
+	     EVALUATE SCREEN-LIN
+	       WHEN 5
+		   MOVE "1"	 TO WS-OPTION
+	       WHEN 6
+		   MOVE "2"	 TO WS-OPTION
+	       WHEN 7
+		   MOVE "3"	 TO WS-OPTION
+	       WHEN 8
+		   MOVE "4"	 TO WS-OPTION
+	       WHEN 9
+		   MOVE "5"	 TO WS-OPTION
+	       WHEN 10
+		   MOVE "6"	 TO WS-OPTION
+	       WHEN 11
+		   MOVE "7"	 TO WS-OPTION
+	       WHEN 12
+		   MOVE "8"	 TO WS-OPTION
+	       WHEN 13
+		   MOVE "A"	 TO WS-OPTION
+	       WHEN 14
+		   MOVE "B"	 TO WS-OPTION
+	       WHEN 15
+		   MOVE "C"	 TO WS-OPTION
+	       WHEN 16
+		   MOVE "D"	 TO WS-OPTION
+	       WHEN 17
+		   MOVE "E"	 TO WS-OPTION
+	       WHEN 18
+		   MOVE "F"	 TO WS-OPTION
+	       WHEN 19
+		   MOVE "0"	 TO WS-OPTION
+	       WHEN OTHER
+		   CALL X"E5" CALL X"E5" CALL X"E5"
+		   GO TO AA05
+	     END-EVALUATE.
 	   GO TO AA18.
 
        AA16.
 	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 17		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 5		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 6		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 7		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 8		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "8"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "A"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "B"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "C"
-	       MOVE 15		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "D"
-	       MOVE 16		 TO SCREEN-LIN.
+	     EVALUATE WS-OPTION
+	       WHEN "0"
+		   MOVE 19	 TO SCREEN-LIN
+	       WHEN "1"
+		   MOVE 5	 TO SCREEN-LIN
+	       WHEN "2"
+		   MOVE 6	 TO SCREEN-LIN
+	       WHEN "3"
+		   MOVE 7	 TO SCREEN-LIN
+	       WHEN "4"
+		   MOVE 8	 TO SCREEN-LIN
+	       WHEN "5"
+		   MOVE 9	 TO SCREEN-LIN
+	       WHEN "6"
+		   MOVE 10	 TO SCREEN-LIN
+	       WHEN "7"
+		   MOVE 11	 TO SCREEN-LIN
+	       WHEN "8"
+		   MOVE 12	 TO SCREEN-LIN
+	       WHEN "A"
+		   MOVE 13	 TO SCREEN-LIN
+	       WHEN "B"
+		   MOVE 14	 TO SCREEN-LIN
+	       WHEN "C"
+		   MOVE 15	 TO SCREEN-LIN
+	       WHEN "D"
+		   MOVE 16	 TO SCREEN-LIN
+	       WHEN "E"
+		   MOVE 17	 TO SCREEN-LIN
+	       WHEN "F"
+		   MOVE 18	 TO SCREEN-LIN
+	     END-EVALUATE.
 	     PERFORM SAVE-ATTR.
 	     PERFORM MARK-BLOCK.
 
@@ -1679,46 +1753,40 @@
 	       MOVE 0		 TO MOUSE-PARAM
 	       CALL X"AF" USING MOUSE-FUNC
 				MOUSE-PARAM.
-006730	   IF WS-OPTION = "0"
-006740         GO TO AY000-EOJ.
-006750     IF WS-OPTION = "1"
-006760	       PERFORM BA000D
-006770     ELSE
-006780     IF WS-OPTION = "2"
-006790         PERFORM DA00M
-006800     ELSE
-006810     IF WS-OPTION = "3"
-006820         PERFORM EA00Y
-006830     ELSE
-006840     IF WS-OPTION = "4"
-006850         PERFORM CG00R
-006860     ELSE
-006870     IF WS-OPTION = "5"
-006880         PERFORM FA00R
-006890     ELSE
-006900     IF WS-OPTION = "6"
-006910         PERFORM GA00R
-006920     ELSE
-006930     IF WS-OPTION = "7"
-006940         PERFORM HA00R
-006950     ELSE
-006960     IF WS-OPTION = "8"
-006970         PERFORM IA000
-006980     ELSE
-006990     IF WS-OPTION = "A"
-007000         PERFORM JA000
-007010     ELSE
-006990     IF WS-OPTION = "B"
-007000         PERFORM LA000
-007010     ELSE
-007020	   IF WS-OPTION = "C"
-007030	       PERFORM KA00R
-007040     ELSE
-007020	   IF WS-OPTION = "D"
-007030	       PERFORM MA00R
-007040     ELSE
-007020	   IF WS-OPTION = "$"
-007030	       PERFORM NA00T.
+	     EVALUATE WS-OPTION
+	       WHEN "0"
+006740		   GO TO AY000-EOJ
+	       WHEN "1"
+006760		   PERFORM BA000D
+	       WHEN "2"
+006790		   PERFORM DA00M
+	       WHEN "3"
+006820		   PERFORM EA00Y
+	       WHEN "4"
+006850		   PERFORM CG00R
+	       WHEN "5"
+006880		   PERFORM FA00R
+	       WHEN "6"
+006910		   PERFORM GA00R
+	       WHEN "7"
+006940		   PERFORM HA00R
+	       WHEN "8"
+006970		   PERFORM IA000
+	       WHEN "A"
+007000		   PERFORM JA000
+	       WHEN "B"
+007000		   PERFORM LA000
+	       WHEN "C"
+007030		   PERFORM KA00R
+	       WHEN "D"
+007030		   PERFORM MA00R
+	       WHEN "E"
+007030		   PERFORM OA00R
+	       WHEN "F"
+007030		   PERFORM PA00R
+	       WHEN "$"
+007030		   PERFORM NA00T
+	     END-EVALUATE.
 	   IF WS-PRINTER = "S"
 	       MOVE "I" 	 TO WS-COMMAND
 	       PERFORM CALL-PRINTUTL
@@ -4864,7 +4932,7 @@
        DA75.
 026010       DISPLAY CLR-SCREEN.
              DISPLAY "CLEAR CONVERTED ORDERS" AT 0229
-                      WITH FOREGROUND-COLOR 15.
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
 026030       DISPLAY "This routine will clear converted orders" 
                       AT 0408.
 026050       DISPLAY "Are you sure Y/N?" AT 0608
@@ -4902,8 +4970,8 @@
 023280 FA00R                  SECTION 53.
 023290 FA00.
 023300       DISPLAY CLR-SCREEN.
-023310       DISPLAY (10, 20) "Busy printing Category Analysis Report"
-023320			       WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+023310	     DISPLAY "Busy printing Category Analysis Report" AT 1020
+023320		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
 023330       DISPLAY "Are you sure Y/N?" AT 1220
 023340                WITH FOREGROUND-COLOR 14.
 023350 FA02.
@@ -6031,15 +6099,17 @@
 026060                WITH FOREGROUND-COLOR 14.
 
        MA05.
-026080	     ACCEPT WS-OPTION AT 0838
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-026140	   IF NOT (WS-OPTION = "Y" OR "N")
-               GO TO MA05.
-           IF WS-OPTION = "N"
+
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+026080	       ACCEPT WS-OPTION AT 0838
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			 BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+	   IF WS-OPTION = "N"
                GO TO MA999.
 	     DISPLAY "For the period." AT 1020.
 	     DISPLAY "Start date :" AT 1120.
@@ -6953,6 +7023,853 @@
 
        NA999.
 	     EXIT.
+      /----------------------------------------------------------------*
+      * 	    ****    ORDERS AND QUOTATIONS    ****	       *
+      *----------------------------------------------------------------*
+021400 OA00R		      SECTION 62.
+021410 OA00.
+021420       DISPLAY CLR-SCREEN.
+	     MOVE WS-OPTION	 TO WS-STATOP.
+	     DISPLAY "ORDERS AND QUOTATIONS" AT 0229
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+	     MOVE 5		 TO SHADE-ROW.
+	     MOVE 31		 TO SHADE-COL.
+	     MOVE 22		 TO SHADE-WIDTH.
+	     MOVE 5		 TO SHADE-LINES.
+	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 0429
+		      WITH BACKGROUND-COLOR 2
+			   FOREGROUND-COLOR 2 HIGHLIGHT
+		     "¿" AT 0452 WITH BACKGROUND-COLOR 2
+				      FOREGROUND-COLOR 0.
+	     DISPLAY "³ " AT 0529
+		      WITH BACKGROUND-COLOR 2
+			   FOREGROUND-COLOR 2 HIGHLIGHT
+		     "1" WITH BACKGROUND-COLOR 2
+			      FOREGROUND-COLOR 7 HIGHLIGHT
+		     " Quotations         ³"
+		      WITH BACKGROUND-COLOR 2 FOREGROUND-COLOR 0.
+	     DISPLAY "³ " AT 0629
+		      WITH BACKGROUND-COLOR 2
+			   FOREGROUND-COLOR 2 HIGHLIGHT
+		     "2" WITH BACKGROUND-COLOR 2
+			      FOREGROUND-COLOR 7 HIGHLIGHT
+		     " Sales Orders       ³"
+		      WITH BACKGROUND-COLOR 2 FOREGROUND-COLOR 0.
+	     DISPLAY "³ " AT 0729
+		      WITH BACKGROUND-COLOR 2
+			   FOREGROUND-COLOR 2 HIGHLIGHT
+		     "3" WITH BACKGROUND-COLOR 2
+			      FOREGROUND-COLOR 7 HIGHLIGHT
+		     " Converted Orders   ³"
+		      WITH BACKGROUND-COLOR 2 FOREGROUND-COLOR 0.
+
+	     DISPLAY "³ " AT 0829
+		      WITH BACKGROUND-COLOR 2
+			   FOREGROUND-COLOR 2 HIGHLIGHT
+		     "0" WITH BACKGROUND-COLOR 2
+			      FOREGROUND-COLOR 7 HIGHLIGHT
+		     " Period-End Control ³"
+		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 2.
+	     DISPLAY "À" AT 0929
+		      WITH BACKGROUND-COLOR 2
+			   FOREGROUND-COLOR 2 HIGHLIGHT
+		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 2.
+	     DISPLAY MENU-INSTRUCT.
+	     PERFORM SCREEN-SHADOW.
+	     PERFORM SAVE-SCREEN-3.
+
+021480 OA00A.
+	     PERFORM RESTORE-SCREEN-3.
+	     MOVE 4		 TO TOP-ROW.
+	     MOVE 7		 TO BOTTOM-ROW.
+	     MOVE 3		 TO SCREEN-LIN.
+	     MOVE 31		 TO SCREEN-COL.
+	     MOVE 20		 TO STRING-LENGTH.
+	     PERFORM SAVE-ATTR.
+
+       OA00A-5.
+	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+
+006660 OA00A-10.
+	   IF ADIS-FUNC
+	       EVALUATE KEY-CODE-1
+		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
+		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
+		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+				 IF MOUSE-ENTER = "Y"
+				     MOVE "N"	 TO MOUSE-ENTER
+				     GO TO OA00A-15
+				 END-IF
+				 IF MOUSE-Y = 24
+				     IF MOUSE-X = 5
+					 MOVE 5  TO KEY-CODE-1
+					 GO TO OA00A-10
+				     ELSE
+				     IF MOUSE-X = 10
+					 MOVE 6  TO KEY-CODE-1
+					 GO TO OA00A-10
+				     ELSE
+				     IF MOUSE-X > 36 AND < 44
+					 MOVE 0  TO KEY-CODE-1
+					 GO TO OA00A-10
+				     ELSE
+				     IF MOUSE-X > 54 AND < 60
+					 MOVE 0  TO KEY-CODE-1
+					 MOVE 1  TO KEY-TYPE
+					 GO TO OA00A-10
+				     END-IF
+				 END-IF
+		 WHEN ENTER-KEY  GO TO OA00A-15
+		 WHEN OTHER	 CALL X"E5" CALL X"E5" CALL X"E5"
+	       END-EVALUATE
+	       GO TO OA00A-5
+	   ELSE
+	   IF USER-FUNC
+	       EVALUATE KEY-CODE-1
+		 WHEN ESC-KEY
+		     MOVE "0"	 TO WS-OPTION
+		     GO TO OA00AF
+		 WHEN OTHER	 CALL X"E5" CALL X"E5" CALL X"E5"
+	       END-EVALUATE
+	       GO TO OA00A-5
+	   ELSE
+	   IF DATA-8BIT
+	       MOVE KEY-CODE-1X  TO WS-OPTION
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	       IF WS-OPTION < "0" OR > "3"
+		   CALL X"E5" CALL X"E5" CALL X"E5"
+		   GO TO OA00A-5
+	       END-IF
+	       GO TO OA00A-16
+	   ELSE
+	       CALL X"E5" CALL X"E5" CALL X"E5"
+	       GO TO OA00A-5.
+
+       OA00A-15.
+	     EVALUATE SCREEN-LIN
+	       WHEN 4
+		   MOVE "1"	 TO WS-OPTION
+	       WHEN 5
+		   MOVE "2"	 TO WS-OPTION
+	       WHEN 6
+		   MOVE "3"	 TO WS-OPTION
+	       WHEN 7
+		   MOVE "0"	 TO WS-OPTION
+	       WHEN OTHER
+		   CALL X"E5" CALL X"E5" CALL X"E5"
+		   GO TO OA00A-5
+	     END-EVALUATE.
+	     GO TO OA00AF.
+
+       OA00A-16.
+	     PERFORM CLEAR-BLOCK.
+	     EVALUATE WS-OPTION
+	       WHEN "0"
+		   MOVE 7	 TO SCREEN-LIN
+	       WHEN "1"
+		   MOVE 4	 TO SCREEN-LIN
+	       WHEN "2"
+		   MOVE 5	 TO SCREEN-LIN
+	       WHEN "3"
+		   MOVE 6	 TO SCREEN-LIN
+	     END-EVALUATE.
+	     PERFORM SAVE-ATTR.
+	     PERFORM MARK-BLOCK.
+
+       OA00AF.
+	   IF MOUSE-ATTACHED = "Y"
+	       MOVE 66		 TO MOUSE-FUNC
+	       MOVE 0		 TO MOUSE-PARAM
+	       CALL X"AF" USING MOUSE-FUNC
+				MOUSE-PARAM.
+	     MOVE WS-OPTION	 TO WS-REPLY.
+	     MOVE WS-STATOP	 TO WS-OPTION.
+021550	   IF WS-REPLY = "0"
+021560	       GO TO OA999.
+	   IF WS-REPLY = "1"
+	       GO TO OA40.
+	   IF WS-REPLY = "2"
+	       GO TO OA65.
+	   IF WS-REPLY = "3"
+	       GO TO OA75.
+	     GO TO OA00A.
+      *
+      *    ****    R E D U N D A N T   Q U O T E S
+      *
+       OA40.
+026010       DISPLAY CLR-SCREEN.
+             DISPLAY "CLEAR REDUNDANT QUOTATIONS" AT 0227
+                      WITH FOREGROUND-COLOR 15.
+026030       DISPLAY "This routine will clear redundant quotations" 
+                      AT 0408.
+026050       DISPLAY "Are you sure Y/N?" AT 0608
+026060                WITH FOREGROUND-COLOR 14.
+
+       OA45.
+026080	     ACCEPT WS-OPTION AT 0626
+		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			 BACKGROUND-COLOR 5 AUTO.
+	     CALL "CBL_TOUPPER" USING WS-OPTION
+				BY VALUE WS-LENGTH
+				RETURNING WS-STATUS.
+026140	   IF NOT (WS-OPTION = "Y" OR "N")
+	       GO TO OA45.
+           IF WS-OPTION = "N"
+	       GO TO OA00.
+             MOVE "Q"            TO WS-TYPE.
+035570       DISPLAY "Enter Date from which QUOTATIONS are to be kept DD
+035580- 	     "/MM/YYYY" AT 0808.
+             MOVE ZERO           TO W15-END.
+
+       OA50.
+             DISPLAY "Order No:" AT 1008.
+             ACCEPT S08.
+	     PERFORM CHECK-CORRECT.
+018520	   IF WS-OPTION = "N"
+018530	       GO TO OA50.
+             MOVE W15-END        TO W10-DTE.
+             PERFORM CHECK-DATE.
+027400     IF WS-ERROR = 1
+027410	       MOVE "Invalid date"
+				 TO WS-ERR-STRING
+	       PERFORM ERROR-MESSAGE
+	       GO TO OA50.
+             MOVE W20-DTE        TO W15-E-YMD.
+000740       MOVE "00000001"     TO SOR-REF
+             MOVE ZERO           TO SOR-SEQ
+000750       PERFORM START-AT-ORDER-NO THRU READ-SORDER-EXIT.
+000880     IF WS-F-ERROR = 20
+	       GO TO OA00.
+       OA55.
+000920       PERFORM READ-SORDER-NEXT THRU READ-SORDER-EXIT.
+000930     IF WS-F-ERROR = 20
+000940	       GO TO OA00.
+       OA58.
+           IF SOR-TYPE NOT = ZERO
+	       GO TO OA55.
+             DISPLAY SOR-REF AT 1018 WITH FOREGROUND-COLOR 15.
+           IF SOR-DOC = WS-TYPE
+               IF SOR-DTE < W15-E-YMD
+                   MOVE SOR-REF  TO WS-REF
+		   GO TO OA60.
+	     GO TO OA55.
+
+       OA60.
+             PERFORM DELETE-SORDER-REC THRU WRITE-SORDER-EXIT.
+000920       PERFORM READ-SORDER-NEXT THRU READ-SORDER-EXIT.
+000930     IF WS-F-ERROR = 20
+000940	       GO TO OA00.
+           IF SOR-REF NOT = WS-REF
+	       GO TO OA58.
+	     GO TO OA60.
+      *
+      *    ****    R E D U N D A N T   O R D E R S
+      *
+       OA65.
+026010       DISPLAY CLR-SCREEN.
+             DISPLAY "CLEAR REDUNDANT SALES ORDERS" AT 0226
+                      WITH FOREGROUND-COLOR 15.
+026030       DISPLAY "This routine will clear redundant sales orders" 
+                      AT 0408.
+026050       DISPLAY "Are you sure Y/N?" AT 0608
+026060                WITH FOREGROUND-COLOR 14.
+
+       OA70.
+026080	     ACCEPT WS-OPTION AT 0626
+		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			 BACKGROUND-COLOR 5 AUTO.
+	     CALL "CBL_TOUPPER" USING WS-OPTION
+				BY VALUE WS-LENGTH
+				RETURNING WS-STATUS.
+026140	   IF NOT (WS-OPTION = "Y" OR "N")
+	       GO TO OA70.
+           IF WS-OPTION = "N"
+	       GO TO OA00.
+             MOVE "O"            TO WS-TYPE.
+035570       DISPLAY "Enter Date from which SLS-ORDERS are to be kept DD
+035580- 	     "/MM/YYYY" AT 0808.
+             MOVE ZERO           TO W15-END.
+	     GO TO OA50.
+      *
+      *    ****    C O N V E R T E D   O R D E R S
+      *
+       OA75.
+026010       DISPLAY CLR-SCREEN.
+             DISPLAY "CLEAR CONVERTED ORDERS" AT 0229
+                      WITH FOREGROUND-COLOR 15.
+026030       DISPLAY "This routine will clear converted orders" 
+                      AT 0408.
+026050       DISPLAY "Are you sure Y/N?" AT 0608
+026060                WITH FOREGROUND-COLOR 14.
+
+       OA80.
+026080	     ACCEPT WS-OPTION AT 0626
+		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			 BACKGROUND-COLOR 5 AUTO.
+	     CALL "CBL_TOUPPER" USING WS-OPTION
+				BY VALUE WS-LENGTH
+				RETURNING WS-STATUS.
+026140	   IF NOT (WS-OPTION = "Y" OR "N")
+	       GO TO OA80.
+           IF WS-OPTION = "N"
+	       GO TO OA00.
+             MOVE "I"            TO WS-TYPE.
+035570       DISPLAY "Enter Date from which CNV-ORDERS are to be kept DD
+035580- 	     "/MM/YYYY" AT 0808.
+             MOVE ZERO           TO W15-END.
+	     GO TO OA50.
+
+023200 OA999.
+023210       EXIT.
+      /
+      *    ****    V A T   E X P O R T
+      * 
+       PA00R	       SECTION 63.
+       PA00.
+026010       DISPLAY CLR-SCREEN.
+	     DISPLAY "VAT REPORT - EXPORT - EXCEL" AT 0226
+                      WITH FOREGROUND-COLOR 15.
+	     MOVE "D"		 TO WS-VATTYPE.
+026030	     DISPLAY "Busy Exporting VAT to EXCEL" AT 0620
+	     MOVE "P"		 TO WS-STATOP.
+026050	     DISPLAY "Are you sure Y/N?" AT 0820
+026060                WITH FOREGROUND-COLOR 14.
+	     PERFORM TEST AFTER
+		     UNTIL WS-OPTION = "N" OR "Y"
+026080	       ACCEPT WS-OPTION AT 0838
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			 BACKGROUND-COLOR 5 AUTO
+	       CALL "CBL_TOUPPER" USING WS-OPTION
+				  BY VALUE WS-LENGTH
+				  RETURNING WS-STATUS
+	     END-PERFORM.
+	   IF WS-OPTION = "N"
+	       GO TO PA999.
+	     DISPLAY "For the period." AT 1020.
+	     DISPLAY "Start date :" AT 1120.
+	     DISPLAY "End date   :" AT 1220.
+	     DISPLAY "Dates to be keyed in as DDMMYYYY" AT 1420
+                      WITH FOREGROUND-COLOR 11.
+	     MOVE ZERO		 TO W15-START W15-END.
+
+       PA05.
+             ACCEPT S07.
+	     PERFORM CHECK-CORRECT.
+018520	   IF WS-OPTION = "N"
+018530	       GO TO PA05.
+	     MOVE W15-START	 TO W10-DTE.
+             PERFORM CHECK-DATE.
+027400     IF WS-ERROR = 1
+027410	       MOVE "Start date" TO WS-ERR-STRING
+	       PERFORM ERROR-MESSAGE
+	       GO TO PA05.
+             MOVE W20-DTE        TO W15-S-YMD.
+             MOVE W15-END        TO W10-DTE.
+             PERFORM CHECK-DATE.
+027400     IF WS-ERROR = 1
+027410	       MOVE "End date"	 TO WS-ERR-STRING
+	       PERFORM ERROR-MESSAGE
+	       GO TO PA05.
+             MOVE W20-DTE        TO W15-E-YMD.
+	     MOVE W15-START	 TO W24-DTE1.
+	     MOVE W15-END	 TO W24-DTE2.
+
+      *      DISPLAY "A" AT 1420 WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      *		     "ll/" "D" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      *		     "ebtors/" "C" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      *		     "reditors Transactions :".
+	     MOVE "D"		 TO WS-TYPE.
+	     DISPLAY "File to be Created:" AT 1420.
+
+       PA06A.
+	     ACCEPT W02-VATNAME AT 1440
+		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
+			 BACKGROUND-COLOR 5 UPDATE AUTO.
+	     MOVE 12		 TO WS-LENGTH.
+	     CALL "CBL_TOUPPER" USING W02-VATNAME
+				BY VALUE WS-LENGTH
+				RETURNING WS-STATUS.
+	     MOVE 1		 TO WS-LENGTH.
+	     OPEN OUTPUT VATREP.
+
+      *	     ACCEPT WS-TYPE AT 1457
+      *		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      *			 BACKGROUND-COLOR 5 UPDATE AUTO.
+      *	     CALL "CBL_TOUPPER" USING WS-TYPE
+      *				BY VALUE WS-LENGTH
+      *				RETURNING WS-STATUS.
+      *	   IF NOT (WS-TYPE = "A" OR "C" OR "D")
+      *	       GO TO PA06A.
+	     MOVE 1		 TO W05-V-RATE.
+
+       PA08.
+	     OPEN I-O TXTRAN.
+	   IF WS-STATUS NOT = "00"
+               PERFORM OPEN-ERROR.
+	     INITIALIZE W10-TAX-KEY.
+	     MOVE W10-TAX-KEY	 TO TAX-KEY.
+	     MOVE "1"		 TO TAX-TYPE.
+	     MOVE "0"		 TO W10-TAX-TYPE.
+	     PERFORM START-AT-TXTRAN-KEY THRU READ-TXTRAN-EXIT.
+	   IF WS-F-ERROR = 32
+	       GO TO PA75.
+	     DISPLAY "Reading TAX record:" AT 1620
+		      WITH FOREGROUND-COLOR 7.
+	     MOVE ZERO		 TO W15-TRAN-AMT-1
+				    W15-TRAN-AMT-2
+				    W15-TRAN-AMT-3
+				    W15-TRAN-AMT-I
+				    W15-TRAN-AMT-O
+				    W15-NON-TXBL-1
+                                    W15-NON-TXBL-2
+                                    W15-NON-TXBL-3
+                                    W15-NON-TXBL-I
+				    W15-NON-TXBL-O.
+	     MOVE 1		 TO WS-S7.
+
+       PA09.
+	     MOVE ZERO		 TO W15-TXBL-AMT-1(WS-S7)
+				    W15-TXBL-AMT-2(WS-S7)
+				    W15-TXBL-AMT-3(WS-S7)
+				    W15-TXBL-AMT-I(WS-S7)
+				    W15-TXBL-AMT-O(WS-S7)
+				    W15-VAT-AMT-1(WS-S7)
+				    W15-VAT-AMT-2(WS-S7)
+				    W15-VAT-AMT-3(WS-S7)
+				    W15-VAT-AMT-I(WS-S7)
+				    W15-VAT-AMT-O(WS-S7).
+	   IF WS-S7 < 12
+	       ADD 1		 TO WS-S7
+	       GO TO PA09.
+
+       PA10.
+	     MOVE W05-VAT-CODE	 TO DPT-CODE.
+	     PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+007140	     MOVE W95-COMP	 TO EXP-DATA.
+	     WRITE VAT-REC1.
+	     MOVE "* V A T   R E P O R T *"
+				 TO EXP-DATA.
+	     WRITE VAT-REC1.
+	     MOVE W15-VAT-TYPE	 TO R-DETAIL.
+	     MOVE W24-PERIOD	 TO V-CPY.
+	     MOVE R-DETAIL	 TO EXP-DATA.
+	     WRITE VAT-REC1.
+007160	     MOVE SPACES	 TO R-DETAIL.
+	     MOVE "Trn-date"	 TO VTD-H1.
+	     MOVE "Doc.numb"	 TO VTD-H2.
+	     MOVE "Tran-type"	 TO VTD-H3.
+	     MOVE "Account Name" TO VTD-H3A.
+	     MOVE "Tran-amount"  TO VTD-H4.
+	     MOVE "Non-taxable"  TO VTD-H5.
+	     MOVE "Taxable"	 TO VTD-H6.
+	     MOVE "VAT-amount"	 TO VTD-H7.
+	     MOVE VTD-RECORD2	 TO EXP-DATA.
+	     WRITE VAT-REC1.
+
+       PA15.
+	     PERFORM READ-TXTRAN-NEXT THRU READ-TXTRAN-EXIT.
+	   IF WS-F-ERROR = 32
+	       GO TO PA70.
+	     DISPLAY TAX-DATE AT 1640 WITH FOREGROUND-COLOR 14
+		     " " TAX-REF WITH FOREGROUND-COLOR 15.
+           IF (TAX-DATE < W15-S-YMD) OR 
+              (TAX-DATE > W15-E-YMD)
+	       GO TO PA15.
+	   IF NOT (WS-TYPE = "A")
+	       IF WS-TYPE = "D"
+		   IF NOT (TAX-ACTYPE = 1 OR 2)
+		       GO TO PA15
+		   END-IF
+	       ELSE
+		   IF NOT (TAX-ACTYPE = 3)
+		       GO TO PA15.
+	     MOVE 1		 TO WS-S7.
+           IF TAX-TYPE NOT = W10-TAX-TYPE
+               IF W10-TAX-TYPE = "0"
+		   PERFORM PA40
+		   PERFORM PA55
+      *		   PERFORM PA10
+               ELSE
+		   PERFORM PA20 THRU PA24
+		   PERFORM PA25 THRU PA28
+		   PERFORM PA35 THRU PA38
+                   IF TAX-TYPE > 2 AND W10-TAX-TYPE < 3
+		       PERFORM PA45 THRU PA50
+                   ELSE
+		       PERFORM PA40
+           ELSE
+               IF TAX-ACTYPE NOT = W10-TAX-ACTYPE
+		   PERFORM PA20 THRU PA24
+		   PERFORM PA25 THRU PA28
+		   PERFORM PA30 THRU PA34
+               ELSE
+                   IF TAX-CODE NOT = W10-TAX-CODE
+		       PERFORM PA20 THRU PA24.
+	     MOVE 1		 TO WS-S7.
+             PERFORM PRINT-ABORT.
+	   IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+014990	       GO TO PA75.
+	     MOVE TAX-KEY	 TO W10-TAX-KEY.
+	     MOVE TAX-DATE	 TO W22-DTE2.
+	     MOVE W22-CC2	 TO W22-CC3.
+	     MOVE W22-YY2	 TO W22-YY3.
+	     MOVE W22-MM2	 TO W22-MM3.
+	     MOVE W22-DD2	 TO W22-DD3.
+	   IF WS-VATTYPE = "S"
+	       GO TO PA16.
+	     MOVE W22-DTE3	 TO VTD-DAT.
+	     MOVE TAX-REF	 TO VTD-REF.
+	     MOVE W15-DESC	 TO VTD-TRAN.
+           IF TAX-ACTYPE = 1
+               MOVE TAX-AC       TO DEB-ACNO
+               PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT
+	       MOVE DEB-NAME	 TO VTD-NAME
+	       INSPECT VTD-NAME REPLACING ALL "*" BY " "
+	       INSPECT VTD-NAME REPLACING ALL "!" BY " "
+           ELSE
+           IF TAX-ACTYPE = 2
+	       MOVE "Cash Sales" TO VTD-NAME
+           ELSE
+           IF TAX-ACTYPE = 3
+	       MOVE TAX-AC	 TO P-NUMBER
+               PERFORM READ-CREDIT THRU READ-CREDIT-EXIT
+	       MOVE P-NAME	 TO VTD-NAME
+           ELSE
+	   IF TAX-ACTYPE = 4
+               MOVE "General Ledger"
+				 TO VTD-NAME
+	   ELSE
+	       MOVE "Petty Cash" TO VTD-NAME.
+	     MOVE TAX-VALUE	 TO VTD-TRAN-AMT.
+	     MOVE TAX-TAXFREE	 TO VTD-NO-TAX.
+	     MOVE TAX-VAT(WS-S7) TO VTD-VAT-AMT.
+	     MOVE TAX-VAL(WS-S7) TO VTD-TXBL-AMT.
+
+       PA16.
+	     ADD TAX-TAXFREE	 TO W15-NON-TXBL-1
+                                    W15-NON-TXBL-2
+                                    W15-NON-TXBL-3.
+	     ADD TAX-VALUE	 TO W15-TRAN-AMT-1
+                                    W15-TRAN-AMT-2
+                                    W15-TRAN-AMT-3.
+	   IF TAX-TYPE = "1" OR "3"
+               ADD TAX-VALUE     TO W15-TRAN-AMT-I
+               ADD TAX-TAXFREE   TO W15-NON-TXBL-I
+	   ELSE
+               ADD TAX-VALUE     TO W15-TRAN-AMT-O
+	       ADD TAX-TAXFREE	 TO W15-NON-TXBL-O.
+	   IF WS-VATTYPE = "D"
+	       PERFORM PA80.
+	     PERFORM PRINT-ABORT.
+	   IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+	       MOVE SPACES	 TO R-DETAIL
+	       MOVE "P"		 TO WS-COMMAND
+014990	       GO TO PA75.
+
+       PA17.
+	   IF TAX-VAL(WS-S7) = ZERO
+	       GO TO PA18.
+
+       PA17A.
+	     ADD TAX-VAL(WS-S7)  TO W15-TXBL-AMT-1(WS-S7)
+				    W15-TXBL-AMT-2(WS-S7)
+				    W15-TXBL-AMT-3(WS-S7).
+	     ADD TAX-VAT(WS-S7)	 TO W15-VAT-AMT-1(WS-S7)
+				    W15-VAT-AMT-2(WS-S7)
+				    W15-VAT-AMT-3(WS-S7).
+           IF TAX-TYPE = "1" OR "3"
+	       ADD TAX-VAL(WS-S7)
+				 TO W15-TXBL-AMT-I(WS-S7)
+	       ADD TAX-VAT(WS-S7)
+				 TO W15-VAT-AMT-I(WS-S7)
+           ELSE
+	       ADD TAX-VAL(WS-S7)
+				 TO W15-TXBL-AMT-O(WS-S7)
+	       ADD TAX-VAT(WS-S7)
+				 TO W15-VAT-AMT-O(WS-S7).
+
+       PA18.
+	   IF WS-S7 < 12
+	       ADD 1		 TO WS-S7
+	       GO TO PA17.
+	     GO TO PA15.
+
+       PA20.
+      *	   IF W02-LINAGE < W02-PRN-LENGTH
+      *	       PERFORM PA80.
+	     MOVE SPACES	 TO VTD-DATE VTD-REFER.
+	     MOVE "Total -"	 TO VTD-TRAN.
+	     MOVE W15-DESC	 TO VTD-NAME.
+	     MOVE W15-TRAN-AMT-1 TO VTD-TRAN-AMT.
+	     MOVE W15-NON-TXBL-1 TO VTD-NO-TAX.
+	     MOVE 1		 TO WS-S7.
+      *----------------------------------------------------------------*
+      * 							       *
+      * This routine to be amended when multiple rates are introduced. *
+      * 							       *
+      *----------------------------------------------------------------*
+
+       PA22.
+	   IF W15-TXBL-AMT-1(WS-S7) = ZERO
+	       GO TO PA24.
+	     MOVE W15-TXBL-AMT-1(WS-S7)
+				 TO VTD-TXBL-AMT.
+	     MOVE W15-VAT-AMT-1(WS-S7)
+				 TO VTD-VAT-AMT.
+      *   IF W02-LINAGE < (W02-PRN-LENGTH - 1)
+	       PERFORM PA80.
+
+	PA24.
+	   IF WS-S7 < 7
+	       ADD 1		 TO WS-S7
+	       GO TO PA22.
+             MOVE ZERO           TO W15-TRAN-AMT-1
+                                    W15-NON-TXBL-1
+				    W15-TXBL-AMT-1(1)
+				    W15-TXBL-AMT-1(7)
+				    W15-VAT-AMT-1(1)
+				    W15-VAT-AMT-1(7).
+	     PERFORM PA55.
+
+       PA25.
+      *   IF W02-LINAGE < W02-PRN-LENGTH
+      *	       PERFORM PA80.
+	     MOVE SPACES	 TO VTD-DATE VTD-REFER.
+	     MOVE "Total for:"	 TO VTD-TRAN.
+           IF W10-TAX-ACTYPE = 1
+	       MOVE "Debtors"	 TO VTD-NAME
+           ELSE
+	   IF W10-TAX-ACTYPE = 2
+	       MOVE "Cash"	 TO VTD-NAME
+	   ELSE
+	   IF W10-TAX-ACTYPE = 3
+	       MOVE "Creditors"  TO VTD-NAME
+	   ELSE
+	   IF W10-TAX-ACTYPE = 4
+	       MOVE "General ledger"
+				 TO VTD-NAME
+	   ELSE
+	       MOVE "Petty Cash"
+				 TO VTD-NAME.
+	     MOVE W15-TRAN-AMT-2 TO VTD-TRAN-AMT.
+	     MOVE W15-NON-TXBL-2 TO VTD-NO-TAX.
+	     MOVE 1		 TO WS-S7.
+      *----------------------------------------------------------------*
+      * 							       *
+      * This routine to be amended when multiple rates are introduced. *
+      * 							       *
+      *----------------------------------------------------------------*
+       PA26.
+	   IF W15-TXBL-AMT-2(WS-S7) = ZERO
+	       GO TO PA28.
+	     MOVE W15-TXBL-AMT-2(WS-S7)
+				 TO VTD-TXBL-AMT.
+	     MOVE W15-VAT-AMT-2(WS-S7)
+				 TO VTD-VAT-AMT.
+      *   IF W02-LINAGE < (W02-PRN-LENGTH - 1)
+	       PERFORM PA80.
+
+	PA28.
+	   IF WS-S7 < 7
+	       ADD 1		 TO WS-S7
+	       GO TO PA26.
+	     MOVE ZERO		 TO W15-TRAN-AMT-2
+                                    W15-NON-TXBL-2
+				    W15-TXBL-AMT-2(1)
+				    W15-TXBL-AMT-2(7)
+				    W15-VAT-AMT-2(1)
+				    W15-VAT-AMT-2(2).
+       PA30.
+      *   IF W02-LINAGE < W02-PRN-LENGTH
+      *	       PERFORM PA80.
+	     MOVE SPACES	 TO VTD-DATE VTD-REFER VTD-TRAN.
+             MOVE "Running Total -"
+				 TO VTD-NAME.
+	     MOVE W15-TRAN-AMT-3 TO VTD-TRAN-AMT.
+	     MOVE W15-NON-TXBL-3 TO VTD-NO-TAX.
+	     MOVE 1		 TO WS-S7.
+      *----------------------------------------------------------------*
+      * 							       *
+      * This routine to be amended when multiple rates are introduced. *
+      * 							       *
+      *----------------------------------------------------------------*
+       PA32.
+	   IF W15-TXBL-AMT-3(WS-S7) = ZERO
+	       GO TO PA34.
+	     MOVE W15-TXBL-AMT-3(WS-S7)
+				 TO VTD-TXBL-AMT.
+	     MOVE W15-VAT-AMT-3(WS-S7)
+				 TO VTD-VAT-AMT.
+      *   IF W02-LINAGE < (W02-PRN-LENGTH - 1)
+	       PERFORM PA80.
+
+       PA34.
+	   IF WS-S7 < 7
+	       ADD 1		 TO WS-S7
+	       GO TO PA32.
+
+       PA35.
+      *   IF W02-LINAGE < W02-PRN-LENGTH
+      *	       PERFORM PA80.
+	     MOVE SPACES	 TO VTD-DATE VTD-REFER.
+	     MOVE "Totals -"	 TO VTD-TRAN.
+	     MOVE W15-VAT-TYPE	 TO VTD-NAME.
+	     MOVE W15-TRAN-AMT-3 TO VTD-TRAN-AMT.
+	     MOVE W15-NON-TXBL-3 TO VTD-NO-TAX.
+	     MOVE 1		 TO WS-S7.
+      *----------------------------------------------------------------*
+      * 							       *
+      * This routine to be amended when multiple rates are introduced. *
+      * 							       *
+      *----------------------------------------------------------------*
+       PA36.
+	   IF W15-TXBL-AMT-3(WS-S7) = ZERO
+	       GO TO PA38.
+	     MOVE W15-TXBL-AMT-3(WS-S7)
+				 TO VTD-TXBL-AMT.
+	     MOVE W15-VAT-AMT-3(WS-S7)
+				 TO VTD-VAT-AMT.
+      *   IF W02-LINAGE < (W02-PRN-LENGTH - 1)
+	       PERFORM PA80.
+
+       PA38.
+	   IF WS-S7 < 7
+	       ADD 1		 TO WS-S7
+	       GO TO PA36.
+	     MOVE ZERO		 TO W15-TRAN-AMT-3
+                                    W15-NON-TXBL-3
+				    W15-TXBL-AMT-3(1)
+				    W15-TXBL-AMT-3(7)
+				    W15-VAT-AMT-3(1)
+				    W15-VAT-AMT-3(7).
+       PA40.
+           IF TAX-TYPE = 1
+               MOVE "Input VAT"  TO W15-VAT-TYPE
+           ELSE
+           IF TAX-TYPE = 2
+               MOVE "Output VAT" TO W15-VAT-TYPE
+           ELSE
+           IF TAX-TYPE = 3
+               MOVE "Input payments"
+                                 TO W15-VAT-TYPE
+           ELSE
+           IF TAX-TYPE = 4
+               MOVE "Output payments"
+                                 TO W15-VAT-TYPE.
+       PA45.
+      *   IF W02-LINAGE < W02-PRN-LENGTH
+      *	       PERFORM PA80.
+	     MOVE SPACES	 TO VTD-DATE VTD-REFER VTD-TRAN.
+	     MOVE ZERO		 TO VTD-TRAN-AMT VTD-NO-TAX
+				    VTD-TXBL-AMT.
+             MOVE "Net VAT amount"
+				 TO VTD-NAME.
+      *----------------------------------------------------------------*
+      * 							       *
+      * This routine to be amended when multiple rates are introduced. *
+      * 							       *
+      *----------------------------------------------------------------*
+	     ADD W15-VAT-AMT-I(1) W15-VAT-AMT-O(1)
+		 W15-VAT-AMT-I(7) W15-VAT-AMT-O(7)
+				 GIVING VTD-VAT-AMT.
+       PA50.
+	     PERFORM PA80.
+	     PERFORM PA40.
+      *	     PERFORM PA10.
+             MOVE ZERO           TO W15-TRAN-AMT-I
+                                    W15-NON-TXBL-I
+				    W15-TXBL-AMT-I(1)
+				    W15-TXBL-AMT-I(7)
+				    W15-VAT-AMT-I(1)
+				    W15-VAT-AMT-I(7).
+             MOVE ZERO           TO W15-TRAN-AMT-O
+                                    W15-NON-TXBL-O
+				    W15-TXBL-AMT-O(1)
+				    W15-TXBL-AMT-O(7)
+				    W15-VAT-AMT-O(1)
+				    W15-VAT-AMT-O(1).
+
+       PA55.
+           IF TAX-ACTYPE = 1
+	       PERFORM PA60
+           ELSE
+           IF TAX-ACTYPE = 2
+               IF TAX-CODE = 01
+                   MOVE "Cash sale"
+                                 TO W15-DESC
+               ELSE
+                   MOVE "Cash refund"
+                                 TO W15-DESC
+           ELSE
+           IF TAX-ACTYPE = 3
+	       PERFORM PA65
+           ELSE
+           IF TAX-ACTYPE = 4
+               IF TAX-CODE = 01
+		   MOVE "Inv/B.Chrg"
+				 TO W15-DESC
+               ELSE
+		   MOVE "D.N./Reversal"
+				 TO W15-DESC
+           ELSE
+	   IF TAX-ACTYPE = 5
+               IF TAX-CODE = 01
+		   MOVE "Inv/P.Cash"
+				 TO W15-DESC
+               ELSE
+		   MOVE "D.N./P.Cash"
+				 TO W15-DESC.
+       PA60.
+             ADD 21 TAX-CODE     GIVING W25-RESULT.
+             DIVIDE W25-RESULT BY 2
+                                 GIVING WS-PARKEY
+                                 REMAINDER WS-S1.
+             ADD 1               TO WS-S1.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+	     MOVE PAR-E-DESC(WS-S1)
+                                 TO W15-DESC.
+       PA65.
+             ADD 381 TAX-CODE    GIVING W25-RESULT.
+             DIVIDE W25-RESULT BY 2
+                                 GIVING WS-PARKEY
+                                 REMAINDER WS-S1.
+             ADD 1               TO WS-S1.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+	     MOVE PAR-C-DESC(WS-S1)
+                                 TO W15-DESC.
+       PA70.
+	     PERFORM PA20 THRU PA24.
+	     PERFORM PA25 THRU PA28.
+	     PERFORM PA35 THRU PA38.
+	     PERFORM PA45.
+	     PERFORM PA80.
+	     MOVE SPACES	 TO R-DETAIL.
+	     MOVE SPACES	 TO VTD-DATE VTD-REFER VTD-TRAN.
+             MOVE "**** E N D   R E P O R T ****"
+				 TO VTD-NAME.
+	     MOVE ZERO		 TO VTD-TRAN-AMT
+				    VTD-NO-TAX
+				    VTD-TXBL-AMT
+				    VTD-VAT-AMT.
+	     PERFORM PA80.
+	     MOVE "P"		 TO WS-COMMAND.
+	     MOVE "D"		 TO W02-PRN-TYPE.
+	     MOVE SPACES	 TO R-DETAIL.
+
+       PA75.
+	     CLOSE TXTRAN
+		   VATREP.
+	     GO TO PA999.
+
+       PA80.
+	     MOVE VTD-RECORD	 TO EXP-DATA.
+	     WRITE VAT-REC1.
+
+       PA999.
+             EXIT.
       /    *************************************************************
       * 		I N I T I A L I S E   P R O G R A M
       *    *************************************************************

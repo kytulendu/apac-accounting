@@ -13,7 +13,7 @@
       *                                                                *
       *     I N V O I C I N G	P R O G R A M	-   ( C O N S O L )    *
       *                                                                *
-      *     VERSION 8.15.00 - December 2010			       *
+      *     VERSION 8.15.02 - December 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -27,7 +27,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1984.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1984 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1984 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -199,6 +199,7 @@
 002600 77  WS-LASTINV      PIC  9(04)    COMP-5.
 002610 77  WS-LINE         PIC  9(04)    COMP-5.
 002620 77  WS-PAGE         PIC  9(02)    COMP-5.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
 002630 77  WS-L1           PIC  9(04)    COMP-5.
 002570 77  WS-PGE-LENGTH   PIC	9(02)	 VALUE 66.
 001870 77  WS-PRN-LENGTH   PIC	9(02)	 VALUE 62.

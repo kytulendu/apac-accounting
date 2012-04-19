@@ -13,7 +13,7 @@
       *                                                                *
       *      P R I N T   P I C K I N G   S L I P   P R O G R A M       *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.

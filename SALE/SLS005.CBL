@@ -13,7 +13,7 @@
       *                                                                *
       *      P R O C E S S   S A L E S   O R D E R   P R O G R A M     *
       *                                                                *
-      *     VERSION 8.14.03 - May 2010				       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -942,8 +942,13 @@
                IF WS-ERROR NOT = ZERO
                    MOVE 4        TO WS-ERROR
                    GO TO GET-SORDER-EXIT
-               END-IF
-               MOVE SOR-OREF     TO W90-REG
+	       END-IF
+      *    *************************************************************
+      *    *		 C l i e n t   V A T   n u m b e r	       *
+      *    *  N e e d	t o   p r i n t   o n	t h e	I n v o i c e  *
+      *    *************************************************************
+	       MOVE DEB-TAX	 TO W40-TAX
+	       MOVE SOR-OREF	 TO W90-REG
                MOVE SOR-NAME     TO W40-NAME
                MOVE SOR-ORD      TO W90-ORD
                MOVE SOR-SMAN     TO W10-SMAN
@@ -960,7 +965,7 @@
 		   MOVE SOR-EXT-ITEM TO SAL-EXT-ITEM
                    MOVE SOR-DESC     TO SAL-MSER
                    MOVE SOR-QNT      TO SAL-QNT
-		   MOVE SOR-QORD     TO SAL-ORD
+      *		   MOVE SOR-QORD     TO SAL-ORD
                    MOVE SOR-COST     TO SAL-COST
                    MOVE SOR-SELL     TO SAL-SELL
                    MOVE SOR-VAT      TO SAL-VAT
@@ -1022,7 +1027,7 @@
 	   ELSE
       * 		     T E X T
 015170	   IF SOR-TYPE = 8
-	       MOVE SOR-TEXT	 TO W32-REMARKS (WS-S7)
+	       MOVE SOR-TEXT	 TO W32-REMARKS(WS-S7)
 	       ADD 1		 TO WS-S7
 	   ELSE
       *                      T R A I L E R
@@ -1077,7 +1082,7 @@
 025000       SUBTRACT SOR-VAL    FROM W90-DB.
 025010       SUBTRACT SOR-DISC   FROM W90-LDISC.
 025020       SUBTRACT SOR-NONTAX FROM W90-NONTAX.
-	   IF NOT (SOR-VAT-SUB = ZERO)
+	   IF NOT(SOR-VAT-SUB = ZERO)
 025030	       SUBTRACT SOR-TAXVAL FROM W90-TAXVAL(WS-VAT-SUB).
 025050       COMPUTE W90-BAL = W90-BAL - (SOR-COST * SOR-QNT).
              MOVE 3              TO SOR-TYPE.
@@ -1088,7 +1093,8 @@
              MOVE ZERO           TO SOR-QNT SOR-COST SOR-INCTAX
                                     SOR-VAT SOR-SELL SOR-NONTAX
                                     SOR-VAL SOR-DISC SOR-TAXVAL
-				    SOR-DSC SOR-QORD.
+				    SOR-DSC.
+      *				     SOR-QORD.
              PERFORM REWRITE-SORDER-UNLOCK THRU WRITE-SORDER-EXIT.
            IF W14-SUB < WS-SUB
                ADD 1             TO W14-SUB
@@ -1567,9 +1573,10 @@
       *
        BC65.
              DISPLAY CLR-SCREEN.
-             DISPLAY "PROCESS INVOICE" AT 0236 WITH FOREGROUND-COLOR 15
+	     DISPLAY "PROCESS INVOICE" AT 0236
+		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
              DISPLAY "Printing invoice" AT 1212
-                      WITH FOREGROUND-COLOR 14
+		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
 	     MOVE W90-REF	 TO LS-SLS-ORDNO.
 	     MOVE WS-NOSELL	 TO W40-NOSELL.
 	     CLOSE SALE.
@@ -1589,7 +1596,7 @@
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
 	     PERFORM OPT-MESSAGE.
-028940	   IF NOT (WS-OPTION = "E")
+028940	   IF NOT(WS-OPTION = "E")
 028960         GO TO BC05.
              GO TO BC599.
 
@@ -1603,11 +1610,10 @@
 	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
 	     GO TO BC599.
 023520 BC115.
-028770	     DISPLAY (LIN, 1) "³" WITH BACKGROUND-COLOR 0
-				       FOREGROUND-COLOR 3
-			       WS-INV78 WITH FOREGROUND-COLOR 3
-			      "³" WITH BACKGROUND-COLOR 0
-				       FOREGROUND-COLOR 3.
+028770	     DISPLAY "³" AT LINE LIN COLUMN 1
+			 WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
+		      WS-INV78 WITH FOREGROUND-COLOR 3
+		     "³" WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3.
 023540	     ADD 1		 TO LIN.
 031080 BC599.
 031090       EXIT.

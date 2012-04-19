@@ -13,7 +13,7 @@
       *                                                                *
       *  D E B T O R   E X T R A C T   T R A N S A C T I O N S	       *
       *                                                                *
-      *     VERSION 8.15.00 - December 2010			       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -127,6 +127,7 @@
 001760 77  WS-PERIOD       PIC  9(02).
 001770 77  WS-NTP          PIC  X(01).
 001810 77  WS-KEYSTR	   PIC	9(06)	 COMP-5.
+001820 77  WS-DELETE	   PIC	X(01).
 001820 77  WS-OPTION       PIC  X(01).
 001820 77  WS-SKIP         PIC  X(01) VALUE "N".
 001820 77  WS-TAX          PIC  X(01).
@@ -405,6 +406,8 @@
 
        COPY ERROR.CRT.
 
+       COPY OPT.CRT.
+
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -420,6 +423,43 @@
 013040	     CLOSE DEBTRN.
 013140 AA49.
 013150       EXIT PROGRAM.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³			  OPT-MESSAGE			       ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine is used to allow the OPERATOR to respond to  ³
+      *    ³ a request for an option, so that the correct action can   ³
+      *    ³ be performed by the program. The routine will display the ³
+      *    ³ message in a pop-up window and allow the OPERATOR to      ³
+      *    ³ respond to the 'question'. 			       ³
+      *    ³							       ³
+      *    ³ The option request must be placed in WS-ERR-MES and may   ³
+      *    ³ not exceed 48 characters. The message will be centred in  ³
+      *    ³ the window. An example of a message request follows:      ³
+      *    ³							       ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
+      *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
+      *    ³	       other keys are to be tested on exit)	       ³
+      *    ³			     OR 			       ³
+      *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
+      *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
+      *    ³   default option)					       ³
+      *    ³							       ³
+      *    ³ This would be displayed as:			       ³
+      *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
+      *    ³	³	   Print transactions (Y/N) [ ] 	 ³°°   ³
+      *    ³	ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°   ³
+      *    ³	  °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°   ³
+      *    ³							       ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³							       ³
+      *    ³ To display the request message higher or lower (default   ³
+      *    ³ is line 13) move the line number to be used to SLIN and   ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+       COPY OPTION.CRT.
 
        COPY FUNCTION.SCR.
 
@@ -515,6 +555,9 @@
 	     PERFORM CHECK-DATE.
 	   IF WS-ERROR NOT = ZERO
 	       GO TO CI10.
+	     MOVE "Delete these transactions (Y/N) [ ]" TO WS-ERR-MES.
+	     PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".
+	     MOVE WS-OPTION	 TO WS-DELETE.
 	     MOVE SPACES	 TO TRA-KEY.
 	     MOVE ZERO		 TO TRA-DATE TRA-CODE.
 	     DISPLAY "Reading Record :" AT 0604.
@@ -543,6 +586,8 @@
 				 TO DBT-VALUE.
 	     ADD 1		 TO WS-DBTKEY.
 	     PERFORM WRITE-DEBTRN THRU WRITE-DEBTRN-EXIT.
+	   IF WS-DELETE = "Y"
+	       PERFORM DELETE-DBTRAN-REC THRU WRITE-DBTRAN-EXIT.
 	     GO TO CI15.
 
        CI20.

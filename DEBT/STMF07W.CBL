@@ -17,7 +17,7 @@
       * 							       *
       * 	       ( C O N S O L - U S B)			       *
       *                                                                *
-      *     VERSION 8.15.01 - August 2011			       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -71,7 +71,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   DECEMBER 1994.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1994 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1994 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -2584,7 +2584,7 @@
 014970         MOVE "**** PRINT ABORTED BY OPERATOR ****" 
 				 TO ST7-DET
 	       move st7-det	 to Print-Buffer
-	       PERFORM PRINT-DETAILS.
+	       PERFORM PRINT-DETAILS
 017710	       MOVE SPACES	 TO ST7-DET
 014980	       PERFORM Throw-a-page
 014990	       GO TO XB299-EXIT.
@@ -3132,17 +3132,9 @@
 023640	     MOVE DEB-INT	 TO ST7-INT.
 023470	     ADD DEB-60 DEB-90 DEB-120
 				 GIVING ST7-3MTHS.
-023480	     MOVE DEB-30       TO ST7-2MTHS.
-023490	     MOVE DEB-CUR      TO ST7-1MTH.
-023630	     MOVE W90-CUR      TO ST7-CUR.
-      *	   ELSE
-023470*	       ADD DEB-90 DEB-120
-      *				 GIVING ST7-INT
-      *	       MOVE DEB-60	 TO ST7-3MTHS
-023480*	       MOVE DEB-30	 TO ST7-2MTHS
-023490*	       MOVE DEB-CUR	 TO ST7-1MTH
-023630*	       ADD DEB-INT W90-CUR
-      *				 GIVING ST7-CUR.
+023480	     MOVE DEB-30	 TO ST7-2MTHS.
+023490	     MOVE DEB-CUR	 TO ST7-1MTH.
+023630	     MOVE W90-CUR	 TO ST7-CUR.
 023360	     MOVE DEB-BAL	 TO ST7-TBAL.
 	     move 99		 to WS-ADVANCE.
 	     move st7-det	 to Print-Buffer.

@@ -15,7 +15,7 @@
       *                                                                *
       *       D E B T O R   M E M O / R E M A R K S   M A I N T        *
       *                                                                *
-      *     VERSION 8.15.00 - December 2010			       *
+      *     VERSION 8.15.04 - March 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -24,13 +24,16 @@
       * 		  linked to the account. Additional filler     *
       * 		  added for future expansion.		       *
       * 							       *
+      *  March 2012	- Include Option to delete the Entire MEMO for *
+      * 		  a Debtor Account.			       *
+      * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP005.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   February 1990.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -497,6 +500,8 @@
 
        COPY ERROR.CRT.
 
+       COPY OPT.CRT.
+
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -524,6 +529,43 @@
              EXIT.
 
        COPY FUNCTION.CRT.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³			  OPT-MESSAGE			       ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine is used to allow the OPERATOR to respond to  ³
+      *    ³ a request for an option, so that the correct action can   ³
+      *    ³ be performed by the program. The routine will display the ³
+      *    ³ message in a pop-up window and allow the OPERATOR to      ³
+      *    ³ respond to the 'question'. 			       ³
+      *    ³							       ³
+      *    ³ The option request must be placed in WS-ERR-MES and may   ³
+      *    ³ not exceed 48 characters. The message will be centred in  ³
+      *    ³ the window. An example of a message request follows:      ³
+      *    ³							       ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
+      *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
+      *    ³	       other keys are to be tested on exit)	       ³
+      *    ³			     OR 			       ³
+      *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
+      *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
+      *    ³   default option)					       ³
+      *    ³							       ³
+      *    ³ This would be displayed as:			       ³
+      *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
+      *    ³	³	   Print transactions (Y/N) [ ] 	 ³°°   ³
+      *    ³	ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°   ³
+      *    ³	  °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°   ³
+      *    ³							       ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³							       ³
+      *    ³ To display the request message higher or lower (default   ³
+      *    ³ is line 13) move the line number to be used to SLIN and   ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+       COPY OPTION.CRT.
 
        COPY LOCKED.REC.
 
@@ -821,6 +863,10 @@
 			       FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Delete line," WITH BACKGROUND-COLOR 3
 					  FOREGROUND-COLOR 1
+		     "F4" WITH BACKGROUND-COLOR 3
+			       FOREGROUND-COLOR 6 HIGHLIGHT
+		     "=Delete All," WITH BACKGROUND-COLOR 3
+					  FOREGROUND-COLOR 1
 		     "F10" WITH BACKGROUND-COLOR 3
 				FOREGROUND-COLOR 6 HIGHLIGHT
 		     "=Update" WITH BACKGROUND-COLOR 3
@@ -883,6 +929,12 @@
 		     MOVE SPACES TO W200-MEM1
 		     PERFORM CJ130
 		     GO TO CJ45
+      *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
       *
       *    E N D   I N P U T
       *
@@ -955,6 +1007,12 @@
 		     ELSE
 			 GO TO CJ50
       *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
+      *
       *    E N D   I N P U T
       *
 		 WHEN F10-KEY
@@ -1025,6 +1083,12 @@
 			 GO TO CJ50
 		     ELSE
 			 GO TO CJ55
+      *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
       *
       *    E N D   I N P U T
       *
@@ -1097,6 +1161,12 @@
 		     ELSE
 			 GO TO CJ60
       *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
+      *
       *    E N D   I N P U T
       *
 		 WHEN F10-KEY
@@ -1167,6 +1237,12 @@
 			 GO TO CJ60
 		     ELSE
 			 GO TO CJ65
+      *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
       *
       *    E N D   I N P U T
       *
@@ -1239,6 +1315,12 @@
 		     ELSE
 			 GO TO CJ70
       *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
+      *
       *    E N D   I N P U T
       *
 		 WHEN F10-KEY
@@ -1309,6 +1391,12 @@
 			 GO TO CJ70
 		     ELSE
 			 GO TO CJ75
+      *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
       *
       *    E N D   I N P U T
       *
@@ -1381,6 +1469,12 @@
 		     ELSE
 			 GO TO CJ80
       *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
+      *
       *    E N D   I N P U T
       *
 		 WHEN F10-KEY
@@ -1451,6 +1545,12 @@
 			 GO TO CJ80
 		     ELSE
 			 GO TO CJ85
+      *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
       *
       *    E N D   I N P U T
       *
@@ -1523,6 +1623,12 @@
 		     ELSE
 			 GO TO CJ90
       *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
+      *
       *    E N D   I N P U T
       *
 		 WHEN F10-KEY
@@ -1593,6 +1699,12 @@
 			 GO TO CJ90
 		     ELSE
 			 GO TO CJ95
+      *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
       *
       *    E N D   I N P U T
       *
@@ -1673,6 +1785,12 @@
 		     ELSE
 			 GO TO CJ100
       *
+      *	   D E L E T E	 A L L
+      *
+		 WHEN F4-KEY
+		     PERFORM CJ140
+		     GO TO CJ110
+      *
       *    E N D   I N P U T
       *
 		 WHEN F10-KEY
@@ -1745,6 +1863,11 @@
 	     PERFORM CM000.
 	     PERFORM CJ28 THRU CJ40.
 	     MOVE WS-S6 	 TO W205-S2.
+      *
+      *    D E L E T E	 A L L	 F O R	 T H I S   A C O U N T
+      *
+       CJ140.
+	     PERFORM CP000.
 
        CJ999.
 	     EXIT.
@@ -1970,7 +2093,43 @@
        CO999.
 	     EXIT.
 
-       GET-DEBMEM-DETAILS SECTION 55.
+      *
+      *    D E L E T E	 M E M O   D E T A I L S   F O R   T H I S
+      *    A C C O U N T
+      *
+       CP000	       SECTION 55.
+       CP00.
+	     MOVE W80-ACNO	 TO DME-AC.
+             MOVE 1              TO DME-SEQ.
+018690	     MOVE 1		 TO WS-FIRST WS-MEMPOS WS-LAST.
+	     PERFORM START-AT-DEBTOR THRU READ-DEBMEM-EXIT.
+	   IF WS-F-ERROR = 27
+	       MOVE "No MEMO details for account"
+				 TO WS-ERR-STRING
+003260	       PERFORM ERROR-MESSAGE
+	       GO TO CP999
+	   END-IF.
+
+       CP05.
+	     PERFORM READ-DEBMEM-NEXT THRU READ-DEBMEM-EXIT.
+	   IF WS-F-ERROR = 0
+	       IF DME-AC = W80-ACNO
+		   PERFORM DELETE-DEBMEM-REC THRU WRITE-DEBMEM-EXIT
+		   GO TO CP05
+	       END-IF
+	   END-IF.
+	     MOVE SPACES	 TO WS-ERR-MES.
+	     STRING "MEMO deleted for " DELIMITED BY SIZE
+		     W80-ACNO DELIMITED BY SIZE
+		    " - Press ANY key" DELIMITED SIZE
+				 INTO WS-ERR-MES.
+	     MOVE SPACE 	 TO WS-OPTION.
+	     PERFORM OPT-MESSAGE.
+
+       CP999.
+	      EXIT.
+
+       GET-DEBMEM-DETAILS SECTION 56.
        OPEN-MEMDEB.
 	     OPEN OUTPUT MEMDEB.
 	     CLOSE MEMDEB.
@@ -1997,7 +2156,7 @@
       /
       *    ****    I N I T I A L I Z E   P R O G R A M
       *   
-041980 ZA000-INIT	       SECTION 8.
+041980 ZA000-INIT	       SECTION 80.
 041990 ZA000-OPEN.
              PERFORM ZA55 THRU ZA60.
 	     MOVE LS-PARID	 TO WS-PARID.
@@ -2149,7 +2308,7 @@
       /
       *    ****    I / O   E R R O R   M E S S A G E S
       *   
-042900 ZB000-ERROR	     SECTION 8.
+042900 ZB000-ERROR	     SECTION 81.
       
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.

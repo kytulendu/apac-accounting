@@ -6,6 +6,18 @@
 	     MOVE 64		 TO SCOL.
 	     MOVE 48		 TO WS-S1.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё Delete leading spaces from the message to ensure that the Ё
+      *    Ё centering of the message is correct. Included procedure   Ё
+      *    Ё to accomodate PERFORM UNTIL.			       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	   IF WS-ERR-CHAR(1) = SPACE
+	       PERFORM WITH TEST AFTER
+		       UNTIL NOT(WS-ERR-CHAR(1) = SPACE)
+		       MOVE WS-CONT
+				 TO WS-ERR-MES
+	       END-PERFORM
+	   END-IF.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		Calculate the LENGTH of the MESSAGE	       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        OPT-LOOP.
@@ -50,7 +62,7 @@
       *    Ё ground. This change; moving WS-OPTION has been included   Ё
       *    Ё as using the CALL X"AF" function does not echo the value  Ё
       *    Ё of the key that has been pressed, which can confuse the   Ё
-      *    Ё USER if an incorrect key is pressed.		       Ё
+      *    Ё USER if an incorrect key is pressed.		           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        OPT-REPLY.
 	     ADD 1		 TO SLIN.

@@ -1,19 +1,19 @@
       $set LINKCOUNT"576"
       ******************************************************************
       *                                                                *
-      * *******  ******** *******  **	  ** ******* **     ** **   ** *
+      * *******  ******** *******  **	  ** ******* **	    ** **   ** *
       * **    **    **	  **	** ***	 *** **      ***    ** **   ** *
       * **    **    **	  **	** ** * * ** **      ** *   ** **   ** *
       * **    **    **	  *******  **  *  ** *****   **  *  ** **   ** *
-      * **    **    **	  **	   **	  ** **      **   * ** **   ** *
-      * **    **    **	  **	   **	  ** **      **    *** **   ** *
-      * *******     **	  **	   **	  ** ******* **     **	*****  *
+      * **    **    **	  **	   **	  ** **	     **	  * ** **   ** *
+      * **    **    **	  **	   **	  ** **	     **	   *** **   ** *
+      * *******     **	  **	   **	  ** ******* **	    **	*****  *
       * 							       *
       *     ENGLISH                                                    *
       *                                                                *
       *     D E B T O R S   M O D U L E   M E N U   P R O G R A M      *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -46,7 +46,7 @@
       * 							       *
       ******************************************************************
       *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
-      *    ณ		    VERSIONS OF THE APAC SYSTEM		       ณ
+      *    ณ		    VERSIONS OF THE APAC SYSTEM		     ณ
       *    ฦอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออต
       *    ณ While developing this system the requirements and budgets ณ
       *    ณ (originally this was a propriety package) for various     ณ
@@ -88,7 +88,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -116,7 +116,7 @@
 
 000050 ENVIRONMENT DIVISION.
 000060 CONFIGURATION SECTION.
-000070 SPECIAL-NAMES.  
+000070 SPECIAL-NAMES.
 000080                 CURSOR IS CSTART
 000090		       CONSOLE IS CRT
 		       CRT STATUS IS KEY-STATUS.
@@ -646,7 +646,7 @@
 	   03	       COLUMN 29 BACKGROUND-COLOR 3
 				 FOREGROUND-COLOR 0
 				 VALUE " Exit	             ณ".
-	   03  LINE 19 COLUMN 26 BACKGROUND-COLOR 3
+	   03  LINE 20 COLUMN 26 BACKGROUND-COLOR 3
 				 FOREGROUND-COLOR 3 HIGHLIGHT
 				 VALUE "ภ".
 	   03	       COLUMN 27 BACKGROUND-COLOR 3 FOREGROUND-COLOR 0

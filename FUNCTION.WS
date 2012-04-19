@@ -11,10 +11,10 @@
       *    A D I S   F U N C T I O N   K E Y S
       *
        78  ENTER-KEY	    VALUE 0.
-       78  CR-KEY	    VALUE 2.
+       78  CR-KEY	          VALUE 2.
        78  LEFT-KEY	    VALUE 3.
        78  RIGHT-KEY	    VALUE 4.
-       78  UP-KEY	    VALUE 5.
+       78  UP-KEY	          VALUE 5.
        78  DOWN-KEY	    VALUE 6.
        78  HOME-KEY	    VALUE 7.
        78  TAB-KEY	    VALUE 8.
@@ -28,15 +28,15 @@
       *    U S E R   F U N C T I O N   K E Y S
       *
        78  ESC-KEY	    VALUE 0.
-       78  F1-KEY	    VALUE 1.
-       78  F2-KEY	    VALUE 2.
-       78  F3-KEY	    VALUE 3.
-       78  F4-KEY	    VALUE 4.
-       78  F5-KEY	    VALUE 5.
-       78  F6-KEY	    VALUE 6.
-       78  F7-KEY	    VALUE 7.
-       78  F8-KEY	    VALUE 8.
-       78  F9-KEY	    VALUE 9.
+       78  F1-KEY	          VALUE 1.
+       78  F2-KEY	          VALUE 2.
+       78  F3-KEY	          VALUE 3.
+       78  F4-KEY	          VALUE 4.
+       78  F5-KEY	          VALUE 5.
+       78  F6-KEY	          VALUE 6.
+       78  F7-KEY	          VALUE 7.
+       78  F8-KEY	          VALUE 8.
+       78  F9-KEY	          VALUE 9.
        78  F10-KEY	    VALUE 10.
        78  SF1-KEY	    VALUE 11.
        78  SF2-KEY	    VALUE 12.
@@ -68,46 +68,46 @@
        78  AF8-KEY	    VALUE 38.
        78  AF9-KEY	    VALUE 39.
        78  AF10-KEY	    VALUE 40.
-       78  ALT-1	    VALUE 41.
-       78  ALT-2	    VALUE 42.
-       78  ALT-3	    VALUE 43.
-       78  ALT-4	    VALUE 44.
-       78  ALT-5	    VALUE 45.
-       78  ALT-6	    VALUE 46.
-       78  ALT-7	    VALUE 47.
-       78  ALT-8	    VALUE 48.
-       78  ALT-9	    VALUE 49.
-       78  ALT-0	    VALUE 50.
+       78  ALT-1	          VALUE 41.
+       78  ALT-2      	    VALUE 42.
+       78  ALT-3	          VALUE 43.
+       78  ALT-4	          VALUE 44.
+       78  ALT-5      	    VALUE 45.
+       78  ALT-6	          VALUE 46.
+       78  ALT-7      	    VALUE 47.
+       78  ALT-8	          VALUE 48.
+       78  ALT-9      	    VALUE 49.
+       78  ALT-0	          VALUE 50.
        78  ALT-HYPH	    VALUE 51.
        78  ALT-EQUAL	    VALUE 52.
        78  PAGE-UP	    VALUE 53.
        78  PAGE-DOWN	    VALUE 54.
-       78  ALT-A	    VALUE 65.
-       78  ALT-B	    VALUE 66.
-       78  ALT-C	    VALUE 67.
-       78  ALT-D	    VALUE 68.
-       78  ALT-E	    VALUE 69.
-       78  ALT-F	    VALUE 70.
-       78  ALT-G	    VALUE 71.
-       78  ALT-H	    VALUE 72.
-       78  ALT-I	    VALUE 73.
-       78  ALT-J	    VALUE 74.
-       78  ALT-K	    VALUE 75.
-       78  ALT-L	    VALUE 76.
-       78  ALT-M	    VALUE 77.
-       78  ALT-N	    VALUE 78.
-       78  ALT-O	    VALUE 79.
-       78  ALT-P	    VALUE 80.
-       78  ALT-Q	    VALUE 81.
-       78  ALT-R	    VALUE 82.
-       78  ALT-S	    VALUE 83.
-       78  ALT-T	    VALUE 84.
-       78  ALT-U	    VALUE 85.
-       78  ALT-V	    VALUE 86.
-       78  ALT-W	    VALUE 87.
-       78  ALT-X	    VALUE 88.
-       78  ALT-Y	    VALUE 89.
-       78  ALT-Z	    VALUE 90.
+       78  ALT-A      	    VALUE 65.
+       78  ALT-B	          VALUE 66.
+       78  ALT-C      	    VALUE 67.
+       78  ALT-D	          VALUE 68.
+       78  ALT-E	          VALUE 69.
+       78  ALT-F      	    VALUE 70.
+       78  ALT-G	          VALUE 71.
+       78  ALT-H	          VALUE 72.
+       78  ALT-I      	    VALUE 73.
+       78  ALT-J	          VALUE 74.
+       78  ALT-K      	    VALUE 75.
+       78  ALT-L	          VALUE 76.
+       78  ALT-M      	    VALUE 77.
+       78  ALT-N	          VALUE 78.
+       78  ALT-O      	    VALUE 79.
+       78  ALT-P	          VALUE 80.
+       78  ALT-Q      	    VALUE 81.
+       78  ALT-R	          VALUE 82.
+       78  ALT-S      	    VALUE 83.
+       78  ALT-T      	    VALUE 84.
+       78  ALT-U	          VALUE 85.
+       78  ALT-V      	    VALUE 86.
+       78  ALT-W	          VALUE 87.
+       78  ALT-X      	    VALUE 88.
+       78  ALT-Y	          VALUE 89.
+       78  ALT-Z	          VALUE 90.
        78  F11-KEY	    VALUE 91.
        78  F12-KEY	    VALUE 92.
        78  SF11-KEY	    VALUE 93.

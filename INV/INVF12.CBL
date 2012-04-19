@@ -13,7 +13,7 @@
       *                                                                *
       *     I N V O I C I N G	P R O G R A M	-   ( C O N S O L )    *
       *                                                                *
-      *     VERSION 8.15.00 - December 2010			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -27,7 +27,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   DECEMBER 1990.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -197,6 +197,7 @@
 002600 77  WS-LASTINV      PIC  9(04)    COMP-5.
 002610 77  WS-LINE         PIC  9(04)    COMP-5.
        77  WS-DET-LINES    PIC	9(04)	 COMP-5 VALUE 31.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
 002620 77  WS-PAGE	   PIC	9(02)	 COMP-5.
 002630 77  WS-L1           PIC  9(04)    COMP-5.
 002570 77  WS-PGE-LENGTH   PIC	9(02)	 VALUE 66.
@@ -1607,9 +1608,9 @@
              PERFORM DELETE-GARTEE-REC THRU WRITE-GARTEE-EXIT.
        BB99.
              EXIT.
-      /
-      *    ****    I N V O I C E   A N D   C A S H   S A L E
-      *
+      /    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+      *    º	     I N V O I C E   A N D   C A S H   S A L E	       º
+      *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
 018500 BC000	     SECTION 50.
 018510 BC00.
 018690	     MOVE 1		 TO WS-FIRST WS-LAST.
@@ -1643,14 +1644,17 @@
 025540	       MOVE 1		 TO W70-INVOICE
 025550	   ELSE
 025560	       ADD 1		 TO W70-INVOICE.
+      *
+      *    ****    S K I P   P R I N T I N G   I N V O I C E ?
+      *
 026310 BC215.
 	   IF WS-PRNINV = "N"
 	       GO TO BC220.
-027940	     PERFORM BB050.
       *
       *    ****    P R I N T   I N V O I C E   H E A D I N G S
       *
-026320       MOVE SPACES         TO REP-DETAIL2.
+027940	     PERFORM BB050.
+026320	     MOVE SPACES	 TO REP-DETAIL2.
 	   IF WS-PRN-TYPE = "H"
       *
       *      ****    E X P A N D E D   P R I N T
@@ -1784,8 +1788,10 @@
       *
 026500       MOVE SPACES         TO REP-DETAIL2.
 026810	     MOVE WS-DET-LINES	 TO WS-LINE.
+
        BC220.
              EXIT.
+
        BC222.
 026490       MOVE WS-PAGE        TO DOC-PAGE.
 026550       MOVE W80-ACNO       TO DOC-AC.
@@ -1894,7 +1900,7 @@
 027110	   IF W90-TAX = SPACES
 027120       IF W90-EXP NOT = "X"
 040350	       IF WS-VAT-SUB > ZERO
-027140		   MOVE W05-VAT (WS-VAT-SUB)
+027140		   MOVE W05-VAT(WS-VAT-SUB)
 027150                           TO W05-RATE
 027160		   COMPUTE W90-VALUE ROUNDED = (W90-VALUE -
 027170                 (((W90-VALUE / (W05-RATE + 100.00000)) * 
@@ -1933,12 +1939,16 @@
 027370       MULTIPLY -1         BY W90-CDISC 
 027380                           GIVING DOC-DISC.
 027420 BC240.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ If this is a copy of the INVOICE do not update the various³
+      *    ³ statistics, totals nor TAX fields. 		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        BC242.
            IF WS-COPY = "Y"
                GO TO BC246.
-      *
-      *    ****    U P D A T E   S A L E S   A N A L Y S I S
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	     U P D A T E   S A L E S   A N A L Y S I S	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 027430	     MOVE STK-LDG	 TO DPT-CODE.
 027440       PERFORM AY38 THRU AY59.
 027450	     ADD W90-VALUE	 TO DPT-SALES-DAY
@@ -1952,28 +1962,28 @@
                COMPUTE WX-VALUE = W90-VALUE * -1
                MOVE DPT-SALE-GL  TO WX-AC
                MOVE 04           TO WX-TYPE
-      *
-      *    ****    Balancing the Integration entries
-      * 	   SALES LEDGER/CATERGORY
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	      Balancing the Integration entries 	       ³
+      *    ³		   SALES LEDGER/CATERGORY		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	       IF BALANCING-ENTRY-STORED
 		   ADD WX-VALUE  TO WXT-VALUE
 	       ELSE
-      *    *************************************************************
-      *    *		Store first Income Integration entry	       *
-      *    *  As items are selected randomly, storing the first income *
-      *    *  entry each time will mean that INCOME ACCOUNTS are also  *
-      *    *  randomly adjusted.				       *
-      *    *************************************************************
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		Store first Income Integration entry	       ³
+      *    ³  As items are selected randomly, storing the first income ³
+      *    ³  entry each time will mean that INCOME ACCOUNTS are also  ³
+      *    ³  randomly adjusted.				       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 		   MOVE WX-LEDTRF
 				 TO WXT-LEDTRF
 		   MOVE "Y"	 TO WS-BAL-ENTRY
 	       END-IF
 	       PERFORM GL-TRF-UPDATE.
-      *
-      *    ****    U P D A T E   C O S T - O F - S A L E S
-      *
-027480       COMPUTE W90-BCR ROUNDED = (1.000 * W10-QUANT * W10-COST).
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	     U P D A T E   C O S T - O F - S A L E S	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+027480	     COMPUTE W90-BCR ROUNDED = (1.000 * W10-QUANT * W10-COST).
 027490       ADD W90-BCR         TO DPT-COST-DAY
                                     DPT-COST-MTD
 027500                              DPT-COST-YTD.
@@ -1993,9 +2003,9 @@
                                  TO WX-AC
                    MOVE 19       TO WX-TYPE
                    PERFORM GL-TRF-UPDATE.
-      *
-      *    ****    U P D A T E   D I S C O U N T   G I V E N
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	     U P D A T E   D I S C O U N T   G I V E N	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 027510	     ADD W90-EXCDIS	 TO DPT-DISC-DAY
 027520                              DPT-DISC-MTD
 027530                              DPT-DISC-YTD
@@ -2040,7 +2050,8 @@
            IF W40-CODE = SPACES
 027640     IF STK-QUANT NOT > STK-LEVEL
 027650         MOVE 1            TO STK-DISC
-027660         PERFORM BA80.
+027660	       PERFORM BA80.
+
 027670 BC245.
 027680       ADD W90-BCR         TO W90-BDT STK-MTDC STK-YTDC.
 027690	     ADD W10-QNT	 TO STK-MTD STK-YTD.
@@ -2068,6 +2079,7 @@
 027740 BC246.
 027750       ADD 1               TO WS-SALKEY.
 027760       GO TO BC235.
+
 027770 BC247.
 027790       MOVE 3              TO DOC-TYPE.
              INITIALIZE DOC-DET2.
@@ -2089,21 +2101,21 @@
 	       PERFORM CALL-PRINTUTL.
 027820	     MOVE SPACES	 TO REP-DETAIL2.
              PERFORM BC225.
-027830       GO TO BC246.
+027830	     GO TO BC246.
+
        BC248.
-             MOVE SAL-SNO (WS-S1)
-                                 TO W10-SERNO.
+	     MOVE SAL-SNO(WS-S1) TO W10-SERNO.
              MOVE ZERO           TO WS-GAR.
              PERFORM BB070.
              ADD 1               TO WS-S1.
 	   IF WS-S1 < 3
-               IF SAL-SNO (WS-S1) NOT = SPACES
-                   GO TO BC248.
-027840 BC250.
+	       IF NOT(SAL-SNO(WS-S1) = SPACES)
+		   GO TO BC248.
       *
       *    ****    C A R R I E D   F O R W A R D   -   N E X T   P A G E
       *
-           IF WS-PRNINV = "Y"
+027840 BC250.
+	   IF WS-PRNINV = "Y"
 	       MOVE 1		 TO WS-ADVANCE
 	       PERFORM CALL-PRINTUTL
 027860	       MOVE SPACES	 TO REP-DETAIL2
@@ -2121,6 +2133,7 @@
 				 TO INV-REMKS
 	       END-IF
 	       PERFORM CALL-PRINTUTL
+027860	       MOVE SPACES	 TO REP-DETAIL2
 	       IF W30-RMKS15(2) = SPACES
 		   MOVE "Gaan asseblief u faktuur na."
 				 TO INV-RMKS
@@ -2129,10 +2142,12 @@
 				 TO INV-REMKS
 	       END-IF
 	       PERFORM CALL-PRINTUTL
+027860	       MOVE SPACES	 TO REP-DETAIL2
 	       MOVE W30-RMKS15(3)
 				 TO INV-REMKS
 	       MOVE 3		 TO WS-ADVANCE
-	       PERFORM CALL-PRINTUTL.
+	       PERFORM CALL-PRINTUTL
+027860	       MOVE SPACES	 TO REP-DETAIL2.
 027950	     PERFORM BC215 THRU BC220.
            IF WS-PRNINV = "Y"
 027970	       MOVE "B/FWD - O/B"
@@ -2188,6 +2203,7 @@
              INITIALIZE DOC-DET3.
 028070       MOVE W90-DB         TO DOC-SUBTOT.
 	     MOVE DEB-TERMS	 TO DOC-TERMS.
+028090	     MOVE SPACES	 TO REP-DETAIL2.
       *
       *    ****    P R I N T   D I S C O U N T   A N D   U P D A T E
       *            T H E   S U N D R Y   D I S C O U N T   T O T A L S
@@ -2230,8 +2246,7 @@
       *
       *ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 028660	     MOVE W05-RATE	 TO WS-PER.
-           IF WS-COPY = "Y"
-               GO TO BC258.
+
        BC258.
 	     MOVE W90-EXCTOT	 TO INV-EXTEND.
 028680	     MOVE W90-TTAX	 TO DOC-TAX.
@@ -2262,14 +2277,14 @@
 	     MOVE ALL "="	 TO INV-LINE.
 028100	   IF NOT(DEB-SDISC = ZERO) AND
 	      (W30-RMKS15(3) = SPACES)
-028110	       MOVE W15-DISC (DEB-SDISC)
+028110	       MOVE W15-DISC(DEB-SDISC)
 028120                           TO W30-PERC
 028130	       MOVE W30-MESSAGE  TO INV-RMKS.
 	   IF WS-PRNINV = "Y"
 	       MOVE 1		 TO WS-ADVANCE
 	       PERFORM CALL-PRINTUTL
 	       MOVE SPACES	 TO REP-DETAIL2
-	       MOVE "Processed by APAC Accounting - (011) 803-2572"
+	       MOVE "Processed by APAC Accounting - (+27825663095)"
 				 TO REP-DETAIL2
 	       MOVE 2		 TO WS-ADVANCE
 	       PERFORM CALL-PRINTUTL
@@ -2279,9 +2294,9 @@
 		   PERFORM CALL-PRINTUTL.
 028890	     MOVE SPACES	 TO REP-DETAIL2.
 028900       MOVE W12-T-YMD      TO W20-DTE.
-      *
-      *    ****    U P D A T E   T H E   D E B T O R   A C C O U N T
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	 U P D A T E   T H E   D E B T O R   A C C O U N T     ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 028910	     MOVE 1		 TO W90-CODE.
 028920	     PERFORM GET-DEBTOR-TRAN-RECORD.
 028930	     PERFORM GENERATE-DEBTOR-TRAN.
@@ -2294,9 +2309,9 @@
 	       GO TO BC262-CHECK-END.
 	     MOVE W05-VAT-CODE	 TO DPT-CODE.
 027840	     PERFORM AY38 THRU AY59.
-      *
-      *    ****    V A T   S T A T I S T I C S
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		    V A T   S T A T I S T I C S 	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 027850	     ADD W90-VAT(W05-V-RATE)
 				 TO DPT-O-VAT-DAY
 027860				    DPT-O-VAT-MTD
@@ -2311,10 +2326,10 @@
 				 TO WX-AC
 		MOVE DPT-CODE	 TO WX-LEDG
 		MOVE 10 	 TO WX-TYPE
-      *
-      *    ****    Balancing the Integration entries
-      * 	   OUTPUT VAT
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		 Balancing the Integration entries	       ³
+      *    ³			   OUTPUT VAT			       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 		ADD WX-VALUE	 TO WXT-VALUE
 		PERFORM GL-TRF-UPDATE.
 027880	     PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
@@ -2343,23 +2358,23 @@
 	       IF NOT(WXT-VALUE = ZERO)
 		   MOVE WXT-LEDTRF
 				 TO WX-LEDTRF
-      *
-      *    ****  Change the sign of the amount that the entries are
-      * 	 out of balance and process.
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Change the sign of the amount that the entries are out of ³
+      *    ³ balance and process.				       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 		   COMPUTE WX-VALUE = WX-VALUE * -1
 		   PERFORM GL-TRF-UPDATE
 		   MOVE "N"	 TO WS-BAL-ENTRY.
-      *
-      *    ****    L O G   T H E   S A L E S M A N   &   I N V O I C E -
-      *            A U D I T   F I L E   D E T A I L S
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³   L O G   T H E   S A L E S M A N	 &   I N V O I C E -   ³
+      *    ³	       A U D I T   F I L E   D E T A I L S	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 029150	     PERFORM BA90.
 029160	     PERFORM BA95.
-      *
-      *    ****    U P D A T E   T H E   D E B T O R   C A T E G O R Y
-      *
-029180       ADD 121 DEB-CAT     GIVING W90-RESULT.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	 U P D A T E   T H E   D E B T O R   C A T E G O R Y   ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+029180	     ADD 121 DEB-CAT	 GIVING W90-RESULT.
 029190       DIVIDE W90-RESULT BY 2
 029200                           GIVING W90-CATKEY
 029210                           REMAINDER W90-CS.
@@ -2369,55 +2384,55 @@
 029250       ADD W90-DB          TO PAR-CDRMTD (W90-CS).
 029260       ADD W90-DB          TO PAR-CDRYTD (W90-CS).
 029270	     PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-      *
-      *    ****    U P D A T E   T H E   S A L E S M A N   R E C O R D
-      *
-029280     IF W10-SMAN NOT = ZERO
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	U P D A T E   T H E   S A L E S M A N	R E C O R D    ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+029280	   IF W10-SMAN NOT = ZERO
 029290         ADD 100 W10-SMAN  GIVING WS-PARKEY
 029300         PERFORM AY01 THRU AY59
 029310         ADD W90-TCOST     TO PAR-CT-MTD PAR-CT-YTD
 029320         ADD W90-EXCTOT    TO PAR-SL-MTD PAR-SL-YTD
 029330	       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-      *
-      *    ****    R E W R I T E   T H E   D E B T O R   R E C O R D
-      *
-029340       PERFORM REWRITE-DEBTOR THRU WRITE-DEBTOR-EXIT.
-      *
-      *    ****    U P D A T E   T H E   D E B T O R   C O N T R O L
-      *            R E C O R D
-      *
-029350       ADD W90-DB          TO W70-OUT
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	 R E W R I T E	 T H E	 D E B T O R   R E C O R D     ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+029340	     PERFORM REWRITE-DEBTOR THRU WRITE-DEBTOR-EXIT.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	  U P D A T E	T H E	D E B T O R   C O N T R O L    ³
+      *    ³			    R E C O R D 		       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+029350	     ADD W90-DB 	 TO W70-OUT
 029360                              W70-DT.
 029370       ADD W90-CUR         TO W70-MTD.
 029380       ADD W90-30          TO W70-ONE.
 029390       ADD W90-60          TO W70-TWO.
 029400       ADD W90-90          TO W70-THREE.
 029410       ADD W90-120         TO W70-FOUR.
-      *
-      *    ****    U P D A T E   T H E   S T O C K   C O N T R O L
-      *            R E C O R D
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	  U P D A T E	T H E	S T O C K   C O N T R O L      ³
+      *    ³			 R E C O R D			       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        BC265.
 029440       SUBTRACT W90-BAL    FROM STK-TOTAL.
 029450       ADD W90-SALES       TO STK-SMTD STK-SYTD.
 029460 BC266.
-      *
-      *    ****    U P D A T E   T H E   C O S T - O F - S A L E S
-      *
-029470       MOVE 8              TO WS-PARKEY.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	  U P D A T E	T H E	C O S T - O F - S A L E S      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+029470	     MOVE 8		 TO WS-PARKEY.
 029480       PERFORM AY01 THRU AY59.
 029490       ADD W90-BDT         TO PAR-CSHT PAR-CMTD PAR-CYTD.
 029500       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
 029510 BC267.
-      *
-      *    ****    E N D   O F F   T H E   R E C O V E R Y   L O G
-      *
-029520       PERFORM AY70 THRU AY999.
-      *
-      *    ****    C L O S E   F I L E S   
-      *            ( FORCE SYSTEM TO WRITE DETAILS TO DISK )
-      *
-029530       CLOSE PARAM 
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	  E N D   O F F   T H E   R E C O V E R Y   L O G      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+029520	     PERFORM AY70 THRU AY999.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³		       C L O S E   F I L E S		       ³
+      *    ³	     ( FORCE SYSTEM TO WRITE DETAILS TO DISK )	       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+029530	     CLOSE PARAM
 029540             DEPART 
 029550             DEBTOR 
 029560             AUDIT 

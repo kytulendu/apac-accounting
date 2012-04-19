@@ -13,7 +13,7 @@
       *                                                                *
       *     G / L E D G E R   M O D U L E   M E N U   P R O G R A M    *
       *                                                                *
-      *     VERSION 8.14.03 - October 2010			       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
@@ -59,7 +59,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 

@@ -33,6 +33,12 @@
       * 		  and AR_Tyymm, where yymm is replaced with    *
       * 		  the year and month.			       *
       * 							       *
+      *  April 2012	- Changes to handle USB/WINDOWS printer.       *
+      * 		  Include WS-PRINT-PRG, which is set when the  *
+      * 		  OPEN-PRINTER routine is perform and then it  *
+      * 		  is used to call the correct print program.   *
+      * 		  SEE - the PRINTUTL.AS?/AP? routines.	       *							       *
+      * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP026.
@@ -149,7 +155,8 @@
 003230 77  WS-BATCH	   PIC 9(05).
 003240 77  WS-MESS         PIC X(02).
 003250 77  WS-ACNO         PIC X(06).
-003260 77  WS-S1           PIC 9(04)     COMP-5.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
+003260 77  WS-S1	   PIC 9(04)	 COMP-5.
 003270 77  WS-S2           PIC 9(04)     COMP-5.
 003280 77  WS-S3           PIC 9(04)     COMP-5.
 003290 77  WS-S4           PIC 9(04)     COMP-5.

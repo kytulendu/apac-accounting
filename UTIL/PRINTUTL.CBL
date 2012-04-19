@@ -877,7 +877,10 @@
 	       MOVE "COM1"	 TO W02-PRINTER
            ELSE
 	   IF TRM-STDP(WS-S6) = 5
-	       MOVE "COM2"	 TO W02-PRINTER.
+	       MOVE "COM2"	 TO W02-PRINTER
+           ELSE
+	   IF TRM-STDP(WS-S6) = 9
+	       MOVE LS-USER	 TO W02-USER.
 	     ADD 501 TRM-PRN3(WS-S6)
                                  GIVING W25-RESULT.
 

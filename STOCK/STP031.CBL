@@ -145,6 +145,7 @@
        77  WS-BRANCH	   PIC	X(38).
        77  WS-ETYPE         PIC X(01).
 002010 77  WS-PAGE          PIC 9(04)     COMP-5.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
 002020 77  WS-OPTION	   PIC	X(01).
        77  WS-HND-FEE	   PIC	X(01).
        77  WS-SELL	   PIC	X(01).

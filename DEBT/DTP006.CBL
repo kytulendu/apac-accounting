@@ -15,7 +15,7 @@
       *                                                                *
       *       D E B T O R   A G E   A C C O U N T S   P R O G R A M    *
       *                                                                *
-      *     VERSION 8.15.00 - December 2010			       *
+      *     VERSION 8.15.02 - December 2011			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -35,13 +35,19 @@
       * 		  and AR_Tyymm, where yymm is replaced with    *
       * 		  the year and month.			       *
       * 							       *
+      *  December 2011	- Amended creation of history file ID's as it  *
+      * 		  was possible to crerate a history file at    *
+      * 		  the beginning of a month which then resulted *
+      * 		  in no history file being created at month-   *
+      * 		  end. See SECTION ZA000.		       *
+      * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP006.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   March 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1466,7 +1472,17 @@
       *    ****    Create paths and file names for history files    ****
       *    *************************************************************
 	     MOVE W12-YEAR	 TO W05-TYY W05-DYY.
-	     MOVE W12-MONTH	 TO W05-TMM W05-DMM.
+	   IF W12-DAY < 16
+	       IF W12-MONTH = 1
+		   SUBTRACT 1 FROM W12-YEAR
+				 GIVING W05-TYY W05-DYY
+		   MOVE 12	 TO W05-TMM W05-DMM
+	       ELSE
+		   SUBTRACT 1 FROM W12-MONTH
+				 GIVING W05-TMM W05-DMM
+	       END-IF
+	   ELSE
+	       MOVE W12-MONTH	 TO W05-TMM W05-DMM.
 	     INSPECT W02-DBHIST REPLACING FIRST "AR_ACNT.DAT"
 			       BY "           ".
 	     MOVE W02-DBHIST	 TO W60-ADD.

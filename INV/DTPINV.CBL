@@ -13,7 +13,7 @@
       *                                                                *
       *               I N V O I C I N G   P R O G R A M                *
       *                                                                *
-      *     VERSION 8.15.01 - August 2011			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -52,13 +52,16 @@
       * 	    this alternate discount is applicable is the code  *
       * 	    on the Debtor account record.		       *
       * 							       *
+      *  Jan 2012 - Include Format 99 which calls the INVF12W program  *
+      * 	    to produce an Invoice via the Windows spooller.    *	       *
+      * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTPINV.
 000030 AUTHOR.	       James William Lemmon.
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -379,7 +382,7 @@
 004720 01  W25-CALCS.
 004730     03  W25-RESULT      PIC 9(05)V99.
 004740     03  W25-RESULT1 REDEFINES W25-RESULT.
-004750         05  W25-WHOLE   PIC 9(03).
+004750	       05  W25-WHOLE   PIC 9(05).
 004760         05  W25-DECIMAL PIC 9(02).
            03  W25-RESULT2 REDEFINES W25-RESULT.
                05  W25-KEY     PIC 9(04).
@@ -1191,7 +1194,7 @@
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
 010230 AA000-MAIN	       SECTION.
 010240 AA000-INIT.
-003240	   IF (LS0-SALEV < 2) AND (LS0-DBLEV < 2)
+003240	   IF (LS0-SALEV < 1) AND (LS0-DBLEV < 2)
 	       MOVE "Not Authorised"
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
@@ -3549,16 +3552,32 @@
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        BC186-CONTINUE.
 	     MOVE WS-CR 	 TO W40-CR.
-	     CALL PRG-NAME3 USING WS-PARID
-				  LS-USER-ID
-				  LS0-PROGRAMS
-				  LS0-SECURITY
-				  W40-COMPANY
-				  W90-TRAN
-		  ON EXCEPTION
-		      GO TO BC187
-	     END-CALL.
-	     CANCEL PRG-NAME3.
+	   IF PRG-NUMBER = 99
+	       CALL "INV\INVF12W" USING WS-PARID
+					LS-USER-ID
+					LS0-PROGRAMS
+					LS0-SECURITY
+					W40-COMPANY
+					W90-TRAN
+		     ON EXCEPTION
+			GO TO BC187
+	       END-CALL
+	   ELSE
+	       CALL PRG-NAME3 USING WS-PARID
+				    LS-USER-ID
+				    LS0-PROGRAMS
+				    LS0-SECURITY
+				    W40-COMPANY
+				    W90-TRAN
+		    ON EXCEPTION
+		       GO TO BC187
+	       END-CALL
+	   END-IF.
+	   IF PRG-NUMBER = 99
+	       CANCEL "INV\INVF12W"
+	   ELSE
+	       CANCEL PRG-NAME3
+	   END-IF.
 	     GO TO BC188.
 
        BC187.

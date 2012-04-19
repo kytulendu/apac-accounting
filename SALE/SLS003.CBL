@@ -13,7 +13,7 @@
       *                                                                *
       *      P R O C E S S   S A L E S   O R D E R   P R O G R A M     *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -997,7 +997,12 @@
                    MOVE 4        TO WS-ERROR
                    GO TO GET-SORDER-EXIT
                END-IF
-               MOVE SOR-OREF     TO W90-REG
+      *    *************************************************************
+      *    *		 C l i e n t   V A T   n u m b e r	       *
+      *    *  N e e d	t o   p r i n t   o n	t h e	I n v o i c e  *
+      *    *************************************************************
+	       MOVE DEB-TAX	 TO W40-TAX
+	       MOVE SOR-OREF	 TO W90-REG
                MOVE SOR-NAME     TO W40-NAME
                MOVE SOR-ORD      TO W90-ORD
                MOVE SOR-SMAN     TO W10-SMAN
@@ -1014,6 +1019,7 @@
 		   MOVE SOR-EXT-ITEM TO SAL-EXT-ITEM
                    MOVE SOR-DESC     TO SAL-MSER
                    MOVE SOR-QNT      TO SAL-QNT
+      *		   MOVE SOR-QORD     TO SAL-ORD
                    MOVE SOR-COST     TO SAL-COST
                    MOVE SOR-SELL     TO SAL-SELL
                    MOVE SOR-VAT      TO SAL-VAT
@@ -1142,6 +1148,7 @@
                                     SOR-VAT SOR-SELL SOR-NONTAX
                                     SOR-VAL SOR-DISC SOR-TAXVAL
                                     SOR-DSC.
+      *				     SOR-QORD.
              PERFORM REWRITE-SORDER-UNLOCK THRU WRITE-SORDER-EXIT.
            IF W14-SUB < WS-SUB
                ADD 1             TO W14-SUB
@@ -1607,8 +1614,16 @@
 037540	   IF (W90-TAXVAL(WS-P1) = ZERO)
 024430	       GO TO BC62.
 024440	     MOVE W05-VAT(WS-P1) TO W05-RATE.
-021490	     COMPUTE W90-TTAX ROUNDED = (W90-TTAX +
-		    (W90-TAXVAL(WS-P1) * W05-RTE)).
+021490*	     COMPUTE W90-TTAX ROUNDED = (W90-TTAX +
+      *		    (W90-TAXVAL(WS-P1) * W05-RTE)).
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Split the calculation into two COMPUTE statements as the ³
+      *    ³  VAT report was occasionally out of balance (VAT dropping ³
+      *    ³  the decimals of cents).				       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+	     COMPUTE W90-VAT(WS-P1) ROUNDED =
+		     W90-TAXVAL(WS-P1) * W05-RTE.
+021490	     COMPUTE W90-TTAX ROUNDED = W90-TTAX + W90-VAT(WS-P1).
       *
       *    ****    C H E C K   I F   A L L   V A T   R A T E S
       * 	   H A V E   B E E N   C A L C U L A T E D
@@ -1632,6 +1647,7 @@
 004200	     CALL PRG-INVOICE USING LS-PARID
 				    LS-USER-ID
 				    LS0-PROGRAMS
+				    LS0-SECURITY
 				    W40-COMPANY
 				    W90-TRAN
 		  ON EXCEPTION

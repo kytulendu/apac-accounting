@@ -13,7 +13,11 @@
       *                                                                *
       *    D E B T O R ' S   C H A N G E   D A T E S   P R O G R A M   *
       *                                                                *
-      *     VERSION 8.15.00 - December 2010			       *
+      *     VERSION 8.15.03 - January 2012			       *
+      * 							       *
+      ******************************************************************
+      * 							       *
+      *  January 2012 - Include the VAT file			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +25,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   March 1993.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2012
 				     by James William Lemmon.
 
 		   All rights reserved.
@@ -50,6 +54,8 @@
 
        COPY STKDEX.SL.
 
+       COPY TXTRAN.SL.
+
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
@@ -64,6 +70,8 @@
        COPY PURDEX.FDE.
 
        COPY STKDEX.FDE.
+
+       COPY TXTRAN.FDE.
 
       /
       *         **         **    ******    *******    **    **
@@ -192,6 +200,8 @@
 
        COPY STKDEX.ID.
 
+       COPY TXTRAN.ID.
+
        01  WS-APAC.
 	   03  APAC-SYSTEM  PIC  X(12).
 	   03  APAC-VERSION PIC  X(04).
@@ -296,7 +306,8 @@
 		   DBTRAN
 		   INVOICE
 		   PURDEX
-		   STKDEX.
+		   STKDEX
+		   TXTRAN.
 
        AA49.
 013150	     STOP RUN.
@@ -324,6 +335,8 @@
 
        COPY STKDEX.RD.
 
+011330 COPY TXTRAN.RD.
+
       /
       *    ****    WRITE FILES ROUTINES
       *
@@ -338,6 +351,8 @@
        COPY PURDEX.WR.
 
        COPY STKDEX.WR.
+
+011570 COPY TXTRAN.WR.
 
        COPY APAC.HLP.
 
@@ -514,19 +529,49 @@
        BA80.
 	    PERFORM START-AT-INVOIC-DATE THRU READ-INVOIC-EXIT.
 000880	   IF WS-F-ERROR = 12
-	       GO TO BA999.
+	       GO TO BA90.
 
        BA85.
 	    PERFORM READ-INVOIC-NEXT THRU READ-INVOIC-EXIT.
 000880	   IF WS-F-ERROR = 12
-	       GO TO BA999.
+	       GO TO BA90.
 	   IF NOT (DOC-DTE = W15-S-YMD)
-	       GO TO BA999.
+	       GO TO BA90.
 	     DISPLAY DOC-KEY AT 1430
 		     WITH FOREGROUND-COLOR 5 HIGHLIGHT.
 	     MOVE W15-E-YMD	 TO DOC-DTE.
 	     PERFORM REWRITE-INVOIC THRU WRITE-INVOIC-EXIT.
 	     GO TO BA75.
+      *
+      *    ****    V A L U E   A D D E D   T A X   D A T E
+      *
+       BA90.
+	     DISPLAY "Amending VAT Transaction:" AT 1604.
+	     INITIALIZE TAX-KEY.
+	     MOVE "1"		 TO TAX-ACTYPE
+	     MOVE "2"		 TO TAX-TYPE.
+	     MOVE 01		 TO TAX-CODE.
+	     MOVE W15-S-YMD	 TO TAX-DATE.
+
+       BA95.
+	     PERFORM START-AT-TXTRAN-KEY THRU READ-TXTRAN-EXIT.
+000880	   IF WS-F-ERROR = 32
+	       GO TO BA999.
+
+       BA100.
+	     PERFORM READ-TXTRAN-NEXT THRU READ-TXTRAN-EXIT.
+000880	   IF WS-F-ERROR = 32
+	       GO TO BA999.
+	   IF TAX-DATE < W15-S-YMD
+	       GO TO BA100.
+	   IF NOT (TAX-DATE = W15-S-YMD)
+	       GO TO BA999.
+	     DISPLAY TAX-KEY AT 1630
+		     WITH FOREGROUND-COLOR 5 HIGHLIGHT.
+	     PERFORM DELETE-TXTRAN-REC THRU WRITE-TXTRAN-EXIT.
+	     MOVE W15-E-YMD	 TO TAX-DATE.
+	     PERFORM WRITE-TXTRAN THRU WRITE-TXTRAN-EXIT.
+	     GO TO BA90.
 
 021720 BA999.
 021730       EXIT.
@@ -546,7 +591,7 @@
 	       MOVE 19		 TO W12-CENT.
 	     MOVE W12-TODAY	 TO TODAY-DDMMYY.
 	     MOVE "APAC Utility" TO APAC-SYSTEM.
-	     MOVE "7.02"	 TO APAC-VERSION.
+	     MOVE "8.15"	 TO APAC-VERSION.
 	     PERFORM ZA55 THRU ZA60.
 042000	     DISPLAY CLR-SCREEN.
       *
@@ -602,11 +647,12 @@
 	       MOVE 9		 TO WS-ERROR
 	       GO TO ZA999-EXIT.
 	     MOVE WS-SYS-ID	 TO W02-SYSID.
+	     OPEN I-O APACFIDS.
 
       *
       *    ****    P A R A M E T E R   F I L E
       *
-       ZA00A.
+       ZA00C.
 	     MOVE "PARAM"	 TO AFID-KEY.
 
        ZA00-READ-APACFIDS.
@@ -642,6 +688,12 @@
 	     MOVE "STKDEX"	 TO AFID-KEY.
 	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
 	     MOVE AFID-PATH	 TO W02-STKDEX.
+      *    *************************************************************
+      *    ****       V A L U E	  A D D E D   T A X   F I L E	    ****
+      *    *************************************************************
+	     MOVE "TXTRAN"	 TO AFID-KEY.
+	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+	     MOVE AFID-PATH	 TO W02-TXTRAN.
 
 042170 ZA02.
 053830	     OPEN I-O CARDEX.
@@ -748,23 +800,38 @@
 	       ELSE
 	       IF NOT (WS-STATUS = "41")
 044350		   PERFORM OPEN-ERROR.
+038670	     OPEN I-O TXTRAN.
+038680	   IF RUNTIME-ERROR
+038690         IF FLE-LOCKED
+038700             GO TO ZA200
+038710         ELSE
+038720         IF FLE-LIMIT
+038730		   GO TO ZA49
+038740         ELSE
+038750	       IF IDX-CORRUPT
+038760		   MOVE 32	 TO WS-F-ERROR
+038770             GO TO ZA50.
+038780     IF WS-STATUS NOT = "00"
+038790	       MOVE 32		 TO WS-F-ERROR
+	       IF WS-STATUS = "39"
+038770		   GO TO ZA50
+	       ELSE
+038800		   PERFORM OPEN-ERROR.
 044780	     GO TO ZA999-EXIT.
 
-039780 ZA49.
-039790       DISPLAY "Too many files OPEN" AT 0812
-039800                WITH FOREGROUND-COLOR 14.
-039810       DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
-039820       DISPLAY "Press any key to continue" AT 1212.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-039840	     GO TO ZA205.
+       COPY ZA49.PRO.
+
 039850 ZA50.
 041850	   IF WS-F-ERROR = 5
 041860         MOVE "DEBTOR TRAN"
-                                 TO WS-FILE
+				 TO WS-FILE
 055380	   ELSE
 055350     IF WS-F-ERROR = 12
 055360         MOVE "INVOICE file"
-055370                           TO WS-FILE
+055370				 TO WS-FILE
+055380	   ELSE
+055350	   IF WS-F-ERROR = 32
+055360	       MOVE "VAT file"	 TO WS-FILE
 	   ELSE
 041850	   IF WS-F-ERROR = 43
 041860	       MOVE "CARDEX (SALES)"
@@ -851,7 +918,12 @@
 056470     IF WS-F-ERROR = 12
 056480         MOVE W02-INVOIC   TO WS-FILE
 056490         MOVE ZERO         TO WS-KEY
-               MOVE DOC-KEY      TO WS-KEYX
+	       MOVE DOC-KEY	 TO WS-KEYX
+041840	   ELSE
+041850     IF WS-F-ERROR = 32
+041860         MOVE W02-TXTRAN   TO WS-FILE
+041870         MOVE ZERO         TO WS-KEY
+	       MOVE TAX-KEY	 TO WS-KEYX
 041840	   ELSE
 041850	   IF WS-F-ERROR = 43
 041860	       MOVE W02-CARDEX	 TO WS-FILE
@@ -867,32 +939,5 @@
 041860	       MOVE W02-PURDEX	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE PRD-KEY	 TO WS-KEYX.
-041880	   IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY DISPERR.PRO.

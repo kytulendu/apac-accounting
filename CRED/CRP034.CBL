@@ -184,6 +184,7 @@
 002720 77  WS-ER5          PIC X(07)     VALUE "Cheq no".
 002730 77  WS-ER6          PIC X(11)     VALUE "No record".
 002740 77  WS-ER7          PIC X(13)     VALUE "Group heading".
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /

@@ -13,7 +13,7 @@
       *                                                                *
       *      S A L E S   O R D E R S   P R O G R A M                   *
       *                                                                *
-      *     VERSION 8.15.01 - August 2011			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -50,7 +50,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -307,6 +307,7 @@
        77  WS-17CPI	   PIC	X(06).
 001060 77  WS-OPTION	   PIC	X(01).
 001070 77  WS-PGADV	   PIC	X(01)	 VALUE "Y".
+001070 77  WS-LOOP	   PIC	X(01)	 VALUE " ".
 001070 77  WS-SKIP	   PIC	X(01)	 VALUE " ".
 001080 77  WS-LOOK	   PIC	X(01)	 VALUE "S".
 002620 77  WS-ETYPE	   PIC	X(01)	 VALUE "I".
@@ -1489,7 +1490,6 @@
       *    *************************************************************
       *	   IF NOT(WS-LOCAL-DRIVE = "C")
 	       CLOSE SYSUSER.
-	     CLOSE DEBDEP.
 010760	     GO TO BA00.
 
        AA49.
@@ -1930,6 +1930,7 @@
 013020 AZ000-END               SECTION.
 013030 AZ000-EOJ.
 013040	     CLOSE RECOVER
+		   DEBDEP
 013100		   SALE.
 	   IF W70-ORD-SYS = "Y"
 	       IF LS-DSKDRV = "L"
@@ -2650,6 +2651,20 @@
              ADD 1               TO SOR-PICNO.
              PERFORM REWRITE-SORDER THRU WRITE-SORDER-EXIT.
              PERFORM AY70 THRU AY999.
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ To avoid problems of having data corrupted (MULTI USER)   ณ
+      *    ณ by the cache (buffering) of data on the individual Work   ณ
+      *    ณ stations. This results in data from one work station not  ณ
+      *    ณ being available on another Work station until the cache   ณ
+      *    ณ has been ceared. Including a close of the file after each ณ
+      *    ณ new order has been added and then re-opening the file is  ณ
+      *    ณ the way in which the system will release the data for it  ณ
+      *    ณ to be written to the server file and should resolve this  ณ
+      *    ณ problem.						       ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+	     CLOSE SORDER.
+	     OPEN I-O SORDER.
+
        BB310.
 	     MOVE "Y"		 TO WS-OPTION.
 	     MOVE WS-OPTION	 TO WS-PGADV.
@@ -3535,8 +3550,17 @@
       *    *************************************************************
 019710 BC90.
 	     PERFORM CHECK-CORRECT.
-022450	   IF WS-OPTION = "N"
-022460	       GO TO BC60.
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ  As 'PERFORM BC66A THRU BC102' is called from paragraph   ณ
+      *    ณ  BC340, 'WS-LOOP' is set to 'S" so that the routine will  ณ
+      *    ณ  return to 'BC66A' if the details are not correct. After  ณ
+      *    ณ  exiting from this perform 'WS-LOOP' is cleared to SPACE. ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+027590     IF WS-OPTION = "N"
+	       IF WS-LOOP = "S"
+		   GO TO BC66A
+	       ELSE
+027600		   GO TO BC60.
       *    *************************************************************
       *    ***	  F R E S H   P R O D U C E   -   F O R   S P A R    ***
       *    *************************************************************
@@ -4112,6 +4136,19 @@
       *    ****    E N D   O F F   T H E   R E C O V E R Y   L O G
       *    *************************************************************
 022770       PERFORM AY70 THRU AY999.
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ To avoid problems of having data corrupted (MULTI USER)   ณ
+      *    ณ by the cache (buffering) of data on the individual Work   ณ
+      *    ณ stations. This results in data from one work station not  ณ
+      *    ณ being available on another Work station until the cache   ณ
+      *    ณ has been ceared. Including a close of the file after each ณ
+      *    ณ new order has been added and then re-opening the file is  ณ
+      *    ณ the way in which the system will release the data for it  ณ
+      *    ณ to be written to the server file and should resolve this  ณ
+      *    ณ problem.						       ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+	     CLOSE SORDER.
+	     OPEN I-O SORDER.
 
 022880 BC260.
 022810	     MOVE "Print picking slip (Y/N)?  [ ]"
@@ -4129,14 +4166,12 @@
                PERFORM BB200.
       *    *************************************************************
       *    ****    C L O S E   F I L E S   
-      *            ( FORCE SYSTEM TO WRITE DETAILS TO DISK )
+      * 	   ( CLEAR THE WORKING FILE FOR NEXT TRANSACTION )
       *    *************************************************************
-022780       CLOSE SORDER 
-022790             SALE.
+022780	     CLOSE SALE.
 023170       OPEN OUTPUT SALE.
 023180       CLOSE SALE.
-023190       OPEN I-O SALE
-023200                SORDER.
+023190	     OPEN I-O SALE.
 029700	     MOVE "ENTER to continue - E to exit"
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
@@ -4820,35 +4855,46 @@
       *    *************************************************************
       *    ****    A M E N D   S E L L I N G   P R I C E
       *    *************************************************************
-	     PERFORM BC66A THRU BC75.
+	     MOVE "S"		 TO WS-LOOP.
+	     PERFORM BC66A THRU BC102.
+	     MOVE " "		 TO WS-LOOP.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      *
+      *    The following code has been commented out, as the perform has
+      *    been extended to include paragraphs up to BC102. The variable
+      *    WS-LOOP has been included to facilitate this. This has been
+      *    done to remove duplicated code, which will also reduce bugs
+      *    when changes are made to the system.
+      *
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
       *    *************************************************************
       *    ****    R E C A L C U L A T E   V A L U E S
       *    *************************************************************
-030820       MULTIPLY W10-SELL BY W10-QUANT 
-                                 GIVING W25-VALUE.
-030830       MOVE W25-VALUE      TO W100-EXT.
-030840	     DISPLAY (LIN, 70) W100-EXT
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
-	     PERFORM CHECK-CORRECT.
-030930	   IF WS-OPTION = "N"
-030940         GO TO BC325.
+030820*      MULTIPLY W10-SELL BY W10-QUANT
+      * 			 GIVING W25-VALUE.
+030830*      MOVE W25-VALUE	 TO W100-EXT.
+030840*     DISPLAY (LIN, 70) W100-EXT
+      *	      WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      *		   BACKGROUND-COLOR 0.
+      *     PERFORM CHECK-CORRECT.
+030930*   IF WS-OPTION = "N"
+030940*        GO TO BC325.
       *    *************************************************************
       *    ****    U P D A T E	 S A L E   F I L E   R E C O R D    ****
       *    *************************************************************
-030950       MOVE W10-QUANT      TO SAL-QNT.
+030950*      MOVE W10-QUANT	 TO SAL-QNT.
 030950*	     MOVE W10-QORD	 TO SAL-ORD.
-             MOVE W10-SELL       TO SAL-SELL.
-030960       MOVE W25-VALUE      TO SAL-VAL.
-030970     IF WS-DISC = ZERO
-030980	       GO TO BC580.
-030990       COMPUTE W90-CDISC = (W25-VALUE * WS-DISC) / 100.
-031000       MOVE W90-CDISC      TO SAL-DISC.
+      *      MOVE W10-SELL	 TO SAL-SELL.
+030960*      MOVE W25-VALUE	 TO SAL-VAL.
+030970*    IF WS-DISC = ZERO
+030980*       GO TO BC580.
+030990*      COMPUTE W90-CDISC = (W25-VALUE * WS-DISC) / 100.
+031000*      MOVE W90-CDISC	 TO SAL-DISC.
       *    *************************************************************
       *    * R E - C A L C U L A T E   &   D I S P L A Y   T O T A L S *
       *    *************************************************************
 031010 BC580.
-031020	     PERFORM BC95 THRU BC102.
+031020*     PERFORM BC95 THRU BC102.
 
 031030 BC581.
 031040       PERFORM REWRITE-SALE THRU WRITE-SALE-EXIT.
@@ -5490,7 +5536,7 @@
 027400             GO TO BD86.
 027410       PERFORM BB100.
 027420     IF WS-ERROR = 1
-027430         GO TO BD85.
+027430	       GO TO BD85.
 
 027440 BD86.
 027450	     DISPLAY CLEAR-L25.
@@ -5506,8 +5552,17 @@
       *    *************************************************************
 027500 BD90.
 	     PERFORM CHECK-CORRECT.
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ  As 'PERFORM BD66A THRU BD102' is called from paragraph   ณ
+      *    ณ  BD345, 'WS-LOOP' is set to 'S' so that the routine will  ณ
+      *    ณ  return to 'BD66A' if the details are not correct. After  ณ
+      *    ณ  exiting from this perform 'WS-LOOP' is cleared to SPACE. ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
 027590     IF WS-OPTION = "N"
-027600         GO TO BD60.
+	       IF WS-LOOP = "S"
+		   GO TO BD66A
+	       ELSE
+027600		   GO TO BD60.
       *    *************************************************************
       *    ****    A C C U M U L A T E   TOTAL COST / TOTAL DISCOUNT /
       *            VALUES SUBJECT TO TAX AND NON-TAX.
@@ -6127,6 +6182,20 @@
       *    ****    E N D   O F F   T H E   R E C O V E R Y   L O G
       *    *************************************************************
 030420       PERFORM AY70 THRU AY999.
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ To avoid problems of having data corrupted (MULTI USER)   ณ
+      *    ณ by the cache (buffering) of data on the individual Work   ณ
+      *    ณ stations. This results in data from one work station not  ณ
+      *    ณ being available on another Work station until the cache   ณ
+      *    ณ has been ceared. Including a close of the file after each ณ
+      *    ณ new order has been added and then re-opening the file is  ณ
+      *    ณ the way in which the system will release the data for it  ณ
+      *    ณ to be written to the server file and should resolve this  ณ
+      *    ณ problem.						       ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+	     CLOSE SORDER.
+	     OPEN I-O SORDER.
+
 030540 BD260.
 022810	     MOVE "Print picking slip (Y/N)?  [ ]"
 				 TO WS-ERR-MES.
@@ -6143,14 +6212,12 @@
                PERFORM BB200.
       *    *************************************************************
       *    ****    C L O S E   F I L E S   
-      *            ( FORCE SYSTEM TO WRITE DETAILS TO DISK )
+      * 	   ( CLEAR THE WORKING FILE FOR THE NEXT TRANSACTION)
       *    *************************************************************
 030840       CLOSE SALE.
 030830       OPEN OUTPUT SALE.
-030840       CLOSE SALE
-                   SORDER.
-030450       OPEN I-O SORDER
-030850                SALE.
+030840	     CLOSE SALE.
+030450	     OPEN I-O SALE.
 029700	     MOVE "ENTER to continue - E to exit"
 				 TO WS-ERR-MES.
 	     MOVE SPACE 	 TO WS-OPTION.
@@ -6796,6 +6863,22 @@
 020800		   GO TO BD330
                ELSE
 		   GO TO BD335.
+	   IF STK-IND = 4
+	       MOVE "Header Record"
+				 TO WS-ERR-STRING
+003260	       PERFORM ERROR-MESSAGE
+	       GO TO BD330.
+      *    *************************************************************
+      *    **** C H E C K   F O R   S A L E S	R E S T R I C T I O N S
+      *    *************************************************************
+	   IF WS-RESTRICT = "A" OR "E"
+	       PERFORM MA000
+	       IF ((WS-RESTCODE = "Y") AND (WS-RESTRICT = "E")) OR
+		  ((WS-RESTCODE = "N") AND (WS-RESTRICT = "A"))
+		   MOVE "Restricted for this Department"
+                                 TO WS-ERR-STRING
+003260		   PERFORM ERROR-MESSAGE
+020140		   GO TO BD330.
 020920	     MOVE STK-CODE	 TO SAL-EXT-ITEM.
 020930	     DISPLAY CLEAR-L25.
       *    *************************************************************
@@ -6842,35 +6925,49 @@
       *    *************************************************************
       *    ****    A M E N D   S E L L I N G   P R I C E
       *    *************************************************************
-	     PERFORM BD66A THRU BD75.
+	     MOVE "S"		 TO WS-LOOP.
+	     PERFORM BD66A THRU BD102.
+	     MOVE " "		 TO WS-LOOP.
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      *
+      *    The following code has been commented out, as the perform has
+      *    been extended to include paragraphs up to BD102. The variable
+      *    WS-LOOP has been included to facilitate this. This has been
+      *    done to remove duplicated code, which will also reduce bugs
+      *    when changes are made to the system.
+      *
+      *    อออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออ
+      *	     GO TO BD581.
+      *	     PERFORM BD66A THRU BD75.
+027260*       MOVE ZERO 	  TO WS-DISC W90-CDISC.
       *    *************************************************************
       *    ****    R E C A L C U L A T E   V A L U E S
       *    *************************************************************
-030820       MULTIPLY W10-SELL BY W10-QUANT 
-                                 GIVING W25-VALUE.
-030830       MOVE W25-VALUE      TO W100-EXT.
-030840	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
-	     PERFORM CHECK-CORRECT.
-030930	   IF WS-OPTION = "N"
-030940	       GO TO BD325.
+030820*       MULTIPLY W10-SELL BY W10-QUANT
+      * 			  GIVING W25-VALUE.
+030830*       MOVE W25-VALUE	  TO W100-EXT.
+030840*	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
+      *		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      *			  BACKGROUND-COLOR 0.
+      *	     PERFORM CHECK-CORRECT.
+030930*	   IF WS-OPTION = "N"
+030940*	       GO TO BD325.
       *    *************************************************************
       *    ****    U P D A T E   S A L E   F I L E   R E C O R D
       *    *************************************************************
-033180       MOVE W10-QUANT      TO SAL-QNT.
-             MOVE W10-SELL       TO SAL-SELL.
-033190       MOVE W25-VALUE      TO SAL-VAL.
-033200     IF WS-DISC = ZERO
-033210	       GO TO BD580.
-033220       COMPUTE W90-CDISC = (W25-VALUE * WS-DISC) / 100.
-033230       MOVE W90-CDISC      TO SAL-DISC.
+033180*       MOVE W10-QUANT	  TO SAL-QNT.
+      *       MOVE W10-SELL	  TO SAL-SELL.
+033190*       MOVE W25-VALUE	  TO SAL-VAL.
+033200*     IF WS-DISC = ZERO
+033210*	       GO TO BD580.
+033220*       COMPUTE W90-CDISC = (W25-VALUE * WS-DISC) / 100.
+033230*       MOVE W90-CDISC	  TO SAL-DISC.
       *    *************************************************************
       *    ****    R E - C A L C U L A T E   &   D I S P L A Y
       *            T O T A L S
       *    *************************************************************
 033240 BD580.
-033250	     PERFORM BD95 THRU BD102.
+033250*	     PERFORM BD95 THRU BD102.
 
 033260 BD581.
 033280       PERFORM REWRITE-SALE THRU WRITE-SALE-EXIT.
@@ -7253,7 +7350,18 @@
 035390       GO TO BE75.
 035400 BE80.
 035410       PERFORM AY70 THRU AY999.
-035420       CLOSE SORDER 
+      *    ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+      *    ณ To avoid problems of having data corrupted (MULTI USER)   ณ
+      *    ณ by the cache (buffering) of data on the individual Work   ณ
+      *    ณ stations. This results in data from one work station not  ณ
+      *    ณ being available on another Work station until the cache   ณ
+      *    ณ has been ceared. Including a close of the file after each ณ
+      *    ณ new order has been added and then re-opening the file is  ณ
+      *    ณ the way in which the system will release the data for it  ณ
+      *    ณ to be written to the server file and should resolve this  ณ
+      *    ณ problem.						       ณ
+      *    ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+035420	     CLOSE SORDER
 035430             SALE.
 035440       OPEN I-O SORDER.
 035450       OPEN OUTPUT SALE.

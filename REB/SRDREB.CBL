@@ -13,7 +13,7 @@
       *                                                                *
       *  A D J U S T M E N T   C A R D E X   F I L E   R E B U I L D   *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 2001.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2001 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2001 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -54,6 +54,8 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
+       COPY APACFIDS.SL.
+
        COPY CONTROL.SL.
 
 000140 COPY PARAM.SL.
@@ -80,6 +82,8 @@
       /
 000260 DATA DIVISION.
 000270 FILE SECTION.
+
+       COPY APACFIDS.FDE.
 
 000290 COPY CONTROL.IFD.
 
@@ -148,6 +152,8 @@
 000020	   03  WS-SYS-ID       PIC  X(03).
 
 004000 01  W02-FID.
+
+       COPY APACFIDS.ID.
 
 000290 COPY CONTROL.ID.
 
@@ -279,12 +285,6 @@
       /
 002460 ZA000           SECTION.
 002470 ZA00.
-	     MOVE LS-PARID	 TO WS-PARID.
-	     MOVE LS-L-OR-N	 TO W02-L-OR-N.
-	     MOVE WS-SYS-ID	 TO W02-SYSID.
-	     MOVE LS-TODAY-DDMMYY
-				 TO TODAY-DDMMYY.
-	     MOVE LS-USUB	 TO WS-USUB.
       *
       *    ****    P A R A M E T E R   F I L E
       *

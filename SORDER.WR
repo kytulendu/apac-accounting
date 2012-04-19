@@ -36,7 +36,7 @@
                GO TO WRITE-SORDER.
            IF WS-STAT1 NOT = "0"
                MOVE 20           TO WS-F-ERROR
-               PERFORM WRITE-ERROR.
+	       PERFORM WRITE-ERROR.
 
        WRITE-SORDER-EXIT.
              EXIT.

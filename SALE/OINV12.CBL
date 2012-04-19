@@ -13,7 +13,7 @@
       *                                                                *
       *     P R I N T	I N V O I C E	-   ( C O N S O L )	       *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -27,7 +27,7 @@
 000030 AUTHOR.         J.W.LEMMON (APAC).
 000040 DATE-WRITTEN.   AUGUST 1991.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1991 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -397,7 +397,7 @@
 003250         05  FILLER  PIC X(01).
 003260         05  WS-SRT-LINE
 003270                     PIC X(50).
-003280         05  FILLER  PIC X(29).
+003280	05  FILLER  PIC X(29).
 	   03  WS-MM-LINE.
 	       05  FILLER      PIC  X(01) VALUE "Ё".
 	       05  WS-SPACE    PIC  X(60) VALUE SPACES.
@@ -875,6 +875,7 @@
 001230 PROCEDURE DIVISION USING LS-PARID
 				LS-USER-ID
 				LS0-PROGRAMS
+				LS0-SECURITY
 				W40-COMPANY
 				W90-TRAN.
 010250 AA000-MAIN	       SECTION.
@@ -1410,8 +1411,17 @@
 				 TO W90-TAXVAL(SAL-VAT-SUB)
 023060		   MOVE W05-VAT(SAL-VAT-SUB)
 023060				 TO W05-RATE
-023080		   COMPUTE W90-VAT(SAL-VAT-SUB) ROUNDED =
+      *
+      *    ****    C H E C K   I F   I N C L U S I V E
+      *
+		   IF W90-EXP = "I"
+		       COMPUTE W90-VAT(SAL-VAT-SUB) ROUNDED =
+			  ((W90-TAXVAL(SAL-VAT-SUB)
+			  / (100.0000 + W05-RATE)) * W05-RATE)
+		   ELSE
+023080		       COMPUTE W90-VAT(SAL-VAT-SUB) ROUNDED =
 			  (W90-TAXVAL(SAL-VAT-SUB) * W05-RTE)
+		   END-IF
 	       END-IF
 	       PERFORM GET-SORD-WRITE-SALE
 	   ELSE
@@ -2228,6 +2238,7 @@
 	     PERFORM CALL-PRINTUTL.
 	     MOVE 2		 TO WS-ADVANCE.
 	     PERFORM CALL-PRINTUTL.
+
 026470 BC216.
       *
       *    ****    S T A R T   I N V O I C E   L O G G I N G   ( RE-PRINT )
@@ -2239,21 +2250,23 @@
              EXIT.
 
        BC222.
-026490       MOVE WS-PAGE        TO DOC-PAGE.
-026550       MOVE W80-ACNO       TO DOC-AC.
+026490	     MOVE WS-PAGE	 TO DOC-PAGE.
+026550	     MOVE W80-ACNO	 TO DOC-AC.
              MOVE 100            TO DOC-SQN.
              MOVE ZERO           TO DOC-TYPE.
              MOVE W40-NAME       TO DOC-NAME.
-             MOVE ZERO           TO DOC-PICNO.
+	     MOVE ZERO		 TO DOC-PICNO.
 026640       MOVE WS-CR          TO DOC-DOC.
              MOVE W90-EXP        TO DOC-EXP.
              MOVE WS-PRC         TO DOC-PRC.
 026560       MOVE W90-ORD        TO DOC-ORD.
-026590       MOVE W90-REF        TO DOC-REF.
+026590	     MOVE W90-REF	 TO DOC-REF.
 026600       MOVE W90-REG        TO DOC-OREF.
-026680       MOVE W12-T-YMD      TO DOC-DTE.
-026800       MOVE W10-SMAN       TO DOC-SMAN.
-028820       MOVE W90-TOTAL      TO DOC-VALUE.
+026680	     MOVE W12-T-YMD	 TO DOC-DTE.
+026800	     MOVE W10-SMAN	 TO DOC-SMAN.
+028820	     MOVE W90-TOTAL	 TO DOC-VALUE.
+	     MOVE LS0-NO	 TO DOC-USER.
+	     MOVE LS0-NAME	 TO DOC-UNME.
       *
       *    ****    L O G   R E C O R D   T O   I N V O I C E   F I L E
       *
@@ -2261,6 +2274,7 @@
 	     PERFORM WRITE-INVOIC THRU WRITE-INVOIC-EXIT.
 015400	     MOVE 1		 TO WS-ACTION.
 	     PERFORM AY22 THRU AY59.
+
 026830 BC235.
       *
       *    ****    R E A D   T H E   S A L E   F I L E   A N D
@@ -2275,7 +2289,7 @@
 026900         PERFORM BC250.
 026910	   IF SAL-EXT-ITEM = SPACES
 026920         GO TO BC247.
-026930	     MOVE SAL-EXT-ITEM	  TO STK-CODE.
+026930	     MOVE SAL-EXT-ITEM	 TO STK-CODE.
 026940       PERFORM AY05 THRU AY59.
       *
       *    ****    N E X T   E N T R Y   O N   I N V O I C E   L O G
@@ -2304,7 +2318,7 @@
 027020	     MOVE SAL-VAT	 TO DOC-VAT.
 027030       MOVE SAL-SELL       TO W10-SELL  DOC-SELL.
 027050       MOVE SAL-VAL        TO W25-VALUE DOC-VAL.
-026970	     MOVE SAL-EXT-ITEM	 TO INV-ITM.
+026970	     MOVE SAL-EXT-ITEM	 TO INV-EXT-ITM.
 026980	     MOVE SAL-DESC	 TO INV-DESC.
 026990	     MOVE SAL-QNT	 TO INV-QNT.
 027020	     MOVE SAL-VAT	 TO INV-TAX.
@@ -2329,12 +2343,12 @@
 040350	       IF WS-VAT-SUB > ZERO
 027140		   MOVE W05-VAT(WS-VAT-SUB)
 027150				 TO W05-RATE
-027160		   COMPUTE W90-VALUE ROUNDED = W90-VALUE -
+027160		   COMPUTE W90-VALUE ROUNDED = (W90-VALUE -
 027170                 (((W90-VALUE / (W05-RATE + 100.00000)) * 
-027180			  W05-RATE))
-027190		   COMPUTE W90-EXCDIS ROUNDED = W90-CDISC -
+027180			  W05-RATE)))
+027190		   COMPUTE W90-EXCDIS ROUNDED = (W90-CDISC -
 027200                 (((W90-CDISC / (W05-RATE + 100.00000)) *
-027210			  W05-RATE)).
+027210			  W05-RATE))).
 	     MOVE W90-VALUE	 TO INV-EXTEND.
 	     ADD W90-VALUE SAL-VAT
 				 GIVING INV-VAL.
@@ -2396,7 +2410,7 @@
 				 TO WXT-LEDTRF
 		   MOVE "Y"	 TO WS-BAL-ENTRY
 	       END-IF
-		   PERFORM GL-TRF-UPDATE.
+	       PERFORM GL-TRF-UPDATE.
       *
       *    ****    U P D A T E   C O S T - O F - S A L E S
       *
@@ -2404,15 +2418,22 @@
 027490       ADD W90-BCR         TO DPT-COST-DAY
                                     DPT-COST-MTD
 027500                              DPT-COST-YTD.
-           IF (WX-INT = "Y") AND (W90-BCR NOT = ZERO)
-	       MOVE W90-BCR	 TO WX-VALUE
-               MOVE DPT-COST-GL  TO WX-AC
-               MOVE 08           TO WX-TYPE
-               PERFORM GL-TRF-UPDATE
-               COMPUTE WX-VALUE = W90-BCR * -1
-               MOVE DPT-PUR-GL   TO WX-AC
-               MOVE 19           TO WX-TYPE
-               PERFORM GL-TRF-UPDATE.
+	   IF WX-INT = "Y"
+               IF W90-BCR NOT = ZERO
+                   MOVE W90-BCR  TO WX-VALUE
+                   MOVE DPT-COST-GL
+                                 TO WX-AC
+                   MOVE 08       TO WX-TYPE
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё As this entry is double sided - it will not be used to    Ё
+      *    Ё check the balancing of the itegration entries.	       Ё
+      *	   юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+		   PERFORM GL-TRF-UPDATE
+                   COMPUTE WX-VALUE = W90-BCR * -1
+                   MOVE DPT-PUR-GL
+                                 TO WX-AC
+                   MOVE 19       TO WX-TYPE
+                   PERFORM GL-TRF-UPDATE.
       *
       *    ****    U P D A T E   D I S C O U N T   G I V E N
       *
@@ -2598,7 +2619,12 @@
                            MOVE DPT-DISC-GL  TO WX-AC
 			   MOVE DPT-CODE     TO WX-LEDG
 			   MOVE 15	     TO WX-TYPE
-                           PERFORM GL-TRF-UPDATE
+      *
+      *    ****    Balancing the Integration entries
+      * 	   DISCOUNT
+      *
+			   ADD WX-VALUE	     TO WXT-VALUE
+			   PERFORM GL-TRF-UPDATE
                        END-IF
 028260		       PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
       *
@@ -2612,6 +2638,7 @@
       * 	       W90-VAT(?)   =TOTAL VAT PER RATE
       * 	       W90-TOTAL    =TOTAL FOR CREDIT NOTE
       *
+      *ддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд
 028660	     MOVE W05-RATE	 TO WS-PER.
        BC258.
 	     MOVE W90-EXCTOT	 TO INV-EXTEND.
@@ -2645,9 +2672,10 @@
 028110	       MOVE W15-DISC(DEB-SDISC)
 028120                           TO W30-PERC
 028130	       MOVE W30-MESSAGE  TO INV-RMKS.
+	     MOVE 1		 TO WS-ADVANCE.
 	     PERFORM CALL-PRINTUTL.
 028890	     MOVE SPACES	 TO REP-DETAIL2.
-	     MOVE "Processed by APAC Accounting - (011) 803-2572"
+	     MOVE "Processed by APAC Accounting - (+27825663095)"
 				 TO REP-DETAIL2
 	     MOVE 2		 TO WS-ADVANCE.
 	     PERFORM CALL-PRINTUTL.
@@ -2685,6 +2713,11 @@
 				 TO WX-AC
 		MOVE DPT-CODE	 TO WX-LEDG
 		MOVE 10 	 TO WX-TYPE
+      *
+      *    ****    Balancing the Integration entries
+      * 	   OUTPUT VAT
+      *
+		ADD WX-VALUE	 TO WXT-VALUE
 		PERFORM GL-TRF-UPDATE.
 027880	     PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
 	     ADD W90-TAXVAL(W05-V-RATE)
@@ -2745,7 +2778,11 @@
 029290         ADD 100 W10-SMAN  GIVING WS-PARKEY
 029300         PERFORM AY01 THRU AY59
 029310         ADD W90-TCOST     TO PAR-CT-MTD PAR-CT-YTD
-029320         ADD W90-EXCTOT    TO PAR-SL-MTD PAR-SL-YTD
+029320	       ADD W90-EXCTOT	 TO PAR-SL-MTD PAR-SL-YTD
+	       IF NOT(W90-NONTAX = ZERO)
+029320		   ADD W90-NONTAX
+				 TO PAR-SL-MTD PAR-SL-YTD
+	       END-IF
 029330	       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
       *
       *    ****    R E W R I T E   T H E   D E B T O R   R E C O R D
@@ -3068,6 +3105,23 @@
              MOVE PAR-ADJGL      TO WX-ADJGL.
              MOVE PAR-RLGL       TO WX-RLGL.
              MOVE PAR-DSGL       TO WX-DSGL.
+	     MOVE 271		 TO WS-PARKEY.
+	     READ PARAM.
+	   IF NOT (WS-STATUS = 00)
+	       MOVE SPACES	 TO W30-RMKS15(1) W30-RMKS15(2)
+				    W30-RMKS15(3) W30-RMKS15(4)
+				    W30-RMKS15(5) W30-RMKS15(6)
+	       GO TO ZA999.
+	     MOVE 1		 TO WS-S1.
+
+       ZA05.
+	     MOVE PAR-RMKS1	 TO W30-RMKS15 (WS-S1).
+	     ADD 1		 TO WS-S1.
+	     MOVE PAR-RMKS2	 TO W30-RMKS15 (WS-S1).
+	   IF WS-PARKEY < 273
+	       ADD 1		 TO WS-PARKEY WS-S1
+	       PERFORM READ-PARAM THRU READ-PARAM-EXIT
+	       GO TO ZA05.
 051530	     GO TO ZA999.
 
        COPY ZA49.PRO.

@@ -1735,6 +1735,37 @@
        AA199.
 	     EXIT.
 
+      /    *************************************************************
+      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      * 	   S C R E E N ,   K E Y B O A R D   &	 M O U S E
+      *    *************************************************************
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	   SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3      Ё
+      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
+      *    Ё			  SCREEN-SHADOW 		       Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To routine is used to display a shadow down the right and Ё
+      *    Ё along the bottom of a pop-up box. The parameters that are Ё
+      *    Ё required:						       Ё
+      *	   Ё	       SHADE-ROW   - Top line of the box + 1.	       Ё
+      *	   Ё	       SHADE-COL   - Left line of box + 2.	       Ё
+      *	   Ё	       SHADE-WIDTH - Width of the box - 2.	       Ё
+      *	   Ё	       SHADE-LINES - Hight of box - 1.		       Ё
+      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
+      *    Ё			  ERROR-MESSAGE 		       Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To display an error message with " - Press ANY key" at    Ё
+      *    Ё the end; use PERFORM ERROR-MESSAGE.		       Ё
+      *    Ё							       Ё
+      *    Ё To display just the error message; use PERFORM	       Ё
+      *    Ё ERROR-LENGTH THRU ERROR-EXIT.			       Ё
+      *    Ё							       Ё
+      *    Ё To display the error message higher or lower (default is  Ё
+      *    Ё line 13) firstly use PERFORM ERROR-SETUP THRU ERROR-POS   Ё
+      *    Ё or PERFORM ERROR-LENGTH THRU ERROR-POS. Move the line     Ё
+      *    Ё number to be used to SLIN and then PERFORM ERROR-DISPLAY  Ё
+      *    Ё THRU ERROR-EXIT.					       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        COPY FUNCTION.SCR.
 
        COPY ERROR.SCR.
@@ -4433,12 +4464,42 @@
 	     MOVE WS-SYS-ID	 TO W02-SYSID.
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY.
-042000	     DISPLAY CLR-SCREEN.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё  Setup various keys and the mouse for use with menus and  Ё
-      *    Ё  other required user interface functions and procedures.  Ё
+      *    Ё	   S e t   u p	 t h e	 F U N C T I O N   k e y s     Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     COPY FUNCTION.PRO.
+	     MOVE 1		 TO USER-ACTION
+				    USER-SETTING.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё		       ESC, F1 to F10 keys		       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	     MOVE ZERO		 TO USER-NUMBER.
+	     MOVE 11		 TO USER-KEYS.
+	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё		    PAGE-UP and PAGE-DOWN keys		       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	     MOVE 53		 TO USER-NUMBER.
+	     MOVE 2		 TO USER-KEYS.
+	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё		   A C T I V A T E   M O U S E		       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	     MOVE 64		 TO MOUSE-FUNC.
+	     MOVE 1		 TO MOUSE-PARAM.
+	     CALL X"AF" USING MOUSE-FUNC
+			      MOUSE-PARAM.
+	   IF MOUSE-FUNC NOT = 255
+	       MOVE "Y"		 TO MOUSE-ATTACHED
+	   ELSE
+	       GO TO ZA00A
+	   END-IF.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё	       Set MOUSE key to act as FUNCTION key	       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+	     MOVE 3		 TO USER-ACTION.
+	     MOVE 27		 TO USER-NUMBER.
+	     MOVE 2		 TO USER-KEYS.
+	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	    Setup the file ID's including path names           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды

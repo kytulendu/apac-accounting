@@ -13,7 +13,7 @@
       *                                                                *
       *     B U S I N E S S   S Y S T E M   M E N U   P R O G R A M    *
       *                                                                *
-      *     VERSION 8.15.01 - August 2011			       *
+      *     VERSION 8.15.02 - November 2011			       *
       * 							       *
       ******************************************************************
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
@@ -59,7 +59,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   APRIL 1993.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -1615,7 +1615,7 @@
 040960	   IF WS-F-ERROR = 7
 041820	       MOVE W02-DEPART	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
-041830	       MOVE DPT-CODE	 TO WS-KEYX
+41830	       MOVE DPT-CODE	 TO WS-KEYX
 041110	   ELSE
 041120     IF WS-F-ERROR = 15
 041130	       MOVE W02-PARAM	 TO WS-FILE

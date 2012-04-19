@@ -13,7 +13,17 @@
       *                                                                *
       *     S T O C K	-   C O R R E C T   P I C   Q U A N T I T Y    *
       *                                                                *
-      *     VERSION 8.13.07 - March 2008			       *
+      *     VERSION 8.15.02 - November 2011			       *
+      * 							       *
+      ******************************************************************
+      * 							       *
+      * November 2011 - Picking slip quantity not updated when orders  *
+      * 		deleted in period end routine. Program amended *
+      * 		to add the picking slip quantities to the Stock*
+      * 		quantity and clear the picking slip quantity.  *
+      * 		After this has been done the program will read *
+      * 		the sales order file and adjust picking slip   *
+      * 		and stock quantities for any outstanding orders*
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -21,7 +31,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   MAY 2003.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2003 - 2008
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2003 - 2012
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -110,6 +120,7 @@
 002070 77  WS-ERROR	   PIC	9(01).
 002220 77  WS-TYPE	   PIC	X(01).
 003400 77  WS-PAGE	   PIC	9(04)	 COMP-5 VALUE ZERO.
+       77  PRG-PRINTUTL	   PIC	X(12) VALUE "UTP\PRINTUTL".
 002280 77  WS-REF	   PIC	X(08).
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
@@ -496,7 +507,7 @@
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
-020250	   IF NOT (WS-OPTION = "Y" OR "N")
+020250	   IF NOT(WS-OPTION = "Y" OR "N")
 	       GO TO BA05.
 	     PERFORM RESTORE-SCREEN-2.
 	   IF WS-OPTION = "N"
@@ -524,9 +535,10 @@
 	       GO TO BA15.
 	     DISPLAY STK-CODE AT 1244
 		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
-	   IF NOT (STK-QPIC = ZERO)
+	   IF NOT(STK-QPIC = ZERO)
 	       PERFORM BA100
 	       IF WS-PRINT = "N"
+		   ADD STK-QPIC  TO STK-QUANT
 		   MOVE ZERO	 TO STK-QPIC
 	       END-IF
 017190	       PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
@@ -556,7 +568,7 @@
 	       MOVE SPACE	 TO WS-OPTION
 	       PERFORM OPT-MESSAGE
 	       GO TO BA999.
-	   IF NOT (SOR-TYPE = 0)
+	   IF NOT(SOR-TYPE = 0)
 	       MOVE "Order file corrupted missing header"
 				 TO WS-ERR-STRING
 	       MOVE SPACE	 TO WS-OPTION
@@ -570,6 +582,7 @@
 033910	       PERFORM OPT-MESSAGE
 	       MOVE SOR-REF	 TO WS-REF
 	       MOVE "Y" 	 TO WS-DELETE
+	       PERFORM DELETE-SORDER-REC THRU WRITE-SORDER-EXIT
 	       GO TO BA35.
 	   IF NOT SOR-ORDER
 	       MOVE SOR-REF	 TO WS-REF
@@ -608,6 +621,7 @@
 				 TO WS-ERR-STRING
 003260	       PERFORM ERROR-MESSAGE
 	       GO TO BA999.
+	     SUBTRACT SOR-QNT	 FROM STK-QUANT.
 	     ADD SOR-QNT	 TO STK-QPIC.
 	     PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
 	     GO TO BA25.
@@ -700,6 +714,8 @@
 	     PERFORM RESTORE-SCREEN-2.
 	   IF WS-OPTION = "Y"
 	       MOVE WS-OPTION	 TO WS-PRINT
+	       MOVE "Picking Slip quantities on file."
+			       TO W55-HEADING
 	       GO TO BA08.
 
 021720 BA999.

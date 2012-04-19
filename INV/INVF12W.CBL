@@ -13,7 +13,7 @@
       *                                                                *
       * I N V O I C I N G   P R O G R A M   -	( C O N S O L - U S B) *
       * 							       *
-      *     VERSION 8.15.01 - August 2011			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,6 +28,9 @@
       *  Aug 2011	- Fix problem with remarks on an Invoice re-   *
       * 		  print. (Columns were messed up.)	       *
       * 							       *
+      *  Jan 2012	- Allow the User to decide if a copy Invoice   *
+      * 		  must be printed.							       *
+      * 							       *
       ******************************************************************
        IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     INVF12W.
@@ -41,7 +44,7 @@
 	   print process. The system will select the default invoice
 	   program for the previous printers.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2012
                                      by James William Lemmon.
                                        (Id No. 4412165050082).
 
@@ -1060,6 +1063,8 @@
 
        COPY S99.CRT.
 
+       COPY OPT.CRT.
+
       /
 010220 PROCEDURE DIVISION USING LS-PARID
 				LS-USER-ID
@@ -1093,8 +1098,17 @@
       *    ³ For a new Invoice a copy is required for inhouse filing.  ³
       *    ³ As these printers are single sheet printers the program   ³
       *    ³ will perform BE000 section to print a copy of the invoice.³
+      *    ³ Allow the USER to decide whether a copy Invoice must be   ³
+      *    ³ printed or not.					       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     PERFORM BE000.
+	     MOVE "Print a COPY Invoice (Y/N) [ ]"
+				 TO WS-ERR-MES.
+	     MOVE "N"		 TO WS-OPTION.
+	     PERFORM OPT-MESSAGE
+		     TEST AFTER UNTIL WS-OPTION = "N" OR "Y".
+	   IF WS-OPTION = "Y"
+	       MOVE 0		 TO WS-PAGE
+	       PERFORM BE000.
 010410	     GO TO AZ000-EOJ.
 
 010930 COPY LOCKED.RC2.
@@ -1102,6 +1116,43 @@
 010970 COPY DEBTOR.TRN.
 
        COPY FUNCTION.CRT.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³			  OPT-MESSAGE			       ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine is used to allow the OPERATOR to respond to  ³
+      *    ³ a request for an option, so that the correct action can   ³
+      *    ³ be performed by the program. The routine will display the ³
+      *    ³ message in a pop-up window and allow the OPERATOR to      ³
+      *    ³ respond to the 'question'. 			       ³
+      *    ³							       ³
+      *    ³ The option request must be placed in WS-ERR-MES and may   ³
+      *    ³ not exceed 48 characters. The message will be centred in  ³
+      *    ³ the window. An example of a message request follows:      ³
+      *    ³							       ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
+      *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
+      *    ³	       other keys are to be tested on exit)	       ³
+      *    ³			     OR 			       ³
+      *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
+      *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
+      *    ³   default option)					       ³
+      *    ³							       ³
+      *    ³ This would be displayed as:			       ³
+      *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
+      *    ³	³	   Print transactions (Y/N) [ ] 	 ³°°   ³
+      *    ³	ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°   ³
+      *    ³	  °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°   ³
+      *    ³							       ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³							       ³
+      *    ³ To display the request message higher or lower (default   ³
+      *    ³ is line 13) move the line number to be used to SLIN and   ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+       COPY OPTION.CRT.
 
       /
       *    ****    READ FILES ROUTINES
@@ -2340,8 +2391,13 @@
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	   This heading is printed at 5cpi and centered        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE "     TAX INVOICE/BELASTING FAKTUUR"
-				 TO Print-Buffer.
+	   IF W05-VATNO = SPACES
+	       MOVE "            INVOICE/FAKTUUR"
+				 TO Print-Buffer
+	   ELSE
+	       MOVE "     TAX INVOICE/BELASTING FAKTUUR"
+				 TO Print-Buffer
+	   END-IF.
 	     MOVE 44		 TO Print-Buffer-Len.
 	     MOVE 1		 TO WS-ADVANCE.
 	     PERFORM PRINT-DETAILS.
@@ -2529,7 +2585,11 @@
       *    ³		 Print the Date and Reference Number	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 	     MOVE "DATE  :"	 TO INV-H14A.
-	     MOVE W12-TODAY	 TO INV-DTE W40-DTE.
+	     MOVE W12-TODAY	 TO INV-DTE.
+      *
+      *    ***	Date used for 2nd Copy of Invoice
+      *
+	     MOVE W12-T-YMD	 TO W40-DTE.
 	     MOVE "REF No:"	 TO INV-H14.
 026590	     MOVE W90-REF	 TO INV-REF.
 	     move W02-print-record
@@ -2607,7 +2667,7 @@
       *
       *    ****    C L I E N T	 V A T	 N U M B E R
       *
-	   IF NOT (W40-TAX = SPACES)
+	   IF NOT(W40-TAX = SPACES)
 	       MOVE "Vat No"	 TO INV-VATH
 	       MOVE W40-TAX	 TO INV-VATNO.
       *
@@ -2810,7 +2870,7 @@
 027110	   IF W90-TAX = SPACES
 027120       IF W90-EXP NOT = "X"
 040350	       IF WS-VAT-SUB > ZERO
-027140		   MOVE W05-VAT (WS-VAT-SUB)
+027140		   MOVE W05-VAT(WS-VAT-SUB)
 027150                           TO W05-RATE
 027160		   COMPUTE W90-VALUE ROUNDED = (W90-VALUE -
 027170                 (((W90-VALUE / (W05-RATE + 100.00000)) * 
@@ -2829,20 +2889,23 @@
 	   IF WS-CARDEX = "Y"
 	       PERFORM WRITE-CARDEX THRU WRITE-CARDEX-EXIT
 015400	       MOVE 1		 TO WS-ACTION
-	       PERFORM AY43 THRU AY59.
+	       PERFORM AY43 THRU AY59
+	   END-IF.
 	   IF WS-PRNINV = "Y"
 	       MOVE 1		 TO WS-ADVANCE
 	       move W02-print-record
 				 TO Print-Buffer
 	       PERFORM PRINT-ITEM
-027240	       MOVE SPACES	 TO W02-PRINT-RECORD.
+027240	       MOVE SPACES	 TO W02-PRINT-RECORD
+	   END-IF.
 027250       ADD W25-VALUE       TO W90-STOTAL.
       *
       *    ****    H A S   L I N E   D I S C O U N T   B E E N   
       *            A P P L I E D
       *
 027260     IF W90-CDISC = ZERO
-027270         GO TO BC240.
+027270	       GO TO BC240
+	   END-IF.
       *
       *    ****    P R I N T   A N D   L O G   T H E   L I N E
       *            D I S C O U N T
@@ -3018,14 +3081,13 @@
 027830	     GO TO BC246.
 
        BC248.
-             MOVE SAL-SNO (WS-S1)
-                                 TO W10-SERNO.
+	     MOVE SAL-SNO(WS-S1) TO W10-SERNO.
              MOVE ZERO           TO WS-GAR.
              PERFORM BB070.
              ADD 1               TO WS-S1.
 	   IF WS-S1 < 3
-               IF SAL-SNO (WS-S1) NOT = SPACES
-                   GO TO BC248.
+	       IF NOT(SAL-SNO(WS-S1) = SPACES)
+		   GO TO BC248.
       *
       *    ****    C A R R I E D   F O R W A R D   -   N E X T   P A G E
       *
@@ -3297,6 +3359,8 @@
 	       MOVE 1		 TO WS-ADVANCE
 	       MOVE "Processed by APAC Accounting - +27825663095"
 				 TO W02-PRINT-RECORD
+	       move W02-print-record
+				 TO Print-Buffer
 	       PERFORM PRINT-DETAILS
 	       MOVE SPACES	 TO W02-PRINT-RECORD
 	       PERFORM Throw-a-page.
@@ -3850,7 +3914,7 @@
 	     perform advance-printer 2 times.
 	     MOVE SPACES	 TO W02-PRINT-RECORD.
 	     MOVE "TOTAL/TOTAAL" TO INV-H8.
-	     MOVE W90-EXCTOT	   TO INV-EXTEND.
+	     MOVE W90-EXCTOT	 TO INV-EXTEND.
 028670     IF W90-TAX NOT = SPACES
 028680	       MOVE W90-TTAX	 TO INV-TAX.
 028820	     MOVE W90-TOTAL	 TO W90-DB.
@@ -3981,8 +4045,14 @@
 	     MOVE WS-SYS-ID	 TO W02-SYSID.
 	     MOVE LS-TODAY-DDMMYY
 				 TO TODAY-DDMMYY W12-TODAY.
-	     MOVE LS-USUB	 TO WS-USUB.
 	     MOVE LS-DRAW	 TO WS-DRAW.
+	   IF LS-USER NUMERIC
+	       IF LS-USE > ZERO AND < 110
+		   MOVE LS-USE	 TO WS-USUB
+		   GO TO ZA00A
+	       END-IF
+	   END-IF.
+             MOVE 110            TO WS-USUB.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	    Setup the file ID's including path names           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ

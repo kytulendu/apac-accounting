@@ -13,7 +13,7 @@
       *                                                                *
       *     C R E D I T   N O T E   P R O G R A M		       *
       *                                                                *
-      *     VERSION 8.14.02 - January 2010			       *
+      *     VERSION 8.15.04 - January 2012			       *
       * 							       *
       ******************************************************************
       * 							       *
@@ -39,6 +39,11 @@
       * 	    is only applicable if the discount code for which  *
       * 	    this alternate discount is applicable is the code  *
       * 	    on the Debtor account record.		       *
+      * 							       *
+      *  Jan 2012 - Include Format 99 which calls the CRNF12W program  *
+      * 	    to produce a Credit note via the Windows spooller. *
+      * 							       *
+      ******************************************************************
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -357,7 +362,7 @@
 004720 01  W25-CALCS.
 004730     03  W25-RESULT      PIC 9(05)V99.
 004740     03  W25-RESULT1 REDEFINES W25-RESULT.
-004750         05  W25-WHOLE   PIC 9(03).
+004750	       05  W25-WHOLE   PIC 9(05).
 004760         05  W25-DECIMAL PIC 9(02).
            03  W25-RESULT2 REDEFINES W25-RESULT.
                05  W25-KEY     PIC 9(04).
@@ -2795,16 +2800,31 @@
 			   FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
 029610	     CLOSE SALE.
              OPEN I-O SALE.
-	     CALL PRG-NAME3 USING WS-PARID
-				  LS-USER-ID
-				  LS0-PROGRAMS
-				  LS0-SECURITY
-				  W40-COMPANY
-				  W90-TRAN
-		  ON EXCEPTION
-		      GO TO BD119
-	     END-CALL.
-	     CANCEL PRG-NAME3.
+	   IF PRG-NUMBER = 99
+	       CALL "INV\CRNF12W" USING WS-PARID
+					LS-USER-ID
+					LS0-PROGRAMS
+					LS0-SECURITY
+					W40-COMPANY
+					W90-TRAN
+		     ON EXCEPTION
+			GO TO BD119
+	       END-CALL
+	   ELSE
+	       CALL PRG-NAME3 USING WS-PARID
+				    LS-USER-ID
+				    LS0-PROGRAMS
+				    LS0-SECURITY
+				    W40-COMPANY
+				    W90-TRAN
+		    ON EXCEPTION
+			GO TO BD119
+	       END-CALL.
+	   IF PRG-NUMBER = 99
+	       CANCEL "INV\CRNF12W"
+	   ELSE
+	       CANCEL PRG-NAME3
+	   END-IF.
 	     GO TO BD119A.
 
        BD119.

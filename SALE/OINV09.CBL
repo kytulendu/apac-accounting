@@ -13,7 +13,13 @@
       *                                                                *
       *   I N V O I C I N G   P R O G R A M   -   ( ALL FORMS INV G )  *
       *                                                                *
-      *     VERSION 8.15.00 - January 2011			       *
+      *     VERSION 8.15.04 - January 2012			       *
+      * 							       *
+      ******************************************************************
+      * 							       *
+      *  January 2012 -   Include user number and name on the invoice  *
+      * 		  header record to enable lookup of person     *
+      * 		  who captured the Invoice/Credit note.        *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -722,6 +728,7 @@
 010220 PROCEDURE DIVISION USING LS-PARID
 				LS-USER-ID
 				LS0-PROGRAMS
+				LS0-SECURITY
 				W40-COMPANY
 				W90-TRAN.
 010230 AA000-MAIN      SECTION.
@@ -1527,6 +1534,8 @@
 026680       MOVE W12-T-YMD      TO DOC-DTE.
 026800       MOVE W10-SMAN       TO DOC-SMAN.
 028820       MOVE W90-TOTAL      TO DOC-VALUE.
+	     MOVE LS0-NO	 TO DOC-USER.
+	     MOVE LS0-NAME	 TO DOC-UNME.
       *
       *    ****    L O G   R E C O R D   T O   I N V O I C E   F I L E
       *
