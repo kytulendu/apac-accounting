@@ -1,0 +1,36 @@
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.	  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *	     C = Clear comment line (50)
+      *	     E = Clear lines (any line or lines between 5 and 46)
+      * 	     H = Change heading
+      * 	     S = Clear the screen and display headings
+      *
+         03  CRT-TYPE                PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+         03  CRT-START               PIC  9(02).
+         03  CRT-END                 PIC  9(02).
+      *
+      *    Calling Program
+      *
+         03  CRT-PROGRAM             PIC  X(15).
+      *
+      *    Screen Heading
+      *
+         03  CRT-HEADING             PIC  X(40).
+      *
+      *    Company Name
+      *
+         03  CRT-COMPANY             PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+         03  CRT-WRKHD               PIC  X(11).
+         03  CRT-WRKST               PIC  X(03).

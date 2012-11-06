@@ -1,0 +1,26 @@
+      *
+      *    ****   E R A S E   S C R E E N   F R O M   S P E C I F I E D
+      *           L O C A T I O N
+      *
+000010 ERASE-SCREEN       SECTION.
+
+000030 ERASE-SCREEN-CALL.
+             MOVE "E"              TO CRT-TYPE.
+             CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+
+000070 ERASE-SCREEN-EXIT.
+000080       EXIT.
+      *    *************************************************************
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      * 	   C L E A R   L I N E   50   O N   T H E   S C R E E N
+      *    *************************************************************
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                         CLEAR-L50                         ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+       CLEAR-L50   SECTION.
+       CLEAR-SETUP.
+             MOVE "C"            TO CRT-TYPE.
+             CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+
+       CLEAR-EXIT.
+	     EXIT.
