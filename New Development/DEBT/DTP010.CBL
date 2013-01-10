@@ -1,36 +1,36 @@
       $SET LINKCOUNT"468"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	     **      ****      *
-      *   **	**     **     **    **	 **  **     ***     **	**     *
-      *   **	**     **     **    **	**    **     **    **	 **    *
-      *   **	**     **     *******	**    **     **    **	 **    *
-      *   **	**     **     **	**    **     **    **	 **    *
-      *   **	**     **     **	 **  **      **     **	**     *
-      *   *******      **     **	  ****	   ******    ****      *
+      *   *******   ********  *******     ****	     **      ****      *
+      *   **    **     **     **    **   **  **     ***     **  **     *
+      *   **    **     **     **    **  **    **     **    **    **    *
+      *   **    **     **     *******   **    **     **    **    **    *
+      *   **    **     **     **        **    **     **    **    **    *
+      *   **    **     **     **         **  **      **     **  **     *
+      *   *******      **     **          ****     ******    ****      *
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
-      * 	A C C O U N T S	  R E C E I V A B L E	/	       *
+      *            A C C O U N T S   R E C E I V A B L E   /           *
       *                                                                *
       *   D E B T O R	T R A N S A C T I O N S   U S I N G   C O D E  *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
-      * 							       *
+      *     VERSION 9.00.20 - December 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  May 2006	- New field included in Accounts Receivable    *
-      * 		  for recording number of outstanding Jobs     *
-      * 		  linked to the account. Additional filler     *
-      * 		  added for future expansion.		       *
-      * 							       *
+      *                                                                *
+      *  May 2006	- New field included in Accounts Receivable for      *
+      * 		  recording number of outstanding Jobs linked to the *
+      *             account. Additional filler added for future        *
+      *             expansion.                                         *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP010.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -65,56 +65,52 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000160 COPY "DBTRAN.SL".
 
-000160 COPY DBTRAN.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBMEM.SL".
 
-000140 COPY DEBMEM.SL.
+       COPY "DEBTRN.SL".
 
-       COPY DEBTRN.SL.
+000140 COPY "DEPART.SL".
 
-000140 COPY DEPART.SL.
+       COPY "LEDTRF.SL".
 
-       COPY LEDTRF.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
+000220 COPY "RECOVER.SL".
 
-000220 COPY RECOVER.SL.
+       COPY "SHARED.SL".
 
-       COPY SHARED.SL.
-
-       COPY TXTRAN.SL.
+       COPY "TXTRAN.SL".
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000140 COPY "DEBMEM.FDE".
 
-000140 COPY DEBMEM.FDE.
+       COPY "DEBTRN.GFD".
 
-       COPY DEBTRN.GFD.
+000140 COPY "DEPART.FDE".
 
-000140 COPY DEPART.FDE.
+       COPY "LEDTRF.FDE".
 
-       COPY LEDTRF.FDE.
+000290 COPY "PARAM.FDE".
 
-000290 COPY PARAM.FDE.
+000390 COPY "RECOVER.GFD".
 
-000390 COPY RECOVER.GFD.
+       COPY "SHARED.FDE".
 
-       COPY SHARED.FDE.
-
-       COPY TXTRAN.FDE.
+       COPY "TXTRAN.FDE".
 
       /
       *         **         **    ******    *******    **    **
@@ -126,371 +122,340 @@
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
-001560 77  WS-SUB	   PIC	9(04)	 COMP-5.
-001560 77  WS-S            PIC  9(04)    COMP-5.
-001570 77  WS-S1           PIC  9(04)    COMP-5.
-001580 77  WS-S2           PIC  9(04)    COMP-5.
-001590 77  WS-S3           PIC  9(04)    COMP-5.
-001600 77  WS-S4           PIC  9(04)    COMP-5.
-001610 77  WS-S5           PIC  9(04)    COMP-5.
-001620 77  WS-S6           PIC  9(04)    COMP-5.
-001630 77  WS-S7           PIC  9(04)    COMP-5.
-001640 77  WS-S8           PIC  9(04)    COMP-5.
-001650 77  WS-S9           PIC  9(04)    COMP-5.
-002850 77  WS-IXS1         PIC  9(04)    COMP-5.
-002860 77  WS-IXS2         PIC  9(04)    COMP-5.
-002870 77  WS-IXS3         PIC  9(04)    COMP-5.
-002880 77  WS-IXS4         PIC  9(04)    COMP-5.
-001690 77  WS-ENQPOS	   PIC	9(06)	 COMP-5.
-001700 77  WS-ENQEND       PIC  9(06)    COMP-5.
-001680 77  WS-DBTKEY	   PIC	9(06)	 COMP-5.
-001670 77  WS-NETKEY	   PIC	9(06)	 COMP-5.
-001660 77  WS-PARKEY       PIC  9(06)    COMP-5.
-001710 77  WS-RECKEY       PIC  9(06)    COMP-5.
-001720 77  WS-RECOVER      PIC  9(06)    COMP-5.
-000820 77  WS-SHARED	   PIC	9(04)	 COMP-5 VALUE 1.
-001730 77  WS-TRANS        PIC  9(04)    COMP-5 VALUE 1.
-001760 77  WS-PERIOD	   PIC	9(02).
-001770 77  WS-NTP          PIC  X(01).
-       77  WS-MTHEND	   PIC	9(02)	 COMP-5.
-001800 77  WS-PAGE	   PIC	9(04)	 COMP-5.
-002570* 77  WS-PGE-LENGTH   PIC	9(02)	 VALUE 66.
-001870* 77  WS-PRN-LENGTH   PIC	9(02)	 VALUE 62.
-001810 77  WS-KEYSTR	   PIC	9(06)	 COMP-5.
-001820 77  WS-OPTION       PIC  X(01).
-001820 77  WS-ALLOCATE	   PIC	X(01)	 VALUE "M".
-001820 77  WS-SKIP         PIC  X(01) VALUE "N".
-001820 77  WS-TAX          PIC  X(01).
-001820 77  WS-TYPE         PIC  X(01).
-001850 77  WS-ERROR        PIC  9(01) VALUE ZERO.
-001870 77  WS-EKEY         PIC  9(06)    COMP-5.
-001880 77  WS-CHAR1        PIC  X(01).
-001890 77  WS-CHAR2        PIC  X(01).
-001900 77  WS-COMP         PIC  9(01).
-001980 77  WS-BATCH        PIC  9(06) COMP-5.
-       77  WS-VAT-CODE	   PIC	X(04).
-       77  WS-VAT-VALUE    PIC S9(09)V99 COMP-3.
-002010 77  WS-ERR1         PIC  X(22) VALUE "Invalid Account Number".
-002020 77  WS-ERR2         PIC  X(09) VALUE "No Record".
-002100 77  WS-A            PIC  X(19) VALUE "Any key to continue".
-002110 77  WS-E            PIC  X(15) VALUE "**END** - ENTER".
-002130 77  WS-AC	   PIC	X(07) VALUE "ACCOUNT".
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
-       77  WS-USUB	   PIC	9(04) COMP-5.
+       77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+001560 77  WS-SUB                    PIC  9(04)	 COMP-5.
+001560 77  WS-S                      PIC  9(04)    COMP-5.
+001570 77  WS-S1                     PIC  9(04)    COMP-5.
+001580 77  WS-S2                     PIC  9(04)    COMP-5.
+001590 77  WS-S3                     PIC  9(04)    COMP-5.
+001600 77  WS-S4                     PIC  9(04)    COMP-5.
+001610 77  WS-S5                     PIC  9(04)    COMP-5.
+001620 77  WS-S6                     PIC  9(04)    COMP-5.
+001630 77  WS-S7                     PIC  9(04)    COMP-5.
+001640 77  WS-S8                     PIC  9(04)    COMP-5.
+001650 77  WS-S9                     PIC  9(04)    COMP-5.
+002850 77  WS-IXS1                   PIC  9(04)    COMP-5.
+002860 77  WS-IXS2                   PIC  9(04)    COMP-5.
+002870 77  WS-IXS3                   PIC  9(04)    COMP-5.
+002880 77  WS-IXS4                   PIC  9(04)    COMP-5.
+001690 77  WS-ENQPOS                 PIC  9(06)	 COMP-5.
+001700 77  WS-ENQEND                 PIC  9(06)    COMP-5.
+001680 77  WS-DBTKEY                 PIC  9(06)	 COMP-5.
+001670 77  WS-NETKEY                 PIC  9(06)	 COMP-5.
+001660 77  WS-PARKEY                 PIC  9(06)    COMP-5.
+001710 77  WS-RECKEY                 PIC  9(06)    COMP-5.
+001720 77  WS-RECOVER                PIC  9(06)    COMP-5.
+000820 77  WS-SHARED                 PIC  9(04)	 COMP-5 VALUE 1.
+001730 77  WS-TRANS                  PIC  9(04)    COMP-5 VALUE 1.
+001760 77  WS-PERIOD                 PIC  9(02).
+001770 77  WS-NTP                    PIC  X(01).
+       77  WS-MTHEND                 PIC  9(02)	 COMP-5.
+001800 77  WS-PAGE                   PIC  9(04)	 COMP-5.
+002570*77  WS-PGE-LENGTH             PIC  9(02)	 VALUE 66.
+001870*77  WS-PRN-LENGTH             PIC  9(02)	 VALUE 62.
+001810 77  WS-KEYSTR                 PIC  9(06)	 COMP-5.
+001820 77  WS-OPTION                 PIC  X(01).
+001820 77  WS-ALLOCATE               PIC  X(01)	 VALUE "M".
+001820 77  WS-SKIP                   PIC  X(01) VALUE "N".
+001820 77  WS-TAX                    PIC  X(01).
+001820 77  WS-TYPE                   PIC  X(01).
+001850 77  WS-ERROR                  PIC  9(01) VALUE ZERO.
+001870 77  WS-EKEY                   PIC  9(06)    COMP-5.
+001880 77  WS-CHAR1                  PIC  X(01).
+001890 77  WS-CHAR2                  PIC  X(01).
+001900 77  WS-COMP                   PIC  9(01).
+001980 77  WS-BATCH                  PIC  9(06) COMP-5.
+       77  WS-VAT-CODE               PIC  X(04).
+       77  WS-VAT-VALUE              PIC S9(09)V99 COMP-3.
+002010 77  WS-ERR1                   PIC  X(22) VALUE "Invalid Account Number".
+002020 77  WS-ERR2                   PIC  X(09) VALUE "No Record".
+002100 77  WS-A                      PIC  X(19) VALUE "Any key to continue".
+002110 77  WS-E                      PIC  X(15) VALUE "**END** - ENTER".
+002130 77  WS-AC                     PIC  X(07) VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
+       77  TODAY-DDMMYY              PIC  9(08) COMP-5.
+       77  WS-USUB                   PIC  9(04) COMP-5.
       /
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
-002440         05  WS-TCHR PIC X(01) OCCURS 80.
+002440         05  WS-TCHR           PIC  X(01) OCCURS 80.
            03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
+               05  FILLER            PIC  X(01).
+               05  WS-H-LINE         PIC  X(78).
+               05  FILLER            PIC  X(01).
 002430     03  WS-TOP-LNE2.
-002440         05  WS-TCH  PIC X(01) OCCURS 80.
+002440         05  WS-TCH            PIC  X(01) OCCURS 80.
            03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-001430	       05  FILLER      PIC  X(23).
-	       05  WS-WRKHD    PIC  X(11).
-001430	       05  FILLER      PIC  X(01).
-	       05  WS-WRKST    PIC  X(03).
-001430	       05  FILLER      PIC  X(01).
-002450	   03  WS-MID-LNE.
-002460         05  WS-MCHR PIC X(01) OCCURS 80.
-	   03  WS-MDDT-LNE REDEFINES WS-MID-LNE.
-	       05  WS-MDT1     PIC  X(01).
-	       05  WS-MDT78    PIC  X(78).
-	       05  WS-MDT80    PIC  X(01).
-002450	   03  WS-MID-LNE2.
-	       05  FILLER      PIC  X(01) VALUE "³".
-	       05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-	       05  FILLER      PIC  X(01) VALUE "³".
-002470	   03  WS-BOT-LNE.
-002480         05  WS-BCHR PIC X(01) OCCURS 80.
+               05  FILLER            PIC  X(01).
+               05  WS-TOP-COMP       PIC  X(40).
+001430         05  FILLER            PIC  X(23).
+               05  WS-WRKHD          PIC  X(11).
+001430         05  FILLER            PIC  X(01).
+               05  WS-WRKST          PIC  X(03).
+001430         05  FILLER            PIC  X(01).
+002450     03  WS-MID-LNE.
+002460         05  WS-MCHR           PIC  X(01) OCCURS 80.
+           03  WS-MDDT-LNE REDEFINES WS-MID-LNE.
+               05  WS-MDT1           PIC  X(01).
+               05  WS-MDT78          PIC  X(78).
+               05  WS-MDT80          PIC  X(01).
+002450     03  WS-MID-LNE2.
+               05  FILLER            PIC  X(01) VALUE "³".
+               05  WS-BLNK78         PIC  X(78) VALUE ALL "°".
+               05  FILLER            PIC  X(01) VALUE "³".
+002470     03  WS-BOT-LNE.
+002480         05  WS-BCHR           PIC X(01) OCCURS 80.
            03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
+               05  FILLER            PIC X(01).
+               05  WS-F-LINE         PIC X(78).
+               05  FILLER            PIC X(01).
 002470     03  WS-BOT-LNE2.
-002480         05  WS-BCH  PIC X(01) OCCURS 80.
+002480         05  WS-BCH            PIC X(01) OCCURS 80.
 003240     03  WS-B-LINE REDEFINES WS-BOT-LNE2.
-003250         05  FILLER  PIC X(01).
+003250         05  FILLER            PIC X(01).
                05  WS-MEM-LINE.
-003260            07  WS-SRT-LINE
-003270                     PIC X(50).
-                  07  FILLER
-                           PIC X(10).
-003280         05  FILLER  PIC X(19).
+003260             07  WS-SRT-LINE   PIC X(50).
+                   07  FILLER        PIC X(10).
+003280         05  FILLER            PIC X(19).
            03  WS-MM-LINE.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-               05  FILLER  PIC  X(60) VALUE SPACES.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-           03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
+               05  FILLER            PIC  X(01) VALUE X"B3".
+               05  FILLER            PIC  X(60) VALUE SPACES.
+               05  FILLER            PIC  X(01) VALUE X"B3".
+           03  WS-HME-LINE           PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
        01  WS-HELP.
-	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
-	   03  WS-PROG	       PIC  X(03) VALUE "010".
+           03  WS-MODULE             PIC  X(03) VALUE "DTP".
+           03  WS-PROG               PIC  X(03) VALUE "010".
 
-       COPY LEDTRF.WS.
+       COPY "LEDTRF.WS".
 
 002250 01  W00-TRAN-CODES.
-           03  W00-T-VAT   PIC  9(09)V99 COMP-3.
-001410     03  W00-E-DESC  PIC  X(12).
-001420     03  W00-A-DESC  PIC  X(12).
-001430     03  W00-ACTION  PIC  9(01).
-001440     03  W00-T-CODE  PIC  9(02)    COMP-5.
-001450     03  W00-T-GL    PIC  9(06)    COMP-3.
-001460     03  W00-T-DAY   PIC  9(06)    COMP-5.
-001470     03  W00-T-VAL   PIC S9(09)V99 COMP-3.
-001480     03  W00-T-MTD   PIC  9(06)    COMP-5.
-001490     03  W00-T-MTDV  PIC S9(09)V99 COMP-3.
-001500     03  W00-T-YTD   PIC  9(06)    COMP-5.
-001510     03  W00-T-YTDV  PIC S9(09)V99 COMP-3.
+           03  W00-T-VAT             PIC  9(09)V99 COMP-3.
+001410     03  W00-E-DESC            PIC  X(12).
+001420     03  W00-A-DESC            PIC  X(12).
+001430     03  W00-ACTION            PIC  9(01).
+001440     03  W00-T-CODE            PIC  9(02)    COMP-5.
+001450     03  W00-T-GL              PIC  9(06)    COMP-3.
+001460     03  W00-T-DAY             PIC  9(06)    COMP-5.
+001470     03  W00-T-VAL             PIC S9(09)V99 COMP-3.
+001480     03  W00-T-MTD             PIC  9(06)    COMP-5.
+001490     03  W00-T-MTDV            PIC S9(09)V99 COMP-3.
+001500     03  W00-T-YTD             PIC  9(06)    COMP-5.
+001510     03  W00-T-YTDV            PIC S9(09)V99 COMP-3.
 
 000290 01  WS-PARID.
-000020	   03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DEBTOR.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY DEBTRN.ID.
-
-       COPY DEPART.ID.
-
-       COPY LEDTRF.ID.
-
-       COPY PARAM.ID.
-
-       COPY RECOVER.ID.
-
-       COPY SHARED.ID.
-
-       COPY TXTRAN.ID.
+000020     03  WS-SYS-ID             PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
-	   03  W02-PRINTER     PIC  X(12).
-002570	   03  W02-PGE-LENGTH  PIC  9(03).
-001870	   03  W02-PRN-LENGTH  PIC  9(03).
-	   03  W02-LINAGE      PIC  9(03).
-	   03  W02-PRN-STATUS  PIC  X(01) VALUE "C".
+           03  W02-PRINTER           PIC  X(12).
+002570     03  W02-PGE-LENGTH        PIC  9(03).
+001870     03  W02-PRN-LENGTH        PIC  9(03).
+           03  W02-LINAGE            PIC  9(03).
+           03  W02-PRN-STATUS        PIC  X(01) VALUE "C".
       *
       *    ****    D  =  Detail line
-      * 	   C  =  Condensed print
-      * 	   E  =  Expanded print
-      * 	   H  =  Header line
-      * 	   X  =  Cancel expanded print
-      * 	   1  =  10 Characters per inch
-      * 	   2  =  12 Characters per inch
-      * 	   3  =  17 Characters per inch
-      * 	   6  =  6 Lines per inch
-      * 	   8  =  8 Lines per inch
+      *            C  =  Condensed print
+      *            E  =  Expanded print
+      *            H  =  Header line
+      *            X  =  Cancel expanded print
+      *            1  =  10 Characters per inch
+      *            2  =  12 Characters per inch
+      *            3  =  17 Characters per inch
+      *            6  =  6 Lines per inch
+      *            8  =  8 Lines per inch
       *
-	   03  W02-PRN-TYPE    PIC  X(01).
-	   03  W02-PRN-LINE    PIC  X(136).
+           03  W02-PRN-TYPE          PIC  X(01).
+           03  W02-PRN-LINE          PIC  X(136).
 
-	   03  R-SL1 REDEFINES W02-PRN-LINE.
-	       05  R-SLA       PIC  X(78).
-	       05  FILLER      PIC  X(58).
-	   03  R-SL2 REDEFINES W02-PRN-LINE.
-	       05  FILLER      PIC  X(58).
-	       05  R-SLB       PIC  X(78).
-000350	   03  R-L1 REDEFINES W02-PRN-LINE.
-000360	       05  R-DET1      PIC  X(136).
-000370	   03  R-L2 REDEFINES W02-PRN-LINE.
-000380	       05  R-DET2      PIC  X(80).
-000390	   03  R-L3 REDEFINES W02-PRN-LINE.
-000400	       05  R-DATE      PIC  X(06).
-000410	       05  R-DTE       PIC  Z9/99/9999.
-000420	       05  FILLER      PIC  X(04).
-000430	       05  R-H5        PIC  X(46).
-000440	       05  R-H6        PIC  X(07).
-000450	       05  R-BATCH     PIC  Z(05)9.
-000460	       05  FILLER      PIC  X(07).
-	       05  R-PAGE      PIC  X(06).
-	       05  R-P-NO      PIC  Z(03)9.
-	   03  R-L3A REDEFINES W02-PRN-LINE.
-	       05  FILLER      PIC  X(04).
-	       05  R-CO        PIC  X(40).
-	       05  FILLER      PIC  X(04).
-000470	   03  R-L4 REDEFINES W02-PRN-LINE.
-000480	       05  FILLER      PIC  X(11).
-000490	       05  R-H1        PIC  X(04).
-000500	       05  FILLER      PIC  X(06).
-000510	       05  R-H2        PIC  X(15).
-000520	       05  FILLER      PIC  X(06).
-000530	       05  R-H3        PIC  X(15).
-000540	       05  FILLER      PIC  X(06).
-000550	       05  R-H4        PIC  X(06).
-000560	       05  FILLER      PIC  X(11).
-000570	   03  R-L5 REDEFINES W02-PRN-LINE.
-000580	       05  FILLER      PIC  X(12).
-000590	       05  R-TRAN      PIC  9(02).
-000600	       05  FILLER      PIC  X(09).
-000610	       05  R-ENG       PIC  X(12).
-000620	       05  FILLER      PIC  X(09).
-000630	       05  R-AFR       PIC  X(12).
-000640	       05  FILLER      PIC  X(10).
-000650	       05  R-ACT       PIC  X(01).
-000660	       05  FILLER      PIC  X(13).
-000740	   03  R-L7 REDEFINES W02-PRN-LINE.
-000750	       05  R-H7        PIC  X(07).
-	       05  R-H7A       PIC  X(27).
-000760	       05  R-H8        PIC  X(07).
-000770	       05  R-H10       PIC  X(09).
-000780	       05  R-H11       PIC  X(15).
-000790	       05  R-H12       PIC  X(14).
-	       05  R-H13       PIC  X(11).
-	       05  R-H14       PIC  X(06).
-000800	   03  R-L8 REDEFINES W02-PRN-LINE.
-000810	       05  R-TAC       PIC  X(06).
-000820	       05  FILLER      PIC  X(01).
-000830	       05  R-DNME      PIC  X(23).
-000840	       05  FILLER      PIC  X(01).
-000850	       05  R-TDTE      PIC  X(10).
-000860	       05  FILLER      PIC  X(01).
-	       05  R-TDESC     PIC  X(07).
-	       05  FILLER      PIC  X(01).
-000870	       05  R-TREF      PIC  X(08).
-000880	       05  FILLER      PIC  X(01).
-000890	       05  R-VAL       PIC  Z(07)9.99-.
-001020	       05  FILLER      PIC  X(01).
-	       05  R-TAX       PIC  Z(06)9.99-.
-001020	       05  FILLER      PIC  X(01).
-001040	       05  R-TOT       PIC  Z(07)9.99-.
-000900	   03  R-L9 REDEFINES W02-PRN-LINE.
-000910	       05  FILLER      PIC  X(54).
-000920	       05  R-BTOT      PIC  Z(06)9.99-.
-000930	       05  FILLER      PIC  X(15).
-001090	   03  R-L10 REDEFINES W02-PRN-LINE.
-	       05  FILLER      PIC  X(10).
-001100	       05  I-H8        PIC  X(09).
-001110	       05  I-TOTTAX    PIC  Z(07)9.99-.
-001120	       05  FILLER      PIC  X(02).
-001130	       05  I-H9        PIC  X(08).
-001140	       05  I-TOTEXE    PIC  Z(07)9.99-.
-001150	       05  FILLER      PIC  X(02).
-001160	       05  I-H10       PIC  X(08).
-001170	       05  I-TOTGST    PIC  Z(07)9.99-.
-001180	       05  FILLER      PIC  X(02).
-001190	       05  I-H11       PIC  X(07).
-001200	       05  I-TOTBCH    PIC  Z(07)9.99-.
-001210	   03  TL-L3 REDEFINES W02-PRN-LINE.
-001220	       05  FILLER      PIC  X(02).
-001230	       05  TL-LEDG     PIC  9(03).
-001240	       05  FILLER      PIC  X(01).
-001250	       05  TL-NME      PIC  X(37).
-001260	       05  FILLER      PIC  X(01).
-001270	       05  TL-ACT      PIC  99/99/9999.
-	       05  FILLER      PIC  X(01).
-001280	       05  TL-PD       PIC  Z(05)9.99-.
-001290	       05  FILLER      PIC  X(01).
-001300	       05  TL-MTH      PIC  9(01).
-001310	       05  FILLER      PIC  X(02).
-001320	       05  TL-BAL      PIC  Z(05)9.99-.
-001330	   03  I-L1 REDEFINES W02-PRN-LINE.
-001340	       05 I-H1	       PIC  X(07).
-001350	       05 I-H2	       PIC  X(35).
-001360	       05 I-H3	       PIC  X(09).
-001370	       05 I-H4	       PIC  X(14).
-001380	       05 I-H5	       PIC  X(14).
-001390	       05 I-H6	       PIC  X(11).
-001400	       05 I-H7	       PIC  X(06).
-001410	   03  I-L8 REDEFINES W02-PRN-LINE.
-001420	       05 I-AC	       PIC  X(06).
-001430	       05 FILLER       PIC  X(01).
-001440	       05 I-NAME       PIC  X(31).
-001450	       05 FILLER       PIC  X(01).
-001460	       05 I-DATE       PIC  Z9/99/9999.
-001470	       05 FILLER       PIC  X(01).
-001480	       05 I-REF        PIC  X(08).
-001490	       05 FILLER       PIC  X(01).
-001500	       05 I-CAP        PIC  Z(07)9.99-.
-001510	       05 FILLER       PIC  X(01).
-001520	       05 I-GST        PIC  Z(06)9.99-.
-001530	       05 FILLER       PIC  X(01).
-001540	       05 I-TOT        PIC  Z(07)9.99-.
+           03  R-SL1 REDEFINES W02-PRN-LINE.
+               05  R-SLA             PIC  X(78).
+               05  FILLER            PIC  X(58).
+           03  R-SL2 REDEFINES W02-PRN-LINE.
+               05  FILLER            PIC  X(58).
+               05  R-SLB             PIC  X(78).
+000350     03  R-L1 REDEFINES W02-PRN-LINE.
+000360         05  R-DET1            PIC  X(136).
+000370     03  R-L2 REDEFINES W02-PRN-LINE.
+000380         05  R-DET2            PIC  X(80).
+000390     03  R-L3 REDEFINES W02-PRN-LINE.
+000400         05  R-DATE            PIC  X(06).
+000410         05  R-DTE             PIC  Z9/99/9999.
+000420         05  FILLER            PIC  X(04).
+000430         05  R-H5              PIC  X(46).
+000440         05  R-H6              PIC  X(07).
+000450         05  R-BATCH           PIC  Z(05)9.
+000460         05  FILLER            PIC  X(07).
+               05  R-PAGE            PIC  X(06).
+               05  R-P-NO            PIC  Z(03)9.
+           03  R-L3A REDEFINES W02-PRN-LINE.
+               05  FILLER            PIC  X(04).
+               05  R-CO              PIC  X(40).
+               05  FILLER            PIC  X(04).
+000470     03  R-L4 REDEFINES W02-PRN-LINE.
+000480         05  FILLER            PIC  X(11).
+000490         05  R-H1              PIC  X(04).
+000500         05  FILLER            PIC  X(06).
+000510         05  R-H2              PIC  X(15).
+000520         05  FILLER            PIC  X(06).
+000530         05  R-H3              PIC  X(15).
+000540         05  FILLER            PIC  X(06).
+000550         05  R-H4              PIC  X(06).
+000560         05  FILLER            PIC  X(11).
+000570     03  R-L5 REDEFINES W02-PRN-LINE.
+000580         05  FILLER            PIC  X(12).
+000590         05  R-TRAN            PIC  9(02).
+000600         05  FILLER            PIC  X(09).
+000610         05  R-ENG             PIC  X(12).
+000620         05  FILLER            PIC  X(09).
+000630         05  R-AFR             PIC  X(12).
+000640         05  FILLER            PIC  X(10).
+000650         05  R-ACT             PIC  X(01).
+000660         05  FILLER            PIC  X(13).
+000740     03  R-L7 REDEFINES W02-PRN-LINE.
+000750         05  R-H7              PIC  X(07).
+               05  R-H7A             PIC  X(27).
+000760         05  R-H8              PIC  X(07).
+000770         05  R-H10             PIC  X(09).
+000780         05  R-H11             PIC  X(15).
+000790         05  R-H12             PIC  X(14).
+               05  R-H13             PIC  X(11).
+               05  R-H14             PIC  X(06).
+000800     03  R-L8 REDEFINES W02-PRN-LINE.
+000810         05  R-TAC             PIC  X(06).
+000820         05  FILLER            PIC  X(01).
+000830         05  R-DNME            PIC  X(23).
+000840         05  FILLER            PIC  X(01).
+000850         05  R-TDTE            PIC  X(10).
+000860         05  FILLER            PIC  X(01).
+               05  R-TDESC           PIC  X(07).
+               05  FILLER            PIC  X(01).
+000870         05  R-TREF            PIC  X(08).
+000880         05  FILLER            PIC  X(01).
+000890         05  R-VAL             PIC  Z(07)9.99-.
+001020         05  FILLER            PIC  X(01).
+               05  R-TAX             PIC  Z(06)9.99-.
+001020         05  FILLER            PIC  X(01).
+001040         05  R-TOT             PIC  Z(07)9.99-.
+000900     03  R-L9 REDEFINES W02-PRN-LINE.
+000910         05  FILLER            PIC  X(54).
+000920         05  R-BTOT            PIC  Z(06)9.99-.
+000930         05  FILLER            PIC  X(15).
+001090     03  R-L10 REDEFINES W02-PRN-LINE.
+               05  FILLER            PIC  X(10).
+001100         05  I-H8              PIC  X(09).
+001110         05  I-TOTTAX          PIC  Z(07)9.99-.
+001120         05  FILLER            PIC  X(02).
+001130         05  I-H9              PIC  X(08).
+001140         05  I-TOTEXE          PIC  Z(07)9.99-.
+001150         05  FILLER            PIC  X(02).
+001160         05  I-H10             PIC  X(08).
+001170         05  I-TOTGST          PIC  Z(07)9.99-.
+001180         05  FILLER            PIC  X(02).
+001190         05  I-H11             PIC  X(07).
+001200         05  I-TOTBCH          PIC  Z(07)9.99-.
+001210     03  TL-L3 REDEFINES W02-PRN-LINE.
+001220         05  FILLER            PIC  X(02).
+001230         05  TL-LEDG           PIC  9(03).
+001240         05  FILLER            PIC  X(01).
+001250         05  TL-NME            PIC  X(37).
+001260         05  FILLER            PIC  X(01).
+001270         05  TL-ACT            PIC  99/99/9999.
+               05  FILLER            PIC  X(01).
+001280         05  TL-PD             PIC  Z(05)9.99-.
+001290         05  FILLER            PIC  X(01).
+001300         05  TL-MTH            PIC  9(01).
+001310         05  FILLER            PIC  X(02).
+001320         05  TL-BAL            PIC  Z(05)9.99-.
+001330     03  I-L1 REDEFINES W02-PRN-LINE.
+001340         05 I-H1	             PIC  X(07).
+001350         05 I-H2	             PIC  X(35).
+001360         05 I-H3	             PIC  X(09).
+001370         05 I-H4	             PIC  X(14).
+001380         05 I-H5	             PIC  X(14).
+001390         05 I-H6	             PIC  X(11).
+001400         05 I-H7	             PIC  X(06).
+001410    03  I-L8 REDEFINES W02-PRN-LINE.
+001420         05 I-AC	             PIC  X(06).
+001430         05 FILLER             PIC  X(01).
+001440         05 I-NAME             PIC  X(31).
+001450         05 FILLER             PIC  X(01).
+001460         05 I-DATE             PIC  Z9/99/9999.
+001470         05 FILLER             PIC  X(01).
+001480         05 I-REF              PIC  X(08).
+001490         05 FILLER             PIC  X(01).
+001500         05 I-CAP              PIC  Z(07)9.99-.
+001510         05 FILLER             PIC  X(01).
+001520         05 I-GST              PIC  Z(06)9.99-.
+001530         05 FILLER             PIC  X(01).
+001540         05 I-TOT              PIC  Z(07)9.99-.
 
-       COPY W05.VAT.
+       COPY "W05.VAT".
 
        01  W05-DISC.
-000630	   03  W05-DISCOUNT.
-000640         05  W05-DSETT   PIC S9(03)V99 COMP-3 OCCURS 10.
+000630     03  W05-DISCOUNT.
+000640         05  W05-DSETT         PIC S9(03)V99 COMP-3 OCCURS 10.
 
-001270* 01  W08-EXPD.
-      *	   03  W08-CHAR        PIC  X(06).
-001280*	   03  W08-DEC REDEFINES W08-CHAR
-      *			       PIC  X(01) COMP-X OCCURS 6.
+001270*01  W08-EXPD.
+      *    03  W08-CHAR              PIC  X(06).
+001280*    03  W08-DEC REDEFINES W08-CHAR  PIC  X(01) COMP-X OCCURS 6.
 
 002500 01  W10-SPARES.
-002510	   03  W10-DATE	    PIC X(10).
-002520	   03  W10-EDTE REDEFINES W10-DATE PIC 99/99/9999.
+002510     03  W10-DATE              PIC X(10).
+002520     03  W10-EDTE REDEFINES W10-DATE PIC 99/99/9999.
 
        01  W10-REF.
-           03  W10-NUM         PIC  9(08).
-	   03  W10-REF1 REDEFINES W10-NUM.
-	       05  FILLER      PIC  X(07).
-	       05  W10-N1.
-	       07  W10-NUM1    PIC  9(01).
-	   03  W10-REF2 REDEFINES W10-NUM.
-	       05  FILLER      PIC  X(06).
-	       05  W10-N2.
-	       07  W10-NUM2    PIC  9(02).
-	   03  W10-REF3 REDEFINES W10-NUM.
-	       05  FILLER      PIC  X(05).
-	       05  W10-N3.
-	       07  W10-NUM3    PIC  9(03).
+           03  W10-NUM               PIC  9(08).
+           03  W10-REF1 REDEFINES W10-NUM.
+               05  FILLER            PIC  X(07).
+               05  W10-N1.
+                   07  W10-NUM1      PIC  9(01).
+           03  W10-REF2 REDEFINES W10-NUM.
+               05  FILLER            PIC  X(06).
+               05  W10-N2.
+                   07  W10-NUM2      PIC  9(02).
+           03  W10-REF3 REDEFINES W10-NUM.
+               05  FILLER            PIC  X(05).
+               05  W10-N3.
+                   07  W10-NUM3      PIC  9(03).
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
-002860     03  W25-RESULT      PIC 9(05)V99.
+002860     03  W25-RESULT            PIC  9(05)V99.
 002870     03  W25-RESULT1 REDEFINES W25-RESULT.
-002880         05  W25-WHOLE   PIC 9(05).
-002890         05  W25-DECIMAL PIC 9(02).
+002880         05  W25-WHOLE         PIC  9(05).
+002890         05  W25-DECIMAL       PIC  9(02).
            03  W25-RESULT2 REDEFINES W25-RESULT.
-               05  W25-KEY    PIC 9(04).
-               05  W25-SUB    PIC 9(01).
-               05  FILLER     PIC 9(02).
-002900     03  W25-TOTAL       PIC S9(09)V99 COMP-3.
-002910     03  W25-VALUE       PIC S9(09)V99 COMP-3.
+               05  W25-KEY           PIC  9(04).
+               05  W25-SUB           PIC  9(01).
+               05  FILLER            PIC  9(02).
+002900     03  W25-TOTAL             PIC S9(09)V99 COMP-3.
+002910     03  W25-VALUE             PIC S9(09)V99 COMP-3.
 
        01  W30-AGE-DATES.
-	   03  W30-120	       PIC  9(08) COMP-3.
-	   03  W30-90	       PIC  9(08) COMP-3.
-	   03  W30-60	       PIC  9(08) COMP-3.
-	   03  W30-30	       PIC  9(08) COMP-3.
-	   03  W30-CUR	       PIC  9(08) COMP-3.
+           03  W30-120               PIC  9(08) COMP-3.
+           03  W30-90                PIC  9(08) COMP-3.
+           03  W30-60                PIC  9(08) COMP-3.
+           03  W30-30                PIC  9(08) COMP-3.
+           03  W30-CUR               PIC  9(08) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
 003890 01  W45-TRAN.
-003900     03  W45-CODE        PIC 9(02).
-003910     03  W45-ENG         PIC X(12).
-003920     03  W45-AFR         PIC X(12).
-003930     03  W45-ACT         PIC X(01).
+003900     03  W45-CODE              PIC  9(02).
+003910     03  W45-ENG               PIC  X(12).
+003920     03  W45-AFR               PIC  X(12).
+003930     03  W45-ACT               PIC  X(01).
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS".
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -498,58 +463,58 @@
 003580     03  W60-ADDRESS.
 003590         05  W60-ACHAR OCCURS 70 PIC X(01).
 003580     03  W60-ADDR REDEFINES W60-ADDRESS.
-               05  W60-ADD     PIC X(60).
-               05  FILLER      PIC X(10).
+               05  W60-ADD           PIC  X(60).
+               05  FILLER            PIC  X(10).
 003600     03  W60-ADDRESS1.
-               05  W60-PAD     PIC X(60).
-               05  FILLER      PIC X(10).
+               05  W60-PAD           PIC  X(60).
+               05  FILLER            PIC  X(10).
 
        01  W75-KEYS.
-           03  W75-S          PIC 9(02) COMP-5.
-           03  W75-S1         PIC 9(02) COMP-5.
-           03  W75-KEY        PIC  9(06)    COMP-5.
-           03  W75-ALLOCATED  PIC S9(09)V99 COMP-3.
-           03  W75-BALANCE    PIC S9(09)V99 COMP-3.
-           03  W75-DNO        PIC X(06) OCCURS 18.
-	   03  W75-CODE       PIC Z9.
+           03  W75-S                 PIC  9(02) COMP-5.
+           03  W75-S1                PIC  9(02) COMP-5.
+           03  W75-KEY               PIC  9(06)    COMP-5.
+           03  W75-ALLOCATED         PIC S9(09)V99 COMP-3.
+           03  W75-BALANCE           PIC S9(09)V99 COMP-3.
+           03  W75-DNO               PIC  X(06) OCCURS 18.
+           03  W75-CODE              PIC  Z9.
 
 003910 01  W80-ACCOUNT.
-003920     03  W80-ACNO        PIC X(06).
-003940     03  W80-TYPE        PIC 9(01).
+003920     03  W80-ACNO              PIC  X(06).
+003940     03  W80-TYPE              PIC  9(01).
 
 006270 01  W85-PASS.
-006280     03  W85-SUPER       PIC  X(06)    OCCURS 9.
-006290     03  W85-ENTRY       PIC  9(02)    COMP-3.
-006300     03  W85-MARG        PIC S9(02)V99.
+006280     03  W85-SUPER             PIC  X(06)    OCCURS 9.
+006290     03  W85-ENTRY             PIC  9(02)    COMP-3.
+006300     03  W85-MARG              PIC S9(02)V99.
 
 003960 01  W85-BATCHES.
-003970         05  W85-BATCH   PIC  9(06)    COMP-5.
+003970     03  W85-BATCH             PIC  9(06)    COMP-5.
 
-       COPY W90.DBT.
+       COPY "W90.DBT".
 
 004390 01  W95-STM.
-004400     03  W95-COMP        PIC X(40).
+004400     03  W95-COMP              PIC X(40).
 004410     03  W95-V1.
-004420         05  W95-T       PIC Z(04)9.99.
+004420         05  W95-T             PIC Z(04)9.99.
 004430     03  W95-V2.
-004440         05  W95-B       PIC Z(06)9.99-.
+004440         05  W95-B             PIC Z(06)9.99-.
 004450     03  W95-D.
-004460	       05  W95-DTE     PIC Z9/99/9999.
-004470     03  W95-POST        PIC 9(04).
-004480     03  W95-TEL         PIC X(08).
+004460         05  W95-DTE           PIC Z9/99/9999.
+004470     03  W95-POST              PIC 9(04).
+004480     03  W95-TEL               PIC X(08).
 
 004490 01  W100-EDIT.
-004500     03  W100-LBAL       PIC Z(06)9.99-.
-004500     03  W100-LARR       PIC Z(06)9.99.
-004500     03  W100-BAL        PIC Z(08)9.99-.
-004510     03  W100-CUR        PIC Z(08)9.99-.
-004520     03  W100-30         PIC Z(08)9.99-.
-004530     03  W100-60         PIC Z(08)9.99-.
-004540     03  W100-90         PIC Z(08)9.99-.
-004540     03  W100-120        PIC Z(08)9.99-.
-004550	   03  W100-INT        PIC Z(08)9.99B.
-004560	   03  W100-CRL        PIC Z(06)9.
-004570     03  W100-KEY        PIC Z(05)9.
+004500     03  W100-LBAL             PIC Z(06)9.99-.
+004500     03  W100-LARR             PIC Z(06)9.99.
+004500     03  W100-BAL              PIC Z(08)9.99-.
+004510     03  W100-CUR              PIC Z(08)9.99-.
+004520     03  W100-30               PIC Z(08)9.99-.
+004530     03  W100-60               PIC Z(08)9.99-.
+004540     03  W100-90               PIC Z(08)9.99-.
+004540     03  W100-120              PIC Z(08)9.99-.
+004550     03  W100-INT              PIC Z(08)9.99B.
+004560     03  W100-CRL              PIC Z(06)9.
+004570     03  W100-KEY              PIC Z(05)9.
 
        01  W200-MEMO.
            03  W200-MEM-FLDS.
@@ -570,25 +535,25 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 004580 SCREEN SECTION.
 
-       COPY BLANK.CRT.
+       COPY "DEBLUP.CRT".
 
-       COPY DEBLUP.CRT.
-
-       COPY TRNLUP.CRT.
+       COPY "TRNLUP.CRT".
 
        01  S08A.
            03  LINE 16 COLUMN  6 VALUE "Allocation:".
            03  LINE 17 COLUMN  6 VALUE "Ref. No.".
-	   03	       COLUMN 18 VALUE "Date".
-	   03	       COLUMN 26 VALUE "Transaction".
-	   03	       COLUMN 46 VALUE "Value".
-	   03	       COLUMN 57 VALUE "Balance".
-	   03	       COLUMN 69 VALUE "Allocate".
+           03          COLUMN 18 VALUE "Date".
+           03          COLUMN 26 VALUE "Transaction".
+           03          COLUMN 46 VALUE "Value".
+           03          COLUMN 57 VALUE "Balance".
+           03          COLUMN 69 VALUE "Allocate".
 
 005580 01  S12.
 005590	   03  LINE  9 COLUMN 12 VALUE "Name :".
@@ -812,15 +777,8 @@
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-       COPY S99.CRT.
-
-       COPY OPT.CRT.
-
-       COPY ERROR.CRT.
-
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION  USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 008230 AA000		       SECTION.
 008240 AA00.
 003240	   IF LS0-DBLEV < 3
@@ -856,67 +814,67 @@
        AA99.
              EXIT.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY OPTION.CRT.
+       COPY "OPTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY DBTRAN.RD1.
+       COPY "DBTRAN.RD1".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-000140 COPY DEBTRN.RD.
+000140 COPY "DEBTRN.RD".
 
-       COPY DEPART.RD.
+       COPY "DEPART.RD".
 
-       COPY LEDTRF.RD.
+       COPY "LEDTRF.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DBTRAN.WRR.
+       COPY "DBTRAN.WRR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-000140 COPY DEBMEM.WR.
+000140 COPY "DEBMEM.WR".
 
-000140 COPY DEBTRN.WR.
+000140 COPY "DEBTRN.WR".
 
-       COPY DEPART.WR.
+       COPY "DEPART.WR".
 
-       COPY LEDTRF.WR.
+       COPY "LEDTRF.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY TXTRAN.WR.
+       COPY "TXTRAN.WR".
 
-       COPY DEBTOR.LUP.
+       COPY "DEBTOR.LUP".
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
-       COPY PRINTUTL.AS5.
+       COPY "PRINTUTL.AS5".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
@@ -2139,15 +2097,15 @@
        CG300.
              EXIT.
 
-       COPY DEBTOR52.TRN.
+       COPY "DEBTOR52.TRN".
 
-       COPY DBTRAN53.LUP.
+       COPY "DBTRAN53.LUP".
 
-       COPY DEBTOR54.TRA.
+       COPY "DEBTOR54.TRA".
 
-       COPY LEDTRF55.UPD.
+       COPY "LEDTRF55.UPD".
 
-       COPY DEBTOR56.ALL.
+       COPY "DEBTOR56.ALL".
 
        HA000	       SECTION 57.
        HA00.
@@ -2229,137 +2187,12 @@
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Setup the file ID's including path names           ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      *    *************************************************************
-      *    ****    P A R A M E T E R   F I L E
-      *    *************************************************************
-       ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
 
-       ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
-
-       ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
-
-       ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
-      *    *************************************************************
-      *    ****    D E B T O R	 T R A N S A C T I O N	 F I L E    ****
-      *    *************************************************************
-	     MOVE "DBTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DBTRAN.
-      *    *************************************************************
-      *    ** D E B T O R   T R A N S A C T I O N   W O R K   F I L E **
-      *    *************************************************************
-	     MOVE "DEBTRN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     INSPECT AFID-PATH REPLACING FIRST "XXX"
-			       BY LS-USER.
-	     MOVE AFID-PATH	 TO W02-DEBTRN.
-      *    *************************************************************
-      *    **** 	  D E B T O R	M E M O	  F I L E	    ****
-      *    *************************************************************
-	     MOVE "DEBMEM"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBMEM.
-      *    *************************************************************
-      *    ****  D E B T O R   A C C O U N T   ( A / R )   F I L E  ****
-      *    *************************************************************
-	     MOVE "DEBTOR"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBTOR.
-      *    *************************************************************
-      *    **** 	   D E P A R T M E N T	 F I L E	    ****
-      *    *************************************************************
-	     MOVE "DEPART"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEPART.
-      *    *************************************************************
-      *    **** 	  I N T E G R A T I O N	  F I L E	    ****
-      *    *************************************************************
-	     MOVE "LEDTRF"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-LEDTRF.
-      *    *************************************************************
-      *    **** 	    C O N T R O L   F I L E		    ****
-      *    *************************************************************
-	     MOVE "NETWORK"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-NETWORK.
-      *    *************************************************************
-      *    **** 	    R E C O V E R Y   F I L E		    ****
-      *    *************************************************************
-	     MOVE "RECOVER"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     INSPECT AFID-PATH REPLACING FIRST "XXX"
-			       BY LS-USER.
-	     MOVE AFID-PATH	 TO W02-RECOVER.
-      *    *************************************************************
-      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
-      *    *************************************************************
-	     MOVE "SHARED"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-SHARED.
-      *    *************************************************************
-      *    ****      V A T   T R A N S A C T I O N S   F I L E	    ****
-      *    *************************************************************
-	     MOVE "TXTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-TXTRAN.
+             COPY "FUNCTION.PRO".
 
 042170 ZA02.
 042490	     OPEN OUTPUT RECOVER.
@@ -2449,33 +2282,18 @@
       *
 042900 ZB000-ERROR	     SECTION 81.
 
-041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-
-041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-
-041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-041510       GO TO DISPLAY-FILE-NAME.
-       I-O-ERROR-EXIT.
-             EXIT.
+       COPY "ERRORS.PRO".
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK TO WS-FILE
 041630         MOVE WS-NETKEY TO WS-KEY
-041760	   ELSE
+041760     ELSE
 041770     IF WS-F-ERROR = 6
 041780         MOVE W02-DEBTOR TO WS-FILE
 041790         MOVE ZERO         TO WS-KEY
                MOVE DEB-ACNO     TO WS-KEYX
-041840	   ELSE
+041840     ELSE
 041810	   IF WS-F-ERROR = 7
 041820	       MOVE W02-DEPART	 TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
@@ -2511,32 +2329,5 @@
 041860         MOVE W02-LEDTRF   TO WS-FILE
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE XFR-KEY	 TO WS-KEYX.
-041880	   IF WS-STATUS = "10"
-041890         MOVE "End of FILE" TO WS-STAT-MESSAGE
-041900     ELSE
-041910     IF WS-STATUS = "22"
-041920         MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-041930     ELSE
-041940     IF WS-STATUS = "23"
-041950         MOVE "Invalid record number" TO WS-STAT-MESSAGE
-041960     ELSE
-041970     IF WS-STATUS = "24"
-041980         MOVE "DISK full" TO WS-STAT-MESSAGE
-041990     ELSE
-042000     IF WS-STATUS = "30"
-042010         MOVE "DISK error" TO WS-STAT-MESSAGE
-042020     ELSE
-042030     IF WS-STATUS = "94"
-042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94"
-045410         DISPLAY "Key    " AT 1412
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
-045420         DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-045440         DISPLAY "Please make a note of these details" AT 1812.
-042170       STOP RUN.
+
+       COPY "DISPERR.PRO".

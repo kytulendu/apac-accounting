@@ -1,19 +1,19 @@
       $SET LINKCOUNT"384"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	   ******    ******    *
-      *   **	**     **     **    **	 **  **   **	**  **	  **   *
-      *   **	**     **     **    **	**    **	**	 **    *
-      *   **	**     **     *******	**    **     ****      **      *
-      *   **	**     **     **	**    **	**   **        *
-      *   **	**     **     **	 **  **   **	**  **	       *
-      *   *******      **     **	  ****	   ******   ********   *
+      *   *******   ********  *******     ****	   ******    ******    *
+      *   **    **     **     **    **   **  **   **    **  **    **   *
+      *   **    **     **     **    **  **    **        **       **    *
+      *   **    **     **     *******   **    **     ****      **      *
+      *   **    **     **     **        **    **        **   **        *
+      *   **    **     **     **         **  **   **    **  **         *
+      *   *******      **     **          ****	   ******   ********   *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *     D E B T O R	  C O N T R A C T   R E P O R T S	       *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   February 1985.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -63,36 +63,36 @@
 000100 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "APACFIDS.SL".
 
-       COPY CONTROL.SL.
+       COPY "CONTROL.SL".
 
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBTOR.ISL".
 
-000160 COPY DBFOTO.SL.
+000160 COPY "DBFOTO.SL".
 
 000220 DATA DIVISION.
 000230 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "APACFIDS.FDE".
 
-       COPY CONTROL.FDE.
+       COPY "CONTROL.FDE".
 
-000250 COPY PARAM.FDE.
+000250 COPY "PARAM.FDE".
 
-000270 COPY DEBTOR.FDE.
+000270 COPY "DEBTOR.FDE".
 
-000290 COPY DBFOTO.FDE.
+000290 COPY "DBFOTO.FDE".
 
       /
       *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   ** 
-      *         **    *    **   **    **   **   **    **  **  
-      *         **   ***   **   **    **   ******     *****   
-      *          ** ** ** **    **    **   **   **    **  **  
-      *           ***   ***     **    **   **    **   **   ** 
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
       *            *     *       ******    **    **   **    **
       *
 002780 WORKING-STORAGE SECTION.
@@ -148,6 +148,7 @@
 003330 77  WS-S8           PIC 9(04)     COMP-5.
 003410 77  WS-O 	   PIC X(08) VALUE "INTERNAL".
 003420 77  WS-AC           PIC X(07) VALUE "Account".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -202,7 +203,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-003440 COPY WS.WS.
+003440 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
@@ -210,18 +211,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-003520 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY DBFOTO.ID.
-
-       COPY PARAM.ID.
 
        01  W02-PRINTER-DETAILS.
 	   03  W02-PRINTER     PIC  X(12).
@@ -351,15 +340,15 @@
 001270 01  W08-EXPD.
 001280	   03  W08-DEC	       PIC 9(03) OCCURS 6.
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-005170 COPY W50.WS.
+005170 COPY "W50.WS".
 
 005190 01  W60-NME-ADD.
 005200     03  W60-NAME.
@@ -382,12 +371,12 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 005990 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
        01  S01.
 	   03  LINE  2 COLUMN 25 FOREGROUND-COLOR 7 HIGHLIGHT VALUE
@@ -401,8 +390,6 @@
 	   03	       COLUMN 29 FOREGROUND-COLOR 6 HIGHLIGHT
 				 VALUE "A".
 	   03	       COLUMN 30 VALUE "ll contracts".
-
-       COPY ERROR.CRT.
 
       /
 001230 PROCEDURE DIVISION
@@ -421,32 +408,32 @@
        AA49.
 006950	     EXIT PROGRAM.
 
-       COPY FUNCTION.SCR.
+       COPY "FUNCTION.SCR".
 
-       COPY ERROR.SCR.
+       COPY "ERROR.SCR".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY ABORT.PRN.
+       COPY "ABORT.PRN".
 
-       COPY PRINTUTL.AP5.
+       COPY "PRINTUTL.AP5".
 
       /
       *    ****    READ FILES ROUTINES
       *
 007340 AC000-READ              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY PARAM.RD.
-      
-       COPY DEBTOR.RD1.
-      
-       COPY DBFOTO.RD.
+       COPY "PARAM.RD".
 
-       COPY APAC.HLP.
+       COPY "DEBTOR.RD1".
+
+       COPY "DBFOTO.RD".
+
+       COPY "APAC.HLP".
 
 009120 CA165-NAME	       SECTION 2.
 009130 CA165-EXTRACT.
@@ -844,22 +831,22 @@
 025930       EXIT.
       /
 025940 ZB000		     SECTION 9.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -896,11 +883,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
                         " " WS-KEYX WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"

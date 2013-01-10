@@ -13,7 +13,7 @@
       *                                                                *
       *     S T O C K	M O D U L E   M E N U	P R O G R A M          *
       *                                                                *
-      *     VERSION 8.15.01 - August 2011	                             *
+      *     VERSION 9.00.00 - November 2012                            *
       * 							                       *
       ******************************************************************
       * 		                                                     *
@@ -64,7 +64,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   JANUARY 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -165,8 +165,7 @@
 
       /
 000560 WORKING-STORAGE SECTION.
-       77  WS-CHECK            PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 000610 77  WS-S1	   PIC	9(04)	 COMP-5.
 000620 77  WS-S2           PIC  9(04)    COMP-5.
 000630 77  WS-S3           PIC  9(04)    COMP-5.
@@ -182,21 +181,20 @@
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
 
 001350 01  WS-CRT-LINES.
-001380	   03  WS-TOP-LNE2.
-001390	       05  WS-TCR   PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-      -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-001400	   03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
+001380     03  WS-TOP-LNE2.
+001390         05  WS-TCR      PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
+001400     03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
 001410         05  FILLER      PIC  X(01).
 001420         05  WS-TOP-COMP PIC  X(40).
-001430	       05  FILLER      PIC  X(23).
-	       05  WS-WRKHD    PIC  X(11).
-001430	       05  FILLER      PIC  X(01).
-	       05  WS-WRKST    PIC  X(03).
-001430	       05  FILLER      PIC  X(01).
-001460	   03  WS-MID-LNE2.
-	       05  FILLER      PIC  X(01) VALUE "³".
-	       05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-	       05  FILLER      PIC  X(01) VALUE "³".
+001430         05  FILLER      PIC  X(23).
+               05  WS-WRKHD    PIC  X(11).
+001430         05  FILLER      PIC  X(01).
+               05  WS-WRKST    PIC  X(03).
+001430         05  FILLER      PIC  X(01).
+001460     03  WS-MID-LNE2.
+               05  FILLER      PIC  X(01) VALUE "³".
+               05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
+               05  FILLER      PIC  X(01) VALUE "³".
 
 001840 COPY "WS.WS".
 
@@ -236,46 +234,46 @@
 002220 COPY "WSTOCK.ID".
 
        01  BLOCK-DETAIL1.
-	   03  ORIGINAL-VID1.
-	       05  ORIGINAL-CHAR1 PIC  X(01) OCCURS 80.
-	   03  REVERSE-VID1.
-	       05  REVERSE-CHAR1  PIC  X(01) OCCURS 80.
+           03  ORIGINAL-VID1.
+               05  ORIGINAL-CHAR1    PIC  X(01) OCCURS 80.
+           03  REVERSE-VID1.
+               05  REVERSE-CHAR1     PIC  X(01) OCCURS 80.
 
        01  SHADOW-DETAIL1.
-	   03  SHAD1-ROW       PIC  9(02) COMP-X.
-	   03  SHAD1-COL       PIC  9(02) COMP-X.
-	   03  SHAD1-LINES     PIC  9(02) COMP-X.
-	   03  SHAD1-WIDTH     PIC  9(02) COMP-X.
-	   03  SHAD1-CHAR      PIC  X(01).
+           03  SHAD1-ROW             PIC  9(02) COMP-X.
+           03  SHAD1-COL             PIC  9(02) COMP-X.
+           03  SHAD1-LINES           PIC  9(02) COMP-X.
+           03  SHAD1-WIDTH           PIC  9(02) COMP-X.
+           03  SHAD1-CHAR            PIC  X(01).
 
        01  CRT-DETAIL1.
-	   03  TOP-ROW1        PIC  9(02) COMP-X.
-	   03  BOTTOM-ROW1     PIC  9(02) COMP-X.
-	   03  STRING-LENGTH1  PIC  9(04) COMP-X.
-	   03  SCREEN-POSITION1.
-	       05  SCREEN-LIN1 PIC  9(02) COMP-X.
-	       05  SCREEN-COL1 PIC  9(02) COMP-X.
+           03  TOP-ROW1              PIC  9(02) COMP-X.
+           03  BOTTOM-ROW1           PIC  9(02) COMP-X.
+           03  STRING-LENGTH1        PIC  9(04) COMP-X.
+           03  SCREEN-POSITION1.
+               05  SCREEN-LIN1       PIC  9(02) COMP-X.
+               05  SCREEN-COL1       PIC  9(02) COMP-X.
 
        01  BLOCK-DETAIL2.
-	   03  ORIGINAL-VID2.
-	       05  ORIGINAL-CHAR2 PIC  X(01) OCCURS 80.
-	   03  REVERSE-VID2.
-	       05  REVERSE-CHAR2  PIC  X(01) OCCURS 80.
+           03  ORIGINAL-VID2.
+               05  ORIGINAL-CHAR2    PIC  X(01) OCCURS 80.
+           03  REVERSE-VID2.
+               05  REVERSE-CHAR2     PIC  X(01) OCCURS 80.
 
        01  SHADOW-DETAIL2.
-	   03  SHAD2-ROW       PIC  9(02) COMP-X.
-	   03  SHAD2-COL       PIC  9(02) COMP-X.
-	   03  SHAD2-LINES     PIC  9(02) COMP-X.
-	   03  SHAD2-WIDTH     PIC  9(02) COMP-X.
-	   03  SHAD2-CHAR      PIC  X(01).
+           03  SHAD2-ROW             PIC  9(02) COMP-X.
+           03  SHAD2-COL             PIC  9(02) COMP-X.
+           03  SHAD2-LINES           PIC  9(02) COMP-X.
+           03  SHAD2-WIDTH           PIC  9(02) COMP-X.
+           03  SHAD2-CHAR            PIC  X(01).
 
        01  CRT-DETAIL2.
-	   03  TOP-ROW2        PIC  9(02) COMP-X.
-	   03  BOTTOM-ROW2     PIC  9(02) COMP-X.
-	   03  STRING-LENGTH2  PIC  9(04) COMP-X.
-	   03  SCREEN-POSITION2.
-	       05  SCREEN-LIN2 PIC  9(02) COMP-X.
-	       05  SCREEN-COL2 PIC  9(02) COMP-X.
+           03  TOP-ROW2              PIC  9(02) COMP-X.
+           03  BOTTOM-ROW2           PIC  9(02) COMP-X.
+           03  STRING-LENGTH2        PIC  9(04) COMP-X.
+           03  SCREEN-POSITION2.
+               05  SCREEN-LIN2       PIC  9(02) COMP-X.
+               05  SCREEN-COL2       PIC  9(02) COMP-X.
 
        COPY "W40.WS".
 
@@ -287,18 +285,12 @@
 
        COPY "CHAIN.LS".
 
+       COPY "FILE.IDS".
+
       /
 000750 SCREEN SECTION.
 
-       01  MENU-INSTRUCT.
-	     03  BACKGROUND-COLOR Cyan.
-	         05  LINE 25 COLUMN  2 VALUE "Use "                       FOREGROUND-COLOR Blue.
-	         05          COLUMN  6 VALUE ""                          FOREGROUND-COLOR Brown HIGHLIGHT.
-	         05          COLUMN  7 VALUE " or "                       FOREGROUND-COLOR Blue	         .
-	         05          COLUMN 11 VALUE ""                          FOREGROUND-COLOR Brown HIGHLIGHT.
-	         05          COLUMN 12 VALUE " to point to an item, and " FOREGROUND-COLOR Blue.
-	         05          COLUMN 38 VALUE "<Enter>"                    FOREGROUND-COLOR Brown HIGHLIGHT.
-	         05          COLUMN 45 VALUE " to Select "                FOREGROUND-COLOR Blue.
+       COPY "MENUINST.CRT".
 
        01  S01.
 001450     03  LINE  2 COLUMN 31 VALUE "STOCK CONTROL MODULE" BACKGROUND-COLOR Blue FOREGROUND-COLOR Grey HIGHLIGHT.
@@ -3911,7 +3903,7 @@
 		      WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
 	     PERFORM SCREEN-SHADOW.
 042550	     ACCEPT WS-PASS AT 1244
-		    WITH BACKGROUND-COLOR 5
+		    WITH BACKGROUND-COLOR Magenta
 			 FOREGROUND-COLOR Cyan HIGHLIGHT AUTO NO-ECHO.
 	     MOVE 8		 TO WS-LENGTH.
 	     CALL "CBL_TOUPPER" USING WS-PASS
@@ -3951,7 +3943,7 @@
 042670 GA15.
 042680	     ACCEPT WS-OPTION AT 1261
 		    WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
+			 BACKGROUND-COLOR Magenta UPDATE AUTO.
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
@@ -3982,7 +3974,7 @@
 
 042790 GA20.
 042800	     ACCEPT WS-PASS AT 1243
-		    WITH BACKGROUND-COLOR 5
+		    WITH BACKGROUND-COLOR Magenta
 			 FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
 	     MOVE 8		 TO WS-LENGTH.
 	     CALL "CBL_TOUPPER" USING WS-PASS

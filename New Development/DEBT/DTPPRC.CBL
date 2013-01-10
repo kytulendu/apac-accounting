@@ -134,6 +134,7 @@
 002270 77  WS-PASSWORD	   PIC X(08).
        77  WS-PRINT	   PIC 9(01).
 002280 77  WS-PASS	   PIC X(08).
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -377,8 +378,6 @@
       /
 004130 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
 000850 01  S-PROG.
 000860	   03  LINE  2 COLUMN 28 FOREGROUND-COLOR 7
 				 HIGHLIGHT
@@ -585,12 +584,6 @@
            03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
-
-004870 COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
-       COPY OPT.CRT.
 
       /
 001230 PROCEDURE DIVISION

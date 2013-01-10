@@ -1,33 +1,33 @@
       $set LINKCOUNT"640"
       ******************************************************************
-      * 							       *
-      *  ******  ******** *******  **	     ******   ******  **   **  *
-      * **    **    **	  **	** **	    **	  ** **    ** **  **   *
-      * **	    **	  **	** **	    **	  ** **    ** ** **    *
-      *  ******     **	  *******  **	    **	  ** **    ** ****     *
-      *       **    **	  **	   **	    **	  ** **    ** ** **    *
-      * **    **    **	  **	   **	    **	  ** **    ** **  **   *
-      *  ******     **	  **	   ********  ******   ******  **   **  *
-      * 							       *
+      *                                                                *
+      *  ******  ******** *******  **        ******   ******  **   **  *
+      * **    **    **	  **    ** **       **	  ** **    ** **  **   *
+      * **          **	  **    ** **       **	  ** **    ** ** **    *
+      *  ******     **	  *******  **       **	  ** **    ** ****     *
+      *       **    **	  **       **       **	  ** **    ** ** **    *
+      * **    **    **	  **       **       **	  ** **    ** **  **   *
+      *  ******     **	  **       ********  ******   ******  **   **  *
+      *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
-      * 	   S T O C K   L O O K - U P S			       *
+      * 	   S T O C K   L O O K - U P S                             *
       *                                                                *
-      *     VERSION 8.14.02 - November 2009			       *
-      * 							       *
+      *     VERSION 9.00.00 - November 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  Aug 2008	- New file (STKALT) - Stock alternate index    *
-      * 		  included for lookups, using any word con-    *
-      * 		  tained in the Stock description.	       *
-      * 							       *
+      *                                                                *
+      *  Aug 2008	- New file (STKALT) - Stock alternate index included *
+      * 		  for lookups, using any word contained in the Stock *
+      * 		  description.                                       *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     STPLOOK.
 000030 AUTHOR.         J.W.LEMMON (CSS).
 000040 DATE-WRITTEN.   JULY 1998.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1998 - 2010
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1998 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -62,143 +62,137 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "APACFIDS.SL".
 
-       COPY CREDIT.SL.
+       COPY "CREDIT.SL".
 
-000120 COPY DEPART.SL.
+000120 COPY "DEPART.SL".
 
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
-000200 COPY SPARTS.SL.
+000200 COPY "SPARTS.SL".
 
-000140 COPY STKALT.SL.
+000140 COPY "STKALT.SL".
 
-000140 COPY STKMEM.SL.
+000140 COPY "STKMEM.SL".
 
-000140 COPY STOCK.SL.
+000140 COPY "STOCK.SL".
 
-       COPY WSTOCK.SL.
+       COPY "WSTOCK.SL".
 
 000250 DATA DIVISION.
 000260 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "APACFIDS.FDE".
 
-       COPY CREDIT.FDE.
+       COPY "CREDIT.FDE".
 
-       COPY DEPART.FDE.
+       COPY "DEPART.FDE".
 
-000280 COPY PARAM.FDE.
+000280 COPY "PARAM.FDE".
 
-000360 COPY SPARTS.FDE.
+000360 COPY "SPARTS.FDE".
 
-000140 COPY STKALT.FDE.
+000140 COPY "STKALT.FDE".
 
-000140 COPY STKMEM.FDE.
+000140 COPY "STKMEM.FDE".
 
-000300 COPY STOCK.FDE.
+000300 COPY "STOCK.FDE".
 
-000280 COPY WSTOCK.FDE.
+000280 COPY "WSTOCK.FDE".
 
       /
 001690 WORKING-STORAGE SECTION.
-       77  WS-CHECK	   PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
-       77  WS-P1	   PIC	9(02)	 COMP-5.
-       77  WS-S1	   PIC	9(02)	 COMP-5.
-002190 77  WS-S2	   PIC	9(04)	 COMP-5.
-002200 77  WS-S3           PIC  9(04)    COMP-5.
-002210 77  WS-S4           PIC  9(04)    COMP-5.
-002220 77  WS-S5           PIC  9(04)    COMP-5.
-002230 77  WS-S6           PIC  9(04)    COMP-5.
-002240 77  WS-S7           PIC  9(04)    COMP-5.
-002250 77  WS-S8           PIC  9(04)    COMP-5.
-002260 77  WS-S9           PIC  9(04)    COMP-5.
-002270 77  WS-IXS          PIC  9(04)    COMP-5.
-002280 77  WS-IXS1         PIC  9(04)    COMP-5.
-002290 77  WS-IXS2         PIC  9(04)    COMP-5.
-002300 77  WS-IXS3         PIC  9(04)    COMP-5.
-002310 77  WS-IXS4         PIC  9(04)    COMP-5.
-001860 77  WS-NETKEY	   PIC	9(06)	 COMP-5.
-001860 77  WS-PARKEY	   PIC	9(06)	 COMP-5.
-       77  WS-USE-CASES	   PIC	X(01).
-002190 77  WS-USE-PACKS    PIC	X(01).
-       77  WS-USE-ITM	   PIC	X(01).
-       77  WS-EXT-STK	   PIC	X(01).
-       77  WS-PRICE	   PIC	X(01).
-       77  WS-OPTION	   PIC	X(01).
-       77  WS-WSTOCK	   PIC	X(01).
-       77  WS-WH-QUANT	   PIC S9(08)V999 COMP-3.
-       77  WS-NODEP	   PIC	X(30) VALUE
-			   "NO SUCH   D E P A R T M E N T".
-001330 77  WS-DESC-H1	   PIC	X(14) VALUE "Description".
-       77  WS-DESC-H2	   PIC	X(14) VALUE "Description 2".
-       77  WS-RT-HD	   PIC	X(10) VALUE "-Retail   ".
-       77  WS-WS-HD	   PIC	X(10) VALUE "-Wholesale".
-       77  WS-CS-HD	   PIC	X(10) VALUE "-Cash sale".
-       77  TODAY-DDMMYY	   PIC	9(08)	 COMP-5.
-       77  WS-USUB	   PIC	9(04)	 COMP-5.
+       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-P1                   PIC  9(02)    COMP-5.
+001570 77  WS-S1                   PIC  9(04)    COMP-5.
+001580 77  WS-S2                   PIC  9(04)    COMP-5.
+001590 77  WS-S3                   PIC  9(04)    COMP-5.
+001600 77  WS-S4                   PIC  9(04)    COMP-5.
+001610 77  WS-S5                   PIC  9(04)    COMP-5.
+001620 77  WS-S6                   PIC  9(04)    COMP-5.
+001630 77  WS-S7                   PIC  9(04)    COMP-5.
+001640 77  WS-S8                   PIC  9(04)    COMP-5.
+001650 77  WS-S9                   PIC  9(04)    COMP-5.
+002270 77  WS-IXS                  PIC  9(04)    COMP-5.
+002850 77  WS-IXS1                 PIC  9(04)    COMP-5.
+002860 77  WS-IXS2                 PIC  9(04)    COMP-5.
+002870 77  WS-IXS3                 PIC  9(04)    COMP-5.
+002880 77  WS-IXS4                 PIC  9(04)    COMP-5.
+001860 77  WS-NETKEY               PIC  9(06)    COMP-5.
+001860 77  WS-PARKEY               PIC  9(06)    COMP-5.
+       77  WS-USE-CASES            PIC  X(01).
+002190 77  WS-USE-PACKS            PIC  X(01).
+       77  WS-USE-ITM              PIC  X(01).
+       77  WS-EXT-STK              PIC  X(01).
+       77  WS-PRICE                PIC  X(01).
+       77  WS-OPTION               PIC  X(01).
+       77  WS-WSTOCK               PIC  X(01).
+       77  WS-WH-QUANT             PIC S9(08)V999 COMP-3.
+       77  WS-NODEP                PIC  X(30)    VALUE "NO SUCH   D E P A R T M E N T".
+001330 77  WS-DESC-H1              PIC  X(14)    VALUE "Description".
+       77  WS-DESC-H2              PIC  X(14)    VALUE "Description 2".
+       77  WS-RT-HD                PIC  X(10)    VALUE "-Retail   ".
+       77  WS-WS-HD                PIC  X(10)    VALUE "-Wholesale".
+       77  WS-CS-HD                PIC  X(10)    VALUE "-Cash sale".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
 003050 01  WS-DB-LINE.
-003080	   03  WS-TOP-LNE2.
-001390	       05  WS-TCR   PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-      -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-003100	   03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-003110         05  FILLER      PIC  X(01).
-003120         05  WS-TOP-COMP PIC  X(40).
-001430	       05  FILLER      PIC  X(23).
-	       05  WS-WRKHD    PIC  X(11).
-001430	       05  FILLER      PIC  X(01).
-	       05  WS-WRKST    PIC  X(03).
-001430	       05  FILLER      PIC  X(01).
-003160	   03  WS-MID-LNE2.
-	       05  FILLER      PIC  X(01) VALUE "³".
-	       05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-	       05  FILLER      PIC  X(01) VALUE "³".
-002470	   03  WS-BOT-LNE2.
-001510	       05  WS-BCR   PIC  X(80) VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-      -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
-003240	   03  WS-B-LINE REDEFINES WS-BOT-LNE2.
-003250         05  FILLER  PIC X(01).
+003080     03  WS-TOP-LNE2.
+001390         05  WS-TCR            PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
+003100     03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
+003110         05  FILLER            PIC  X(01).
+003120         05  WS-TOP-COMP       PIC  X(40).
+001430         05  FILLER            PIC  X(23).
+               05  WS-WRKHD          PIC  X(11).
+001430         05  FILLER            PIC  X(01).
+               05  WS-WRKST          PIC  X(03).
+001430         05  FILLER            PIC  X(01).
+003160     03  WS-MID-LNE2.
+	         05  FILLER            PIC  X(01) VALUE "³".
+	         05  WS-BLNK78         PIC  X(78) VALUE ALL "°".
+	         05  FILLER            PIC  X(01) VALUE "³".
+002470     03  WS-BOT-LNE2.
+001510         05  WS-BCR            PIC  X(80) VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+003240     03  WS-B-LINE REDEFINES WS-BOT-LNE2.
+003250         05  FILLER            PIC X(01).
                05  WS-MEM-LINE.
-003260            07  WS-SRT-LINE
-003270                     PIC X(50).
-                  07  FILLER
-                           PIC X(10).
-003280         05  FILLER  PIC X(19).
-	   03  WS-MM-LINE.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-               05  FILLER  PIC  X(60) VALUE SPACES.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-           03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
+003260             07  WS-SRT-LINE   PIC X(50).
+                   07  FILLER        PIC X(10).
+003280         05  FILLER            PIC X(19).
+           03  WS-MM-LINE.
+               05  FILLER            PIC  X(01) VALUE X"B3".
+               05  FILLER            PIC  X(60) VALUE SPACES.
+               05  FILLER            PIC  X(01) VALUE X"B3".
+           03  WS-HME-LINE           PIC  X(60) VALUE ALL X"CD".
 
-003480 COPY WS.WS.
+003480 COPY "WS.WS".
 
 000290 01  WS-PARID.
-000020	   03  WS-SYS-ID       PIC  X(03).
+000020     03  WS-SYS-ID             PIC  X(03).
 
 002350 01  W02-FID.
 
-       COPY APACFIDS.ID.
+       COPY "APACFIDS.ID".
 
-       COPY CREDIT.ID.
+       COPY "CREDIT.ID".
 
-       COPY DEPART.ID.
+       COPY "DEPART.ID".
 
-       COPY PARAM.ID.
+       COPY "PARAM.ID".
 
-000360 COPY SPARTS.ID.
+000360 COPY "SPARTS.ID".
 
-000140 COPY STKALT.ID.
+000140 COPY "STKALT.ID".
 
-000140 COPY STKMEM.ID.
+000140 COPY "STKMEM.ID".
 
-000300 COPY STOCK.ID.
+000300 COPY "STOCK.ID".
 
-000360 COPY WSTOCK.ID.
+000360 COPY "WSTOCK.ID".
 
-       COPY W05.VAT.
+       COPY "W05.VAT".
 
        01  W09-STOCK.
 	   03  W09-S-MARKUPS.
@@ -223,7 +217,7 @@
        01  W10.
 	   03  W10-ALT-DISC	 PIC  X(01).
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
        01  W30.
 	   03  W30-ITEM.
@@ -234,7 +228,7 @@
 	   03  W30-EXT-CODE REDEFINES W30-ITEM
 				 PIC  X(18).
 
-       COPY W40.WS.
+       COPY "W40.WS".
       *
       *    ****    U S E D   F O R   W O R D   L O O K U P
       *
@@ -246,9 +240,9 @@
 	   03  W40-ALT-KEY.
 	       05  W40-DESC-CH PIC X(01) OCCURS 12.
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-       COPY W50.WS.
+       COPY "W50.WS".
 
        01  W75-KEYS.
 	   03  W75-P		 PIC  9(02) COMP-5.
@@ -341,22 +335,20 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
 
-       COPY W10.LNK.
+       COPY "W10.LNK".
 
       /
 004130 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
-       COPY STOCK.CRT.
+       COPY "STOCK.CRT".
 
 004850 01  S04C.
 004860	   03  LINE  2 COLUMN 34 FOREGROUND-COLOR 7 HIGHLIGHT
 004870                           VALUE "STOCK ENQUIRY".
 
-       COPY STKLUP.CRT.
+       COPY "STKLUP.CRT".
 
        01  S15.
 	   03  LINE  7 COLUMN 11 FOREGROUND-COLOR 0
@@ -555,125 +547,49 @@
 				 PIC ZZZZZZZ9.99 USING W10-WSALE-4 AUTO.
 
        01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
-           "   M E M O / R E M A R K S / S P E C I F I C A T I O N S
-      -    "".
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G12.
-       01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM12 AUTO.
+           03  FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
+               05  LINE  6 COLUMN 17 PIC X(01) USING WS-G9.
+               05          COLUMN 18 PIC X(60) USING WS-MEM-LINE.
+               05          COLUMN 78 PIC X(01) USING WS-G10.
+               05  LINE  7 COLUMN 17 PIC X(01) USING WS-G3.
+               05          COLUMN 18 VALUE "   M E M O / R E M A R K S / C O R R E S P O N D E N C E   ".
+               05          COLUMN 78 PIC X(01) USING WS-G3.
+               05  LINE  8 COLUMN 17 PIC X(01) USING WS-G14.
+               05          COLUMN 18 PIC X(60) USING WS-HME-LINE.
+               05          COLUMN 78 PIC X(01) USING WS-G13.
+               05  LINE  9 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 10 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 11 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 12 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 13 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 14 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 15 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 16 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 17 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 18 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 19 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 20 COLUMN 17 PIC X(62) USING WS-MM-LINE.
+               05  LINE 21 COLUMN 17 PIC X(01) USING WS-G11.
+               05          COLUMN 18 PIC X(60) USING WS-MEM-LINE.
+               05          COLUMN 78 PIC X(01) USING WS-G12.
 
-       COPY ERROR.CRT.
+       01  SA-MEM.
+           03  FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
+               05  LINE  9 COLUMN 18 PIC X(60) USING W200-MEM1  AUTO.
+               05  LINE 10 COLUMN 18 PIC X(60) USING W200-MEM2  AUTO.
+               05  LINE 11 COLUMN 18 PIC X(60) USING W200-MEM3  AUTO.
+               05  LINE 12 COLUMN 18 PIC X(60) USING W200-MEM4  AUTO.
+               05  LINE 13 COLUMN 18 PIC X(60) USING W200-MEM5  AUTO.
+               05  LINE 14 COLUMN 18 PIC X(60) USING W200-MEM6  AUTO.
+               05  LINE 15 COLUMN 18 PIC X(60) USING W200-MEM7  AUTO.
+               05  LINE 16 COLUMN 18 PIC X(60) USING W200-MEM8  AUTO.
+               05  LINE 17 COLUMN 18 PIC X(60) USING W200-MEM9  AUTO.
+               05  LINE 18 COLUMN 18 PIC X(60) USING W200-MEM10 AUTO.
+               05  LINE 19 COLUMN 18 PIC X(60) USING W200-MEM11 AUTO.
+               05  LINE 20 COLUMN 18 PIC X(60) USING W200-MEM12 AUTO.
 
       /
-001230 PROCEDURE DIVISION USING LS-PARID
-				LS-USER-ID
-				LS0-PROGRAMS
-				LS0-SECURITY
-				W10-STOCK.
+001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY W10-STOCK.
 010230 AA000-MAIN	       SECTION.
 010240 AA000-INIT.
 	     PERFORM ZA000-INIT.
@@ -705,42 +621,42 @@
        AA405.
 	     EXIT.
 
-       COPY ERROR.SCR.
+       COPY "ERROR.SCR".
 
-       COPY FUNCTION.SCR.
+       COPY "FUNCTION.SCR".
 
-       COPY LOCKED.RC2.
+       COPY "LOCKED.RC2".
 
-       COPY DATE.CNV.
+       COPY "DATE.CNV".
 
       /    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	       R E A D	 F I L E S   R O U T I N E S	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 008180 AC000-READ	       SECTION.
 
-       COPY CREDIT.RD.
+       COPY "CREDIT.RD".
 
-       COPY DEPART.RD.
+       COPY "DEPART.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-000140 COPY STKMEM.RD.
+000140 COPY "STKMEM.RD".
 
-000140 COPY STKALT.RD.
+000140 COPY "STKALT.RD".
 
-       COPY STOCK.RD.
+       COPY "STOCK.RD".
 
-       COPY SPARTS.RD.
+       COPY "SPARTS.RD".
 
-       COPY WSTOCK.RD.
+       COPY "WSTOCK.RD".
 
-       COPY CA000X.STK.
+       COPY "CA000X.STK".
 
-       COPY CA100.STK.
+       COPY "CA100.STK".
 
-       COPY CA200.STK.
+       COPY "CA200.STK".
 
-       COPY CA500.STK.
+       COPY "CA500.STK".
 
       /
       *    ****    S T O C K   L O O K U P   R O U T I N E

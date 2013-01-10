@@ -154,6 +154,7 @@
 003230 77  WS-BATCH	   PIC	9(05).
 003240 77  WS-MESS	   PIC	X(02).
 003250 77  WS-ACNO	   PIC	X(06).
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -532,8 +533,6 @@
       /
 005990 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
 000850 01  S-PROG.
 000860	   03  LINE  2 COLUMN 22 FOREGROUND-COLOR 7
 				 HIGHLIGHT VALUE
@@ -733,10 +732,6 @@
 				BACKGROUND-COLOR 7 VALUE
 	       "읕컴컴컴컴컴컴컨컴컴컴컴컴컴컨컴컴컴컴컴컴컨컴컴컴컴컴컴
       -	       "컨컴컴컴켸".
-
-       COPY S99.CRT.
-
-       COPY OPT.CRT.
 
       /
 001230 PROCEDURE DIVISION

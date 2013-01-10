@@ -88,11 +88,11 @@
 
       /
       *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   ** 
-      *         **    *    **   **    **   **   **    **  **  
-      *         **   ***   **   **    **   ******     *****   
-      *          ** ** ** **    **    **   **   **    **  **  
-      *           ***   ***     **    **   **    **   **   ** 
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
       *            *     *       ******    **    **   **    **
       *
 002780 WORKING-STORAGE SECTION.
@@ -479,11 +479,11 @@
 004540     03  W100-90         PIC Z(08)9.99-.
 004540     03  W100-120        PIC Z(08)9.99-.
 004550     03  W100-INT        PIC Z(08)9.99.
-004560     03  W100-CRL        PIC Z(06)9.  
+004560     03  W100-CRL        PIC Z(06)9.
 004570     03  W100-KEY        PIC Z(05)9.
 
        01  W200-MEMO.
-           03  W200-MEM-FLDS. 
+           03  W200-MEM-FLDS.
                05  W200-MEM1   PIC  X(60).
                05  W200-MEM2   PIC  X(60).
                05  W200-MEM3   PIC  X(60).
@@ -505,8 +505,6 @@
 
       /
 005990 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
        01  MENU-INSTRUCT.
 	   03  LINE 25 COLUMN  2 BACKGROUND-COLOR 3
@@ -619,8 +617,6 @@
 				 BACKGROUND-COLOR 7 PIC  Z9
 				 USING WS-DISC AUTO.
 
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -655,9 +651,9 @@
        COPY CONTROL.RD.
 
        COPY PARAM.RD.
-      
+
        COPY DEBTOR.RD1.
-      
+
        COPY DEPART.RD.
 
        COPY PRINTUTL.AP5.
@@ -1393,22 +1389,22 @@
 025930       EXIT.
       /
 025940 ZB000		     SECTION 91.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -1445,11 +1441,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
                         " " WS-KEYX WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"

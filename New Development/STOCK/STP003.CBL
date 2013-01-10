@@ -1,20 +1,20 @@
       $set LINKCOUNT"512"
       ******************************************************************
       *                                                                *
-      *    ******   ********  *******	  ****	    ****     ******    *
-      *   **	**     **     **    **	 **  **    **  **   **	  **   *
-      *   **	       **     **    **	**    **  **	**	  **   *
-      *    ******      **     *******	**    **  **	**	***    *
-      * 	**     **     **	**    **  **	**	  **   *
-      *   **	**     **     **	 **  **    **  **   **	  **   *
-      *    ******      **     **	  ****	    ****     ******    *
+      *    ******   ********  *******     ****	    ****     ******    *
+      *   **    **     **     **    **   **  **    **  **   **    **   *
+      *   **           **     **    **  **    **  **    **        **   *
+      *    ******      **     *******   **    **  **    **      ***    *
+      * 	    **     **     **        **    **  **    **        **   *
+      *   **    **     **     **         **  **    **  **   **    **   *
+      *    ******      **     **          ****	    ****     ******    *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
-      *        A M E N D   S T O C K   C O D E			       *
+      *        A M E N D   S T O C K   C O D E	                       *
       *                                                                *
-      *     VERSION 8.13.07 - January 2008			       *
-      * 							       *
+      *     VERSION 9.00.00 - November 2012                            *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     STP003.
@@ -56,49 +56,48 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "APACFIDS.SL".
 
-000120 COPY CONTROL.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY DEPART.SL.
+000120 COPY "DEPART.SL".
 
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
-000220 COPY RECOVER.SL.
+000220 COPY "RECOVER.SL".
 
-       COPY SHARED.SL.
+       COPY "SHARED.SL".
 
-000200 COPY SPARTS.SL.
+000200 COPY "SPARTS.SL".
 
-000140 COPY STKMEM.SL.
+000140 COPY "STKMEM.SL".
 
-000140 COPY STOCK.SL.
+000140 COPY "STOCK.SL".
 
 000250 DATA DIVISION.
 000260 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "APACFIDS.FDE".
 
-       COPY CONTROL.FDE.
+       COPY "CONTROL.FDE".
 
-       COPY DEPART.FDE.
+       COPY "DEPART.FDE".
 
-000380 COPY RECOVER.GFD.
+000380 COPY "RECOVER.GFD".
 
-000280 COPY PARAM.FDE.
+000280 COPY "PARAM.FDE".
 
-       COPY SHARED.FDE.
+       COPY "SHARED.FDE".
 
-000360 COPY SPARTS.FDE.
+000360 COPY "SPARTS.FDE".
 
-000140 COPY STKMEM.FDE.
+000140 COPY "STKMEM.FDE".
 
-000300 COPY STOCK.FDE.
+000300 COPY "STOCK.FDE".
 
       /
 001690 WORKING-STORAGE SECTION.
-       77  WS-CHECK	   PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 001700 77  WS-DISC	    PIC 999V99	  COMP-3.
 001710 77  WS-SUB           PIC 9(04)     COMP-5.
 001710 77  WS-S1            PIC 9(04)     COMP-5.
@@ -171,7 +170,8 @@
        77  WS-CS-HD	    PIC	 X(10) VALUE "-Cash sale".
        77  WS-NODEP	    PIC  X(30) VALUE
                             "NO SUCH   D E P A R T M E N T".
-       77  PRG-NAME	   PIC	X(12) VALUE "STP\STPLOOK".
+       77  PRG-STOCK-LUP           PIC  X(12)    VALUE "STP\STPLOOK".
+       77  PRG-NAME                PIC  X(12)    VALUE SPACES.
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -226,7 +226,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002330 COPY WS.WS.
+002330 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "STP".
@@ -261,7 +261,7 @@
       *
       *    Screen Heading
       *
-           03  CRT-HEADING           PIC  X(40) VALUE "STOCK/INVENTORY AMENDMENT CODE".
+           03  CRT-HEADING           PIC  X(40) VALUE "STOCK/INVENTORY AMENDMENT (CODE)".
       *
       *    Company Name
       *
@@ -274,30 +274,30 @@
 
 002350 01  W02-FID.
 
-       COPY APACFIDS.ID.
+       COPY "APACFIDS.ID".
 
-       COPY CONTROL.ID.
+       COPY "CONTROL.ID".
 
-       COPY DEPART.ID.
+       COPY "DEPART.ID".
 
-       COPY PARAM.ID.
+       COPY "PARAM.ID".
 
-000380 COPY RECOVER.ID.
+000380 COPY "RECOVER.ID".
 
-       COPY SHARED.ID.
+       COPY "SHARED.ID".
 
-000360 COPY SPARTS.ID.
+000360 COPY "SPARTS.ID".
 
-000140 COPY STKMEM.ID.
+000140 COPY "STKMEM.ID".
 
-000300 COPY STOCK.ID.
+000300 COPY "STOCK.ID".
 
        01  W02-FILE-IDS.
            03  W02-PRINTER.
-	       05  W02-REPORT PIC X(07) VALUE "STP003.".
-               05  W02-USER   PIC X(05) VALUE SPACES.
+               05  W02-REPORT        PIC X(07) VALUE "STP003.".
+               05  W02-USER          PIC X(05) VALUE SPACES.
 
-       COPY W05.VAT.
+       COPY "W05.VAT".
 
        01  W05-EXTRA.
 	   03  W05-ROUND       PIC  X(01).
@@ -336,15 +336,15 @@
 000300		   07  W09-CMKUP PIC S9(03)V9999  COMP-3.
 000300		   07  W09-WMKUP PIC S9(03)V9999  COMP-3.
 
-       COPY W10.STK.
+       COPY "W10.STK".
 
-       COPY W11.STK.
+       COPY "W11.STK".
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W15.STK.
+       COPY "W15.STK".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 003700 01  W25-CALCS.
 005040     03  W25-RESULT      PIC 9(05)V99.
@@ -364,11 +364,11 @@
 003780     03  W25-VALUE      PIC S9(09)V99 COMP-3.
 003780     03  W25-ADJUST     PIC S9(09)V99 COMP-3.
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003800 COPY W50.WS.
+003800 COPY "W50.WS".
 
 003930 01  W80-EDIT.
 003940     03  W80-CNO        PIC 9(04).
@@ -426,18 +426,16 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
 
       /
 004130 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
 004910 01  S04E.
 004920	   03  LINE  2 COLUMN 31 FOREGROUND-COLOR 7 HIGHLIGHT
 004930                           VALUE "AMEND STOCK CODE".
 
-       COPY STOCK.CRT.
+       COPY "STOCK.CRT.
 
        01  S-MEM.
            03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
@@ -551,10 +549,6 @@
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-004870 COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -575,15 +569,15 @@
        AA49.
 	     EXIT PROGRAM.
 
-       COPY AA50.LUP.
+       COPY "AA50.LUP".
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY LOCKED.RC2.
+       COPY "LOCKED.RC2".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY AA300.STK.
+       COPY "AA300.STK".
 
       *
       *    ****    D I S P L A Y   D E P A R T M E N T	 N A M E
@@ -646,49 +640,49 @@
        AA505.
              EXIT.
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008180 AC000-READ              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY DEPART.RD.
+       COPY "DEPART.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
-000140 COPY STKMEM.RD.
+000140 COPY "STKMEM.RD".
 
-       COPY STOCK.RD.
+       COPY "STOCK.RD".
 
-       COPY SPARTS.RD.
+       COPY "SPARTS.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 009850 AD000-WRITE             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DEPART.WR.
+       COPY "DEPART.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY SHARED.WR.
+       COPY "SHARED.WR".
 
-000140 COPY STKMEM.WR.
+000140 COPY "STKMEM.WR".
 
-       COPY STOCK.WR.
+       COPY "STOCK.WR".
 
-       COPY SPARTS.WR.
+       COPY "SPARTS.WR".
 
-       COPY STOCK.1ST.
+       COPY "STOCK.1ST".
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
@@ -928,13 +922,13 @@
 012330 AY999.
 012340       EXIT.
 
-       COPY CA000X.STK.
+       COPY "CA000X.STK".
 
-       COPY CA100.STK.
+       COPY "CA100.STK".
 
-       COPY CA200.STK.
+       COPY "CA200.STK".
 
-       COPY CA500.STK.
+       COPY "CA500.STK".
 
       /
       *    ****  C H A N G E   S T O C K   C O D E

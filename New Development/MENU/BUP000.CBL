@@ -13,7 +13,7 @@
       *                                                                *
       *     ( A P A C )   S T A R T   &   I N I T    P R O G R A M     *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			                 *
+      *     VERSION 9.00.00 - November 2012                            *
       * 							                       *
       ******************************************************************
       * 							                       *
@@ -48,7 +48,7 @@
       * 							                       *
       ******************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    VERSIONS OF THE APAC SYSTEM		       ³
+      *    ³                VERSIONS OF THE APAC SYSTEM                ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
       *    ³ While developing this system the requirements and budgets ³
       *    ³ (originally this was a propriety package) for various     ³
@@ -66,23 +66,23 @@
       *    ³ LS0-MODULES group. The other indicators in this group are ³
       *    ³ used to show which modules of the system are installed.   ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ³	SYSTEM FILE    ³      CHAIN.WS	   ³	  CHAIN.LS     ³
+      *    ³    SYSTEM FILE    ³      CHAIN.WS	   ³     CHAIN.LS      ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ³  03  SEC-MODULES. ³  03  WS0-MODULES. ³  03  LS0-MODULES. ³
-      *    ³	  05  SEC-DTP  ³      05  WS0-DTP  ³	  05  LS0-DTP  ³
-      *    ³	  05  SEC-STP  ³      05  WS0-STP  ³	  05  LS0-STP  ³
-      *    ³	  05  SEC-HPD  ³      05  WS0-HPD  ³	  05  LS0-HPD  ³
-      *    ³	  05  SEC-CRP  ³      05  WS0-CRP  ³	  05  LS0-CRP  ³
-      *    ³	  05  SEC-GLP  ³      05  WS0-GLP  ³	  05  LS0-GLP  ³
-      *    ³	  05  SEC-POS  ³      05  WS0-POS  ³	  05  LS0-POS  ³
-      *    ³	  05  SEC-JCP  ³      05  WS0-JCP  ³	  05  LS0-JCP  ³
-      *    ³	  05  SEC-VHP  ³      05  WS0-VHP  ³	  05  LS0-VHP  ³
-      *    ³	  05  SEC-WAG  ³      05  WS0-WAG  ³	  05  LS0-WAG  ³
-      *    ³	  05  SEC-SAL  ³      05  WS0-SAL  ³	  05  LS0-SAL  ³
-      *    ³	  05  SEC-LEV  ³      05  WS0-LEV  ³	  05  LS0-LEV  ³
-      *    ³	  05  SEC-WHS  ³      05  WS0-WHS  ³	  05  LS0-WHS  ³
-      *    ³	  05  SEC-RTE  ³      05  WS0-RTE  ³	  05  LS0-RTE  ³
-      *    ³	  05  FILLER   ³		   ³		       ³
+      *    ³03	SEC-MODULES. ³03  WS0-MODULES.   ³03 LS0-MODULES.    ³
+      *    ³  05  SEC-DTP 9(01)³  05  WS0-DTP 9(01)³  05  LS0-DTP 9(01)³
+      *    ³  05  SEC-STP 9(01)³  05  WS0-STP 9(01)³  05  LS0-STP 9(01)³
+      *    ³  05  SEC-HPD 9(01)³  05  WS0-HPD 9(01)³  05  LS0-HPD 9(01)³
+      *    ³  05  SEC-CRP 9(01)³  05  WS0-CRP 9(01)³  05  LS0-CRP 9(01)³
+      *    ³  05  SEC-GLP 9(01)³  05  WS0-GLP 9(01)³  05  LS0-GLP 9(01)³
+      *    ³  05  SEC-POS 9(01)³  05  WS0-POS 9(01)³  05  LS0-POS 9(01)³
+      *    ³  05  SEC-JCP 9(01)³  05  WS0-JCP 9(01)³  05  LS0-JCP 9(01)³
+      *    ³  05  SEC-VHP 9(01)³  05  WS0-VHP 9(01)³  05  LS0-VHP 9(01)³
+      *    ³  05  SEC-WAG 9(01)³  05  WS0-WAG 9(01)³  05  LS0-WAG 9(01)³
+      *    ³  05  SEC-SAL 9(01)³  05  WS0-SAL 9(01)³  05  LS0-SAL 9(01)³
+      *    ³  05  SEC-LEV 9(01)³  05  WS0-LEV 9(01)³  05  LS0-LEV 9(01)³
+      *    ³  05  SEC-WHS 9(01)³  05  WS0-WHS 9(01)³  05  LS0-WHS 9(01)³
+      *    ³  05  SEC-RTE 9(01)³  05  WS0-RTE 9(01)³  05  LS0-RTE 9(01)³
+      *    ³  05  FILLER  X(07)³  05  FILLER  X(07)³  05  FILLER  X(07)³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *
 000010 IDENTIFICATION DIVISION.
@@ -90,7 +90,7 @@
 000030 AUTHOR.         J W LEMMON  (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -121,7 +121,7 @@
 000070 SPECIAL-NAMES.
 000080		       CURSOR IS CSTART
 000090		       CONSOLE IS CRT
-		       CRT STATUS IS KEY-STATUS.
+                         CRT STATUS IS KEY-STATUS.
 
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
@@ -158,702 +158,664 @@
 
       /
 000240 FD  PRNREP      LABEL RECORD OMITTED
-000250		       LINAGE WS-PGE-LENGTH.
+000250                 LINAGE WS-PGE-LENGTH.
 000260 01  REP-L1.
-000270	   03  REP-DETAIL      PIC  X(132).
+000270     03  REP-DETAIL            PIC  X(132).
 000280 01  REP-L2.
-000290	   03  FILLER	       PIC  X(28).
-000300	   03  REP-HEAD        PIC  X(24).
-000310	   03  FILLER	       PIC  X(28).
+000290     03  FILLER                PIC  X(28).
+000300     03  REP-HEAD              PIC  X(24).
+000310     03  FILLER                PIC  X(28).
 000320 01  REP-L3.
-000330     03  REP-GRPH        OCCURS 4.
-000340	       05  FILLER      PIC  X(01).
-000350	       05  REP-H1      PIC  X(06).
-000360	       05  REP-H2      PIC  X(06).
-000370	       05  REP-H3      PIC  X(06).
-000380	       05  REP-DIV     PIC  X(01).
+000330     03  REP-GRPH              OCCURS 4.
+000340         05  FILLER            PIC  X(01).
+000350         05  REP-H1            PIC  X(06).
+000360         05  REP-H2            PIC  X(06).
+000370         05  REP-H3            PIC  X(06).
+000380         05  REP-DIV           PIC  X(01).
 000390 01  REP-L4.
-000400     03  REP-ASCII       OCCURS 4.
-000410	       05  FILLER      PIC  X(01).
-000420	       05  REP-DEC     PIC  Z99.
-000430	       05  FILLER      PIC  X(03).
-000440	       05  REP-HEX     PIC  X(02).
-000450	       05  FILLER      PIC  X(04).
+000400     03  REP-ASCII             OCCURS 4.
+000410         05  FILLER            PIC  X(01).
+000420         05  REP-DEC           PIC  Z99.
+000430         05  FILLER            PIC  X(03).
+000440         05  REP-HEX           PIC  X(02).
+000450         05  FILLER            PIC  X(04).
 000460         05  REP-GRAPH.
-000470		   07  FILLER  PIC  X(02).
-000480             07  REP-ALPH PIC X(01).
-000490		   07  FILLER  PIC  X(04).
+000470             07  FILLER        PIC  X(02).
+000480             07  REP-ALPH      PIC  X(01).
+000490             07  FILLER        PIC  X(04).
 000500 01  SYS-L1.
-000510	   03  FILLER	       PIC  X(05).
-000520	   03  SYS-H1	       PIC  X(09).
-000530	   03  FILLER	       PIC  X(03).
-000540	   03  SYS-H2	       PIC  X(05).
-000550	   03  FILLER	       PIC  X(03).
-000560	   03  SYS-H3	       PIC  X(09).
-000570	   03  FILLER	       PIC  X(03).
-000580	   03  SYS-H4	       PIC  X(07).
-000590	   03  FILLER	       PIC  X(36).
+000510     03  FILLER                PIC  X(05).
+000520     03  SYS-H1                PIC  X(09).
+000530     03  FILLER                PIC  X(03).
+000540     03  SYS-H2                PIC  X(05).
+000550     03  FILLER                PIC  X(03).
+000560     03  SYS-H3                PIC  X(09).
+000570     03  FILLER                PIC  X(03).
+000580     03  SYS-H4                PIC  X(07).
+000590     03  FILLER                PIC  X(36).
 000600 01  SYS-L2.
-000610	   03  FILLER	       PIC  X(07).
-000620	   03  SYS-FILE        PIC  X(06).
-000630	   03  FILLER	       PIC  X(06).
-000640	   03  SYS-DRIVE       PIC  X(01).
-000650	   03  FILLER	       PIC  X(08).
-000660	   03  SYS-EXT	       PIC  X(03).
-000670	   03  FILLER	       PIC  X(07).
-000680	   03  SYS-SIZE        PIC  Z(04)9.
-000690	   03  FILLER	       PIC  X(37).
+000610     03  FILLER                PIC  X(07).
+000620     03  SYS-FILE              PIC  X(06).
+000630     03  FILLER                PIC  X(06).
+000640     03  SYS-DRIVE             PIC  X(01).
+000650     03  FILLER                PIC  X(08).
+000660     03  SYS-EXT               PIC  X(03).
+000670     03  FILLER                PIC  X(07).
+000680     03  SYS-SIZE              PIC  Z(04)9.
+000690     03  FILLER                PIC  X(37).
       /
 000700 WORKING-STORAGE SECTION.
-       77  WS-CHECK	   PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
-000710 77  WS-S1	       PIC  9(04) COMP-5.
-000720 77  WS-S2	       PIC  9(04) COMP-5.
-000730 77  WS-S3	       PIC  9(04) COMP-5.
-000740 77  WS-S4	       PIC  9(04) COMP-5.
-000740 77  WS-S6	       PIC  9(04) COMP-5.
-000740 77  WS-SUB-6	       PIC  9(04) COMP-5.
-000750 77  WS-C1	       PIC  9(04) COMP-5.
-000760 77  WS-C2	       PIC  9(04) COMP-5.
-000770 77  WS-C3	       PIC  9(04) COMP-5.
-000780 77  WS-C4	       PIC  9(04) COMP-5.
-000710 77  WS-IXS1	       PIC  9(04) COMP-5.
-000790 77  WS-SECKEY	       PIC  9(04) COMP-5.
-000800 77  WS-PARKEY	       PIC  9(04) COMP-5.
-000800 77  WS-PRNKEY	       PIC  9(04) COMP-5.
-       77  WS-DTE	       PIC  9(08) COMP-3.
-       77  WS-LEV	       PIC  9(01).
-000810 77  WS-SERIAL	       PIC  X(07).
-       77  WS-TERMS	       PIC  9(04) COMP-5.
-000820 77  WS-NUM	       PIC  Z(04)9.
-       77  WS-CONTRACT	       PIC  X(01) VALUE SPACE.
-000870 77  WS-OPTION	       PIC  X(01).
-000880 77  WS-INIT	       PIC  9(01) VALUE ZERO.
-000890 77  WS-ERROR	       PIC  9(01) VALUE ZERO.
-002570 77  WS-PGE-LENGTH       PIC  9(02) VALUE 66.
-001870 77  WS-PRN-LENGTH       PIC  9(02) VALUE 62.
-       77  WS-RESULT	       PIC  9(02) COMP-X.
-       77  WS-FUNCTION         PIC  9(02) COMP-X.
-000910 77  WS-CHAR	       PIC  X(01).
-000920 77  WS-PAR	       PIC  9(01) VALUE 0.
-000940 77  WS-START	       PIC  9(08).
-000950 77  WS-END	       PIC  9(08).
-000950 77  WS-XXX	       PIC  X(07) VALUE "XXXXXXX".
-       77  WS-PACK	       PIC  X(08).
+       77  WS-CHECK                  PIC  X(18)         VALUE "aeWlimemnomLalismJ".
+000710 77  WS-S1                     PIC  9(04) COMP-5.
+000720 77  WS-S2                     PIC  9(04) COMP-5.
+000730 77  WS-S3                     PIC  9(04) COMP-5.
+000740 77  WS-S4                     PIC  9(04) COMP-5.
+000740 77  WS-S6                     PIC  9(04) COMP-5.
+000740 77  WS-SUB-6                  PIC  9(04) COMP-5.
+000750 77  WS-C1                     PIC  9(04) COMP-5.
+000760 77  WS-C2                     PIC  9(04) COMP-5.
+000770 77  WS-C3                     PIC  9(04) COMP-5.
+000780 77  WS-C4                     PIC  9(04) COMP-5.
+000710 77  WS-IXS1                   PIC  9(04) COMP-5.
+000790 77  WS-SECKEY                 PIC  9(04) COMP-5.
+000800 77  WS-PARKEY                 PIC  9(04) COMP-5.
+000800 77  WS-PRNKEY                 PIC  9(04) COMP-5.
+       77  WS-DTE                    PIC  9(08) COMP-3.
+       77  WS-LEV                    PIC  9(01).
+000810 77  WS-SERIAL                 PIC  X(07).
+       77  WS-TERMS                  PIC  9(04) COMP-5.
+000820 77  WS-NUM                    PIC  Z(04)9.
+       77  WS-CONTRACT               PIC  X(01)         VALUE SPACE.
+000870 77  WS-OPTION                 PIC  X(01).
+000880 77  WS-INIT                   PIC  9(01)         VALUE ZERO.
+000890 77  WS-ERROR                  PIC  9(01)         VALUE ZERO.
+002570 77  WS-PGE-LENGTH             PIC  9(02)         VALUE 66.
+001870 77  WS-PRN-LENGTH             PIC  9(02)         VALUE 62.
+       77  WS-RESULT                 PIC  9(02) COMP-X.
+       77  WS-FUNCTION               PIC  9(02) COMP-X.
+000910 77  WS-CHAR                   PIC  X(01).
+000920 77  WS-PAR                    PIC  9(01)         VALUE 0.
+000940 77  WS-START                  PIC  9(08).
+000950 77  WS-END                    PIC  9(08).
+000950 77  WS-XXX                    PIC  X(07)         VALUE "XXXXXXX".
+       77  WS-PACK                   PIC  X(08).
 
 000960 01  WS-GRAPHICS.
-000970     03  WS-GCHAR        PIC X(01) OCCURS 20.
+000970     03  WS-GCHAR              PIC X(01) OCCURS 20.
+
 002060 01  WS-DB-LINE.
 002070     03  WS-TOP-LINE.
-002080         05  WS-TCHAR    PIC  X(01) OCCURS 80.
+002080         05  WS-TCHAR          PIC  X(01) OCCURS 80.
 002430     03  WS-TOP-LNE2.
-002440         05  WS-TCH      PIC  X(01) OCCURS 80.
+002440         05  WS-TCH            PIC  X(01) OCCURS 80.
            03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-001430	       05  FILLER      PIC  X(23).
-	       05  WS-WRKHD    PIC  X(11).
-001430	       05  FILLER      PIC  X(01).
-	       05  WS-WRKST    PIC  X(03).
-001430	       05  FILLER      PIC  X(01).
-002450	   03  WS-MID-LINE.
-002460         05  WS-MCHR     PIC  X(01) OCCURS 80.
-	   03  WS-MID78 REDEFINES WS-MID-LINE.
-	       05  FILLER      PIC  X(01).
-	       05  WS-BLNK78   PIC  X(78).
-	       05  FILLER      PIC  X(01).
-002110	   03  WS-BOT-LINE.
-002120         05  WS-BCHAR    PIC  X(01) OCCURS 80.
+               05  FILLER            PIC  X(01).
+               05  WS-TOP-COMP       PIC  X(40).
+001430         05  FILLER            PIC  X(23).
+               05  WS-WRKHD          PIC  X(11).
+001430         05  FILLER            PIC  X(01).
+               05  WS-WRKST          PIC  X(03).
+001430         05  FILLER            PIC  X(01).
+002450     03  WS-MID-LINE.
+002460         05  WS-MCHR           PIC  X(01) OCCURS 80.
+           03  WS-MID78 REDEFINES WS-MID-LINE.
+               05  FILLER            PIC  X(01).
+               05  WS-BLNK78         PIC  X(78).
+               05  FILLER            PIC  X(01).
+002110     03  WS-BOT-LINE.
+002120         05  WS-BCHAR          PIC  X(01) OCCURS 80.
 002470     03  WS-BOT-LNE2.
-002480         05  WS-BCH      PIC  X(01) OCCURS 80.
+002480         05  WS-BCH            PIC  X(01) OCCURS 80.
+
 000980 01  W00-ALPHA-SER.
-000990     03  W00-SERIAL      PIC X(07).
+000990     03  W00-SERIAL            PIC X(07).
 
 001010 COPY "WS.WS".
 
 001010 COPY "CHAIN.WS".
 
-       01  W02-FILE-IDS".
-
-       COPY "APACFIDS.ID".
-
-       COPY "APACFILE.ID".
-
-       COPY "PARAM.ID".
-
-       COPY "SYSTEM.ID".
-
            03  W02-PRINTER.
-               05  W02-REPORT PIC X(07) VALUE "BUP000.".
-               05  W02-USER   PIC X(05) VALUE SPACES.
+               05  W02-REPORT        PIC X(07) VALUE "BUP000.".
+               05  W02-USER          PIC X(05) VALUE SPACES.
 
-	   03  W02-RENAME-FILE PIC  X(64).
+           03  W02-RENAME-FILE       PIC  X(64).
 
-	   03  W02-NEW-FILE    PIC  X(64).
+           03  W02-NEW-FILE          PIC  X(64).
 
-	   03  W02-WORK-PTH.
-	       05  W02-COMP    PIC  X(03).
-	       05  FILLER      PIC  X(05) VALUE "_WORK".
-	       05  FILLER      PIC  X(01) VALUE X"00".
+           03  W02-WORK-PTH.
+               05  W02-COMP          PIC  X(03).
+               05  FILLER            PIC  X(05) VALUE "_WORK".
+               05  FILLER            PIC  X(01) VALUE X"00".
 
-	   03  W02-CHECK-SYS.
-	       05  W02-CHK-ID  PIC  X(03) VALUE SPACES.
-	       05  FILLER      PIC  X(16) VALUE "_DATA\SYSTEM.DAT".
-	       05  FILLER      PIC  X(01) VALUE X"00".
+           03  W02-CHECK-SYS.
+               05  W02-CHK-ID        PIC  X(03) VALUE SPACES.
+               05  FILLER            PIC  X(16) VALUE "_DATA\SYSTEM.DAT".
+               05  FILLER            PIC  X(01) VALUE X"00".
 
-	   03  W02-OFFLINE.
-	       05  FILLER      PIC  X(07) VALUE "OFFLINE".
-	       05  FILLER      PIC  X(01) VALUE X"00".
+           03  W02-OFFLINE.
+               05  FILLER            PIC  X(07) VALUE "OFFLINE".
+               05  FILLER            PIC  X(01) VALUE X"00".
 
 001160 01  W05-COMMAND.
-001170     03  W05-CHAR        PIC  X(01) OCCURS 128.
+001170     03  W05-CHAR              PIC  X(01) OCCURS 128.
+
 001180 01  W05-DETAIL.
-001190     03  W05-DC          PIC  X(01) OCCURS 2.
-001200 01  W05-COM REDEFINES W05-DETAIL.
+001190     03  W05-DC                PIC  X(01) OCCURS 2.
+
+001200 01  W05-COM                   REDEFINES W05-DETAIL.
 001210     03  W05-DRW.
-001220         05  W05-DRAW    PIC  9(02).
+001220         05  W05-DRAW          PIC  9(02).
 
        01  W10-FILE-PATHS.
-	   03  W10-CURRENT-PATH  PIC  X(52).
-	   03  W10-CURR-PATH	 REDEFINES W10-CURRENT-PATH.
-	       05  W10-CURR-CHAR PIC  X(01) OCCURS 52.
-	   03  W10-WRK-PATH	 PIC  X(52).
-	   03  W10-WK-PATH	 REDEFINES W10-WRK-PATH.
-	       05  W10-WRK-CHAR  PIC  X(01) OCCURS 52.
-	   03  W10-PATH 	 PIC  X(09).
-	   03  W10-COM-PATH	 REDEFINES W10-PATH.
-	       05  W10-COM-CHAR  PIC  X(01) OCCURS 9.
+         03  W10-CURRENT-PATH        PIC  X(52).
+
+         03  W10-CURR-PATH           REDEFINES W10-CURRENT-PATH.
+             05  W10-CURR-CHAR       PIC  X(01) OCCURS 52.
+         03  W10-WRK-PATH            PIC  X(52).
+
+         03  W10-WK-PATH             REDEFINES W10-WRK-PATH.
+             05  W10-WRK-CHAR        PIC  X(01) OCCURS 52.
+         03  W10-PATH                PIC  X(09).
+
+	   03  W10-COM-PATH	       REDEFINES W10-PATH.
+             05  W10-COM-CHAR        PIC  X(01) OCCURS 9.
 
        COPY "W12.WS".
 
 001490 01  W15-HEX.
-001500     03  W15-ASCII       PIC X(01) OCCURS 256.
+001500     03  W15-ASCII             PIC X(01) OCCURS 256.
 
 001510 01  W20-DATE.
-001520     03  W20-DAY         PIC 9(02).
-001530     03  W20-MONTH       PIC 9(02).
-	   03  W20-CENT        PIC 9(02).
-001540     03  W20-YEAR        PIC 9(02).
-001550 01  W20-DTE1 REDEFINES W20-DATE.
-001560	   03  W20-DTE	       PIC 9(08).
-001550 01  W20-DTE2 REDEFINES W20-DATE.
-	   03  W20-CC	       PIC 9(02).
-001520     03  W20-YY          PIC 9(02).
-001530     03  W20-MM          PIC 9(02).
-001540     03  W20-DD          PIC 9(02).
-       01  W20-LEAP REDEFINES W20-DATE.
-	   03  FILLER	       PIC 9(04).
-	   03  W20-CY	       PIC 9(04).
+001520     03  W20-DAY               PIC 9(02).
+001530     03  W20-MONTH             PIC 9(02).
+           03  W20-CENT              PIC 9(02).
+001540     03  W20-YEAR              PIC 9(02).
+
+001550 01  W20-DTE1                  REDEFINES W20-DATE.
+001560     03  W20-DTE               PIC 9(08).
+
+001550 01  W20-DTE2                  REDEFINES W20-DATE.
+           03  W20-CC                PIC 9(02).
+001520     03  W20-YY                PIC 9(02).
+001530     03  W20-MM                PIC 9(02).
+001540     03  W20-DD                PIC 9(02).
+
+       01  W20-LEAP                  REDEFINES W20-DATE.
+           03  FILLER                PIC 9(04).
+           03  W20-CY                PIC 9(04).
 
 001570 01  W25-CALCS.
-001580	   03  W25-RESULT      PIC  9(09)V99.
-001590     03  W25-RESULT1 REDEFINES W25-RESULT.
-001600	       05  W25-DAYS    PIC  9(03).
-001610	       05  W25-WHOLE   PIC  9(06).
-001620	       05  W25-DECIMAL PIC  9(02).
-	   03  W25-RESULT2 REDEFINES W25-RESULT.
-	       05  FILLER      PIC  9(02).
-	       05  W25-KEY     PIC  9(04).
-	       05  W25-SUB     PIC  9(01).
-	       05  FILLER      PIC  9(02).
-001630	   03  W25-PASS.
-001640	       05  W25-PASS1   PIC  9(03).
-001650	       05  W25-PASS2   PIC  9(03).
-001660	   03  W25-TIME        PIC  9(08).
-001670     03  W25-TRED REDEFINES  W25-TIME.
-001690	       05  W25-FACT    PIC  9(08).
-	       05  W25-DATE REDEFINES W25-FACT.
-		   07  W25-CC  PIC  9(02).
-		   07  W25-YY  PIC  9(02).
-		   07  W25-MM  PIC  9(02).
-		   07  W25-DD  PIC  9(02).
+001580     03  W25-RESULT            PIC  9(09)V99.
+
+001590     03  W25-RESULT1           REDEFINES W25-RESULT.
+001600         05  W25-DAYS          PIC  9(03).
+001610         05  W25-WHOLE         PIC  9(06).
+001620         05  W25-DECIMAL       PIC  9(02).
+
+           03  W25-RESULT2           REDEFINES W25-RESULT.
+               05  FILLER            PIC  9(02).
+               05  W25-KEY           PIC  9(04).
+               05  W25-SUB           PIC  9(01).
+               05  FILLER            PIC  9(02).
+001630     03  W25-PASS.
+001640         05  W25-PASS1         PIC  9(03).
+001650         05  W25-PASS2         PIC  9(03).
+001660     03  W25-TIME              PIC  9(08).
+
+001670     03  W25-TRED              REDEFINES  W25-TIME.
+001690         05  W25-FACT          PIC  9(08).
+
+               05  W25-DATE          REDEFINES W25-FACT.
+                   07  W25-CC        PIC  9(02).
+                   07  W25-YY        PIC  9(02).
+                   07  W25-MM        PIC  9(02).
+                   07  W25-DD        PIC  9(02).
 
 001700 01  W30-MONTHS.
 001710     03  W30-MONTH-NAMES.
-001720         05  W30-ENG     PIC X(36)     VALUE
-001730                         "JanFebMarAprMayJunJulAugSepOctNovDec".
-001740     03  W30-MONTH REDEFINES W30-MONTH-NAMES
-001750                         PIC X(03)     OCCURS 12.
+001720         05  W30-ENG           PIC X(36)     VALUE "JanFebMarAprMayJunJulAugSepOctNovDec".
+
+001740     03  W30-MONTH             REDEFINES W30-MONTH-NAMES PIC X(03) OCCURS 12.
+
        01  W31-DAYS.
            03  W31-DAY-NUMBERS.
-               05  W31-DAYNO   PIC  X(36)    VALUE
-                               "000031059090120151181212243273303334".
-               05  W31-DN REDEFINES W31-DAYNO.
-                   07  W31-NO  PIC 9(03) OCCURS 12.
-	   03  W31-DTE1        PIC 9(06) COMP-5.
-	   03  W31-DTE2        PIC 9(06) COMP-5.
+               05  W31-DAYNO         PIC  X(36)    VALUE "000031059090120151181212243273303334".
+
+               05  W31-DN            REDEFINES W31-DAYNO.
+                   07  W31-NO        PIC 9(03) OCCURS 12.
+           03  W31-DTE1              PIC 9(06) COMP-5.
+           03  W31-DTE2              PIC 9(06) COMP-5.
 
 001760 01  W35-PASS.
-001770     03  W35-PASS1       PIC 9(03).
-001780     03  W35-PASS2       PIC 9(03).
-001790 01  W35-PASSW     REDEFINES W35-PASS.
-001800     03  W35-PNUM        PIC 9(06).
+001770     03  W35-PASS1             PIC 9(03).
+001780     03  W35-PASS2             PIC 9(03).
+
+001790 01  W35-PASSW                 REDEFINES W35-PASS.
+001800     03  W35-PNUM              PIC 9(06).
 
        COPY "W40.WS".
 
        COPY "FUNCTION.WS".
 
        01  W75-KEYS.
-	   03  W75-S	       PIC  9(02) COMP-5.
-	   03  W75-S1	       PIC  9(02) COMP-5.
-	   03  W75-S2	       PIC  9(02) COMP-5.
-	   03  W75-COM	       PIC  X(03) OCCURS 18.
+           03  W75-S                 PIC  9(02) COMP-5.
+           03  W75-S1                PIC  9(02) COMP-5.
+           03  W75-S2                PIC  9(02) COMP-5.
+           03  W75-COM               PIC  X(03) OCCURS 18.
 
 001870 01  W85-PASS.
-001880     03  W85-PW          PIC  X(02).
-001890     03  W85-SUPER OCCURS 9
-001900                         PIC  X(06).
-001910     03  W85-ENTRY       PIC  9(02)    COMP-0.
-001920     03  W85-MARG        PIC  9(02)V99.
-001930     03  FILLER          PIC  X(02).
+001880     03  W85-PW                PIC  X(02).
+001890     03  W85-SUPER             PIC  X(06) OCCURS 9.
+001910     03  W85-ENTRY             PIC  9(02)    COMP-0.
+001920     03  W85-MARG              PIC  9(02)V99.
+001930     03  FILLER                PIC  X(02).
 
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
 001160 01  L05-COMMAND.
-001170	   03  L05-CHAR        PIC  X(128).
+001170     03  L05-CHAR              PIC  X(128).
+
+       COPY "FILE.IDS".
 
       /
 001940 SCREEN SECTION.
 
-       COPY "BLANK.CRT".
-
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³			 A P A C   L O G O		       ³
+      *    ³                    A P A C   L O G O                      ³
       *    ³ This is the logo displayed using graphics (ASCII) char-   ³
       *    ³ acters and will later be changed to use a bitmat when the ³
-      *    ³ menus are changed to GUI.				       ³
+      *    ³ menus are changed to GUI.                                 ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "LOGO.CRT".
 
-       01  MENU-INSTRUCT.
-	   02  BACKGROUND-COLOR Cyan.
-	   03  LINE 25 COLUMN  2 VALUE "Use "			    FOREGROUND-COLOR Blue.
-	   03	       COLUMN  6 VALUE ""			    FOREGROUND-COLOR Brown HIGHLIGHT.
-	   03	       COLUMN  7 VALUE " or "			    FOREGROUND-COLOR Blue.
-	   03	       COLUMN 11 VALUE ""			    FOREGROUND-COLOR Brown HIGHLIGHT.
-	   03	       COLUMN 12 VALUE " to point to an item, and " FOREGROUND-COLOR Blue.
-	   03	       COLUMN 38 VALUE "<Enter>"		    FOREGROUND-COLOR Brown HIGHLIGHT.
-	   03	       COLUMN 45 VALUE " to Select "		    FOREGROUND-COLOR Blue.
+       COPY "MENUINST.CRT".
 
 002880 01  S01.
-	   03  LINE  4 COLUMN  6 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN 74 VALUE "¿"								      FOREGROUND-COLOR Black.
-002900	   03  LINE  5 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "APAC - Business System (Version 2012).                             "  FOREGROUND-COLOR Red  HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-002920	   03  LINE  6 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "Copyright (C) 1982 - 2012  JW Lemmon.                              "  FOREGROUND-COLOR Grey HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-002940	   03  LINE  7 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "This SOFTWARE is used under licence to JWL Software CC.            "  HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-002960	   03  LINE  8 COLUMN  6 VALUE "³"								      HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "It is a contravention of the copyright law to:                     "  FOREGROUND-COLOR Grey HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-002980	   03  LINE  9 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "  USE this SOFTWARE without registering it.                        "  HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-003000	   03  LINE 10 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "  HAVE additional copies other than your WORKING & SECURITY disks. "  HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-003030	   03  LINE 11 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "  USE the SOFTWARE on more than one computer or for more than one  "  HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-003060	   03  LINE 12 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "  Business.                                                        "  HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-003070	   03  LINE 13 COLUMN  6 VALUE "³"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "The SOFTWARE remains the property of James W Lemmon.               "  FOREGROUND-COLOR Grey HIGHLIGHT.
-002920	   03	       COLUMN 74 VALUE "³"								      FOREGROUND-COLOR Black.
-	   03  LINE 14 COLUMN  6 VALUE "À"								      FOREGROUND-COLOR Blue HIGHLIGHT.
-	   03	       COLUMN  7 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  LINE  4 COLUMN  6 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN 74 VALUE "¿"                                                                    FOREGROUND-COLOR Black.
+002900     03  LINE  5 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "APAC - Business System (Version 2013).                             "  FOREGROUND-COLOR Red  HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"    FOREGROUND-COLOR Black.
+002920     03  LINE  6 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "Copyright (C) 1982 - 2013  JW Lemmon.                              "  FOREGROUND-COLOR Grey HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+002940     03  LINE  7 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "This SOFTWARE is used under licence to JWL Software CC.            "  HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+002960     03  LINE  8 COLUMN  6 VALUE "³"                                                                    HIGHLIGHT.
+           03          COLUMN  7 VALUE "It is a contravention of the copyright law to:                     "  FOREGROUND-COLOR Grey HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+002980     03  LINE  9 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "  USE this SOFTWARE without registering it.                        "  HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+003000     03  LINE 10 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "  HAVE additional copies other than your WORKING & SECURITY disks. "  HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+003030     03  LINE 11 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "  USE the SOFTWARE on more than one computer or for more than one  "  HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+003060     03  LINE 12 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "  Business.                                                        "  HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+003070     03  LINE 13 COLUMN  6 VALUE "³"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "The SOFTWARE remains the property of James W Lemmon.               "  FOREGROUND-COLOR Grey HIGHLIGHT.
+002920     03          COLUMN 74 VALUE "³"                                                                    FOREGROUND-COLOR Black.
+           03  LINE 14 COLUMN  6 VALUE "À"                                                                    FOREGROUND-COLOR Blue HIGHLIGHT.
+           03          COLUMN  7 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
-003090	   03  LINE 16 COLUMN  7 VALUE "Do you accept these conditions (Y/N)  " 			      FOREGROUND-COLOR Brown HIGHLIGHT.
+003090     03  LINE 16 COLUMN  7 VALUE "Do you accept these conditions (Y/N)  "                               FOREGROUND-COLOR Brown HIGHLIGHT.
 
 000850 01  S-PROG.
-003430	   03  LINE  2 COLUMN 35 VALUE "SYSTEM MENU"							      BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT.
+003430     03  LINE  2 COLUMN 35 VALUE "SYSTEM MENU" BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT.
 
        01  S-MENU.
-	   02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03  LINE  8 COLUMN 30 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 51 VALUE "¿"			FOREGROUND-COLOR Black.
-	   03  LINE  9 COLUMN 30 VALUE "³   ".
-	   03	       COLUMN 34 VALUE "SYSTEM CONTROL".
-	   03	       COLUMN 48 VALUE "   ³"			FOREGROUND-COLOR Black.
-	   03  LINE 10 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "1".
-	   03	       COLUMN 33 VALUE " Run the System   ³"	FOREGROUND-COLOR Black.
-	   03  LINE 11 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "2".
-	   03	       COLUMN 33 VALUE " Special Routines ³"	FOREGROUND-COLOR Black.
-	   03  LINE 12 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "9".
-	   03	       COLUMN 33 VALUE " Exit to Op-System³"	FOREGROUND-COLOR Black.
-	   03  LINE 13 COLUMN 30 VALUE "À".
-	   03	       COLUMN 31 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"	FOREGROUND-COLOR Black.
+           02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
+               03  LINE  8 COLUMN 30 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
+               03          COLUMN 51 VALUE "¿"                      FOREGROUND-COLOR Black.
+               03  LINE  9 COLUMN 30 VALUE "³   ".
+               03          COLUMN 34 VALUE "SYSTEM CONTROL".
+               03          COLUMN 48 VALUE "   ³"                   FOREGROUND-COLOR Black.
+               03  LINE 10 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "1".
+               03          COLUMN 33 VALUE " Run the System   ³"    FOREGROUND-COLOR Black.
+               03  LINE 11 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "2".
+               03          COLUMN 33 VALUE " Special Routines ³"    FOREGROUND-COLOR Black.
+               03  LINE 12 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "9".
+               03          COLUMN 33 VALUE " Exit to Op-System³"    FOREGROUND-COLOR Black.
+               03  LINE 13 COLUMN 30 VALUE "À".
+               03          COLUMN 31 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"  FOREGROUND-COLOR Black.
 
        01  S-MENU2.
-	   02  BACKGROUND-COLOR Green FOREGROUND-COLOR Green HIGHLIGHT.
-	   03  LINE  5 COLUMN 30 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 51 VALUE "¿"			FOREGROUND-COLOR Black.
-	   03  LINE  6 COLUMN 30 VALUE "³  ".
-	   03	       COLUMN 33 VALUE "SPECIAL ROUTINES"	FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 49 VALUE "  ³"			FOREGROUND-COLOR Black.
-	   03  LINE  7 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "1"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Offline Location ³"	FOREGROUND-COLOR Black.
-	   03  LINE  8 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "2"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Initialize Files ³"	FOREGROUND-COLOR Black.
-001470	   03  LINE  9 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "3"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Register System  ³"	FOREGROUND-COLOR Black.
-001570	   03  LINE 10 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "4"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Run the System   ³"	FOREGROUND-COLOR Black.
-001500	   03  LINE 11 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "5"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Print ASCII Table³"	FOREGROUND-COLOR Black.
-	   03  LINE 12 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "6"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Clear W/Stat. Log³"	FOREGROUND-COLOR Black.
-	   03  LINE 13 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "7"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Amend No of W/St ³"	FOREGROUND-COLOR Black.
-	   03  LINE 14 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "8"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Renew Contract   ³"	FOREGROUND-COLOR Black.
-	   03  LINE 15 COLUMN 30 VALUE "³ ".
-	   03	       COLUMN 32 VALUE "9"			FOREGROUND-COLOR Grey HIGHLIGHT.
-	   03	       COLUMN 33 VALUE " Exit to Op-System³"	FOREGROUND-COLOR Black.
-	   03  LINE 16 COLUMN 30 VALUE "À".
-	   03	       COLUMN 31 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"	FOREGROUND-COLOR Black.
+           02  BACKGROUND-COLOR Green FOREGROUND-COLOR Green HIGHLIGHT.
+               03  LINE  5 COLUMN 30 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
+               03          COLUMN 51 VALUE "¿"                      FOREGROUND-COLOR Black.
+               03  LINE  6 COLUMN 30 VALUE "³  ".
+               03          COLUMN 33 VALUE "SPECIAL ROUTINES"       FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 49 VALUE "  ³"                    FOREGROUND-COLOR Black.
+               03  LINE  7 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "1"	                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Offline Location ³"    FOREGROUND-COLOR Black.
+               03  LINE  8 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "2"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Initialize Files ³"    FOREGROUND-COLOR Black.
+001470         03  LINE  9 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "3"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Register System  ³"    FOREGROUND-COLOR Black.
+001570         03  LINE 10 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "4"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Run the System   ³"    FOREGROUND-COLOR Black.
+001500         03  LINE 11 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "5"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Print ASCII Table³"    FOREGROUND-COLOR Black.
+               03  LINE 12 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "6"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Clear W/Stat. Log³"    FOREGROUND-COLOR Black.
+               03  LINE 13 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "7"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Amend No of W/St ³"    FOREGROUND-COLOR Black.
+               03  LINE 14 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "8"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Renew Contract   ³"    FOREGROUND-COLOR Black.
+               03  LINE 15 COLUMN 30 VALUE "³ ".
+               03          COLUMN 32 VALUE "9"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               03          COLUMN 33 VALUE " Exit to Op-System³"    FOREGROUND-COLOR Black.
+               03  LINE 16 COLUMN 30 VALUE "À".
+               03          COLUMN 31 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"  FOREGROUND-COLOR Black.
 
        01  S-COM.
-	   02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-	   03  LINE  6 COLUMN 28 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" HIGHLIGHT.
-	   03	       COLUMN 75 VALUE "¿".
-	   03  LINE  7 COLUMN 28 VALUE "³"						 HIGHLIGHT.
-	   03	       COLUMN 29 VALUE "     C O M P A N Y   C O D E   L O O K U P    "  FOREGROUND-COLOR Magenta.
-	   03	       COLUMN 75 VALUE "³"						 FOREGROUND-COLOR Black.
-	   03  LINE  8 COLUMN 28 VALUE "³"						 HIGHLIGHT.
-	   03	       COLUMN 29 VALUE "ÚÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"  FOREGROUND-COLOR Magenta.
-	   03	       COLUMN 75 VALUE "³"						 FOREGROUND-COLOR Black.
-	   03  LINE 21 COLUMN 28 VALUE "³"						 HIGHLIGHT.
-	   03	       COLUMN 29 VALUE "ÀÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"  FOREGROUND-COLOR Magenta.
-	   03	       COLUMN 75 VALUE "³"						 FOREGROUND-COLOR Black.
-	   03  LINE 22 COLUMN 28 VALUE "À"						 HIGHLIGHT.
-	   03	       COLUMN 29 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               03  LINE  6 COLUMN 28 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" HIGHLIGHT.
+               03          COLUMN 75 VALUE "¿".
+               03  LINE  7 COLUMN 28 VALUE "³"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "     C O M P A N Y   C O D E   L O O K U P    "  FOREGROUND-COLOR Magenta.
+               03          COLUMN 75 VALUE "³"                                               FOREGROUND-COLOR Black.
+               03  LINE  8 COLUMN 28 VALUE "³"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "ÚÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"  FOREGROUND-COLOR Magenta.
+               03          COLUMN 75 VALUE "³"                                               FOREGROUND-COLOR Black.
+               03  LINE 21 COLUMN 28 VALUE "³"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "ÀÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"  FOREGROUND-COLOR Magenta.
+               03          COLUMN 75 VALUE "³"                                               FOREGROUND-COLOR Black.
+               03  LINE 22 COLUMN 28 VALUE "À"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
        01  SD-COM.
-	   03  COLUMN 30 FOREGROUND-COLOR Magenta BACKGROUND-COLOR Grey PIC X(03) FROM COM-CODE.
-	   03  COLUMN 34 FOREGROUND-COLOR Blue BACKGROUND-COLOR Grey PIC X(40) FROM COM-NAME.
+           03  COLUMN 30 FOREGROUND-COLOR Magenta BACKGROUND-COLOR Grey PIC X(03) FROM COM-CODE.
+           03  COLUMN 34 FOREGROUND-COLOR Blue BACKGROUND-COLOR Grey PIC X(40) FROM COM-NAME.
 
 003330 01  S03.
-003340	   03  LINE 18 COLUMN  7 VALUE "Company Identity Code ?" FOREGROUND-COLOR Brown HIGHLIGHT.
+003340     03  LINE 18 COLUMN  7 VALUE "Company Identity Code ?" FOREGROUND-COLOR Brown HIGHLIGHT.
 
 003370 01  S04.
 003380	   03  LINE 18 COLUMN 31 PIC X(03) USING WS-SYS-ID AUTO FOREGROUND-COLOR Grey HIGHLIGHT.
 
 003490 01  S06.
-	   02  BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT.
-003500     03  LINE  8 COLUMN 12 VALUE "Enter Password >      <".
+           02  BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT.
+003500         03  LINE  8 COLUMN 12 VALUE "Enter Password >      <".
 003510	   03  LINE 16 COLUMN  8 VALUE " NB. ALL terminals MUST have signed off before this routine ".
 003550	   03  LINE 17 COLUMN  8 VALUE " can  be run.  If this routine is run  while terminals  are ".
 003590	   03  LINE 18 COLUMN  8 VALUE " still  attached, the  results are unpredictable and  could ".
 003630	   03  LINE 19 COLUMN  8 VALUE " result in the LOSS OF DATA or worse if a recovery is run.  ".
 
 003670 01  S07.
-003680	   03  LINE  8 COLUMN 28 PIC  X(06) TO W40-CSHPASS AUTO SECURE FOREGROUND-COLOR Grey HIGHLIGHT.
+003680     03  LINE  8 COLUMN 28 PIC  X(06) TO W40-CSHPASS AUTO SECURE FOREGROUND-COLOR Grey HIGHLIGHT.
 
        01  S08.
-	   03  LINE 17 COLUMN 32 PIC  X(07) TO W00-SERIAL AUTO SECURE FOREGROUND-COLOR Grey HIGHLIGHT.
+           03  LINE 17 COLUMN 32 PIC  X(07) TO W00-SERIAL AUTO SECURE FOREGROUND-COLOR Grey HIGHLIGHT.
 
 003700 01  S10.
-003710	   03  LINE  5 COLUMN 27 PIC Z9/99/9999 USING SEC-DATE AUTO FOREGROUND-COLOR Grey HIGHLIGHT.
+003710     03  LINE  5 COLUMN 27 PIC Z9/99/9999 USING SEC-DATE AUTO FOREGROUND-COLOR Grey HIGHLIGHT.
 
 003730 01  S11.
-003740	   03  LINE 20 COLUMN  7 VALUE "Work Station id " FOREGROUND-COLOR Brown HIGHLIGHT.
+003740     03  LINE 20 COLUMN  7 VALUE "Work Station id " FOREGROUND-COLOR Brown HIGHLIGHT.
 
 003750 01  S12.
-003760	   03  LINE 20 COLUMN 23 PIC X(03) USING WS-USER AUTO FOREGROUND-COLOR Grey HIGHLIGHT.
+003760     03  LINE 20 COLUMN 23 PIC X(03) USING WS-USER AUTO FOREGROUND-COLOR Grey HIGHLIGHT.
 
 003780 01  S13.
 003790     02  S13A.
-003800	   03  LINE  2 COLUMN 26 VALUE "OFFLINE FILE LOCATIONS" 			FOREGROUND-COLOR Grey HIGHLIGHT.
+003800	   03  LINE  2 COLUMN 26 VALUE "OFFLINE FILE LOCATIONS"                         FOREGROUND-COLOR Grey HIGHLIGHT.
 003820     02  S13B.
-	   03  LINE 12 COLUMN 18 VALUE "This routine will set up the offline locations" FOREGROUND-COLOR Brown HIGHLIGHT.
-	   03  LINE 14 COLUMN 18 VALUE "Press ANY key to continue"			FOREGROUND-COLOR Brown HIGHLIGHT.
+               03  LINE 12 COLUMN 18 VALUE "This routine will set up the offline locations" FOREGROUND-COLOR Brown HIGHLIGHT.
+               03  LINE 14 COLUMN 18 VALUE "Press ANY key to continue"                      FOREGROUND-COLOR Brown HIGHLIGHT.
 
 004790 01  S17.
-004800	   03  LINE  3 COLUMN 33 VALUE "INITIALIZE FILES"				FOREGROUND-COLOR Grey HIGHLIGHT.
-004820	   03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)? > <"			FOREGROUND-COLOR Brown HIGHLIGHT.
+004800     03  LINE  3 COLUMN 33 VALUE "INITIALIZE FILES"        FOREGROUND-COLOR Grey HIGHLIGHT.
+004820     03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)? > <" FOREGROUND-COLOR Brown HIGHLIGHT.
 
 004790 01  S17A.
-004800	   03  LINE  3 COLUMN 31 VALUE "REGISTER THE SYSTEM"				FOREGROUND-COLOR Grey HIGHLIGHT.
-004820	   03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)? > <"			FOREGROUND-COLOR Brown HIGHLIGHT.
+004800     03  LINE  3 COLUMN 31 VALUE "REGISTER THE SYSTEM"     FOREGROUND-COLOR Grey HIGHLIGHT.
+004820     03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)? > <" FOREGROUND-COLOR Brown HIGHLIGHT.
 
 004790 01  S17B.
-004800	   03  LINE  3 COLUMN 28 VALUE "AMEND NO. OF WORK STATIONS"			FOREGROUND-COLOR Grey HIGHLIGHT.
-004820	   03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)?"				FOREGROUND-COLOR Brown HIGHLIGHT.
+004800     03  LINE  3 COLUMN 28 VALUE "AMEND NO. OF WORK STATIONS" FOREGROUND-COLOR Grey HIGHLIGHT.
+004820     03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)?"        FOREGROUND-COLOR Brown HIGHLIGHT.
 
 004790 01  S17C.
-004800	   03  LINE  3 COLUMN 34 VALUE "RENEW CONTRACT" 				FOREGROUND-COLOR Grey HIGHLIGHT.
-004820	   03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)? > <"			FOREGROUND-COLOR Brown HIGHLIGHT.
+004800     03  LINE  3 COLUMN 34 VALUE "RENEW CONTRACT"          FOREGROUND-COLOR Grey HIGHLIGHT.
+004820     03  LINE  5 COLUMN  4 VALUE "Are you sure (Y/N)? > <" FOREGROUND-COLOR Brown HIGHLIGHT.
 
 004830 01  S18.
-	   02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-	   03  LINE  4 COLUMN 16 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" HIGHLIGHT.
-	   03	       COLUMN 65 VALUE "¿"						   FOREGROUND-COLOR Black.
-	   03  LINE  5 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "Packaging and Marketing:                        "  HIGHLIGHT.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-004850	   03  LINE  6 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "       WORKGROUP DATA SOLUTIONS.                "  FOREGROUND-COLOR Black.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-	   03  LINE  7 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "       18 Milford Crest, North Riding, JHB.     "  FOREGROUND-COLOR Black.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-004880	   03  LINE  8 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "       PO Box 68416,                            "  FOREGROUND-COLOR Black.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-004890	   03  LINE  9 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "       BRYANSTON. 2021                          "  FOREGROUND-COLOR Black.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-004900	   03  LINE 10 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "Support:                                        "  HIGHLIGHT.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-004910	   03  LINE 11 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "  See the registration card, supplied with the  "  FOREGROUND-COLOR Black.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-	   03  LINE 12 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "  system, for details of the telephone and fax  "  FOREGROUND-COLOR Black.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-004910	   03  LINE 13 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "  numbers of the APAC support line.             "  FOREGROUND-COLOR Black.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-	   03  LINE 14 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "  For local support in your area please contact "  HIGHLIGHT.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-	   03  LINE 15 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-004910	   03	       COLUMN 17 VALUE "  the support line, who will in turn give you   "  HIGHLIGHT.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-	   03  LINE 16 COLUMN 16 VALUE "³"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "  details of your local support centre.         "  HIGHLIGHT.
-	   03	       COLUMN 65 VALUE "³"						   FOREGROUND-COLOR Black.
-	   03  LINE 17 COLUMN 16 VALUE "À"						   HIGHLIGHT.
-	   03	       COLUMN 17 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+       02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+           03  LINE  4 COLUMN 16 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" HIGHLIGHT.
+           03          COLUMN 65 VALUE "¿"                                                 FOREGROUND-COLOR Black.
+           03  LINE  5 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "Packaging and Marketing:                        "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+004850     03  LINE  6 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       WORKGROUP DATA SOLUTIONS.                "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+           03  LINE  7 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       18 Milford Crest, North Riding, JHB.     "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+004880     03  LINE  8 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       PO Box 68416,                            "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+004890     03  LINE  9 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       BRYANSTON. 2021                          "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+004900     03  LINE 10 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "Support:                                        "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+004910     03  LINE 11 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  See the registration card, supplied with the  "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+           03  LINE 12 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  system, for details of the telephone and fax  "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+004910     03  LINE 13 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  numbers of the APAC support line.             "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+           03  LINE 14 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  For local support in your area please contact "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+           03  LINE 15 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+004910     03          COLUMN 17 VALUE "  the support line, who will in turn give you   "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+           03  LINE 16 COLUMN 16 VALUE "³"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  details of your local support centre.         "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "³"                                                 FOREGROUND-COLOR Black.
+           03  LINE 17 COLUMN 16 VALUE "À"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
-004970	   03  LINE 19 COLUMN 17 FOREGROUND-COLOR Brown HIGHLIGHT
-004980		       VALUE "Please key in todays date (DDMMCCYY)".
+004970     03  LINE 19 COLUMN 17 VALUE "Please key in todays date (DDMMCCYY)"              FOREGROUND-COLOR Brown HIGHLIGHT.
 
 004990 01  S20.
-005000	   03  LINE 19 COLUMN 54 FOREGROUND-COLOR Grey HIGHLIGHT
-005010				 PIC Z9/99/9999 USING W20-DTE AUTO.
+005000     03  LINE 19 COLUMN 54 PIC Z9/99/9999 USING W20-DTE AUTO FOREGROUND-COLOR Grey HIGHLIGHT.
 
        01  S25.
-	   03  LINE  8 COLUMN  4 FOREGROUND-COLOR Brown HIGHLIGHT
-005010				 VALUE "Work Stations :".
-	   03  LINE 10 COLUMN 10 VALUE "Package: ".
-	   03	       COLUMN 20 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 PIC  X(08) FROM WS-PACK.
-	   03  S25A.
-	       05  LINE 8 COLUMN 20 FOREGROUND-COLOR Grey HIGHLIGHT
-				    PIC ZZ9 USING WS-TERMS AUTO.
+           03  LINE  8 COLUMN  4 VALUE "Work Stations :" FOREGROUND-COLOR Brown HIGHLIGHT.
+           03  LINE 10 COLUMN 10 VALUE "Package: ".
+           03          COLUMN 20 PIC  X(08) FROM WS-PACK FOREGROUND-COLOR Cyan HIGHLIGHT.
+           03  S25A.
+               05  LINE 8 COLUMN 20 PIC ZZ9 USING WS-TERMS AUTO FOREGROUND-COLOR Grey HIGHLIGHT.
 
        01  S30.
-	   03  LINE 12 COLUMN 50 FOREGROUND-COLOR Grey HIGHLIGHT
-				 BACKGROUND-COLOR Magenta
-				 PIC ZZ9 USING WS-TERMS AUTO.
-
-004870 COPY "S99.CRT".
-
-       COPY "ERROR.CRT".
+           03  LINE 12 COLUMN 50 PIC ZZ9 USING WS-TERMS AUTO FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta.
 
       /
-010570 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS L05-COMMAND.
+010570 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS L05-COMMAND DATA-FILE-IDS.
 005070 AA000-MAIN              SECTION.
 005080 AA00.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ This routine has now been upgraded to the latest COBOL    ³
       *    ³ syntax regarding date.				                 ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     ACCEPT W25-FACT FROM DATE[YYYYMMDD].
-	     MOVE W25-FACT	 TO W12-T-YMD.
-	     MOVE W25-CC	 TO W12-CENT.
-	     MOVE W25-YY	 TO W12-YEAR.
-	     MOVE W25-MM	 TO W12-MONTH.
-	     MOVE W25-DD	 TO W12-DAY.
-	     MOVE W12-TODAY	 TO TODAY-DDMMYY.
-005100	     PERFORM AL000.
-005110	     MOVE W05-DRAW	 TO WS-DRAW.
+             ACCEPT W25-FACT FROM DATE[YYYYMMDD].
+             MOVE W25-FACT           TO W12-T-YMD.
+             MOVE W25-CC             TO W12-CENT.
+             MOVE W25-YY             TO W12-YEAR.
+             MOVE W25-MM             TO W12-MONTH.
+             MOVE W25-DD             TO W12-DAY.
+             MOVE W12-TODAY          TO TODAY-DDMMYY.
+005100       PERFORM AL000.
+005110       MOVE W05-DRAW           TO WS-DRAW.
 
        AA02.
 005210       DISPLAY CLR-SCREEN.
-	     DISPLAY WS-BLNK78 AT 0202 WITH FOREGROUND-COLOR Cyan.
-	     MOVE 5		 TO SHADE-ROW.
-	     MOVE 8		 TO SHADE-COL.
-	     MOVE 67		 TO SHADE-WIDTH.
-	     MOVE 10		 TO SHADE-LINES.
-	     DISPLAY S01.
-	     PERFORM SCREEN-SHADOW.
+             DISPLAY WS-BLNK78 AT 0202 WITH FOREGROUND-COLOR Cyan.
+             MOVE 5                  TO SHADE-ROW.
+             MOVE 8                  TO SHADE-COL.
+             MOVE 67                 TO SHADE-WIDTH.
+             MOVE 10                 TO SHADE-LINES.
+             DISPLAY S01.
+             PERFORM SCREEN-SHADOW.
 005130       PERFORM AD000.
 005140     IF WS-PAR = 9
-005150	       PERFORM AK000
-	       GO TO AA02.
-	   IF MOUSE-ATTACHED = "Y"
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 1		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM.
-005210	     DISPLAY CLR-SCREEN.
-005220	     DISPLAY S-PROG.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 32		 TO SHADE-COL.
-	     MOVE 20		 TO SHADE-WIDTH.
-	     MOVE 5		 TO SHADE-LINES.
+005150         PERFORM AK000
+               GO TO AA02.
+           IF MOUSE-ATTACHED = "Y"
+               MOVE 66               TO MOUSE-FUNC
+               MOVE 1                TO MOUSE-PARAM
+               CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
+005210       DISPLAY CLR-SCREEN.
+005220       DISPLAY S-PROG.
+             MOVE 9                  TO SHADE-ROW.
+             MOVE 32                 TO SHADE-COL.
+             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 5                  TO SHADE-LINES.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³		       The System Start Menu		       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-005240	     DISPLAY S-MENU.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 11		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 32		 TO SCREEN-COL.
-	     MOVE 18		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
-006280	     MOVE 2		 TO WS-SECKEY.
-006300	     READ SECUR.
+005240       DISPLAY S-MENU.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 9                   TO TOP-ROW.
+             MOVE 11                  TO BOTTOM-ROW.
+             MOVE 8                   TO SCREEN-LIN.
+             MOVE 32                  TO SCREEN-COL.
+             MOVE 18                  TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
+006280       MOVE 2                   TO WS-SECKEY.
+006300       READ SECUR.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³	C H E C K   T O	  S E E	  I F	T H E	A N N U A L    ³
       *    ³	C O N T R A C T	  M U S T   B E	  R E N E W E D	       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF SEC-AGREE = "R"
-	       IF NOT (SEC-DAYS = 255)
-		   DISPLAY "Contract must be renewed" AT 1629
-			    WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				 BACKGROUND-COLOR Red
-		   IF SEC-DAYS > 15
-		       MOVE SEC-ANDATE
-				 TO W20-DTE
-015070		       DISPLAY "By - " AT 1729
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red
-				W20-DD
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red
-				" "
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red
-015080				W30-MONTH (W12-MM)
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red
-				","
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red
-				W12-CC
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red
-				W12-YY
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red
-				"        "
-				WITH FOREGROUND-COLOR Grey HIGHLIGHT
-				     BACKGROUND-COLOR Red.
+           IF SEC-AGREE = "R"
+              IF NOT(SEC-DAYS = 255)
+                  DISPLAY "Contract must be renewed" AT 1629 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+                  IF SEC-DAYS > 15
+                      MOVE SEC-ANDATE  TO W20-DTE
+015070                DISPLAY "By - " AT 1729    WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+                               W20-DD            WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+                              " "                WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+015080                         W30-MONTH(W12-MM) WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+                              ","                WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+                               W12-CC            WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+                               W12-YY            WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red
+                              "        "         WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
 
        AA05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        AA10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO AA15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO AA10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO AA10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO AA10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO AA10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO AA15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO AA05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF NOT (WS-OPTION = 1 OR 2 OR 9)
-		   CALL X"E5"
-		   GO TO AA05
-	       END-IF
-	       GO TO AA16
-	   ELSE
-	       CALL X"E5"
-	       GO TO AA05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY    PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY  PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY PERFORM POSITION-MOUSE
+                                IF MOUSE-ENTER = "Y"
+                                    MOVE "N" TO MOUSE-ENTER
+                                    GO TO AA15
+                                END-IF
+                                IF MOUSE-Y = 24
+                                    IF MOUSE-X = 5
+	                                  MOVE 5  TO KEY-CODE-1
+	                                  GO TO AA10
+                                    ELSE
+                                    IF MOUSE-X = 10
+                                        MOVE 6  TO KEY-CODE-1
+                                        GO TO AA10
+                                    ELSE
+                                    IF MOUSE-X > 36 AND < 44
+                                        MOVE 0  TO KEY-CODE-1
+                                        GO TO AA10
+                                    ELSE
+                                    IF MOUSE-X > 54 AND < 60
+	                                  MOVE 0  TO KEY-CODE-1
+	                                  MOVE 1  TO KEY-TYPE
+	                                  GO TO AA10
+                                    END-IF
+                                END-IF
+                 WHEN ENTER-KEY  GO TO AA15
+                 WHEN OTHER      CALL X"E5"
+               END-EVALUATE
+               GO TO AA05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X      TO WS-OPTION
+               IF NOT(WS-OPTION = 1 OR 2 OR 9)
+                   CALL X"E5"
+                   GO TO AA05
+               END-IF
+               GO TO AA16
+           ELSE
+               CALL X"E5"
+               GO TO AA05.
 
        AA15.
-	     EVALUATE SCREEN-LIN
-	       WHEN 9
-		    MOVE "1"	 TO WS-OPTION
-	       WHEN 10
-		    MOVE "2"	 TO WS-OPTION
-	       WHEN 11
-		    MOVE "9"	 TO WS-OPTION
-	       WHEN OTHER
-		    GO TO AA05
-	     END-EVALUATE.
-	     GO TO AA18.
+             EVALUATE SCREEN-LIN
+               WHEN 9
+                    MOVE "1"         TO WS-OPTION
+               WHEN 10
+                    MOVE "2"         TO WS-OPTION
+               WHEN 11
+                    MOVE "9"         TO WS-OPTION
+               WHEN OTHER
+                    GO TO AA05
+             END-EVALUATE.
+             GO TO AA18.
 
        AA16.
-	     PERFORM CLEAR-BLOCK.
-	     EVALUATE WS-OPTION
-	       WHEN "9"
-		    MOVE 11	 TO SCREEN-LIN
-	       WHEN "1"
-		    MOVE 9	 TO SCREEN-LIN
-	       WHEN "2"
-		    MOVE 10	 TO SCREEN-LIN
-	     END-EVALUATE.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "9"
+                    MOVE 11          TO SCREEN-LIN
+               WHEN "1"
+                    MOVE 9           TO SCREEN-LIN
+               WHEN "2"
+                    MOVE 10          TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        AA18.
-	   IF MOUSE-ATTACHED = "Y"
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM.
-005320	   IF WS-OPTION = "9"
-005330	       MOVE 6		 TO WS-ERROR
+           IF MOUSE-ATTACHED = "Y"
+               MOVE 66               TO MOUSE-FUNC
+               MOVE 0                TO MOUSE-PARAM
+               CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
+005320     IF WS-OPTION = "9"
+005330         MOVE 6                TO WS-ERROR
 005340         GO TO AZ000-EOJ.
-005350	   IF WS-OPTION = "1"
+005350     IF WS-OPTION = "1"
 005510         PERFORM AI000
 005520         IF WS-ERROR = ZERO
-005530		   GO TO AZ000-EOJ.
-005160	     GO TO AB00.
+005530		 GO TO AZ000-EOJ.
+005160	 GO TO AB00.
 005170 AA999.
 005180       EXIT.
 
@@ -2377,86 +2339,83 @@
 020260 AL000	     SECTION 58.
 020270 AL00.
 020280       ACCEPT WS-START FROM TIME.
-020290	     MOVE 223		 TO W40-DEC.
-020300	     MOVE 1		 TO WS-S1.
+020290       MOVE 223                TO W40-DEC.
+020300       MOVE 1                  TO WS-S1.
 
 020310 AL05.
-020320	     MOVE W40-CHAR	 TO WS-GCHAR (WS-S1).
+020320       MOVE W40-CHAR           TO WS-GCHAR(WS-S1).
 020330     IF WS-S1 < 20
-020340	       ADD 1		 TO WS-S1
+020340         ADD 1                 TO WS-S1
 020350         GO TO AL05.
-014170	     MOVE 2		 TO WS-S1.
+014170       MOVE 2                  TO WS-S1.
 
 014180 AL05A.
-014190	     MOVE WS-G1 	 TO WS-TCHAR (WS-S1)
-				    WS-BCHAR (WS-S1).
-	     MOVE WS-G8 	 TO WS-TCH   (WS-S1)
-				    WS-BCH   (WS-S1).
+014190       MOVE WS-G1              TO WS-TCHAR(WS-S1) WS-BCHAR(WS-S1).
+             MOVE WS-G8              TO WS-TCH(WS-S1)   WS-BCH(WS-S1).
 014200     IF WS-S1 < 79
-014210	       ADD 1		 TO WS-S1
+014210         ADD 1                 TO WS-S1
 014220         GO TO AL05A.
-	     MOVE WS-G9 	 TO WS-TCH  (1).
-	     MOVE WS-G10	 TO WS-TCH  (80).
-	     MOVE WS-G11	 TO WS-BCH  (1).
-	     MOVE WS-G12	 TO WS-BCH  (80).
-014230	     MOVE WS-G15	 TO WS-TCHAR (1).
-014240	     MOVE WS-G16	 TO WS-TCHAR (80).
-014250	     MOVE WS-G17	 TO WS-BCHAR (1).
-014260	     MOVE WS-G18	 TO WS-BCHAR (80).
-	   IF NOT LS-INSTR = "X"
-020360	       DISPLAY APAC.
-021870	     MOVE ALL "°"	 TO WS-MID-LINE.
-	     MOVE WS-G3 	 TO WS-MCHR (1) WS-MCHR (80).
-020510	     MOVE ZERO		 TO WS-S1 WS-S2.
-	     MOVE L05-COMMAND	 TO W05-COMMAND.
-020540	     MOVE 1		 TO WS-S1 WS-S2.
-020550	     MOVE ZERO		 TO W05-DRAW.
+             MOVE WS-G9	             TO WS-TCH(1).
+             MOVE WS-G10             TO WS-TCH(80).
+             MOVE WS-G11             TO WS-BCH(1).
+             MOVE WS-G12             TO WS-BCH(80).
+014230       MOVE WS-G15             TO WS-TCHAR(1).
+014240       MOVE WS-G16             TO WS-TCHAR(80).
+014250       MOVE WS-G17             TO WS-BCHAR(1).
+014260       MOVE WS-G18             TO WS-BCHAR(80).
+           IF NOT(LS-INSTR = "X")
+020360         DISPLAY APAC.
+021870         MOVE ALL "°"          TO WS-MID-LINE.
+             MOVE WS-G3              TO WS-MCHR(1) WS-MCHR(80).
+020510       MOVE ZERO               TO WS-S1 WS-S2.
+             MOVE L05-COMMAND        TO W05-COMMAND.
+020540       MOVE 1                  TO WS-S1 WS-S2.
+020550       MOVE ZERO               TO W05-DRAW.
 
 020560 AL10.
-020570     IF W05-CHAR (WS-S1) = "*"
+020570     IF W05-CHAR(WS-S1) = "*"
 020580         GO TO AL15.
 020590     IF WS-S1 < 117
-020600	       ADD 1		 TO WS-S1
+020600         ADD 1                 TO WS-S1
 020610         GO TO AL10.
 020620       GO TO AL30.
 
 020630 AL15.
-020640	     ADD 2		 TO WS-S1.
+020640       ADD 2                   TO WS-S1.
 
 020650 AL20.
 020660     IF W05-CHAR (WS-S1) = "," OR " "
 020670         GO TO AL25.
-020680	     MOVE W05-CHAR (WS-S1)
-				 TO W05-DC (WS-S2).
+020680       MOVE W05-CHAR(WS-S1)    TO W05-DC(WS-S2).
            IF WS-S2 < 2
-	       ADD 1		 TO WS-S2
+               ADD 1                 TO WS-S2
            ELSE
 020690         GO TO AL30.
 
 020700 AL25.
 020710     IF WS-S1 < 128
-020720	       ADD 1		 TO WS-S1
+020720         ADD 1                 TO WS-S1
 020730         GO TO AL20.
 
 020740 AL30.
 020750     IF W05-DRW NOT NUMERIC
-020760	       MOVE 0		 TO W05-DRAW
+020760         MOVE 0                TO W05-DRAW
 020770     ELSE
 020780     IF W05-DRAW > 39
-020790	       MOVE 40		 TO W05-DRAW.
-020800	     MOVE ZERO		 TO WS-S1.
+020790         MOVE 40               TO W05-DRAW.
+020800       MOVE ZERO               TO WS-S1.
 
 020810 AL35.
 020820       CALL X"D9" USING WS-CONSOLE.
 020830     IF WS-CONSOLE NOT = ZERO
-020840	       ACCEPT WS-OPTION WITH AUTO
+020840         ACCEPT WS-OPTION WITH AUTO
 020850         GO TO AL40.
-020860	     ADD 1		 TO WS-S1 WS-S2.
-020870     ACCEPT WS-END FROM TIME.
-020880	   SUBTRACT WS-START	 FROM WS-END.
-	   IF LS-INSTR = "X"
-	       GO TO AL999.
-020890	   IF WS-END < 400
+020860       ADD 1                   TO WS-S1 WS-S2.
+020870       ACCEPT WS-END FROM TIME.
+020880       SUBTRACT WS-START       FROM WS-END.
+           IF LS-INSTR = "X"
+               GO TO AL999.
+020890     IF WS-END < 400
 020900         GO TO AL35.
 
 020910 AL40.
@@ -2468,44 +2427,11 @@
 	     MOVE 1		 TO USER-SETTING.
 	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		       ESC, F1 to F10 keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    PAGE-UP and PAGE-DOWN keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   A C T I V A T E   M O U S E		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO AL999.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set MOUSE key to act as FUNCTION key	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+
+             COPY "FUNCTION.PRO".
 
 020930 AL999.
 020940     EXIT.

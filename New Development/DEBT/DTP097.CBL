@@ -1,34 +1,38 @@
       $SET LINKCOUNT"320"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	   ******   ********   *
-      *   **	**     **     **    **	 **  **   **	**	 **    *
-      *   **	**     **     **    **	**    **  **	**	**     *
-      *   **	**     **     *******	**    **   *******     **      *
-      *   **	**     **     **	**    **	**    **       *
-      *   **	**     **     **	 **  **   **	**    **       *
-      *   *******      **     **	  ****	   ******     **       *
+      *   *******   ********  *******     ****	   ******   ********   *
+      *   **    **     **     **    **   **  **   **    **       **    *
+      *   **    **     **     **    **  **    **  **    **      **     *
+      *   **    **     **     *******   **    **   *******     **      *
+      *   **    **     **     **        **    **        **    **       *
+      *   **    **     **     **         **  **   **    **    **       *
+      *   *******      **     **          ****	   ******     **       *
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
-      *  D E B T O R   E X T R A C T   T R A N S A C T I O N S	       *
+      *  D E B T O R   E X T R A C T   T R A N S A C T I O N S         *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
-      * 							       *
+      *     VERSION 9.00.20 - December 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  May 2006	- New field included in Accounts Receivable    *
-      * 		  for recording number of outstanding Jobs     *
-      * 		  linked to the account. Additional filler     *
-      * 		  added for future expansion.		       *
-      * 							       *
+      *                                                                *
+      *  May 2006	- New  field included in Accounts Receivable  for    *
+      * 		  recording number of outstanding Jobs linked to the *
+      * 		  account. Additional  filler added  for  future     *
+      * 		  expansion.	                                   *
+      *                                                                *
+      *  Jan 2008	- New file (DEBALT)- Debtor alternate index included *
+      * 		  for lookups, using any word contained in the       *
+      * 		  Debtor name.                                       *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP097.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -63,41 +67,36 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000160 COPY "DBTRAN.SL".
 
-000160 COPY DBTRAN.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBTRN.SL".
 
-000140 COPY DEBTRN.SL.
-
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000310 COPY "DEBTRN.FDE".
 
-000310 COPY DEBTRN.FDE.
-
-000290 COPY PARAM.FDE.
+000290 COPY "PARAM.FDE".
 
       /
       *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   ** 
-      *         **    *    **   **    **   **   **    **  **  
-      *         **   ***   **   **    **   ******     *****   
-      *          ** ** ** **    **    **   **   **    **  **  
-      *           ***   ***     **    **   **    **   **   ** 
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 001560 77  WS-SUB	   PIC	9(04)	 COMP-5.
 001560 77  WS-S            PIC  9(04)    COMP-5.
 001570 77  WS-S1           PIC  9(04)    COMP-5.
@@ -144,6 +143,44 @@
 002130 77  WS-AC           PIC  X(07) VALUE "ACCOUNT".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
+
+      *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커
+      *    � Used by calling program (WORKING-STORAGE) and called program �
+      *    � (LINKAGE SECTION) for Main screen layout and headings.	  �
+      *    읕컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴켸
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *	     C = Clear comment line (50)
+      *	     E = Clear lines (any line or lines between 5 and 46)
+      * 	     H = Change heading
+      * 	     S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "DTP097".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "ACCOUNTS RECEIVABLE- EXTRACT TRANSATIONS".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-WRKHD           PIC  X(11).
+           03  CRT-WRKST           PIC  X(03).
+
       /
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
@@ -196,22 +233,10 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY DEBTRN.ID.
-
-       COPY PARAM.ID.
 
 002500 01  W10-SPARES.
 002510	   03  W10-DATE	    PIC X(10).
@@ -257,7 +282,7 @@
 	     05  W15-NEW       PIC  9(04).
 	     05  FILLER        PIC  X(04).
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
 002860     03  W25-RESULT      PIC 9(05)V99.
@@ -277,13 +302,13 @@
            03  W30-30          PIC  9(06) COMP-3.
            03  W30-CUR         PIC  9(06) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS".
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -362,52 +387,49 @@
 004540     03  W100-90         PIC Z(08)9.99-.
 004540     03  W100-120        PIC Z(08)9.99-.
 004550     03  W100-INT        PIC Z(08)9.99.
-004560     03  W100-CRL        PIC Z(06)9.  
+004560     03  W100-CRL        PIC Z(06)9.
 004570     03  W100-KEY        PIC Z(05)9.
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
 004580 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
 007640 01  S27.
-007650	   03  LINE  5 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
+007650	   03  LINE  5 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Red
 007660                           VALUE "This routine does not include a
 007670-                          "recovery procedure. Security".
-007680	   03  LINE  6 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
+007680	   03  LINE  6 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Red
 007690                           VALUE "copies  of the data files should
 007700-                          " be made as a power  failure".
-007710	   03  LINE  7 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
+007710	   03  LINE  7 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Red
 007720                           VALUE "or any other problem during this
 007730-                          " procedure would require the".
-007740	   03  LINE  8 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
+007740	   03  LINE  8 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Red
 007750                           VALUE "DATA FILES from the previous bac
 007760-                          "kup to be restored !!!      ".
 007770	   03  LINE 10 COLUMN 12 VALUE "Do you wish to continue (".
-	   03	       COLUMN 37 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 37 FOREGROUND-COLOR Brown HIGHLIGHT
 				 VALUE "Y".
 	   03	       COLUMN 38 VALUE "/".
-	   03	       COLUMN 39 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 39 FOREGROUND-COLOR Brown HIGHLIGHT
 				 VALUE "N".
 	   03	       COLUMN 40 VALUE ")?".
 
 007780 01  S28.
-007790	   03  LINE  4 COLUMN 40 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+007790	   03  LINE  4 COLUMN 40 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta
 007800				 PIC Z9/99/9999 USING W90-IDTE AUTO.
 
-       COPY ERROR.CRT.
-
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 008230 AA000		       SECTION.
 008240 AA00.
 003240	   IF LS0-DBLEV < 9
@@ -421,55 +443,55 @@
 013140 AA49.
 013150       EXIT PROGRAM.
 
-       COPY FUNCTION.SCR.
+       COPY "FUNCTION.SCR".
 
-       COPY ERROR.SCR.
+       COPY "ERROR.SCR".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY DBTRAN.RD1.
+       COPY "DBTRAN.RD1".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-       COPY DEBTRN.RD.
+       COPY "DEBTRN.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY DBTRAN.WR.
+       COPY "DBTRAN.WR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-       COPY DEBTRN.WR.
+       COPY "DEBTRN.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
       /
       *    ****    E X T R A C T   O R	 L O A D   T R A N S
-      *   
+      *
 034100 CI000		       SECTION 5.
 034110 CI00.
 034120       DISPLAY CLR-SCREEN.
 	     DISPLAY "EXTRACT / LOAD DEBTOR TRANSACTIONS"
-		      AT 0224 WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+		      AT 0224 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 	     DISPLAY S27.
 024790 CI-CHK.
 024800	     ACCEPT WS-OPTION AT 1043
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
+		    WITH FOREGROUND-COLOR Grey HIGHLIGHT
+			 BACKGROUND-COLOR Magenta AUTO.
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
@@ -477,14 +499,14 @@
 024870         GO TO CI-CHK.
 024880     IF WS-OPTION = "N"
 024890	       GO TO CI999.
-	     DISPLAY "E" AT 1204 WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     "xtract or " "L" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+	     DISPLAY "E" AT 1204 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+		     "xtract or " "L" WITH FOREGROUND-COLOR Brown HIGHLIGHT
 		     "oad transactions".
 	     MOVE SPACE TO WS-OPTION.
        CI05.
 024800	     ACCEPT WS-OPTION AT 1234
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
+		    WITH FOREGROUND-COLOR Grey HIGHLIGHT
+			 BACKGROUND-COLOR Magenta UPDATE AUTO.
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
@@ -506,7 +528,7 @@
 	   IF WS-OPTION = "L"
 	       GO TO CI20.
 	     DISPLAY "EXTRACT DEBTOR TRANSACTIONS"
-		      AT 0227 WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+		      AT 0227 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 	     DISPLAY "Date from which to extract (DDMMYY)" AT 0404.
 	     MOVE W12-TODAY	 TO W90-IDTE.
        CI10.
@@ -525,8 +547,8 @@
        CI15.
 	     PERFORM READ-DBTRAN-NEXT THRU READ-DBTRAN-EXIT.
 	     DISPLAY TRA-KEY AT 0621
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+			  BACKGROUND-COLOR Magenta.
 	   IF WS-F-ERROR = 5
 	       GO TO CI30.
 	   IF TRA-DATE < W22-DTE1
@@ -547,7 +569,7 @@
 
        CI20.
 	     DISPLAY "LOAD DEBTOR TRANSACTIONS"
-		      AT 0228 WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+		      AT 0228 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 	     DISPLAY "Writing Record :" AT 0604.
 
        CI25.
@@ -557,8 +579,8 @@
 	       GO TO CI30.
 	     MOVE DBT-RECORD1	 TO TRA-RECORD1.
 	     DISPLAY TRA-KEY AT 0621
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+			  BACKGROUND-COLOR Magenta.
 	     MOVE TRA-AC	 TO DEB-ACNO.
 	     PERFORM READ-DEBTOR-LOCK THRU READ-DEBTOR-EXIT.
 	   IF TRA-VALUE < ZERO
@@ -572,15 +594,15 @@
 
        CI30.
 	     DISPLAY "Load/Extract Complete" AT 0804
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+		      WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
 	     DISPLAY "Press ANY key to continue" AT 1004
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT.
+		      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 036380 CI999.
 036390       EXIT.
       /
       *    ****    I N I T I A L I Z E   P R O G R A M
-      *   
+      *
 041980 ZA000-INIT	       SECTION 8.
 041990 ZA000-OPEN.
              PERFORM ZA55 THRU ZA60.
@@ -706,22 +728,22 @@
 042890       EXIT.
       /
       *    ****    I / O   E R R O R   M E S S A G E S
-      *   
+      *
 042900 ZB000-ERROR	     SECTION 8.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
+041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
        I-O-ERROR-EXIT.
              EXIT.
@@ -761,14 +783,14 @@
 042020     ELSE
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
+045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
+045390       DISPLAY "Status " AT 1212
+                      WS-STATUS WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
+                        WS-KEY WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                        " " WS-KEYX WITH FOREGROUND-COLOR Cyan HIGHLIGHT
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.
 045440         DISPLAY "Please make a note of these details" AT 1812.

@@ -1,13 +1,13 @@
       $SET LINKCOUNT"512"
       ******************************************************************
       *                                                                *
-      *    *******   ********  *******	   ****       **	**     *
-      *    **	 **	**     **    **   **  **     ***       ***     *
-      *    **	 **	**     **    **  **    **     **      * **     *
-      *    **	 **	**     *******	 **    **     **     *	**     *
-      *    **	 **	**     **	 **    **     **    *******    *
-      *    **	 **	**     **	  **  **      **	**     *
-      *    *******	**     **	   ****     ******     ****    *
+      *    *******   ********  *******     ****       **        **     *
+      *    **    **	**     **    **   **  **     ***       ***     *
+      *    **    **	**     **    **  **    **     **      * **     *
+      *    **    **	**     *******   **    **     **     *  **     *
+      *    **    **	**     **        **    **     **    *******    *
+      *    **    **	**     **         **  **      **        **     *
+      *    *******	**     **          ****     ******     ****    *
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
@@ -15,7 +15,7 @@
       *                                                                *
       *   D E B T O R	B A T C H   T R A N S A C T I O N S   C O D E  *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
@@ -30,7 +30,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -65,31 +65,29 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000160 COPY "DBTRAN.SL".
 
-000160 COPY DBTRAN.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBMEM.SL".
 
-000140 COPY DEBMEM.SL.
+       COPY "DEBTRN.SL".
 
-       COPY DEBTRN.SL.
+000140 COPY "DEPART.SL".
 
-000140 COPY DEPART.SL.
+       COPY "DRBTCH.SL".
 
-       COPY DRBTCH.SL.
+       COPY "LEDTRF.SL".
 
-       COPY LEDTRF.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
+000220 COPY "RECOVER.SL".
 
-000220 COPY RECOVER.SL.
+       COPY "SHARED.SL".
 
-       COPY SHARED.SL.
-
-       COPY TXTRAN.SL.
+       COPY "TXTRAN.SL".
 
 000240     SELECT PRNREP  ASSIGN W02-PRINTER
                           ORGANIZATION LINE SEQUENTIAL.
@@ -97,31 +95,29 @@
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000140 COPY "DEBMEM.FDE".
 
-000140 COPY DEBMEM.FDE.
+       COPY "DEBTRN.GFD".
 
-       COPY DEBTRN.GFD.
+000140 COPY "DEPART.FDE".
 
-000140 COPY DEPART.FDE.
+       COPY "DRBTCH.FDE".
 
-       COPY DRBTCH.FDE.
+       COPY "LEDTRF.FDE".
 
-       COPY LEDTRF.FDE.
+000290 COPY "PARAM.FDE".
 
-000290 COPY PARAM.FDE.
+000390 COPY "RECOVER.GFD".
 
-000390 COPY RECOVER.GFD.
+       COPY "SHARED.FDE".
 
-       COPY SHARED.FDE.
-
-       COPY TXTRAN.FDE.
+       COPY "TXTRAN.FDE".
 
       /
 000410 FD  PRNREP    LABEL RECORD OMITTED
@@ -310,6 +306,7 @@
 002100 77  WS-A            PIC  X(19) VALUE "Any key to continue".
 002110 77  WS-E            PIC  X(15) VALUE "**END** - ENTER".
 002130 77  WS-AC	   PIC	X(07) VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -364,13 +361,13 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
 	   03  WS-PROG	       PIC  X(03) VALUE "010".
 
-       COPY LEDTRF.WS.
+       COPY "LEDTRF.WS".
 
 002250 01  W00-TRAN-CODES.
            03  W00-T-VAT   PIC  9(09)V99 COMP-3.
@@ -389,40 +386,12 @@
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
 
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DEBTOR.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY DEBTRN.ID.
-
-       COPY DEPART.ID.
-
-       COPY DRBTCH.ID.
-
-       COPY LEDTRF.ID.
-
-       COPY PARAM.ID.
-
-       COPY RECOVER.ID.
-
-       COPY SHARED.ID.
-
-       COPY TXTRAN.ID.
-
        01  W02-FILE-IDS.
            03  W02-PRINTER.
 	       05  W02-REPORT PIC X(07) VALUE "DTP014.".
                05  W02-USER   PIC X(05) VALUE SPACES.
 
-       COPY W05.VAT.
+       COPY "W05.VAT".
 
        01  W05-DISC.
 000630	   03  W05-DISCOUNT.
@@ -440,9 +409,9 @@
        01  W10-REF.
            03  W10-NUM         PIC  9(08).
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
 002860     03  W25-RESULT      PIC 9(05)V99.
@@ -463,9 +432,9 @@
 	   03  W30-30	       PIC  9(08) COMP-3.
 	   03  W30-CUR	       PIC  9(08) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
 003890 01  W45-TRAN.
 003900     03  W45-CODE        PIC 9(02).
@@ -473,9 +442,9 @@
 003920     03  W45-AFR         PIC X(12).
 003930     03  W45-ACT         PIC X(01).
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS".
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -527,7 +496,7 @@
 003960 01  W85-BATCHES.
 003970         05  W85-BATCH   PIC  9(06)    COMP-5.
 
-       COPY W90.DBT.
+       COPY "W90.DBT".
 
 004390 01  W95-STM.
 004400     03  W95-COMP        PIC X(40).
@@ -572,16 +541,16 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 004580 SCREEN SECTION.
 
-       COPY BLANK.CRT.
+       COPY "DEBLUP.CRT".
 
-       COPY DEBLUP.CRT.
-
-       COPY TRNLUP.CRT.
+       COPY "TRNLUP.CRT".
 
        01  S08A.
 	   03  LINE 16 COLUMN  6 VALUE "Allocation:".
@@ -817,12 +786,6 @@
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-       COPY S99.CRT.
-
-       COPY OPT.CRT.
-
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -879,73 +842,73 @@
        AA99.
              EXIT.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY OPTION.CRT.
+       COPY "OPTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY DEBTOR.TRN.
+       COPY "DEBTOR.TRN".
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY DBTRAN.RD1.
+       COPY "DBTRAN.RD1".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-000140 COPY DEBTRN.RD.
+000140 COPY "DEBTRN.RD".
 
-       COPY DEPART.RD.
+       COPY "DEPART.RD".
 
-       COPY DRBTCH.RD.
+       COPY "DRBTCH.RD".
 
-       COPY LEDTRF.RD.
+       COPY "LEDTRF.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DBTRAN.WR.
+       COPY "DBTRAN.WR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-000140 COPY DEBMEM.WR.
+000140 COPY "DEBMEM.WR".
 
-000140 COPY DEBTRN.WR.
+000140 COPY "DEBTRN.WR".
 
-       COPY DEPART.WR.
+       COPY "DEPART.WR".
 
-       COPY DRBTCH.WR.
+       COPY "DRBTCH.WR".
 
-       COPY LEDTRF.WR.
+       COPY "LEDTRF.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY TXTRAN.WR.
+       COPY "TXTRAN.WR".
 
-       COPY DEBTOR.LUP.
+       COPY "DEBTOR.LUP".
 
-       COPY DBTRAN.LUP.
+       COPY "DBTRAN.LUP".
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
@@ -1193,11 +1156,11 @@
 014430 CA160-EXIT.
 014440       EXIT.
 
-       COPY DEBTOR.TRA.
+       COPY "DEBTOR.TRA".
 
-       COPY LEDTRF.UPD.
+       COPY "LEDTRF.UPD".
 
-       COPY DEBTOR.ALL.
+       COPY "DEBTOR.ALL".
 
       /
       *    ****    D E B T O R	 T R A N S A C T I O N S

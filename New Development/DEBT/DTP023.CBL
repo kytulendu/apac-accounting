@@ -1,19 +1,19 @@
       $SET LINKCOUNT"512"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	   ******    ******    *
-      *   **	**     **     **    **	 **  **   **	**  **	  **   *
-      *   **	**     **     **    **	**    **       **	  **   *
-      *   **	**     **     *******	**    **     ** 	***    *
-      *   **	**     **     **	**    **   **		  **   *
-      *   **	**     **     **	 **  **   **	    **	  **   *
-      *   *******      **     **	  ****	  ********   ******    *
+      *   *******   ********  *******     ****	   ******    ******    *
+      *   **    **     **     **    **   **  **   **    **  **    **   *
+      *   **    **     **     **    **  **    **       **         **   *
+      *   **    **     **     *******   **    **     **         ***    *
+      *   **    **     **     **        **    **   **             **   *
+      *   **    **     **     **         **  **   **        **    **   *
+      *   *******      **     **          ****	  ********   ******    *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *     D E B T O R	  A D D R E S S   L A B E L S	P R O G R A M  *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   November 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -63,32 +63,28 @@
 000100 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "CONTROL.SL".
 
-       COPY CONTROL.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
-
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBTOR.ISL".
 
 000220 DATA DIVISION.
 000230 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "CONTROL.FDE".
 
-       COPY CONTROL.FDE.
+000250 COPY "PARAM.FDE".
 
-000250 COPY PARAM.FDE.
-
-000270 COPY DEBTOR.FDE.
+000270 COPY "DEBTOR.FDE".
 
       /
       *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   ** 
-      *         **    *    **   **    **   **   **    **  **  
-      *         **   ***   **   **    **   ******     *****   
-      *          ** ** ** **    **    **   **   **    **  **  
-      *           ***   ***     **    **   **    **   **   ** 
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
       *            *     *       ******    **    **   **    **
       *
 002780 WORKING-STORAGE SECTION.
@@ -182,7 +178,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-003440 COPY WS.WS.
+003440 COPY "WS.WS".
 
 003460 01  W00-TRAN-CODES.
 003470     03  W00-TRAN-TYPES  OCCURS 100.
@@ -193,16 +189,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-003520 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY PARAM.ID.
 
        01  W02-PRINTER-DETAILS.
 	   03  W02-PRINTER     PIC  X(12).
@@ -499,7 +485,7 @@
       *     03	W10-RDATE REDEFINES W10-DATE.
       *	       05  W10-DTE     PIC 99/99/9999.
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
        01  W15-OPTIONS.
 	   03  W15-OPTS.
@@ -520,8 +506,8 @@
            03  W24-MONTH-NAMES.
                05  FILLER      PIC  X(09) VALUE " January ".
                05  FILLER      PIC  X(09) VALUE " February".
-               05  FILLER      PIC  X(09) VALUE "  March  ". 
-               05  FILLER      PIC  X(09) VALUE "  April  ". 
+               05  FILLER      PIC  X(09) VALUE "  March  ".
+               05  FILLER      PIC  X(09) VALUE "  April  ".
                05  FILLER      PIC  X(09) VALUE "   May   ".
                05  FILLER      PIC  X(09) VALUE "   June  ".
                05  FILLER      PIC  X(09) VALUE "   July  ".
@@ -572,7 +558,7 @@
 005000     02  W40-TITLE       PIC 9(04)     COMP-5.
 005010     02  W40-LANG        PIC X(01).
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
 005020 01  W45-TRAN.
 005030     03  W45-CODE        PIC 9(02).
@@ -592,9 +578,9 @@
 005140         05  W46-POST.
 005150             07  W46-PC  PIC 9(04).
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-005170 COPY W50.WS.
+005170 COPY "W50.WS".
 
        01  W55-STATS.
            03  W55-H1         PIC  X(09).
@@ -717,17 +703,17 @@
 004540     03  W100-90         PIC Z(08)9.99-.
 004540     03  W100-120        PIC Z(08)9.99-.
 004550     03  W100-INT        PIC Z(08)9.99.
-004560     03  W100-CRL        PIC Z(06)9.  
+004560     03  W100-CRL        PIC Z(06)9.
 004570     03  W100-KEY        PIC Z(05)9.
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 005990 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
 006120 01  S03.
 	   02  S03-1.
@@ -925,12 +911,6 @@
 006190 01  S05.
 006200	   03  LINE 10 COLUMN 12 VALUE "Key in Category code".
 
-       COPY S99.CRT.
-
-       COPY OPT.CRT.
-
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -952,27 +932,27 @@
        AA49.
 006950	     EXIT PROGRAM.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY ABORT.PRN.
+       COPY "ABORT.PRN".
 
-       COPY PRINTUTL.AP8.
+       COPY "PRINTUTL.AP8".
 
       /
       *    ****    READ FILES ROUTINES
       *
 007340 AC000-READ              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY PARAM.RD.
-      
-       COPY DEBTOR.RD1.
-      
+       COPY "PARAM.RD".
+
+       COPY "DEBTOR.RD1".
+
       /
 008930 CA155-GET-DEBTOR        SECTION 2.
 008940 CA155-ACCOUNT.
@@ -1698,22 +1678,22 @@
 025930       EXIT.
       /
 025940 ZB000		     SECTION 9.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -1745,11 +1725,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
                         " " WS-KEYX WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"

@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -59,23 +59,21 @@
 000070 SPECIAL-NAMES.
 000080		       CURSOR IS CSTART
 000090		       CONSOLE IS CRT
-		       CRT STATUS IS KEY-STATUS.
+                         CRT STATUS IS KEY-STATUS.
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000160 COPY "DBTRAN.SL".
 
-000160 COPY DBTRAN.SL.
+000140 COPY "DEBCOL.SL".
 
-000140 COPY DEBCOL.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBMEM.SL".
 
-000140 COPY DEBMEM.SL.
-
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
 000240     SELECT PRNREP  ASSIGN W02-PRINTER
                           ORGANIZATION LINE SEQUENTIAL.
@@ -83,19 +81,17 @@
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+000310 COPY "DEBCOL.FDE".
 
-000310 COPY DEBCOL.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000140 COPY "DEBMEM.FDE".
 
-000140 COPY DEBMEM.FDE.
-
-000290 COPY PARAM.FDE.
+000290 COPY "PARAM.FDE".
 
       /
 000410 FD  PRNREP    LABEL RECORD OMITTED
@@ -113,8 +109,7 @@
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK        PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 001560 77  WS-SUB	   PIC	9(04)	 COMP-5.
 001560 77  WS-S            PIC  9(04)    COMP-5.
 001570 77  WS-S1           PIC  9(04)    COMP-5.
@@ -149,8 +144,47 @@
 001850 77  WS-ERROR        PIC  9(01) VALUE ZERO.
 002010 77  WS-ERR1         PIC  X(22) VALUE "Invalid Account Number".
 002020 77  WS-ERR2         PIC  X(09) VALUE "No Record".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.	  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *	     C = Clear comment line (50)
+      *	     E = Clear lines (any line or lines between 5 and 46)
+      * 	     H = Change heading
+      * 	     S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "DTPCOL".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "ACCOUNTS RECEIVABLE - COLLECTIONS".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-WRKHD           PIC  X(11).
+           03  CRT-WRKST           PIC  X(03).
+
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
 002440         05  WS-TCHR PIC X(01) OCCURS 80.
@@ -202,7 +236,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
@@ -225,28 +259,12 @@
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
 
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DEBCOL.ID.
-
-       COPY DEBTOR.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY PARAM.ID.
-
        01  W02-FILE-IDS.
            03  W02-PRINTER.
 	       05  W02-REPORT PIC X(07) VALUE "DTPCOL.".
                05  W02-USER   PIC X(05) VALUE SPACES.
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
        01  W15-ALLOCATIONS.
            03  W15-DETAIL.
@@ -330,7 +348,7 @@
 002900     03  W25-TOTAL       PIC S9(09)V99 COMP-3.
 002910     03  W25-VALUE       PIC S9(09)V99 COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
        01  W40-BALANCES.
            03  W40-A-MTD       PIC S9(09)V99 COMP-3.
@@ -355,7 +373,7 @@
 003420     03  W40-T-120       PIC S9(09)V99 COMP-3.
 003430     03  W40-T-INT       PIC S9(09)V99 COMP-3.
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
 003890 01  W45-TRAN.
 003900     03  W45-CODE        PIC 9(02).
@@ -363,9 +381,9 @@
 003920     03  W45-AFR         PIC X(12).
 003930     03  W45-ACT         PIC X(01).
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS".
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -483,15 +501,15 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 004580 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
 005070 01  S08.
-005080	   03  LINE  2 COLUMN 34 FOREGROUND-COLOR 7 HIGHLIGHT
+005080	   03  LINE  2 COLUMN 34 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 005090				 VALUE "DEBTOR ENQUIRY".
 005100     03  LINE  3 COLUMN  2 VALUE "Account No:".
 005110     03          COLUMN 21 VALUE "Name:".
@@ -541,735 +559,658 @@
 005510     03          COLUMN 51 VALUE "Credit limit    :".
 
        01  S09A.
-           03  LINE  7 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE  7 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE  8 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE  8 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE  9 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 10 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 11 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 12 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 13 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 14 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 15 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 16 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 17 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 18 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 19 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 20 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 21 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 21 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE 22 COLUMN 45 BACKGROUND-COLOR 7
+           03  LINE 22 COLUMN 45 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC  X(34) FROM W40-SPACES.
-           03  LINE  7 COLUMN 47 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0 VALUE "Allocated".
-           03          COLUMN 61 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0 VALUE "Balance".
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0 VALUE "Ref. No.".
-           03  LINE  8 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE  7 COLUMN 47 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT VALUE "Allocated".
+           03          COLUMN 61 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT VALUE "Balance".
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT VALUE "Ref. No.".
+           03  LINE  8 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL1.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL1.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC1.
-           03  LINE  9 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE  9 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL2.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL2.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC2.
-	   03  LINE 10 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 10 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL3.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL3.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC3.
-	   03  LINE 11 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 11 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL4.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL4.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC4.
-	   03  LINE 12 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 12 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL5.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL5.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC5.
-	   03  LINE 13 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 13 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL6.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL6.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC6.
-	   03  LINE 14 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 14 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL7.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL7.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC7.
-	   03  LINE 15 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 15 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL8.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL8.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC8.
-	   03  LINE 16 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 16 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL9.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL9.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC9.
-	   03  LINE 17 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 17 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL10.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL10.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC10.
-	   03  LINE 18 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 18 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL11.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL11.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC11.
-	   03  LINE 19 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 19 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL12.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL12.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC12.
-	   03  LINE 20 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 20 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL13.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL13.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC13.
-	   03  LINE 21 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 21 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL14.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL14.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC14.
-	   03  LINE 22 COLUMN 46 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+	   03  LINE 22 COLUMN 46 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-ALL15.
-           03          COLUMN 58 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 58 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  PIC  X(11) FROM W15-BAL15.
-	   03	       COLUMN 70 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 70 BACKGROUND-COLOR Grey HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(08) FROM W15-REC15.
 
        01  S09B.
-           03  LINE  7 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE  7 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-TOP.
-           03  LINE  8 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE  8 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE  9 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 10 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 11 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 12 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 13 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 14 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 15 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 16 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 17 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 18 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 19 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 20 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-MID.
-           03  LINE 21 COLUMN 51 BACKGROUND-COLOR 7
+           03  LINE 21 COLUMN 51 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC  X(28) FROM W40-BOT.
-           03  LINE  8 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE  8 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "PURCHASES LAST 12 MONTHS".
-           03  LINE  9 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE  9 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "January   :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(1).
-           03  LINE 10 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 10 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "February  :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(2).
-           03  LINE 11 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 11 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "March     :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(3).
-           03  LINE 12 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 12 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "April     :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(4).
-           03  LINE 13 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 13 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "May       :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(5).
-           03  LINE 14 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 14 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "June      :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(6).
-           03  LINE 15 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 15 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "July      :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(7).
-           03  LINE 16 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 16 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "August    :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(8).
-           03  LINE 17 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 17 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "September :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(9).
-           03  LINE 18 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 18 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "October   :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(10).
-           03  LINE 19 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 19 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "November  :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(11).
-           03  LINE 20 COLUMN 53 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03  LINE 20 COLUMN 53 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
                                  VALUE "December  :".
-           03          COLUMN 65 BACKGROUND-COLOR 7
-                                 FOREGROUND-COLOR 0
+           03          COLUMN 65 BACKGROUND-COLOR Grey HIGHLIGHT
+                                 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  Z(08)9.99- FROM DEB-MTHPUR(12).
        01  S10.
-	   03  LINE  8 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT VALUE
+	   03  LINE  8 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT VALUE
 	      "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-	   03  LINE  9 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE  9 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³ Delivery Address : ".
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(30) USING W40-PADD1.
-	   03	       COLUMN 55 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 55 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE " ³".
-	   03  LINE 10 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 10 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³                    ".
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(30) USING W40-PADD2.
-	   03	       COLUMN 55 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 55 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE " ³".
-	   03  LINE 11 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 11 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³                    ".
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(30) USING W40-PADD3.
-	   03	       COLUMN 55 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 55 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE " ³".
-	   03  LINE 12 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 12 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³                    ".
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(30) USING W40-PADD4.
-	   03	       COLUMN 55 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 55 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE " ³".
-	   03  LINE 13 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 13 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³ Postal Code        ".
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  9(04) USING W40-PPOST.
-	   03	       COLUMN 29 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT VALUE
+	   03	       COLUMN 29 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT VALUE
 				  "                           ³".
-	   03  LINE 14 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 14 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³ Category       ".
-	   03	       COLUMN 22 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 22 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  99B USING DEB-CAT.
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(30) USING W90-CDESC.
-	   03	       COLUMN 55 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 55 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE " ³".
-	   03  LINE 15 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 15 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³ Terms          ".
-	   03	       COLUMN 22 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 22 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(03) USING DEB-TERMS.
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(12) USING W90-TERMS.
-	   03	       COLUMN 37 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT VALUE
+	   03	       COLUMN 37 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT VALUE
 				 "                   ³".
-	   03  LINE 16 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 16 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³ Price Code     ".
-	   03	       COLUMN 22 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 22 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(03) USING DEB-PRICE.
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(12) USING W90-PRICE.
-	   03	       COLUMN 37 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT VALUE
+	   03	       COLUMN 37 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT VALUE
 				 "                   ³".
-	   03  LINE 17 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 17 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³ Sales Person   ".
-	   03	       COLUMN 22 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 22 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  99B USING DEB-SMAN.
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(30) USING W90-SMAN.
-	   03	       COLUMN 55 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03	       COLUMN 55 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE " ³".
-	   03  LINE 18 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+	   03  LINE 18 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "³ Invoice Type   ".
-	   03	       COLUMN 22 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 0
+	   03	       COLUMN 22 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Black HIGHLIGHT
 				 PIC  X(03) USING DEB-INV-TYPE.
-	   03	       COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
+	   03	       COLUMN 25 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 				 PIC  X(12) USING W90-TYPE.
-	   03	       COLUMN 37 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT VALUE
+	   03	       COLUMN 37 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT VALUE
 				 "                   ³".
-	   03  LINE 19 COLUMN  5 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT VALUE
+	   03  LINE 19 COLUMN  5 BACKGROUND-COLOR Green HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT VALUE
 	      "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
 
 007910 01  S36.
-007920	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+007920	   03  FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT BACKGROUND-COLOR Magenta HIGHLIGHT
 				  PIC X(06) USING W80-ACNO AUTO.
 
 009340 01  S-DEB.
-009350	   03  LINE  2 COLUMN 30 FOREGROUND-COLOR 7 HIGHLIGHT
+009350	   03  LINE  2 COLUMN 30 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
 009360				 VALUE "DEBTOR COLLECTION LOOKUP".
 009370	   03  LINE  3 COLUMN  2 VALUE "Start No/Name:".
 009380	   03	       COLUMN 23 VALUE	"/".
 009390     03  LINE  4 COLUMN  2 REVERSE-VIDEO VALUE
 009400	       "Ac/No  Customer name                            Tot.Bala
 009410-        "nce  Past Due  T  Days".
-009160	   03  LINE  5 COLUMN  1 BACKGROUND-COLOR 0 VALUE "Æ".
+009160	   03  LINE  5 COLUMN  1 BACKGROUND-COLOR Black HIGHLIGHT VALUE "Æ".
 009160	   03	       COLUMN  2 VALUE "ÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÑÍÑÍÍÍÍÍ".
-	   03	       COLUMN 80 BACKGROUND-COLOR 0 VALUE "µ".
-009160	   03  LINE 22 COLUMN  1 BACKGROUND-COLOR 0 VALUE "Æ".
+	   03	       COLUMN 80 BACKGROUND-COLOR Black HIGHLIGHT VALUE "µ".
+009160	   03  LINE 22 COLUMN  1 BACKGROUND-COLOR Black HIGHLIGHT VALUE "Æ".
 009170	   03	       COLUMN  2 VALUE "ÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÏÍÏÍÍÍÍÍ".
-	   03	       COLUMN 80 BACKGROUND-COLOR 0 VALUE "µ".
-009440     03  LINE 23 COLUMN  2 FOREGROUND-COLOR 7 VALUE
+	   03	       COLUMN 80 BACKGROUND-COLOR Black HIGHLIGHT VALUE "µ".
+009440     03  LINE 23 COLUMN  2 FOREGROUND-COLOR Grey HIGHLIGHT VALUE
 009450       "Key in at least the first character of the name or press".
-009460	   03	       COLUMN 59 FOREGROUND-COLOR 6 HIGHLIGHT
+009460	   03	       COLUMN 59 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "Esc".
-009470     03          COLUMN 62 FOREGROUND-COLOR 7 VALUE " to exit".
-009480	   03  LINE 25 COLUMN  2 BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 1 VALUE "Pressing '".
-009490	   03	       COLUMN 12 BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+009470     03          COLUMN 62 FOREGROUND-COLOR Grey HIGHLIGHT VALUE " to exit".
+009480	   03  LINE 25 COLUMN  2 BACKGROUND-COLOR Cyan HIGHLIGHT
+				 FOREGROUND-COLOR Blue HIGHLIGHT VALUE "Pressing '".
+009490	   03	       COLUMN 12 BACKGROUND-COLOR Cyan HIGHLIGHT
+				 FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 				 VALUE "ENTER".
-009500	   03	       COLUMN 17 BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 1 VALUE
+009500	   03	       COLUMN 17 BACKGROUND-COLOR Cyan HIGHLIGHT
+				 FOREGROUND-COLOR Blue HIGHLIGHT VALUE
 009510                           "' key only, will start from the beginn
 009520-                          "ing of the debtor file".
 009530 01  SA-ACT.
-009540	   03  LINE  3 COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+009540	   03  LINE  3 COLUMN 17 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 009550				 PIC  X(06) USING W80-ACNO AUTO.
 009530 01  SA-DEB.
-009540	   03  LINE  3 COLUMN 24 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+009540	   03  LINE  3 COLUMN 24 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 009550                           PIC  X(40) USING W40-NAME AUTO.
 
        01  S-COL.
-	   03  LINE  3 COLUMN  2 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "ACNO " .
-	   03	       COLUMN  7 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03  LINE  3 COLUMN  2 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "ACNO " .
+	   03	       COLUMN  7 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC  X(06) FROM DEB-ACNO.
-	   03	       COLUMN 13 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE " NAME ".
-	   03	       COLUMN 19 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 13 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE " NAME ".
+	   03	       COLUMN 19 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC  X(40) FROM W40-NAME.
-	   03	       COLUMN 60 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "  TEL ".
-	   03	       COLUMN 66 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 60 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "  TEL ".
+	   03	       COLUMN 66 FOREGROUND-COLOR Grey HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC  X(14) FROM W40-TEL.
-	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE " MTD ".
-	   03	       COLUMN  7 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03  LINE  4 COLUMN  2 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE " MTD ".
+	   03	       COLUMN  7 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZ9.99- FROM W40-A-MTD.
-	   03	       COLUMN 20 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "   CUR ".
-	   03	       COLUMN 27 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 20 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "   CUR ".
+	   03	       COLUMN 27 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZ9.99- FROM W40-A-CUR.
-	   03	       COLUMN 40 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "   30D ".
-	   03	       COLUMN 47 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 40 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "   30D ".
+	   03	       COLUMN 47 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZ9.99- FROM W40-A-30.
-	   03	       COLUMN 60 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "  60D ".
-	   03	       COLUMN 66 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 60 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "  60D ".
+	   03	       COLUMN 66 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZZ9.99- FROM W40-A-60.
-	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE " 90D ".
-	   03	       COLUMN  7 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03  LINE  5 COLUMN  2 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE " 90D ".
+	   03	       COLUMN  7 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZ9.99- FROM W40-A-90.
-	   03	       COLUMN 20 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "  120D ".
-	   03	       COLUMN 27 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 20 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "  120D ".
+	   03	       COLUMN 27 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZ9.99- FROM W40-A-120.
-	   03	       COLUMN 40 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "   INT ".
-	   03	       COLUMN 47 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 40 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "   INT ".
+	   03	       COLUMN 47 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZ9.99- FROM W40-A-INT.
-	   03	       COLUMN 60 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 2 VALUE "  DUE ".
-	   03	       COLUMN 66 FOREGROUND-COLOR 3 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03	       COLUMN 60 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Green HIGHLIGHT VALUE "  DUE ".
+	   03	       COLUMN 66 FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+				 BACKGROUND-COLOR Magenta HIGHLIGHT
 				 PIC ZZZZZZZZZ9.99- FROM W40-D-MTD.
-	   03  LINE  6 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE  6 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G9.
-	   03	       COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03	       COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING WS-MEM-LINE.
-	   03	       COLUMN 78 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03	       COLUMN 78 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G10.
-	   03  LINE  7 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE  7 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G3.
-	   03	       COLUMN 18 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
+	   03	       COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT VALUE
 	   "   C O L L E C T I O N   N O T E S   A M E N D / V I E W
       -    "".
-	   03	       COLUMN 78 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03	       COLUMN 78 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G3.
-	   03  LINE  8 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE  8 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G14.
-	   03	       COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03	       COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING WS-HME-LINE.
-	   03	       COLUMN 78 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03	       COLUMN 78 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G13.
-	   03  LINE  9 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE  9 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 10 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 10 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
 				 PIC X(62) USING WS-MM-LINE.
-	   03  LINE 11 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 11 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 12 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 12 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 13 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 13 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 14 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 14 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 15 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 15 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 16 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 16 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 17 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 17 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 18 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 18 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 19 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 19 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 20 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 20 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(62) USING WS-MM-LINE.
-	   03  LINE 21 COLUMN 17 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 21 COLUMN 17 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G11.
-	   03	       COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03	       COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING WS-MEM-LINE.
-	   03	       COLUMN 78 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03	       COLUMN 78 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(01) USING WS-G12.
        01  SA-COL.
-	   03  LINE  9 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE  9 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM1 AUTO.
-	   03  LINE 10 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 10 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM2 AUTO.
-	   03  LINE 11 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 11 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM3 AUTO.
-	   03  LINE 12 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 12 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM4 AUTO.
-	   03  LINE 13 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 13 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM5 AUTO.
-	   03  LINE 14 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 14 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM6 AUTO.
-	   03  LINE 15 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 15 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM7 AUTO.
-	   03  LINE 16 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 16 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM8 AUTO.
-	   03  LINE 17 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 17 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM9 AUTO.
-	   03  LINE 18 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 18 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM10 AUTO.
-	   03  LINE 19 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 19 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM11 AUTO.
-	   03  LINE 20 COLUMN 18 FOREGROUND-COLOR 5
-				 BACKGROUND-COLOR 7
+	   03  LINE 20 COLUMN 18 FOREGROUND-COLOR Magenta HIGHLIGHT
+				 BACKGROUND-COLOR Grey HIGHLIGHT
                                  PIC X(60) USING W200-MEM12 AUTO.
 
 
        01  S-DEB-MEM.
-           03  LINE  7 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
+           03  LINE  7 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT
+                                 BACKGROUND-COLOR Grey HIGHLIGHT VALUE
            "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
       -    "".
 
        01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
-           "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
-      -    "".
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G12.
+           03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G9.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-MEM-LINE.
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G10.
+           03  LINE  7 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G3.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey VALUE "   M E M O / R E M A R K S / C O R R E S P O N D E N C E".
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G3.
+           03  LINE  8 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G14.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-HME-LINE.
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G13.
+           03  LINE  9 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 10 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 11 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 12 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 13 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 14 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 15 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 16 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 17 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 18 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 19 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 20 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 21 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G11.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-MEM-LINE.
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G12.
+
        01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM12 AUTO.
-
-004870 COPY S99.CRT.
-
-       COPY ERROR.CRT.
+           03  LINE  9 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM1 AUTO.
+           03  LINE 10 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM2 AUTO.
+           03  LINE 11 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM3 AUTO.
+           03  LINE 12 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM4 AUTO.
+           03  LINE 13 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM5 AUTO.
+           03  LINE 14 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM6 AUTO.
+           03  LINE 15 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM7 AUTO.
+           03  LINE 16 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM8 AUTO.
+           03  LINE 17 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM9 AUTO.
+           03  LINE 18 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM10 AUTO.
+           03  LINE 19 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM11 AUTO.
+           03  LINE 20 COLUMN 18 FOREGROUND-COLOR Black HIGHLIGHT BACKGROUND-COLOR Grey HIGHLIGHT PIC X(60) USING W200-MEM12 AUTO.
 
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 010250 AA000-MAIN	       SECTION.
 010260 AA000-INIT.
 003240	   IF LS0-DBLEV < 2
@@ -1284,35 +1225,35 @@
        AA49.
 013150	     EXIT PROGRAM.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-011390 COPY LOCKED.RC2.
+011390 COPY "LOCKED.RC2".
 
-011410 COPY CLEAR.CRT.
+011410 COPY "CLEAR.CRT".
 
       /
       *    ****    READ FILES ROUTINES
       *
 011650 AC000              SECTION.
 
-011670 COPY CONTROL.RD.
+011670 COPY "CONTROL.RD".
 
-       COPY DBTRAN.RD.
+       COPY "DBTRAN.RD".
 
-011710 COPY DEBCOL.RD.
+011710 COPY "DEBCOL.RD".
 
-011710 COPY DEBTOR.RD.
+011710 COPY "DEBTOR.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-011750 COPY PARAM.RD.
+011750 COPY "PARAM.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY DEBCOL.WR.
+       COPY "DEBCOL.WR".
 
       *
       *    G E T   A   D E B T O R   T R A N S A C T I O N   R E C O R D
@@ -1418,7 +1359,7 @@
 	       GO TO DEBT-LUP-NAME.
 
        DEBT-LUP-CONTINUE.
-	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
+	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
 000170	     PERFORM CLEAR-L50.
 000180       MOVE 6              TO CLIN.
 000200       MOVE 1              TO W75-S W75-S1.
@@ -1472,12 +1413,12 @@
 000870         INSPECT W40-NAME REPLACING ALL "*" BY " "
 000880         INSPECT W40-NAME REPLACING FIRST "!" BY " ".
 000890	     DISPLAY DEB-ACNO AT LINE CLIN COLUMN 2
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT.
 000900	     DISPLAY W40-NAME AT LINE CLIN COLUMN 9
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT.
 000910       MOVE DEB-BAL        TO W100-LBAL.
 000920	     DISPLAY W100-LBAL AT LINE CLIN COLUMN 50
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT.
 	   IF DEB-TERMS = 0 OR 3
 000930	       COMPUTE W100-LARR = DEB-30 + DEB-60 + DEB-90 + DEB-120
 				 + DEB-INT
@@ -1488,48 +1429,48 @@
 	   IF DEB-TERMS = 2
 000930	       COMPUTE W100-LARR = DEB-90 + DEB-120 + DEB-INT.
 000940	     DISPLAY W100-LARR AT LINE CLIN COLUMN 62
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT.
 000960	     DISPLAY DEB-TERMS AT LINE CLIN COLUMN 73
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT.
 	   IF DEB-120 > ZERO
 	       DISPLAY "120" AT LINE CLIN COLUMN 76
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
 	   ELSE
 	   IF DEB-90 > ZERO
 	       DISPLAY " 90" AT LINE CLIN COLUMN 76
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
 	   ELSE
 	   IF DEB-60 > ZERO
 	       DISPLAY " 60" AT LINE CLIN COLUMN 76
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
 	   ELSE
 	   IF DEB-30 > ZERO
 	       DISPLAY " 30" AT LINE CLIN COLUMN 76
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT
+			WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
 	   ELSE
 	       DISPLAY "CUR" AT LINE CLIN COLUMN 76
-			WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+			WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT.
 000970     IF CLIN < 21
 000980         ADD 1             TO CLIN W75-S
 000990         GO TO DEBT-GET-DEBTOR-REC.
 001000
 001010 DEBT-FULL-SCREEN.
-001020	     DISPLAY " " AT 2303 WITH FOREGROUND-COLOR 6 HIGHLIGHT
-001030		     " - " WITH FOREGROUND-COLOR 7
-		     "PgUp" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-                     "/" WITH FOREGROUND-COLOR 7
-		     "PgDn" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     " - " WITH FOREGROUND-COLOR 7
-001040		     "ENTER" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-001050		     " view - " WITH FOREGROUND-COLOR 7
-001170		     "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     "ape - " WITH FOREGROUND-COLOR 7
-		     "F8" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+001020	     DISPLAY " " AT 2303 WITH FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
+001030		     " - " WITH FOREGROUND-COLOR Grey HIGHLIGHT
+		     "PgUp" WITH FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
+                     "/" WITH FOREGROUND-COLOR Grey HIGHLIGHT
+		     "PgDn" WITH FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
+		     " - " WITH FOREGROUND-COLOR Grey HIGHLIGHT
+001040		     "ENTER" WITH FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
+001050		     " view - " WITH FOREGROUND-COLOR Grey HIGHLIGHT
+001170		     "Esc" WITH FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
+		     "ape - " WITH FOREGROUND-COLOR Grey HIGHLIGHT
+		     "F8" WITH FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 		     " Collect.Notes - "
-		      WITH FOREGROUND-COLOR 7
-		     "F9" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+		      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+		     "F9" WITH FOREGROUND-COLOR Brown HIGHLIGHT HIGHLIGHT
 		     " memo/remarks"
-		      WITH FOREGROUND-COLOR 7.
+		      WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 
        DEBT-SAVE-FULL-SCREEN.
 	     PERFORM SAVE-SCREEN-2.
@@ -1619,17 +1560,17 @@
 
 001580 DEBT-NO-RECORD.
 001590	     DISPLAY "No record - " AT 5012
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-001600		     "N" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT
+001600		     "N" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
 001610		     "ext or "
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-001620		     "Q" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT
+001620		     "Q" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
 001630		     "uit > <"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT.
 001640
 001650 DEBT-GET-USER-OPT-2.
 001660	     ACCEPT WS-OPTION AT 5038
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+		    WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
@@ -1666,7 +1607,7 @@
              PERFORM READ-DEBMEM THRU READ-DEBMEM-EXIT.
            IF WS-F-ERROR NOT = ZERO
 	       DISPLAY "No Memo or remarks" AT 5002
-			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+			WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
 	       CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS
                GO TO DEBT-ADD-EXIT.
              INITIALIZE W200-MEM-FLDS.
@@ -1698,7 +1639,7 @@
 	     DISPLAY S-DEB-MEM.
              DISPLAY SA-MEM.
 021280	     DISPLAY "ENTER to continue or ESCape" AT 5012
-                      WITH FOREGROUND-COLOR 14.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 	   IF USER-FUNC
 	       EVALUATE KEY-CODE-1
@@ -1780,11 +1721,11 @@
 	     ACCEPT SA-COL.
 012180	     DISPLAY S99.
 012190	     ACCEPT WS-OPTION AT 5060
-		    WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15 AUTO.
+		    WITH BACKGROUND-COLOR Magenta HIGHLIGHT FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
-017890	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
+017890	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
 015980     IF WS-OPTION = "N"
 	       GO TO DEBT-COL-ACCEPT.
              MOVE 1              TO WS-S1.
@@ -1828,27 +1769,28 @@
 	     EXIT.
 
 002070 DEBT-CRT-EDGE.
-002130	     DISPLAY "³" AT CPOS WITH BACKGROUND-COLOR 0
-				      FOREGROUND-COLOR 3
+002130	     DISPLAY "³" AT CPOS WITH BACKGROUND-COLOR Black HIGHLIGHT
+				      FOREGROUND-COLOR Cyan HIGHLIGHT
 		     "      ³                                        ³
       - 	     "         ³          ³ ³     "
-		      WITH FOREGROUND-COLOR 3
-		     "³" WITH BACKGROUND-COLOR 0
-			      FOREGROUND-COLOR 3.
+		      WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+		     "³" WITH BACKGROUND-COLOR Black HIGHLIGHT
+			      FOREGROUND-COLOR Cyan HIGHLIGHT.
 002090	     ADD 1		 TO CLIN.
 
 
 002110 DEBTOR-LOOKUP-EXIT.
 002120       EXIT.
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
       /
       *  ****  E N Q U I R Y   ( C O L L E C T I O N S )
       *
 021000 BA000		       SECTION 5.
 021010 BA000-ENQUIRY.
-021020       DISPLAY CLR-SCREEN.
+             MOVE "S"                TO CRT-TYPE.
+007750       CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
 	     PERFORM DEBTOR-LOOKUP.
 
 021720 BA999.
@@ -1990,24 +1932,24 @@
 	   ELSE
 	       MOVE "Wholesale"  TO W90-PRICE.
 022860	     DISPLAY W60-NAME AT 0327
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 022870	     DISPLAY DEB-LANG AT 0378
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 022880	     DISPLAY W60-ADD AT 0414
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 022890	     DISPLAY W40-TEL AT 0514
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 022890	     DISPLAY DEB-CONTACT AT 0544
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 022900       MOVE DEB-POST       TO W95-POST.
 022910	     DISPLAY W95-POST AT 0476
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 022940       COMPUTE W90-CUR = DEB-BAL - (DEB-30 + DEB-60 +
 022950                         DEB-90 + DEB-120 + DEB-INT).
 022960     IF W90-CUR < ZERO
@@ -2017,35 +1959,35 @@
 023000         MOVE ZERO         TO W90-90.
 023010       MOVE DEB-FAX        TO W40-FAX.
 023020	     DISPLAY W40-FAX AT 0614
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023030       MOVE DEB-PURYTD     TO W95-B.
 023040	     DISPLAY W95-V2 AT 0650
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023050       MOVE DEB-PURPRV     TO W95-B.
 023060	     DISPLAY W95-V2 AT 0669
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
              MOVE ZERO           TO WS-ENQEND WS-ENQPOS.
 
 023070 CD12.
 023080       MOVE DEB-STM        TO W95-B.
 023090	     DISPLAY W95-V2 AT 0769
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023100       MOVE DEB-DEBT       TO W95-B.
 023110	     DISPLAY W95-V2 AT 0869
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023120       MOVE DEB-CRED       TO W95-B.
 023130	     DISPLAY W95-V2 AT 0969
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023140       MOVE DEB-BAL        TO W95-B.
 023150	     DISPLAY W95-V2 AT 1069
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023160	     MOVE DEB-ACTIVE	 TO W22-DTE1.
 	     MOVE W22-CC1	 TO W22-CC2.
 	     MOVE W22-YY1	 TO W22-YY2.
@@ -2053,8 +1995,8 @@
 	     MOVE W22-DD1	 TO W22-DD2.
 	     MOVE W22-DTE2	 TO W95-DTE.
 023170	     DISPLAY W95-D AT 1269
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023160	     MOVE DEB-PMT	 TO W22-DTE1.
 	     MOVE W22-CC1	 TO W22-CC2.
 	     MOVE W22-YY1	 TO W22-YY2.
@@ -2062,40 +2004,40 @@
 	     MOVE W22-DD1	 TO W22-DD2.
 	     MOVE W22-DTE2	 TO W95-DTE.
 023170	     DISPLAY W95-D AT 1369
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023180       MOVE W90-CUR        TO W95-B.
 023190	     DISPLAY W95-V2 AT 1569
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023200       MOVE DEB-30         TO W95-B.
 023210	     DISPLAY W95-V2 AT 1669
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023220       MOVE DEB-60         TO W95-B.
 023230	     DISPLAY W95-V2 AT 1769
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023240       MOVE DEB-90         TO W95-B.
 023250	     DISPLAY W95-V2 AT 1869
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023240       MOVE DEB-120        TO W95-B.
 023250	     DISPLAY W95-V2 AT 1969
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023260       MOVE DEB-INT        TO W95-B.
 023270	     DISPLAY W95-V2 AT 2069
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023280       MOVE W90-90         TO W95-B.
 023290	     DISPLAY W95-V2 AT 2169
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023300       MOVE DEB-CRL        TO W95-B.
 023310	     DISPLAY W95-V2 AT 2269
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 
 023320 CD14.
 023350       MOVE DEB-ACNO       TO TRA-KEY.
@@ -2129,16 +2071,16 @@
 	     MOVE W22-DTE2	 TO W90-DTE.
              MOVE 02             TO CCOL.
 023410	     DISPLAY W90-DTE AT CPOS
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 	     MOVE 13		 TO CCOL.
 023420	     DISPLAY W00-E-DESC AT CPOS
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 	     MOVE 26		 TO CCOL.
 023440	     DISPLAY TRA-REF AT CPOS
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023450       MOVE TRA-VALUE      TO W95-B.
            IF TRA-VALUE > ZERO
                MULTIPLY TRA-ALLOCATED BY -1
@@ -2154,8 +2096,8 @@
 	       MOVE SPACES	 TO W15-REC(WS-S9).
 	     MOVE 35		 TO CCOL.
 023460	     DISPLAY W95-V2 AT CPOS
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT HIGHLIGHT
+			  BACKGROUND-COLOR Magenta HIGHLIGHT.
 023500     IF CLIN < 22
 023510         ADD 1             TO CLIN
 023520         GO TO CD020.
@@ -2163,23 +2105,23 @@
 
        CD21.
 023540	     DISPLAY "PgDn" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     ", " WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "PgUp" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     ", " WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     "ape, " WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F6" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
+		     ", " WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT
+		     "PgUp" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
+		     ", " WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT
+		     "Esc" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
+		     "ape, " WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT
+		     "F6" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
 		     " purchases, "
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F7" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT
+		     "F7" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
 		     " allocations, "
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F8" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT
+		     "F8" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
 		     " screen 2, "
-		     "F9" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		     "F9" WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT
 		     " Memo/Remarks"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Blue HIGHLIGHT.
 
        CD022.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
@@ -2234,7 +2176,7 @@
              DISPLAY SA-MEM.
 019250	     PERFORM CLEAR-L50.
 021280	     DISPLAY "ENTER to continue" AT 5024
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 	     PERFORM RESTORE-SCREEN-3.
 
@@ -2291,7 +2233,7 @@
 	     PERFORM SCREEN-SHADOW.
 019250	     PERFORM CLEAR-L50.
 021280	     DISPLAY "ENTER to continue" AT 5024
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 	     PERFORM RESTORE-SCREEN-3.
 
@@ -2316,7 +2258,7 @@
 	     PERFORM SCREEN-SHADOW.
 019250	     PERFORM CLEAR-L50.
 021280	     DISPLAY "ENTER to continue" AT 5024
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 	     PERFORM RESTORE-SCREEN-3.
 
@@ -2333,7 +2275,7 @@
 	     PERFORM SCREEN-SHADOW.
 019250	     PERFORM CLEAR-L50.
 021280	     DISPLAY "ENTER to continue" AT 5024
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 	     PERFORM RESTORE-SCREEN-3.
 
@@ -2377,85 +2319,14 @@
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
-       ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-       ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
-
-       ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
+             COPY ""FUNCTION.PRO".
 
        ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
-	     MOVE "DBTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DBTRAN.
-	     MOVE "DEBCOL"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBCOL.
-	     MOVE "DEBMEM"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBMEM.
-	     MOVE "DEBTOR"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBTOR.
-	     MOVE "NETWORK"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-NETWORK.
 	   IF LS-USER NUMERIC
 	       IF LS-USE > ZERO AND < 110
 		   MOVE LS-USE	 TO WS-USUB
@@ -2535,13 +2406,13 @@
 042750       MOVE PAR-DMY        TO W12-TODAY.
 042760       MOVE PAR-YMD        TO W12-T-YMD.
       *       DISPLAY "Waiting for printer response" AT 1412
-      * 	       WITH FOREGROUND-COLOR 14 BLINK.
+      * 	       WITH FOREGROUND-COLOR Brown HIGHLIGHT BLINK.
 042780*       OPEN OUTPUT PRNREP.
 044780	     GO TO ZA999-EXIT.
 
 039780 ZA49.
 039790       DISPLAY "Too many files OPEN" AT 0812
-039800                WITH FOREGROUND-COLOR 14.
+039800                WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 039810       DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
 039820       DISPLAY "Press any key to continue" AT 1212.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
@@ -2551,7 +2422,7 @@
 041860	       MOVE "DEBTOR COLL"
 				 TO WS-FILE.
 039980       DISPLAY "Rebuild " AT 0812
-039990                WS-FILE WITH FOREGROUND-COLOR 14.
+039990                WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 040000       DISPLAY "Press any key to continue" AT 1012.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 040020 ZA51.
@@ -2589,12 +2460,12 @@
 	       MOVE LS-USER	   TO WS-WRKST.
 042800 ZA200.
 042810       DISPLAY "Files locked - Try later" AT 2312
-042820                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
+042820                WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     " " WS-STATUS WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 042830	     DISPLAY "Press any key" AT 5012
-042840		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+042840		      WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Brown HIGHLIGHT.
 042850	     ACCEPT WS-OPTION AT 5026
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+		    WITH BACKGROUND-COLOR Cyan HIGHLIGHT FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
        ZA205.
              EXIT PROGRAM.
 042880 ZA999-EXIT.
@@ -2606,17 +2477,17 @@
 
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
 
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
 
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
+041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
        I-O-ERROR-EXIT.
              EXIT.
@@ -2661,14 +2532,14 @@
 042020     ELSE
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
+045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
 045390       DISPLAY "Status " AT 1212
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
+                      WS-STATUS WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 045400     IF WS-STATUS NOT = "94"
 045410         DISPLAY "Key    " AT 1412
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
+                        WS-KEY WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                        " " WS-KEYX WITH FOREGROUND-COLOR Cyan HIGHLIGHT
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.
 045440         DISPLAY "Please make a note of these details" AT 1812.

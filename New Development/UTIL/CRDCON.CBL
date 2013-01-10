@@ -170,9 +170,9 @@
 000330     03  W12-TODAY       PIC  9(06).
 000340     03  W12-DATE-DMY REDEFINES W12-TODAY.
 000350         05  W12-DAY     PIC  9(02).
-000360         05  W12-MONTH   PIC  9(02).  
+000360         05  W12-MONTH   PIC  9(02).
 000370         05  W12-YEAR    PIC  9(02).
-000380     03  W12-T-YMD       PIC  9(06). 
+000380     03  W12-T-YMD       PIC  9(06).
 000390     03  W12-DATE-YMD REDEFINES W12-T-YMD.
 000400         05  W12-YY      PIC  9(02).
 000410         05  W12-MM      PIC  9(02).
@@ -185,7 +185,7 @@
       *
 003160 01  CLR-SCREEN.
 003170     03  BLANK SCREEN FOREGROUND-COLOR 3.
-003860     03  LINE  1 COLUMN  1 PIC  X(80) USING WS-TOP-LNE2.
+003860     03  LINE  1 COLUMN  1 VALUE "旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커".
 003870     03  LINE  2 COLUMN  1 PIC  X(01) USING WS-G3.
 004160     03          COLUMN  2 FOREGROUND-COLOR 12
 004170                           VALUE "APAC Accounting".
@@ -281,7 +281,7 @@
 021940                      WS-TCHR (64) WS-TCHR (71).
 021950       MOVE WS-G3  TO WS-MCHR (16) WS-MCHR (41)
 021960                      WS-MCHR (64) WS-MCHR (71)
-                            WS-MCHR (1)  WS-MCHR (80) 
+                            WS-MCHR (1)  WS-MCHR (80)
                             WS-MCH  (1)  WS-MCH  (80).
 021970       MOVE WS-G4  TO WS-BCHR (16) WS-BCHR (41)
 021980                      WS-BCHR (64) WS-BCHR (71).
@@ -393,8 +393,8 @@
            IF WS-STAT1 NOT = "0"
                MOVE 4            TO WS-F-ERROR
                PERFORM WRITE-ERROR.
-       AX999.                    
-             EXIT.               
+       AX999.
+             EXIT.
       /
 002460 ZA000           SECTION.
 002470 ZA00.
@@ -459,9 +459,9 @@
 002540     IF WS-STATUS NOT = "00"
 002550         MOVE 15 TO WS-F-ERROR
 002560         PERFORM READ-ERROR.
-002650       MOVE WS-DSK15       TO W02-DSK2 
-                                    W02-DSK3 
-                                    W02-DSK4 
+002650       MOVE WS-DSK15       TO W02-DSK2
+                                    W02-DSK3
+                                    W02-DSK4
                                     W02-DSK16
                                     W02-DSK3O
                                     W02-DSK4O.
@@ -516,7 +516,7 @@
 020110 ZA200.
 020120       DISPLAY "Files locked - Try later" AT 2412
 020130                WITH FOREGROUND-COLOR 14.
-020140       DISPLAY "Press any key" AT 2512 
+020140       DISPLAY "Press any key" AT 2512
 020150                WITH FOREGROUND-COLOR 14.
 020160       ACCEPT WS-OPTION AT 2526 WITH FOREGROUND-COLOR 15 AUTO.
              MOVE 9 TO WS-ERROR.
@@ -524,22 +524,22 @@
 003090       EXIT.
       /
 003100 ZB000-ERROR           SECTION.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK TO WS-FILE
@@ -582,11 +582,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.

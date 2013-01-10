@@ -1,55 +1,54 @@
       $SET LINKCOUNT"512"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	    ****	**     *
-      *   **	**     **     **    **	 **  **    **  **      ***     *
-      *   **	**     **     **    **	**    **  **	**    * **     *
-      *   **	**     **     *******	**    **  **	**   *	**     *
-      *   **	**     **     **	**    **  **	**  *******    *
-      *   **	**     **     **	 **  **    **  **	**     *
-      *   *******      **     **	  ****	    ****       ****    *
+      *   *******   ********  *******     ****	    ****        **     *
+      *   **    **     **     **    **   **  **    **  **      ***     *
+      *   **    **     **     **    **  **    **  **    **    * **     *
+      *   **    **     **     *******   **    **  **    **   *  **     *
+      *   **    **     **     **        **    **  **    **  *******    *
+      *   **    **     **     **         **  **    **  **       **     *
+      *   *******      **     **          ****	    ****       ****    *
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
-      * 	A C C O U N T S	  R E C E I V A B L E	/	       *
+      *           A C C O U N T S   R E C E I V A B L E   /	           *
       *                                                                *
-      *       D E B T O R   A M E N D	A C C O U N T	N U M B E R    *
+      *       D E B T O R   A M E N D   A C C O U N T   N U M B E R    *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
-      * 							       *
+      *     VERSION 9.00.20 - December 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  May 2006	- New field included in Accounts Receivable    *
-      * 		  for recording number of outstanding Jobs     *
-      * 		  linked to the account. Additional filler     *
-      * 		  added for future expansion.		       *
-      * 							       *
-      *  Feb 2007	- New file (DEBDEP/AR_REST.DAT) - Debtor sales *
-      * 		  restrictions file has been included which    *
-      * 		  will allow for departments to be excluded or *
-      * 		  only selected departments allowed. This will *
-      * 		  allow the user the abillity to allow or bar  *
-      * 		  sales of selected departments.	       *
-      * 							       *
-      *  Jan 2008	- New file (DEBALT) - Debtor alternate index   *
-      * 		  included for lookups, using any word con-    *
-      * 		  tained in the Debtor name.		       *
-      * 							       *
-      *  March 2010	- Include facility to print to a USB printer   *
-      * 		  via the Windows print using the relavent     *
-      * 		  print API's supplied with MF COBOL. An entry *
-      * 		  in the APACFIDS file has been included for   *
-      *			  the system to access the bitmap file that is *
-      * 		  used for the statement and is accessed using *
-      * 		  "STMBMP" as the key.			       *
-      * 							       *
+      *                                                                *
+      * May 2006 - New field included in Accounts Receivable for       *
+      * 	       recording number of outstanding Jobs linked to the  *
+      * 	       account. Additional filler added for future         *
+      * 	       expansion.                                          *
+      *                                                                *
+      * Feb 2007 - New file (DEBDEP/AR_REST.DAT) - Debtor sales        *
+      *            restrictions file has been included which will allow*
+      *            for departments to be excluded or only selected     *
+      *            departments allowed. This will allow the user the   *
+      *            abillity to allow or bar sales of selected depart-  *
+      *            ments.	                                         *
+      *                                                                *
+      * Jan 2008 - New file (DEBALT) - Debtor alternate index included *
+      * 	       for lookups, using any word contained in the Debtor *
+      * 	       name.                                               *
+      *                                                                *
+      * March 2010 - Include facility to print to a USB printer via the*
+      * 		   Windows print using the relavent print API's      *
+      * 		   supplied with MF COBOL. An entry in the APACFIDS  *
+      * 		   file has been included for the system to access   *
+      *              the bitmap file that is used for the statement    *
+      * 		   and is accessed using "STMBMP" as the key.        *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP004.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   August 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -84,52 +83,48 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000160 COPY "DBTRAN.SL".
 
-000160 COPY DBTRAN.SL.
+000140 COPY "DEBALT.SL".
 
-000140 COPY DEBALT.SL.
+000160 COPY "DEBDEP.SL".
 
-000160 COPY DEBDEP.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBMEM.SL".
 
-000140 COPY DEBMEM.SL.
+000200 COPY "INVOIC.SL".
 
-000200 COPY INVOIC.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
+000220 COPY "RECOVER.SL".
 
-000220 COPY RECOVER.SL.
-
-       COPY SHARED.SL.
+       COPY "SHARED.SL".
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+000310 COPY "DEBALT.FDE".
 
-000310 COPY DEBALT.FDE.
+000330 COPY "DEBDEP.FDE".
 
-000330 COPY DEBDEP.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000140 COPY "DEBMEM.FDE".
 
-000140 COPY DEBMEM.FDE.
+000370 COPY "INVOIC.FDE".
 
-000370 COPY INVOIC.FDE.
+000290 COPY "PARAM.FDE".
 
-000290 COPY PARAM.FDE.
+000390 COPY "RECOVER.GFD".
 
-000390 COPY RECOVER.GFD.
-
-       COPY SHARED.FDE.
+       COPY "SHARED.FDE".
 
       /
       *         **         **    ******    *******    **    **
@@ -141,9 +136,8 @@
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
-001560 77  WS-SUB	   PIC	9(04)	 COMP-5.
+       77  WS-CHECK        PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+001560 77  WS-SUB          PIC  9(04)    COMP-5.
 001560 77  WS-S            PIC  9(04)    COMP-5.
 001570 77  WS-S1           PIC  9(04)    COMP-5.
 001580 77  WS-S2           PIC  9(04)    COMP-5.
@@ -158,39 +152,79 @@
 002860 77  WS-IXS2         PIC  9(04)    COMP-5.
 002870 77  WS-IXS3         PIC  9(04)    COMP-5.
 002880 77  WS-IXS4         PIC  9(04)    COMP-5.
-001690 77  WS-ENQPOS	   PIC	9(06)	 COMP-5.
+001690 77  WS-ENQPOS	   PIC  9(06)    COMP-5.
 001700 77  WS-ENQEND       PIC  9(06)    COMP-5.
 001670 77  WS-NETKEY       PIC  9(06)    COMP-5.
 001660 77  WS-PARKEY       PIC  9(06)    COMP-5.
 001710 77  WS-RECKEY       PIC  9(06)    COMP-5.
 001720 77  WS-RECOVER      PIC  9(06)    COMP-5.
-000820 77  WS-SHARED	   PIC	9(04)	 COMP-5 VALUE 1.
+000820 77  WS-SHARED	   PIC  9(04)    COMP-5 VALUE 1.
 001730 77  WS-TRANS        PIC  9(04)    COMP-5 VALUE 1.
 001750 77  WS-FIN-RATE	   PIC S9(03)V99 COMP-3.
 001760 77  WS-PERIOD       PIC  9(02).
 001770 77  WS-NTP          PIC  X(01).
-001810 77  WS-KEYSTR	   PIC	9(06)	 COMP-5.
+001810 77  WS-KEYSTR	   PIC  9(06)	 COMP-5.
 001820 77  WS-OPTION       PIC  X(01).
 001820 77  WS-SKIP         PIC  X(01) VALUE "N".
 001820 77  WS-TAX          PIC  X(01).
-000750 77  WS-TYP	   PIC	X(01).
+000750 77  WS-TYP	         PIC  X(01).
 001820 77  WS-TYPE         PIC  X(01).
 001850 77  WS-ERROR        PIC  9(01) VALUE ZERO.
 001870 77  WS-EKEY         PIC  9(06)    COMP-5.
 001880 77  WS-CHAR1        PIC  X(01).
 001890 77  WS-CHAR2        PIC  X(01).
 001900 77  WS-COMP         PIC  9(01).
-       77  WS-RT-HD	   PIC	X(10) VALUE "-Retail   ".
-       77  WS-WS-HD	   PIC	X(10) VALUE "-Wholesale".
-       77  WS-CS-HD	   PIC	X(10) VALUE "-Cash sale".
-001980 77  WS-BATCH	   PIC	9(06) COMP-5.
-002010 77  WS-ERR1	   PIC	X(22) VALUE "Invalid Account Number".
+       77  WS-RT-HD	   PIC  X(10) VALUE "-Retail   ".
+       77  WS-WS-HD	   PIC  X(10) VALUE "-Wholesale".
+       77  WS-CS-HD	   PIC  X(10) VALUE "-Cash sale".
+001980 77  WS-BATCH	   PIC  9(06) COMP-5.
+002010 77  WS-ERR1	   PIC  X(22) VALUE "Invalid Account Number".
 002020 77  WS-ERR2         PIC  X(09) VALUE "No Record".
 002100 77  WS-A            PIC  X(19) VALUE "Any key to continue".
 002110 77  WS-E            PIC  X(15) VALUE "**END** - ENTER".
 002130 77  WS-AC           PIC  X(07) VALUE "ACCOUNT".
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
-       77  WS-USUB	   PIC	9(04) COMP-5.
+       77  PRG-NAME	           PIC  X(12)    VALUE SPACES.
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
+       77  TODAY-DDMMYY	   PIC  9(08) COMP-5.
+       77  WS-USUB	   PIC  9(04) COMP-5.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.	  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *	     C = Clear comment line (50)
+      *	     E = Clear lines (any line or lines between 5 and 46)
+      * 	     H = Change heading
+      * 	     S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "DTP004".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "ACCOUNTS RECEIVABLE - AMEND AC. NUMBER".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-WRKHD           PIC  X(11).
+           03  CRT-WRKST           PIC  X(03).
+
       /
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
@@ -243,7 +277,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
@@ -252,30 +286,6 @@
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
 
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DEBALT.ID.
-
-000330 COPY DEBDEP.ID.
-
-       COPY DEBTOR.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY INVOIC.ID.
-
-       COPY PARAM.ID.
-
-       COPY RECOVER.ID.
-
-       COPY SHARED.ID.
-
 002500 01  W10-SPARES.
 002510	   03  W10-DATE	    PIC X(10).
 002520	   03  W10-EDTE REDEFINES W10-DATE PIC 99/99/9999.
@@ -283,9 +293,9 @@
        01  W10-REF.
            03  W10-NUM         PIC  9(08).
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
 002860     03  W25-RESULT      PIC 9(05)V99.
@@ -306,25 +316,13 @@
 	   03  W30-30	       PIC  9(08) COMP-3.
 	   03  W30-CUR	       PIC  9(08) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
-
-003550 01  W60-NME-ADD.
-003560     03  W60-NAME.
-003570         05  W60-NCHAR OCCURS 40 PIC X(01).
-003580     03  W60-ADDRESS.
-003590         05  W60-ACHAR OCCURS 70 PIC X(01).
-003580     03  W60-ADDR REDEFINES W60-ADDRESS.
-               05  W60-ADD     PIC X(60).
-               05  FILLER      PIC X(10).
-003600     03  W60-ADDRESS1.
-               05  W60-PAD     PIC X(60).
-               05  FILLER      PIC X(10).
+003530 COPY "W50.WS".
 
        01  W75-KEYS.
            03  W75-S          PIC 9(02) COMP-5.
@@ -403,161 +401,27 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 004580 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
-005000 01  S05.
-005010	   03  LINE  3 COLUMN 37 FOREGROUND-COLOR 7 HIGHLIGHT
-				 VALUE "COMPANY".
-
 005020 01  S06.
-005030	   03  LINE  3 COLUMN 37 FOREGROUND-COLOR 7 HIGHLIGHT
+005030	   03  LINE  3 COLUMN 37 FOREGROUND-COLOR Grey HIGHLIGHT
 				 VALUE "INTERNAL".
 
-005040 01  S07A.
-005050	   03  LINE  2 COLUMN 32 FOREGROUND-COLOR 7 HIGHLIGHT
-005060                           VALUE "AMENDMENT TO AC.NO.".
-
-       COPY DEBLUP.CRT.
-
-       COPY DEBTOR.CRT.
+       COPY "DEBTOR.CRT".
 
 007910 01  S36.
-007920	   03  FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
-				 PIC X(06) USING W80-ACNO AUTO.
+007920     03  PIC X(06) USING W80-ACNO FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta AUTO.
 
-       01  S-DEB-MEM.
-           03  LINE  7 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
-           "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
-      -    "".
 
-       01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
-           "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
-      -    "".
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G12.
-       01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM12 AUTO.
-
-004870 COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
-       COPY UPDATE.CRT.
+       COPY "UPDATE.CRT".
 
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 008230 AA000		       SECTION.
 008240 AA00.
 003240	   IF LS0-DBLEV < 5
@@ -573,77 +437,96 @@
 013140 AA49.
 013150       EXIT PROGRAM.
 
+      /    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ This routine is used to call the Debtor / Ac's Receivable ³
+      *    ³ lookup program and cancel it when control is returned.    ³
+      *    ³ The  relevant  error  message  will be  displayed  if  an ³
+      *    ³ exception occurs. The usual  parameters are passed to the ³
+      *    ³ lookup program as well W40-COMPANY which will contain the ³
+      *    ³ details of the account that has been selected when control³
+      *    ³ is returned to the calling program.                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AA50-LOOKUP     SECTION.
        AA50.
-	     PERFORM SAVE-SCREEN.
-011080	     MOVE 4		 TO W44-FUNCTION.
-011090	     PERFORM SCREEN-CONTENTS.
-	   IF WS-TYP = "A"
-	       PERFORM DEBTOR-A-LOOKUP
-	   ELSE
-011180	       PERFORM DEBTOR-LOOKUP.
-	     PERFORM RESTORE-SCREEN.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³          Save the screen contents and attributes.         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             PERFORM SAVE-SCREEN.
+011080       MOVE 4                  TO W44-FUNCTION.
+011090       PERFORM SCREEN-CONTENTS.
+             MOVE PRG-DEBT-LUP       TO PRG-NAME.
+	       CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+	            ON EXCEPTION GO TO AA55
+	       END-CALL.
+	       CANCEL PRG-DEBT-LUP.
+	       GO TO AA58.
+
+       AA55.
+             MOVE SPACE              TO WS-ERR-MES.
+             STRING "Program- " DELIMITED SIZE PRG-NAME DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³       Restore the screen contents and attributes.         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       AA58.
+             PERFORM RESTORE-SCREEN.
 
        AA99.
              EXIT.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY DBTRAN.RD1.
+       COPY "DBTRAN.RD1".
 
-       COPY DEBALT.RD.
+       COPY "DEBALT.RD".
 
-011190 COPY DEBDEP.RD.
+011190 COPY "DEBDEP.RD".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-       COPY INVOIC.RD.
+       COPY "INVOIC.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DBTRAN.WR.
+       COPY "DBTRAN.WR".
 
-       COPY DEBALT.WR.
+       COPY "DEBALT.WR".
 
-       COPY DEBDEP.WR.
+       COPY "DEBDEP.WR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-000140 COPY DEBMEM.WR.
+000140 COPY "DEBMEM.WR".
 
-       COPY INVOIC.WR.
+       COPY "INVOIC.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-011970 COPY DEBTOR.ALU.
-
-       COPY DEBTOR.LUP.
-
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
@@ -718,8 +601,8 @@
 011290       WRITE REC-RECORD.
 011300     IF WS-STATUS NOT = "00"
 011310         DISPLAY "Write error Recovery file - Status " AT 2212
-011320                  WITH FOREGROUND-COLOR 14 WS-STATUS
-011330                  WITH FOREGROUND-COLOR 15
+011320                  WITH FOREGROUND-COLOR Brown HIGHLIGHT WS-STATUS
+011330                  WITH FOREGROUND-COLOR Grey HIGHLIGHT
 011340         STOP RUN.
 
 011370 AY59.
@@ -746,13 +629,13 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
       *
 012550	     DISPLAY "WAITING" AT 5051
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
 012560	     COMMIT.
 	     ACCEPT WS-STIME FROM TIME.
 	     MOVE 400		 TO WS-WAIT.
 012580	     PERFORM LOCK-REC-LOOP.
 012590	     DISPLAY SPACE AT 5051
-		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+		     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 012600       GO TO AY60.
 
 012610 AY61.
@@ -789,11 +672,11 @@
 		   END-IF
 	       ELSE
       *
-      *    ****   I S	T H I S   P R O G R A M   I N	T H E  Q
+      *    ****   I S	T H I S   P R O G R A M   I N   T H E   Q
       *
 	       IF PAR-USR(WS-SUB) = LS-USER
       *
-      *    ****   I S	I T   N E X T	I N   L I N E	T O   P R O C E S S
+      *    ****   I S	I T   N E X T   I N   L I N E   T O   P R O C E S S
       *
 		   IF WS-WAIT = ZERO
 		       GO TO AY63
@@ -822,16 +705,16 @@
 	   IF WS-WAIT > ZERO
 	       COMMIT
 	       DISPLAY "Waiting" AT 5072
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			WITH BACKGROUND-COLOR Cyan
+			     FOREGROUND-COLOR Brown HIGHLIGHT BLINK
 	       ACCEPT WS-STIME FROM TIME
 	       PERFORM LOCK-REC-LOOP
 	       DISPLAY "Waiting" AT 5072
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			WITH BACKGROUND-COLOR Cyan
+			     FOREGROUND-COLOR Brown HIGHLIGHT BLINK
 	       GO TO AY60.
 012880	     DISPLAY SPACE AT 5072
-		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+		     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 
 012900 AY63.
 012920	     MOVE WS-SUB	 TO WS-USUB.
@@ -898,62 +781,25 @@
                MOVE DEB-TYPE     TO W80-TYPE.
 014430 CA160-EXIT.
 014440       EXIT.
-      *
-014450 CA165-NAME        SECTION 2.
-014460 CA165.
-014470       UNSTRING W60-NAME DELIMITED BY "*" OR "!"
-014480                           INTO W40-SURNAME
-                                      W40-FNAME
-                                      W40-SNAME
-014490       OVERFLOW
-014500           MOVE 1          TO WS-ERROR.
-014510 CA170-EXIT.
-014520       EXIT.
-      *
-014530 CA175-ADDRESS     SECTION 2.
-014540 CA175.
-014550       UNSTRING W60-ADDRESS DELIMITED BY "*"
-014560                           INTO W40-ADD1
-                                      W40-ADD2
-                                      W40-ADD3
-                                      W40-ADD4
-014570       OVERFLOW
-014580           MOVE 1          TO WS-ERROR.
-014590 CA175-EXIT.
-014600       EXIT.
-      *
-014610 CA180-ADDRESS     SECTION 2.
-014620 CA180.
-014630       UNSTRING W60-ADDRESS1 DELIMITED BY "*"
-014640                           INTO W40-PADD1
-                                      W40-PADD2
-                                      W40-PADD3
-                                      W40-PADD4
-014650       OVERFLOW
-014660           MOVE 1          TO WS-ERROR.
-014670 CA180-EXIT.
-014680       EXIT.
       /
       *    ****   A M E N D   A   D E B T O R   A C C O U N T   N O
       *
 020300 CH000		 SECTION 5.
 020310 CH00.
-020320       DISPLAY CLR-SCREEN.
-020330       DISPLAY S07A.
-020350       DISPLAY "Account :" AT 0302.
+             MOVE "S"                TO CRT-TYPE.
+007750       CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+020350       DISPLAY "Account :" AT 0602.
 020370       MOVE SPACES         TO W80-ACNO.
 020360 CH05.
-	     DISPLAY "F1" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     "=Help,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     " to do Debtor Lookup "
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     " to exit"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
-020380       ACCEPT S36 AT 0312.
+             DISPLAY "F1"                        AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     "=Help,"                            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F2"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to do Account Lookup,"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F9"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " Debtor Lookup (Any Word),"        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "Esc"                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to exit"                          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+020380       ACCEPT S36 AT 0612.
 	   IF USER-FUNC
 	       EVALUATE KEY-CODE-1
 		 WHEN ESC-KEY
@@ -962,19 +808,20 @@
 		 WHEN F1-KEY
 		     PERFORM HELP-ROUTINE
 		 WHEN F2-KEY
-		     MOVE SPACE  TO WS-TYP
+		     MOVE SPACE  TO W40-LUP
 016560		     PERFORM AA50
 		 WHEN F9-KEY
-		     MOVE "A"	 TO WS-TYP
+		     MOVE "A"	 TO W40-LUP
 		     PERFORM AA50
 		 WHEN OTHER
 		     CALL X"E5"
 		     GO TO CH05
 	       END-EVALUATE
-016570	       DISPLAY S36 AT 0312
+016570	       DISPLAY S36 AT 0612
 016580	       IF W80-ACNO = SPACES
 016590		   GO TO CH05.
-	     DISPLAY WS-BLNK78 AT 1202 WITH FOREGROUND-COLOR 3.
+             MOVE 12                 TO CRT-START CRT-END.
+018380       PERFORM ERASE-SCREEN.
 	     PERFORM CLEAR-L50.
 020390     IF W80-ACNO = SPACES
 020400	       GO TO CH99.
@@ -993,43 +840,18 @@
 020460	       MOVE WS-ERR1	 TO WS-ERR-STRING
 	       PERFORM ERROR-MESSAGE
 020470	       GO TO CH05.
-	     DISPLAY WS-BLNK78 AT 0302 WITH FOREGROUND-COLOR 3.
-020480       MOVE DEB-NAME       TO W60-NAME.
-020490       MOVE DEB-ADDRESS    TO W60-ADDRESS.
-020500       MOVE DEB-PADDR      TO W60-ADDRESS1.
-020510       MOVE DEB-POST       TO W40-POST.
-020520       MOVE DEB-PPOST      TO W40-PPOST.
-020530	     MOVE DEB-LANG	 TO W40-LANG.
-020540       MOVE SPACES         TO W40-NAME1 W40-ADDRESS1 W40-PADDRESS.
-020550       MOVE DEB-H-TEL      TO W40-HTEL.
-020560       MOVE DEB-B-TEL      TO W40-TEL.
-020570       MOVE DEB-TITLE      TO W40-TITLE.
-020580	     MOVE DEB-ID	 TO W40-ID.
-019900	     MOVE DEB-TAX	 TO W40-TAX.
-020590       MOVE DEB-CAT        TO W40-CAT.
-020600       MOVE DEB-CRL        TO W40-CRL.
-020600       MOVE DEB-OI         TO W40-OI.
-020600       MOVE DEB-LAB        TO W40-LAB.
-	   IF NOT VALID-PRICE
-	       MOVE "R" 	 TO DEB-PRICE.
-             MOVE DEB-PRICE      TO W40-PRICE.
-020610	   IF DEB-FIN = 1
-020620         MOVE "N"          TO W40-FIN
-020630     ELSE
-020640         MOVE "Y"          TO W40-FIN.
-020650       MOVE DEB-TERMS      TO W40-TERMS.
-             MOVE DEB-INV-TYPE   TO W40-INV-TYPE.
-020660       MOVE DEB-SMAN       TO W40-SMAN.
-020670       MOVE DEB-DISC       TO W40-DISC.
-020670       MOVE DEB-SDISC      TO W40-SDISC.
-020680       PERFORM CA175-ADDRESS.
-020690       PERFORM CA180-ADDRESS.
-	     DISPLAY WS-BLNK78 AT 0302 WITH FOREGROUND-COLOR 3.
+             MOVE 6                  TO CRT-START CRT-END.
+018380       PERFORM ERASE-SCREEN.
+           IF NOT VALID-PRICE
+               MOVE "R"              TO DEB-PRICE.
+             MOVE DEB-RECORD1        TO W40-DEBTREC.
+
+             MOVE 6                  TO CRT-START CRT-END.
+018380       PERFORM ERASE-SCREEN.
 020710     IF W80-TYPE NOT = 1
 020720         GO TO CH30.
-020730       PERFORM CA165-NAME.
 020760       DISPLAY S22.
-             DISPLAY S36 AT 0415.
+             DISPLAY S36 AT 0615.
 020770 CH10.
 020780       DISPLAY S25.
 	     PERFORM CHECK-CORRECT.
@@ -1037,12 +859,10 @@
 020870         GO TO CH00.
              GO TO CH40.
 021360 CH30.
-021370     IF W80-TYPE = 3
-021380         DISPLAY S06
-021390     ELSE
-021400         DISPLAY S05.
 021410       DISPLAY S23.
-             DISPLAY S36 AT 0415.
+019110     IF W80-TYPE = 3
+019120         DISPLAY S06.
+             DISPLAY S36 AT 0615.
 021420       MOVE W60-NAME       TO W40-NAME.
 021450 CH35.
 021460       DISPLAY S24.
@@ -1052,7 +872,7 @@
        CH40.
              MOVE DEB-ACNO       TO W40-ACNO.
        CH45.
-             ACCEPT S36 AT 0415.
+             ACCEPT S36 AT 0615.
            IF W80-ACNO = SPACES
 	       GO TO CH99.
            IF W80-ACNO = DEB-ACNO
@@ -1086,11 +906,11 @@
                GO TO CH60.
 	     PERFORM CLEAR-L50.
 	     DISPLAY "Memo record:" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
        CH50.
 	     DISPLAY DME-DATA AT 5015
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 7 HIGHLIGHT.
+		      WITH BACKGROUND-COLOR Cyan
+			   FOREGROUND-COLOR Grey HIGHLIGHT.
              MOVE DME-SEQ        TO WS-S1.
              MOVE DME-DATA       TO W200-MEM (WS-S1).
              PERFORM DELETE-DEBMEM-REC THRU WRITE-DEBMEM-EXIT.
@@ -1107,8 +927,8 @@
                MOVE W200-MEM (WS-S1)
                                  TO DME-DATA
 	       DISPLAY DME-DATA AT 5015
-		       WITH BACKGROUND-COLOR 3
-			    FOREGROUND-COLOR 7 HIGHLIGHT
+		       WITH BACKGROUND-COLOR Cyan
+			    FOREGROUND-COLOR Grey HIGHLIGHT
 	       PERFORM WRITE-DEBMEM THRU WRITE-DEBMEM-EXIT
                ADD 1             TO DME-SEQ.
            IF WS-S1 < 12
@@ -1122,20 +942,20 @@
 	   IF WS-F-ERROR = 5
 	       GO TO CH65.
 	     DISPLAY "Tran record:" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
 023390	     PERFORM READ-DBTRAN-NEXT THRU READ-DBTRAN-EXIT.
            IF (WS-F-ERROR = 5) OR
 	      (TRA-AC NOT = W40-ACNO)
 	       GO TO CH65.
 	     DISPLAY TRA-KEY AT 5015
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 7 HIGHLIGHT.
+		      WITH BACKGROUND-COLOR Cyan
+			   FOREGROUND-COLOR Grey HIGHLIGHT.
 	     PERFORM DELETE-DBTRAN-REC THRU WRITE-DBTRAN-EXIT.
 	     MOVE W80-ACNO	 TO TRA-AC.
 	     PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
 	     DISPLAY TRA-KEY AT 5045
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
+		      WITH BACKGROUND-COLOR Cyan
+			   FOREGROUND-COLOR Brown HIGHLIGHT.
 	     GO TO CH60.
 
        CH65.
@@ -1149,20 +969,20 @@
 045230     IF WS-F-ERROR NOT = ZERO
 	       GO TO CH75.
 	     DISPLAY "Inv. record:" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
 023390	     PERFORM READ-INVOIC-NEXT THRU READ-INVOIC-EXIT.
 	   IF (WS-F-ERROR = 12) OR
 	      (DOC-AC NOT = W40-ACNO)
 	       GO TO CH75.
 	     DISPLAY DOC-KEY AT 5015
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 7 HIGHLIGHT.
+		      WITH BACKGROUND-COLOR Cyan
+			   FOREGROUND-COLOR Grey HIGHLIGHT.
 	     PERFORM DELETE-INVOIC-REC THRU WRITE-INVOIC-EXIT.
 	     MOVE W80-ACNO	 TO DOC-AC.
 	     PERFORM WRITE-INVOIC THRU WRITE-INVOIC-EXIT.
 	     DISPLAY DOC-KEY AT 5045
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
+		      WITH BACKGROUND-COLOR Cyan
+			   FOREGROUND-COLOR Brown HIGHLIGHT.
 	     GO TO CH70.
 
        CH75.
@@ -1227,120 +1047,12 @@
 				 TO TODAY-DDMMYY.
 	     MOVE LS-USUB	 TO WS-USUB.
 042000	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
-       ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-       ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
-
-       ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
-
-       ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
-	     MOVE "DBTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DBTRAN.
-      *    *************************************************************
-      *    *** D E B T O R   A L T E R N A T E	 I N D E X   F I L E ***
-      *    *************************************************************
-	     MOVE "DEBALT"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBALT.
-      *    *************************************************************
-      *    **** D E B T O R   S A L E S   R E S T R I T I O N	F I L E 	  ****
-      *    *************************************************************
-	     MOVE "DEBDEP"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBDEP.
-      *    *************************************************************
-      *    **** 	  D E B T O R	M E M O	  F I L E	    ****
-      *    *************************************************************
-	     MOVE "DEBMEM"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBMEM.
-      *    *************************************************************
-      *    ****  D E B T O R   A C C O U N T   ( A / R )   F I L E  ****
-      *    *************************************************************
-	     MOVE "DEBTOR"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBTOR.
-	     MOVE "INVOIC"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-INVOIC.
-      *    *************************************************************
-      *    **** 	    C O N T R O L   F I L E		    ****
-      *    *************************************************************
-	     MOVE "NETWORK"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-NETWORK.
-      *    *************************************************************
-      *    **** 	    R E C O V E R Y   F I L E		    ****
-      *    *************************************************************
-	     MOVE "RECOVER"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     INSPECT AFID-PATH REPLACING FIRST "XXX"
-			       BY LS-USER.
-	     MOVE AFID-PATH	 TO W02-RECOVER.
-      *    *************************************************************
-      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
-      *    *************************************************************
-	     MOVE "SHARED"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-SHARED.
+             COPY "FUNCTION.PRO".
 
 042170 ZA02.
 	     OPEN I-O DEBDEP.
@@ -1379,7 +1091,7 @@
 	       MOVE PAR-RT-HD	 TO WS-RT-HD.
 044780	     GO TO ZA999-EXIT.
 
-       COPY ZA49.PRO.
+       COPY "ZA49.PRO".
 
 039850 ZA50.
 055350	   IF WS-F-ERROR = 33
@@ -1387,7 +1099,7 @@
 055370				 TO WS-FILE
 	   END-IF.
 039980       DISPLAY "Rebuild " AT 0812
-039990                WS-FILE WITH FOREGROUND-COLOR 14.
+039990                WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 040000       DISPLAY "Press any key to continue" AT 1012.
 	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 040020 ZA51.
@@ -1427,7 +1139,7 @@
 
 042800 ZA200.
 
-       COPY LOCKED.PRO.
+       COPY "LOCKED.PRO".
 
        ZA205.
              EXIT PROGRAM.
@@ -1439,7 +1151,7 @@
       *
 042900 ZB000-ERROR	     SECTION 81.
 
-       COPY ERRORS.PRO.
+       COPY "ERRORS.PRO".
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
@@ -1488,4 +1200,4 @@
 041870         MOVE ZERO         TO WS-KEY
 	       MOVE DAL-KEY	 TO WS-KEYX.
 
-       COPY DISPERR.PRO.
+       COPY "DISPERR.PRO".

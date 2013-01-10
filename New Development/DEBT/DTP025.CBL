@@ -13,7 +13,7 @@
       *                                                                *
       *     D E B T O R	  T R A N S A C T I O N   J O U R N A L        *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
@@ -32,7 +32,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   July 1983.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -67,36 +67,32 @@
 000100 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "CONTROL.SL".
 
-       COPY CONTROL.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
-
-000160 COPY DBTRAN.SL.
+000160 COPY "DBTRAN.SL".
 
 000220 DATA DIVISION.
 000230 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "CONTROL.FDE".
 
-       COPY CONTROL.FDE.
+000250 COPY "PARAM.FDE".
 
-000250 COPY PARAM.FDE.
+000270 COPY "DEBTOR.FDE".
 
-000270 COPY DEBTOR.FDE.
-
-000290 COPY DBTRAN.FDE.
+000290 COPY "DBTRAN.FDE".
 
       /
       *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   ** 
-      *         **    *    **   **    **   **   **    **  **  
-      *         **   ***   **   **    **   ******     *****   
-      *          ** ** ** **    **    **   **   **    **  **  
-      *           ***   ***     **    **   **    **   **   ** 
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
       *            *     *       ******    **    **   **    **
       *
 002780 WORKING-STORAGE SECTION.
@@ -210,7 +206,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-003440 COPY WS.WS.
+003440 COPY "WS.WS".
 
 003460 01  W00-TRAN-CODES.
 003470     03  W00-TRAN-TYPES  OCCURS 100.
@@ -221,18 +217,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-003520 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY PARAM.ID.
 
        01  W02-PRINTER-DETAILS.
 	   03  W02-PRINTER     PIC  X(12).
@@ -531,11 +515,11 @@
            03  W10-RDATE REDEFINES W10-DATE.
 	       05  W10-DTE     PIC 99/99/9999.
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W15.WS.
+       COPY "W15.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
        01  W23-PERIOD.
            03  FILLER          PIC X(17) VALUE "For the period : ".
@@ -555,9 +539,9 @@
 003980     03  W25-TOTAL       PIC S9(07)V99 COMP-3.
 003990     03  W25-VALUE       PIC S9(07)V99 COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
 005020 01  W45-TRAN.
 005030     03  W45-CODE        PIC 9(02).
@@ -577,9 +561,9 @@
 005140         05  W46-POST.
 005150             07  W46-PC  PIC 9(04).
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-005170 COPY W50.WS.
+005170 COPY "W50.WS".
 
        01  W55-STATS.
            03  W55-H1         PIC  X(09).
@@ -702,17 +686,17 @@
 004540     03  W100-90         PIC Z(08)9.99-.
 004540     03  W100-120        PIC Z(08)9.99-.
 004550     03  W100-INT        PIC Z(08)9.99.
-004560     03  W100-CRL        PIC Z(06)9.  
+004560     03  W100-CRL        PIC Z(06)9.
 004570     03  W100-KEY        PIC Z(05)9.
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 005990 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
 006250 01  S07.
 006260	   03  LINE  7 COLUMN 12 VALUE "Are you sure (".
@@ -757,10 +741,6 @@
 				 BACKGROUND-COLOR 5
 				 PIC 99/99/9999 USING W15-END AUTO.
 
-       COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -777,33 +757,33 @@
        AA49.
 006950	     EXIT PROGRAM.
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
-       COPY DATE.CNV.
+       COPY "DATE.CNV".
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY ABORT.PRN.
+       COPY "ABORT.PRN".
 
-       COPY PRINTUTL.AP5.
+       COPY "PRINTUTL.AP5".
 
       /
       *    ****    READ FILES ROUTINES
       *
 007340 AC000-READ              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY PARAM.RD.
-      
-       COPY DEBTOR.RD1.
-      
-       COPY DBTRAN.RD.
-      
+       COPY "PARAM.RD".
+
+       COPY "DEBTOR.RD1".
+
+       COPY "DBTRAN.RD".
+
       /
 008930 CA155-GET-DEBTOR        SECTION 2.
 008940 CA155-ACCOUNT.
@@ -1030,7 +1010,7 @@
 014250 EA22.
 014260       PERFORM READ-DBTRAN-NEXT THRU READ-DBTRAN-EXIT.
            IF (WS-F-ERROR = 5) OR
-014270        (TRA-CODE NOT = W45-CODE) OR 
+014270        (TRA-CODE NOT = W45-CODE) OR
               (TRA-DATE > W15-E-YMD)
 014280         GO TO EA25-CHR.
       *    **************************************************************
@@ -1142,7 +1122,7 @@
       *    Ё  Setup various keys and the mouse for use with menus and  Ё
       *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     COPY FUNCTION.PRO.
+	     COPY "FUNCTION.PRO".
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё	    Setup the file ID's including path names           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
@@ -1231,7 +1211,7 @@
 025740       PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
 025830	     GO TO ZA999-EXIT.
 
-       COPY ZA49.PRO.
+       COPY "ZA49.PRO".
 
        ZA55.
 041220       MOVE 1              TO WS-S1.
@@ -1265,7 +1245,7 @@
 	       MOVE LS-USER	   TO WS-WRKST.
 025840 ZA200.
 
-       COPY LOCKED.PRO.
+       COPY "LOCKED.PRO".
 
        ZA205.
              EXIT PROGRAM.
@@ -1275,7 +1255,7 @@
       /
 025940 ZB000		     SECTION 9.
 
-       COPY ERRORS.PRO.
+       COPY "ERRORS.PRO".
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
@@ -1296,4 +1276,4 @@
 041860         MOVE WS-PARID     TO WS-FILE
 041870	       MOVE WS-PARKEY	 TO WS-KEY.
 
-       COPY DISPERR.PRO.
+       COPY "DISPERR.PRO".

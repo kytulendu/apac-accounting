@@ -449,10 +449,10 @@
 	       05  W100-DTE    PIC  9(08).
 004500	   03  W100-LBAL       PIC -(07)9.99.
 004500	   03  W100-LARR       PIC Z(06)9.99.
-004560     03  W100-CRL        PIC Z(06)9.  
+004560     03  W100-CRL        PIC Z(06)9.
 
        01  W200-MEMO.
-           03  W200-MEM-FLDS. 
+           03  W200-MEM-FLDS.
                05  W200-MEM1   PIC  X(60).
                05  W200-MEM2   PIC  X(60).
                05  W200-MEM3   PIC  X(60).
@@ -474,8 +474,6 @@
 
       /
 004130 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
        01  MENU-INSTRUCT.
 	   03  LINE 25 COLUMN  2 BACKGROUND-COLOR 3
@@ -725,12 +723,6 @@
 	   03	       COLUMN 13 FOREGROUND-COLOR 7 HIGHLIGHT
                                  PIC  X(21) FROM W65-FIELD.
 
-004870 COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
-       COPY OPT.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -801,7 +793,7 @@
       *    ****    E X T R A C T   I M P O R T
       *
       * 	   W50-DATA   : EXTRACTED FIELD FROM IMPORTED DATA
-      *            W50-LENGTH : LENGTH OF DATA 
+      *            W50-LENGTH : LENGTH OF DATA
       *            W50-EXP    : FIELD TERMINATION CHARACTER
       *
        AA200           SECTION.
@@ -1419,7 +1411,7 @@
 	     INITIALIZE W60-FIELDS.
              MOVE 1              TO W60-S.
 001020	     DISPLAY " " AT 1803 WITH FOREGROUND-COLOR 14
-                     " to view the fields available " 
+                     " to view the fields available "
                       WITH FOREGROUND-COLOR 7
                      "S" WITH FOREGROUND-COLOR 14
                      "elect/" WITH FOREGROUND-COLOR 7
@@ -1598,7 +1590,7 @@
        BA999.
              EXIT.
       *
-      *    ****    Pack the debtor address for storage in the 
+      *    ****    Pack the debtor address for storage in the
       *            debtor record
       *
 017330 CA110-ADDRESS       SECTION 2.
@@ -1623,10 +1615,10 @@
 
 017510 CA120.
 017520     IF WS-S6 NOT = 99
-017530         MOVE W40-ACHAR (WS-S2) 
+017530         MOVE W40-ACHAR (WS-S2)
                                  TO W60-ACHAR (WS-S1)
 017540     ELSE
-017550         MOVE W40-PCHAR (WS-S2) 
+017550         MOVE W40-PCHAR (WS-S2)
                                  TO W60-ACHAR (WS-S1).
 017560     IF WS-S2 = WS-S3
 017570         GO TO CA125.
@@ -1770,10 +1762,7 @@
 019960       MOVE W40-OI         TO DEB-OI.
 019960       MOVE W40-LAB        TO DEB-LAB.
              MOVE W40-PRICE      TO DEB-PRICE.
-019970     IF W40-FIN = "N"
-019980         MOVE 1            TO DEB-FIN
-019990     ELSE
-020000         MOVE ZERO         TO DEB-FIN.
+019970       MOVE W40-FIN        TO DEB-FIN.
 020010       MOVE W40-TERMS      TO DEB-TERMS.
 020020       MOVE W40-DISC       TO DEB-DISC.
 020020       MOVE W40-SDISC      TO DEB-SDISC.
@@ -1955,22 +1944,22 @@
 020000       EXIT.
       /
 020010 ZB000-ERROR	       SECTION 89.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041770	   IF WS-F-ERROR = 2
 041620	       MOVE W02-NETWORK  TO WS-FILE
@@ -2002,11 +1991,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.

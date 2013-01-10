@@ -158,6 +158,7 @@
 002270 77  WS-PASSWORD      PIC X(08).
        77  WS-PRINT         PIC 9(01).
 002280 77  WS-PASS          PIC X(08).
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -418,8 +419,6 @@
 
       /
 004130 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
        01  MENU-INSTRUCT.
 	   03  LINE 25 COLUMN  2 BACKGROUND-COLOR 3
@@ -807,10 +806,6 @@
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-004870 COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -1180,10 +1175,7 @@
                GO TO AA399.
       *
            IF W50-BIN = 28
-	       IF DEB-FIN = 1
-		   MOVE "Y"	 TO W50-DATA
-	       ELSE
-		   MOVE "N"	 TO W50-DATA
+               MOVE DEB-FIN      TO W50-DATA
 	       END-IF
 	       MOVE 1		 TO W50-LENGTH
                PERFORM AA200

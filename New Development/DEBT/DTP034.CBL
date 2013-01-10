@@ -1,19 +1,19 @@
       $SET LINKCOUNT"448"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	   ******	**     *
-      *   **	**     **     **    **	 **  **   **	**     ***     *
-      *   **	**     **     **    **	**    **	**    * **     *
-      *   **	**     **     *******	**    **     ****    *	**     *
-      *   **	**     **     **	**    **	**  *******    *
-      *   **	**     **     **	 **  **   **	**	**     *
-      *   *******      **     **	  ****	   ******      ****    *
+      *   *******   ********  *******     ****	   ******	    **     *
+      *   **    **     **     **    **   **  **   **    **     ***     *
+      *   **    **     **     **    **  **    **        **    * **     *
+      *   **    **     **     *******   **    **     ****    *  **     *
+      *   **    **     **     **        **    **        **  *******    *
+      *   **    **     **     **         **  **   **    **      **     *
+      *   *******      **     **          ****	   ******      ****    *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *     D E B T O R	  C O N T R A C T   E N Q U I R Y	       *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
@@ -28,7 +28,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   February 1985.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -63,32 +63,32 @@
 000100 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "APACFIDS.SL".
 
-       COPY CONTROL.SL.
+       COPY "CONTROL.SL".
 
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBTOR.ISL".
 
-000160 COPY DBFOTO.SL.
+000160 COPY "DBFOTO.SL".
 
-000140 COPY DEBMEM.SL.
+000140 COPY "DEBMEM.SL".
 
 000220 DATA DIVISION.
 000230 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "APACFIDS.FDE".
 
-       COPY CONTROL.FDE.
+       COPY "CONTROL.FDE".
 
-000250 COPY PARAM.FDE.
+000250 COPY "PARAM.FDE".
 
-000270 COPY DEBTOR.FDE.
+000270 COPY "DEBTOR.FDE".
 
-000290 COPY DBFOTO.FDE.
+000290 COPY "DBFOTO.FDE".
 
-000140 COPY DEBMEM.FDE.
+000140 COPY "DEBMEM.FDE".
 
       /
       *         **         **    ******    *******    **    **
@@ -145,6 +145,7 @@
 003360 77  WS-ERR1	   PIC X(22)	  VALUE
 003370                     "Invalid account number".
 003380 77  WS-ERR2         PIC X(09) VALUE "No record".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -199,7 +200,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-003440 COPY WS.WS.
+003440 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
@@ -207,20 +208,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-003520 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY DBFOTO.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY PARAM.ID.
 
        01  W02-FILE-IDS.
 	   03  W02-STATEMENT.
@@ -239,9 +226,9 @@
            03  W10-RDATE REDEFINES W10-DATE.
 	       05  W10-DTE     PIC 99/99/9999.
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
        01  W24-MONTHS.
            03  W24-MONTH-NAMES.
@@ -295,9 +282,9 @@
 	       05  W30-VAT     PIC  9(01).
 	   03  FILLER	       PIC  X(15).
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
 005020 01  W45-TRAN.
 005030     03  W45-CODE        PIC 9(02).
@@ -305,9 +292,9 @@
 005050     03  W45-AFR         PIC X(12).
 005060     03  W45-ACT         PIC X(01).
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-005170 COPY W50.WS.
+005170 COPY "W50.WS".
 
 005190 01  W60-NME-ADD.
 005200     03  W60-NAME.
@@ -361,12 +348,12 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 005990 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
        01  S01.
 	   03  LINE  2 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT VALUE
@@ -500,7 +487,7 @@
 				 FOREGROUND-COLOR 3 HIGHLIGHT
 				 PIC 99/99/9999 FROM W30-RDTE.
 
-       COPY DEBLUP.CRT.
+       COPY "DEBLUP.CRT".
 
        01  S-DEB-MEM.
            03  LINE  7 COLUMN 18 FOREGROUND-COLOR 0
@@ -619,12 +606,6 @@
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-       COPY S99.CRT.
-
-       COPY OPT.CRT.
-
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -652,36 +633,36 @@
        AA99.
              EXIT.
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY OPTION.CRT.
+       COPY "OPTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY ABORT.PRN.
+       COPY "ABORT.PRN".
 
       /
       *    ****    READ FILES ROUTINES
       *
 007340 AC000-READ              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY DEBTOR.RD1.
+       COPY "DEBTOR.RD1".
 
-       COPY DBFOTO.RD.
+       COPY "DBFOTO.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-       COPY DEBTOR.LUP.
+       COPY "DEBTOR.LUP".
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
       /
 008930 CA155-GET-DEBTOR        SECTION 2.

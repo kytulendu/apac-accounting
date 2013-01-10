@@ -181,7 +181,7 @@
 000460         05  FILLER      PIC  X(10).
 000470     03  WS0-PRGM  REDEFINES WS0-MODULES.
 000480         05  WS0-PMODS   PIC  X(20).
-000490                               
+000490
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
 
@@ -296,7 +296,7 @@
       *
 004140 01  CLR-SCREEN.
 004150     03  BLANK SCREEN FOREGROUND-COLOR 3.
-003860     03  LINE  1 COLUMN  1 PIC X(80) USING WS-TOP-LNE2.
+003860     03  LINE  1 COLUMN  1 VALUE "旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커".
 003870     03  LINE  2 COLUMN  1 PIC X(01) USING WS-G3.
 004160     03          COLUMN  2 FOREGROUND-COLOR 12
 004170                           VALUE "APAC Accounting".
@@ -373,13 +373,13 @@
 
       *
       *    ****    D I S P L A Y   R E C O R D   L O C K E D
-      *            M E S S A G E   -   D E L A Y   F O R   
+      *            M E S S A G E   -   D E L A Y   F O R
       *            C O U N T   O F   2 5 0 0
       *
 000010 LOCKED-RECORD      SECTION.
 000020 LOCK-REC.
 000030       DISPLAY SPACE AT 2550.
-000040       DISPLAY "Record LOCKED - " AT 2551 
+000040       DISPLAY "Record LOCKED - " AT 2551
 000050                WITH FOREGROUND-COLOR 14
 000060               "waiting" WITH FOREGROUND-COLOR 14 BLINK.
 000070       MOVE ZERO TO WS-WAIT.
@@ -387,7 +387,7 @@
 
 000100 LOCK-USERS-REC.
 000110       DISPLAY SPACE AT 2550.
-000120       DISPLAY "waiting" AT 2551 
+000120       DISPLAY "waiting" AT 2551
 000130                WITH FOREGROUND-COLOR 14 BLINK.
 000140       MOVE -3771          TO WS-WAIT.
 000150
@@ -436,7 +436,7 @@
 
 000320 READ-CONTROL-EXIT.
 000330       EXIT.
-      
+
 008650 READ-DEPART.
 008660       READ DEPART.
 008670     IF WS-STATUS = "00"
@@ -450,7 +450,7 @@
 008750       MOVE 7              TO WS-F-ERROR.
 008760       PERFORM READ-ERROR.
 008770       GO TO READ-DEPART-EXIT.
-      
+
 008780 READ-DEPART-LOCK.
 008790       READ DEPART WITH KEPT LOCK.
 008800     IF WS-STATUS = "00"
@@ -466,10 +466,10 @@
 008900         GO TO READ-DEPART-LOCK.
 008910       MOVE 7              TO WS-F-ERROR.
 008920       PERFORM READ-ERROR.
-      
+
 008930 READ-DEPART-EXIT.
 008940       EXIT.
-      
+
 008690 READ-PARAM.
 008700       READ PARAM.
 008710     IF WS-STATUS = "00"
@@ -482,7 +482,7 @@
 008780         GO TO READ-PARAM.
 008790       MOVE 15             TO WS-F-ERROR.
 008800       PERFORM READ-ERROR.
-      
+
 008810 READ-PARAM-LOCK.
 008820     READ PARAM            WITH KEPT LOCK.
 008830     IF WS-STATUS = "00"
@@ -502,7 +502,7 @@
 008930         GO TO READ-PARAM-LOCK.
 008940       MOVE 15             TO WS-F-ERROR.
 008950       PERFORM READ-ERROR.
-      
+
 008960 READ-PARAM-EXIT.
 008970       EXIT.
       *
@@ -589,7 +589,7 @@
 000730       GO TO READ-STOCK-EXIT.
 
 000750 START-AT-STOCK-CODE.
-000760       START STOCK 
+000760       START STOCK
 000770         KEY >= STK-CODE.
 000780     IF WS-STATUS = "00"
 000790         MOVE ZERO         TO WS-F-ERROR
@@ -680,7 +680,7 @@
       *     ***    *   *   * *     **          *   ***   ***
       *        *   *   *   * *     * *         *   *  *  *
       *    *   *   *   *   * *   * *  *        *   *   * *
-      *     ***    *    ***   ***  *   *       *   *   * *    
+      *     ***    *    ***   ***  *   *       *   *   * *
       *
 000010 READ-STKTRF.
 000020       READ STKTRF.
@@ -720,21 +720,21 @@
 
 000160 WRITE-CONTROL-EXIT.
 000170       EXIT.
-      
+
 010060 REWRITE-DEPART.
 010070       REWRITE DPT-RECORD.
 010080     IF WS-STATUS NOT = "00"
 010090         MOVE 7            TO WS-F-ERROR
 010100         PERFORM WRITE-ERROR.
 010110       GO TO WRITE-DEPART-EXIT.
-      
+
 010120 REWRITE-DEPART-UNLOCK.
 010130       REWRITE DPT-RECORD.
 010140     IF WS-STATUS NOT = "00"
 010150         MOVE 7            TO WS-F-ERROR
 010160         PERFORM WRITE-ERROR.
 010170       UNLOCK DEPART.
-      
+
 010180 WRITE-DEPART-EXIT.
 010190       EXIT.
 
@@ -803,7 +803,7 @@
       *     ***    *   *   * *     **          *   ***   ***
       *        *   *   *   * *     * *         *   *  *  *
       *    *   *   *   *   * *   * *  *        *   *   * *
-      *     ***    *    ***   ***  *   *       *   *   * *    
+      *     ***    *    ***   ***  *   *       *   *   * *
       *
 000010 REWRITE-STKTRF.
 000020       REWRITE TRF-RECORD1.
@@ -836,7 +836,7 @@
 
 012510 BA000           SECTION 1.
 012520 BA00.
-012530       DISPLAY CLR-SCREEN. 
+012530       DISPLAY CLR-SCREEN.
 	     DISPLAY "Updating Stock Prices" AT 0230
 		      WITH FOREGROUND-COLOR 7 HIGHLIGHT.
              DISPLAY "UPDPRC Record :" AT 0603.
@@ -858,9 +858,9 @@
 	     MOVE PRC-CODE	 TO W10-ITEM.
              PERFORM CA500.
            IF WS-F-ERROR = ZERO
-               IF ((PRC-COST = ZERO) OR (PRC-COST = STK-COST)) AND 
+               IF ((PRC-COST = ZERO) OR (PRC-COST = STK-COST)) AND
 		   (PRC-LEDG = STK-LEDG) AND (PRC-XREF = STK-XREF)
-                   UNLOCK STOCK 
+                   UNLOCK STOCK
                    GO TO BA05
                ELSE
                    PERFORM DB000
@@ -868,8 +868,8 @@
              PERFORM DA000.
              GO TO BA05.
        BA10.
-             DISPLAY "Update complete - Press " AT 2312 
-                      WITH FOREGROUND-COLOR 14 "ENTER" 
+             DISPLAY "Update complete - Press " AT 2312
+                      WITH FOREGROUND-COLOR 14 "ENTER"
                       WITH FOREGROUND-COLOR 15.
              ACCEPT WS-OPTION AT 2342 WITH FOREGROUND-COLOR 15 AUTO.
        BA999.
@@ -884,7 +884,7 @@
 013320       MOVE W10-ITEM       TO W50-DATA.
            IF W50-1 = SPACE
                MOVE W50-13       TO W10-ITEM
-               GO TO CA505.      
+               GO TO CA505.
 	     CALL "CBL_TOUPPER" USING W50-DATA
 				BY VALUE W50-LENGTH
 				RETURNING WS-STATUS.
@@ -905,10 +905,10 @@
 015760	     MOVE SPACES	 TO W10-ACODE.
              MOVE PRC-COST       TO W10-COST W10-AVRG.
              MOVE PRC-LEDG       TO W10-LEDG.
-015780       MOVE ZERO           TO W10-QUANT W10-SELL W10-MARKUP 
-015790                              W10-ORDER W10-CASH W10-CMARKUP 
+015780       MOVE ZERO           TO W10-QUANT W10-SELL W10-MARKUP
+015790                              W10-ORDER W10-CASH W10-CMARKUP
                                     W10-PURCH W10-ODTE W10-WMARKUP
-                                    W10-REORD W10-GUAR W10-LTIME 
+                                    W10-REORD W10-GUAR W10-LTIME
                                     W10-WSALE W10-IND.
              MOVE W10-LEDG       TO WS-DEPKEY.
              PERFORM READ-DEPART THRU READ-DEPART-EXIT.
@@ -929,11 +929,11 @@
 016790       MOVE W10-SELL       TO W10-CSELL.
 016800     IF W10-COST = ZERO
 016810         IF W10-SELL NOT = ZERO
-016820             COMPUTE W10-CCOST ROUNDED = (W10-CSELL / 
+016820             COMPUTE W10-CCOST ROUNDED = (W10-CSELL /
 016830                     (100 + W10-MARKUP) * 100).
 016840     IF W10-SELL = ZERO
 016850         IF W10-COST NOT = ZERO
-016860             COMPUTE W10-CSELL ROUNDED = (W10-CCOST + 
+016860             COMPUTE W10-CSELL ROUNDED = (W10-CCOST +
 016870                     ((W10-CCOST * W10-MARKUP) / 100)).
 016880       MOVE W10-CCOST      TO W10-COST.
 016890       MOVE W10-CSELL      TO W10-SELL.
@@ -992,7 +992,7 @@
 017500       GO TO DA999.
       *
       *    ****  D E F A U L T   M A R K U P
-      *  
+      *
 017540 DA50.
 017600     IF W10-SELL > ZERO AND W10-COST > ZERO
 017610         MOVE W10-SELL     TO W10-CSELL
@@ -1005,7 +1005,7 @@
              EXIT.
       *
       *    ****  D E F A U L T   C A S H   M A R K U P
-      *  
+      *
        DA52.
 017600     IF W10-CASH > ZERO AND W10-COST > ZERO
 017610         MOVE W10-CASH     TO W10-CSELL
@@ -1018,13 +1018,13 @@
 017660       EXIT.
       *
       *    ****  D E F A U L T   W H O L E S A L E   M A R K U P
-      *  
+      *
        DA54.
 017600     IF W10-WSALE > ZERO AND W10-COST > ZERO
 017610         MOVE W10-WSALE    TO W10-CSELL
 017620         MOVE W10-COST     TO W10-CCOST
 017630         COMPUTE W10-WMARKUP ROUNDED = (((W10-CSELL - W10-CCOST)
-017640                                        / W10-COST) * 100) 
+017640                                        / W10-COST) * 100)
 017590     ELSE
 017580         MOVE DPT-WMRKUP   TO W10-WMARKUP.
 017650 DA55.
@@ -1044,14 +1044,14 @@
       * 	IF STK-QUANT NOT = ZERO
       * 	    GO TO DB05.
              MOVE PRC-COST TO STK-COST.
-016860       COMPUTE STK-SELL ROUNDED = (PRC-COST + 
+016860       COMPUTE STK-SELL ROUNDED = (PRC-COST +
 016870                        ((PRC-COST * STK-MARKUP) / 100)).
-016860       COMPUTE STK-CASH ROUNDED = (PRC-COST + 
+016860       COMPUTE STK-CASH ROUNDED = (PRC-COST +
 016870                        ((PRC-COST * STK-CMARKUP) / 100)).
-016860       COMPUTE STK-WSALE ROUNDED = (PRC-COST + 
+016860       COMPUTE STK-WSALE ROUNDED = (PRC-COST +
 016870                         ((PRC-COST * STK-WMARKUP) / 100)).
        DB05.
-             MOVE PRC-LEDG       TO STK-LEDG.  
+             MOVE PRC-LEDG       TO STK-LEDG.
 	     MOVE PRC-XREF	 TO STK-XREF.
              PERFORM DC000.
              PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
@@ -1244,7 +1244,7 @@
 021940                      WS-TCHR (64) WS-TCHR (71).
 021950       MOVE WS-G3  TO WS-MCHR (16) WS-MCHR (41)
 021960                      WS-MCHR (64) WS-MCHR (71)
-                            WS-MCHR (1)  WS-MCHR (80) 
+                            WS-MCHR (1)  WS-MCHR (80)
                             WS-MCH  (1)  WS-MCH  (80).
 021970       MOVE WS-G4  TO WS-BCHR (16) WS-BCHR (41)
 021980                      WS-BCHR (64) WS-BCHR (71).
@@ -1254,7 +1254,7 @@
 044790 ZA200.
 044800       DISPLAY "Files locked - Try later" AT 2412
 044810                WITH FOREGROUND-COLOR 14.
-044820       DISPLAY "Press any key" AT 2512 
+044820       DISPLAY "Press any key" AT 2512
 044830                WITH FOREGROUND-COLOR 14.
 044840       ACCEPT WS-OPTION AT 2526 WITH FOREGROUND-COLOR 15 AUTO.
        ZA205.
@@ -1263,22 +1263,22 @@
 044880       EXIT.
       /
 044890 ZB000-ERROR             SECTION 81.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -1317,11 +1317,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.

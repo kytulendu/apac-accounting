@@ -11,18 +11,18 @@
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
-      * 	A C C O U N T S	  R E C E I V A B L E	/	       *
+      *          A C C O U N T S   R E C E I V A B L E   /             *
       *                                                                *
       *     D E B T O R   C R E D I T	N O T E   A N A L I S E D      *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
-      *  May 2006	- New field included in Accounts Receivable    *
-      * 		  for recording number of outstanding Jobs     *
-      * 		  linked to the account. Additional filler     *
-      * 		  added for future expansion.		       *
+      * May 2006 - New field included in Accounts Receivable for       *
+      * 	       recording number of outstanding Jobs linked to the  *
+      * 	       account. Additional filler added for future         *
+      * 	       expansion.                                          *
       * 							       *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -30,7 +30,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -65,52 +65,48 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000160 COPY "DBTRAN.SL".
 
-000160 COPY DBTRAN.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBMEM.SL".
 
-000140 COPY DEBMEM.SL.
+000140 COPY "DEPART.SL".
 
-000140 COPY DEPART.SL.
+       COPY "LEDTRF.SL".
 
-       COPY LEDTRF.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
+000220 COPY "RECOVER.SL".
 
-000220 COPY RECOVER.SL.
+       COPY "SHARED.SL".
 
-       COPY SHARED.SL.
-
-       COPY TXTRAN.SL.
+       COPY "TXTRAN.SL".
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000140 COPY "DEBMEM.FDE".
 
-000140 COPY DEBMEM.FDE.
+000140 COPY "DEPART.FDE".
 
-000140 COPY DEPART.FDE.
+       COPY "LEDTRF.FDE".
 
-       COPY LEDTRF.FDE.
+000290 COPY "PARAM.FDE".
 
-000290 COPY PARAM.FDE.
+000390 COPY "RECOVER.GFD".
 
-000390 COPY RECOVER.GFD.
+       COPY "SHARED.FDE".
 
-       COPY SHARED.FDE.
-
-       COPY TXTRAN.FDE.
+       COPY "TXTRAN.FDE".
 
       /
       *         **         **    ******    *******    **    **
@@ -122,8 +118,7 @@
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 001560 77  WS-SUB	   PIC	9(04)	 COMP-5.
 001560 77  WS-S            PIC  9(04)    COMP-5.
 001570 77  WS-S1           PIC  9(04)    COMP-5.
@@ -168,6 +163,7 @@
 002110 77  WS-E            PIC  X(15) VALUE "**END** - ENTER".
 002120 77  WS-M            PIC  X(17) VALUE "New batch (Y/N) ?".
 002130 77  WS-AC           PIC  X(07) VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -222,13 +218,13 @@
 	       05  FILLER  PIC	X(01) VALUE "³".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
 	   03  WS-PROG	       PIC  X(03) VALUE "009".
 
-       COPY LEDTRF.WS.
+       COPY "LEDTRF.WS".
 
 002250 01  W00-TRAN-CODES.
            03  W00-T-VAT   PIC  9(09)V99 COMP-3.
@@ -246,30 +242,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DEBTOR.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY DEPART.ID.
-
-       COPY LEDTRF.ID.
-
-       COPY PARAM.ID.
-
-       COPY RECOVER.ID.
-
-       COPY SHARED.ID.
-
-       COPY TXTRAN.ID.
 
        01  W02-PRINTER-DETAILS.
 	   03  W02-PRINTER     PIC  X(12).
@@ -414,7 +386,7 @@
 001530	       05 FILLER       PIC  X(01).
 001540	       05 I-TOT        PIC  Z(07)9.99-.
 
-       COPY W05.VAT.
+       COPY "W05.VAT".
 
        01  W05-DISC.
 000630	   03  W05-DISCOUNT.
@@ -444,13 +416,13 @@
 	       05  W10-N3.
 	       07  W10-NUM3    PIC  9(03).
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
        01  W15-CONTROL.
 003540	   03  W15-LEDG.
 	       05  W15-LDG	PIC  9(04)    COMP.
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
 002860     03  W25-RESULT      PIC 9(05)V99.
@@ -471,13 +443,13 @@
 	   03  W30-30	       PIC  9(08) COMP-3.
 	   03  W30-CUR	       PIC  9(08) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS".
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -529,7 +501,7 @@
 003960 01  W85-BATCHES.
 003970         05  W85-BATCH   PIC  9(06)    COMP-5.
 
-       COPY W90.DBT.
+       COPY "W90.DBT".
 
 004390 01  W95-STM.
 004400     03  W95-COMP        PIC X(40).
@@ -574,16 +546,14 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 004580 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
-       COPY DEBLUP.CRT.
-
-       COPY DEPART.CRT.
+       COPY "DEPART.CRT".
 
 007910 01  S35.
 007920	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
@@ -791,15 +761,8 @@
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-       COPY S99.CRT.
-
-       COPY OPT.CRT.
-
-       COPY ERROR.CRT.
-
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION  USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 008230 AA000		       SECTION.
 008240 AA00.
 003240	   IF LS0-DBLEV < 3
@@ -825,77 +788,97 @@
 013140 AA49.
 013150       EXIT PROGRAM.
 
+      /    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ This routine is used to call the Debtor / Ac's Receivable ³
+      *    ³ lookup program and cancel it when control is returned.    ³
+      *    ³ The  relevant  error  message  will be  displayed  if  an ³
+      *    ³ exception occurs. The usual  parameters are passed to the ³
+      *    ³ lookup program as well W40-COMPANY which will contain the ³
+      *    ³ details of the account that has been selected when control³
+      *    ³ is returned to the calling program.                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AA50-LOOKUP     SECTION.
        AA50.
-	     PERFORM SAVE-SCREEN.
-011080	     MOVE 4		 TO W44-FUNCTION.
-011090	     PERFORM SCREEN-CONTENTS.
-	     PERFORM DEBTOR-LOOKUP.
-	     PERFORM RESTORE-SCREEN.
+             PERFORM SAVE-SCREEN.
+011080       MOVE 4                  TO W44-FUNCTION.
+011090       PERFORM SCREEN-CONTENTS.
+	       CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+	            ON EXCEPTION GO TO AA55
+	       END-CALL.
+             MOVE
+	       CANCEL PRG-DEBT-LUP.
+	       GO TO AA58.
+
+       AA55.
+             MOVE SPACE            TO WS-ERR-MES.
+             STRING "Program- " DELIMITED SIZE PRG-DEBT-LUP DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
+
+       AA58.
+             PERFORM RESTORE-SCREEN.
+
        AA99.
              EXIT.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY OPTION.CRT.
+       COPY "OPTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY DEBTOR.TRN.
+       COPY "DEBTOR.TRN".
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY DBTRAN.RD1.
+       COPY "DBTRAN.RD1".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-       COPY DEPART.RD.
+       COPY "DEPART.RD".
 
-       COPY LEDTRF.RD.
+       COPY "LEDTRF.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DBTRAN.WRR.
+       COPY "DBTRAN.WRR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-000140 COPY DEBMEM.WR.
+000140 COPY "DEBMEM.WR".
 
-       COPY DEPART.WR.
+       COPY "DEPART.WR".
 
-       COPY LEDTRF.WR.
+       COPY "LEDTRF.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY TXTRAN.WR.
+       COPY "TXTRAN.WR".
 
-       COPY DEBTOR.LUP.
+       COPY "DEPART.LUP".
 
-       COPY DEPART.LUP.
+       COPY "APAC.HLP".
 
-       COPY APAC.HLP.
-
-       COPY PRINTUTL.AS5.
+       COPY "PRINTUTL.AS5".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
@@ -1354,7 +1337,7 @@
 001690 DEBTOR-TRAN-EXIT.
 001700       EXIT.
 
-       COPY LEDTRF.UPD.
+       COPY "LEDTRF.UPD".
 
       /
       *    ****    D E B T O R	 C R E D I T   N O T E	 A N A L I S E D
@@ -1464,16 +1447,14 @@
 037880       MOVE W12-TODAY      TO W90-IDTE.
 
 037890 CK25.
-	     DISPLAY "F1" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     "=Help,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     " to do Debtor Lookup "
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     " to exit"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+             DISPLAY "F1"                        AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     "=Help,"                            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F2"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to do Account Lookup,"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F9"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " Debtor Lookup (Any Word),"        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "Esc"                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to exit"                          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
 037900       ACCEPT S36 AT 0414.
 	   IF USER-FUNC
 	       EVALUATE KEY-CODE-1
@@ -1482,8 +1463,12 @@
 		     GO TO CK75
 		 WHEN F1-KEY
 		     PERFORM HELP-ROUTINE
-		 WHEN F2-KEY
-016560		     PERFORM AA50
+                 WHEN F2-KEY
+                      MOVE SPACE     TO W40-LUP
+016560                PERFORM AA50
+                 WHEN F9-KEY
+                      MOVE "A"       TO W40-LUP
+                      PERFORM AA50
 		 WHEN OTHER
 		     CALL X"E5"
 		     GO TO CK25

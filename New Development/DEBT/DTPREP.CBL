@@ -84,11 +84,11 @@
 
       /
       *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   ** 
-      *         **    *    **   **    **   **   **    **  **  
-      *         **   ***   **   **    **   ******     *****   
-      *          ** ** ** **    **    **   **   **    **  **  
-      *           ***   ***     **    **   **    **   **   ** 
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
       *            *     *       ******    **    **   **    **
       *
 002780 WORKING-STORAGE SECTION.
@@ -523,8 +523,8 @@
            03  W24-MONTH-NAMES.
                05  FILLER      PIC  X(09) VALUE " January ".
                05  FILLER      PIC  X(09) VALUE " February".
-               05  FILLER      PIC  X(09) VALUE "  March  ". 
-               05  FILLER      PIC  X(09) VALUE "  April  ". 
+               05  FILLER      PIC  X(09) VALUE "  March  ".
+               05  FILLER      PIC  X(09) VALUE "  April  ".
                05  FILLER      PIC  X(09) VALUE "   May   ".
                05  FILLER      PIC  X(09) VALUE "   June  ".
                05  FILLER      PIC  X(09) VALUE "   July  ".
@@ -679,7 +679,7 @@
 004540     03  W100-90         PIC Z(08)9.99-.
 004540     03  W100-120        PIC Z(08)9.99-.
 004550     03  W100-INT        PIC Z(08)9.99.
-004560     03  W100-CRL        PIC Z(06)9.  
+004560     03  W100-CRL        PIC Z(06)9.
 004570     03  W100-KEY        PIC Z(05)9.
 
        LINKAGE SECTION.
@@ -688,8 +688,6 @@
 
       /
 005990 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
 006210 01  S06.
 006220	   03  LINE  3 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
@@ -706,7 +704,7 @@
 	   03	       COLUMN 29 VALUE ")".
 
 006270 01  S08.
-006280     03  LINE 10 COLUMN 12 VALUE 
+006280     03  LINE 10 COLUMN 12 VALUE
 006290		       "Do you want the Client address printed (".
 	   03	       COLUMN 52 FOREGROUND-COLOR 6 HIGHLIGHT
 				 VALUE "Y".
@@ -716,14 +714,8 @@
 	   03	       COLUMN 55 VALUE ")".
 
 006300 01  S09.
-006310     03  LINE 12 COLUMN 12 VALUE  
+006310     03  LINE 12 COLUMN 12 VALUE
 006320				 "Keyin Representative code".
-
-       COPY S99.CRT.
-
-       COPY OPT.CRT.
-
-       COPY ERROR.CRT.
 
       /
 001230 PROCEDURE DIVISION
@@ -761,9 +753,9 @@
        COPY CONTROL.RD.
 
        COPY PARAM.RD.
-      
+
        COPY DEBTOR.RD1.
-      
+
       /
 008930 CA155-GET-DEBTOR        SECTION 2.
 008940 CA155-ACCOUNT.
@@ -998,7 +990,7 @@
 012580	       ADD W25-TOTAL	 TO W90-CUR.
 012590	     MOVE W25-VALUE	 TO TRL-PD.
 012600	     MOVE DEB-BAL	 TO TRL-BAL.
-012610     IF (DEB-90 > 0) OR (DEB-120 > 0) 
+012610     IF (DEB-90 > 0) OR (DEB-120 > 0)
 012620	       MOVE 3		 TO TRL-MTH
 012630     ELSE
 012640     IF DEB-60 > 0
@@ -1292,22 +1284,22 @@
 025930       EXIT.
       /
 025940 ZB000		     SECTION 9.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -1339,11 +1331,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
                         " " WS-KEYX WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"

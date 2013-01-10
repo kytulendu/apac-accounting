@@ -125,6 +125,7 @@
 		        PERFORM BA20 THRU BA29
 		        DISPLAY CLR-SCREEN
              END-EVALUATE.
+             MOVE ZERO                   TO CRT-START CRT-END.
 
        AA09.
              EXIT-PROGRAM.

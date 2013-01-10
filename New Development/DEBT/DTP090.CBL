@@ -1,34 +1,38 @@
       $SET LINKCOUNT"448"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	   ******     ****     *
-      *   **	**     **     **    **	 **  **   **	**   **  **    *
-      *   **	**     **     **    **	**    **  **	**  **	  **   *
-      *   **	**     **     *******	**    **   *******  **	  **   *
-      *   **	**     **     **	**    **	**  **	  **   *
-      *   **	**     **     **	 **  **   **	**   **  **    *
-      *   *******      **     **	  ****	   ******     ****     *
+      *   *******   ********  *******     ****	   ******     ****     *
+      *   **    **     **     **    **   **  **   **    **   **  **    *
+      *   **    **     **     **    **  **    **  **    **  **    **   *
+      *   **    **     **     *******   **    **   *******  **    **   *
+      *   **    **     **     **        **    **        **  **    **   *
+      *   **    **     **     **         **  **   **    **   **  **    *
+      *   *******      **     **          ****	   ******     ****     *
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
       *     D E B T O R   R E C A L C U L A T E   P U R C H A S E S    *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
-      * 							       *
+      *     VERSION 9.00.20 - December 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  May 2006	- New field included in Accounts Receivable    *
-      * 		  for recording number of outstanding Jobs     *
-      * 		  linked to the account. Additional filler     *
-      * 		  added for future expansion.		       *
-      * 							       *
+      *                                                                *
+      *  May 2006	- New  field included in Accounts Receivable  for    *
+      * 		  recording number of outstanding Jobs linked to the *
+      * 		  account. Additional  filler added  for  future     *
+      * 		  expansion.	                                   *
+      *                                                                *
+      *  Jan 2008	- New file (DEBALT)- Debtor alternate index included *
+      * 		  for lookups, using any word contained in the       *
+      * 		  Debtor name.                                       *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP090.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -63,36 +67,32 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000160*COPY "DBTRAN.SL".
 
-000160*COPY DBTRAN.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000200 COPY "INVOIC.SL".
 
-000200 COPY INVOIC.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
-
-       COPY SHARED.SL.
+       COPY "SHARED.SL".
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000330*COPY "DBTRAN.FDE".
 
-000330*COPY DBTRAN.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000370 COPY "INVOIC.FDE".
 
-000370 COPY INVOIC.FDE.
+000290 COPY "PARAM.FDE".
 
-000290 COPY PARAM.FDE.
-
-       COPY SHARED.FDE.
+       COPY "SHARED.FDE".
 
       /
       *         **         **    ******    *******    **    **
@@ -104,8 +104,7 @@
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 001560 77  WS-SUB	   PIC	9(04)	 COMP-5.
 001560 77  WS-S            PIC  9(04)    COMP-5.
 001570 77  WS-S1           PIC  9(04)    COMP-5.
@@ -146,6 +145,44 @@
 001980 77  WS-BATCH        PIC  9(06) COMP-5.
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.	  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *	     C = Clear comment line (50)
+      *	     E = Clear lines (any line or lines between 5 and 46)
+      * 	     H = Change heading
+      * 	     S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "DTP090".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "ACCOUNTS RECEIVABLE - RECALC PURCHASES".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-WRKHD           PIC  X(11).
+           03  CRT-WRKST           PIC  X(03).
+
       /
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
@@ -198,37 +235,21 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-      *COPY DBTRAN.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY INVOIC.ID.
-
-       COPY PARAM.ID.
-
-       COPY SHARED.ID.
 
        01  W10-REF.
            03  W10-NUM         PIC  9(08).
 002910	   03  W10-DATE.
 	       05  W10-EDTE	 PIC  99/99/9999.
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W15.WS.
+       COPY "W15.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
 002860     03  W25-RESULT      PIC 9(05)V99.
@@ -249,13 +270,13 @@
 	   03  W30-30	       PIC  9(08) COMP-3.
 	   03  W30-CUR	       PIC  9(08) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS".
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -339,76 +360,46 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
 004580 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
        01  S05A.
-	   03  LINE  7 COLUMN 44 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
+	   03  LINE  7 COLUMN 44 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta
 				 PIC 99/99/9999 USING W15-START AUTO.
 
 009340 01  S05D.
-	   03  LINE  4 COLUMN 24 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE
+	   03  LINE  4 COLUMN 24 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE
 				"ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-	   03  LINE  5 COLUMN 24 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE
+	   03  LINE  5 COLUMN 24 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE
 				"³   Include transactions from:   ³".
-	   03  LINE  6 COLUMN 24 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE
+	   03  LINE  6 COLUMN 24 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE
 				"ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-	   03  LINE  7 COLUMN 24 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE
+	   03  LINE  7 COLUMN 24 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE
 				"³   Starting Date :              ³".
-	   03  LINE  8 COLUMN 24 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE
+	   03  LINE  8 COLUMN 24 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE
 				"ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-	   03  LINE  9 COLUMN 24 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE
+	   03  LINE  9 COLUMN 24 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE
 				"³Dates to be keyed in as ".
-	   03	       COLUMN 49 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE "DDMMCCYY".
-	   03	       COLUMN 57 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE "³".
-	   03  LINE 10 COLUMN 24 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 6 VALUE
+	   03	       COLUMN 49 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE "DDMMCCYY".
+	   03	       COLUMN 57 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE "³".
+	   03  LINE 10 COLUMN 24 FOREGROUND-COLOR Brown HIGHLIGHT
+				 BACKGROUND-COLOR Brown VALUE
 				"ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
 
-007640 01  S27.
-007650	   03  LINE  5 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
-007660				 VALUE "This routine re-calculates the p
-007670- 			 "urchases statistics for  all".
-007680	   03  LINE  6 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
-007690				 VALUE "the  Debtor accounts and will on
-007700- 			 "ly include the  transactions".
-007710	   03  LINE  7 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
-007720				 VALUE "from  the specified date. The da
-007730- 			 "te will be requested in  the".
-007740	   03  LINE  8 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 4
-007750				 VALUE "next screen.
-007760- 			 "                            ".
-007770	   03  LINE 10 COLUMN 12 VALUE "Do you wish to continue (".
-	   03	       COLUMN 37 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "Y".
-	   03	       COLUMN 38 VALUE "/".
-	   03	       COLUMN 39 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "N".
-	   03	       COLUMN 40 VALUE ")?".
-
-       COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 008230 AA000		       SECTION.
 008240 AA00.
 003240	   IF LS0-DBLEV < 9
@@ -422,41 +413,81 @@
 013140 AA49.
 013150       EXIT PROGRAM.
 
-       COPY FUNCTION.CRT.
+      /    *************************************************************
+      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      * 	   S C R E E N ,   K E Y B O A R D   &	 M O U S E
+      *    *************************************************************
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	   SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3    ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      SCREEN-SHADOW                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To routine is used to display a shadow down the right and ³
+      *    ³ along the bottom of a pop-up box. The parameters that are ³
+      *    ³ required:                                                 ³
+      *    ³          SHADE-ROW   - Top line of the box + 1.           ³
+      *    ³          SHADE-COL   - Left line of box + 2.              ³
+      *    ³          SHADE-WIDTH - Width of the box - 2.              ³
+      *    ³          SHADE-LINES - Hight of box - 1.                  ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      CHECK-CORRECT                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine displays a pop-up window with the message    ³
+      *    ³           "Press Y if correct - N if incorrect"           ³
+      *    ³                                                           ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³                                                           ³
+      *    ³ To start with the pop-up window higher or lower than row  ³
+      *    ³ 13 (default); move another value to SLIN and PERFORM      ³
+      *    ³ CHECK-SETUP THRU CHECK-EXIT.	                             ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      * 	       D I S P L A Y   E R R O R   M E S S A G E S
+      *    *************************************************************
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                      ERROR-MESSAGE                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To display the error message higher or lower (default is  ³
+      *    ³ line 20) Move the line number which must be used as the   ³
+      *    ³ top line to WS-MES-LINE. The message to be displayed must ³
+      *    ³ be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-       COPY LOCKED.REC.
+       COPY "FUNCTION.CRT".
 
-       COPY CLEAR.CRT.
+       COPY "LOCKED.REC".
 
-       COPY DATE.CHK.
+       COPY "CLEAR.CRT".
+
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-      *COPY DBTRAN.RD1.
+      *COPY "DBTRAN.RD1".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-011250 COPY INVOIC.RD.
+011250 COPY "INVOIC.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
       /
       *    THIS ROUTINE LOCKS THE CONTROL FILE DEBTOR RECORD
@@ -484,13 +515,13 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
       *
 012550	     DISPLAY "WAITING" AT 5051
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
 012560	     COMMIT.
 	     ACCEPT WS-STIME FROM TIME.
 	     MOVE 400		 TO WS-WAIT.
 012580	     PERFORM LOCK-REC-LOOP.
 012590	     DISPLAY SPACE AT 5051
-		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+		     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 012600       GO TO AY60.
 
 012610 AY61.
@@ -559,16 +590,16 @@
 	   IF WS-WAIT > ZERO
 	       COMMIT
 	       DISPLAY "Waiting" AT 5072
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			WITH BACKGROUND-COLOR Cyan
+			     FOREGROUND-COLOR Brown HIGHLIGHT BLINK
 	       ACCEPT WS-STIME FROM TIME
 	       PERFORM LOCK-REC-LOOP
 	       DISPLAY "Waiting" AT 5072
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 14 BLINK
+			WITH BACKGROUND-COLOR Cyan
+			     FOREGROUND-COLOR Brown HIGHLIGHT BLINK
 	       GO TO AY60.
 012880	     DISPLAY SPACE AT 5072
-		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+		     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 
 012900 AY63.
 012920	     MOVE WS-SUB	 TO WS-USUB.
@@ -622,20 +653,11 @@
       *
 034100 CM000		       SECTION 5.
 034110 CM00.
-034120       DISPLAY CLR-SCREEN.
-034130	     DISPLAY "RE-CALCULATE ACCOUNT PURCHASES" AT 0226
-                        WITH FOREGROUND-COLOR 11.
-034140	     DISPLAY S27.
+             MOVE "S"                TO CRT-TYPE.
+007750       CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+             CALL "UTP\NORECOV" USING WS-OPTION.
 
 024790 CM05.
-024800	     ACCEPT WS-OPTION AT 1043
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-024860	   IF NOT (WS-OPTION = "Y" OR "N")
-024870	       GO TO CM05.
 024880     IF WS-OPTION = "N"
 024890         GO TO CM999.
 	     PERFORM SAVE-SCREEN-3.
@@ -660,11 +682,11 @@
 	     MOVE W15-SCENT	 TO W15-ECC.
 	     MOVE W15-SYEAR	 TO W15-EYY.
 	     DISPLAY "Press " AT 5052
-		      WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
-		     "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				BACKGROUND-COLOR 3
+		      WITH FOREGROUND-COLOR Blue BACKGROUND-COLOR Cyan
+		     "Esc" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+				BACKGROUND-COLOR Cyan
 		     "ape to Exit"
-		      WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3.
+		      WITH FOREGROUND-COLOR Blue BACKGROUND-COLOR Cyan.
 
        CM10.
 	     ACCEPT S05A.
@@ -705,8 +727,8 @@
            IF WS-F-ERROR = 6
                GO TO CM85.
 034790	     DISPLAY DEB-ACNO AT 1822
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+			  BACKGROUND-COLOR Magenta.
 	     MOVE 1		 TO WS-S1.
 
        CM25.
@@ -925,17 +947,17 @@
 
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
 
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
 
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
+041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       GO TO DISPLAY-FILE-NAME.
        I-O-ERROR-EXIT.
              EXIT.
@@ -984,14 +1006,14 @@
 042020     ELSE
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
+045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
 045390       DISPLAY "Status " AT 1212
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
+                      WS-STATUS WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 045400     IF WS-STATUS NOT = "94"
 045410         DISPLAY "Key    " AT 1412
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
+                        WS-KEY WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                        " " WS-KEYX WITH FOREGROUND-COLOR Cyan HIGHLIGHT
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.
 045440         DISPLAY "Please make a note of these details" AT 1812.

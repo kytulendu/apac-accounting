@@ -1,27 +1,31 @@
       $SET LINKCOUNT"256"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	   ******    ******    *
-      *   **	**     **     **    **	 **  **   **	**  **	  **   *
-      *   **	**     **     **    **	**    **  **	**  **	  **   *
-      *   **	**     **     *******	**    **   *******   *******   *
-      *   **	**     **     **	**    **	**	  **   *
-      *   **	**     **     **	 **  **   **	**  **	  **   *
-      *   *******      **     **	  ****	   ******    ******    *
+      *   *******   ********  *******     ****	   ******    ******    *
+      *   **    **     **     **    **   **  **   **    **  **    **   *
+      *   **    **     **     **    **  **    **  **    **  **    **   *
+      *   **    **     **     *******   **    **   *******   *******   *
+      *   **    **     **     **        **    **        **	      **   *
+      *   **    **     **     **         **  **   **    **  **    **   *
+      *   *******      **     **          ****	   ******    ******    *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *          D E B T O R   B A L A N C E   T A K E - O N           *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
-      * 							       *
+      *     VERSION 9.00.20 - December 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  May 2006	- New field included in Accounts Receivable    *
-      * 		  for recording number of outstanding Jobs     *
-      * 		  linked to the account. Additional filler     *
-      * 		  added for future expansion.		       *
-      * 							       *
+      *                                                                *
+      *  May 2006	- New  field included in Accounts Receivable  for    *
+      * 		  recording number of outstanding Jobs linked to the *
+      * 		  account. Additional  filler added  for  future     *
+      * 		  expansion.	                                   *
+      *                                                                *
+      *  Jan 2008	- New file (DEBALT)- Debtor alternate index included *
+      * 		  for lookups, using any word contained in the       *
+      * 		  Debtor name.                                       *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP099.
@@ -63,32 +67,28 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
+       COPY "DBTRAN.SL".
 
-       COPY DBTRAN.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
-
-       COPY DEBMEM.SL.
+       COPY "DEBMEM.SL".
 
 000160 DATA DIVISION.
 000170 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "CONTROL.IFD".
 
-       COPY CONTROL.IFD.
+000190 COPY "PARAM.IFD".
 
-000190 COPY PARAM.IFD.
+       COPY "DBTRAN.GFD".
 
-       COPY DBTRAN.GFD.
+000210 COPY "DEBTOR.GFD".
 
-000210 COPY DEBTOR.GFD.
-
-       COPY DEBMEM.FD.
+       COPY "DEBMEM.FD".
 
       /
       *         **         **    ******    *******    **    **
@@ -100,8 +100,7 @@
       *            *     *       ******    **    **   **    **
       *
 000230 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 000240 77  WS-S1	   PIC 9(04)	 COMP-5.
 000250 77  WS-S2           PIC 9(04)     COMP-5.
 000250 77  WS-S3	   PIC 9(04)	 COMP-5.
@@ -117,8 +116,46 @@
 000370 77  WS-ERR1	   PIC X(22)	  VALUE
 000380                    "Invalid account number".
 000390 77  WS-ERR2         PIC X(09)      VALUE "No record".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
+
+      *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커
+      *    � Used by calling program (WORKING-STORAGE) and called program �
+      *    � (LINKAGE SECTION) for Main screen layout and headings.	  �
+      *    읕컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴켸
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *	     C = Clear comment line (50)
+      *	     E = Clear lines (any line or lines between 5 and 46)
+      * 	     H = Change heading
+      * 	     S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "DTP099".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "ACCOUNTS RECEIVABLE - BALANCE TAKE-ON".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-WRKHD           PIC  X(11).
+           03  CRT-WRKST           PIC  X(03).
 
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
@@ -171,7 +208,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-000410 COPY WS.WS.
+000410 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
@@ -180,33 +217,21 @@
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
 
-000430 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY DEBMEM.ID.
-
-       COPY PARAM.ID.
-
 000480 01  W10-SPARES.
 000490     03  W10-DATE       PIC X(08).
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 000700 01  W25-CALCS.
 000710     03  W25-TOTAL      PIC S9(09)V99 COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
 000720 01  W70-LINKS.
 000730     03  W70-OPOUT      PIC S9(09)V99 COMP-3.
@@ -266,17 +291,17 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 000940 SCREEN SECTION.
 
-       COPY BLANK.CRT.
-
-       COPY DEBLUP.CRT.
+       COPY "DEBLUP.CRT".
 
 001010 01  S026-TRANS.
-001020	   03  LINE 2  COLUMN 33 FOREGROUND-COLOR 7 HIGHLIGHT
+001020	   03  LINE 2  COLUMN 33 FOREGROUND-COLOR Grey HIGHLIGHT
 001030				 VALUE "DEBTOR BALANCE TAKE-ON".
 001040     03  LINE 4  COLUMN 2  VALUE "Account No:".
 001050     03  LINE 5  COLUMN 2  VALUE "Name:".
@@ -289,155 +314,150 @@
 001110	   03  LINE 12 COLUMN 2  VALUE "Interest".
 
        01  S28.
-	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+	   03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta
 				  PIC X(06) USING W80-ACNO AUTO.
 
 001120 01  S030-TAKE-ON.
-001130	   03  LINE  6 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC Z(08)9.99-
+001130	   03  LINE  6 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta PIC Z(08)9.99-
 001140                           USING W90-BAL AUTO.
-001150	   03  LINE  7 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC Z(08)9.99-
+001150	   03  LINE  7 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta PIC Z(08)9.99-
 001160                           USING W90-CUR AUTO.
-001170	   03  LINE  8 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC Z(08)9.99-
+001170	   03  LINE  8 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta PIC Z(08)9.99-
 001180                           USING W90-30 AUTO.
-001190	   03  LINE  9 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC Z(08)9.99-
+001190	   03  LINE  9 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta PIC Z(08)9.99-
 001200                           USING W90-60 AUTO.
-001210	   03  LINE 10 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC Z(08)9.99-
+001210	   03  LINE 10 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta PIC Z(08)9.99-
 001220                           USING W90-90 AUTO.
-001210	   03  LINE 11 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC Z(08)9.99-
+001210	   03  LINE 11 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta PIC Z(08)9.99-
 001220                           USING W90-120 AUTO.
-001230	   03  LINE 12 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC Z(04)9.99-
+001230	   03  LINE 12 COLUMN 16 FOREGROUND-COLOR Grey HIGHLIGHT
+				 BACKGROUND-COLOR Magenta PIC Z(04)9.99-
 001240                           USING W90-INT AUTO.
        01  S-DEB-MEM.
-           03  LINE  7 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
+           03  LINE  7 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey VALUE
            "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
       -    "".
        01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  7 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey VALUE
            "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
       -    "".
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  8 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 21 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G12.
        01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-004870 COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 001260 AA000-MAIN	       SECTION.
 001270 AA000-INIT.
 003240	   IF LS0-DBLEV < 9
@@ -460,29 +480,29 @@
        AA99.
              EXIT.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
 001410 AC000-READ              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-       COPY DEBTOR.LUP.
+       COPY "DEBTOR.LUP".
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
 001920 AZ000-END	       SECTION.
 001930 AZ000-EOJ.
@@ -522,8 +542,8 @@
 002290       MOVE ZERO           TO WS-ERROR.
 002300       DISPLAY "Password :" AT 0812.
 002310	     ACCEPT WS-PASSW AT 0824
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 NO-ECHO AUTO-SKIP.
+		    WITH FOREGROUND-COLOR Grey HIGHLIGHT
+			 BACKGROUND-COLOR Magenta NO-ECHO AUTO-SKIP.
 002320	     MOVE 8		 TO WS-LENGTH.
 	     CALL "CBL_TOUPPER" USING WS-PASSW
 				BY VALUE WS-LENGTH
@@ -538,28 +558,28 @@
 
 002520 CE10.
 002530       DISPLAY "Change password (" AT 1007
-                     "Y" WITH FOREGROUND-COLOR 11
-                     "/" "N" WITH FOREGROUND-COLOR 11 ")".
+                     "Y" WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                     "/" "N" WITH FOREGROUND-COLOR Cyan HIGHLIGHT ")".
              MOVE "N"            TO WS-OPTION.
 
 002540 CE15.
 002550	     ACCEPT WS-OPTION AT 1032
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
+		    WITH FOREGROUND-COLOR Grey HIGHLIGHT
+			 BACKGROUND-COLOR Magenta UPDATE AUTO.
 	     CALL "CBL_TOUPPER" USING WS-OPTION
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
 	   IF NOT (WS-OPTION = "Y" OR "N")
                GO TO CE15.
-002510	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
+002510	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan.
 002620     IF WS-OPTION = "N"
 002640         GO TO CE25.
 
 002670 CE20-CHANGE.
 002680       DISPLAY "Password :" AT 1212.
 002690	     ACCEPT WS-PASSW AT 1224
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5.
+		    WITH FOREGROUND-COLOR Grey HIGHLIGHT
+			 BACKGROUND-COLOR Magenta.
 	     MOVE 8		 TO WS-LENGTH.
 	     CALL "CBL_TOUPPER" USING WS-PASSW
 				BY VALUE WS-LENGTH
@@ -568,21 +588,21 @@
 	     PERFORM CHECK-CORRECT.
 002770	   IF WS-OPTION = "N"
 002780         GO TO CE20-CHANGE.
-002510	     DISPLAY WS-BLNK78 AT 1202 WITH FOREGROUND-COLOR 3.
+002510	     DISPLAY WS-BLNK78 AT 1202 WITH FOREGROUND-COLOR Cyan.
 004060	     MOVE 3		 TO WS-PARKEY.
 004070       PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
 002790	     MOVE WS-PASSW	 TO PAR-PASSWORD.
 002800       PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
 
        CE25.
-             DISPLAY "R" AT 1212 WITH FOREGROUND-COLOR 14
-                     "eplace, " "A" WITH FOREGROUND-COLOR 14
+             DISPLAY "R" AT 1212 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "eplace, " "A" WITH FOREGROUND-COLOR Brown HIGHLIGHT
                      "dd to current balances".
 
        CE30.
              ACCEPT WS-TAKEON AT 1245
-		    WITH FOREGROUND-COLOR 15
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
+		    WITH FOREGROUND-COLOR Grey HIGHLIGHT
+			 BACKGROUND-COLOR Magenta UPDATE AUTO.
 	     CALL "CBL_TOUPPER" USING WS-TAKEON
 				BY VALUE WS-LENGTH
 				RETURNING WS-STATUS.
@@ -600,15 +620,15 @@
 
 002880 CG15.
 	     DISPLAY "F1" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
 		     "=Help,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+		     "F2" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
 		     " to do Debtor Lookup "
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+		     "Esc" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
 		     " to exit"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
 002890       ACCEPT S28 AT 0414.
 	   IF USER-FUNC
 	       EVALUATE KEY-CODE-1
@@ -629,13 +649,13 @@
 	     PERFORM CLEAR-L50.
 002900     IF W80-ACNO = SPACES
 002910       GO TO CG65.
-002510	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
+002510	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan.
 002920       PERFORM CA155-GET-DEBTOR.
 002930     IF WS-ERROR = 1
-002940         DISPLAY WS-ERR2 AT 2312 WITH FOREGROUND-COLOR 14
+002940         DISPLAY WS-ERR2 AT 2312 WITH FOREGROUND-COLOR Brown HIGHLIGHT
 002950         GO TO CG15.
 002960     IF WS-ERROR = 2
-002970         DISPLAY WS-ERR1 AT 2312 WITH FOREGROUND-COLOR 14
+002970         DISPLAY WS-ERR1 AT 2312 WITH FOREGROUND-COLOR Brown HIGHLIGHT
 002980         GO TO CG15.
 	   IF DEB-OI = "O"
 	       MOVE "Open Item - May not use balance take-on"
@@ -643,18 +663,18 @@
 003260	       PERFORM ERROR-LENGTH THRU ERROR-EXIT
 	       GO TO CG15.
 002990	     DISPLAY DEB-NAME AT 0514
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+		     WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+			  BACKGROUND-COLOR Magenta.
 	     PERFORM CHECK-CORRECT.
 003080	   IF WS-OPTION = "N"
 003090         GO TO CG00.
            IF WS-TAKEON = "R"
 003100         IF DEB-BAL NOT = DEB-STM
 003110             DISPLAY "May not change balances - 'ENTER'" AT 2312
-                            WITH FOREGROUND-COLOR 14
+                            WITH FOREGROUND-COLOR Brown HIGHLIGHT
 003120             ACCEPT WS-OPTION AT 2346
-			  WITH FOREGROUND-COLOR 15
-			       BACKGROUND-COLOR 5 AUTO
+			  WITH FOREGROUND-COLOR Grey HIGHLIGHT
+			       BACKGROUND-COLOR Magenta AUTO
 003130             GO TO CG00
                ELSE
 003140             MOVE DEB-BAL  TO W90-BAL
@@ -673,10 +693,10 @@
                                     W90-120
                                     W90-INT.
 	     DISPLAY "Press " AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+		     "Esc" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
 		     " to CANCEL"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
 
 003210 CG25.
 003220       ACCEPT S030-TAKE-ON.
@@ -875,10 +895,10 @@
 
        ZA49.
              DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
              DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
+             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
              GO TO ZA205.
 
        ZA50.
@@ -890,9 +910,9 @@
 041860         MOVE "DEBTOR MEMO"
                                  TO WS-FILE.
              DISPLAY "Rebuild " AT 0812
-                      WS-FILE WITH FOREGROUND-COLOR 14.
+                      WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Press any key to continue" AT 1012.
-             ACCEPT WS-OPTION AT 1038 WITH FOREGROUND-COLOR 15.
+             ACCEPT WS-OPTION AT 1038 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
        ZA51.
              EXIT PROGRAM.
        ZA55.
@@ -927,12 +947,12 @@
 	       MOVE LS-USER	   TO WS-WRKST.
 004090 ZA200.
 004100       DISPLAY "Files locked - Try later" AT 2312
-004110                WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
+004110                WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     " " WS-STATUS WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 004120	     DISPLAY "Press any key" AT 5012
-004130		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+004130		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT.
 004140	     ACCEPT WS-OPTION AT 5026
-		    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+		    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
        ZA205.
              EXIT PROGRAM.
 004170 ZA999-EXIT.
@@ -942,17 +962,17 @@
 
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       PERFORM DISPLAY-FILE-NAME.
 
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
-041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
+041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       PERFORM DISPLAY-FILE-NAME.
 
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
-041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
+041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 041510       PERFORM DISPLAY-FILE-NAME.
 
 041560 DISPLAY-FILE-NAME.
@@ -994,13 +1014,13 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked"
                                  TO WS-STAT-MESSAGE.
-045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
+045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
 045390       DISPLAY "Status " AT 1212
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
+                      WS-STATUS WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 045400     IF WS-STATUS NOT = "94"
 045410         DISPLAY "Key    " AT 1412
-                        WS-KEY WITH FOREGROUND-COLOR 11
+                        WS-KEY WITH FOREGROUND-COLOR Cyan HIGHLIGHT
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.
 045440         DISPLAY "Please make a note of these details" AT 1812.

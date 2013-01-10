@@ -1,13 +1,13 @@
       $SET LINKCOUNT"468"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	   ****	      **       **      *
-      *   **	**     **     **    **	  **  **     ***      ***      *
-      *   **	**     **     **    **	 **    **     **       **      *
-      *   **	**     **     *******	 **    **     **       **      *
-      *   **	**     **     **	 **    **     **       **      *
-      *   **	**     **     **	  **  **      **       **      *
-      *   *******      **     **	   ****	    ******   ******    *
+      *    *******   ********  *******     ****	      **       **      *
+      *    **    **     **     **    **   **  **     ***      ***      *
+      *    **    **     **     **    **  **    **     **       **      *
+      *    **    **     **     *******   **    **     **       **      *
+      *    **    **     **     **        **    **     **       **      *
+      *    **    **     **     **         **  **      **       **      *
+      *    *******      **     **          ****	    ******   ******    *
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
@@ -15,7 +15,7 @@
       *                                                                *
       *   D E B T O R	P O S T   A R R E A R	I N T E R E S T        *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
@@ -30,7 +30,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -65,56 +65,52 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+000120 COPY "CONTROL.SL".
 
-000120 COPY CONTROL.SL.
+000160 COPY "DBTRAN.SL".
 
-000160 COPY DBTRAN.SL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEPART.SL".
 
-000140 COPY DEPART.SL.
+       COPY "LEDTRF.SL".
 
-       COPY LEDTRF.SL.
+000120 COPY "PARAM.SL".
 
-000120 COPY PARAM.SL.
+000220 COPY "RECOVER.SL".
 
-000220 COPY RECOVER.SL.
+       COPY "SHARED.SL".
 
-       COPY SHARED.SL.
-
-       COPY TXTRAN.SL.
+       COPY "TXTRAN.SL".
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000140 COPY "DEPART.FDE".
 
-000140 COPY DEPART.FDE.
+       COPY "LEDTRF.FDE".
 
-       COPY LEDTRF.FDE.
+000290 COPY "PARAM.FDE".
 
-000290 COPY PARAM.FDE.
+000390 COPY "RECOVER.GFD".
 
-000390 COPY RECOVER.GFD.
+       COPY "SHARED.FDE".
 
-       COPY SHARED.FDE.
-
-       COPY TXTRAN.FDE.
+       COPY "TXTRAN.FDE".
 
       /
       *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   ** 
-      *         **    *    **   **    **   **   **    **  **  
-      *         **   ***   **   **    **   ******     *****   
-      *          ** ** ** **    **    **   **   **    **  **  
-      *           ***   ***     **    **   **    **   **   ** 
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
@@ -220,9 +216,9 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
-       COPY LEDTRF.WS.
+       COPY "LEDTRF.WS".
 
 002250 01  W00-TRAN-CODES.
            03  W00-T-VAT   PIC  9(09)V99 COMP-3.
@@ -240,28 +236,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY DEPART.ID.
-
-       COPY LEDTRF.ID.
-
-       COPY PARAM.ID.
-
-       COPY RECOVER.ID.
-
-       COPY SHARED.ID.
-
-       COPY TXTRAN.ID.
 
        01  W02-PRINTER-DETAILS.
 	   03  W02-PRINTER     PIC  X(12).
@@ -406,7 +380,7 @@
 001530	       05 FILLER       PIC  X(01).
 001540	       05 I-TOT        PIC  Z(07)9.99-.
 
-       COPY W05.VAT.
+       COPY "W05.VAT".
 
        01  W05-DISC.
 000630	   03  W05-DISCOUNT.
@@ -436,9 +410,9 @@
 	       05  W10-N3.
 	       07  W10-NUM3    PIC  9(03).
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
 002860     03  W25-RESULT      PIC 9(05)V99.
@@ -459,13 +433,13 @@
 	   03  W30-30	       PIC  9(08) COMP-3.
 	   03  W30-CUR	       PIC  9(08) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS.
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -516,7 +490,7 @@
 003960 01  W85-BATCHES.
 003970         05  W85-BATCH   PIC  9(06)    COMP-5.
 
-       COPY W90.DBT.
+       COPY "W90.DBT".
 
 004390 01  W95-STM.
 004400     03  W95-COMP        PIC X(40).
@@ -539,11 +513,11 @@
 004540     03  W100-90         PIC Z(08)9.99-.
 004540     03  W100-120        PIC Z(08)9.99-.
 004550     03  W100-INT        PIC Z(08)9.99.
-004560     03  W100-CRL        PIC Z(06)9.  
+004560     03  W100-CRL        PIC Z(06)9.
 004570     03  W100-KEY        PIC Z(05)9.
 
        01  W200-MEMO.
-           03  W200-MEM-FLDS. 
+           03  W200-MEM-FLDS.
                05  W200-MEM1   PIC  X(60).
                05  W200-MEM2   PIC  X(60).
                05  W200-MEM3   PIC  X(60).
@@ -561,12 +535,12 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 004580 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
 005520 01  S10.
 005530	   03  LINE  2 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
@@ -590,8 +564,6 @@
 007750                           VALUE "DATA FILES from the previous bac
 007760-                          "kup to be restored !!!      ".
 007770     03  LINE 10 COLUMN 12 VALUE "Do you wish to continue (Y/N)?".
-
-       COPY ERROR.CRT.
 
       /
 001230 PROCEDURE DIVISION
@@ -621,55 +593,55 @@
 013140 AA49.
 013150       EXIT PROGRAM.
 
-       COPY FUNCTION.SCR.
+       COPY "FUNCTION.SCR".
 
-       COPY ERROR.SCR.
+       COPY "ERROR.SCR".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY DEBTOR.TRN.
+       COPY "DEBTOR.TRN".
 
-       COPY PRINTUTL.AS5.
+       COPY "PRINTUTL.AS5".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY DBTRAN.RD1.
+       COPY "DBTRAN.RD1".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-       COPY DEPART.RD.
+       COPY "DEPART.RD".
 
-       COPY LEDTRF.RD.
+       COPY "LEDTRF.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DBTRAN.WRR.
+       COPY "DBTRAN.WRR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-       COPY DEPART.WR.
+       COPY "DEPART.WR".
 
-       COPY LEDTRF.WR.
+       COPY "LEDTRF.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY TXTRAN.WR.
+       COPY "TXTRAN.WR".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
@@ -741,7 +713,7 @@
 011290       WRITE REC-RECORD.
 011300     IF WS-STATUS NOT = "00"
 011310         DISPLAY "Write error Recovery file - Status " AT 2212
-011320                  WITH FOREGROUND-COLOR 14 WS-STATUS 
+011320                  WITH FOREGROUND-COLOR 14 WS-STATUS
 011330                  WITH FOREGROUND-COLOR 15
 011340         STOP RUN.
 011370 AY59.
@@ -906,13 +878,13 @@
 011860 AY999.
 011870       EXIT.
 
-       COPY DEBTOR.TRA.
+       COPY "DEBTOR.TRA".
 
-       COPY LEDTRF.UPD.
+       COPY "LEDTRF.UPD".
 
       /
       *    ****    A R R E A R   I N T E R E S T
-      *   
+      *
 024740 CF000		   SECTION 5.
 024750 CF00.
 024760       DISPLAY CLR-SCREEN.
@@ -978,7 +950,7 @@
 025550       PERFORM READ-DEBTOR-NEXT-LOCK THRU READ-DEBTOR-EXIT.
            IF WS-F-ERROR = 6
                GO TO CF15.
-025560     IF DEB-FIN = 1
+025560     IF DEB-FIN = "Y"
 025570         GO TO CF12.
 	   IF WS-PERIOD = 90
 025580	       ADD DEB-120
@@ -1028,7 +1000,7 @@
              GO TO CF05.
 026020 CF15.
 026250       MOVE "N"            TO WS-SKIP.
-026190       MOVE "Total Interest:" 
+026190       MOVE "Total Interest:"
                                  TO R-DNME.
 026200       MOVE W90-DTE        TO R-TDTE.
 026210       MOVE W90-BDT        TO R-TOT.
@@ -1044,8 +1016,8 @@
        CG000	       SECTION 5.
        CG06.
 026480	     MOVE ZERO		 TO W90-BDT W90-30
-026510                              W90-BCR W90-60 
-                                    W90-CUR W90-90 
+026510                              W90-BCR W90-60
+                                    W90-CUR W90-90
                                     W90-INT W90-DISC
                                     W90-120 W40-SDISC.
        CG08.
@@ -1065,7 +1037,7 @@
 026610       ADD 1               TO WS-PAGE.
 026620       MOVE W12-TODAY      TO R-DTE.
 026630       MOVE WS-PAGE        TO R-P-NO.
-026700       MOVE "DEBTOR TRANSACTIONS - AUDIT TRAIL" 
+026700       MOVE "DEBTOR TRANSACTIONS - AUDIT TRAIL"
                                  TO R-H5.
 026680       MOVE "BATCH:"       TO R-H6.
 026690       MOVE WS-BATCH       TO R-BATCH.
@@ -1112,7 +1084,7 @@
 030880     IF W90-DB > 0
 030890         MOVE W90-DB       TO R-TOT
 030900     ELSE
-030910         MULTIPLY -1 BY W90-CR 
+030910         MULTIPLY -1 BY W90-CR
                                  GIVING R-TOT.
 039710	   IF W02-LINAGE < (W02-PRN-LENGTH - 2)
 	       MOVE 1		 TO WS-ADVANCE
@@ -1125,7 +1097,7 @@
 030980       PERFORM REWRITE-DEBTOR THRU WRITE-DEBTOR-EXIT.
 
 031230 CG070-NEW.
-031320       SUBTRACT W90-BCR FROM W90-BDT 
+031320       SUBTRACT W90-BCR FROM W90-BDT
                                  GIVING W25-VALUE.
 031350       ADD W25-VALUE       TO DEB-OUT.
 031360       ADD W90-BDT         TO DEB-DT.
@@ -1147,12 +1119,12 @@
            IF W90-VAL NOT = ZERO
 031880	       IF W90-TX = ZERO
                    IF W90-DB = ZERO
-                       ADD W90-VAL 
+                       ADD W90-VAL
                                  TO PAR-CNGS-DAY
                                     PAR-CNGS-MTD
                                     PAR-CNGS-YTD
                    ELSE
-                       ADD W90-VAL 
+                       ADD W90-VAL
                                  TO PAR-DNGS-DAY
                                     PAR-DNGS-MTD
                                     PAR-DNGS-YTD
@@ -1197,7 +1169,7 @@
 
       /
       *    ****    I N I T I A L I Z E   P R O G R A M
-      *   
+      *
 041980 ZA000-INIT	       SECTION 8.
 041990 ZA000-OPEN.
              PERFORM ZA55 THRU ZA60.
@@ -1342,7 +1314,7 @@
 001120       MOVE PAR-REDGL      TO WX-REDGL.
 001130       MOVE PAR-ADJGL      TO WX-ADJGL.
 001140       MOVE PAR-RLGL       TO WX-RLGL.
-001150       MOVE PAR-DSGL       TO WX-DSGL. 
+001150       MOVE PAR-DSGL       TO WX-DSGL.
       *
       *    ****    S E T   U P   A G E   D A T E S
       *
@@ -1414,19 +1386,19 @@
 042890       EXIT.
       /
       *    ****    I / O   E R R O R   M E S S A G E S
-      *   
+      *
 042900 ZB000-ERROR	     SECTION 8.
-      
+
 041480 OPEN-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
 041490       DISPLAY CLR-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
 041530       DISPLAY CLR-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
@@ -1488,11 +1460,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
                         " " WS-KEYX WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"

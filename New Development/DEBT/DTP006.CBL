@@ -1,47 +1,47 @@
       $SET LINKCOUNT"512"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	    ****     ******    *
-      *   **	**     **     **    **	 **  **    **  **   **	  **   *
-      *   **	**     **     **    **	**    **  **	**  **	       *
-      *   **	**     **     *******	**    **  **	**  *******    *
-      *   **	**     **     **	**    **  **	**  **	  **   *
-      *   **	**     **     **	 **  **    **  **   **	  **   *
-      *   *******      **     **	  ****	    ****     ******    *
+      *   *******   ********  *******     ****	    ****     ******    *
+      *   **    **     **     **    **   **  **    **  **   **    **   *
+      *   **    **     **     **    **  **    **  **    **  **         *
+      *   **    **     **     *******   **    **  **    **  *******    *
+      *   **    **     **     **        **    **  **    **  **    **   *
+      *   **    **     **     **         **  **    **  **   **    **   *
+      *   *******      **     **          ****	    ****     ******    *
       *                                                                *
       *       ENGLISH                                                  *
       *                                                                *
-      * 	A C C O U N T S	  R E C E I V A B L E	/	       *
+      *          A C C O U N T S   R E C E I V A B L E   /             *
       *                                                                *
       *       D E B T O R   A G E   A C C O U N T S   P R O G R A M    *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
-      * 							       *
+      *     VERSION 9.00.20 - December 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  May 2006	- New field included in Accounts Receivable    *
-      * 		  for recording number of outstanding Jobs     *
-      * 		  linked to the account. Additional filler     *
-      * 		  added for future expansion.		       *
-      * 							       *
+      *                                                                *
+      * May 2006 - New field included in Accounts Receivable for       *
+      * 	       recording number of outstanding Jobs linked to the  *
+      * 	       account. Additional filler added for future         *
+      * 	       expansion.                                          *
+      *                                                                *
       *  October 2006	- Amended Accounts receivable ageing from a    *
       * 		  specific date to the actual date on which    *
       * 		  statements and month-end is run.	       *
-      * 							       *
+      *                                                                *
       *  October 2008	- Amended Accounts receivable ageing to create *
       * 		  duplicate files of the accounts and trans-   *
       * 		  actions for printing of copy satements when  *
       * 		  and if required. The file names are AR_Ayymm *
       * 		  and AR_Tyymm, where yymm is replaced with    *
       * 		  the year and month.			       *
-      * 							       *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP006.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   March 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -76,9 +76,7 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY "APACFIDS.SL".
-
-000120 COPY CONTROL.SL.
+000120 COPY "CONTROL.SL".
 
 000180     SELECT DBTOLD  ASSIGN DISK
                           LOCK EXCLUSIVE
@@ -86,50 +84,48 @@
 000200                    ACCESS SEQUENTIAL
 000210                    ORGANIZATION SEQUENTIAL.
 
-000160 COPY DBTRAN.SL.
+000160 COPY "DBTRAN.SL".
 
-       COPY DTHIST.SL.
+       COPY "DTHIST.SL".
 
-       COPY DBHIST.SL.
+       COPY "DBHIST.SL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBTOR.ISL".
 
-000140 COPY DEBMEM.SL.
+000140 COPY "DEBMEM.SL".
 
-000200 COPY INVOIC.SL.
+000200 COPY "INVOIC.SL".
 
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
-000220 COPY RECOVER.SL.
+000220 COPY "RECOVER.SL".
 
-       COPY SHARED.SL.
+       COPY "SHARED.SL".
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+000120 COPY "CONTROL.FDE".
 
-000120 COPY CONTROL.FDE.
+000160 COPY "DBTOLD.GFD".
 
-000160 COPY DBTOLD.GFD.
+000330 COPY "DBTRAN.FDE".
 
-000330 COPY DBTRAN.FDE.
+       COPY "DTHIST.FDE".
 
-       COPY DTHIST.FDE.
+       COPY "DBHIST.FDE".
 
-       COPY DBHIST.FDE.
+000310 COPY "DEBTOR.FDE".
 
-000310 COPY DEBTOR.FDE.
+000140 COPY "DEBMEM.FDE".
 
-000140 COPY DEBMEM.FDE.
+000370 COPY "INVOIC.FDE".
 
-000370 COPY INVOIC.FDE.
+000290 COPY "PARAM.FDE".
 
-000290 COPY PARAM.FDE.
+000390 COPY "RECOVER.GFD".
 
-000390 COPY RECOVER.GFD.
-
-       COPY SHARED.FDE.
+       COPY "SHARED.FDE".
 
       /
       *         **         **    ******    *******    **    **
@@ -141,8 +137,7 @@
       *            *     *       ******    **    **   **    **
       *
 001550 WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
 001560 77  WS-SUB	   PIC	9(04)	 COMP-5.
 001560 77  WS-S            PIC  9(04)    COMP-5.
 001570 77  WS-S1           PIC  9(04)    COMP-5.
@@ -188,6 +183,7 @@
 002100 77  WS-A            PIC  X(19) VALUE "Any key to continue".
 002110 77  WS-E            PIC  X(15) VALUE "**END** - ENTER".
 002130 77  WS-AC           PIC  X(07) VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -242,7 +238,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-002230 COPY WS.WS.
+002230 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
@@ -250,32 +246,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-000160 COPY DBTOLD.ID.
-
-       COPY DBTRAN.ID.
-
-       COPY DTHIST.ID.
-
-       COPY DBHIST.ID.
-
-       COPY DEBTOR.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY INVOIC.ID.
-
-       COPY PARAM.ID.
-
-       COPY RECOVER.ID.
-
-       COPY SHARED.ID.
 
        01  W05-DEB-HISTORY.
 	   03  W05-DBT-HIS.
@@ -298,9 +268,9 @@
        01  W10-REF.
            03  W10-NUM         PIC  9(08).
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
 002850 01  W25-CALCS.
 002860     03  W25-RESULT      PIC 9(05)V99.
@@ -321,13 +291,13 @@
 	   03  W30-30	    PIC  9(08) COMP-3.
 	   03  W30-CUR	    PIC  9(08) COMP-3.
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-003530 COPY W50.WS.
+003530 COPY "W50.WS".
 
 003550 01  W60-NME-ADD.
 003560     03  W60-NAME.
@@ -428,13 +398,11 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
 004580 SCREEN SECTION.
-
-       COPY BLANK.CRT.
-
-       COPY DEBLUP.CRT.
 
 007640 01  S27.
 007650	   03  LINE  4 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
@@ -454,137 +422,59 @@
 007750                           VALUE "DATA FILES from the previous bac
 007760-                          "kup to be restored !!!      ".
 007770	   03  LINE  9 COLUMN 12 VALUE "Do you wish to continue (Y/N)?".
+
 007780 01  S28.
 007790	   03  LINE  7 COLUMN 67 FOREGROUND-COLOR 3 HIGHLIGHT
 				 BACKGROUND-COLOR 5
 007800				 PIC Z9/99/9999 USING W90-IDTE AUTO.
 
        01  S-DEB-MEM.
-           03  LINE  7 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
-           "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
-      -    "".
+           03  LINE  7 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey VALUE "   M E M O / R E M A R K S / C O R R E S P O N D E N C E".
+
        01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
-           "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
-      -    "".
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(01) USING WS-G12.
+           03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G9.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-MEM-LINE.
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G10.
+           03  LINE  7 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G3.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey VALUE "   M E M O / R E M A R K S / C O R R E S P O N D E N C E".
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G3.
+           03  LINE  8 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G14.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-HME-LINE.
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G13.
+           03  LINE  9 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 10 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 11 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 12 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 13 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 14 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 15 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 16 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 17 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 18 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 19 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 20 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
+           03  LINE 21 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G11.
+           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-MEM-LINE.
+           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G12.
+
        01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
-                                 PIC X(60) USING W200-MEM12 AUTO.
+           03  LINE  9 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM1 AUTO.
+           03  LINE 10 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM2 AUTO.
+           03  LINE 11 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM3 AUTO.
+           03  LINE 12 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM4 AUTO.
+           03  LINE 13 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM5 AUTO.
+           03  LINE 14 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM6 AUTO.
+           03  LINE 15 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM7 AUTO.
+           03  LINE 16 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM8 AUTO.
+           03  LINE 17 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM9 AUTO.
+           03  LINE 18 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM10 AUTO.
+           03  LINE 19 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM11 AUTO.
+           03  LINE 20 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING W200-MEM12 AUTO.
 
-       COPY OPT.CRT.
-
-       COPY ERROR.CRT.
-
-       COPY UPDATE.CRT.
+       COPY "UPDATE.CRT".
 
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION  USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 008230 AA000		       SECTION.
 008240 AA00.
 003240	   IF LS0-DBLEV < 4
@@ -598,67 +488,86 @@
 013140 AA49.
 013150       EXIT PROGRAM.
 
+      /    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ This routine is used to call the Debtor / Ac's Receivable ³
+      *    ³ lookup program and cancel it when control is returned.    ³
+      *    ³ The  relevant  error  message  will be  displayed  if  an ³
+      *    ³ exception occurs. The usual  parameters are passed to the ³
+      *    ³ lookup program as well W40-COMPANY which will contain the ³
+      *    ³ details of the account that has been selected when control³
+      *    ³ is returned to the calling program.                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AA50-LOOKUP     SECTION.
        AA50.
-	     PERFORM SAVE-SCREEN.
-011080	     MOVE 4		 TO W44-FUNCTION.
-011090	     PERFORM SCREEN-CONTENTS.
-	     PERFORM DEBTOR-LOOKUP.
-	     PERFORM RESTORE-SCREEN.
+             PERFORM SAVE-SCREEN.
+011080       MOVE 4                  TO W44-FUNCTION.
+011090       PERFORM SCREEN-CONTENTS.
+	       CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+	            ON EXCEPTION GO TO AA55
+	       END-CALL.
+	       CANCEL PRG-DEBT-LUP.
+	       GO TO AA58.
+
+       AA55.
+             MOVE SPACE            TO WS-ERR-MES.
+             STRING "Program- " DELIMITED SIZE PRG-DEBT-LUP DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
+
+       AA58.
+             PERFORM RESTORE-SCREEN.
+
        AA99.
              EXIT.
 
-       COPY FUNCTION.SCR.
+       COPY "FUNCTION.SCR".
 
-       COPY ERROR.SCR.
+       COPY "ERROR.SCR".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
-       COPY OPTION.CRT.
+       COPY "OPTION.CRT".
 
-       COPY DATE.CHK.
+       COPY "DATE.CHK".
 
       /
       *    ****    READ FILES ROUTINES
       *
 008680 AC000              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY DBTRAN.RD1.
+       COPY "DBTRAN.RD1".
 
-       COPY DEBTOR.RD.
+       COPY "DEBTOR.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-       COPY INVOIC.RD.
+       COPY "INVOIC.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DBTRAN.WR.
+       COPY "DBTRAN.WR".
 
-       COPY DEBTOR.WR.
+       COPY "DEBTOR.WR".
 
-000140 COPY DEBMEM.WR.
+000140 COPY "DEBMEM.WR".
 
-       COPY INVOIC.WR.
+       COPY "INVOIC.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY DEBTOR.LUP.
-
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
@@ -960,7 +869,8 @@
 034790	     DISPLAY DEB-ACNO AT 2022
 		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
 		     " " DEB-NAME WITH FOREGROUND-COLOR 6 HIGHLIGHT.
-035660	     DISPLAY WS-BLNK78 AT 1902 WITH FOREGROUND-COLOR 3.
+             MOVE 19                 TO CRT-START CRT-END.
+018380       PERFORM ERASE-SCREEN.
 	   IF WS-REST = "Y"
 	       IF DEB-ACNO < W80-ACNO
 		   ADD DEB-BAL	 TO W90-BAL
@@ -1269,16 +1179,14 @@
 	     MOVE SPACES	 TO W80-ACNO.
 
        CI95.
-	     DISPLAY "F1" AT 5002
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     "=Help,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     " to do Debtor Lookup "
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-		     " to exit"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+             DISPLAY "F1"                        AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     "=Help,"                            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F2"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to do Account Lookup,"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F9"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " Debtor Lookup (Any Word),"        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "Esc"                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to exit"                          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
 	     ACCEPT W80-ACNO AT 2031
 		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
 			 BACKGROUND-COLOR 5 UPDATE AUTO.
@@ -1289,8 +1197,12 @@
 		     GO TO CI100
 		 WHEN F1-KEY
 		     PERFORM HELP-ROUTINE
-		 WHEN F2-KEY
-016560		     PERFORM AA50
+                 WHEN F2-KEY
+                      MOVE SPACE     TO W40-LUP
+016560                PERFORM AA50
+                 WHEN F9-KEY
+                      MOVE "A"       TO W40-LUP
+                      PERFORM AA50
 		 WHEN OTHER
 		     CALL X"E5"
 		     GO TO CI95

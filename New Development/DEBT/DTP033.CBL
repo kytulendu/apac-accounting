@@ -1,13 +1,13 @@
       $SET LINKCOUNT"384"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******	  ****	   ******    ******    *
-      *   **	**     **     **    **	 **  **   **	**  **	  **   *
-      *   **	**     **     **    **	**    **	**	  **   *
-      *   **	**     **     *******	**    **     ****      ****    *
-      *   **	**     **     **	**    **	**	  **   *
-      *   **	**     **     **	 **  **   **	**  **	  **   *
-      *   *******      **     **	  ****	   ******    ******    *
+      *   *******   ********  *******     ****	   ******    ******    *
+      *   **    **     **     **    **   **  **   **    **  **    **   *
+      *   **    **     **     **    **  **    **        **        **   *
+      *   **    **     **     *******   **    **     ****      ****    *
+      *   **    **     **     **        **    **        **        **   *
+      *   **    **     **     **         **  **   **    **  **    **   *
+      *   *******      **     **          ****	   ******    ******    *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
@@ -15,7 +15,7 @@
       *                                                                *
       *     M O N T H L Y   R E A D I N G S			       *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012			       *
+      *     VERSION 9.00.20 - December 2012                            *
       * 							       *
       ******************************************************************
       * 							       *
@@ -30,7 +30,7 @@
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   February 1985.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -65,40 +65,40 @@
 000100 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "APACFIDS.SL".
 
-       COPY CONTROL.SL.
+       COPY "CONTROL.SL".
 
-000120 COPY PARAM.SL.
+000120 COPY "PARAM.SL".
 
-000140 COPY DEBTOR.ISL.
+000140 COPY "DEBTOR.ISL".
 
-000160 COPY DBFOTO.SL.
+000160 COPY "DBFOTO.SL".
 
-000140 COPY DEBMEM.SL.
+000140 COPY "DEBMEM.SL".
 
-000220 COPY RECOVER.SL.
+000220 COPY "RECOVER.SL".
 
-       COPY SHARED.SL.
+       COPY "SHARED.SL".
 
 000220 DATA DIVISION.
 000230 FILE SECTION.
 
-       COPY APACFIDS.FDE.
+       COPY "APACFIDS.FDE".
 
-       COPY CONTROL.FDE.
+       COPY "CONTROL.FDE".
 
-000250 COPY PARAM.FDE.
+000250 COPY "PARAM.FDE".
 
-000270 COPY DEBTOR.FDE.
+000270 COPY "DEBTOR.FDE".
 
-000290 COPY DBFOTO.FDE.
+000290 COPY "DBFOTO.FDE".
 
-000140 COPY DEBMEM.FDE.
+000140 COPY "DEBMEM.FDE".
 
-000390 COPY RECOVER.FDE.
+000390 COPY "RECOVER.FDE".
 
-       COPY SHARED.FDE.
+       COPY "SHARED.FDE".
 
       /
       *         **         **    ******    *******    **    **
@@ -179,6 +179,7 @@
 003400 77  WS-C            PIC X(07) VALUE "COMPANY".
 003410 77  WS-O            PIC X(08) VALUE "INTERNAL".
 003420 77  WS-AC           PIC X(07) VALUE "Account".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /
@@ -233,7 +234,7 @@
                05  FILLER  PIC  X(01) VALUE X"B3".
            03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
 
-003440 COPY WS.WS.
+003440 COPY "WS.WS".
 
        01  WS-HELP.
 	   03  WS-MODULE       PIC  X(03) VALUE "DTP".
@@ -249,24 +250,6 @@
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
 
-003520 01  W02-FID.
-
-       COPY APACFIDS.ID.
-
-       COPY CONTROL.ID.
-
-       COPY DEBTOR.ID.
-
-       COPY DBFOTO.ID.
-
-000140 COPY DEBMEM.ID.
-
-       COPY PARAM.ID.
-
-       COPY RECOVER.ID.
-
-       COPY SHARED.ID.
-
 003650 01  W05-LIST.
 003660     03  W05-OPT         PIC 9(03).
 003670     03  W05-TYPES REDEFINES W05-OPT.
@@ -279,11 +262,11 @@
            03  W10-RDATE REDEFINES W10-DATE.
 	       05  W10-DTE     PIC 99/99/9999.
 
-       COPY W12.WS.
+       COPY "W12.WS".
 
-       COPY W15.WS.
+       COPY "W15.WS".
 
-       COPY W20.WS.
+       COPY "W20.WS".
 
        01  W24-MONTHS.
            03  W24-MONTH-NAMES.
@@ -337,9 +320,9 @@
 	       05  W30-VAT     PIC  9(01).
 	   03  FILLER	       PIC  X(15).
 
-       COPY W40.DBT.
+       COPY "W40.DBT".
 
-       COPY W40.WS.
+       COPY "W40.WS".
 
 005020 01  W45-TRAN.
 005030     03  W45-CODE        PIC 9(02).
@@ -347,9 +330,9 @@
 005050     03  W45-AFR         PIC X(12).
 005060     03  W45-ACT         PIC X(01).
 
-       COPY FUNCTION.WS.
+       COPY "FUNCTION.WS".
 
-005170 COPY W50.WS.
+005170 COPY "W50.WS".
 
        01  W55-STATS.
            03  W55-H1         PIC  X(09).
@@ -466,12 +449,12 @@
 
        LINKAGE SECTION.
 
-       COPY CHAIN.LS.
+       COPY "CHAIN.LS".
+
+       COPY "FILE-DEBT.IDS".
 
       /
 005990 SCREEN SECTION.
-
-       COPY BLANK.CRT.
 
        01  S01.
 	   03  LINE  2 COLUMN 26 FOREGROUND-COLOR 7 HIGHLIGHT VALUE
@@ -506,7 +489,7 @@
 				 FOREGROUND-COLOR 7 HIGHLIGHT
 				 PIC Z(07)9 USING W30-READING AUTO.
 
-       COPY DEBLUP.CRT.
+       COPY "DEBLUP.CRT".
 
        01  S-DEB-MEM.
            03  LINE  7 COLUMN 18 FOREGROUND-COLOR 0
@@ -625,10 +608,6 @@
                                  BACKGROUND-COLOR 7
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-       COPY S99.CRT.
-
-       COPY ERROR.CRT.
-
       /
 001230 PROCEDURE DIVISION
 		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
@@ -657,43 +636,43 @@
        AA99.
              EXIT.
 
-       COPY FUNCTION.CRT.
+       COPY "FUNCTION.CRT".
 
-       COPY LOCKED.REC.
+       COPY "LOCKED.REC".
 
-       COPY CLEAR.CRT.
+       COPY "CLEAR.CRT".
 
       /
       *    ****    READ FILES ROUTINES
       *
 007340 AC000-READ              SECTION.
 
-       COPY CONTROL.RD.
+       COPY "CONTROL.RD".
 
-       COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY DEBTOR.RD1.
+       COPY "DEBTOR.RD1".
 
-       COPY DBFOTO.RD.
+       COPY "DBFOTO.RD".
 
-000140 COPY DEBMEM.RD.
+000140 COPY "DEBMEM.RD".
 
-       COPY SHARED.RD.
+       COPY "SHARED.RD".
 
       /
       *    ****    REWRITE AND WRITE FILES ROUTINES
       *
 010170 AD000             SECTION.
 
-       COPY CONTROL.WR.
+       COPY "CONTROL.WR".
 
-       COPY DBFOTO.WR.
+       COPY "DBFOTO.WR".
 
-       COPY PARAM.WR.
+       COPY "PARAM.WR".
 
-       COPY DEBTOR.LUP.
+       COPY "DEBTOR.LUP".
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
       /
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS

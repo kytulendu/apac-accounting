@@ -15,7 +15,7 @@
       *                                                                *
       *       D E B T O R   A M E N D M E N T S   P R O G R A M        *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012	                             *
+      *     VERSION 9.00.00 - November 2012                            *
       * 							                       *
       ******************************************************************
       *                                                                *
@@ -35,13 +35,24 @@
       *            for lookups, using any word contained in the Debtor *
       *            name.                                               *
       *                                                                *
+      *  Nov 2012 - Changed DEB-ADDRESS and DEB-PADDR from group       *
+      *             fields with 70 characters to group fields          *
+      *             containing DEB-ADD-L1/2/3/4 and DEB-PADD-L1/2/3/4  *
+      *             respectively. Each of these new fields are defined *
+      *             as PIC X(30). As new PC's and Servers contain huge *
+      *             amounts of disk space this has been changed, which *
+      *             also results in simplifying the code for handling  *
+      *             addresses in Data capture, enquiries, reports etc. *
+      *             This also removes the restriction on the number of *
+      *             characters that an address may contain.            *
+      *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     DTP002.
 000030 AUTHOR.         J W LEMMON (APAC).
 000040 DATE-WRITTEN.   March 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2012
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -76,8 +87,6 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY "APACFIDS.SL".
-
 000120 COPY "CONTROL.SL".
 
 000160 COPY "DBTRAN.SL".
@@ -85,8 +94,6 @@
 000140 COPY "DEBALT.SL".
 
 000140 COPY "DEBTOR.ISL".
-
-000140 COPY "DEBMEM.SL".
 
 000140 COPY "DEPART.SL".
 
@@ -99,8 +106,6 @@
 000260 DATA DIVISION.
 000270 FILE SECTION.
 
-       COPY "APACFIDS.FDE".
-
 000120 COPY "CONTROL.FDE".
 
 000330 COPY "DBTRAN.FDE".
@@ -108,8 +113,6 @@
 000310 COPY "DEBALT.FDE".
 
 000310 COPY "DEBTOR.FDE".
-
-000140 COPY "DEBMEM.FDE".
 
 000140 COPY "DEPART.FDE".
 
@@ -175,14 +178,51 @@
 002020 77  WS-ERR2         PIC  X(09)    VALUE "No Record".
 002030 77  WS-ERR3         PIC  X(15)    VALUE "Data incomplete".
 002040 77  WS-ERR4         PIC  X(13)    VALUE "Invalid title".
-002060 77  WS-ERR6	   PIC  X(20)    VALUE "Name > 38 characters".
-002070 77  WS-ERR7         PIC  X(23)    VALUE "Address > 67 characters".
 002090 77  WS-ERR8         PIC  X(16)    VALUE "Invalid category".
 002100 77  WS-A            PIC  X(19)    VALUE "Any key to continue".
 002110 77  WS-E            PIC  X(15)    VALUE "**END** - ENTER".
 002130 77  WS-AC           PIC  X(07)    VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC  9(08)    COMP-5.
        77  WS-USUB	   PIC  9(04)    COMP-5.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.	  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *	     C = Clear comment line (50)
+      *	     E = Clear lines (any line or lines between 5 and 46)
+      * 	     H = Change heading
+      * 	     S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "DTP002".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "ACCOUNTS RECEIVABLE - AMEND ACCOUNT".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-WRKHD           PIC  X(11).
+           03  CRT-WRKST           PIC  X(03).
+
       /
 002420 01  WS-DB-LINE.
 002430     03  WS-TOP-LNE.
@@ -239,28 +279,6 @@
 
 000290 01  WS-PARID.
 000020     03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY "APACFIDS.ID".
-
-       COPY "CONTROL.ID".
-
-000330 COPY "DBTRAN.ID".
-
-       COPY "DEBALT.ID".
-
-       COPY "DEBTOR.ID".
-
-000140 COPY "DEBMEM.ID".
-
-000140 COPY "DEPART.ID".
-
-       COPY "PARAM.ID".
-
-       COPY "RECOVER.ID".
-
-       COPY "SHARED.ID".
 
 002500 01  W10-SPARES.
 002510     03  W10-DATE	       PIC  X(08).
@@ -322,18 +340,6 @@
        COPY "FUNCTION.WS".
 
 003530 COPY "W50.WS".
-
-003550 01  W60-NME-ADD.
-003560     03  W60-NAME.
-003570         05  W60-NCHAR OCCURS 40 PIC X(01).
-003580     03  W60-ADDRESS.
-003590         05  W60-ACHAR OCCURS 70 PIC X(01).
-003580     03  W60-ADDR REDEFINES W60-ADDRESS.
-               05  W60-ADD     PIC  X(60).
-               05  FILLER      PIC  X(10).
-003600     03  W60-ADDRESS1.
-               05  W60-PAD     PIC  X(60).
-               05  FILLER      PIC  X(10).
 
        01  W75-KEYS.
            03  W75-S           PIC  9(02) COMP-5.
@@ -408,21 +414,10 @@
 
        COPY "CHAIN.LS".
 
+       COPY "FILE-DEBT.IDS".
+
       /
 004580 SCREEN SECTION.
-
-       COPY "BLANK.CRT".
-
-005000 01  S05.
-005010     03  LINE  3 COLUMN 37 FOREGROUND-COLOR Grey HIGHLIGHT VALUE "COMPANY".
-
-005020 01  S06.
-005030     03  LINE  3 COLUMN 37 FOREGROUND-COLOR Grey HIGHLIGHT VALUE "INTERNAL".
-
-005040 01  S07.
-005050     03  LINE  2 COLUMN 23 FOREGROUND-COLOR Grey HIGHLIGHT VALUE "ACCOUNTS RECEIVABLE -AMEND ACCOUNT".
-
-       COPY "DEBLUP.CRT".
 
        01  S-ART11.
            03  LINE 11 COLUMN 16 FOREGROUND-COLOR Black           BACKGROUND-COLOR Green VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
@@ -433,66 +428,22 @@
            03  LINE 13 COLUMN 16 FOREGROUND-COLOR Black           BACKGROUND-COLOR Green VALUE "À".
            03          COLUMN 17 FOREGROUND-COLOR Green HIGHLIGHT BACKGROUND-COLOR Green VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
 
+005020 01  S06.
+005030     03  LINE  5 COLUMN 37 FOREGROUND-COLOR Grey HIGHLIGHT VALUE "INTERNAL".
+
        COPY "DEBTOR.CRT".
 
 007910 01  S36.
 007920     03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta PIC X(06) USING W80-ACNO AUTO.
 
-       01  S-DEB-MEM.
-           03  LINE  7 COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey VALUE "   M E M O / R E M A R K S / C O R R E S P O N D E N C E".
-
-       01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey VALUE "   M E M O / R E M A R K S / C O R R E S P O N D E N C E".
-           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey PIC X(01) USING WS-G12.
-
-       01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0 BACKGROUND-COLOR 7 PIC X(60) USING W200-MEM12 AUTO.
-
-004870 COPY "S99.CRT".
-
-       COPY "ERROR.CRT".
-
        COPY "UPDATE.CRT".
 
       /
-001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 008230 AA000		       SECTION.
 008240 AA00.
 003240	   IF LS0-DBLEV < 2
-                   MOVE "Not Authorised" TO WS-ERR-STRING
+                   MOVE "Not Authorised" TO WS-ERR-MES
 003260	       PERFORM ERROR-MESSAGE
                    GO TO AA49.
 008250           PERFORM ZA000-INIT.
@@ -502,19 +453,76 @@
 013140 AA49.
 013150       EXIT PROGRAM.
 
-       AA50-LOOKUP     SECTION.
+      /    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ This routine is used to call the Debtor / Ac's Receivable ³
+      *    ³ lookup program and cancel it when control is returned.    ³
+      *    ³ The  relevant  error  message  will be  displayed  if  an ³
+      *    ³ exception occurs. The usual  parameters are passed to the ³
+      *    ³ lookup program as well W40-COMPANY which will contain the ³
+      *    ³ details of the account that has been selected when control³
+      *    ³ is returned to the calling program.                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       AA50            SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
 011080       MOVE 4		 TO W44-FUNCTION.
 011090       PERFORM SCREEN-CONTENTS.
-	   IF WS-TYP = "A"
-	       PERFORM DEBTOR-A-LOOKUP
-	   ELSE
-011180       PERFORM DEBTOR-LOOKUP.
-	     PERFORM RESTORE-SCREEN.
+	       CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+	            ON EXCEPTION GO TO AA55
+	       END-CALL.
+	       CANCEL PRG-DEBT-LUP.
+	       GO TO AA58.
+
+       AA55.
+             MOVE SPACE            TO WS-ERR-MES.
+             STRING "Program- " DELIMITED SIZE PRG-DEBT-LUP DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
+
+       AA58.
+             PERFORM RESTORE-SCREEN.
 
        AA99.
              EXIT.
+
+      /    *************************************************************
+      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      * 	   S C R E E N ,   K E Y B O A R D   &	 M O U S E
+      *    *************************************************************
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³	   SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3    ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      SCREEN-SHADOW                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To routine is used to display a shadow down the right and ³
+      *    ³ along the bottom of a pop-up box. The parameters that are ³
+      *    ³ required:                                                 ³
+      *    ³          SHADE-ROW   - Top line of the box + 1.           ³
+      *    ³          SHADE-COL   - Left line of box + 2.              ³
+      *    ³          SHADE-WIDTH - Width of the box - 2.              ³
+      *    ³          SHADE-LINES - Hight of box - 1.                  ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      CHECK-CORRECT                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine displays a pop-up window with the message    ³
+      *    ³           "Press Y if correct - N if incorrect"           ³
+      *    ³                                                           ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³                                                           ³
+      *    ³ To start with the pop-up window higher or lower than row  ³
+      *    ³ 13 (default); move another value to SLIN and PERFORM      ³
+      *    ³ CHECK-SETUP THRU CHECK-EXIT.	                             ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      * 	       D I S P L A Y   E R R O R   M E S S A G E S
+      *    *************************************************************
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                      ERROR-MESSAGE                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To display the error message higher or lower (default is  ³
+      *    ³ line 20) Move the line number which must be used as the   ³
+      *    ³ top line to WS-MES-LINE. The message to be displayed must ³
+      *    ³ be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "FUNCTION.CRT".
 
@@ -537,8 +545,6 @@
 
        COPY "DEBTOR.RD".
 
-000140 COPY "DEBMEM.RD".
-
 000140 COPY "DEPART.RD".
 
        COPY "PARAM.RD".
@@ -560,10 +566,6 @@
 
        COPY "PARAM.WR".
 
-011970 COPY "DEBTOR.ALU".
-
-       COPY "DEBTOR.LUP".
-
        COPY "APAC.HLP".
 
       /
@@ -583,54 +585,57 @@
       *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 010910 AY000	       SECTION.
 010970 AY02.
-010980       MOVE 02             TO REC-FILE.
-008020       MOVE ZERO           TO REC-KEY.
-             MOVE WS-ACTION      TO REC-TYPE
+010980       MOVE 02                 TO REC-FILE.
+008020       MOVE ZERO               TO REC-KEY.
+             MOVE WS-ACTION          TO REC-TYPE
            IF WS-ACTION = 0 OR 2
                PERFORM READ-DEBTOR-LOCK THRU READ-DEBTOR-EXIT.
-011000       MOVE DEB-RECORD1    TO REC-DEBTOR.
+011000       MOVE DEB-RECORD1        TO REC-DEBTOR.
 011010       GO TO AY50.
 
 011070 AY04.
-011080       MOVE 04             TO REC-FILE.
-011090       MOVE ZERO           TO REC-KEY.
-             MOVE WS-ACTION      TO REC-TYPE.
-011100       MOVE TRA-RECORD1    TO REC-DBTRAN.
+011080       MOVE 04                 TO REC-FILE.
+011090       MOVE ZERO               TO REC-KEY.
+             MOVE WS-ACTION          TO REC-TYPE.
+011100       MOVE TRA-RECORD1        TO REC-DBTRAN.
 011110       GO TO AY50.
 
        AY39.
-             MOVE 39             TO REC-FILE.
-             MOVE WS-NETKEY      TO REC-KEY.
-             MOVE NET-RECORD     TO REC-NETWORK.
+             MOVE 39                 TO REC-FILE.
+             MOVE WS-NETKEY          TO REC-KEY.
+             MOVE NET-RECORD         TO REC-NETWORK.
              GO TO AY50.
 
 010970 AY47.
-010980       MOVE 47             TO REC-FILE.
-008020       MOVE ZERO           TO REC-KEY.
-             MOVE WS-ACTION      TO REC-TYPE
-011000       MOVE DAL-RECORD1    TO REC-DEBALT.
+010980       MOVE 47                 TO REC-FILE.
+008020       MOVE ZERO               TO REC-KEY.
+             MOVE WS-ACTION          TO REC-TYPE
+011000       MOVE DAL-RECORD1        TO REC-DEBALT.
 011010       GO TO AY50.
 
 011120 AY49.
-011130       MOVE 99             TO REC-FILE.
-011140       MOVE ZERO           TO REC-KEY.
-011150       MOVE SPACES         TO REC-DETAIL.
+011130       MOVE 99                 TO REC-FILE.
+011140       MOVE ZERO               TO REC-KEY.
+011150       MOVE SPACES             TO REC-DETAIL.
 011160       PERFORM AY50 THRU AY59.
-011170       ADD 1               TO WS-TRANS.
+011170       ADD 1                   TO WS-TRANS.
 011180     IF WS-RECOVER > 95
 011190         CLOSE RECOVER
 011200         OPEN OUTPUT RECOVER
 011210         CLOSE RECOVER
 011220         OPEN I-O RECOVER
-011230         MOVE ZERO         TO WS-RECOVER.
+011230         MOVE ZERO             TO WS-RECOVER.
 011240       GO TO AY59.
+
 011250 AY50.
-011260       ADD 1               TO WS-RECOVER.
-011270       MOVE WS-RECOVER     TO WS-RECKEY.
-011280       MOVE WS-TRANS       TO REC-TRAN.
+011260       ADD 1                   TO WS-RECOVER.
+011270       MOVE WS-RECOVER         TO WS-RECKEY.
+011280       MOVE WS-TRANS           TO REC-TRAN.
 011290       WRITE REC-RECORD.
 011300     IF WS-STATUS NOT = "00"
-011310         DISPLAY "Write error Recovery file - Status " AT 2212 WITH FOREGROUND-COLOR Brown HIGHLIGHT WS-STATUS WITH FOREGROUND-COLOR Grey HIGHLIGHT
+               MOVE SPACES           TO WS-ERR-MES
+               STRING "Write error Recovery file - Status " DELIMITED SIZE WS-STATUS DELIMITED SIZE INTO WS-ERR-MES
+011330         PERFORM ERROR-MESSAGE
 011340         STOP RUN.
 011370 AY59.
 011380       EXIT.
@@ -638,19 +643,19 @@
       *    ****    Start processing transaction
       *
 012470 AY60.
-012690       MOVE 1              TO WS-COUNT.
-012690       MOVE 5              TO WS-SHARED.
+012690       MOVE 1                  TO WS-COUNT.
+012690       MOVE 5                  TO WS-SHARED.
 012700       PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-      *      MOVE SHR-STOCK      TO WS-STOCK.
+      *      MOVE SHR-STOCK          TO WS-STOCK.
       *
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
       *
-012500       MOVE 4		   TO WS-PARKEY.
+012500       MOVE 4		       TO WS-PARKEY.
 012510       PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
 012520     IF PAR-USERS < 24
-012530         MOVE 1            TO WS-SUB
-               MOVE ZERO         TO WS-WAIT
+012530         MOVE 1                TO WS-SUB
+               MOVE ZERO             TO WS-WAIT
 012540         GO TO AY62.
       *
       *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
@@ -658,20 +663,20 @@
 012550       DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
 012560       COMMIT.
              ACCEPT WS-STIME FROM TIME.
-             MOVE 400            TO WS-WAIT.
+             MOVE 400                TO WS-WAIT.
 012580       PERFORM LOCK-REC-LOOP.
 012590       DISPLAY SPACE AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 012600       GO TO AY60.
 
 012610 AY61.
-012620       MOVE "DB"           TO PAR-PROG(WS-USUB).
-012630       MOVE LS-USER        TO PAR-USR(WS-USUB).
+012620       MOVE "DB"               TO PAR-PROG(WS-USUB).
+012630       MOVE LS-USER            TO PAR-USR(WS-USUB).
 012640       PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
       *
       *    ****    Read the DEBTOR control record in the NETWORK file
       *            and lock it. Log details to the RECOVERY file.
       *
-012010       MOVE 1              TO WS-NETKEY.
+012010       MOVE 1                  TO WS-NETKEY.
 012680       PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
 012690       PERFORM AY39 THRU AY59.
 012740       GO TO AY999.
@@ -692,7 +697,7 @@
       *
                    GO TO AY62-WAIT
                ELSE
-                   ADD 1         TO WS-SUB
+                   ADD 1             TO WS-SUB
                    GO TO AY62
                END-IF
            ELSE
@@ -712,19 +717,19 @@
                    GO TO AY62-WAIT
 	         END-IF
            END-IF.
-             MOVE LS-USER        TO PAR-USR(WS-SUB).
-             MOVE WS-SUB         TO PAR-USERS.
+             MOVE LS-USER            TO PAR-USR(WS-SUB).
+             MOVE WS-SUB             TO PAR-USERS.
              PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
              GO TO AY62-CHECK.
       *
       *    ****   S E T   W A I T   P E R I O D
       *
        AY62-WAIT.
-	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
-	       IF WS-SUB < 24
-		   ADD 1	 TO WS-SUB
-		   GO TO AY62.
+             MOVE 300                    TO WS-WAIT.
+           IF NOT(PAR-USR(WS-SUB) = LS-USER)
+	         IF WS-SUB < 24
+                   ADD 1             TO WS-SUB
+                   GO TO AY62.
 
        AY62-CHECK.
            IF WS-WAIT > ZERO
@@ -737,11 +742,11 @@
 012880       DISPLAY SPACE AT 5072 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 
 012900 AY63.
-012920       MOVE WS-SUB         TO WS-USUB.
+012920       MOVE WS-SUB             TO WS-USUB.
 012940       GO TO AY61.
 
 012970 AY70.
-013030       MOVE 4              TO WS-PARKEY.
+013030       MOVE 4                  TO WS-PARKEY.
 013040       PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
       *
       *    ****    Write links back and unlock PARAM record 4 and
@@ -749,907 +754,560 @@
       *
 013010       PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
 013020       PERFORM AY49 THRU AY59.
-             MOVE 1              TO WS-USUB.
+             MOVE 1                  TO WS-USUB.
 
        AY72.
-           IF NOT (PAR-USR(WS-USUB) = LS-USER)
+           IF NOT(PAR-USR(WS-USUB) = LS-USER)
                IF WS-USUB < 24
-                   ADD 1         TO WS-USUB
+                   ADD 1             TO WS-USUB
                    GO TO AY72
-               ELSE
+	         ELSE
                    GO TO AY85.
 
        AY75.
-013050       MOVE SPACES         TO PAR-PROG(WS-USUB) PAR-USR(WS-USUB).
-	   IF WS-USUB < 24
-	       ADD 1 WS-USUB	 GIVING WS-SUB
-	   ELSE
-	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
-	       MOVE PAR-PROG(WS-SUB)
-				 TO PAR-PROG(WS-USUB)
-	       MOVE PAR-USR(WS-SUB)
-				 TO PAR-USR(WS-USUB)
-	       ADD 1		 TO WS-USUB
-	       GO TO AY75.
+013050       MOVE SPACES             TO PAR-PROG(WS-USUB) PAR-USR(WS-USUB).
+           IF WS-USUB < 24
+               ADD 1 WS-USUB         GIVING WS-SUB
+           ELSE
+               GO TO AY80.
+           IF NOT(PAR-PROG(WS-SUB) = SPACES)
+               MOVE PAR-PROG(WS-SUB) TO PAR-PROG(WS-USUB)
+               MOVE PAR-USR(WS-SUB)  TO PAR-USR(WS-USUB)
+               ADD 1                 TO WS-USUB
+               GO TO AY75.
 
        AY80.
-013070	     SUBTRACT 1 FROM WS-USUB
-				 GIVING PAR-USERS.
-013080	     PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+013070       SUBTRACT 1 FROM WS-USUB GIVING PAR-USERS.
+013080       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
 
        AY85.
-013090	     COMMIT.
+013090       COMMIT.
 
 011860 AY999.
 011870       EXIT.
-      /
-      *    ****    Pack the debtor name for storage in the
-      *            debtor record
-      *
-016670 CA010-NAME          SECTION 2.
-016680 CA10.
-016690       MOVE 24             TO WS-S3.
-016700       MOVE ZERO           TO WS-ERROR.
-016710       MOVE SPACES         TO W60-NAME.
-       CA12.
-             MOVE W40-SURNAME    TO W50-SURNAME.
-           IF W50-SN1 = SPACE
-               MOVE W50-S23      TO W40-SURNAME
-               GO TO CA12.
-016720 CA15.
-016730     IF W40-NCHAR (WS-S3) NOT = SPACE
-016740         GO TO CA20.
-016750       SUBTRACT 1          FROM WS-S3.
-016760       GO TO CA15.
-016770 CA20.
-016780       MOVE W40-SURNAME    TO W60-NAME.
-016790       MOVE WS-S3          TO WS-S2.
-016800       ADD 1 TO WS-S2.
-016810       MOVE "*"            TO W60-NCHAR (WS-S2).
-016820       MOVE 25             TO WS-S1.
-016830       MOVE 48             TO WS-S3.
-016840       ADD 1               TO WS-S2.
-016850 CA25.
-016860     IF W40-NCHAR (WS-S3) NOT = SPACE
-016870         GO TO CA30.
-016880     IF WS-S3 > WS-S1
-016890         SUBTRACT 1        FROM WS-S3
-016900         GO TO CA25.
-016910 CA30.
-016920       MOVE W40-NCHAR (WS-S1)
-                                 TO W60-NCHAR (WS-S2).
-016930     IF WS-S1 = WS-S3
-016940         GO TO CA35.
-016950       ADD 1               TO WS-S2.
-016960       ADD 1               TO WS-S1.
-016970     IF WS-S2 > 40
-016980         MOVE 1            TO WS-ERROR
-016990         GO TO CA50.
-017000       GO TO CA30.
-017010 CA35.
-017020     IF WS-S2 > 39
-017030         MOVE 1            TO WS-ERROR
-017040         GO TO CA50.
-017050       ADD 1               TO WS-S2.
-017060       MOVE "*"            TO W60-NCHAR (WS-S2).
-017070       MOVE 49             TO WS-S1.
-017080       MOVE 72             TO WS-S3.
-017090       ADD 1               TO WS-S2.
-017100 CA36.
-017110     IF W40-NCHAR (WS-S3) NOT = SPACE
-017120         GO TO CA40.
-017130     IF WS-S3 > WS-S1
-017140         SUBTRACT 1        FROM WS-S3
-017150         GO TO CA36.
-017160 CA40.
-017170       MOVE W40-NCHAR (WS-S1)
-                                 TO W60-NCHAR (WS-S2).
-017180     IF WS-S1 = WS-S3
-017190         GO TO CA45.
-017200       ADD 1               TO WS-S1.
-017210       ADD 1               TO WS-S2.
-017220     IF WS-S2 > 40
-017230         MOVE 1            TO WS-ERROR
-017240         GO TO CA50.
-017250       GO TO CA40.
-017260 CA45.
-017270     IF WS-S2 > 39
-017280         GO TO CA50.
-017290       ADD 1               TO WS-S2.
-017300       MOVE "!"            TO W60-NCHAR (WS-S2).
-017310 CA50.
-017320       EXIT.
-      *
-      *    ****    Pack the debtor address for storage in the
-      *            debtor record
-      *
-017330 CA110-ADDRESS       SECTION 2.
-017340 CA110.
-017350       MOVE ZERO           TO WS-ERROR.
-017360       MOVE 1              TO WS-S1 WS-S2.
-017370       MOVE 30             TO WS-S3.
-017380       MOVE SPACES         TO W60-ADDRESS.
-017390 CA115.
-017400     IF WS-S6 NOT = 99
-017410         IF W40-ACHAR (WS-S3) NOT = SPACE
-017420             GO TO CA120
-017430         ELSE
-017440             NEXT SENTENCE
-017450     ELSE
-017460     IF W40-PCHAR (WS-S3) NOT = SPACE
-017470         GO TO CA120.
-017480     IF WS-S3 > WS-S2
-017490         SUBTRACT 1        FROM WS-S3
-017500         GO TO CA115.
-017510 CA120.
-017520     IF WS-S6 NOT = 99
-017530         MOVE W40-ACHAR (WS-S2)
-                                 TO W60-ACHAR (WS-S1)
-017540     ELSE
-017550         MOVE W40-PCHAR (WS-S2)
-                                 TO W60-ACHAR (WS-S1).
-017560     IF WS-S2 = WS-S3
-017570         GO TO CA125.
-017580       ADD 1               TO WS-S1.
-017590       ADD 1               TO WS-S2.
-017600     IF WS-S1 > 70
-017610         MOVE 1            TO WS-ERROR
-017620     ELSE
-017630         GO TO CA120.
-017640 CA125.
-017650     IF WS-ERROR = 1
-017660         GO TO CA130.
-017670     IF WS-S1 < 70
-017680         ADD 1             TO WS-S1
-017690         MOVE "*"          TO W60-ACHAR (WS-S1).
-017700 CA130.
-017710       ADD 1               TO WS-S1.
-017720 CA135.
-017730       MOVE 31             TO WS-S2.
-017740       MOVE 60             TO WS-S3.
-017750       PERFORM CA115 THRU CA130.
-017760     IF WS-ERROR = 1
-017770         GO TO CA140-EXIT.
-017780       MOVE 61             TO WS-S2.
-017790       MOVE 90             TO WS-S3.
-017800       PERFORM CA115 THRU CA130.
-017810     IF WS-ERROR = 1
-017820         GO TO CA140-EXIT.
-017830       MOVE 91             TO WS-S2.
-017840       MOVE 120            TO WS-S3.
-017850       PERFORM CA115 THRU CA130.
-017860 CA140-EXIT.
-017870       MOVE ZERO TO WS-S6.
-017880 CA140.
-017890       EXIT.
       *
       *    ****    Read debtor record - using account number.
       *
 014260 CA155-GET-DEBTOR  SECTION 2.
 014270 CA155.
-012010       MOVE W80-ACNO       TO DEB-ACNO.
+012010       MOVE W80-ACNO           TO DEB-ACNO.
 012020       PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT.
            IF WS-F-ERROR = 6
-               MOVE 1            TO WS-ERROR
+               MOVE 1                TO WS-ERROR
 014380     ELSE
 014390     IF DEB-ACNO NOT = W80-ACNO
-014400         MOVE 2            TO WS-ERROR
+014400         MOVE 2                TO WS-ERROR
 014410     ELSE
-014420         MOVE 0            TO WS-ERROR
-               MOVE DEB-TYPE     TO W80-TYPE.
+014420         MOVE 0                TO WS-ERROR
+               MOVE DEB-TYPE         TO W80-TYPE.
 	   IF DEB-CONAC = LOW-VALUES
-	       MOVE SPACES	 TO DEB-CONAC.
+	       MOVE SPACES             TO DEB-CONAC.
 
 014430 CA160-EXIT.
 014440       EXIT.
       *
-014450 CA165-NAME        SECTION 2.
-014460 CA165.
-014470       UNSTRING W60-NAME DELIMITED BY "*" OR "!"
-014480                           INTO W40-SURNAME
-                                      W40-FNAME
-                                      W40-SNAME
-014490       OVERFLOW
-014500           MOVE 1          TO WS-ERROR.
-014510 CA170-EXIT.
-014520       EXIT.
-      *
-014530 CA175-ADDRESS     SECTION 2.
-014540 CA175.
-014550       UNSTRING W60-ADDRESS DELIMITED BY "*"
-014560                           INTO W40-ADD1
-                                      W40-ADD2
-                                      W40-ADD3
-                                      W40-ADD4
-014570       OVERFLOW
-014580           MOVE 1          TO WS-ERROR.
-014590 CA175-EXIT.
-014600       EXIT.
-      *
-014610 CA180-ADDRESS     SECTION 2.
-014620 CA180.
-014630       UNSTRING W60-ADDRESS1 DELIMITED BY "*"
-014640                           INTO W40-PADD1
-                                      W40-PADD2
-                                      W40-PADD3
-                                      W40-PADD4
-014650       OVERFLOW
-014660           MOVE 1          TO WS-ERROR.
-014670 CA180-EXIT.
-014680       EXIT.
       /
       *    ****   A M E N D   A N   E X I S T I N G   D E B T O R
       *           R E C O R D
       *
 020300 CC000		 SECTION 50.
-       CC0.
-018150       DISPLAY CLR-SCREEN.
-	     DISPLAY "ACCOUNTS RECEIVABLE -AMEND ACCOUNT" AT 0223
-		      WITH FOREGROUND-COLOR Grey HIGHLIGHT.
-
 020310 CC00.
-020320       DISPLAY CLR-SCREEN.
-020330       DISPLAY S07.
-020350       DISPLAY "Account :" AT 0302.
-020370       MOVE SPACES         TO W80-ACNO.
+             MOVE "S"                TO CRT-TYPE.
+007750       CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+020350       DISPLAY "Account :" AT 0602.
+020370       MOVE SPACES             TO W80-ACNO.
 
 020360 CC05.
-	     DISPLAY "F1" AT 5002
-		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-		     "=Help,"
-		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-		     "F2" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-		     " to do Account Lookup,"
-		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-		     "F9" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-		     " Debtor Lookup (Any Word),"
-		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-		     "Esc" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-		     " to exit"
-		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
-020380       ACCEPT S36 AT 0312.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE SPACES TO W80-ACNO
-		     GO TO CC999
-		 WHEN F1-KEY
-		     PERFORM HELP-ROUTINE
-		 WHEN F2-KEY
-		     MOVE SPACE  TO WS-TYP
-016560		     PERFORM AA50
-		 WHEN F9-KEY
-		     MOVE "A"	 TO WS-TYP
-		     PERFORM AA50
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO CC05
-	       END-EVALUATE
-016570	       DISPLAY S36 AT 0312
-016580	       IF W80-ACNO = SPACES
-016590		   GO TO CC05.
-	     DISPLAY WS-BLNK78 AT 1202 WITH FOREGROUND-COLOR Cyan.
-	     PERFORM CLEAR-L50.
+             DISPLAY "F1"                        AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     "=Help,"                            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F2"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to do Account Lookup,"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "F9"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " Debtor Lookup (Any Word),"        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                     "Esc"                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     " to exit"                          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+020380       ACCEPT S36 AT 0612.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY
+                      MOVE SPACES    TO W80-ACNO
+	                GO TO CC999
+                 WHEN F1-KEY
+                      PERFORM HELP-ROUTINE
+                 WHEN F2-KEY
+                      MOVE SPACE     TO W40-LUP
+016560                PERFORM AA50
+                 WHEN F9-KEY
+                      MOVE "A"       TO W40-LUP
+                      PERFORM AA50
+                 WHEN OTHER
+                      CALL X"E5"
+                      GO TO CC05
+               END-EVALUATE
+016570         DISPLAY S36 AT 0612
+016580         IF W80-ACNO = SPACES
+016590             GO TO CC05.
+             MOVE 12                 TO CRT-START CRT-END.
+018380       PERFORM ERASE-SCREEN.
+             PERFORM CLEAR-L50.
 020390     IF W80-ACNO = SPACES
 020400         GO TO CC999.
-             MOVE 6              TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W80-ACNO
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     MOVE 1		 TO WS-LENGTH.
-             MOVE W80-ACNO       TO DEB-ACNO.
+             MOVE 6                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W80-ACNO BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+             MOVE W80-ACNO           TO DEB-ACNO.
 020410       PERFORM CA155-GET-DEBTOR.
 020420     IF WS-ERROR = 1
-020430	       MOVE WS-ERR2	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
+020430         MOVE WS-ERR2          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
 020440         GO TO CC05.
 020450     IF WS-ERROR = 2
-020460	       MOVE WS-ERR1	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
+020460         MOVE WS-ERR1          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
 020470         GO TO CC05.
-	     DISPLAY WS-BLNK78 AT 0302 WITH FOREGROUND-COLOR Cyan.
-020480       MOVE DEB-NAME       TO W60-NAME.
-             MOVE DEB-CONTACT    TO W40-CONTACT.
-020490       MOVE DEB-ADDRESS    TO W60-ADDRESS.
-020500       MOVE DEB-PADDR      TO W60-ADDRESS1.
-020510       MOVE DEB-POST       TO W40-POST.
-020520       MOVE DEB-PPOST      TO W40-PPOST.
-020530	     MOVE DEB-LANG	 TO W40-LANG.
-020540       MOVE SPACES         TO W40-NAME1 W40-ADDRESS1 W40-PADDRESS.
-020550       MOVE DEB-H-TEL      TO W40-HTEL.
-020560       MOVE DEB-B-TEL      TO W40-TEL.
-020560       MOVE DEB-FAX        TO W40-FAX.
-020570       MOVE DEB-TITLE      TO W40-TITLE.
-020580	     MOVE DEB-ID	 TO W40-ID.
-019900	     MOVE DEB-TAX	 TO W40-TAX.
-020590       MOVE DEB-CAT        TO W40-CAT W40-OCAT.
-020600       MOVE DEB-CRL        TO W40-CRL.
-020600       MOVE DEB-OI         TO W40-OI W40-OOI.
-	     MOVE DEB-ART11	 TO W40-EXEMPT.
-020600       MOVE DEB-LAB        TO W40-LAB.
-	   IF NOT VALID-PRICE
-	       MOVE "R" 	 TO DEB-PRICE.
-             MOVE DEB-PRICE      TO W40-PRICE.
-020610	   IF DEB-FIN = 1
-020620         MOVE "N"          TO W40-FIN
-020630     ELSE
-020640         MOVE "Y"          TO W40-FIN.
-020650       MOVE DEB-TERMS      TO W40-TERMS.
-             MOVE DEB-INV-TYPE   TO W40-INV-TYPE.
-020660       MOVE DEB-SMAN       TO W40-SMAN.
-020670       MOVE DEB-DISC       TO W40-DISC.
-020670       MOVE DEB-SDISC      TO W40-SDISC.
-	     MOVE DEB-CONAC	 TO W40-CONAC.
-      *	     MOVE DEB-GROUP	 TO W40-GROUP.
-020680       PERFORM CA175-ADDRESS.
-020690       PERFORM CA180-ADDRESS.
-	     DISPLAY WS-BLNK78 AT 0302 WITH FOREGROUND-COLOR Cyan.
+             MOVE 06                 TO CRT-START CRT-END.
+018380       PERFORM ERASE-SCREEN.
+           IF NOT VALID-PRICE
+               MOVE "R"              TO DEB-PRICE.
+             MOVE DEB-RECORD1        TO W40-DEBTREC.
+             MOVE 6                  TO CRT-START CRT-END.
+018380       PERFORM ERASE-SCREEN.
 020710     IF W80-TYPE NOT = 1
 020720         GO TO CC30.
-020730       PERFORM CA165-NAME.
 020760       DISPLAY S22.
-018440*	   IF WS-USE-GROUP = "Y"
-      *	       DISPLAY S22B AT LINE 23.
-	     DISPLAY S36 AT 0415.
-018440*	   IF WS-USE-GROUP = "Y"
-      *	       DISPLAY S24B AT LINE 23.
+018440*    IF WS-USE-GROUP = "Y"
+      *        DISPLAY S22B AT LINE 23.
+             DISPLAY S36 AT 0615.
+018440*    IF WS-USE-GROUP = "Y"
+      *        DISPLAY S24B AT LINE 23.
 
 020770 CC10.
 020780       ACCEPT S25.
-018440*	   IF WS-USE-GROUP = "Y"
-      *	       ACCEPT S24B AT LINE 23.
-	     PERFORM CHECK-CORRECT.
-020860	   IF WS-OPTION = "N"
+018440*    IF WS-USE-GROUP = "Y"
+      *        ACCEPT S24B AT LINE 23.
+             PERFORM CHECK-CORRECT.
+020860     IF WS-OPTION = "N"
 020870         GO TO CC10.
-	     MOVE 6	       TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CONAC
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     MOVE 8	       TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-POST
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-PPOST
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-      *	     MOVE 4	       TO WS-LENGTH.
-      *	     CALL "CBL_TOUPPER" USING W40-GROUP
-      *				BY VALUE WS-LENGTH
-      *				RETURNING WS-STATUS.
-	     MOVE 1	       TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-FIN
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-INV-TYPE
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-OI
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-LAB
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-PRICE
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-020980	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan.
-020990       DISPLAY "Checking Input data" AT 2318
-                      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
-021000     IF W40-SURNAME = SPACE OR W40-ADD1 = SPACE OR
-021010	       W40-POST = ZERO OR W40-TITLE = ZERO
-018710	       MOVE WS-ERR3	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021040	       GO TO CC10.
-	     MOVE 24		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-SURNAME
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-FNAME
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-SNAME
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     MOVE 1		 TO WS-LENGTH.
-021050	   IF W40-TITLE < 0 OR > 10
-018740	       MOVE WS-ERR4	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021070	       GO TO CC10.
+             MOVE 6                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-CONAC    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 8                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-POST     BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-PPOST    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+      *      MOVE 4                  TO WS-LENGTH.
+      *      CALL "CBL_TOUPPER" USING W40-GROUP    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1	       TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-FIN      BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-INV-TYPE BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-OI       BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-LAB      BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-PRICE    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             PERFORM CLEAR-L50.
+020990       DISPLAY "Checking Input data" AT 5018 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
+      *
+      *    **** Test first 8 characters of the name for spaces
+      *
+021000     IF W40-ENTRY = SPACE OR W40-ADD1 = SPACE OR W40-POST = ZERO OR W40-TITLE = ZERO
+018710         MOVE WS-ERR3          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+021040         GO TO CC10.
+             MOVE 24                 TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-SURNAME  BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-FNAME    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-SNAME    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+             MOVE "I"                TO W40-INSTR.
+             CALL "DTP\DTPNAME" USING W40-COMPANY.
+021050     IF W40-TITLE < 0 OR > 10
+018740         MOVE WS-ERR4          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+021070         GO TO CC10.
 
 021080 CC25.
-021120	     PERFORM CA010-NAME.
-021130     IF WS-ERROR = 1
-018810	       MOVE WS-ERR6	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021150	       GO TO CC10.
-021160       PERFORM CA110-ADDRESS.
-021170     IF WS-ERROR = 1
-018850	       MOVE WS-ERR7	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021190	       GO TO CC10.
-021200       MOVE W60-ADDRESS TO W60-ADDRESS1.
-021210       MOVE 99             TO WS-S6.
-021220       PERFORM CA110-ADDRESS.
-021230     IF WS-ERROR = 1
-	       MOVE SPACES	 TO WS-ERR-STRING
-018910	       STRING "2nd " DELIMITED SIZE
-		       WS-ERR7 DELIMITED SIZE
-		       INTO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021250	       GO TO CC10.
 021260     IF W40-CAT < 1 OR > 80
-018940	       MOVE WS-ERR8	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
+018940         MOVE WS-ERR8          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
 021280         GO TO CC10.
 021290     IF W40-TERMS < "0" OR > "3"
-018970	       MOVE "Terms"	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021310	       GO TO CC10.
+018970         MOVE "Terms"          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+021310         GO TO CC10.
 021320     IF W40-SMAN > 50
-019000	       MOVE "Salesperson"
-				 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021340	       GO TO CC10.
-019020	   IF (W40-DISC > 10 AND < 60) OR (W40-SDISC > 10)
-019030	       MOVE "Discount"	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-019040	       GO TO CC10.
-018760     IF NOT (W40-INV-TYPE = "I" OR "E" OR "X")
-018770	       MOVE "Invoice type"
-				 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC10.
-018760     IF NOT (W40-OI = "O" OR "B")
-018770	       MOVE "Statement type"
-				 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC10.
-018760     IF NOT (W40-LAB = "Y" OR "N")
-018770	       MOVE "Label code" TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC10.
-018760	   IF NOT (W40-PRICE = "1" OR "2" OR "3")
-018770	       MOVE "Price code" TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC10.
-      *	   IF NOT (W40-GROUP = SPACES)
-      *	       MOVE W40-GROUP	 TO DPT-CODE
-      *	       PERFORM READ-DEPART THRU READ-DEPART-EXIT
-      *	       IF WS-F-ERROR = 7
-      *		   MOVE "Croup code"
-      *				 TO WS-ERR-STRING
-      *		   PERFORM ERROR-MESSAGE
-      *		   GO TO CC10.
-	   IF W40-CONAC NOT = SPACES
-	       MOVE W40-CONAC	 TO DEB-ACNO
-012020	       PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT
-	       IF WS-F-ERROR = 6
-		   MOVE "Consolidation Account"
-				 TO WS-ERR-STRING
-		   PERFORM ERROR-MESSAGE
-		   PERFORM CA155-GET-DEBTOR
-		   GO TO CC10
-	       END-IF
-	       PERFORM CA155-GET-DEBTOR.
-021350	     GO TO CC40.
+019000         MOVE "Salesperson"    TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+021340         GO TO CC10.
+019020     IF (W40-DISC > 10 AND < 60) OR (W40-SDISC > 10)
+019030         MOVE "Discount"       TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+019040         GO TO CC10.
+018760     IF NOT(W40-INV-TYPE = "I" OR "E" OR "X")
+018770         MOVE "Invoice type"   TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC10.
+018760     IF NOT(W40-OI = "O" OR "B")
+018770         MOVE "Statement type" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC10.
+018760     IF NOT(W40-LAB = "Y" OR "N")
+018770         MOVE "Label code"     TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC10.
+018760     IF NOT(W40-PRICE = "1" OR "2" OR "3")
+018770         MOVE "Price code"     TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC10.
+      *    IF NOT(W40-GROUP = SPACES)
+      *        MOVE W40-GROUP	 TO DPT-CODE
+      *        PERFORM READ-DEPART THRU READ-DEPART-EXIT
+      *        IF WS-F-ERROR = 7
+      *            MOVE "Croup code" TO WS-ERR-MES
+      *	       PERFORM ERROR-MESSAGE
+      *	       GO TO CC10.
+           IF W40-CONAC NOT = SPACES
+               MOVE W40-CONAC        TO DEB-ACNO
+012020         PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT
+               IF WS-F-ERROR = 6
+                   MOVE "Consolidation Account"  TO WS-ERR-MES
+                   PERFORM ERROR-MESSAGE
+                   PERFORM CA155-GET-DEBTOR
+                   GO TO CC10
+               END-IF
+               PERFORM CA155-GET-DEBTOR.
+021350         GO TO CC40.
       *
       *    ****   C O M P A N Y  /  I N T E R N A L   A / C
       *
 021360 CC30.
-021370     IF W80-TYPE = 3
-021380         DISPLAY S06
-021390     ELSE
-021400         DISPLAY S05.
 021410       DISPLAY S23.
-018440*	   IF WS-USE-GROUP = "Y"
-      *	       DISPLAY S22B AT LINE 22.
-	     DISPLAY S36 AT 0415.
-021420       MOVE W60-NAME       TO W40-NAME.
-018440*	   IF WS-USE-GROUP = "Y"
-      *	       DISPLAY S24B AT LINE 22.
+019110     IF W80-TYPE = 3
+019120         DISPLAY S06.
+018440*    IF WS-USE-GROUP = "Y"
+      *        DISPLAY S22B AT LINE 22.
+             DISPLAY S36 AT 0615.
+018440*    IF WS-USE-GROUP = "Y"
+      *        DISPLAY S24B AT LINE 22.
 
 021450 CC35.
 021460       ACCEPT S24.
-018440*	   IF WS-USE-GROUP = "Y"
-      *	       ACCEPT S24B AT LINE 22.
-	     PERFORM CHECK-CORRECT.
-021540	   IF WS-OPTION = "N"
+018440*    IF WS-USE-GROUP = "Y"
+      *        ACCEPT S24B AT LINE 22.
+             PERFORM CHECK-CORRECT.
+021540     IF WS-OPTION = "N"
 021550         GO TO CC35.
-	     MOVE 6	       TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CONAC
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     MOVE 8	       TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-POST
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-PPOST
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-      *	     MOVE 4	       TO WS-LENGTH.
-      *	     CALL "CBL_TOUPPER" USING W40-GROUP
-      *				BY VALUE WS-LENGTH
-      *				RETURNING WS-STATUS.
-	     MOVE 1	       TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-FIN
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-INV-TYPE
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-OI
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-LAB
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     CALL "CBL_TOUPPER" USING W40-PRICE
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-021660	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan.
-021670       DISPLAY "Checking Input data" AT 2318
-                      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
-021680     IF W40-NAME = SPACE OR W40-ADD1 = SPACE OR
-021690	       W40-POST = ZERO
-021700	       MOVE WS-ERR3	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
+             MOVE 6                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-CONAC    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 8                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-POST     BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-PPOST    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+      *      MOVE 4                  TO WS-LENGTH.
+      *      CALL "CBL_TOUPPER" USING W40-GROUP    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-FIN      BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-INV-TYPE BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-OI       BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-LAB      BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W40-PRICE    BY VALUE WS-LENGTH RETURNING WS-STATUS.
+021660       PERFORM CLEAR-L50.
+021670       DISPLAY "Checking Input data" AT 5018 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
+      *
+      *    **** Test first 8 characters of the name for spaces
+      *
+021680     IF W40-ENTRY = SPACE OR W40-ADD1 = SPACE OR W40-POST = ZERO
+021700         MOVE WS-ERR3          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
 021710         GO TO CC35.
-	     MOVE 40		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-NAME
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     MOVE 1		 TO WS-LENGTH.
-021750	     MOVE W40-NAME	 TO W60-NAME.
-021760       PERFORM CA110-ADDRESS.
-021770     IF WS-ERROR = 1
-021780	       MOVE WS-ERR7	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021790         GO TO CC35.
-021800       MOVE W60-ADDRESS    TO W60-ADDRESS1.
-021810       MOVE 99             TO WS-S6.
-021820       PERFORM CA110-ADDRESS.
-021830     IF WS-ERROR = 1
-	       MOVE SPACES	 TO WS-ERR-STRING
-018910	       STRING "2nd " DELIMITED SIZE
-		       WS-ERR7 DELIMITED SIZE
-		       INTO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021850	       GO TO CC35.
+             MOVE 40                 TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-NAME BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+             MOVE "C"                TO W40-INSTR.
+             CALL "DTP\DTPNAME" USING W40-COMPANY.
 021860     IF W40-CAT < 1 OR > 80
-018940	       MOVE WS-ERR8	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021880	       GO TO CC35.
+018940         MOVE WS-ERR8          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+021880         GO TO CC35.
 021890     IF W40-TERMS < "0" OR > "3"
-018970	       MOVE "Terms"	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021910	       GO TO CC35.
+018970         MOVE "Terms"          TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+021910         GO TO CC35.
 021920     IF W40-SMAN > 50
-019000	       MOVE "Salesperson"
-				 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-021940	       GO TO CC35.
-019020	   IF (W40-DISC > 10 AND < 60) OR (W40-SDISC > 10)
-019030	       MOVE "Discount"	 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-019040	       GO TO CC35.
-018760     IF NOT (W40-INV-TYPE = "I" OR "E" OR "X")
-018770	       MOVE "Invoice type"
-				 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC35.
-018760     IF NOT (W40-OI = "O" OR "B")
-018770	       MOVE "Statement type"
-				 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC35.
-018760     IF NOT (W40-LAB = "Y" OR "N")
-018770	       MOVE "Label code" TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC35.
-018760	   IF NOT (W40-PRICE = "1" OR "2" OR "3")
-018770	       MOVE "Price code" TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-018780	       GO TO CC35.
-      *	   IF NOT (W40-GROUP = SPACES)
-      *	       MOVE W40-GROUP	 TO DPT-CODE
-      *	       PERFORM READ-DEPART THRU READ-DEPART-EXIT
-      *	       IF WS-F-ERROR = 7
-      *		   MOVE "Croup code"
-      *				 TO WS-ERR-STRING
-      *		   PERFORM ERROR-MESSAGE
-      *		   GO TO CC35.
-	   IF W40-CONAC NOT = SPACES
-	       MOVE W40-CONAC	 TO DEB-ACNO
-012020	       PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT
-	       IF WS-F-ERROR = 6
-		   MOVE "Consolidation Account"
-				 TO WS-ERR-STRING
-		   PERFORM ERROR-MESSAGE
-		   PERFORM CA155-GET-DEBTOR
-		   GO TO CC35
-	       END-IF
-	       PERFORM CA155-GET-DEBTOR.
+019000         MOVE "Salesperson"    TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+021940         GO TO CC35.
+019020     IF (W40-DISC > 10 AND < 60) OR (W40-SDISC > 10)
+019030         MOVE "Discount"       TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+019040         GO TO CC35.
+018760     IF NOT(W40-INV-TYPE = "I" OR "E" OR "X")
+018770         MOVE "Invoice type"   TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC35.
+018760     IF NOT(W40-OI = "O" OR "B")
+018770         MOVE "Statement type" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC35.
+018760     IF NOT(W40-LAB = "Y" OR "N")
+018770         MOVE "Label code"     TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC35.
+018760     IF NOT(W40-PRICE = "1" OR "2" OR "3")
+018770         MOVE "Price code"     TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+018780         GO TO CC35.
+      *    IF NOT(W40-GROUP = SPACES)
+      *        MOVE W40-GROUP	 TO DPT-CODE
+      *        PERFORM READ-DEPART THRU READ-DEPART-EXIT
+      *        IF WS-F-ERROR = 7
+      *            MOVE "Croup code" TO WS-ERR-MES
+      *            PERFORM ERROR-MESSAGE
+      *            GO TO CC35.
+           IF W40-CONAC NOT = SPACES
+               MOVE W40-CONAC        TO DEB-ACNO
+012020         PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT
+               IF WS-F-ERROR = 6
+                   MOVE "Consolidation Account"  TO WS-ERR-MES
+                   PERFORM ERROR-MESSAGE
+                   PERFORM CA155-GET-DEBTOR
+                   GO TO CC35
+               END-IF
+               PERFORM CA155-GET-DEBTOR.
+
 021950 CC40.
-	    IF W40-CAT NOT = W40-OCAT
-		IF W40-OCAT = 80
-		    PERFORM CC70.
-	   IF W40-ART11 = "N"
-	       GO TO CC45.
+           IF W40-CAT NOT = W40-OCAT
+               IF W40-OCAT = 80
+                   PERFORM CC70.
+           IF W40-ART11 = "N"
+               GO TO CC45.
 
        CC40-ART11.
-	     PERFORM SAVE-SCREEN-3.
-	     MOVE 12		 TO SHADE-ROW.
-	     MOVE 18		 TO SHADE-COL.
-	     MOVE 48		 TO SHADE-WIDTH.
-	     MOVE 2		 TO SHADE-LINES.
-	     DISPLAY S-ART11.
-	     PERFORM SCREEN-SHADOW.
+             PERFORM SAVE-SCREEN-3.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 18                 TO SHADE-COL.
+             MOVE 48                 TO SHADE-WIDTH.
+             MOVE 2                  TO SHADE-LINES.
+             DISPLAY S-ART11.
+             PERFORM SCREEN-SHADOW.
 
        CC40-EXEMPT.
-	     ACCEPT W40-EXEMPT AT 1263
-		    WITH FOREGROUND-COLOR Grey HIGHLIGHT
-			 BACKGROUND-COLOR Magenta UPDATE AUTO.
-	     CALL "CBL_TOUPPER" USING W40-EXEMPT
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (W40-EXEMPT = "N" OR "Y")
-	       GO TO CC40-EXEMPT.
-	     PERFORM RESTORE-SCREEN-3.
+             ACCEPT W40-EXEMPT AT 1263 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta UPDATE AUTO.
+             CALL "CBL_TOUPPER" USING W40-EXEMPT BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF NOT(W40-EXEMPT = "N" OR "Y")
+               GO TO CC40-EXEMPT.
+             PERFORM RESTORE-SCREEN-3.
 
        CC45.
-021960	     PERFORM AY60 THRU AY999.
-             MOVE 0              TO WS-ACTION.
+021960       PERFORM AY60 THRU AY999.
+             MOVE 0                  TO WS-ACTION.
 021970       PERFORM AY02 THRU AY59.
-021980       MOVE W60-NAME       TO DEB-NAME.
-             MOVE W40-CONTACT    TO DEB-CONTACT.
-021990       MOVE W60-ADDRESS1   TO DEB-ADDRESS.
-022000       MOVE W60-ADDRESS    TO DEB-PADDR.
-022010       MOVE W40-POST       TO DEB-POST.
-022020       MOVE W40-PPOST      TO DEB-PPOST.
-022030       MOVE W40-TEL        TO DEB-B-TEL.
-022040       MOVE W40-HTEL       TO DEB-H-TEL.
-022030       MOVE W40-FAX        TO DEB-FAX.
-022050	     MOVE W40-ID	 TO DEB-ID.
-019900	     MOVE W40-TAX	 TO DEB-TAX.
-022060       MOVE W40-CAT        TO DEB-CAT.
-022070       MOVE W40-TITLE      TO DEB-TITLE.
-022080	     MOVE W40-LANG	 TO DEB-LANG.
-022090       MOVE W40-CRL        TO DEB-CRL.
+      *
+      *    ****  Has the account been changed from Balance forward to Open Item?
+      *
            IF W40-OI = "O"
                IF DEB-OI NOT = "O"
                    PERFORM CC80 THRU CC105.
-022090       MOVE W40-OI         TO DEB-OI.
-022090       MOVE W40-LAB        TO DEB-LAB.
-             MOVE W40-PRICE      TO DEB-PRICE.
-022100     IF W40-FIN = "N"
-022110         MOVE 1            TO DEB-FIN
-022120     ELSE
-022130         MOVE ZERO         TO DEB-FIN.
-022140       MOVE W40-TERMS      TO DEB-TERMS.
-             MOVE W40-INV-TYPE   TO DEB-INV-TYPE.
-022150       MOVE W40-SMAN       TO DEB-SMAN.
-022160       MOVE W40-DISC       TO DEB-DISC.
-022160       MOVE W40-SDISC      TO DEB-SDISC.
-	     MOVE W40-CONAC	 TO DEB-CONAC.
-      *	     MOVE W40-GROUP	 TO DEB-GROUP.
-	     MOVE W40-EXEMPT	 TO DEB-ART11.
+             MOVE W40-DEBTREC        TO DEB-RECORD1.
 
 022490 CC65.
 022500       PERFORM REWRITE-DEBTOR THRU WRITE-DEBTOR-EXIT.
-022520	     PERFORM AY70 THRU AY999.
-	     PERFORM CC110 THRU CC120.
-	   IF WS-ERROR = 9
-	       MOVE "Rebuild the ALT NAME Index"
-				 TO WS-ERR-STRING
-	       PERFORM ERROR-MESSAGE
-	       GO TO CC999.
-022550	     GO TO CC00.
+022520       PERFORM AY70 THRU AY999.
+             PERFORM CC110 THRU CC120.
+           IF WS-ERROR = 9
+               MOVE "Rebuild the ALT NAME Index" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO CC999.
+022550       GO TO CC00.
 
        CC70.
-032000       MOVE 5              TO WS-PARKEY.
+032000       MOVE 5                  TO WS-PARKEY.
 032010       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-032020       MOVE PAR-PW         TO W85-PASS.
-018260	     DISPLAY "Enter password" AT 5051
-018270		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT.
-018280	     ACCEPT W40-CSHPASS AT 5067
-		    WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT
-018290			 AUTO NO-ECHO.
-018300       MOVE 6 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CSHPASS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-018360	     MOVE 1 TO WS-LENGTH.
-018370     IF NOT (W40-CSHPASS = W85-SUPER (1) OR
-				 W85-SUPER (8) OR
-                                 "OGETAC")
-               MOVE W40-OCAT     TO W40-CAT.
-018260	     DISPLAY "                       " AT 5051
-		      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+032020       MOVE PAR-PW             TO W85-PASS.
+018260       DISPLAY "Enter password" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT.
+018280       ACCEPT W40-CSHPASS AT 5067 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT AUTO NO-ECHO.
+018300       MOVE 6                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-CSHPASS BY VALUE WS-LENGTH RETURNING WS-STATUS.
+018360       MOVE 1                  TO WS-LENGTH.
+018370     IF NOT(W40-CSHPASS = W85-SUPER (1) OR W85-SUPER (8) OR "OGETAC")
+               MOVE W40-OCAT         TO W40-CAT.
+018260       DISPLAY "                       " AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+
        CC75.
              EXIT.
+
        CC80.
-             MOVE W12-T-YMD      TO W22-DTE2.
+             MOVE W12-T-YMD          TO W22-DTE2.
            IF W22-MM2 > 01
-               SUBTRACT 1        FROM W22-MM2
+               SUBTRACT 1            FROM W22-MM2
            ELSE
-               MOVE 12           TO W22-MM2
-	       IF W22-YY2 > ZERO
-		   SUBTRACT 1	 FROM W22-YY2
-	       ELSE
-		   SUBTRACT 1	 FROM W22-CC2
-		   MOVE 99	 TO W22-YY2.
-	   IF W22-MM2 = 02
-               MOVE 28           TO W22-DD2
+               MOVE 12               TO W22-MM2
+               IF W22-YY2 > ZERO
+		       SUBTRACT 1        FROM W22-YY2
+               ELSE
+                   SUBTRACT 1        FROM W22-CC2
+                   MOVE 99           TO W22-YY2.
+           IF W22-MM2 = 02
+               MOVE 28               TO W22-DD2
            ELSE
            IF W22-MM2 = 04 OR 06 OR 09 OR 11
-               MOVE 30           TO W22-DD2
+               MOVE 30               TO W22-DD2
            ELSE
-               MOVE 31           TO W22-DD2.
+               MOVE 31               TO W22-DD2.
              INITIALIZE W40-BALANCES.
-             MOVE DEB-CUR        TO W40-D-CUR.
-             MOVE DEB-30         TO W40-D-30.
-             MOVE DEB-60         TO W40-D-60.
-             MOVE DEB-90         TO W40-D-90.
-             MOVE DEB-120        TO W40-D-120.
-             MOVE DEB-INT        TO W40-D-INT.
-	     COMPUTE W40-D-MTD = DEB-BAL - (DEB-CUR + DEB-30 + DEB-60
-					 + DEB-90 + DEB-120 + DEB-INT).
-             MOVE DEB-ACNO       TO TRA-AC.
-             MOVE ZERO           TO TRA-DATE TRA-CODE.
-             MOVE SPACES         TO TRA-REF.
+             MOVE DEB-CUR            TO W40-D-CUR.
+             MOVE DEB-30             TO W40-D-30.
+             MOVE DEB-60             TO W40-D-60.
+             MOVE DEB-90             TO W40-D-90.
+             MOVE DEB-120            TO W40-D-120.
+             MOVE DEB-INT            TO W40-D-INT.
+             COMPUTE W40-D-MTD = DEB-BAL - (DEB-CUR + DEB-30 + DEB-60 + DEB-90 + DEB-120 + DEB-INT).
+             MOVE DEB-ACNO           TO TRA-AC.
+             MOVE ZERO               TO TRA-DATE TRA-CODE.
+             MOVE SPACES             TO TRA-REF.
              PERFORM START-AT-DTRN-KEY THRU READ-DBTRAN-EXIT.
            IF WS-F-ERROR = 5
                GO TO CC90.
+
        CC85.
              PERFORM READ-DBTRAN-NEXT THRU READ-DBTRAN-EXIT.
-           IF (WS-F-ERROR = 5) OR
-              (DEB-ACNO NOT = TRA-AC)
+           IF (WS-F-ERROR = 5) OR (DEB-ACNO NOT = TRA-AC)
                GO TO CC90.
            IF TRA-CODE = 17 OR 20
-               ADD TRA-VALUE     TO W40-A-INT
+               ADD TRA-VALUE         TO W40-A-INT
            ELSE
            IF TRA-AGE = 5
-               ADD TRA-VALUE     TO W40-A-120
+               ADD TRA-VALUE         TO W40-A-120
            ELSE
            IF TRA-AGE = 4
-               ADD TRA-VALUE     TO W40-A-90
+               ADD TRA-VALUE         TO W40-A-90
            ELSE
            IF TRA-AGE = 3
-               ADD TRA-VALUE     TO W40-A-60
+               ADD TRA-VALUE         TO W40-A-60
            ELSE
            IF TRA-AGE = 2
-               ADD TRA-VALUE     TO W40-A-30
+               ADD TRA-VALUE         TO W40-A-30
            ELSE
            IF TRA-AGE = 1
-               ADD TRA-VALUE     TO W40-A-CUR
+               ADD TRA-VALUE         TO W40-A-CUR
            ELSE
-               ADD TRA-VALUE     TO W40-A-MTD.
+               ADD TRA-VALUE         TO W40-A-MTD.
              GO TO CC85.
        CC90.
-             SUBTRACT W40-A-INT FROM W40-D-INT
-                                 GIVING W40-T-INT.
-             SUBTRACT W40-A-120 FROM W40-D-120
-                                 GIVING W40-T-120.
-             SUBTRACT W40-A-90 FROM W40-D-90
-                                 GIVING W40-T-90.
-             SUBTRACT W40-A-60 FROM W40-D-60
-                                 GIVING W40-T-60.
-             SUBTRACT W40-A-30 FROM W40-D-30
-                                 GIVING W40-T-30.
-             SUBTRACT W40-A-CUR FROM W40-D-CUR
-                                 GIVING W40-T-CUR.
-             SUBTRACT W40-A-MTD FROM W40-D-MTD
-                                 GIVING W40-T-MTD.
+             SUBTRACT W40-A-INT FROM W40-D-INT GIVING W40-T-INT.
+             SUBTRACT W40-A-120 FROM W40-D-120 GIVING W40-T-120.
+             SUBTRACT W40-A-90  FROM W40-D-90  GIVING W40-T-90.
+             SUBTRACT W40-A-60  FROM W40-D-60  GIVING W40-T-60.
+             SUBTRACT W40-A-30  FROM W40-D-30  GIVING W40-T-30.
+             SUBTRACT W40-A-CUR FROM W40-D-CUR GIVING W40-T-CUR.
+             SUBTRACT W40-A-MTD FROM W40-D-MTD GIVING W40-T-MTD.
            IF W40-T-INT < ZERO
-               ADD W40-T-INT     TO W40-T-120
-               MOVE ZERO         TO W40-T-INT.
+               ADD W40-T-INT         TO W40-T-120
+               MOVE ZERO             TO W40-T-INT.
            IF W40-T-120 < ZERO
-               ADD W40-T-120     TO W40-T-90
-               MOVE ZERO         TO W40-T-120.
+               ADD W40-T-120         TO W40-T-90
+               MOVE ZERO             TO W40-T-120.
            IF W40-T-90 < ZERO
-               ADD W40-T-90      TO W40-T-60
-               MOVE ZERO         TO W40-T-90.
+               ADD W40-T-90          TO W40-T-60
+               MOVE ZERO             TO W40-T-90.
            IF W40-T-60 < ZERO
-               ADD W40-T-60      TO W40-T-30
-               MOVE ZERO         TO W40-T-60.
+               ADD W40-T-60          TO W40-T-30
+               MOVE ZERO             TO W40-T-60.
            IF W40-T-30 < ZERO
-               ADD W40-T-30      TO W40-T-CUR
-               MOVE ZERO         TO W40-T-30.
+               ADD W40-T-30          TO W40-T-CUR
+               MOVE ZERO             TO W40-T-30.
            IF W40-T-CUR < ZERO
-               ADD W40-T-CUR     TO W40-T-MTD
-               MOVE ZERO         TO W40-T-CUR.
+               ADD W40-T-CUR         TO W40-T-MTD
+               MOVE ZERO             TO W40-T-CUR.
              GO TO CC100.
+
        CC95.
              INITIALIZE TRA-RECORD1.
-             MOVE DEB-ACNO       TO TRA-AC.
-             MOVE W12-T-YMD      TO TRA-DATE.
-             MOVE "U"            TO TRA-TYPE.
+             MOVE DEB-ACNO           TO TRA-AC.
+             MOVE W12-T-YMD          TO TRA-DATE.
+             MOVE "U"                TO TRA-TYPE.
+
        CC100.
            IF W40-T-INT > ZERO
                PERFORM CC95
-	       MOVE "STM-INT"	 TO TRA-REF
-               MOVE 17           TO TRA-CODE
-               MOVE W40-T-INT    TO TRA-VALUE
+               MOVE "STM-INT"        TO TRA-REF
+               MOVE 17               TO TRA-CODE
+               MOVE W40-T-INT        TO TRA-VALUE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
            IF W40-T-120 > ZERO
                PERFORM CC95
-               MOVE "ST-120D"    TO TRA-REF
-               MOVE 05           TO TRA-CODE
-               MOVE W40-T-120    TO TRA-VALUE
-               MOVE 5            TO TRA-AGE
+               MOVE "ST-120D"        TO TRA-REF
+               MOVE 05               TO TRA-CODE
+               MOVE W40-T-120        TO TRA-VALUE
+               MOVE 5                TO TRA-AGE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
            IF W40-T-90 > ZERO
                PERFORM CC95
-               MOVE "ST-90D"     TO TRA-REF
-               MOVE 05           TO TRA-CODE
-               MOVE W40-T-90     TO TRA-VALUE
-               MOVE 4            TO TRA-AGE
+               MOVE "ST-90D"         TO TRA-REF
+               MOVE 05               TO TRA-CODE
+               MOVE W40-T-90         TO TRA-VALUE
+               MOVE 4                TO TRA-AGE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
            IF W40-T-60 > ZERO
                PERFORM CC95
-               MOVE "ST-60D"     TO TRA-REF
-               MOVE 05           TO TRA-CODE
-               MOVE W40-T-60     TO TRA-VALUE
-               MOVE 3            TO TRA-AGE
+               MOVE "ST-60D"         TO TRA-REF
+               MOVE 05               TO TRA-CODE
+               MOVE W40-T-60         TO TRA-VALUE
+               MOVE 3                TO TRA-AGE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
            IF W40-T-30 > ZERO
                PERFORM CC95
-               MOVE "ST-30D"     TO TRA-REF
-               MOVE 05           TO TRA-CODE
-               MOVE W40-T-30     TO TRA-VALUE
-               MOVE 2            TO TRA-AGE
+               MOVE "ST-30D"         TO TRA-REF
+               MOVE 05               TO TRA-CODE
+               MOVE W40-T-30         TO TRA-VALUE
+               MOVE 2                TO TRA-AGE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
            IF W40-T-CUR > ZERO
                PERFORM CC95
-               MOVE "ST-1-30D"   TO TRA-REF
-               MOVE 05           TO TRA-CODE
-               MOVE W40-T-CUR    TO TRA-VALUE
-               MOVE 1            TO TRA-AGE
+               MOVE "ST-1-30D"       TO TRA-REF
+               MOVE 05               TO TRA-CODE
+               MOVE W40-T-CUR        TO TRA-VALUE
+               MOVE 1                TO TRA-AGE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
            IF W40-T-MTD > ZERO
                PERFORM CC95
-               MOVE "ST-MTD"     TO TRA-REF
-               MOVE 05           TO TRA-CODE
-               MOVE W40-T-MTD    TO TRA-VALUE
-               MOVE 0            TO TRA-AGE
+               MOVE "ST-MTD"         TO TRA-REF
+               MOVE 05               TO TRA-CODE
+               MOVE W40-T-MTD        TO TRA-VALUE
+               MOVE 0                TO TRA-AGE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
            IF W40-T-MTD < ZERO
                PERFORM CC95
-	       MOVE "ST-MTD"	 TO TRA-REF
-               MOVE 06           TO TRA-CODE
-               MOVE W40-T-MTD    TO TRA-VALUE
-               MOVE 0            TO TRA-AGE
+               MOVE "ST-MTD"         TO TRA-REF
+               MOVE 06               TO TRA-CODE
+               MOVE W40-T-MTD        TO TRA-VALUE
+               MOVE 0                TO TRA-AGE
                PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
+
        CC105.
 	     EXIT.
       *
       *    ****    C H E C K   T H E   A L T E R N A T E   I N D E X
       *
        CC110.
-	     MOVE ZERO		 TO WS-ERROR.
-	     MOVE DEB-NAME	 TO W50-DATA.
-	   IF DEB-TYPE = 1
-000870	       INSPECT W50-DATA REPLACING ALL "*" BY " "
-000880	       INSPECT W50-DATA REPLACING FIRST "!" BY " ".
-	     MOVE DEB-ACNO	 TO DAL-ACNO
-	     MOVE ZERO		 TO DAL-NO.
-	     PERFORM READ-DEBALT THRU READ-DEBALT-EXIT.
-	   IF WS-F-ERROR = 47
-	       MOVE 9		 TO WS-ERROR
-	       GO TO CC120.
-	   IF DAL-NAME = W50-DATA
-	       GO TO CC120.
+             MOVE ZERO               TO WS-ERROR.
+             MOVE DEB-NAME           TO W50-DATA.
+           IF DEB-TYPE = 1
+000870         INSPECT W50-DATA REPLACING ALL "*" BY " "
+000880         INSPECT W50-DATA REPLACING FIRST "!" BY " ".
+             MOVE DEB-ACNO           TO DAL-ACNO
+             MOVE ZERO               TO DAL-NO.
+             PERFORM READ-DEBALT THRU READ-DEBALT-EXIT.
+           IF WS-F-ERROR = 47
+               MOVE 9                TO WS-ERROR
+               GO TO CC120.
+           IF DAL-NAME = W50-DATA
+               GO TO CC120.
 
        CC115.
-	     PERFORM DELETE-DEBALT-REC THRU WRITE-DEBALT-EXIT.
-	     PERFORM READ-DEBALT-NEXT THRU READ-DEBALT-EXIT.
-	   IF NOT(WS-F-ERROR = 47)
-	       IF (DAL-ACNO = DEB-ACNO)
-		   GO TO CC115.
-021960	     PERFORM AY60 THRU AY999.
-	     PERFORM DEBTOR-NAME-INDEX.
-022520	     PERFORM AY70 THRU AY999.
+             PERFORM DELETE-DEBALT-REC THRU WRITE-DEBALT-EXIT.
+             PERFORM READ-DEBALT-NEXT THRU READ-DEBALT-EXIT.
+           IF NOT(WS-F-ERROR = 47)
+               IF (DAL-ACNO = DEB-ACNO)
+                   GO TO CC115.
+021960       PERFORM AY60 THRU AY999.
+             PERFORM DEBTOR-NAME-INDEX.
+022520       PERFORM AY70 THRU AY999.
 
        CC120.
 	     EXIT.
@@ -1668,176 +1326,74 @@
 041980 ZA000-INIT	       SECTION 80.
 041990 ZA000-OPEN.
              PERFORM ZA55 THRU ZA60.
-	     MOVE LS-PARID	 TO WS-PARID.
-	     MOVE LS-L-OR-N	 TO W02-L-OR-N.
-	     MOVE WS-SYS-ID	 TO W02-SYSID.
-	     MOVE LS-TODAY-DDMMYY
-				 TO TODAY-DDMMYY.
-	     MOVE LS-USUB	 TO WS-USUB.
-042000	     DISPLAY CLR-SCREEN.
-      *
-      *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
-      *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *
-      *    ESC, F1 to F10 keys
-      *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    PAGE-UP AND PAGE-DOWN KEYS
-      *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    A C T I V A T E   M O U S E
-      *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *
-      *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
-      *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *
-      *    ****    P A R A M E T E R   F I L E
-      *
-       ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-L-OR-N          TO W02-L-OR-N.
+             MOVE WS-SYS-ID          TO W02-SYSID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-USUB            TO WS-USUB.
+042000       DISPLAY CLR-SCREEN.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-       ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
-
-       ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
+             COPY "FUNCTION.PRO".
 
        ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
-	     MOVE "DBTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DBTRAN.
-      *    *************************************************************
-      *    *** D E B T O R   A L T E R N A T E	 I N D E X   F I L E ***
-      *    *************************************************************
-	     MOVE "DEBALT"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBALT.
-      *    *************************************************************
-      *    **** 	  D E B T O R	M E M O	  F I L E	    ****
-      *    *************************************************************
-	     MOVE "DEBMEM"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBMEM.
-      *    *************************************************************
-      *    ****  D E B T O R   A C C O U N T   ( A / R )   F I L E  ****
-      *    *************************************************************
-	     MOVE "DEBTOR"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBTOR.
-	     MOVE "DEPART"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEPART.
-      *    *************************************************************
-      *    **** 	    C O N T R O L   F I L E		    ****
-      *    *************************************************************
-	     MOVE "NETWORK"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-NETWORK.
-      *    *************************************************************
-      *    **** 	    R E C O V E R Y   F I L E		    ****
-      *    *************************************************************
-	     MOVE "RECOVER"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     INSPECT AFID-PATH REPLACING FIRST "XXX"
-			       BY LS-USER.
-	     MOVE AFID-PATH	 TO W02-RECOVER.
-      *    *************************************************************
-      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
-      *    *************************************************************
-	     MOVE "SHARED"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-SHARED.
-042080	     MOVE 3		 TO WS-PARKEY.
+042080       MOVE 3                  TO WS-PARKEY.
 042090       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-ART11 = "Y" OR "N")
-	       MOVE "N" 	 TO PAR-ART11.
-	     MOVE PAR-ART11	 TO W40-ART11.
-042080*	     MOVE 5		 TO WS-PARKEY.
+           IF NOT(PAR-ART11 = "Y" OR "N")
+               MOVE "N"              TO PAR-ART11.
+             MOVE PAR-ART11          TO W40-ART11.
+042080*      MOVE 5                  TO WS-PARKEY.
 042090*      PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-      *	     MOVE PAR-USE-GROUP  TO WS-USE-GROUP.
-042520	     MOVE 8		 TO WS-PARKEY.
+      *      MOVE PAR-USE-GROUP      TO WS-USE-GROUP.
+042520       MOVE 8                  TO WS-PARKEY.
 042550       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-WS-HD = X"00000000000000000000")
-	       MOVE PAR-WS-HD	 TO WS-WS-HD.
-	   IF NOT (PAR-CS-HD = X"00000000000000000000")
-	       MOVE PAR-CS-HD	 TO WS-CS-HD.
-	   IF NOT (PAR-RT-HD = X"00000000000000000000")
-	       MOVE PAR-RT-HD	 TO WS-RT-HD.
-042490	     OPEN OUTPUT RECOVER.
+           IF NOT(PAR-WS-HD = X"00000000000000000000")
+               MOVE PAR-WS-HD        TO WS-WS-HD.
+           IF NOT(PAR-CS-HD = X"00000000000000000000")
+               MOVE PAR-CS-HD        TO WS-CS-HD.
+           IF NOT(PAR-RT-HD = X"00000000000000000000")
+               MOVE PAR-RT-HD        TO WS-RT-HD.
+042490       OPEN OUTPUT RECOVER.
 042500       CLOSE RECOVER.
 042510       OPEN I-O RECOVER.
-042720       MOVE 1              TO WS-PARKEY.
+042720       MOVE 1                  TO WS-PARKEY.
 042730       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-042740       MOVE PAR-COMPANY    TO W95-COMP.
-042750       MOVE PAR-DMY        TO W12-TODAY.
-042760       MOVE PAR-YMD        TO W12-T-YMD.
-044780	     GO TO ZA999-EXIT.
+042740       MOVE PAR-COMPANY        TO W95-COMP.
+042750       MOVE PAR-DMY            TO W12-TODAY.
+042760       MOVE PAR-YMD            TO W12-T-YMD.
+044780       GO TO ZA999-EXIT.
+
        ZA55.
-041220       MOVE 1              TO WS-S1.
-021870	     MOVE SPACES	 TO WS-MID-LNE.
+041220       MOVE 1                  TO WS-S1.
+021870       MOVE SPACES             TO WS-MID-LNE.
+
 041240 ZA60.
-041250       MOVE WS-G1          TO WS-TCHR (WS-S1) WS-BCHR (WS-S1).
-             MOVE WS-G8          TO WS-TCH  (WS-S1) WS-BCH  (WS-S1).
+041250       MOVE WS-G1              TO WS-TCHR (WS-S1) WS-BCHR (WS-S1).
+             MOVE WS-G8              TO WS-TCH  (WS-S1) WS-BCH  (WS-S1).
 041260     IF WS-S1 < 80
-041270         ADD 1             TO WS-S1
+041270         ADD 1                 TO WS-S1
 041280         GO TO ZA60.
-             MOVE WS-G9          TO WS-TCH  (1).
-             MOVE WS-G10         TO WS-TCH  (80).
-             MOVE WS-G11         TO WS-BCH  (1).
-             MOVE WS-G12         TO WS-BCH  (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
-             MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-021930       MOVE WS-G2          TO WS-TCHR (8)  WS-TCHR (49)
-021940                              WS-TCHR (61) WS-TCHR (72).
-021950       MOVE WS-G3          TO WS-MCHR (8)  WS-MCHR (49)
-021960                              WS-MCHR (61) WS-MCHR (72)
-021960				    WS-MCHR (1)  WS-MCHR (80).
-021970       MOVE WS-G4          TO WS-BCHR (8)  WS-BCHR (49)
-021980                              WS-BCHR (61) WS-BCHR (72).
-             MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
-	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
-	   IF LS-USER = LS-SYS-ID
-	       MOVE "SupervisorÄ"  TO WS-WRKHD
-	   ELSE
-	       MOVE "Workstation"  TO WS-WRKHD
-	       MOVE LS-USER	   TO WS-WRKST.
+             MOVE WS-G9              TO WS-TCH(1).
+             MOVE WS-G10             TO WS-TCH(80).
+             MOVE WS-G11             TO WS-BCH(1).
+             MOVE WS-G12             TO WS-BCH(80).
+             MOVE WS-G14             TO WS-TCHR(1)  WS-BCHR(1).
+             MOVE WS-G13             TO WS-TCHR(80) WS-BCHR(80).
+021930       MOVE WS-G2              TO WS-TCHR(8)  WS-TCHR(49) WS-TCHR(61) WS-TCHR(72).
+021950       MOVE WS-G3              TO WS-MCHR(8)  WS-MCHR(49) WS-MCHR(61) WS-MCHR(72) WS-MCHR(1)  WS-MCHR(80).
+021970       MOVE WS-G4              TO WS-BCHR(8)  WS-BCHR(49) WS-BCHR(61) WS-BCHR(72).
+             MOVE WS-G13             TO WS-TCHR(80) WS-BCHR(80).
+             MOVE WS-G14             TO WS-TCHR(1)  WS-BCHR(1).
+             MOVE LS-COMPANY         TO WS-TOP-COMP.
+           IF LS-USER = LS-SYS-ID
+               MOVE "SupervisorÄ"    TO WS-WRKHD
+           ELSE
+               MOVE "Workstation"    TO WS-WRKHD
+               MOVE LS-USER          TO WS-WRKST.
+
 042800 ZA200.
 
        COPY "LOCKED.PRO".
@@ -1855,44 +1411,44 @@
 
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
-041620	       MOVE W02-NETWORK  TO WS-FILE
-041630	       MOVE WS-NETKEY	 TO WS-KEY
+041620         MOVE W02-NETWORK      TO WS-FILE
+041630         MOVE WS-NETKEY	 TO WS-KEY
 041640     ELSE
 041730     IF WS-F-ERROR = 5
-041740	       MOVE W02-DBTRAN	 TO WS-FILE
-041750         MOVE ZERO         TO WS-KEY
-               MOVE TRA-KEY      TO WS-KEYX
+041740         MOVE W02-DBTRAN       TO WS-FILE
+041750         MOVE ZERO             TO WS-KEY
+               MOVE TRA-KEY          TO WS-KEYX
 041760     ELSE
 041770     IF WS-F-ERROR = 6
-041780	       MOVE W02-DEBTOR	 TO WS-FILE
-041790         MOVE ZERO         TO WS-KEY
-               MOVE DEB-ACNO     TO WS-KEYX
-041800	   ELSE
-041810	   IF WS-F-ERROR = 7
-041820	       MOVE W02-DEPART	 TO WS-FILE
-041870	       MOVE ZERO	 TO WS-KEY
-041830	       MOVE DPT-CODE	 TO WS-KEYX
-041840	   ELSE
+041780         MOVE W02-DEBTOR       TO WS-FILE
+041790         MOVE ZERO             TO WS-KEY
+               MOVE DEB-ACNO         TO WS-KEYX
+041800     ELSE
+041810     IF WS-F-ERROR = 7
+041820         MOVE W02-DEPART       TO WS-FILE
+041870         MOVE ZERO             TO WS-KEY
+041830         MOVE DPT-CODE         TO WS-KEYX
+041840     ELSE
 041850     IF WS-F-ERROR = 15
-041860	       MOVE WS-PARID	 TO WS-FILE
-041870	       MOVE WS-PARKEY	 TO WS-KEY
+041860         MOVE WS-PARID         TO WS-FILE
+041870         MOVE WS-PARKEY        TO WS-KEY
 041840     ELSE
 041850     IF WS-F-ERROR = 18
-041860	       MOVE W02-RECOVER  TO WS-FILE
-041870	       MOVE WS-RECKEY	 TO WS-KEY
+041860         MOVE W02-RECOVER      TO WS-FILE
+041870         MOVE WS-RECKEY        TO WS-KEY
 041840     ELSE
 041850     IF WS-F-ERROR = 27
-041860         MOVE W02-DEBMEM   TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
-	       MOVE DME-KEY	 TO WS-KEYX
-041840	   ELSE
-041850	   IF WS-F-ERROR = 37
-041860	       MOVE W02-SHARED	 TO WS-FILE
-041870	       MOVE WS-SHARED	 TO WS-KEY
-041840	   ELSE
-041850	   IF WS-F-ERROR = 47
-041860	       MOVE W02-DEBALT	 TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
-	       MOVE DAL-KEY	 TO WS-KEYX.
+041860         MOVE W02-DEBMEM       TO WS-FILE
+041870         MOVE ZERO             TO WS-KEY
+               MOVE DME-KEY          TO WS-KEYX
+041840     ELSE
+041850     IF WS-F-ERROR = 37
+041860         MOVE W02-SHARED       TO WS-FILE
+041870         MOVE WS-SHARED        TO WS-KEY
+041840     ELSE
+041850     IF WS-F-ERROR = 47
+041860         MOVE W02-DEBALT       TO WS-FILE
+041870         MOVE ZERO             TO WS-KEY
+               MOVE DAL-KEY          TO WS-KEYX.
 
        COPY "DISPERR.PRO".

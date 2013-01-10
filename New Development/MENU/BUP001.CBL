@@ -12,18 +12,18 @@
       *                                                                *
       *     ( A P A C )   T E R M I N A L   S T A R T   &   I N I T    *
       *                                                                *
-      *     VERSION 8.15.01 - August 2011			       *
-      * 							       *
+      *     VERSION 9.00.00 - November 2012                            *
+      *                                                                *
       ******************************************************************
-      * 							       *
-      *  May 2010	- Include the updating of new files that are   *
-      * 		  added to the system to the Work stations as  *
-      * 		  the file containing the paths could be on a  *
-      * 		  local drive and not the Network drive.       *
-      * 							       *
+      *                                                                *
+      *  May 2010	- Include the updating of new files that are added   *
+      * 		  to the system to the Work stations as the file     *
+      * 		  containing the paths could be on a local drive and *
+      * 		  not the Network drive.                             *
+      *                                                                *
       ******************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё		    VERSIONS OF THE APAC SYSTEM		       Ё
+      *    Ё                VERSIONS OF THE APAC SYSTEM                Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
       *    Ё While developing this system the requirements and budgets Ё
       *    Ё (originally this was a propriety package) for various     Ё
@@ -41,31 +41,31 @@
       *    Ё LS0-MODULES group. The other indicators in this group are Ё
       *    Ё used to show which modules of the system are installed.   Ё
       *    фмммммммммммммммммммямммммммммммммммммммяммммммммммммммммммм╣
-      *    Ё	SYSTEM FILE    Ё      CHAIN.WS	   Ё	 CHAIN.LS      Ё
+      *    Ё    SYSTEM FILE    Ё      CHAIN.WS	   Ё     CHAIN.LS      Ё
       *    цдддддддддддддддддддедддддддддддддддддддеддддддддддддддддддд╢
-      *	   Ё  03  SEC-MODULES. Ё  03  WS0-MODULES. Ё  03  LS0-MODULES. Ё
-      *    Ё	  05  SEC-DTP  Ё      05  WS0-DTP  Ё	  05  LS0-DTP  Ё
-      *    Ё	  05  SEC-STP  Ё      05  WS0-STP  Ё	  05  LS0-STP  Ё
-      *    Ё	  05  SEC-HPD  Ё      05  WS0-HPD  Ё	  05  LS0-HPD  Ё
-      *    Ё	  05  SEC-CRP  Ё      05  WS0-CRP  Ё	  05  LS0-CRP  Ё
-      *    Ё	  05  SEC-GLP  Ё      05  WS0-GLP  Ё	  05  LS0-GLP  Ё
-      *    Ё	  05  SEC-POS  Ё      05  WS0-POS  Ё	  05  LS0-POS  Ё
-      *    Ё	  05  SEC-JCP  Ё      05  WS0-JCP  Ё	  05  LS0-JCP  Ё
-      *    Ё	  05  SEC-VHP  Ё      05  WS0-VHP  Ё	  05  LS0-VHP  Ё
-      *    Ё	  05  SEC-WAG  Ё      05  WS0-WAG  Ё	  05  LS0-WAG  Ё
-      *    Ё	  05  SEC-SAL  Ё      05  WS0-SAL  Ё	  05  LS0-SAL  Ё
-      *    Ё	  05  SEC-LEV  Ё      05  WS0-LEV  Ё	  05  LS0-LEV  Ё
-      *    Ё	  05  SEC-WHS  Ё      05  WS0-WHS  Ё	  05  LS0-WHS  Ё
-      *    Ё	  05  SEC-RTE  Ё      05  WS0-RTE  Ё	  05  LS0-RTE  Ё
-      *	   Ё	  05  FILLER   Ё		   Ё		       Ё
+      *    Ё03	SEC-MODULES. Ё03  WS0-MODULES.   Ё03 LS0-MODULES.    Ё
+      *    Ё  05  SEC-DTP 9(01)Ё  05  WS0-DTP 9(01)Ё  05  LS0-DTP 9(01)Ё
+      *    Ё  05  SEC-STP 9(01)Ё  05  WS0-STP 9(01)Ё  05  LS0-STP 9(01)Ё
+      *    Ё  05  SEC-HPD 9(01)Ё  05  WS0-HPD 9(01)Ё  05  LS0-HPD 9(01)Ё
+      *    Ё  05  SEC-CRP 9(01)Ё  05  WS0-CRP 9(01)Ё  05  LS0-CRP 9(01)Ё
+      *    Ё  05  SEC-GLP 9(01)Ё  05  WS0-GLP 9(01)Ё  05  LS0-GLP 9(01)Ё
+      *    Ё  05  SEC-POS 9(01)Ё  05  WS0-POS 9(01)Ё  05  LS0-POS 9(01)Ё
+      *    Ё  05  SEC-JCP 9(01)Ё  05  WS0-JCP 9(01)Ё  05  LS0-JCP 9(01)Ё
+      *    Ё  05  SEC-VHP 9(01)Ё  05  WS0-VHP 9(01)Ё  05  LS0-VHP 9(01)Ё
+      *    Ё  05  SEC-WAG 9(01)Ё  05  WS0-WAG 9(01)Ё  05  LS0-WAG 9(01)Ё
+      *    Ё  05  SEC-SAL 9(01)Ё  05  WS0-SAL 9(01)Ё  05  LS0-SAL 9(01)Ё
+      *    Ё  05  SEC-LEV 9(01)Ё  05  WS0-LEV 9(01)Ё  05  LS0-LEV 9(01)Ё
+      *    Ё  05  SEC-WHS 9(01)Ё  05  WS0-WHS 9(01)Ё  05  LS0-WHS 9(01)Ё
+      *    Ё  05  SEC-RTE 9(01)Ё  05  WS0-RTE 9(01)Ё  05  LS0-RTE 9(01)Ё
+      *    Ё  05  FILLER  X(07)Ё  05  FILLER  X(07)Ё  05  FILLER  X(07)Ё
       *    юдддддддддддддддддддадддддддддддддддддддаддддддддддддддддддды
       *
 000010 IDENTIFICATION DIVISION.
 000020 PROGRAM-ID.     BUP001.
 000030 AUTHOR.         J W LEMMON  (APAC).
-000040 DATE-WRITTEN.   JUNE 1990.
+000040 DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
+		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2013
 				     by James William Lemmon.
 				       (Id No. 4412165050082).
 
@@ -171,16 +171,6 @@
 000410 COPY WS.WS.
 
 000410 COPY CHAIN.WS.
-
-       01  W02-FILE-IDS.
-
-       COPY APACFIDS.ID.
-
-       COPY APACFILE.ID.
-
-       COPY PARAM.ID.
-
-       COPY SYSTEM.ID.
 
 000430 01  W05-COMMAND.
 	   03  W05-COM-LINE.
@@ -303,129 +293,75 @@
 001160 01  L05-COMMAND.
 001170	   03  L05-CHAR        PIC  X(128).
 
-000830 SCREEN SECTION.
+       COPY "FILE.IDS".
 
-       COPY BLANK.CRT.
+000830 SCREEN SECTION.
 
        COPY LOGO.CRT.
 
 004830 01  S18.
-	   03  LINE  4 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE
-	       "здддддддддддддддддддддддддддддддддддддддддддддддд".
-	   03	       COLUMN 65 BACKGROUND-COLOR 7 FOREGROUND-COLOR 0
-				 VALUE "©".
-	   03  LINE  5 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE
-	       "Packaging and Marketing:                        ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-004850	   03  LINE  6 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
-004860	       "       WORKGROUP DATA SOLUTIONS.                ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03  LINE  7 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
-	       "       18 Milford Crest, North Riding, JHB.     ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-004880	   03  LINE  8 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
-	       "       PO Box 68416,                            ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-004890	   03  LINE  9 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
-	       "       BRYANSTON. 2021                          ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-004900	   03  LINE 10 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE
-	       "Support:                                        ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-004910	   03  LINE 11 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
-	       "  See the registration card, supplied with the  ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03  LINE 12 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
-	       "  system, for details of the telephone and fax  ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-004910	   03  LINE 13 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE
-	       "  numbers of the APAC support line.             ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03  LINE 14 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE
-	       "  For local support in your area please contact ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03  LINE 15 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-004910	   03	       COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE
-	       "  the support line, who will in turn give you   ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03  LINE 16 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03	       COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE
-	       "  details of your local support centre.         ".
-	   03	       COLUMN 65 FOREGROUND-COLOR 0
-				 BACKGROUND-COLOR 7 VALUE "Ё".
-	   03  LINE 17 COLUMN 16 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7 VALUE "ю".
-	   03	       COLUMN 17 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 0 VALUE
-	       "дддддддддддддддддддддддддддддддддддддддддддддддды".
-001470	   03  LINE 19 COLUMN 16 FOREGROUND-COLOR 6 HIGHLIGHT VALUE
-001480	       "Press any KEY to Continue".
+       02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+           03  LINE  4 COLUMN 16 VALUE "здддддддддддддддддддддддддддддддддддддддддддддддд" HIGHLIGHT.
+           03          COLUMN 65 VALUE "©"                                                 FOREGROUND-COLOR Black.
+           03  LINE  5 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "Packaging and Marketing:                        "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+004850     03  LINE  6 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       WORKGROUP DATA SOLUTIONS.                "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+           03  LINE  7 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       18 Milford Crest, North Riding, JHB.     "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+004880     03  LINE  8 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       PO Box 68416,                            "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+004890     03  LINE  9 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "       BRYANSTON. 2021                          "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+004900     03  LINE 10 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "Support:                                        "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+004910     03  LINE 11 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  See the registration card, supplied with the  "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+           03  LINE 12 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  system, for details of the telephone and fax  "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+004910     03  LINE 13 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  numbers of the APAC support line.             "  FOREGROUND-COLOR Black.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+           03  LINE 14 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  For local support in your area please contact "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+           03  LINE 15 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+004910     03          COLUMN 17 VALUE "  the support line, who will in turn give you   "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+           03  LINE 16 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "  details of your local support centre.         "  HIGHLIGHT.
+           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
+           03  LINE 17 COLUMN 16 VALUE "ю"                                                 HIGHLIGHT.
+           03          COLUMN 17 VALUE "дддддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
+
+001470     03  LINE 19 COLUMN 16 VALUE "Press any KEY to Continue"                         FOREGROUND-COLOR 6 HIGHLIGHT.
 
        01  S-COM.
-	   03  LINE  6 COLUMN 29 FOREGROUND-COLOR 0
-	       BACKGROUND-COLOR 7 VALUE "здддддддддддддддддддддддддддддд
-      -        "дддддддддддддд©".
-	   03  LINE  7 COLUMN 29 FOREGROUND-COLOR 0
-	       BACKGROUND-COLOR 7 VALUE "Ё    C O M P A N Y   C O D E
-      -	       "L O O K U P   Ё".
-	   03  LINE  8 COLUMN 29 FOREGROUND-COLOR 0
-	       BACKGROUND-COLOR 7 VALUE "цдддбдддддддддддддддддддддддддд
-      -        "дддддддддддддд╢".
-	   03  LINE 21 COLUMN 29 FOREGROUND-COLOR 0
-	       BACKGROUND-COLOR 7 VALUE "юдддадддддддддддддддддддддддддд
-      -        "дддддддддддддды".
-
+           02  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               03  LINE  6 COLUMN 28 VALUE "здддддддддддддддддддддддддддддддддддддддддддддд" HIGHLIGHT.
+               03          COLUMN 75 VALUE "©".
+               03  LINE  7 COLUMN 28 VALUE "Ё"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "     C O M P A N Y   C O D E   L O O K U P    "  FOREGROUND-COLOR Magenta.
+               03          COLUMN 75 VALUE "Ё"                                               FOREGROUND-COLOR Black.
+               03  LINE  8 COLUMN 28 VALUE "Ё"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "здддбдддддддддддддддддддддддддддддддддддддддд©"  FOREGROUND-COLOR Magenta.
+               03          COLUMN 75 VALUE "Ё"                                               FOREGROUND-COLOR Black.
+               03  LINE 21 COLUMN 28 VALUE "Ё"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "юдддадддддддддддддддддддддддддддддддддддддддды"  FOREGROUND-COLOR Magenta.
+               03          COLUMN 75 VALUE "Ё"                                               FOREGROUND-COLOR Black.
+               03  LINE 22 COLUMN 28 VALUE "ю"                                               HIGHLIGHT.
+               03          COLUMN 29 VALUE "дддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
        01  SD-COM.
-	   03  COLUMN 30 FOREGROUND-COLOR 5
-			 BACKGROUND-COLOR 7 PIC X(03) FROM COM-CODE.
-	   03  COLUMN 34 FOREGROUND-COLOR 1 BACKGROUND-COLOR 7
-			 PIC X(40) FROM COM-NAME.
+           03  COLUMN 30 FOREGROUND-COLOR Magenta BACKGROUND-COLOR Grey PIC X(03) FROM COM-CODE.
+           03  COLUMN 34 FOREGROUND-COLOR Blue BACKGROUND-COLOR Grey PIC X(40) FROM COM-NAME.
 
 003700 01  S19.
 004970	   03  LINE 16 COLUMN 17 FOREGROUND-COLOR 6 HIGHLIGHT
@@ -436,10 +372,7 @@
 005010				 PIC Z9/99/9999 USING W20-DTE AUTO.
 
 
-       COPY ERROR.CRT.
-
-010570 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS L05-COMMAND.
+010570 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS L05-COMMAND DATA-FILE-IDS.
 001500 AA000-MAIN	       SECTION.
 001510 AA00.
              DISPLAY SPACE AT 0101.

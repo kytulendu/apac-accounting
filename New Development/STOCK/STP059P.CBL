@@ -131,6 +131,7 @@
        77  WS-RT-HD	   PIC	X(10) VALUE "-Retail   ".
        77  WS-WS-HD	   PIC	X(10) VALUE "-Wholesale".
        77  WS-CS-HD	   PIC	X(10) VALUE "-Cash sale".
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
       /

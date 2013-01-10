@@ -13,7 +13,7 @@
       *                                                                *
       *     D E B T O R ' S   E N Q U I R Y   P R O G R A M            *
       *                                                                *
-      *     VERSION 9.00.00 - November 2012                            *
+      *     VERSION 9.00.20 - December 2012                            *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -83,8 +83,6 @@
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
-       COPY "APACFIDS.SL".
-
 000120 COPY "CONTROL.SL".
 
 000160 COPY "DBTRAN.SL".
@@ -110,8 +108,6 @@
 
 000260 DATA DIVISION.
 000270 FILE SECTION.
-
-       COPY "APACFIDS.FDE".
 
 000120 COPY "CONTROL.FDE".
 
@@ -198,6 +194,7 @@
 002100 77  WS-A 	   PIC	X(19) VALUE "Any key to continue".
 002110 77  WS-E            PIC  X(15) VALUE "**END** - ENTER".
 003030 77  WS-CR           PIC  X(01).
+       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
        77  TODAY-YYMMDD	   PIC	9(08) COMP-5.
        77  WS-USUB	   PIC	9(04) COMP-5.
@@ -288,30 +285,6 @@
 
 000290 01  WS-PARID.
 000020	   03  WS-SYS-ID       PIC  X(03).
-
-002310 01  W02-FID.
-
-       COPY "APACFIDS.ID".
-
-       COPY "CONTROL.ID".
-
-       COPY "DBTRAN.ID".
-
-000330 COPY "DEBALT.ID".
-
-000330 COPY "DEBDEP.ID".
-
-       COPY "DEBTOR.ID".
-
-000140 COPY "DEBMEM.ID".
-
-003760 COPY "DEPART.ID".
-
-003800 COPY "INVOIC.ID".
-
-       COPY "PARAM.ID".
-
-003840 COPY "SALE.ID".
 
        01  W02-FILE-IDS.
            03  W02-PRINTER.
@@ -589,25 +562,27 @@
 
        COPY "CHAIN.LS".
 
+       COPY "FILE-DEBT.IDS".
+
       /
 004580 SCREEN SECTION.
 
 005070 01  S08.
-005080	   03  LINE  2 COLUMN 34 FOREGROUND-COLOR 7 HIGHLIGHT
+005080     03  LINE  2 COLUMN 34 FOREGROUND-COLOR 7 HIGHLIGHT
 005090                           VALUE "DEBTOR ENQUIRY".
-005100	   03  LINE  3 COLUMN  2 VALUE "Account ".
-005110	   03	       COLUMN 19 VALUE "Name ".
-005120	   03	       COLUMN 66 VALUE "°°Language°°°°".
-005130	   03  LINE  4 COLUMN  2 VALUE "Address ".
-005140	   03  LINE  5 COLUMN  2 VALUE "Phone No".
-	   03	       COLUMN 35 VALUE "Contact  ".
-005150	   03  LINE  6 COLUMN  2 VALUE "Fax     ".
-005160	   03	       COLUMN 35 VALUE "Purchases  YTD".
-005170	   03	       COLUMN 62 VALUE "Prev ".
-005180	   03  LINE  7 COLUMN  5 VALUE "Date".
-005190	   03	       COLUMN 13 VALUE "Description".
-005200	   03	       COLUMN 26 VALUE "Ref No".
-005210	   03	       COLUMN 40 VALUE "Value".
+005100     03  LINE  3 COLUMN  2 VALUE "Account ".
+005110     03          COLUMN 19 VALUE "Name ".
+005120     03          COLUMN 66 VALUE "°°Language°°°°".
+005130     03  LINE  4 COLUMN  2 VALUE "Address ".
+005140     03  LINE  5 COLUMN  2 VALUE "Phone No".
+           03          COLUMN 35 VALUE "Contact  ".
+005150     03  LINE  6 COLUMN  2 VALUE "Fax     ".
+005160     03          COLUMN 35 VALUE "Purchases  YTD".
+005170     03          COLUMN 62 VALUE "Prev ".
+005180     03  LINE  7 COLUMN  5 VALUE "Date".
+005190     03          COLUMN 13 VALUE "Description".
+005200     03          COLUMN 26 VALUE "Ref No".
+005210     03          COLUMN 40 VALUE "Value".
 
 005220 01  S09.
 005230     03  LINE  7 COLUMN 48 PIC X(01) USING WS-G3.
@@ -1193,7 +1168,7 @@
 
       /
 001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS.
 010250 AA000-MAIN	       SECTION.
 010260 AA000-INIT.
 010270       PERFORM ZA000-INIT.
@@ -1206,14 +1181,14 @@
 
        AA50-LOOKUP     SECTION.
 010910 AA50.
-011050	     PERFORM SAVE-SCREEN.
-011080       MOVE 4              TO W44-FUNCTION.
-011090	     PERFORM SCREEN-CONTENTS.
-	   IF WS-TYP = "A"
-	       PERFORM DEBTOR-A-LOOKUP
-	   ELSE
-011180	       PERFORM DEBTOR-LOOKUP.
-011320	     PERFORM RESTORE-SCREEN.
+011050       PERFORM SAVE-SCREEN.
+011080       MOVE 4                  TO W44-FUNCTION.
+011090       PERFORM SCREEN-CONTENTS.
+           IF WS-TYP = "A"
+               PERFORM DEBTOR-A-LOOKUP
+           ELSE
+011180         PERFORM DEBTOR-LOOKUP.
+011320       PERFORM RESTORE-SCREEN.
 011360 AA99.
 011370       EXIT.
 
@@ -1300,6 +1275,7 @@
 011650 AC000		  SECTION.
 
 011670 COPY "CONTROL.RD.
+
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Special start for displaying transactions descending Seq. ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -1482,34 +1458,32 @@
 		     " to exit"
 		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
 022650	     ACCEPT S36 AT 0311.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE SPACES TO W80-ACNO
-		     GO TO CD999
-		 WHEN F1-KEY
-		     PERFORM HELP-ROUTINE
-		 WHEN F2-KEY
-		     MOVE SPACE  TO WS-TYP
-		     PERFORM AA50
-		 WHEN F9-KEY
-		     MOVE "A"	 TO WS-TYP
-		     PERFORM AA50
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO CD005
-	       END-EVALUATE
-	       DISPLAY S36 AT 0311
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY
+                      MOVE SPACES    TO W80-ACNO
+                      GO TO CD999
+                 WHEN F1-KEY
+                      PERFORM HELP-ROUTINE
+                 WHEN F2-KEY
+                      MOVE SPACE     TO WS-TYP
+                      PERFORM AA50
+                 WHEN F9-KEY
+                      MOVE "A"       TO WS-TYP
+                      PERFORM AA50
+                 WHEN OTHER
+                     CALL X"E5"
+                     GO TO CD005
+               END-EVALUATE
+               DISPLAY S36 AT 0311
                IF W80-ACNO = SPACES
 015990             GO TO CD005.
-022680	     DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
+022680       DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
 	     PERFORM CLEAR-L50.
 022660     IF W80-ACNO = SPACES
 022670         GO TO CD999.
-             MOVE 6              TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W80-ACNO
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
+             MOVE 6                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W80-ACNO BY VALUE WS-LENGTH RETURNING WS-STATUS.
 	     MOVE 1		 TO WS-LENGTH.
              MOVE W80-ACNO       TO DEB-ACNO.
 022690       PERFORM CA155-GET-DEBTOR.
@@ -2547,143 +2521,27 @@
       /
       *    ****    I N I T I A L I Z E   P R O G R A M
       *
-041980 ZA000-INIT	       SECTION 80.
+041980 ZA000-INIT	       SECTION 8.
 041990 ZA000-OPEN.
              PERFORM ZA55 THRU ZA60.
-	     MOVE LS-PARID	 TO WS-PARID.
-	     MOVE LS-L-OR-N	 TO W02-L-OR-N.
-	     MOVE WS-SYS-ID	 TO W02-SYSID.
-	     MOVE LS-TODAY-DDMMYY
-				 TO TODAY-DDMMYY W22-DTE3.
-	     MOVE W22-DD3	 TO W22-DD2.
-	     MOVE W22-MM3	 TO W22-MM2.
-	     MOVE W22-CC3	 TO W22-CC2.
-	     MOVE W22-YY3	 TO W22-YY2.
-	     MOVE W22-DTE2	 TO TODAY-YYMMDD.
-	     MOVE LS-USUB	 TO WS-USUB.
-042000	     DISPLAY CLR-SCREEN.
+             MOVE LS-PARID	          TO WS-PARID.
+             MOVE LS-L-OR-N             TO W02-L-OR-N.
+             MOVE WS-SYS-ID             TO W02-SYSID.
+             MOVE LS-TODAY-DDMMYY       TO TODAY-DDMMYY W22-DTE3.
+             MOVE W22-DD3               TO W22-DD2.
+             MOVE W22-MM3               TO W22-MM2.
+             MOVE W22-CC3               TO W22-CC2.
+             MOVE W22-YY3               TO W22-YY2.
+             MOVE W22-DTE2              TO TODAY-YYMMDD.
+             MOVE LS-USUB               TO WS-USUB.
+042000       DISPLAY CLR-SCREEN.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		       ESC, F1 to F10 keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    PAGE-UP and PAGE-DOWN keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   A C T I V A T E   M O U S E		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set MOUSE key to act as FUNCTION key	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Setup the file ID's including path names           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      *    *************************************************************
-      *    ****    P A R A M E T E R   F I L E
-      *    *************************************************************
-       ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
 
-       ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
+             COPY "FUNCTION.PRO".
 
-       ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
-
-       ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
-      *    *************************************************************
-      *    ****    D E B T O R	 T R A N S A C T I O N	 F I L E    ****
-      *    *************************************************************
-	     MOVE "DBTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DBTRAN.
-      *    *************************************************************
-      *    *** D E B T O R   A L T E R N A T E	 I N D E X   F I L E ***
-      *    *************************************************************
-	     MOVE "DEBALT"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBALT.
-      *    *************************************************************
-      *    ** D E B T O R   S A L E S	R E S T R I T I O N   F I L E **
-      *    *************************************************************
-	     MOVE "DEBDEP"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBDEP.
-      *    *************************************************************
-      *    **** 	  D E B T O R	M E M O	  F I L E	    ****
-      *    *************************************************************
-	     MOVE "DEBMEM"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBMEM.
-      *    *************************************************************
-      *    **** 	       D E B T O R   F I L E		    ****
-      *    *************************************************************
-	     MOVE "DEBTOR"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEBTOR.
-      *    *************************************************************
-      *    ****        D E B T O R   I N V O I C E   F I L E	    ****
-      *    *************************************************************
-	     MOVE "INVOIC"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-INVOIC.
-      *    *************************************************************
-      *    **** 	    C O N T R O L   F I L E		    ****
-      *    *************************************************************
-	     MOVE "NETWORK"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-NETWORK.
-      *    *************************************************************
-      *    **** 	   D E P A R T M E N T	 F I L E	    ****
-      *    *************************************************************
-	     MOVE "DEPART"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEPART.
-      *    *************************************************************
-      *    **** 		S A L E S   F I L E		    ****
-      *    *************************************************************
-	     MOVE "SALE"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     INSPECT AFID-PATH REPLACING FIRST "XXX"
-			       BY LS-USER.
-	     MOVE AFID-PATH	 TO W02-SALE.
 	   IF LS-USER NUMERIC
 	       IF LS-USE > ZERO AND < 110
 		   MOVE LS-USE	 TO WS-USUB
@@ -2828,7 +2686,7 @@
       /
       *    ****    I / O   E R R O R   M E S S A G E S
       *
-042900 ZB000-ERROR	     SECTION 81.
+042900 ZB000-ERROR	     SECTION 8.
 
        COPY "ERRORS.PRO".
 
