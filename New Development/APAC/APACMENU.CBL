@@ -1,23 +1,23 @@
-      $SET LINKCOUNT"256"
+      $SET LINKCOUNT"256" GNT"APACMENU.GNT"
       ******************************************************************
       *                                                                *
-      *    ****    *******    ******   **     **  ********  **	 **  *
-      *   **  **   **	 **  **    **  ***   ***  **	      ***    **  *
+      *    ****    *******    ******   **     **  ********  **     **  *
+      *   **  **   **    **  **    **  ***   ***  **        ***    **  *
       *  **    **  **    **  **        ** * * **  **        ** *   **  *
-      *  ********  *******   **	   **  *  **  *****     **  *  **  *
-      *  **    **  **	     **        **     **  **	      **   * **  *
-      *  **    **  **	     **    **  **     **  **	      **    ***  *
-      *  **    **  **	      ******   **     **  *******   **	 **  *
+      *  ********  *******   **        **  *  **  *****     **  *  **  *
+      *  **    **  **        **        **     **  **        **   * **  *
+      *  **    **  **        **    **  **     **  **        **    ***  *
+      *  **    **  **         ******   **     **  ********  **     **  *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *     B U S I N E S S   S Y S T E M   M E N U   P R O G R A M    *
       *                                                                *
-      *     VERSION 9.00.00 - November 2012                            *
+      *       Version 9.00.70 - March 2015                             *
       *                                                                *
       ******************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    VERSIONS OF THE APAC SYSTEM	           ³
+      *    ³                VERSIONS OF THE APAC SYSTEM                ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
       *    ³ While developing this system the requirements and budgets ³
       *    ³ (originally this was a propriety package) for various     ³
@@ -35,188 +35,181 @@
       *    ³ LS0-MODULES group. The other indicators in this group are ³
       *    ³ used to show which modules of the system are installed.   ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ³    SYSTEM FILE    ³      CHAIN.WS	   ³	   CHAIN.LS      ³
+      *    ³    SYSTEM FILE    ³      CHAIN.WS     ³      CHAIN.LS     ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
       *    ³  03  SEC-MODULES. ³  03  WS0-MODULES. ³  03  LS0-MODULES. ³
-      *    ³      05  SEC-DTP  ³      05  WS0-DTP  ³	    05  LS0-DTP  ³
-      *    ³      05  SEC-STP  ³      05  WS0-STP  ³	    05  LS0-STP  ³
-      *    ³      05  SEC-HPD  ³      05  WS0-HPD  ³	    05  LS0-HPD  ³
-      *    ³      05  SEC-CRP  ³      05  WS0-CRP  ³	    05  LS0-CRP  ³
-      *    ³      05  SEC-GLP  ³      05  WS0-GLP  ³	    05  LS0-GLP  ³
-      *    ³      05  SEC-POS  ³      05  WS0-POS  ³	    05  LS0-POS  ³
-      *    ³      05  SEC-JCP  ³      05  WS0-JCP  ³	    05  LS0-JCP  ³
-      *    ³      05  SEC-VHP  ³      05  WS0-VHP  ³	    05  LS0-VHP  ³
-      *    ³      05  SEC-WAG  ³      05  WS0-WAG  ³	    05  LS0-WAG  ³
-      *    ³      05  SEC-SAL  ³      05  WS0-SAL  ³	    05  LS0-SAL  ³
-      *    ³      05  SEC-LEV  ³      05  WS0-LEV  ³	    05  LS0-LEV  ³
-      *    ³      05  SEC-WHS  ³      05  WS0-WHS  ³	    05  LS0-WHS  ³
-      *    ³      05  SEC-RTE  ³      05  WS0-RTE  ³	    05  LS0-RTE  ³
-      *    ³      05  FILLER   ³		         ³		           ³
+      *    ³      05  SEC-DTP  ³      05  WS0-DTP  ³      05  LS0-DTP  ³
+      *    ³      05  SEC-STP  ³      05  WS0-STP  ³      05  LS0-STP  ³
+      *    ³      05  SEC-HPD  ³      05  WS0-HPD  ³      05  LS0-HPD  ³
+      *    ³      05  SEC-CRP  ³      05  WS0-CRP  ³      05  LS0-CRP  ³
+      *    ³      05  SEC-GLP  ³      05  WS0-GLP  ³      05  LS0-GLP  ³
+      *    ³      05  SEC-POS  ³      05  WS0-POS  ³      05  LS0-POS  ³
+      *    ³      05  SEC-JCP  ³      05  WS0-JCP  ³      05  LS0-JCP  ³
+      *    ³      05  SEC-VHP  ³      05  WS0-VHP  ³      05  LS0-VHP  ³
+      *    ³      05  SEC-WAG  ³      05  WS0-WAG  ³      05  LS0-WAG  ³
+      *    ³      05  SEC-SAL  ³      05  WS0-SAL  ³      05  LS0-SAL  ³
+      *    ³      05  SEC-LEV  ³      05  WS0-LEV  ³      05  LS0-LEV  ³
+      *    ³      05  SEC-WHS  ³      05  WS0-WHS  ³      05  LS0-WHS  ³
+      *    ³      05  SEC-RTE  ³      05  WS0-RTE  ³      05  LS0-RTE  ³
+      *    ³      05  FILLER   ³                   ³                   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *
-000010 IDENTIFICATION DIVISION.
-000020 PROGRAM-ID.     APACMENU.
-000030 AUTHOR.         J W LEMMON (APAC).
-000040 DATE-WRITTEN.   APRIL 1993.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.     APACMENU.
+       AUTHOR.         J W LEMMON (APAC).
+       DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2013
-				     by James William Lemmon.
-				       (Id No. 4412165050082).
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2014
+                                  by James William Lemmon.
+                                    (Id No. 4412165050082).
 
-		   All rights reserved.
+                All rights reserved.
 
-		   e-mail jwlemmon@gmail.com.
+                e-mail jwlemmon@gmail.com.
 
-000050 SECURITY.
-		   This program is free software; you can redistribute
-		   it and/or modify it under the terms of the GNU General
-		   Public License as published by the Free Software
-		   Foundation; either version 2 of the License, or (at
-		   your option) any later version.
+       SECURITY.
+                This program is free software; you can redistribute
+                it and/or modify it under the terms of the GNU General
+                Public License as published by the Free Software
+                Foundation; either version 3 of the License, or (at
+                your option) any later version.
 
-		   This program is distributed in the hope that it will
-		   be useful, but WITHOUT ANY WARRANTY; without even the
-		   implied warranty of MERCHANTABILITY or FITNESS FOR A
-		   PARTICULAR PURPOSE. See the GNU General Public License
-		   for more details.
+                This program is distributed in the hope that it will
+                be useful, but WITHOUT ANY WARRANTY; without even the
+                implied warranty of MERCHANTABILITY or FITNESS FOR A
+                PARTICULAR PURPOSE. See the GNU General Public License
+                for more details.
 
-		   You should have received a copy of the GNU General
-		   Public License along with this program; if not, write
-		   to the Free Software Foundation, Inc., 59 Temple Place
-		   - Suite 330, Boston, MA 02111-1307, USA.
+                You should have received a copy of the GNU General
+                Public License along with this program. If not, see
+                <http://www.gnu.org/licenses/>.
 
-000050 ENVIRONMENT DIVISION.
-000060 CONFIGURATION SECTION.
-000070 SPECIAL-NAMES.
-000080		       CURSOR IS CSTART
-000090		       CONSOLE IS CRT
+       INSTALLATION.          APAC.
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+                         CURSOR IS CSTART
+                         CONSOLE IS CRT
                          CRT STATUS IS KEY-STATUS.
-000090 INPUT-OUTPUT SECTION.
-000100 FILE-CONTROL.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
 
        COPY "APACFIDS.SL".
 
-000130 COPY "CONTROL.SL".
+       COPY "CONTROL.SL".
 
-000190 COPY "DEPART.SL".
+       COPY "DEPART.SL".
 
-000210 COPY "PARAM.SL".
+       COPY "PARAM.SL".
 
        COPY "SHARED.SL".
 
        COPY "TXTRAN.SL".
 
       /
-000330 DATA DIVISION.
-000340 FILE SECTION.
+       DATA DIVISION.
+      *
+      *          ********  ********  **        ******** 
+      *          **           **     **        **
+      *          **           **     **        ** 
+      *          *****        **     **        *****
+      *          **           **     **        **  
+      *          **           **     **        **
+      *          **        ********  ********  ********
+      *
+       FILE SECTION.
 
        COPY "APACFIDS.FDE".
 
-000360 COPY "CONTROL.FDE".
+       COPY "CONTROL.FDE".
 
-000420 COPY "DEPART.FDE".
+       COPY "DEPART.FDE".
 
-000440 COPY "PARAM.FDE".
+       COPY "PARAM.FDE".
 
        COPY "SHARED.FDE".
 
        COPY "TXTRAN.FDE".
 
-      /
-000560 WORKING-STORAGE SECTION.
-       77  WS-CHECK	   PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-000610 77  WS-S1           PIC  9(04)    COMP-5.
-000620 77  WS-S2           PIC  9(04)    COMP-5.
-000630 77  WS-S3           PIC  9(04)    COMP-5.
-000640 77  WS-S4           PIC  9(04)    COMP-5.
-000820 77  WS-SHARED       PIC  9(04)    COMP-5 VALUE 1.
-000820 77  WS-NETKEY       PIC  9(04)    COMP-5.
-000750 77  WS-PARKEY       PIC  9(04)    COMP-5.
-       77  WS-TEMP-LIN	   PIC  9(02)    COMP-5.
-       77  WS-OPTION	   PIC  X(01).
-       77  PRG-NAME	   PIC  X(12)    VALUE SPACES.
-       77  WS-NUM          PIC  Z9.
-       77  WS-CONV	   PIC  9(01).
-       77  APAC-SYSTEM	   PIC  X(12).
-       77  APAC-VERSION    PIC  X(04).
+      *
+      *         **         **    ******    *******    **    **
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
+      *            *     *       ******    **    **   **    **
+      *
+       WORKING-STORAGE SECTION.
+       77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-S1                     PIC  9(04)    COMP-5.
+       77  WS-S2                     PIC  9(04)    COMP-5.
+       77  WS-S3                     PIC  9(04)    COMP-5.
+       77  WS-S4                     PIC  9(04)    COMP-5.
+       77  WS-SHARED                 PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-NETKEY                 PIC  9(04)    COMP-5.
+       77  WS-PARKEY                 PIC  9(04)    COMP-5.
+       77  WS-TEMP-LIN               PIC  9(02)    COMP-5.
+       77  WS-OPTION                 PIC  X(01).
+       77  PRG-NAME                  PIC  X(18)    VALUE SPACES.
+       77  WS-NUM                    PIC  Z9.
+       77  WS-CONV                   PIC  9(01).
+       77  APAC-SYSTEM               PIC  X(12).
+       77  APAC-VERSION              PIC  X(04).
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
-      *    ³ (LINKAGE SECTION) for Main screen layout and headings.	  ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.       ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        01  CRT-HEADINGS.
       *
       *    TYPE:
-      *	     C = Clear comment line (50)
-      *	     E = Clear lines (any line or lines between 5 and 46)
-      * 	     H = Change heading
-      * 	     S = Clear the screen and display headings
+      *         C = Clear comment line (50)
+      *         E = Clear lines (any line or lines between 5 and 46)
+      *         H = Change heading
+      *         S = Clear the screen and display headings
       *
-         03  CRT-TYPE                PIC  X(01).
+           03  CRT-TYPE              PIC  X(01).
       *
       *    The following two fields are used for clearing a portion of
       *    the screen. (Start line and end line)
       *
-         03  CRT-START               PIC  9(02).
-         03  CRT-END	             PIC  9(02).
+           03  CRT-START             PIC  9(02).
+           03  CRT-END               PIC  9(02).
       *
       *    Calling Program
       *
-         03  CRT-PROGRAM             PIC  X(15) VALUE "APACMENU".
+           03  CRT-PROGRAM           PIC  X(15)  VALUE "APACMENU".
       *
       *    Screen Heading
       *
-         03  CRT-HEADING             PIC  X(40) VALUE "SUPERVISOR MENU".
+           03  CRT-HEADING           PIC  X(40)  VALUE "APAC SYSTEM MAIN MENU".
       *
       *    Company Name
       *
-         03  CRT-COMPANY             PIC  X(40).
+           03  CRT-COMPANY           PIC  X(40)  VALUE "WAITING FOR COMPANY/BUSINESS NAME".
       *
       *    WorkStation / Supervisor
       *
-         03  CRT-WRKHD               PIC  X(11).
-         03  CRT-WRKST               PIC  X(03) VALUE "ÄÄÄ".
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD         PIC  X(11)  VALUE "SupervisorÄ".
+               05  CRT-WRKST         PIC  X(03)  VALUE "ÄÄÄ".
 
-001350 01  WS-CRT-LINES.
-001380     03  WS-TOP-LNE2.
-001390         05  WS-TCR   PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-001400     03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-001410         05  FILLER      PIC  X(01).
-001420         05  WS-TOP-COMP PIC  X(40).
-001430         05  FILLER      PIC  X(23).
-               05  WS-WRKHD    PIC  X(11).
-001430         05  FILLER      PIC  X(01).
-               05  WS-WRKST    PIC  X(03).
-001430         05  FILLER      PIC  X(01).
-001460     03  WS-MID-LNE2.
-               05  FILLER      PIC  X(01) VALUE "³".
-               05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-               05  FILLER      PIC  X(01) VALUE "³".
-
-001840 COPY "WS.WS".
+       COPY "WS.WS".
 
        01  WS-HELP.
-           03  WS-MODULE       PIC  X(03) VALUE "APC".
-           03  WS-PROG	       PIC  X(03) VALUE "MEN".
+           03  WS-MODULE             PIC  X(03) VALUE "APC".
+           03  WS-PROG               PIC  X(03) VALUE "MEN".
 
-001860 COPY "CHAIN.WS".
+       COPY "CHAIN.WS".
 
-002040 01  W02-FID.
+       COPY "FILE-IDX.IDS".
 
-       COPY "APACFIDS.ID".
+       COPY "FILE.IDS".
 
-002060 COPY "CONTROL.ID".
-
-002120 COPY "DEPART.ID".
-
-       COPY "PARAM.ID".
-
-       COPY "SHARED.ID".
-
-       COPY "TXTRAN.ID".
-
-001160 01  W05-COMMAND.
-001170     03  W05-CHAR        PIC  X(128).
+       01  W05-COMMAND.
+           03  W05-CHAR              PIC  X(128).
 
        COPY "W12.WS".
 
@@ -224,174 +217,178 @@
 
        COPY "FUNCTION.WS".
 
-004540 COPY "W50.WS".
+       COPY "W50.WS".
 
-      /
-000750 SCREEN SECTION.
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
+       SCREEN SECTION.
 
-       01  MENU-INSTRUCT.
-	     03  BACKGROUND-COLOR Cyan.
-	         05  LINE 50 COLUMN  2 FOREGROUND-COLOR Blue	          VALUE "Use ".
-	         05          COLUMN  6 FOREGROUND-COLOR Brown HIGHLIGHT VALUE "".
-	         05          COLUMN  7 FOREGROUND-COLOR Blue	          VALUE " or ".
-	         05          COLUMN 11 FOREGROUND-COLOR Brown HIGHLIGHT VALUE "".
-	         05          COLUMN 12 FOREGROUND-COLOR Blue	          VALUE " to point to an item, and ".
-	         05          COLUMN 38 FOREGROUND-COLOR Brown HIGHLIGHT VALUE "<Enter>".
-	         05          COLUMN 45 FOREGROUND-COLOR Blue	          VALUE " to Select ".
-
-000850 01  S-PROG.
-000860     03  LINE  2 COLUMN 34 BACKGROUND-COLOR Blue FOREGROUND-COLOR Grey HIGHLIGHT VALUE "APAC MAIN MENU".
+       COPY "MENUINST.CRT".
 
        01  S-MENU.
-           03  BACKGROUND-COLOR Magenta.
-               05  LINE  6 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-               05          COLUMN 51 FOREGROUND-COLOR Black   HIGHLIGHT VALUE "¿".
-               05  LINE  7 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³  ".
-               05          COLUMN 33 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "PROGRAM  CONTROL".
-               05          COLUMN 49 FOREGROUND-COLOR Black	            VALUE "  ³".
-               05  LINE  8 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "1".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Stock            ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE  9 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "2".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Creditors        ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-001470         05  LINE 10 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "3".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Debtors          ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-001570         05  LINE 11 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "4".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " General Ledger   ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-001500         05  LINE 12 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "5".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Sales / Orders   ".
-               05          COLUMN 51 FOREGROUND-COLOR Black             VALUE "³".
-               05  LINE 13 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "6".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Point-of-Sale    ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE 14 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "7".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Job Costing      ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE 15 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "8".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Period End/Dates ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE 16 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "A".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Utilities        ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE 17 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "B".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Add Bus/Company  ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE 18 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "C".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Switch Companies ".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE 19 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "D".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Print Spool File ".
-               05          COLUMN 51 FOREGROUND-COLOR Black             VALUE "³".
-               05  LINE 20 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "E".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Cheque Processing".
-               05          COLUMN 51 FOREGROUND-COLOR Black	            VALUE "³".
-               05  LINE 21 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "F".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Orders Spec.     ".
-               05          COLUMN 51 FOREGROUND-COLOR Black             VALUE "³".
-               05  LINE 22 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "L".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " Login/Logout     ".
-               05          COLUMN 51 FOREGROUND-COLOR Black             VALUE "³".
-               05  LINE 23 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "³ ".
-               05          COLUMN 32 FOREGROUND-COLOR Grey	  HIGHLIGHT VALUE "9".
-               05          COLUMN 33 FOREGROUND-COLOR Cyan	  HIGHLIGHT VALUE " End System       ".
-               05          COLUMN 51 FOREGROUND-COLOR Black             VALUE "³".
-               05  LINE 24 COLUMN 30 FOREGROUND-COLOR Magenta HIGHLIGHT VALUE "À".
-               05          COLUMN 31 FOREGROUND-COLOR Black             VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Magenta FOREGROUND-COLOR Magenta.
+               05  LINE  6 COLUMN 30 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                         HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "¿" FOREGROUND-COLOR Black.
+               05  LINE  7 COLUMN 30 VALUE "³  "                                           HIGHLIGHT.
+               05          COLUMN 33 VALUE    "PROGRAM  CONTROL"    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 49 VALUE                    "  ³" FOREGROUND-COLOR Black.
+               05  LINE  8 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "1"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Stock            "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE  9 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "2"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Creditors        "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 10 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "3"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Debtors          "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 11 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "4"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " General Ledger   "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "5"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Sales / Orders   "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "6"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Point-of-Sale    "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "7"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Job Costing      "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "8"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Period End/Dates "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "A"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Utilities        "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "B"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Add Bus/Company  "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "C"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Switch Companies "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "D"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Print Spool File "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "E"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Cheque Processing"  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "F"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Orders Spec.     "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 22 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "L"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " Login/Logout     "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 23 COLUMN 30 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 32 VALUE   "9"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 33 VALUE    " End System       "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05          COLUMN 51 VALUE                      "³" FOREGROUND-COLOR Black.
+               05  LINE 24 COLUMN 30 VALUE "À"                                             HIGHLIGHT.
+               05          COLUMN 31 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
-002480 01  S98.
+       01  S98.
            03  BACKGROUND-COLOR Red.
-               05  LINE 21 COLUMN 14 FOREGROUND-COLOR Red	HIGHLIGHT VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-               05          COLUMN 66 FOREGROUND-COLOR Black           VALUE "¿".
-002490         05  LINE 22 COLUMN 14 FOREGROUND-COLOR Red	HIGHLIGHT VALUE "³".
-               05          COLUMN 15 FOREGROUND-COLOR Grey	HIGHLIGHT VALUE "Do not forget to make security copies of your files".
-               05          COLUMN 66 FOREGROUND-COLOR Black           VALUE "³".
-               05  LINE 23 COLUMN 14 FOREGROUND-COLOR Red	HIGHLIGHT VALUE "À".
-               05	         COLUMN 15 FOREGROUND-COLOR Black           VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
-               05  LINE 49 COLUMN 79 BACKGROUND-COLOR Blue  FOREGROUND-COLOR Cyan VALUE "Ä".
+               05  LINE 21 COLUMN 14 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" FOREGROUND-COLOR Red HIGHLIGHT. 
+               05          COLUMN 66 VALUE "¿"                                                    FOREGROUND-COLOR Black.          
+               05  LINE 22 COLUMN 14 VALUE "³"                                                    FOREGROUND-COLOR Red HIGHLIGHT.
+               05          COLUMN 15 VALUE "Do not forget to make security copies of your files"  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 66 VALUE "³"                                                    FOREGROUND-COLOR Black.           
+               05  LINE 23 COLUMN 14 VALUE "À"                                                    FOREGROUND-COLOR Red  HIGHLIGHT. 
+               05          COLUMN 15 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.          
+               05  LINE 49 COLUMN 79 VALUE "Ä"                                                    BACKGROUND-COLOR Blue  FOREGROUND-COLOR Cyan.
 
-002480 01  S98T.
+       01  S98T.
            03  BACKGROUND-COLOR Red.
-               05  LINE 21 COLUMN 22 FOREGROUND-COLOR Red	HIGHLIGHT VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-               05	         COLUMN 59 FOREGROUND-COLOR Black	          VALUE "¿".
-002490	   05  LINE 22 COLUMN 22 FOREGROUND-COLOR Red	HIGHLIGHT VALUE "³".
-002490	   05	         COLUMN 23 FOREGROUND-COLOR Grey	HIGHLIGHT VALUE "The terminal may now be switched off".
-               05	         COLUMN 59 FOREGROUND-COLOR Black	          VALUE "³".
-               05  LINE 23 COLUMN 22 FOREGROUND-COLOR Red	HIGHLIGHT VALUE "À".
-               05	         COLUMN 23 FOREGROUND-COLOR Black	          VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
-               05  LINE 49 COLUMN 79 BACKGROUND-COLOR Blue  FOREGROUND-COLOR Cyan VALUE "Ä".
+               05  LINE 21 COLUMN 22 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" FOREGROUND-COLOR Red  HIGHLIGHT.
+               05          COLUMN 59 VALUE "¿"                                     FOREGROUND-COLOR Black.
+               05  LINE 22 COLUMN 22 VALUE "³"                                     FOREGROUND-COLOR Red  HIGHLIGHT.
+               05          COLUMN 23 VALUE "The terminal may now be switched off"  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 59 VALUE "³"                                     FOREGROUND-COLOR Black.
+               05  LINE 23 COLUMN 22 VALUE "À"                                     FOREGROUND-COLOR Red  HIGHLIGHT.
+               05          COLUMN 23 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+               05  LINE 49 COLUMN 79 VALUE "Ä"                                     BACKGROUND-COLOR Blue  FOREGROUND-COLOR Cyan.
 
-      /
-010570 PROCEDURE DIVISION.
-       AA000	       SECTION.
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
+       PROCEDURE DIVISION.
+       AA000        SECTION.
        AA00.
              ACCEPT W05-COMMAND FROM COMMAND-LINE.
              PERFORM ZA000-INIT.
            IF WS0-POS > 0
-	         IF WS0-CRED = "N" AND WS0-STOCK = "N" AND WS0-DEBT = "N" AND WS0-JOBS = "N" AND WS0-PARM = "N" AND WS0-WAGES = "N" AND WS0-GL = "N"
+               IF "N" = WS0-CRED AND WS0-STOCK AND WS0-DEBT AND WS0-JOBS AND WS0-PARM AND WS0-WAGES AND WS0-GL
+      *        IF WS0-CRED = "N" AND WS0-STOCK = "N" AND WS0-DEBT = "N" AND WS0-JOBS = "N" AND WS0-PARM = "N" AND WS0-WAGES = "N" AND WS0-GL = "N"
                    GO TO AA10.
-             DISPLAY S-PROG.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
              PERFORM BA000.
            IF MOUSE-ATTACHED = "Y"
                MOVE 66               TO MOUSE-FUNC
                MOVE 0                TO MOUSE-PARAM
                CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
-             MOVE "S"                TO CRT-TYPE.
-007750       CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
            IF WS-USER NUMERIC
-               MOVE 22               TO SHADE-ROW
-               MOVE 24               TO SHADE-COL
-               MOVE 36               TO SHADE-WIDTH
-               MOVE 2                TO SHADE-LINES
-007820         DISPLAY S98T
+               MOVE 21               TO SHADE-ROW
+               MOVE 22               TO SHADE-COL
+               MOVE 38               TO SHADE-WIDTH
+               MOVE 3                TO SHADE-LINES
+               DISPLAY S98T
                PERFORM SCREEN-SHADOW
                STOP RUN.
        AA05.
       *    *************************************************************
       *    ****    P A R A M E T E R   F I L E
       *    *************************************************************
-             PERFORM ZA00A THRU ZA00A-CONTINUE.
+             PERFORM ZA00AA THRU ZA00A-CONTINUE.
              OPEN I-O PARAM.
-038210     IF RUNTIME-ERROR
-038220         IF FLE-LOCKED OR FLE-LIMIT
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED OR FLE-LIMIT
                    DISPLAY "WAITING" AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-038230             GO TO AA05.
-038270     IF WS-STATUS NOT = "00" AND WS-STAT1 NOT = "4"
-038280         MOVE 15               TO WS-F-ERROR
-038290         PERFORM OPEN-ERROR.
+                   GO TO AA05.
+           IF WS-STATUS NOT = "00" AND WS-STAT1 NOT = "4"
+               MOVE 15               TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
                MOVE 4                TO WS-PARKEY.
-007710       PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
-007780       MOVE ZERO               TO PAR-LOGON.
-007790       REWRITE PAR-RECORD1.
+             PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+             MOVE ZERO               TO PAR-LOGON.
+             REWRITE PAR-RECORD1.
              MOVE 3                  TO WS-PARKEY.
-007710       PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
-007800       UNLOCK PARAM.
-007810       CLOSE PARAM.
-             MOVE 22                 TO SHADE-ROW.
-             MOVE 16                 TO SHADE-COL.
-             MOVE 51                 TO SHADE-WIDTH.
-             MOVE 2                  TO SHADE-LINES.
-007820       DISPLAY S98.
+             PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+             UNLOCK PARAM.
+             CLOSE PARAM.
+             MOVE 21                 TO SHADE-ROW.
+             MOVE 14                 TO SHADE-COL.
+             MOVE 53                 TO SHADE-WIDTH.
+             MOVE 3                  TO SHADE-LINES.
+             DISPLAY S98.
              PERFORM SCREEN-SHADOW.
              CLOSE APACFIDS.
-007830       STOP RUN.
+             STOP RUN.
 
        AA10.
              MOVE "MNU\POSMENU"      TO PRG-NAME.
@@ -400,18 +397,17 @@
                MOVE 66               TO MOUSE-FUNC
                MOVE 0                TO MOUSE-PARAM
                CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
-             MOVE "S"                TO CRT-TYPE.
-007750       CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+             PERFORM ERASE-SCREEN.
              DISPLAY S98.
              STOP RUN.
 
-       AA100	       SECTION.
+       AA100        SECTION.
        AA101.
-             PERFORM ZA00A THRU ZA999.
+             PERFORM ZA00AA THRU ZA999.
            IF WS-OPTION = "Y"
                PERFORM CA000
                IF WS-OPTION = "8"
-	             PERFORM CLEAR-BLOCK
+                   PERFORM CLEAR-BLOCK
                    MOVE 11           TO SCREEN-LIN
                    PERFORM SAVE-ATTR
                    PERFORM MARK-BLOCK
@@ -426,7 +422,7 @@
        AA102.
              MOVE SPACES             TO WS-NEXT-PRG.
              CALL PRG-NAME USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
-	            ON EXCEPTION GO TO AA110
+             ON EXCEPTION GO TO AA110
              END-CALL.
             CANCEL PRG-NAME.
           IF NOT(WS-NEXT-PRG = SPACES)
@@ -442,17 +438,19 @@
                MOVE 66               TO MOUSE-FUNC
                MOVE 1                TO MOUSE-PARAM
                CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
-013040       CLOSE NETWORK DEPART PARAM SHARED TXTRAN.
+             CLOSE NETWORK DEPART PARAM SHARED TXTRAN.
              GO TO AA199.
 
        AA110.
              MOVE SPACE              TO WS-ERR-MES.
              STRING "Program- " DELIMITED SIZE PRG-NAME DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
-             PERFORM ERROR-LENGTH THRU ERROR-EXIT.
+             PERFORM ERROR-MESSAGE.
              GO TO AA105.
 
        AA199.
              EXIT.
+
+       COPY "AA900.ALM".
 
       /    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
@@ -461,11 +459,11 @@
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³       SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3      ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ³			  SCREEN-SHADOW 		       ³
+      *    ³                        SCREEN-SHADOW                      ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
       *    ³ To routine is used to display a shadow down the right and ³
       *    ³ along the bottom of a pop-up box. The parameters that are ³
-      *    ³ required:	                                               ³
+      *    ³ required:                                                 ³
       *    ³           SHADE-ROW   - Top line of the box + 1.          ³
       *    ³           SHADE-COL   - Left line of box + 2.             ³
       *    ³           SHADE-WIDTH - Width of the box - 2.             ³
@@ -476,7 +474,7 @@
 
       /    *************************************************************
       *    ****   T H I S   R O U T I N E   I S   U S E D   T O
-      * 	  D I S P L A Y   E R R O R   M E S S A G E S
+      *    D I S P L A Y   E R R O R   M E S S A G E S
       *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                      ERROR-MESSAGE                        ³
@@ -487,108 +485,113 @@
       *    ³ be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-       COPY "ERROR.SCR".
+       COPY "ERRORW.SCR".
 
        COPY "LOCKED.RC2".
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	      ERASE SCREEN FROM SPECIFIED LOCATION	       ³
+      *    ³           ERASE SCREEN FROM SPECIFIED LOCATION            ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ³ Uses CPOS (CLIN,CCOL) as starting position and increases  ³
-      *    ³ CLIN by 1 until CLIN reaches the line allocated to exit.  ³
-      *    ³ The screen is cleared with Column 1 and 80 containing "³" ³
-      *    ³ and columns 2 to 79 containing spaces.		       ³
-      *    ³  eg.						       ³
-      *    ³	  MOVE 0801	 TO CPOS.			       ³
-      *    ³	  PERFORM ERASE-SCREEN-LOOP UNTIL CLIN > 19.	       ³
+      *    ³ Uses CRT-START as starting line and increases and CRT-END ³
+      *    ³ as the ending line. The screen is cleared with Column 1   ³
+      *    ³ and 80 containing "³" and columns 2 to 79 containing      ³
+      *    ³ spaces.                                                   ³
+      *    ³                                                           ³
+      *    ³  eg.                                                      ³
+      *    ³   MOVE 8         TO CRT-START.                            ³
+      *    ³   MOVE 28        TO CRT-END.                              ³
+      *    ³   PERFORM ERASE-SCREEN.                                   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-011433 COPY CLEAR.CRT.
+       COPY "CLEARW.CRT".
 
       /    *************************************************************
       *    ****    READ FILES ROUTINES
       *    *************************************************************
-008680 AC000              SECTION.
+       AC000              SECTION.
 
-011750 COPY PARAM.RD.
+       COPY "PARAM.RD".
 
-       COPY APAC.HLP.
+       COPY "APAC.HLP".
 
-       BA000	       SECTION 50.
+       BA000        SECTION 1.
        BA00.
-             MOVE 8                  TO SHADE-ROW.
-             MOVE 32                 TO SHADE-COL.
-             MOVE 20                 TO SHADE-WIDTH.
-             MOVE 18                 TO SHADE-LINES.
+             MOVE 6                  TO SHADE-ROW.
+             MOVE 30                 TO SHADE-COL.
+             MOVE 22                 TO SHADE-WIDTH.
+             MOVE 19                 TO SHADE-LINES.
              DISPLAY S-MENU.
            IF WS0-POS < 2
-               DISPLAY "(N/A)" AT 1046 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
+               DISPLAY "(N/A)" AT 1346 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
            IF (WS0-LEV < 4) AND (WS0-JCP < 2)
-               DISPLAY "(N/A)" AT 1146 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
+               DISPLAY "(N/A)" AT 1446 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
            IF WS0-LEV < 3
-              DISPLAY " Add Bus/Com (N/A)" AT 1433 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
-              DISPLAY " Switch Comp (N/A)" AT 1533 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
-              DISPLAY ".(N/A)" AT 1745 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
-              DISPLAY "(N/A)" AT 1846 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
+              DISPLAY " Add Bus/Com (N/A)" AT 1733 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
+              DISPLAY " Switch Comp (N/A)" AT 1833 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
+              DISPLAY ".(N/A)" AT 2045 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
+              DISPLAY "(N/A)" AT 2146 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
       *    IF (DEB-ORD-SYS = "Y")
              DISPLAY MENU-INSTRUCT.
              PERFORM SCREEN-SHADOW.
 
        BA02.
-             MOVE 8	             TO TOP-ROW.
-             MOVE 23                 TO BOTTOM-ROW.
-             MOVE 3                  TO SCREEN-LIN.
+             MOVE 7                  TO TOP-ROW.
+             MOVE 22                 TO BOTTOM-ROW.
+             MOVE 6                  TO SCREEN-LIN.
              MOVE 32                 TO SCREEN-COL.
              MOVE 18                 TO STRING-LENGTH.
-	       PERFORM SAVE-ATTR.
+             PERFORM SAVE-ATTR.
 
        BA05.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
              CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        BA10.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN F1-KEY
-                      PERFORM HELP-ROUTINE
-                 WHEN OTHER CALL X"E5"
+                 WHEN F1-KEY       PERFORM HELP-ROUTINE
+                      
+                 WHEN OTHER        PERFORM AA900-ALARM
                END-EVALUATE
                GO TO BA05
            ELSE
            IF ADIS-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN UP-KEY
-                      PERFORM MOVE-BLOCK-UP
-                 WHEN DOWN-KEY
-                      PERFORM MOVE-BLOCK-DOWN
-                 WHEN MOUSE-KEY
-                      PERFORM POSITION-MOUSE
-                      IF MOUSE-ENTER = "Y"
-                          MOVE "N"   TO MOUSE-ENTER
-                          GO TO BA15
-                      END-IF
-                      IF MOUSE-Y = 24
-                          IF MOUSE-X = 5
-                              MOVE 5 TO KEY-CODE-1
-                              GO TO BA10
-                          ELSE
-                          IF MOUSE-X = 10
-                              MOVE 6 TO KEY-CODE-1
-                              GO TO BA10
-                          ELSE
-                          IF MOUSE-X > 36 AND < 44
-                              MOVE 0 TO KEY-CODE-1
-                              GO TO BA10
-                          ELSE
-                          IF MOUSE-X > 54 AND < 60
-                              MOVE 0 TO KEY-CODE-1
-                              MOVE 1 TO KEY-TYPE
-                              GO TO BA10
-                          END-IF
-                      END-IF
-                 WHEN ENTER-KEY
-                      GO TO BA15
-                 WHEN OTHER
-                      CALL X"E5"
+                 WHEN UP-KEY       PERFORM MOVE-BLOCK-UP
+                 
+                 WHEN DOWN-KEY     PERFORM MOVE-BLOCK-DOWN
+                 
+                 WHEN MOUSE-KEY    PERFORM POSITION-MOUSE
+                                   IF MOUSE-ENTER = "Y"
+                                       MOVE "N"   TO MOUSE-ENTER
+                                       GO TO BA15
+                                   END-IF
+                                   IF MOUSE-Y = 49
+                                       IF MOUSE-X = 5
+                                           MOVE 5 TO KEY-CODE-1
+                                           GO TO BA10
+                                       ELSE
+                                       IF MOUSE-X = 10
+                                           MOVE 6 TO KEY-CODE-1
+                                           GO TO BA10
+                                       ELSE
+                                       IF MOUSE-X > 36 AND < 44
+                                           MOVE 0 TO KEY-CODE-1
+                                           GO TO BA10
+                                       ELSE
+                                       IF MOUSE-X > 54 AND < 60
+                                           MOVE 0 TO KEY-CODE-1
+                                           MOVE 1 TO KEY-TYPE
+                                           GO TO BA10
+                                       END-IF
+                                   END-IF
+                                   
+                 WHEN ENTER-KEY    GO TO BA15
+                 
+                 WHEN OTHER        PERFORM AA900-ALARM
                END-EVALUATE
                GO TO BA05
            ELSE
@@ -596,675 +599,618 @@
                MOVE KEY-CODE-1X  TO WS-OPTION
                CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS
                IF (WS-OPTION < 1 OR > 9) AND (WS-OPTION < "A" OR > "F") AND (WS-OPTION NOT = "L")
-	             CALL X"E5"
-	             GO TO BA05
+                   PERFORM AA900-ALARM
+                   GO TO BA05
                END-IF
                GO TO BA16
            ELSE
-               CALL X"E5"
+               PERFORM AA900-ALARM
                GO TO BA05.
 
        BA15.
              EVALUATE SCREEN-LIN
-               WHEN 4
-                    MOVE "1"	 TO WS-OPTION
-               WHEN 5
-                    MOVE "2"	 TO WS-OPTION
-               WHEN 6
-                    MOVE "3"	 TO WS-OPTION
-               WHEN 7
-	    MOVE "4"	 TO WS-OPTION
-               WHEN 8
-	    MOVE "5"	 TO WS-OPTION
-               WHEN 9
-	    MOVE "6"	 TO WS-OPTION
-               WHEN 10
-	    MOVE "7"	 TO WS-OPTION
-               WHEN 11
-	    MOVE "8"	 TO WS-OPTION
-               WHEN 12
-	    MOVE "A"	 TO WS-OPTION
-               WHEN 13
-	    MOVE "B"	 TO WS-OPTION
-               WHEN 14
-	    MOVE "C"	 TO WS-OPTION
-               WHEN 15
-	    MOVE "D"	 TO WS-OPTION
-               WHEN 16
-	    MOVE "E"	 TO WS-OPTION
-               WHEN 17
-	    MOVE "F"	 TO WS-OPTION
-               WHEN 18
-	    MOVE "L"	 TO WS-OPTION
-               WHEN 19
-	    MOVE "9"	 TO WS-OPTION
-               WHEN OTHER
-	   CALL X"E5" CALL X"E5" CALL X"E5"
-	   GO TO BA05
+               WHEN 7      MOVE "1"    TO WS-OPTION
+               
+               WHEN 8      MOVE "2"    TO WS-OPTION
+               
+               WHEN 9      MOVE "3"    TO WS-OPTION
+               
+               WHEN 10     MOVE "4"    TO WS-OPTION
+               
+               WHEN 11     MOVE "5"    TO WS-OPTION
+               
+               WHEN 12     MOVE "6"    TO WS-OPTION
+               
+               WHEN 13     MOVE "7"    TO WS-OPTION
+               
+               WHEN 14     MOVE "8"    TO WS-OPTION
+               
+               WHEN 15     MOVE "A"    TO WS-OPTION
+               
+               WHEN 16     MOVE "B"    TO WS-OPTION
+               
+               WHEN 17     MOVE "C"    TO WS-OPTION
+               
+               WHEN 18     MOVE "D"    TO WS-OPTION
+               
+               WHEN 19     MOVE "E"    TO WS-OPTION
+               
+               WHEN 20     MOVE "F"    TO WS-OPTION
+               
+               WHEN 21     MOVE "L"    TO WS-OPTION
+               
+               WHEN 22     MOVE "9"    TO WS-OPTION
+               
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO BA05
              END-EVALUATE.
-     GO TO BA18.
+             GO TO BA18.
 
        BA16.
-	     PERFORM CLEAR-BLOCK.
-	     EVALUATE WS-OPTION
-	       WHEN "9"
-		    MOVE 19	 TO SCREEN-LIN
-	       WHEN "1"
-		    MOVE 4	 TO SCREEN-LIN
-	       WHEN "2"
-		    MOVE 5	 TO SCREEN-LIN
-	       WHEN "3"
-		    MOVE 6	 TO SCREEN-LIN
-	       WHEN "4"
-		    MOVE 7	 TO SCREEN-LIN
-	       WHEN "5"
-		    MOVE 8	 TO SCREEN-LIN
-	       WHEN "6"
-		    MOVE 9	 TO SCREEN-LIN
-	       WHEN "7"
-		    MOVE 10	 TO SCREEN-LIN
-	       WHEN "8"
-		    MOVE 11	 TO SCREEN-LIN
-	       WHEN "A"
-		    MOVE 12	 TO SCREEN-LIN
-	       WHEN "B"
-		    MOVE 13	 TO SCREEN-LIN
-	       WHEN "C"
-		    MOVE 14	 TO SCREEN-LIN
-	       WHEN "D"
-		    MOVE 15	 TO SCREEN-LIN
-	       WHEN "E"
-		    MOVE 16	 TO SCREEN-LIN
-	       WHEN "F"
-		    MOVE 17	 TO SCREEN-LIN
-	       WHEN "L"
-		    MOVE 18	 TO SCREEN-LIN
-	     END-EVALUATE.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "9"    MOVE 22     TO SCREEN-LIN
+               
+               WHEN "1"    MOVE 7      TO SCREEN-LIN
+               
+               WHEN "2"    MOVE 8      TO SCREEN-LIN
+               
+               WHEN "3"    MOVE 9      TO SCREEN-LIN
+               
+               WHEN "4"    MOVE 10     TO SCREEN-LIN
+               
+               WHEN "5"    MOVE 11     TO SCREEN-LIN
+               
+               WHEN "6"    MOVE 12     TO SCREEN-LIN
+               
+               WHEN "7"    MOVE 13     TO SCREEN-LIN
+               
+               WHEN "8"    MOVE 14     TO SCREEN-LIN
+               
+               WHEN "A"    MOVE 15     TO SCREEN-LIN
+               
+               WHEN "B"    MOVE 16     TO SCREEN-LIN
+               
+               WHEN "C"    MOVE 17     TO SCREEN-LIN
+               
+               WHEN "D"    MOVE 18     TO SCREEN-LIN
+               
+               WHEN "E"    MOVE 19     TO SCREEN-LIN
+               
+               WHEN "F"    MOVE 20     TO SCREEN-LIN
+               
+               WHEN "L"    MOVE 21     TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        BA18.
-	   IF WS-DAYS > 91
-	     DISPLAY "This package must be legalised - PHONE JW Lemmon - 082-566-3095" AT 2302 WITH FOREGROUND-COLOR Red HIGHLIGHT
-	     GO TO BA05.
-	     EVALUATE WS-OPTION
-	       WHEN "9"
-		    GO TO BA999
-	       WHEN "1"
-		    MOVE "MNU\STPMENU"	   TO PRG-NAME
-	       WHEN "2"
-		    MOVE "MNU\CRPMENU"	   TO PRG-NAME
-	       WHEN "3"
-		    MOVE "MNU\DTPMENU"	   TO PRG-NAME
-	       WHEN "4"
-		    MOVE "MNU\GLPMENU"	   TO PRG-NAME
-	       WHEN "5"
-		    MOVE "MNU\SLPMENU"	   TO PRG-NAME
-	       WHEN "6"
-		    IF WS0-POS = 0
-			MOVE "MNU\NOPMENU" TO PRG-NAME
-		    ELSE
-			MOVE "MNU\SALMENU" TO PRG-NAME
-	       WHEN "7"
-		    IF (WS0-LEV < 4) AND (WS0-JCP < 2)
-			MOVE "MNU\NOPMENU" TO PRG-NAME
-		    ELSE
-			MOVE "MNU\JCPMENU" TO PRG-NAME
-	       WHEN "8"
-		    MOVE "MNU\REPMENU"	   TO PRG-NAME
-	       WHEN "A"
-		    MOVE "MNU\UTILMENU"    TO PRG-NAME
-	       WHEN "B"
-		    IF WS0-LEV < 3
-			MOVE "MNU\NOPMENU" TO PRG-NAME
-		    ELSE
-			MOVE "UTP\SYSNEW"  TO PRG-NAME
-	       WHEN "D"
-		    MOVE "UTP\SPOOLPRN"    TO PRG-NAME
-	       WHEN "E"
-		    IF WS0-LEV < 3
-			MOVE "MNU\NOPMENU" TO PRG-NAME
-		    ELSE
-			MOVE "UTP\PRNCHQ"  TO PRG-NAME
-	       WHEN "F"
-		    IF WS0-LEV < 3
-			MOVE "MNU\NOPMENU" TO PRG-NAME
-		    ELSE
-			MOVE "SLP\ORDSPC"  TO PRG-NAME
-	       WHEN "L"
-		    MOVE "UTP\USR001"	   TO PRG-NAME
-	     END-EVALUATE.
-      *	   ELSE
-      *	   IF WS0-LEV < 3
-      *	       MOVE "MNU\NOPMENU"
-      *				 TO PRG-NAME
-      *	   ELSE
-      *	   IF (WS0-DBLEV < 3) AND (WS0-STLEV < 3) AND
-      *	      (WS0-GLLEV < 3) AND (WS0-CRLEV < 3)
-      *	       MOVE "MNU\NOPMENU" TO PRG-NAME
-      *	   ELSE
-      *	       GO TO BA20.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO BA05.
+           IF WS-DAYS > 91
+               DISPLAY "This package must be legalised - PHONE JW Lemmon - 082-566-3095" AT 2302 WITH FOREGROUND-COLOR Red HIGHLIGHT
+               GO TO BA05.
+             EVALUATE WS-OPTION
+               WHEN "9"    GO TO BA999
+               
+               WHEN "1"    MOVE "MNU\STPMENU"    TO PRG-NAME
+               
+               WHEN "2"    MOVE "MNU\CRPMENU"    TO PRG-NAME
+               
+               WHEN "3"    MOVE "MNU\DTPMENU"    TO PRG-NAME
+               
+               WHEN "4"    MOVE "MNU\GLPMENU"    TO PRG-NAME
+               
+               WHEN "5"    MOVE "MNU\SLPMENU"    TO PRG-NAME
+               
+               WHEN "6"    IF WS0-POS = 0
+                               MOVE "MNU\NOPMENU"  TO PRG-NAME
+                           ELSE
+                               MOVE "MNU\SALMENU"  TO PRG-NAME
+                               
+               WHEN "7"    IF (WS0-LEV < 4) AND (WS0-JCP < 2)
+                               MOVE "MNU\NOPMENU"  TO PRG-NAME
+                           ELSE
+                               MOVE "MNU\JCPMENU"  TO PRG-NAME
+                               
+               WHEN "8"    MOVE "MNU\REPMENU"      TO PRG-NAME
+               
+               WHEN "A"    MOVE "MNU\UTILMENU"     TO PRG-NAME
+               
+               WHEN "B"    IF WS0-LEV < 3
+                               MOVE "MNU\NOPMENU"  TO PRG-NAME
+                           ELSE
+                               MOVE "UTP\SYSNEW"   TO PRG-NAME
 
+               WHEN "C"    IF WS0-LEV < 3
+                               MOVE "MNU\NOPMENU"  TO PRG-NAME
+                           ELSE
+                           IF (WS0-DBLEV < 3) AND (WS0-STLEV < 3) AND (WS0-GLLEV < 3) AND (WS0-CRLEV < 3)
+                               MOVE "MNU\NOPMENU"  TO PRG-NAME
+                           ELSE
+                               GO TO BA20
+                               
+               WHEN "D"    MOVE "UTP\SPOOLPRN"     TO PRG-NAME
+               
+               WHEN "E"    IF WS0-LEV < 3
+                               MOVE "MNU\NOPMENU"  TO PRG-NAME
+                           ELSE
+                               MOVE "UTP\PRNCHQ"   TO PRG-NAME
+                               
+               WHEN "F"    IF WS0-LEV < 3
+                               MOVE "MNU\NOPMENU"  TO PRG-NAME
+                           ELSE
+                               MOVE "SLP\ORDSPC"   TO PRG-NAME
+                               
+               WHEN "L"    MOVE "UTP\USR001"       TO PRG-NAME
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO BA05.
+      *    *************************************************************
+      *    ****           S W I T C H   C O M P A N I E S
+      *    *************************************************************
        BA20.
            IF MOUSE-ATTACHED = "Y"
-               MOVE 66		 TO MOUSE-FUNC
-               MOVE 0		 TO MOUSE-PARAM
+               MOVE 66               TO MOUSE-FUNC
+               MOVE 0                TO MOUSE-PARAM
                CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
-             MOVE "S"                TO CRT-TYPE.
-007750       CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+             PERFORM ERASE-SCREEN.
 
        BA25.
       *    *************************************************************
-      *    ****    P A R A M E T E R   F I L E
+      *    ****    U P D A T E   P A R A M E T E R   F I L E
+      *          Su
       *    *************************************************************
              OPEN I-O PARAM.
-038210     IF RUNTIME-ERROR
-038220         IF FLE-LOCKED OR FLE-LIMIT
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED OR FLE-LIMIT
                    DISPLAY "WAITING" AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-038230             GO TO AA05.
-038270     IF WS-STATUS NOT = "00"
-038280         MOVE 15           TO WS-F-ERROR
-038290         PERFORM OPEN-ERROR.
-	     MOVE 4		 TO WS-PARKEY.
-007710	     PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
-007780	     MOVE ZERO		 TO PAR-LOGON.
-007790       REWRITE PAR-RECORD1.
-	     MOVE 3		 TO WS-PARKEY.
-007710	     PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
-007800	     UNLOCK PARAM.
-007810	     CLOSE PARAM.
-	     CLOSE APACFIDS.
-	     MOVE "ANYBODY"	 TO WS0-NAME.
-	     MOVE "X"		 TO WS-INSTR.
-	     PERFORM ZA000-INIT.
-	     DISPLAY S-PROG.
-	     GO TO BA00.
+                   GO TO AA05.
+           IF WS-STATUS NOT = "00"
+               MOVE 15               TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
+             MOVE 4                  TO WS-PARKEY.
+             PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+             MOVE ZERO               TO PAR-LOGON.
+             REWRITE PAR-RECORD1.
+             MOVE 3                  TO WS-PARKEY.
+             PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+             UNLOCK PARAM.
+             CLOSE PARAM APACFIDS.
+             MOVE "ANYBODY"          TO WS0-NAME.
+             MOVE "X"                TO WS-INSTR.
+             PERFORM ZA000-INIT.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
+             GO TO BA00.
 
        BA999.
-	     EXIT.
+             EXIT.
 
-       CA000	       SECTION 51.
+       CA000        SECTION 2.
        CA00.
-	     PERFORM SAVE-SCREEN-3.
-007630	     DISPLAY CLR-SCREEN.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 0413 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red "¿" WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.
-	     DISPLAY "³"						       AT 0513 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " The System parameters, Company details, Departments, "  AT 0514 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0568 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0613 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     Divisions, Hardware configurations, Integration, "  AT 0614 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0668 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0713 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     Rate structures & Stationery choices need to be  "  AT 0714 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0768 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0813 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     set up!                                          "  AT 0814 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0868 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0913 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " These details include:                               "  AT 0914 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 0968 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1013 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     Address, Telephone, VAT registration number,     "  AT 1014 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1068 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1113 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     Sales staff, Technicians, Debtor Categories,     "  AT 1114 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1168 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1213 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     Sales Ledgers, Printers, Cash Drawer/s, Interest "  AT 1214 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1268 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1313 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     rates, Price rounding, Stationery choices, User  "  AT 1314 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1368 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1413 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "     codes, Passwords and Integration account numbers."  AT 1414 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1468 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1513 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " If you are not sure of the above, please read pages  "  AT 1514 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1568 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1613 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " 30 to 36 of the manual and then select the Demonstra-"  AT 1614 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1668 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1713 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " tion system and selecting option 8 from the PROGRAM  "  AT 1714 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1768 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1813 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " CONTROL menu study the various PARAMETER options to  "  AT 1814 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1868 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1913 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " familiarise yourself with the requirements.          "  AT 1914 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 1968 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 2013 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "                                                      "  AT 2014 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 2068 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 2113 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY " DO THE SETUP NOW ?                                   "  AT 2114 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "³"						       AT 2168 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     DISPLAY "À"						       AT 2213 WITH FOREGROUND-COLOR Red HIGHLIGHT BACKGROUND-COLOR Red.
-	     DISPLAY "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 2214 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Red.
-	     MOVE 5		 TO SHADE-ROW.
-	     MOVE 15		 TO SHADE-COL.
-	     MOVE 54		 TO SHADE-WIDTH.
-	     MOVE 18		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
-	     ACCEPT WS-OPTION AT 2134 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Red AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "Y"
-	       GO TO CA05.
-	     DISPLAY " SWITCH THIS MESSAGE OFF ?                            " AT 2114 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-	     ACCEPT WS-OPTION AT 2141 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Red AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "Y")
-	       PERFORM RESTORE-SCREEN-3
-	       GO TO CA999.
-	     GO TO CA10.
+             PERFORM SAVE-SCREEN-3.
+             PERFORM ERASE-SCREEN.
+             DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 0813 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                                                                            "¿"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.
+             DISPLAY "³"                                                       AT 0913 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " The System parameters, Company details, Departments, "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1013 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     Divisions, Hardware configurations, Integration, "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1113 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     Rate structures & Stationery choices need to be  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1213 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     set up!                                          "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1313 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " These details include:                               "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1413 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     Address, Telephone, VAT registration number,     "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1513 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     Sales staff, Technicians, Debtor Categories,     "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1613 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     Sales Ledgers, Printers, Cash Drawer/s, Interest "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1713 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     rates, Price rounding, Stationery choices, User  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1813 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "     codes, Passwords and Integration account numbers."         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 1913 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " If you are not sure of the above, please read pages  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 2013 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " 30 to 36 of the manual and then select the Demonstra-"         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 2113 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " tion system and selecting option 8 from the PROGRAM  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 2213 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " CONTROL menu study the various PARAMETER options to  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 2313 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " familiarise yourself with the requirements.          "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 2413 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "                                                      "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "³"                                                       AT 2513 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      " DO THE SETUP NOW ?                                   "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
+                                                                            "³"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
+             DISPLAY "À"                                                       AT 2613 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
+                      "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.
+             MOVE 8                  TO SHADE-ROW.
+             MOVE 13                 TO SHADE-COL.
+             MOVE 56                 TO SHADE-WIDTH.
+             MOVE 19                 TO SHADE-LINES.
+             PERFORM SCREEN-SHADOW.
+             ACCEPT WS-OPTION AT 2534 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Red AUTO.
+             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF WS-OPTION = "Y"
+               GO TO CA05.
+             DISPLAY " SWITCH THIS MESSAGE OFF ?                            " AT 2514 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
+             ACCEPT WS-OPTION AT 2541 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Red AUTO.
+             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF NOT(WS-OPTION = "Y")
+               PERFORM RESTORE-SCREEN-3
+               GO TO CA999.
+             GO TO CA10.
 
        CA05.
-	     MOVE "8"		 TO WS-OPTION.
+             MOVE "8"                TO WS-OPTION.
 
        CA10.
-038300	     MOVE 3		 TO WS-PARKEY.
-038310       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	     MOVE "N"		 TO PAR-NEW-SYS.
-010190	     REWRITE PAR-RECORD1.
-	     PERFORM RESTORE-SCREEN-3.
+             MOVE 3                  TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             MOVE "N"                TO PAR-NEW-SYS.
+             REWRITE PAR-RECORD1.
+             PERFORM RESTORE-SCREEN-3.
 
        CA999.
-	     EXIT.
+             EXIT.
       /    *************************************************************
-      * 		I N I T I A L I S E   P R O G R A M
+      *             I N I T I A L I S E   P R O G R A M
       *    *************************************************************
-038140 ZA000-INIT	       SECTION 90.
-038150 ZA000-OPEN.
-	     MOVE "APACMENU"	 TO CRT-PROGRAM.
-	     MOVE "S"		 TO CRT-TYPE.
-	     CALL "MNU\BUP000"
-		   USING WS-PARID WS-USER-ID WS0-PROGRAMS W05-COMMAND.
-	     CANCEL "MNU\BUP000".
-	     MOVE WS-APAC-VERSION
-				 TO APAC-VERSION.
-	     MOVE WS-APAC-SYSTEM TO APAC-SYSTEM.
-	     MOVE TODAY-DDMMYY	 TO W12-TODAY.
-	   IF APAC-END
-	       DISPLAY CLR-SCREEN
-	       STOP RUN.
-	     MOVE WS-L-OR-N	 TO W02-L-OR-N.
-	     MOVE WS-SYS-ID	 TO W02-SYSID.
-	     OPEN I-O APACFIDS.
-	   IF APAC-INIT
-	       PERFORM ZA100
-	       GO TO ZA000-OPEN.
-038160	     PERFORM ZA60.
-	   IF (WS-DEM = 1 AND WS-DAYS < 66) OR
-	      (WS-DEM > 1)
-	       CALL "UTP\SYS001" USING WS-PARID WS-USER-ID WS0-PROGRAMS
-	       CANCEL "UTP\SYS001".
-	     CALL "UTP\USR001"
-		 USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY.
-	     CANCEL "UTP\USR001".
+       ZA000-INIT        SECTION 9.
+       ZA000-OPEN.
+             ACCEPT W12-T-YMD FROM DATE YYYYMMDD.
+             MOVE W12-CC             TO W12-CENT.
+             MOVE W12-YY             TO W12-YEAR.
+             MOVE W12-MM             TO W12-MONTH.
+             MOVE W12-DD             TO W12-DAY.
+             MOVE W12-TODAY          TO TODAY-DDMMYY.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
+             CALL "MNU\BUP000" USING WS-PARID WS-USER-ID WS0-PROGRAMS W05-COMMAND DATA-FILE-IDS.
+             CANCEL "MNU\BUP000".
+           IF APAC-END
+               STOP RUN.
+             MOVE WS-APAC-VERSION    TO APAC-VERSION.
+             MOVE WS-APAC-SYSTEM     TO APAC-SYSTEM.
+             MOVE WS-COMPANY         TO CRT-COMPANY.
+             MOVE WS-L-OR-N          TO W02-L-OR-N.
+             MOVE WS-SYS-ID          TO W02-SYSID.
+             MOVE TODAY-DDMMYY       TO W12-TODAY.
+             MOVE WS-TERMINAL        TO CRT-TERMINAL.
+             OPEN I-O APACFIDS.
+           IF APAC-INIT
+               PERFORM ZA100
+               GO TO ZA000-OPEN.
+             PERFORM ZA60.
+           IF (WS-DEM = 1 AND WS-DAYS < 66) OR (WS-DEM > 1)
+               CALL "UTP\SYS001" USING WS-PARID WS-USER-ID WS0-PROGRAMS
+               CANCEL "UTP\SYS001".
+             CALL "UTP\USR001" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY DATA-FILE-IDS.
+             CANCEL "UTP\USR001".
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ D o   n o t   d i s p l a y   E R R O R   m e s s a g e s ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 2		 TO USER-ACTION.
-	     MOVE 44		 TO USER-NUMBER.
-	     MOVE 1		 TO USER-SETTING.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+             MOVE 2                  TO USER-ACTION.
+             MOVE 44                 TO USER-NUMBER.
+             MOVE 1                  TO USER-SETTING.
+             CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³  Setup various keys and the mouse for use with menus and  ³
+      *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		       ESC, F1 to F10 keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    PAGE-UP and PAGE-DOWN keys		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   A C T I V A T E   M O U S E		       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	   ELSE
-	       GO TO ZA00.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set MOUSE key to act as FUNCTION key	       ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+
+             COPY "FUNCTION.PRO".
 
        ZA00.
-	     DISPLAY CLR-SCREEN.
-	   IF (WS-DEM = 1) AND (WS-DAYS > 85)
-	       COMPUTE WS-NUM = 15 - (WS-DAYS - 85)
-	       DISPLAY "This package must be registered within " AT 2102 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT
-			WS-NUM WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT BLINK " days" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
-	     GO TO ZA999.
+             PERFORM ERASE-SCREEN.
+           IF (WS-DEM = 1) AND (WS-DAYS > 85)
+               COMPUTE WS-NUM = 15 - (WS-DAYS - 85)
+               DISPLAY "This package must be registered within " AT 2102 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT
+                       WS-NUM WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT BLINK " days" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
+               GO TO ZA999.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Setup the file ID's including path names           ³
+      *    ³         Setup the file ID's including path names          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *    *************************************************************
-      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    ****             P A R A M E T E R   F I L E             ****
       *    *************************************************************
-       ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
+       ZA00AA.
+             MOVE "PARAM"            TO AFID-KEY.
 
        ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
+             READ APACFIDS WITH IGNORE LOCK KEY IS AFID-KEY.
+           IF WS-STATUS = "00"
+               GO TO ZA00-READ-APACFIDS-EXIT.
+             STRING "Missing " DELIMITED SIZE AFID-KEY DELIMITED BY " " " file ID - Status " DELIMITED SIZE WS-STATUS DELIMITED SIZE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
+             STOP RUN.
 
        ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
+             EXIT.
 
        ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
+             MOVE AFID-PATH          TO W02-PARAM.
 
        ZA00B.
-038200	     OPEN I-O PARAM.
-038210     IF RUNTIME-ERROR
-038220         IF FLE-LOCKED
-038230             GO TO ZA200
-038240         ELSE
-038250         IF FLE-LIMIT
-038260             GO TO ZA49.
-038270     IF WS-STATUS NOT = "00"
-038280         MOVE 15           TO WS-F-ERROR
-038290         PERFORM OPEN-ERROR.
-038300       MOVE 3              TO WS-PARKEY.
-038310       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             OPEN I-O PARAM.
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED
+                   GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49.
+           IF WS-STATUS NOT = "00"
+               MOVE 15               TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
+             MOVE 3                  TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
       *    *************************************************************
-      *    **** 	    C O N T R O L   F I L E		    ****
+      *    ****               C O N T R O L   F I L E               ****
       *    *************************************************************
-	     MOVE "NETWORK"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-NETWORK.
+            MOVE "NETWORK"  TO AFID-KEY.
+            PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+            MOVE AFID-PATH  TO W02-NETWORK.
       *    *************************************************************
-      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    ****            D E P A R T M E N T   F I L E            ****
       *    *************************************************************
-	     MOVE "DEPART"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEPART.
+            MOVE "DEPART"  TO AFID-KEY.
+            PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+            MOVE AFID-PATH  TO W02-DEPART.
       *    *************************************************************
-      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    ****       N E T W O R K   (S H A R E D)   F I L E       ****
       *    *************************************************************
-	     MOVE "SHARED"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-SHARED.
+            MOVE "SHARED"  TO AFID-KEY.
+            PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+            MOVE AFID-PATH  TO W02-SHARED.
       *    *************************************************************
-      *    ****       V A L U E	  A D D E D   T A X   F I L E	    ****
+      *    ****       V A L U E   A D D E D   T A X   F I L E       ****
       *    *************************************************************
-	     MOVE "TXTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-TXTRAN.
-	     MOVE PAR-CRDX	 TO WS-CARDEX.
-      *	     MOVE "X"		 TO WS-CRDMTH.
-	     MOVE PAR-NEW-SYS	 TO WS-OPTION.
+            MOVE "TXTRAN"  TO AFID-KEY.
+            PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+            MOVE AFID-PATH  TO W02-TXTRAN.
+            MOVE PAR-CRDX  TO WS-CARDEX.
+      *      MOVE "X"   TO WS-CRDMTH.
+            MOVE PAR-NEW-SYS  TO WS-OPTION.
       *    *************************************************************
       *    ****    C O N T R O L   F I L E
       *    *************************************************************
-038470	     OPEN I-O NETWORK.
-038480     IF RUNTIME-ERROR
-038490         IF FLE-LOCKED
-038500             GO TO ZA200
-038510         ELSE
-038520         IF FLE-LIMIT
-038530             GO TO ZA49.
-038540     IF WS-STATUS NOT = "00"
-038550         MOVE 2            TO WS-F-ERROR
-038560         PERFORM OPEN-ERROR.
+            OPEN I-O NETWORK.
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED
+                   GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49.
+           IF WS-STATUS NOT = "00"
+               MOVE 2                TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
       *    *************************************************************
       *    ****    O P E N   T H E   S H A R E D   F I L E
       *    *************************************************************
-038470	     OPEN I-O SHARED.
-038480     IF RUNTIME-ERROR
-038490         IF FLE-LOCKED
-038500             GO TO ZA200
-038510         ELSE
-038520         IF FLE-LIMIT
-038530             GO TO ZA49.
-	   IF WS-STATUS = "05"
-	       PERFORM ZA05 THRU ZA15.
-038540	   IF WS-STATUS NOT = "00"
-038550	       MOVE 37		 TO WS-F-ERROR
-038560         PERFORM OPEN-ERROR.
-	     MOVE 5		 TO WS-SHARED.
-	     READ SHARED WITH LOCK.
-	   IF NOT (SHR-RUN-DATE = W12-TODAY)
-	       MOVE W12-TODAY	 TO SHR-RUN-DATE
-	       MOVE ZERO	 TO SHR-UPDATE-SEQ
-	       REWRITE SHR-RECORD.
-	     UNLOCK SHARED.
+            OPEN I-O SHARED.
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED
+                   GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49.
+           IF WS-STATUS = "05"
+               PERFORM ZA05 THRU ZA15.
+           IF WS-STATUS NOT = "00"
+               MOVE 37               TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
+             MOVE 5                  TO WS-SHARED.
+             READ SHARED WITH LOCK.
+           IF NOT (SHR-RUN-DATE = W12-TODAY)
+               MOVE W12-TODAY  TO SHR-RUN-DATE
+               MOVE ZERO  TO SHR-UPDATE-SEQ
+               REWRITE SHR-RECORD.
+             UNLOCK SHARED.
       *    *************************************************************
-      *    ****    D E P A R T M E N T	 /   S A L E S	 L E D G E R
-      * 	   F I L E
+      *    ****    D E P A R T M E N T  /   S A L E S  L E D G E R
+      *                            F I L E
       *    *************************************************************
        ZA01.
-038810	     OPEN I-O DEPART.
-042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
-	      (WS-STATUS = "39")
-	       CLOSE PARAM
-	       PERFORM SAVE-SCREEN-3
-	       CALL "UTP\DPTREB"
-		     USING WS-PARID WS-USER-ID WS0-PROGRAMS
-			   WS0-SECURITY
-	       CANCEL "UTP\DPTREB"
-	       PERFORM RESTORE-SCREEN-3
-	       CLOSE DEPART
-	       OPEN I-O PARAM NETWORK
-	       GO TO ZA01.
-038820	   IF RUNTIME-ERROR
-038830         IF FLE-LOCKED
-038840             GO TO ZA200
-038850         ELSE
-038860         IF FLE-LIMIT
-038870             GO TO ZA49.
-038910     IF WS-STATUS NOT = "00"
-038920	       MOVE 7		 TO WS-F-ERROR
-038930         PERFORM OPEN-ERROR.
+             OPEN I-O DEPART.
+           IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR (WS-STATUS = "39")
+               CLOSE PARAM
+               PERFORM SAVE-SCREEN-3
+               CALL "UTP\DPTREB" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY DATA-FILE-IDS
+               CANCEL "UTP\DPTREB"
+               PERFORM RESTORE-SCREEN-3
+               CLOSE DEPART
+               OPEN I-O PARAM NETWORK
+               GO TO ZA01.
+           IF RUNTIME-ERROR IF FLE-LOCKED
+                                GO TO ZA200
+                            ELSE
+                            IF FLE-LIMIT
+                                GO TO ZA49.
+           IF NOT(WS-STATUS = "00")
+               MOVE 7                TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
 
        ZA02.
-038670	     OPEN I-O TXTRAN.
-042120	   IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR
-	      (WS-STATUS = "39")
-	       CLOSE PARAM
-	       PERFORM SAVE-SCREEN-3
-	       CALL "UTP\TAXREB"
-		     USING WS-PARID WS-USER-ID WS0-PROGRAMS
-			   WS0-SECURITY
-	       CANCEL "UTP\TAXREB"
-	       PERFORM RESTORE-SCREEN-3
-	       OPEN I-O PARAM NETWORK
-	       GO TO ZA02.
-038680	   IF RUNTIME-ERROR
-038690         IF FLE-LOCKED
-038700             GO TO ZA200
-038710         ELSE
-038720         IF FLE-LIMIT
-038730		   GO TO ZA49
-038740         ELSE
-038750	       IF IDX-CORRUPT
-038760		   MOVE 32	 TO WS-F-ERROR
-038770             GO TO ZA50.
-038780     IF WS-STATUS NOT = "00"
-038790	       MOVE 32		 TO WS-F-ERROR
-	       IF WS-STATUS = "39"
-038770		   GO TO ZA50
-	       ELSE
-038800		   PERFORM OPEN-ERROR.
-038300	     MOVE 251		 TO WS-PARKEY.
-038310	     PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             OPEN I-O TXTRAN.
+           IF (WS-STAT1 = "9" AND IDX-CORRUPT) OR (WS-STATUS = "39")
+               CLOSE PARAM
+               PERFORM SAVE-SCREEN-3
+               CALL "UTP\TAXREB" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY DATA-FILE-IDS
+               CANCEL "UTP\TAXREB"
+               PERFORM RESTORE-SCREEN-3
+               OPEN I-O PARAM NETWORK
+               GO TO ZA02.
+           IF RUNTIME-ERROR IF FLE-LOCKED
+                                GO TO ZA200
+                            ELSE
+                            IF FLE-LIMIT
+                                GO TO ZA49
+                            ELSE
+                       IF IDX-CORRUPT
+                                MOVE 32  TO WS-F-ERROR
+                                GO TO ZA50.
+           IF WS-STATUS NOT = "00"
+              MOVE 32   TO WS-F-ERROR
+              IF WS-STATUS = "39"
+                  GO TO ZA50
+              ELSE
+                  PERFORM OPEN-ERROR.
+            MOVE 251   TO WS-PARKEY.
+            PERFORM READ-PARAM THRU READ-PARAM-EXIT.
       *    *************************************************************
       *    ****    C H E C K   I F   C O N V E R S I O N S
-      * 	   R E Q U I R E D
+      *                   R E Q U I R E D
+      *     As screen layouts and CALL parameters have changed as from
+      *     Version 9, all previous convertions are now remarks.
       *    *************************************************************
-	     MOVE 1		 TO WS-NETKEY.
-	     READ NETWORK.
-	   IF DEB-VER < "8.09"
-	       PERFORM SAVE-SCREEN-3
-	       CALL "CNV\DEBCON" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\DEBCON"
-	       PERFORM RESTORE-SCREEN-3.
-	   IF DEB-VER < "8.11"
-	       PERFORM SAVE-SCREEN-3
-	       CALL "UTP\JOBREB"
-		  USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
-	       CALL "CNV\DEBJOB" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\DEBJOB"
-	       PERFORM RESTORE-SCREEN-3.
-	   IF DEB-VER < "8.12"
-	       PERFORM SAVE-SCREEN-3
-	       CALL "CNV\DEBAGE" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\DEBAGE"
-	       PERFORM RESTORE-SCREEN-3.
-	   IF DEB-VER < "8.13"
-	       PERFORM SAVE-SCREEN-3
-	       CALL "CNV\DEBREST" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\DEBREST"
-	       PERFORM RESTORE-SCREEN-3.
-	     MOVE 2		 TO WS-NETKEY.
-	     READ NETWORK.
-	   IF P-VER < "8.12"
-	       PERFORM SAVE-SCREEN-3
-	       CALL "CNV\PURCON" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\PURCON"
-	       PERFORM RESTORE-SCREEN-3.
-	     MOVE 3		 TO WS-NETKEY.
-	     READ NETWORK.
-	   IF STK-VER < "8.09"
-	       PERFORM SAVE-SCREEN-3
-	       CALL "CNV\SRDCON" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\SRDCON"
-	       CALL "UTP\CARREB"
-		  USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
-	       PERFORM RESTORE-SCREEN-3.
-	   IF STK-VER < "8.14"
-	       PERFORM SAVE-SCREEN-3
-	       CALL "CNV\CARCON" USING WS-PARID WS-USER-ID
-	       CANCEL "CNV\CARCON"
-	       CALL "UTP\CARREB"
-		  USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
-	       PERFORM RESTORE-SCREEN-3.
-039770	     GO TO ZA999.
+             MOVE 1                  TO WS-NETKEY.
+             READ NETWORK.
+      *    IF DEB-VER < "8.09"
+      *        PERFORM SAVE-SCREEN-3
+      *        CALL "CNV\DEBCON" USING WS-PARID WS-USER-ID
+      *        CANCEL "CNV\DEBCON"
+      *        PERFORM RESTORE-SCREEN-3.
+      *    IF DEB-VER < "8.11"
+      *        PERFORM SAVE-SCREEN-3
+      *        CALL "UTP\JOBREB" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
+      *        CALL "CNV\DEBJOB" USING WS-PARID WS-USER-ID
+      *        CANCEL "CNV\DEBJOB"
+      *        PERFORM RESTORE-SCREEN-3.
+      *    IF DEB-VER < "8.12"
+      *        PERFORM SAVE-SCREEN-3
+      *        CALL "CNV\DEBAGE" USING WS-PARID WS-USER-ID
+      *        CANCEL "CNV\DEBAGE"
+      *        PERFORM RESTORE-SCREEN-3.
+      *    IF DEB-VER < "8.13"
+      *        PERFORM SAVE-SCREEN-3
+      *        CALL "CNV\DEBREST" USING WS-PARID WS-USER-ID
+      *        CANCEL "CNV\DEBREST"
+      *        PERFORM RESTORE-SCREEN-3.
+           IF DEB-VER < "9.04"
+               PERFORM SAVE-SCREEN-3
+               CALL "CNV\DEBCONV" USING WS-PARID WS-USER-ID DATA-FILE-IDS
+               CANCEL "CNV\DEBCONV"
+               PERFORM RESTORE-SCREEN-3.
+             MOVE 2                  TO WS-NETKEY.
+             READ NETWORK.
+      *    IF P-VER < "8.12"
+      *        PERFORM SAVE-SCREEN-3
+      *        CALL "CNV\PURCON" USING WS-PARID WS-USER-ID
+      *        CANCEL "CNV\PURCON"
+      *        PERFORM RESTORE-SCREEN-3.
+           IF P-VER < "9.04"
+               PERFORM SAVE-SCREEN-3
+               CALL "CNV\CREDCONV" USING WS-PARID WS-USER-ID DATA-FILE-IDS
+               CANCEL "CNV\CREDCONV"
+               PERFORM RESTORE-SCREEN-3.
+      *      MOVE 3   TO WS-NETKEY.
+      *      READ NETWORK.
+      *    IF STK-VER < "8.09"
+      *        PERFORM SAVE-SCREEN-3
+      *        CALL "CNV\SRDCON" USING WS-PARID WS-USER-ID
+      *        CANCEL "CNV\SRDCON"
+      *        CALL "UTP\CARREB" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
+      *        PERFORM RESTORE-SCREEN-3.
+      *    IF STK-VER < "8.14"
+      *        PERFORM SAVE-SCREEN-3
+      *        CALL "CNV\CARCON" USING WS-PARID WS-USER-ID
+      *        CANCEL "CNV\CARCON"
+      *        CALL "UTP\CARREB" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
+      *        PERFORM RESTORE-SCREEN-3.
+           GO TO ZA999.
 
        ZA05.
-	     MOVE 1		 TO WS-SHARED
-				    WS-NETKEY.
+             MOVE 1                  TO WS-SHARED WS-NETKEY.
        ZA10.
-000030	     READ NETWORK IGNORE LOCK.
-	     MOVE NET-RECORD	 TO SHR-RECORD.
-	   IF WS-NETKEY = 5
-	       MOVE "N"		 TO SHR-DEBT
-				    SHR-CRED
-				    SHR-STOCK
-				    SHR-GLED
-				    SHR-LAY.
-	     WRITE SHR-RECORD.
-	  IF WS-NETKEY < 5
-	      ADD 1		 TO WS-SHARED
-				    WS-NETKEY
-	      GO TO ZA10.
+             READ NETWORK IGNORE LOCK.
+             MOVE NET-RECORD  TO SHR-RECORD.
+           IF WS-NETKEY = 5
+               MOVE "N"              TO SHR-DEBT SHR-CRED SHR-STOCK SHR-GLED SHR-LAY.
+             WRITE SHR-RECORD.
+           IF WS-NETKEY < 5
+               ADD 1                 TO WS-SHARED WS-NETKEY
+               GO TO ZA10.
 
        ZA15.
-	     EXIT.
+             EXIT.
 
-       COPY ZA49.PRO.
+       COPY "ZA49.PRO".
 
-039850 ZA50.
-039860	   IF WS-F-ERROR = 32
-039870	       MOVE "TAX file"	 TO WS-FILE.
-039980	     DISPLAY "Rebuild " AT 0812
-039990		      WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
-040000	     DISPLAY "Press any key to continue" AT 1012.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+       ZA50.
+             MOVE "Rebuild TAX file" TO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
 
-040020 ZA51.
-040030       EXIT PROGRAM.
+       ZA51.
+             EXIT PROGRAM.
       *    *************************************************************
       *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
       *    *************************************************************
-040090 ZA60.
-040650	     MOVE WS-COMPANY	 TO WS-TOP-COMP.
-	   IF WS-USER = WS-SYS-ID
-	       MOVE "SupervisorÄ"  TO WS-WRKHD
-	   ELSE
-	       MOVE "Workstation"  TO WS-WRKHD
-	       MOVE WS-USER	   TO WS-WRKST.
+       ZA60.
+             MOVE WS-COMPANY         TO CRT-COMPANY.
       *    *************************************************************
-      *    ****    I N I T I A L I Z E	 F I L E S
+      *    ****    I N I T I A L I Z E  F I L E S
       *    *************************************************************
        ZA100.
-	     MOVE WS-NEXT-PRG	 TO PRG-NAME.
-	     MOVE SPACES	 TO WS-NEXT-PRG.
-	     CALL PRG-NAME
-		  USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
-		  ON EXCEPTION
-		  STOP RUN.
-	     CANCEL PRG-NAME.
-	   IF WS-NEXT-PRG NOT = SPACES
-	       GO TO ZA100.
+             MOVE WS-NEXT-PRG        TO PRG-NAME.
+             MOVE SPACES             TO WS-NEXT-PRG.
+             CALL PRG-NAME USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
+                  ON EXCEPTION STOP RUN.
+             CANCEL PRG-NAME.
+           IF WS-NEXT-PRG NOT = SPACES
+               GO TO ZA100.
 
-040660 ZA200.
+       ZA200.
 
-       COPY LOCKED.PRO.
+       COPY "LOCKED.PRO".
 
-040730 ZA205.
-040740       EXIT PROGRAM.
+       ZA205.
+             EXIT PROGRAM.
 
-040750 ZA999.
-040760       EXIT.
+       ZA999.
+             EXIT.
 
-040780 I-O-ERRORS      SECTION  91.
+       I-O-ERRORS      SECTION  10.
 
-       COPY ERRORS.PRO.
-040930
-040950 DISPLAY-FILE-NAME.
-040960	   IF WS-F-ERROR = 2
-040970	       MOVE W02-NETWORK  TO WS-FILE
-040980	       MOVE WS-NETKEY	 TO WS-KEY
-041110	   ELSE
-040960	   IF WS-F-ERROR = 7
-041820	       MOVE W02-DEPART	 TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
-041830	       MOVE DPT-CODE	 TO WS-KEYX
-041110	   ELSE
-041120     IF WS-F-ERROR = 15
-041130	       MOVE W02-PARAM	 TO WS-FILE
-041140         MOVE WS-PARKEY    TO WS-KEY
-041840	   ELSE
-041850     IF WS-F-ERROR = 32
-041860         MOVE W02-TXTRAN   TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
-	       MOVE TAX-KEY	 TO WS-KEYX
-041110	   ELSE
-041120	   IF WS-F-ERROR = 37
-041130	       MOVE W02-SHARED	 TO WS-FILE
-041140	       MOVE WS-SHARED	 TO WS-KEY.
+       COPY "ERRORS.PRO".
+      
+       DISPLAY-FILE-NAME.
+             MOVE ZERO               TO WS-KEY.
+             EVALUATE WS-F-ERROR
+               WHEN 2          MOVE W02-NETWORK  TO WS-FILE
+                               MOVE WS-NETKEY    TO WS-KEY
+                               
+               WHEN 7          MOVE W02-DEPART   TO WS-FILE
+                               MOVE DPT-CODE     TO WS-KEYX
+                               
+               WHEN 15         MOVE W02-PARAM    TO WS-FILE
+                               MOVE WS-PARKEY    TO WS-KEY
+                               
+               WHEN 32         MOVE W02-TXTRAN   TO WS-FILE
+                               MOVE TAX-KEY      TO WS-KEYX
+                               
+               WHEN 37         MOVE W02-SHARED   TO WS-FILE
+                               MOVE WS-SHARED    TO WS-KEY
+                               
+               WHEN OTHER      MOVE "ERROR"      TO WS-FILE
+             END-EVALUATE.
 
-       COPY DISPERR.PRO.
+       COPY "DISPERR.PRO".

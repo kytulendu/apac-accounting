@@ -1,4 +1,4 @@
-      $set LINKCOUNT"512"
+      $set LINKCOUNT"512" GNT"UTILMENU.GNT"
       ******************************************************************
       *                                                                *
       *  **    **  ********  **        **     **  ********  **     **  *
@@ -13,7 +13,7 @@
       *                                                                *
       *     U T I L I T I E S   M E N U   P R O G R A M                *
       *                                                                *
-      *     VERSION 9.00.00 - November 2012                            *
+      *   Version 9.00.70 - March 2015                                 *
       *                                                                *
       ******************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -35,9 +35,9 @@
       *    ³ LS0-MODULES group. The other indicators in this group are ³
       *    ³ used to show which modules of the system are installed.   ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ³    SYSTEM FILE    ³      CHAIN.WS	   ³     CHAIN.LS      ³
+      *    ³    SYSTEM FILE    ³      CHAIN.WS     ³     CHAIN.LS      ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ³03	SEC-MODULES. ³03  WS0-MODULES.   ³03 LS0-MODULES.    ³
+      *    ³03 SEC-MODULES. ³03  WS0-MODULES.      ³03 LS0-MODULES.    ³
       *    ³  05  SEC-DTP 9(01)³  05  WS0-DTP 9(01)³  05  LS0-DTP 9(01)³
       *    ³  05  SEC-STP 9(01)³  05  WS0-STP 9(01)³  05  LS0-STP 9(01)³
       *    ³  05  SEC-HPD 9(01)³  05  WS0-HPD 9(01)³  05  LS0-HPD 9(01)³
@@ -54,99 +54,125 @@
       *    ³  05  FILLER  X(07)³  05  FILLER  X(07)³  05  FILLER  X(07)³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *
-000010 IDENTIFICATION DIVISION.
-000020 PROGRAM-ID.     UTILMENU.
-000030 AUTHOR.         J W LEMMON (APAC).
-000040 DATE-WRITTEN.   OCTOBER 1982.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.     UTILMENU.
+       AUTHOR.         J W LEMMON (APAC).
+       DATE-WRITTEN.   OCTOBER 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
-				     by James William Lemmon.
-				       (Id No. 4412165050082).
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                                  by James William Lemmon.
+                                    (Id No. 4412165050082).
 
-		   All rights reserved.
+                All rights reserved.
 
-		   e-mail jwlemmon@gmail.com.
+                e-mail jwlemmon@gmail.com.
 
-000050 SECURITY.
-		   This program is free software; you can redistribute
-		   it and/or modify it under the terms of the GNU General
-		   Public License as published by the Free Software
-		   Foundation; either version 2 of the License, or (at
-		   your option) any later version.
+       SECURITY.
+                This program is free software; you can redistribute
+                it and/or modify it under the terms of the GNU General
+                Public License as published by the Free Software
+                Foundation; either version 3 of the License, or (at
+                your option) any later version.
 
-		   This program is distributed in the hope that it will
-		   be useful, but WITHOUT ANY WARRANTY; without even the
-		   implied warranty of MERCHANTABILITY or FITNESS FOR A
-		   PARTICULAR PURPOSE.	See the GNU General Public License
-		   for more details.
+                This program is distributed in the hope that it will
+                be useful, but WITHOUT ANY WARRANTY; without even the
+                implied warranty of MERCHANTABILITY or FITNESS FOR A
+                PARTICULAR PURPOSE. See the GNU General Public License
+                for more details.
 
-		   You should have received a copy of the GNU General
-		   Public License along with this program; if not, write
-		   to the Free Software Foundation, Inc., 59 Temple Place
-		   - Suite 330, Boston, MA 02111-1307, USA.
+                You should have received a copy of the GNU General
+                Public License along with this program. If not, see
+                <http://www.gnu.org/licenses/>.
 
-000050 ENVIRONMENT DIVISION.
-000060 CONFIGURATION SECTION.
-000070 SPECIAL-NAMES.
-000080                 CURSOR IS CSTART
-000090                 CONSOLE IS CRT
+       INSTALLATION.          APAC.
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+                       CURSOR IS CSTART
+                       CONSOLE IS CRT
                        CRT STATUS IS KEY-STATUS.
-000100 INPUT-OUTPUT SECTION.
-000110 FILE-CONTROL.
-
-       COPY "APACFIDS.SL".
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
 
        COPY "TXTRAN.SL".
 
       /
-000330 DATA DIVISION.
-000340 FILE SECTION.
-
-       COPY "APACFIDS.FDE".
+       DATA DIVISION.
+       FILE SECTION.
 
        COPY "TXTRAN.FDE".
 
       /
-000560 WORKING-STORAGE SECTION.
+       WORKING-STORAGE SECTION.
        77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-000610 77  WS-S1	   PIC	9(04)	 COMP-5.
-000620 77  WS-S2           PIC  9(04)    COMP-5.
-000630 77  WS-S3           PIC  9(04)    COMP-5.
-000640 77  WS-S4           PIC  9(04)    COMP-5.
-       77  WS-TEMP-LIN	   PIC	9(02)	 COMP-5.
-       77  WS-OPTION	   PIC	X(01).
-       77  PRG-NAME	   PIC	X(12) VALUE SPACES.
-000250 77  WS-PASSWORD	   PIC	X(08) VALUE SPACES.
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
+       77  WS-S1    PIC 9(04)  COMP-5.
+       77  WS-S2           PIC  9(04)    COMP-5.
+       77  WS-S3           PIC  9(04)    COMP-5.
+       77  WS-S4           PIC  9(04)    COMP-5.
+       77  WS-TEMP-LIN    PIC 9(02)  COMP-5.
+       77  WS-OPTION    PIC X(01).
+       77  PRG-NAME    PIC X(12) VALUE SPACES.
+       77  WS-PASSWORD    PIC X(08) VALUE SPACES.
+       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
 
-001350 01  WS-CRT-LINES.
-001380     03  WS-TOP-LNE2.
-001390         05  WS-TCR      PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-001400     03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-001410         05  FILLER      PIC  X(01).
-001420         05  WS-TOP-COMP PIC  X(40).
-001430         05  FILLER      PIC  X(23).
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *       C = Clear comment line (50)
+      *       E = Clear lines (any line or lines between 5 and 46)
+      *       H = Change heading
+      *       S = Clear the screen and display headings
+      *
+           03  CRT-TYPE              PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START             PIC  9(02).
+           03  CRT-END               PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM           PIC  X(15) VALUE "UTILMENU".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING           PIC  X(40) VALUE "UTILITIES/PARAMETERS CONTROL MODULE".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY           PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-WRKHD             PIC  X(11).
+           03  CRT-WRKST             PIC  X(03) VALUE "ÄÄÄ".
+
+       01  WS-CRT-LINES.
+           03  WS-TOP-LNE2.
+               05  WS-TCR      PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
+           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
+               05  FILLER      PIC  X(01).
+               05  WS-TOP-COMP PIC  X(40).
+               05  FILLER      PIC  X(23).
                05  WS-WRKHD    PIC  X(11).
-001430         05  FILLER      PIC  X(01).
+               05  FILLER      PIC  X(01).
                05  WS-WRKST    PIC  X(03).
-001430         05  FILLER      PIC  X(01).
-001460     03  WS-MID-LNE2.
+               05  FILLER      PIC  X(01).
+           03  WS-MID-LNE2.
                05  FILLER      PIC  X(01) VALUE "³".
                05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
                05  FILLER      PIC  X(01) VALUE "³".
 
-001840 COPY "WS.WS".
+       COPY "WS.WS".
 
-000290 01  WS-PARID.
-000020	   03  WS-SYS-ID       PIC  X(03).
-
-002040 01  W02-FID.
-
-       COPY "APACFIDS.ID".
-
-       COPY "PARAM.ID".
-
-       COPY "TXTRAN.ID".
+       01  WS-PARID.
+          03  WS-SYS-ID       PIC  X(03).
 
        01  BLOCK-DETAIL1.
            03  ORIGINAL-VID1.
@@ -194,7 +220,7 @@
 
        COPY "FUNCTION.WS".
 
-004540 COPY "W50.WS".
+       COPY "W50.WS".
 
        LINKAGE SECTION.
 
@@ -203,4262 +229,2761 @@
        COPY "FILE.IDS".
 
       /
-000750 SCREEN SECTION.
+       SCREEN SECTION.
 
        COPY "MENUINST.CRT".
 
-       01  S01.
-001450	   03  LINE  2 COLUMN 30 BACKGROUND-COLOR Blue
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-001460				 VALUE "UTILITIES CONTROL MENU".
-
        01  S02.
-	   03  LINE  4 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  5 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³  ".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "UTILITY CONTROL".
-	   03	       COLUMN 25 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE "   ³".
-	   03  LINE  6 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN  9 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE " Parameters       ³".
-001470	   03  LINE  7 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN  9 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE " Rebuild Files    ³".
-001470	   03  LINE  8 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN  9 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE " Delivery Routes  ³".
-001470	   03  LINE  9 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN  9 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE " Clear USER Log   ³".
-001570	   03  LINE 10 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN  9 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE " Clear Values     ³".
-001570	   03  LINE 11 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN  9 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE " Purge Cardex File³".
-001570	   03  LINE 12 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN  9 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 10 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit	          ³".
-	   03  LINE 13 COLUMN  7 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Green HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN  8 BACKGROUND-COLOR Green
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Green FOREGROUND-COLOR Green.
+               05  LINE  8 COLUMN  7 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                         HIGHLIGHT.
+               05          COLUMN 28 VALUE                      "¿" FOREGROUND-COLOR Black.
+               05  LINE  9 COLUMN  7 VALUE "³  "                                           HIGHLIGHT.
+               05          COLUMN 10 VALUE    "UTILITY CONTROL"     FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 25 VALUE                   "   ³" FOREGROUND-COLOR Black.
+               05  LINE 10 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN  9 VALUE   "1"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 10 VALUE    " Parameters       ³" FOREGROUND-COLOR Black.
+               05  LINE 11 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN  9 VALUE   "2"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 10 VALUE    " Rebuild Files    ³" FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN  9 VALUE   "3"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 10 VALUE    " Delivery Routes  ³" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN  9 VALUE   "4"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 10 VALUE    " Clear USER Log   ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN  9 VALUE   "5"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 10 VALUE    " Clear Values     ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN  9 VALUE   "6"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 10 VALUE    " Purge Cardex File³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN  9 VALUE   "0"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 10 VALUE    " Exit             ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN  7 VALUE "À"                                             HIGHLIGHT.
+               05          COLUMN  8 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S03.
-	   03  LINE  6 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 45 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  7 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³  ".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "REBUILD FILES".
-	   03	       COLUMN 42 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE "   ³".
-	   03  LINE  8 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Creditors      ³".
-001470	   03  LINE  9 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Debtors        ³".
-001570	   03  LINE 10 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " General Ledger ³".
-001500	   03  LINE 11 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Job Costing    ³".
-001500	   03  LINE 12 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Stock          ³".
-	   03  LINE 13 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Sundry         ³".
-	   03  LINE 14 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit	        ³".
-	   03  LINE 15 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 27 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
+               05  LINE 10 COLUMN 26 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 45 VALUE                    "¿" FOREGROUND-COLOR Black.
+               05  LINE 11 COLUMN 26 VALUE "³  "                                         HIGHLIGHT.
+               05          COLUMN 29 VALUE    "REBUILD FILES"     FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 42 VALUE                 "   ³" FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 28 VALUE   "1"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Creditors      ³" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 28 VALUE   "2"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Debtors        ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 28 VALUE   "3"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 29 VALUE    " General Ledger ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 28 VALUE   "4"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Job Costing    ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 28 VALUE   "5"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Stock          ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 28 VALUE   "6"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Sundry         ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 28 VALUE   "0"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 26 VALUE "À"                                           HIGHLIGHT.
+               05          COLUMN 27 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S04.
-	   03  LINE  8 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 63 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³  ".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "CREDITOR FILES".
-	   03	       COLUMN 61 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "  ³".
-	   03  LINE 10 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Account File   ³".
-	   03  LINE 11 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Purchase Orders³".
-	   03  LINE 12 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " PD Cheques     ³".
-	   03  LINE 13 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Transactions   ³".
-	   03  LINE 14 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Memo/Remarks   ³".
-	   03  LINE 15 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cardex (Purch) ³".
-	   03  LINE 16 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit           ³".
-	   03  LINE 17 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 45 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                         HIGHLIGHT.
+               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 44 VALUE "³  "                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    "CREDITOR FILES"                           HIGHLIGHT.
+               05          COLUMN 61 VALUE                  "  ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 46 VALUE   "1"                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Account File   ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 46 VALUE   "2"                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Purchase Orders³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 46 VALUE   "3"                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    " PD Cheques     ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 46 VALUE   "4"                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Transactions   ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 46 VALUE   "5"                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Memo/Remarks   ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 46 VALUE   "6"                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Cardex (Purch) ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 46 VALUE   "0"                                         HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
+               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S05.
-	   03  LINE  8 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 63 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³   ".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "DEBTOR FILES".
-	   03	       COLUMN 60 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "   ³".
-	   03  LINE 10 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Account File   ³".
-	   03  LINE 11 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Invoice File   ³".
-	   03  LINE 12 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Memo/Remarks   ³".
-	   03  LINE 13 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Sales Orders   ³".
-	   03  LINE 14 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Transactions   ³".
-	   03  LINE 15 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Rec.Transact's ³".
-	   03  LINE 16 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "7".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " ALT NAME Index ³".
-	   03  LINE 17 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit           ³".
-	   03  LINE 18 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 45 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 44 VALUE "³   "                                       HIGHLIGHT.
+               05          COLUMN 48 VALUE     "DEBTOR FILES"                           HIGHLIGHT.
+               05          COLUMN 60 VALUE                 "   ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Account File   ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Invoice File   ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Memo/Remarks   ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Sales Orders   ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Transactions   ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "6"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Rec.Transact's ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "7"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " ALT NAME Index ³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
+               05  LINE 22 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
+               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S06.
-	   03  LINE  8 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 63 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³  ".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "GENERAL LEDGER".
-	   03	       COLUMN 61 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "  ³".
-	   03  LINE 10 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Account File   ³".
-	   03  LINE 11 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Batch File     ³".
-	   03  LINE 12 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Integration    ³".
-	   03  LINE 13 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Transactions   ³".
-	   03  LINE 14 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cheque Batch   ³".
-	   03  LINE 15 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit           ³".
-	   03  LINE 16 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 45 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 44 VALUE "³  "                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    "GENERAL LEDGER"                          HIGHLIGHT.
+               05          COLUMN 61 VALUE                  "  ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Account File   ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Batch File     ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Integration    ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Transactions   ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Cheque Batch   ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
+               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S07.
-	   03  LINE  8 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 63 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³   ".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "JOB COSTING".
-	   03	       COLUMN 59 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "    ³".
-	   03  LINE 10 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Job File       ³".
-	   03  LINE 11 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Job Types      ³".
-	   03  LINE 12 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Requisitions   ³".
-	   03  LINE 13 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Rev. Warranty  ³".
-	   03  LINE 14 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit           ³".
-	   03  LINE 15 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 45 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 44 VALUE "³   "                                       HIGHLIGHT.
+               05          COLUMN 48 VALUE     "JOB COSTING"                            HIGHLIGHT.
+               05          COLUMN 59 VALUE                "    ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Job File       ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Job Types      ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Requisitions   ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Rev. Warranty  ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
+               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S08.
-	   03  LINE  8 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 63 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³   ".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "STOCK FILES".
-	   03	       COLUMN 59 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "    ³".
-	   03  LINE 10 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Memo/Remarks   ³".
-	   03  LINE 11 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Production     ³".
-	   03  LINE 12 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Stock File     ³".
-	   03  LINE 13 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cardex File    ³".
-	   03  LINE 14 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Warehouse File ³".
-	   03  LINE 15 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " W/H Stock File ³".
-	   03  LINE 16 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit           ³".
-	   03  LINE 17 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 45 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 44 VALUE "³   "                                       HIGHLIGHT.
+               05          COLUMN 48 VALUE     "STOCK FILES"                            HIGHLIGHT.
+               05          COLUMN 59 VALUE                "    ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Memo/Remarks   ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Production     ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Stock File     ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Cardex File    ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Warehouse File ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "6"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " W/H Stock File ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
+               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S09.
-	   03  LINE  8 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 63 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³  ".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "SUNDRY FILES".
-	   03	       COLUMN 59 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "    ³".
-	   03  LINE 10 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cheques        ³".
-	   03  LINE 11 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Guarantees     ³".
-	   03  LINE 12 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Tax (VAT)      ³".
-	   03  LINE 13 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cash Slips     ³".
-	   03  LINE 14 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Department     ³".
-	   03  LINE 15 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 46 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit           ³".
-	   03  LINE 16 COLUMN 44 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 45 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 44 VALUE "³  "                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    "SUNDRY FILES"                            HIGHLIGHT.
+               05          COLUMN 59 VALUE                "    ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Cheques        ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Guarantees     ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Tax (VAT)      ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Cash Slips     ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Department     ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
+               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
+               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
+               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
-002330 01  S11.
-	   02  S11A.
-	   03  LINE 23 COLUMN 12 FOREGROUND-COLOR Brown HIGHLIGHT
-				 VALUE "Password:".
-	   02  S11B.
-002340	   03  LINE 23 COLUMN 22 PIC  X(08)
-002350                           USING WS-PASSWORD SECURE AUTO.
+       01  S11.
+           03  S11A.
+               05  LINE 23 COLUMN 12 VALUE "Password:" FOREGROUND-COLOR Brown HIGHLIGHT.
+           03  S11B.
+               05  LINE 23 COLUMN 22 PIC  X(08) USING WS-PASSWORD SECURE AUTO.
 
        01  S12.
-	   03  LINE  6 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  7 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³      ".
-	   03	       COLUMN 33 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "PARAMETERS".
-	   03	       COLUMN 43 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE "      ³".
-	   03  LINE  8 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Company/Staff Data ³".
-001470	   03  LINE  9 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Transaction Codes  ³".
-001570	   03  LINE 10 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Printer Details    ³".
-001500	   03  LINE 11 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Tax/Int/Disc Rates ³".
-001500	   03  LINE 12 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Account Numbers    ³".
-	   03  LINE 13 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Sundry Parameters  ³".
-	   03  LINE 14 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "7".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Cheque Printing    ³".
-	   03  LINE 15 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "8".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Inhouse Bar Codes  ³".
-	   03  LINE 16 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "A".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Bar Code Labels    ³".
-	   03  LINE 17 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "B".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Stock Conv. Factor ³".
-	   03  LINE 18 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 28 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 29 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit	            ³".
-	   03  LINE 19 COLUMN 26 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Cyan HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 27 BACKGROUND-COLOR Cyan
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
+               05  LINE 10 COLUMN 26 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 49 VALUE                        "¿" FOREGROUND-COLOR Black.
+               05  LINE 11 COLUMN 26 VALUE "³      "                                        HIGHLIGHT.
+               05          COLUMN 33 VALUE        "PARAMETERS"        FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 43 VALUE                  "      ³" FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "1"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Company/Staff Data ³" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "2"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Transaction Codes  ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "3"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Printer Details    ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "4"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Tax/Int/Disc Rates ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "5"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Account Numbers    ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "6"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Sundry Parameters  ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "7"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Cheque Printing    ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "8"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Inhouse Bar Codes  ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "A"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Bar Code Labels    ³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "B"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Stock Conv. Factor ³" FOREGROUND-COLOR Black.
+               05  LINE 22 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
+               05          COLUMN 28 VALUE   "0"                      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 29 VALUE    " Exit               ³" FOREGROUND-COLOR Black.
+               05  LINE 23 COLUMN 26 VALUE "À"                                              HIGHLIGHT.
+               05          COLUMN 27 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S13.
-	   03  LINE  8 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 69 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "COMPANY/STAFF DATA".
-	   03	       COLUMN 67 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "  ³".
-	   03  LINE 10 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Company Details   ³".
-	   03  LINE 11 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Debtor Categories ³".
-	   03  LINE 12 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Sales Ledgers     ³".
-	   03  LINE 13 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Sales Staff Data  ³".
-	   03  LINE 14 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Technicians Data  ³".
-	   03  LINE 15 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Branch Details    ³".
-	   03  LINE 16 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "7".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Bank Details      ³".
-	   03  LINE 17 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit              ³".
-	   03  LINE 18 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 69 VALUE                       "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "COMPANY/STAFF DATA"                          HIGHLIGHT.
+               05          COLUMN 67 VALUE                     "  ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "1"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Company Details   ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "2"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Debtor Categories ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "3"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Sales Ledgers     ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "4"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Sales Staff Data  ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "5"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Technicians Data  ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "6"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Branch Details    ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "7"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Bank Details      ³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "0"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Exit              ³" FOREGROUND-COLOR Black.
+               05  LINE 22 COLUMN 47 VALUE "À"                                             HIGHLIGHT.
+               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S14.
-	   03  LINE  8 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 67 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "TRANSACTION CODES".
-	   03	       COLUMN 66 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " ³".
-	   03  LINE 10 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Creditor Codes  ³".
-	   03  LINE 11 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Debtor Codes    ³".
-	   03  LINE 12 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit            ³".
-	   03  LINE 13 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 67 VALUE                     "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 49 VALUE   "TRANSACTION CODES"                         HIGHLIGHT.
+               05          COLUMN 66 VALUE                    " ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 49 VALUE   "1"                                         HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Creditor Codes  ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 49 VALUE   "2"                                         HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Debtor Codes    ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 49 VALUE   "0"                                         HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Exit            ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 47 VALUE "À"                                           HIGHLIGHT.
+               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S15.
-	   03  LINE  8 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 74 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³   ".
-	   03	       COLUMN 51 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "PRINTERS/STATIONERY".
-	   03	       COLUMN 70 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "    ³".
-	   03  LINE 10 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Printer Specifications ³".
-	   03  LINE 11 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Supervisor Printers    ³".
-	   03  LINE 12 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Work Station Printers  ³".
-	   03  LINE 13 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cash Slip Headings     ³".
-	   03  LINE 14 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cash Slip/Drawer Cont. ³".
-	   03  LINE 15 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Statement/Inv. Formats ³".
-	   03  LINE 16 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "7".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Statement/Inv. Heading ³".
-	   03  LINE 17 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "8".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Consol. Statements     ³".
-	   03  LINE 18 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "A".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Stm Det. Lines USB/WIN ³".
-	   03  LINE 19 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit                   ³".
-	   03  LINE 20 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 74 VALUE                            "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 47 VALUE "³   "                                               HIGHLIGHT.
+               05          COLUMN 51 VALUE     "PRINTERS/STATIONERY"                            HIGHLIGHT.
+               05          COLUMN 70 VALUE                        "    ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "1"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Printer Specifications ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "2"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Supervisor Printers    ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "3"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Work Station Printers  ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "4"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Cash Slip Headings     ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "5"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Cash Slip/Drawer Cont. ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "6"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Statement/Inv. Formats ³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "7"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Statement/Inv. Heading ³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "8"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Consol. Statements     ³" FOREGROUND-COLOR Black .
+               05  LINE 22 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "A"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Stm Det. Lines USB/WIN ³" FOREGROUND-COLOR Black.
+               05  LINE 23 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
+               05          COLUMN 49 VALUE   "0"                                                HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Exit                   ³" FOREGROUND-COLOR Black.
+               05  LINE 24 COLUMN 47 VALUE "À"                                                  HIGHLIGHT.
+               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S16.
-	   03  LINE  8 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 69 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "TAX/INT/DISC RATES".
-	   03	       COLUMN 67 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "  ³".
-	   03  LINE 10 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Value Added Tax   ³".
-	   03  LINE 11 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Ad-Valorem Tax    ³".
-	   03  LINE 12 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Arrear Interest   ³".
-	   03  LINE 13 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Settlement Discnt.³".
-	   03  LINE 14 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit              ³".
-	   03  LINE 15 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 69 VALUE                       "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "TAX/INT/DISC RATES"                          HIGHLIGHT.
+               05          COLUMN 67 VALUE                     "  ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "1"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Value Added Tax   ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "2"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Ad-Valorem Tax    ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "3"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Arrear Interest   ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "4"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Settlement Discnt.³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "0"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Exit              ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 47 VALUE "À"                                             HIGHLIGHT.
+               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S17.
-	   03  LINE  8 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 67 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³  ".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "ACCOUNT NUMBERS".
-	   03	       COLUMN 65 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "  ³".
-	   03  LINE 10 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cash Sales      ³".
-	   03  LINE 11 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " General Ledger  ³".
-	   03  LINE 12 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit            ³".
-	   03  LINE 13 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 67 VALUE                     "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 47 VALUE "³  "                                         HIGHLIGHT.
+               05          COLUMN 50 VALUE    "ACCOUNT NUMBERS"                          HIGHLIGHT.
+               05          COLUMN 65 VALUE                   "  ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 49 VALUE   "1"                                         HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Cash Sales      ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 49 VALUE   "2"                                         HIGHLIGHT.
+               05          COLUMN 50 VALUE    " General Ledger  ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
+               05          COLUMN 49 VALUE   "0"                                         HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Exit            ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 47 VALUE "À"                                           HIGHLIGHT.
+               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
        01  S18.
-	   03  LINE  8 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-	   03	       COLUMN 69 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "¿".
-	   03  LINE  9 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³  ".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "SUNDRY PARAMETERS".
-	   03	       COLUMN 67 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "  ³".
-	   03  LINE 10 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "1".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Starting Numbers  ³".
-	   03  LINE 11 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "2".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Price Rounding    ³".
-	   03  LINE 12 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "3".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " System Passwords  ³".
-	   03  LINE 13 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "4".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Minimum Margin    ³".
-	   03  LINE 14 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "5".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cost Codes        ³".
-	   03  LINE 15 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "6".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Debtor Title Codes³".
-	   03  LINE 16 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "7".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Special Routines  ³".
-	   03  LINE 17 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "8".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cash Voucher Code ³".
-	   03  LINE 18 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "A".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Batch/Realtime POS³".
-	   03  LINE 19 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "B".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Cash Slip Rounding³".
-	   03  LINE 20 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "C".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Article 11/1g(VAT)³".
-	   03  LINE 21 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "D".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Stock Conv.Factor ³".
-	   03  LINE 22 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "³ ".
-	   03	       COLUMN 49 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey
-				 HIGHLIGHT
-				 VALUE "0".
-	   03	       COLUMN 50 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE " Exit              ³".
-	   03  LINE 23 COLUMN 47 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Grey HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 48 BACKGROUND-COLOR Grey
-				 FOREGROUND-COLOR Black
-				 VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
+               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
+               05          COLUMN 69 VALUE                       "¿" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 47 VALUE "³  "                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    "SUNDRY PARAMETERS"                          HIGHLIGHT.
+               05          COLUMN 67 VALUE                     "  ³" FOREGROUND-COLOR Black.
+               05  LINE 14 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "1"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Starting Numbers  ³" FOREGROUND-COLOR Black.
+               05  LINE 15 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "2"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Price Rounding    ³" FOREGROUND-COLOR Black.
+               05  LINE 16 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "3"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " System Passwords  ³" FOREGROUND-COLOR Black.
+               05  LINE 17 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "4"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Minimum Margin    ³" FOREGROUND-COLOR Black.
+               05  LINE 18 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "5"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Cost Codes        ³" FOREGROUND-COLOR Black.
+               05  LINE 19 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "6"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Debtor Title Codes³" FOREGROUND-COLOR Black.
+               05  LINE 20 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "7"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Special Routines  ³" FOREGROUND-COLOR Black.
+               05  LINE 21 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "8"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Cash Voucher Code ³" FOREGROUND-COLOR Black.
+               05  LINE 22 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "A"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Batch/Realtime POS³" FOREGROUND-COLOR Black.
+               05  LINE 23 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "B"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Cash Slip Rounding³" FOREGROUND-COLOR Black.
+               05  LINE 24 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "C"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Article 11/1g(VAT)³" FOREGROUND-COLOR Black.
+               05  LINE 25 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "D"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Stock Conv.Factor ³" FOREGROUND-COLOR Black.
+               05  LINE 26 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
+               05          COLUMN 49 VALUE   "0"                                           HIGHLIGHT.
+               05          COLUMN 50 VALUE    " Exit              ³" FOREGROUND-COLOR Black.
+               05  LINE 27 COLUMN 47 VALUE "À"                                             HIGHLIGHT.
+               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
 
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
-       AA000	       SECTION.
+       PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
+       AA000        SECTION.
        AA00.
-003240	   IF LS0-PALEV < 1 AND LS0-SALEV < 4
-	       MOVE "Not Authorised"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO AA99.
-	     PERFORM ZA000-INIT.
-	     DISPLAY CLR-L1-2.
-	     DISPLAY S01.
-	     PERFORM BA000.
-	   IF MOUSE-ATTACHED = "Y"
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM.
-013140 AA99.
-013150       EXIT PROGRAM.
-
-       AA100	       SECTION.
+           IF LS0-PALEV < 1 AND LS0-SALEV < 4
+               MOVE "Not Authorised" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO AA99.
+             PERFORM ZA000-INIT.
+             PERFORM BA000.
+           IF MOUSE-ATTACHED = "Y"
+               MOVE 66   TO MOUSE-FUNC
+               MOVE 0   TO MOUSE-PARAM
+               CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
+       AA99.
+             EXIT PROGRAM.
+             
+       AA100        SECTION.
        AA101.
-	   IF MOUSE-ATTACHED = "Y"
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM.
-	     PERFORM SAVE-SCREEN-3.
-	     CALL PRG-NAME
-		  USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY
-		  ON EXCEPTION
-		      GO TO AA110
-	     END-CALL.
-	     CANCEL PRG-NAME.
+           IF MOUSE-ATTACHED = "Y"
+               MOVE 66               TO MOUSE-FUNC
+               MOVE 0                TO MOUSE-PARAM
+               CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM
+           END-IF.
+             PERFORM SAVE-SCREEN-3.
+             MOVE SPACES             TO LS-PRG-NAME.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Strip the path from the program name and put the program  ³
+      *    ³ name into LS-PRG-NAME.                                    ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             UNSTRING PRG-NAME DELIMITED BY "\" OR " " INTO WS-STAT-MESSAGE LS-PRG-NAME.
+             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS
+                  ON EXCEPTION GO TO AA110
+             END-CALL.
+             CANCEL PRG-NAME.
+
        AA105.
-	     PERFORM RESTORE-SCREEN-3.
-	   IF MOUSE-ATTACHED = "Y"
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 1		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM.
-	     GO TO AA199.
+             PERFORM RESTORE-SCREEN-3.
+           IF MOUSE-ATTACHED = "Y"
+               MOVE 66               TO MOUSE-FUNC
+               MOVE 1                TO MOUSE-PARAM
+               CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM
+           END-IF.
+             GO TO AA199.
+
        AA110.
-	     MOVE SPACE 	 TO WS-ERR-MES.
-	     STRING "Program- " DELIMITED SIZE
-		     PRG-NAME DELIMITED " "
-		     " not on disk, press ANY key"
-		     DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     MOVE W43-SCREEN	 TO W43-SCREEN2.
-	     MOVE W42-ATTRIB	 TO W42-ATTRIB2.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-	     MOVE W43-SCREEN2	 TO W43-SCREEN.
-	     MOVE W42-ATTRIB2	 TO W42-ATTRIB.
-	     GO TO AA105.
+             MOVE SPACE              TO WS-ERR-MES.
+             STRING "Program- " DELIMITED SIZE LS-PRG-NAME DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             MOVE W43-SCREEN         TO W43-SCREEN2.
+             MOVE W42-ATTRIB         TO W42-ATTRIB2.
+             PERFORM ERROR-MESSAGE.
+             MOVE W43-SCREEN2        TO W43-SCREEN.
+             MOVE W42-ATTRIB2        TO W42-ATTRIB.
+             GO TO AA105.
 
        AA199.
-	     EXIT.
+             EXIT.
 
        COPY "FUNCTION.SCR".
 
        COPY "ERROR.SCR".
 
-011433 COPY "CLEAR.CRT".
+       COPY "CLEAR.CRT".
 
-       BA000	       SECTION.
+       COPY "AA900.ALM".
+
+       BA000        SECTION.
        BA00.
-	     MOVE 5		 TO SHADE-ROW.
-	     MOVE 9		 TO SHADE-COL.
-	     MOVE 20		 TO SHADE-WIDTH.
-	     MOVE 9		 TO SHADE-LINES.
-	     DISPLAY S02.
-	   IF (LS0-LEV < 4) OR (LS0-RTE = 0)
-	       DISPLAY " Del. Routes (N/A)³" AT 0810
-			WITH BACKGROUND-COLOR Green FOREGROUND-COLOR Black.
-	   IF (LS0-LEV < 3)
-	       DISPLAY " Purge Cardex(N/A)³" AT 1110
-			WITH BACKGROUND-COLOR Green FOREGROUND-COLOR Black.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
+             MOVE 8                  TO SHADE-ROW.
+             MOVE 7                  TO SHADE-COL.
+             MOVE 22                 TO SHADE-WIDTH.
+             MOVE 10                 TO SHADE-LINES.
+             DISPLAY S02.
+           IF (LS0-LEV < 4) OR (LS0-RTE = 0)
+               DISPLAY " Del. Routes (N/A)³" AT 0810 WITH BACKGROUND-COLOR Green FOREGROUND-COLOR Black.
+           IF (LS0-LEV < 3)
+               DISPLAY " Purge Cardex(N/A)³" AT 1110 WITH BACKGROUND-COLOR Green FOREGROUND-COLOR Black.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
        BA02.
-	     MOVE 5		 TO TOP-ROW.
-	     MOVE 11		 TO BOTTOM-ROW.
-	     MOVE 4		 TO SCREEN-LIN.
-	     MOVE 9		 TO SCREEN-COL.
-	     MOVE 18		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
-	   IF LS-OK = "Z"
-	       MOVE SPACE	 TO LS-OK
-	       MOVE 1		 TO WS-OPTION
-	       GO TO BA16.
+             MOVE 9                  TO TOP-ROW.
+             MOVE 15                 TO BOTTOM-ROW.
+             MOVE 8                  TO SCREEN-LIN.
+             MOVE 9                  TO SCREEN-COL.
+             MOVE 18                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
+           IF LS-OK = "Z"
+               MOVE SPACE  TO LS-OK
+               MOVE 1                TO WS-OPTION
+               GO TO BA16.
 
        BA05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        BA10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO BA15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO BA10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO BA10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO BA10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO BA10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO BA15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO BA05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO BA18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO BA05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       CALL "CBL_TOUPPER" USING WS-OPTION
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
-	       IF (WS-OPTION < 0 OR > 6) AND
-		  (WS-OPTION NOT = "S")
-		   CALL X"E5"
-		   GO TO BA05
-	       END-IF
-	       GO TO BA16
-	   ELSE
-	       CALL X"E5"
-	       GO TO BA05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                      IF MOUSE-ENTER = "Y"
+                          MOVE "N"  TO MOUSE-ENTER
+                          GO TO BA15
+                      END-IF
+                      IF MOUSE-Y = 49
+                          IF MOUSE-X = 5
+                              MOVE 5  TO KEY-CODE-1
+                              GO TO BA10
+                          ELSE
+                          IF MOUSE-X = 10
+                              MOVE 6  TO KEY-CODE-1
+                              GO TO BA10
+                          ELSE
+                          IF MOUSE-X > 36 AND < 44
+                              MOVE 0  TO KEY-CODE-1
+                              GO TO BA10
+                          ELSE
+                          IF MOUSE-X > 54 AND < 60
+                              MOVE 0  TO KEY-CODE-1
+                              MOVE 1  TO KEY-TYPE
+                              GO TO BA10
+                          END-IF
+                      END-IF
+                 WHEN ENTER-KEY  GO TO BA15
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO BA05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO BA18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO BA05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS
+               IF (WS-OPTION < 0 OR > 6) AND (WS-OPTION NOT = "S")
+                   PERFORM AA900-ALARM
+                   GO TO BA05
+               END-IF
+               GO TO BA16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO BA05.
 
        BA15.
-	   IF SCREEN-LIN < 5
-	       CALL X"E5"
-	       GO TO BA05
-	   ELSE
-	   IF SCREEN-LIN = 5
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 6
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 7
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 8
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO BA18.
+             EVALUATE SCREEN-LIN
+               WHEN 9     MOVE "1"   TO WS-OPTION
+               WHEN 10    MOVE "2"   TO WS-OPTION
+               WHEN 11    MOVE "3"   TO WS-OPTION
+               WHEN 12    MOVE "4"   TO WS-OPTION
+               WHEN 13    MOVE "5"   TO WS-OPTION
+               WHEN 14    MOVE "6"   TO WS-OPTION
+               WHEN 15    MOVE "0"   TO WS-OPTION
+               WHEN OTHER PERFORM AA900-ALARM
+                          GO TO BA05
+             END-EVALUATE.
+             GO TO BA18.
 
        BA16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0" OR "S"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 5		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 6		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 7		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 8		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 10		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"  MOVE 15     TO SCREEN-LIN
+               WHEN "1"  MOVE 9      TO SCREEN-LIN
+               WHEN "2"  MOVE 10     TO SCREEN-LIN
+               WHEN "3"  MOVE 11     TO SCREEN-LIN
+               WHEN "4"  MOVE 12     TO SCREEN-LIN
+               WHEN "5"  MOVE 13     TO SCREEN-LIN
+               WHEN "6"  MOVE 14     TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        BA18.
-	   IF WS-OPTION = "0"
-	       GO TO BA999.
-	     PERFORM SAVE-SCREEN.
-	     MOVE BLOCK-DETAIL	 TO BLOCK-DETAIL1.
-	     MOVE SHADOW-DETAIL  TO SHADOW-DETAIL1.
-	     MOVE CRT-DETAIL	 TO CRT-DETAIL1.
-	   IF WS-OPTION = "1"
-	       PERFORM GA000
-	   ELSE
-	   IF WS-OPTION = "2"
-	       PERFORM CA000
-	   ELSE
-	   IF WS-OPTION = "3"
-	       PERFORM DA000
-	   ELSE
-	   IF WS-OPTION = "4"
-	       PERFORM EA000
-	   ELSE
-	   IF WS-OPTION = "5"
-	       PERFORM FA000
-	   ELSE
-	   IF WS-OPTION = "6"
-	       PERFORM IA000
-	   ELSE
-	   IF WS-OPTION = "S"
-	       PERFORM HA000.
-	     PERFORM RESTORE-SCREEN.
-	     MOVE BLOCK-DETAIL1  TO BLOCK-DETAIL.
-	     MOVE SHADOW-DETAIL1 TO SHADOW-DETAIL.
-	     MOVE CRT-DETAIL1	 TO CRT-DETAIL.
-	     GO TO BA05.
+             PERFORM SAVE-SCREEN.
+             MOVE BLOCK-DETAIL       TO BLOCK-DETAIL1.
+             MOVE SHADOW-DETAIL      TO SHADOW-DETAIL1.
+             MOVE CRT-DETAIL         TO CRT-DETAIL1.
+             EVALUATE WS-OPTION
+               WHEN "0"  GO TO BA999
+               WHEN "1"  PERFORM GA000
+               WHEN "2"  PERFORM CA000
+               WHEN "3"  PERFORM DA000
+               WHEN "4"  PERFORM EA000
+               WHEN "5"  PERFORM FA000
+               WHEN "6"  PERFORM IA000
+               WHEN "S"  PERFORM HA000
+             END-EVALUATE.
+             PERFORM RESTORE-SCREEN.
+             MOVE BLOCK-DETAIL1      TO BLOCK-DETAIL.
+             MOVE SHADOW-DETAIL1     TO SHADOW-DETAIL.
+             MOVE CRT-DETAIL1        TO CRT-DETAIL.
+             GO TO BA05.
        BA999.
-	     EXIT.
+             EXIT.
 
       /
       *    ****    R E B U I L D   F I L E S
       *
-       CA000	       SECTION 50.
+       CA000        SECTION 5.
        CA00.
-	     MOVE SPACES	 TO WS-PASSWORD.
-	     DISPLAY S11A.
-	     ACCEPT S11B.
-006080	     MOVE 8 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING WS-PASSWORD
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-006140	     MOVE 1 TO WS-LENGTH.
-	     DISPLAY WS-BLNK78 AT 2302
-		     WITH BACKGROUND-COLOR Blue FOREGROUND-COLOR Cyan.
-006150	   IF WS-PASSWORD NOT = "APACFILE"
-	       GO TO CA999.
-	     MOVE 7		 TO SHADE-ROW.
-	     MOVE 28		 TO SHADE-COL.
-	     MOVE 18		 TO SHADE-WIDTH.
-	     MOVE 9		 TO SHADE-LINES.
-	     DISPLAY S03.
-	   IF LS0-LEV < 1
-	       DISPLAY ".N/A" AT 1041
-			WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
-	   IF (LS0-LEV < 4) AND (LS0-JCP = 0)
-	       DISPLAY "N/A" AT 1142
-			WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 7		 TO TOP-ROW.
-	     MOVE 13		 TO BOTTOM-ROW.
-	     MOVE 6		 TO SCREEN-LIN.
-	     MOVE 28		 TO SCREEN-COL.
-	     MOVE 16		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE SPACES  TO WS-PASSWORD.
+             DISPLAY S11A.
+             ACCEPT S11B.
+             MOVE 8                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING WS-PASSWORD BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+             MOVE 23                 TO CRT-START CRT-END.
+             PERFORM ERASE-SCREEN.
+           IF WS-PASSWORD NOT = "APACFILE"
+               GO TO CA999.
+             MOVE 10                 TO SHADE-ROW.
+             MOVE 26                 TO SHADE-COL.
+             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 10                 TO SHADE-LINES.
+             DISPLAY S03.
+           IF LS0-LEV < 1
+               DISPLAY ".N/A" AT 1041 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
+           IF (LS0-LEV < 4) AND (LS0-JCP = 0)
+               DISPLAY "N/A" AT 1142 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 11                 TO TOP-ROW.
+             MOVE 17                 TO BOTTOM-ROW.
+             MOVE 10                 TO SCREEN-LIN.
+             MOVE 28                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        CA05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        CA10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO CA15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO CA10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO CA10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO CA10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO CA10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO CA15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CA05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO CA18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CA05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 6
-		   CALL X"E5"
-		   GO TO CA05
-	       END-IF
-	       GO TO CA16
-	   ELSE
-	       CALL X"E5"
-	       GO TO CA05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                      IF MOUSE-ENTER = "Y"
+                          MOVE "N"  TO MOUSE-ENTER
+                          GO TO CA15
+                      END-IF
+                      IF MOUSE-Y = 49
+                          IF MOUSE-X = 5
+                              MOVE 5  TO KEY-CODE-1
+                              GO TO CA10
+                          ELSE
+                          IF MOUSE-X = 10
+                              MOVE 6  TO KEY-CODE-1
+                              GO TO CA10
+                          ELSE
+                          IF MOUSE-X > 36 AND < 44
+                              MOVE 0  TO KEY-CODE-1
+                              GO TO CA10
+                          ELSE
+                          IF MOUSE-X > 54 AND < 60
+                              MOVE 0  TO KEY-CODE-1
+                              MOVE 1  TO KEY-TYPE
+                              GO TO CA10
+                          END-IF
+                      END-IF
+                 WHEN ENTER-KEY  GO TO BA15
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO CA18
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CA05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               IF WS-OPTION < 0 OR > 6
+                   PERFORM AA900-ALARM
+                   GO TO CA05
+               END-IF
+               GO TO CA16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO CA05.
 
        CA15.
-	   IF SCREEN-LIN < 7
-	       CALL X"E5"
-	       GO TO CA05
-	   ELSE
-	   IF SCREEN-LIN = 7
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 8
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO CA18.
+             EVALUATE SCREEN-LIN
+               WHEN 11     MOVE "1"  TO WS-OPTION
+               WHEN 12     MOVE "2"  TO WS-OPTION
+               WHEN 13     MOVE "3"  TO WS-OPTION
+               WHEN 14     MOVE "4"  TO WS-OPTION
+               WHEN 15     MOVE "5"  TO WS-OPTION
+               WHEN 16     MOVE "6"  TO WS-OPTION
+               WHEN 17     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CA05
+             END-EVALUATE.
+             GO TO CA18.
 
        CA16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 7		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 8		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 12		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 17   TO SCREEN-LIN
+               WHEN "1"    MOVE 11   TO SCREEN-LIN
+               WHEN "2"    MOVE 12   TO SCREEN-LIN
+               WHEN "3"    MOVE 13   TO SCREEN-LIN
+               WHEN "4"    MOVE 14   TO SCREEN-LIN
+               WHEN "5"    MOVE 15   TO SCREEN-LIN
+               WHEN "6"    MOVE 16   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        CA18.
-	   IF WS-OPTION = "0"
-	       GO TO CA999.
-	     PERFORM SAVE-SCREEN-2.
-	     MOVE BLOCK-DETAIL	 TO BLOCK-DETAIL2.
-	     MOVE SHADOW-DETAIL	 TO SHADOW-DETAIL2.
-	     MOVE CRT-DETAIL	 TO CRT-DETAIL2.
-	   IF WS-OPTION = "1"
-	       PERFORM CB000
-	   ELSE
-	   IF WS-OPTION = "2"
-	       PERFORM CC000
-	   ELSE
-	   IF WS-OPTION = "3"
-	       PERFORM CD000
-	   ELSE
-	   IF WS-OPTION = "4"
-	       PERFORM CE000
-	   ELSE
-	   IF WS-OPTION = "5"
-	       PERFORM CF000
-	   ELSE
-	       PERFORM CG000.
-	     PERFORM RESTORE-SCREEN-2.
-	     MOVE BLOCK-DETAIL2  TO BLOCK-DETAIL.
-	     MOVE SHADOW-DETAIL2 TO SHADOW-DETAIL.
-	     MOVE CRT-DETAIL2	 TO CRT-DETAIL.
-	     GO TO CA05.
-
-       CA20.
-	     PERFORM CLEAR-L50.
-003250	     DISPLAY "Not Authorised - Press any key" AT 2512
-003260		      WITH BACKGROUND-COLOR Cyan
-			   FOREGROUND-COLOR Brown HIGHLIGHT.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-
+             PERFORM SAVE-SCREEN-2.
+             MOVE BLOCK-DETAIL       TO BLOCK-DETAIL2.
+             MOVE SHADOW-DETAIL      TO SHADOW-DETAIL2.
+             MOVE CRT-DETAIL         TO CRT-DETAIL2.
+             EVALUATE WS-OPTION
+               WHEN "0"    GO TO CA999
+               WHEN "1"    PERFORM CB000
+               WHEN "2"    PERFORM CC000
+               WHEN "3"    PERFORM CD000
+               WHEN "4"    PERFORM CE000
+               WHEN "5"    PERFORM CF000
+               WHEN "6"    PERFORM CG000
+             END-EVALUATE.
+             PERFORM RESTORE-SCREEN-2.
+             MOVE BLOCK-DETAIL2      TO BLOCK-DETAIL.
+             MOVE SHADOW-DETAIL2     TO SHADOW-DETAIL.
+             MOVE CRT-DETAIL2        TO CRT-DETAIL.
+             GO TO CA05.
 
        CA999.
-	     EXIT.
+             EXIT.
       *
       *    ****    R E B U I L D   C R E D I T O R   F I L E S
       *
-       CB000	       SECTION 50.
+       CB000        SECTION 5.
        CB0.
-003240	   IF LS0-CRED = "N" OR LS0-CRLEV < 9
-	       PERFORM CA20
-	       GO TO CB999.
+          IF LS0-CRED = "N" OR LS0-CRLEV < 9
+              MOVE "Not Authorised"  TO WS-ERR-MES
+              PERFORM ERROR-MESSAGE
+              GO TO CB999.
 
        CB00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 46		 TO SHADE-COL.
-	     MOVE 18		 TO SHADE-WIDTH.
-	     MOVE 9		 TO SHADE-LINES.
-	     DISPLAY S04.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 15		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 46		 TO SCREEN-COL.
-	     MOVE 16		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12  TO SHADE-ROW.
+             MOVE 44   TO SHADE-COL.
+             MOVE 20   TO SHADE-WIDTH.
+             MOVE 10  TO SHADE-LINES.
+             DISPLAY S04.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13  TO TOP-ROW.
+             MOVE 19   TO BOTTOM-ROW.
+             MOVE 12  TO SCREEN-LIN.
+             MOVE 46   TO SCREEN-COL.
+             MOVE 16   TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        CB05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        CB10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO CB15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO CB10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO CB10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO CB10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO CB10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO CB15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CB05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO CB18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CB05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 6
-		   CALL X"E5"
-		   GO TO CB05
-	       END-IF
-	       GO TO CB16
-	   ELSE
-	       CALL X"E5"
-	       GO TO CB05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"      TO MOUSE-ENTER
+                                     GO TO CB15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5    TO KEY-CODE-1
+                                         GO TO CB10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6    TO KEY-CODE-1
+                                         GO TO CB10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0    TO KEY-CODE-1
+                                         GO TO CB10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0    TO KEY-CODE-1
+                                         MOVE 1    TO KEY-TYPE
+                                         GO TO CB10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO CB15
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CB05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO CB18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CB05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               IF WS-OPTION < 0 OR > 6
+                   PERFORM AA900-ALARM
+                   GO TO CB05
+               END-IF
+               GO TO CB16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO CB05.
 
        CB15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO CB05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO CB18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"   TO WS-OPTION
+               WHEN 14     MOVE "2"   TO WS-OPTION
+               WHEN 15     MOVE "3"   TO WS-OPTION
+               WHEN 16     MOVE "4"   TO WS-OPTION
+               WHEN 17     MOVE "5"   TO WS-OPTION
+               WHEN 18     MOVE "6"   TO WS-OPTION
+               WHEN 19     MOVE "0"   TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CB05
+             END-EVALUATE.
+             GO TO CB18.
 
        CB16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 15		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 14		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 19   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+               WHEN "6"    MOVE 18   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        CB18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO CB999.
-	   IF WS-OPTION < 1 OR > 6
-	       CALL X"E5"
-	       GO TO CB05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\CRDREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PURREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\PDCREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\CRTREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\CRMREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE "UTP\PRDREB" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO CB05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO CB999
+               WHEN "1"    MOVE "UTP\CRDREB" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PURREB" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\PDCREB" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\CRTREB" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\CRMREB" TO PRG-NAME
+               WHEN "6"    MOVE "UTP\PRDREB" TO PRG-NAME
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO CB05.
 
        CB999.
-	     EXIT.
+             EXIT.
       *
-      *    ****    R E B U I L D   D E B T O R	 F I L E S
+      *    ****    R E B U I L D   D E B T O R  F I L E S
       *
-       CC000	       SECTION 50.
+       CC000        SECTION 5.
        CC0.
-003240	   IF LS0-DEBT = "N" OR LS0-DBLEV < 9
-	       PERFORM CA20
-	       GO TO CC999.
+          IF LS0-DEBT = "N" OR LS0-DBLEV < 9
+              MOVE "Not Authorised"  TO WS-ERR-MES
+              PERFORM ERROR-MESSAGE
+        GO TO CC999.
 
        CC00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 46		 TO SHADE-COL.
-	     MOVE 18		 TO SHADE-WIDTH.
-	     MOVE 10		 TO SHADE-LINES.
-	     DISPLAY S05.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 16		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 46		 TO SCREEN-COL.
-	     MOVE 16		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 44                 TO SHADE-COL.
+             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 11                 TO SHADE-LINES.
+             DISPLAY S05.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 20                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 46                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        CC05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        CC10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO CC15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO CC10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO CC10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO CC10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO CC10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO CC15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CC05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO CC18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CC05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 7
-		   CALL X"E5"
-		   GO TO CC05
-	       END-IF
-	       GO TO CC16
-	   ELSE
-	       CALL X"E5"
-	       GO TO CC05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"      TO MOUSE-ENTER
+                                     GO TO CC15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5    TO KEY-CODE-1
+                                         GO TO CC10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6    TO KEY-CODE-1
+                                         GO TO CC10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0    TO KEY-CODE-1
+                                         GO TO CC10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0    TO KEY-CODE-1
+                                         MOVE 1    TO KEY-TYPE
+                                         GO TO CC10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO CC15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CC05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO CC18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CC05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X      TO WS-OPTION
+               IF WS-OPTION < 0 OR > 7
+                   PERFORM AA900-ALARM
+                   GO TO CC05
+               END-IF
+               GO TO CC16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO CC05.
 
        CC15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO CC05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "7"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 16
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO CC18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "5"  TO WS-OPTION
+               WHEN 18     MOVE "6"  TO WS-OPTION
+               WHEN 19     MOVE "7"  TO WS-OPTION
+               WHEN 20     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CC05
+             END-EVALUATE.
+             GO TO CC18.
 
        CC16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 16		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE 15		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 20   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+               WHEN "6"    MOVE 18   TO SCREEN-LIN
+               WHEN "7"    MOVE 19   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        CC18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO CC999.
-	   IF WS-OPTION < 1 OR > 7
-	       CALL X"E5"
-	       GO TO CC05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\DEBREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\INVREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\DBMREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\SALREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\DBTREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE "UTP\DBFREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE "UTP\DALREB" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO CC05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO CC999
+               WHEN "1"    MOVE "UTP\DEBREB" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\INVREB" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\DBMREB" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\SALREB" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\DBTREB" TO PRG-NAME
+               WHEN "6"    MOVE "UTP\DBFREB" TO PRG-NAME
+               WHEN "7"    MOVE "UTP\DALREB" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CC05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO CC05.
 
        CC999.
-	     EXIT.
+             EXIT.
       *
       *    ****    R E B U I L D   G / L E D G E R   F I L E S
       *
-       CD000	       SECTION 50.
+       CD000        SECTION 5.
        CD0.
-	   IF LS0-LEV < 1
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	       PERFORM AA100
-	       DISPLAY MENU-INSTRUCT
-	       GO TO CD999.
-003240	   IF LS0-GL = "N" OR LS0-GLLEV < 9
-	       PERFORM CA20
-	       GO TO CD999.
+           IF LS0-LEV < 1
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³               Not available in this version               ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+               PERFORM AA100
+               DISPLAY MENU-INSTRUCT
+               GO TO CD999.
 
        CD00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 46		 TO SHADE-COL.
-	     MOVE 18		 TO SHADE-WIDTH.
-	     MOVE 8		 TO SHADE-LINES.
-	     DISPLAY S06.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 14		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 46		 TO SCREEN-COL.
-	     MOVE 16		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 44                 TO SHADE-COL.
+             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 9                  TO SHADE-LINES.
+             DISPLAY S06.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 18                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 46                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        CD05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        CD10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO CD15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO CD10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO CD10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO CD10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO CD10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO CD15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CD05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO CD18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CD05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 5
-		   CALL X"E5"
-		   GO TO CD05
-	       END-IF
-	       GO TO CD16
-	   ELSE
-	       CALL X"E5"
-	       GO TO CD05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"  TO MOUSE-ENTER
+                                     GO TO CD15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO CD10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO CD10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO CD10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO CD10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO CD15
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CD05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO CD18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CD05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X      TO WS-OPTION
+               IF WS-OPTION < 0 OR > 5
+                   PERFORM AA900-ALARM
+                   GO TO CD05
+               END-IF
+               GO TO CD16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO CD05.
 
        CD15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO CD05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO CD18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "5"  TO WS-OPTION
+               WHEN 18     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CD05
+             END-EVALUATE.
+             GO TO CD18.
 
        CD16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 18   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        CD18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO CD999.
-	   IF WS-OPTION < 1 OR > 5
-	       CALL X"E5"
-	       GO TO CD05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\GACREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\GBHREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\LEDREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\GTRREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\CHBREB" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO CD05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO CD999
+               WHEN "1"    MOVE "UTP\GACREB" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\GBHREB" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\LEDREB" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\GTRREB" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\CHBREB" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CD05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO CD05.
 
        CD999.
-	     EXIT.
+             EXIT.
       *
       *    ****    R E B U I L D   J O B - C O S T   F I L E S
       *
-       CE000	       SECTION 50.
+       CE000        SECTION 5.
        CE0.
-	   IF (LS0-LEV < 4) AND (LS0-JCP = 0)
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	       PERFORM AA100
-	       DISPLAY MENU-INSTRUCT
-	       GO TO CE999.
-003240	   IF LS0-JOBS = "N" OR LS0-JBLEV < 9
-	       PERFORM CA20
-	       GO TO CE999.
+           IF (LS0-LEV < 4) AND (LS0-JCP = 0)
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³               Not available in this version               ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+               PERFORM AA100
+               DISPLAY MENU-INSTRUCT
+               GO TO CE999.
+           IF LS0-JOBS = "N" OR LS0-JBLEV < 9
+               MOVE "Not Authorised"  TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO CE999.
 
        CE00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 46		 TO SHADE-COL.
-	     MOVE 18		 TO SHADE-WIDTH.
-	     MOVE 7		 TO SHADE-LINES.
-	     DISPLAY S07.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 13		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 46		 TO SCREEN-COL.
-	     MOVE 16		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 44                 TO SHADE-COL.
+             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 8                  TO SHADE-LINES.
+             DISPLAY S07.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 17                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 46                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        CE05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        CE10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO CE15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO CE10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO CE10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO CE10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO CE10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO CE15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CE05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO CE18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CE05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 4
-		   CALL X"E5"
-		   GO TO CE05
-	       END-IF
-	       GO TO CE16
-	   ELSE
-	       CALL X"E5"
-	       GO TO CE05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"    TO MOUSE-ENTER
+                                     GO TO CE15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO CE10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO CE10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO CE10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO CE10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO CE15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CE05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO CE18
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CE05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X      TO WS-OPTION
+               IF WS-OPTION < "0" OR > "4"
+                   PERFORM AA900-ALARM
+                   GO TO CE05
+               END-IF
+               GO TO CE16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO CE05.
 
        CE15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO CE05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO CE18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CE05
+             END-EVALUATE.
+             GO TO CE18.
 
        CE16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 17   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        CE18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO CE999.
-	   IF WS-OPTION < 1 OR > 4
-	       CALL X"E5"
-	       GO TO CE05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\JOBREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\JTPREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\JRQREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\JWAREB" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO CE05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO CE999
+               WHEN "1"    MOVE "UTP\JOBREB" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\JTPREB" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\JRQREB" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\JWAREB" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CE05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO CE05.
 
        CE999.
-	     EXIT.
+             EXIT.
       *
       *    ****    R E B U I L D   S T O C K   F I L E S
       *
-       CF000	       SECTION 50.
+       CF000        SECTION 5.
        CF0.
-003240	   IF LS0-STOCK = "N" OR LS0-STLEV < 9
-	       PERFORM CA20
-	       GO TO CF999.
+           IF LS0-STOCK = "N" OR LS0-STLEV < 9
+               MOVE "Not Authorised"  TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO CF999.
 
        CF00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 46		 TO SHADE-COL.
-	     MOVE 18		 TO SHADE-WIDTH.
-	     MOVE 9		 TO SHADE-LINES.
-	     DISPLAY S08.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 15		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 46		 TO SCREEN-COL.
-	     MOVE 16		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 44                 TO SHADE-COL.
+             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 10                 TO SHADE-LINES.
+             DISPLAY S08.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 19                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 46                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        CF05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        CF10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO CF15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO CF10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO CF10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO CF10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO CF10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO CF15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CF05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO CF18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CF05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 6
-		   CALL X"E5"
-		   GO TO CF05
-	       END-IF
-	       GO TO CF16
-	   ELSE
-	       CALL X"E5"
-	       GO TO CF05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"    TO MOUSE-ENTER
+                                     GO TO CF15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO CF10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO CF10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO CF10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO CF10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO CF15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CE05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO CF18
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CE05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X      TO WS-OPTION
+               IF WS-OPTION < "0" OR > "6"
+                   PERFORM AA900-ALARM
+                   GO TO CF05
+               END-IF
+               GO TO CF16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO CF05.
 
        CF15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO CF05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO CF18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "5"  TO WS-OPTION
+               WHEN 18     MOVE "6"  TO WS-OPTION
+               WHEN 19     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CF05
+             END-EVALUATE.
+             GO TO CF18.
 
        CF16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 15		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 14		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 19   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+               WHEN "6"    MOVE 18   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        CF18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO CF999.
-	   IF WS-OPTION < 1 OR > 6
-	       CALL X"E5"
-	       GO TO CF05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\STMREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PROREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\STKREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\CARREB" TO PRG-NAME
-	       PERFORM AA100
-	       MOVE "UTP\PRDREB" TO PRG-NAME
-	       PERFORM AA100
-	       MOVE "UTP\SRDREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\WARREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE "UTP\WSTREB" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO CF05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO CF999
+               WHEN "1"    MOVE "UTP\STMREB" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PROREB" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\STKREB" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\CARREB" TO PRG-NAME
+                           PERFORM AA100
+                           MOVE "UTP\PRDREB" TO PRG-NAME
+                           PERFORM AA100
+                           MOVE "UTP\SRDREB" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\WARREB" TO PRG-NAME
+               WHEN "6"    MOVE "UTP\WSTREB" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CF05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO CF05.
 
        CF999.
-	     EXIT.
+             EXIT.
       *
-      *    ****    R E B U I L D   S U N D R Y	 F I L E S
+      *    ****    R E B U I L D   S U N D R Y  F I L E S
       *
-       CG000	       SECTION 50.
+       CG000        SECTION 5.
        CG0.
-003240	   IF LS0-CRLEV < 9 AND
-	      LS0-DBLEV < 9 AND
-	      LS0-GLLEV < 9 AND
-	      LS0-STLEV < 9 AND
-	      LS0-JBLEV < 9 AND
-	      LS0-PALEV < 9 AND
-	      LS0-SALEV < 9
-	       PERFORM CA20
-	       GO TO CG999.
+          IF LS0-CRLEV < 9 AND LS0-DBLEV < 9 AND LS0-GLLEV < 9 AND LS0-STLEV < 9 AND LS0-JBLEV < 9 AND LS0-PALEV < 9 AND LS0-SALEV < 9
+              MOVE "Not Authorised"  TO WS-ERR-MES
+              PERFORM ERROR-MESSAGE
+              GO TO CG999.
 
        CG00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 46		 TO SHADE-COL.
-	     MOVE 18		 TO SHADE-WIDTH.
-	     MOVE 8		 TO SHADE-LINES.
-	     DISPLAY S09.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 14		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 46		 TO SCREEN-COL.
-	     MOVE 16		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 44                 TO SHADE-COL.
+             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 9                  TO SHADE-LINES.
+             DISPLAY S09.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 18                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 46                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        CG05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        CG10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO CG15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO CG10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO CG10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO CG10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO CG10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO CG15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CG05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO CG18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO CG05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 5
-		   CALL X"E5"
-		   GO TO CG05
-	       END-IF
-	       GO TO CG16
-	   ELSE
-	       CALL X"E5"
-	       GO TO CG05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"    TO MOUSE-ENTER
+                                     GO TO CG15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO CG10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO CG10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO CG10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO CG10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO CG15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CG05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO CG18
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO CG05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X      TO WS-OPTION
+               IF WS-OPTION < "0" OR > "5"
+                   PERFORM AA900-ALARM
+                   GO TO CG05
+               END-IF
+               GO TO CG16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO CG05.
 
        CG15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO CG05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO CG18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "5"  TO WS-OPTION
+               WHEN 18     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CG05
+             END-EVALUATE.
+             GO TO CG18.
 
        CG16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 18   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        CG18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO CG999.
-	   IF WS-OPTION < 1 OR > 5
-	       CALL X"E5"
-	       GO TO CG05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\CHQREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\GARREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\TAXREB" TO PRG-NAME
-	       CLOSE TXTRAN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\SLPREB" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\DPTREB" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	   IF PRG-NAME = "UTP\TAXREB"
-013040	       OPEN I-O TXTRAN.
-	     GO TO CG05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO CG999
+               WHEN "1"    MOVE "UTP\CHQREB" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\GARREB" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\TAXREB" TO PRG-NAME
+                           CLOSE TXTRAN
+               WHEN "4"    MOVE "UTP\SLPREB" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\DPTREB" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CG05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+           IF PRG-NAME = "UTP\TAXREB"
+               OPEN I-O TXTRAN.
+             GO TO CG05.
 
        CG999.
-	     EXIT.
+             EXIT.
       /
       *    ****    D E L I V E R Y   R O U T E S
       *
-       DA000	       SECTION 51.
+       DA000        SECTION 6.
        DA00.
-	   IF LS-DSKDRV = "L"
-	       MOVE "Not available on Local drive"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO DA999.
-	   IF (LS0-LEV < 4) OR (LS0-RTE = 0)
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	   ELSE
-	       MOVE "SLP\DLP006" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+           IF LS-DSKDRV = "L"
+               MOVE "Not available on Local drive" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO DA999.
+           IF (LS0-LEV < 4) OR (LS0-RTE = 0)
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+           ELSE
+               MOVE "SLP\DLP006"     TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
        DA999.
-	     EXIT.
+             EXIT.
       /
-      *    ****    C L E A R   U S E R	 L O G
+      *    ****    C L E A R   U S E R  L O G
       *
-       EA000	       SECTION 52.
+       EA000        SECTION 6.
        EA00.
-	     MOVE "LOG001"	 TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+             MOVE "LOG001"           TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
 
        EA999.
-	     EXIT.
+             EXIT.
       /
       *    ****    C L E A R   V A L U E S
       *
-       FA000	       SECTION 53.
+       FA000        SECTION 6.
        FA00.
-	   IF LS-DSKDRV = "L"
-	       MOVE "Not available on Local drive"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO FA999.
-	     MOVE SPACES	 TO WS-PASSWORD.
-	     DISPLAY S11A.
-	     ACCEPT S11B.
-006080	     MOVE 8 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING WS-PASSWORD
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-006140	     MOVE 1 TO WS-LENGTH.
-	     DISPLAY WS-BLNK78 AT 2302.
-006150	   IF WS-PASSWORD NOT = "APACZERO"
-	       GO TO FA999.
+           IF LS-DSKDRV = "L"
+               MOVE "Not available on Local drive" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO FA999.
+             MOVE SPACES             TO WS-PASSWORD.
+             DISPLAY S11A.
+             ACCEPT S11B.
+             MOVE 8                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING WS-PASSWORD BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+             MOVE 23                 TO CRT-START CRT-END.
+             PERFORM ERASE-SCREEN.
+           IF WS-PASSWORD NOT = "APACZERO"
+               GO TO FA999.
 
        FA999.
-	     EXIT.
+             EXIT.
       /
       *    ****    P A R A M E T E R S
       *
-       GA000	       SECTION 54.
+       GA000        SECTION 7.
        GA00.
-	   IF LS-DSKDRV = "L"
-	       MOVE "Not available on Local drive"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO GA999.
-003240	   IF LS0-PARM = "N"
-	       GO TO GA20.
+           IF LS-DSKDRV = "L"
+               MOVE "Not available on Local drive" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO GA999.
+           IF LS0-PARM = "N"
+               MOVE "Not Authorised"  TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO GA999.
 
        GA02.
-	     MOVE 7		 TO SHADE-ROW.
-	     MOVE 28		 TO SHADE-COL.
-	     MOVE 22		 TO SHADE-WIDTH.
-	     MOVE 13		 TO SHADE-LINES.
-	     DISPLAY S12.
-	   IF LS0-LEV < 3
-	       DISPLAY "N/A" AT 1446
-			WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black
-	       DISPLAY "/Codes N/A" AT 1539
-			WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black
-	       DISPLAY "N/A" AT 1546
-			WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black
-	       DISPLAY "N/A" AT 1746
-			WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 7		 TO TOP-ROW.
-	     MOVE 17		 TO BOTTOM-ROW.
-	     MOVE 6		 TO SCREEN-LIN.
-	     MOVE 28		 TO SCREEN-COL.
-	     MOVE 20		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 10                 TO SHADE-ROW.
+             MOVE 26                 TO SHADE-COL.
+             MOVE 24                 TO SHADE-WIDTH.
+             MOVE 14                 TO SHADE-LINES.
+             DISPLAY S12.
+           IF LS0-LEV < 3
+               DISPLAY "N/A"        AT 1446 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black
+               DISPLAY "/Codes N/A" AT 1539 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black
+               DISPLAY "N/A"        AT 1546 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black
+               DISPLAY "N/A"        AT 1746 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 11                 TO TOP-ROW.
+             MOVE 21                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 28                 TO SCREEN-COL.
+             MOVE 20                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        GA05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        GA10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO GA15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO GA10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO GA10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO GA10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO GA10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO GA15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GA05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO GA18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GA05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF (WS-OPTION < 0 OR > 8) AND
-		  (WS-OPTION < "A" OR > "B")
-		   CALL X"E5"
-		   GO TO GA05
-	       END-IF
-	       GO TO GA16
-	   ELSE
-	       CALL X"E5"
-	       GO TO GA05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"  TO MOUSE-ENTER
+                                     GO TO GA15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO GA10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO GA10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO GA10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO GA10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO GA15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GA05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO GA18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GA05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS
+               IF (WS-OPTION < 0 OR > 8) AND (WS-OPTION < "A" OR > "B")
+                   PERFORM AA900-ALARM
+                   GO TO GA05
+               END-IF
+               GO TO GA16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO GA05.
 
        GA15.
-	   IF SCREEN-LIN < 7
-	       CALL X"E5"
-	       GO TO GA05
-	   ELSE
-	   IF SCREEN-LIN = 7
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 8
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "7"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "8"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "A"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 16
-	       MOVE "B"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 17
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO GA18.
+             EVALUATE SCREEN-LIN
+               WHEN 11     MOVE "1"  TO WS-OPTION
+               WHEN 12     MOVE "2"  TO WS-OPTION
+               WHEN 13     MOVE "3"  TO WS-OPTION
+               WHEN 14     MOVE "4"  TO WS-OPTION
+               WHEN 15     MOVE "5"  TO WS-OPTION
+               WHEN 16     MOVE "6"  TO WS-OPTION
+               WHEN 17     MOVE "7"  TO WS-OPTION
+               WHEN 18     MOVE "8"  TO WS-OPTION
+               WHEN 19     MOVE "A"  TO WS-OPTION
+               WHEN 20     MOVE "B"  TO WS-OPTION
+               WHEN 21     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GA05
+             END-EVALUATE.
+             GO TO GA18.
 
        GA16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 17		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 7		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 8		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "8"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "A"
-	       MOVE 15		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "B"
-	       MOVE 16		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 21   TO SCREEN-LIN
+               WHEN "1"    MOVE 11   TO SCREEN-LIN
+               WHEN "2"    MOVE 12   TO SCREEN-LIN
+               WHEN "3"    MOVE 13   TO SCREEN-LIN
+               WHEN "4"    MOVE 14   TO SCREEN-LIN
+               WHEN "5"    MOVE 15   TO SCREEN-LIN
+               WHEN "6"    MOVE 16   TO SCREEN-LIN
+               WHEN "7"    MOVE 17   TO SCREEN-LIN
+               WHEN "8"    MOVE 18   TO SCREEN-LIN
+               WHEN "A"    MOVE 19   TO SCREEN-LIN
+               WHEN "B"    MOVE 20   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        GA18.
-	   IF WS-OPTION = "0"
-	       GO TO GA999.
-	     PERFORM SAVE-SCREEN-2.
-	     MOVE BLOCK-DETAIL	 TO BLOCK-DETAIL2.
-	     MOVE SHADOW-DETAIL	 TO SHADOW-DETAIL2.
-	     MOVE CRT-DETAIL	 TO CRT-DETAIL2.
-	   IF WS-OPTION = "1"
-	       PERFORM GB000
-	   ELSE
-	   IF WS-OPTION = "2"
-	       PERFORM GC000
-	   ELSE
-	   IF WS-OPTION = "3"
-	       PERFORM GD000
-	   ELSE
-	   IF WS-OPTION = "4"
-	       PERFORM GE000
-	   ELSE
-	   IF WS-OPTION = "5"
-	       PERFORM GF000
-	   ELSE
-	   IF WS-OPTION = "6"
-	       PERFORM GG000
-	   ELSE
-	   IF WS-OPTION = "7"
-	       PERFORM GH000
-	   ELSE
-	   IF WS-OPTION = "8"
-	       PERFORM GI000
-	   ELSE
-	   IF WS-OPTION = "A"
-	       PERFORM GK000
-	   ELSE
-	       PERFORM GJ000.
-	     PERFORM RESTORE-SCREEN-2.
-	     MOVE BLOCK-DETAIL2  TO BLOCK-DETAIL
-	     MOVE SHADOW-DETAIL2 TO SHADOW-DETAIL
-	     MOVE CRT-DETAIL2	 TO CRT-DETAIL
-	     GO TO GA05.
-
-       GA20.
-	     PERFORM CLEAR-L50.
-003250	     DISPLAY "Not Authorised - Press any key" AT 2512
-003260		      WITH BACKGROUND-COLOR Cyan
-			   FOREGROUND-COLOR Brown HIGHLIGHT.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             PERFORM SAVE-SCREEN-2.
+             MOVE BLOCK-DETAIL       TO BLOCK-DETAIL2.
+             MOVE SHADOW-DETAIL      TO SHADOW-DETAIL2.
+             MOVE CRT-DETAIL         TO CRT-DETAIL2.
+             EVALUATE WS-OPTION
+               WHEN "0"    GO TO GA999
+               WHEN "1"    PERFORM GB000
+               WHEN "2"    PERFORM GC000
+               WHEN "3"    PERFORM GD000
+               WHEN "4"    PERFORM GE000
+               WHEN "5"    PERFORM GF000
+               WHEN "6"    PERFORM GG000
+               WHEN "7"    PERFORM GH000
+               WHEN "8"    PERFORM GI000
+               WHEN "A"    PERFORM GK000
+               WHEN "B"    PERFORM GJ000
+             END-EVALUATE.
+             PERFORM RESTORE-SCREEN-2.
+             MOVE BLOCK-DETAIL2      TO BLOCK-DETAIL.
+             MOVE SHADOW-DETAIL2     TO SHADOW-DETAIL.
+             MOVE CRT-DETAIL2        TO CRT-DETAIL.
+             GO TO GA05.
 
        GA999.
-	     EXIT.
+             EXIT.
 
-       GB000	       SECTION 54.
+       GB000        SECTION 7.
        GB00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 49		 TO SHADE-COL.
-	     MOVE 21		 TO SHADE-WIDTH.
-	     MOVE 10		 TO SHADE-LINES.
-	     DISPLAY S13.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 16		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 49		 TO SCREEN-COL.
-	     MOVE 19		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 47                 TO SHADE-COL.
+             MOVE 23                 TO SHADE-WIDTH.
+             MOVE 11                 TO SHADE-LINES.
+             DISPLAY S13.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 20                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 49                 TO SCREEN-COL.
+             MOVE 19                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        GB05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        GB10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO GB15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO GB10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO GB10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO GB10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO GB10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO GB15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GB05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO GB18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GB05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 7
-		   CALL X"E5"
-		   GO TO GB05
-	       END-IF
-	       GO TO GB16
-	   ELSE
-	       CALL X"E5"
-	       GO TO GB05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"  TO MOUSE-ENTER
+                                     GO TO GB15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO GB10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO GB10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO GB10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO GB10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO GB15
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GB05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO GB18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GB05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               IF WS-OPTION < 0 OR > 7
+                   PERFORM AA900-ALARM
+                   GO TO GB05
+               END-IF
+               GO TO GB16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO GB05.
 
        GB15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO GB05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "7"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 16
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO GB18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"   TO WS-OPTION
+               WHEN 14     MOVE "2"   TO WS-OPTION
+               WHEN 15     MOVE "3"   TO WS-OPTION
+               WHEN 16     MOVE "4"   TO WS-OPTION
+               WHEN 17     MOVE "5"   TO WS-OPTION
+               WHEN 18     MOVE "6"   TO WS-OPTION
+               WHEN 19     MOVE "7"   TO WS-OPTION
+               WHEN 20     MOVE "0"   TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GB05
+             END-EVALUATE.
+             GO TO GB18.
 
        GB16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 16		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE 15		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 20   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+               WHEN "6"    MOVE 18   TO SCREEN-LIN
+               WHEN "7"    MOVE 19   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        GB18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO GB999.
-	   IF WS-OPTION < 1 OR > 7
-	       CALL X"E5"
-	       GO TO GB05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\PRP001" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PRP002" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\PRP003" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\PRP004" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\PRP005" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE "UTP\PRP006" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE "UTP\PRP007" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO GB05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO GB999
+               WHEN "1"    MOVE "UTP\PRP001" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PRP002" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\PRP003" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\PRP004" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\PRP005" TO PRG-NAME
+               WHEN "6"    MOVE "UTP\PRP006" TO PRG-NAME
+               WHEN "7"    MOVE "UTP\PRP007" TO PRG-NAME
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO GB05.
 
        GB999.
-	     EXIT.
+             EXIT.
 
-       GC000	       SECTION 54.
+       GC000        SECTION 7.
        GC00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 49		 TO SHADE-COL.
-	     MOVE 19		 TO SHADE-WIDTH.
-	     MOVE 5		 TO SHADE-LINES.
-	     DISPLAY S14.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 11		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 49		 TO SCREEN-COL.
-	     MOVE 17		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 47                 TO SHADE-COL.
+             MOVE 21                 TO SHADE-WIDTH.
+             MOVE 6                  TO SHADE-LINES.
+             DISPLAY S14.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 15                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 49                 TO SCREEN-COL.
+             MOVE 17                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        GC05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        GC10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO GC15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO GC10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO GC10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO GC10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO GC10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO GC15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GC05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO GC18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GC05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 2
-		   CALL X"E5"
-		   GO TO GC05
-	       END-IF
-	       GO TO GC16
-	   ELSE
-	       CALL X"E5"
-	       GO TO GC05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"  TO MOUSE-ENTER
+                                     GO TO GC15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO GC10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO GC10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO GC10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO GC10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO GC15
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GC05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO GC18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GC05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               IF WS-OPTION < 0 OR > 2
+                   PERFORM AA900-ALARM
+                   GO TO GC05
+               END-IF
+               GO TO GC16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO GC05.
 
        GC15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO GC05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO GC18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GC05
+             END-EVALUATE.
+             GO TO GC18.
 
        GC16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 15   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        GC18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO GC999.
-	   IF WS-OPTION < 1 OR > 2
-	       CALL X"E5"
-	       GO TO GC05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\PRP010" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PRP011" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO GC05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO GC999
+               WHEN "1"    MOVE "UTP\PRP010" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PRP011" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GC05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO GC05.
 
        GC999.
-	     EXIT.
+             EXIT.
 
-       GD000	       SECTION 54.
+       GD000        SECTION 7.
        GD00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 49		 TO SHADE-COL.
-	     MOVE 26		 TO SHADE-WIDTH.
-	     MOVE 12		 TO SHADE-LINES.
-	     DISPLAY S15.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 18		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 49		 TO SCREEN-COL.
-	     MOVE 24		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 47                 TO SHADE-COL.
+             MOVE 28                 TO SHADE-WIDTH.
+             MOVE 13                 TO SHADE-LINES.
+             DISPLAY S15.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 22                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 49                 TO SCREEN-COL.
+             MOVE 24                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        GD05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        GD10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO GD15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO GD10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO GD10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO GD10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO GD10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO GD15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GD05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO GD18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GD05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF (WS-OPTION < 0 OR > 8) AND
-		  NOT(WS-OPTION = "A")
-		   CALL X"E5"
-		   GO TO GD05
-	       END-IF
-	       GO TO GD16
-	   ELSE
-	       CALL X"E5"
-	       GO TO GD05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"  TO MOUSE-ENTER
+                                     GO TO GD15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO GD10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO GD10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO GD10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO GD10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO GD15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GD05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO GD18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GD05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS
+               IF (WS-OPTION < 0 OR > 8) AND (WS-OPTION NOT = "A")
+                   PERFORM AA900-ALARM
+                   GO TO GD05
+               END-IF
+               GO TO GD16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO GD05.
 
        GD15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO GD05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "7"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 16
-	       MOVE "8"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 17
-	       MOVE "A"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 18
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO GD18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "5"  TO WS-OPTION
+               WHEN 18     MOVE "6"  TO WS-OPTION
+               WHEN 19     MOVE "7"  TO WS-OPTION
+               WHEN 20     MOVE "8"  TO WS-OPTION
+               WHEN 21     MOVE "A"  TO WS-OPTION
+               WHEN 22     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GD05
+             END-EVALUATE.
+             GO TO GD18.
 
        GD16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 18		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE 15		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "8"
-	       MOVE 16		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "A"
-	       MOVE 17		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 22   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+               WHEN "6"    MOVE 18   TO SCREEN-LIN
+               WHEN "7"    MOVE 19   TO SCREEN-LIN
+               WHEN "8"    MOVE 20   TO SCREEN-LIN
+               WHEN "A"    MOVE 21   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        GD18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO GD999.
-	   IF (WS-OPTION < 1 OR > 8) AND
-	      (WS-OPTION NOT = "A")
-	       CALL X"E5"
-	       GO TO GD05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\PRP020" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PRP021" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\PRP022" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\PRP023" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\PRP024" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE "UTP\PRP025" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE "UTP\PRP026" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "8"
-	       MOVE "UTP\PRP027" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "A"
-	       MOVE "UTP\PRP028" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO GD05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO GD999
+               WHEN "1"    MOVE "UTP\PRP020" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PRP021" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\PRP022" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\PRP023" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\PRP024" TO PRG-NAME
+               WHEN "6"    MOVE "UTP\PRP025" TO PRG-NAME
+               WHEN "7"    MOVE "UTP\PRP026" TO PRG-NAME
+               WHEN "8"    MOVE "UTP\PRP027" TO PRG-NAME
+               WHEN "A"    MOVE "UTP\PRP028" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GD05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO GD05.
 
        GD999.
-	     EXIT.
+             EXIT.
 
-       GE000	       SECTION 54.
+       GE000        SECTION 7.
        GE00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 49		 TO SHADE-COL.
-	     MOVE 21		 TO SHADE-WIDTH.
-	     MOVE 7		 TO SHADE-LINES.
-	     DISPLAY S16.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 13		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 49		 TO SCREEN-COL.
-	     MOVE 19		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 47                 TO SHADE-COL.
+             MOVE 23                 TO SHADE-WIDTH.
+             MOVE 8                  TO SHADE-LINES.
+             DISPLAY S16.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 17                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 49                 TO SCREEN-COL.
+             MOVE 19                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        GE05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        GE10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO GE15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO GE10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO GE10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO GE10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO GE10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO GE15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GE05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO GE18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GE05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 4
-		   CALL X"E5"
-		   GO TO GE05
-	       END-IF
-	       GO TO GE16
-	   ELSE
-	       CALL X"E5"
-	       GO TO GE05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"    TO MOUSE-ENTER
+                                     GO TO GE15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO GE10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO GE10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO GE10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO GE10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO GE15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GE05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO GE18
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GE05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X      TO WS-OPTION
+               IF WS-OPTION < "0" OR > "4"
+                   PERFORM AA900-ALARM
+                   GO TO GE05
+               END-IF
+               GO TO GE16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO GE05.
 
        GE15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO GE05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO GE18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GE05
+             END-EVALUATE.
+             GO TO GE18.
 
        GE16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 17   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        GE18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO GE999.
-	   IF WS-OPTION < 1 OR > 4
-	       CALL X"E5"
-	       GO TO GE05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\PRP030" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PRP031" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\PRP032" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\PRP033" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO GE05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO GE999
+               WHEN "1"    MOVE "UTP\PRP030" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PRP031" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\PRP032" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\PRP033" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GE05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO GE05.
 
        GE999.
-	     EXIT.
+             EXIT.
 
-       GF000	       SECTION 54.
+       GF000        SECTION 7.
        GF00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 49		 TO SHADE-COL.
-	     MOVE 19		 TO SHADE-WIDTH.
-	     MOVE 5		 TO SHADE-LINES.
-	     DISPLAY S17.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 11		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 49		 TO SCREEN-COL.
-	     MOVE 17		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 47                 TO SHADE-COL.
+             MOVE 21                 TO SHADE-WIDTH.
+             MOVE 6                  TO SHADE-LINES.
+             DISPLAY S17.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 15                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 49                 TO SCREEN-COL.
+             MOVE 17                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        GF05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        GF10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO GF15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO GF10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO GF10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO GF10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO GF10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO GF15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GF05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO GF18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GF05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION < 0 OR > 2
-		   CALL X"E5"
-		   GO TO GF05
-	       END-IF
-	       GO TO GF16
-	   ELSE
-	       CALL X"E5"
-	       GO TO GF05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"  TO MOUSE-ENTER
+                                     GO TO GF15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO GF10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO GF10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO GF10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO GF10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO GF15
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GF05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO GF18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GF05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               IF WS-OPTION < 0 OR > 2
+                   PERFORM AA900-ALARM
+                   GO TO GF05
+               END-IF
+               GO TO GF16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO GF05.
 
        GF15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO GF05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO GF18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GF05
+             END-EVALUATE.
+             GO TO GF18.
 
        GF16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 15   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        GF18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO GF999.
-	   IF WS-OPTION < 1 OR > 2
-	       CALL X"E5"
-	       GO TO GF05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\PRP040" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PRP041" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO GF05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO GF999
+               WHEN "1"    MOVE "UTP\PRP040" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PRP041" TO PRG-NAME
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GF05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO GF05.
 
        GF999.
-	     EXIT.
+             EXIT.
 
-       GG000	       SECTION 54.
+       GG000        SECTION 7.
        GG00.
-	     MOVE 9		 TO SHADE-ROW.
-	     MOVE 49		 TO SHADE-COL.
-	     MOVE 21		 TO SHADE-WIDTH.
-	     MOVE 15		 TO SHADE-LINES.
-	     DISPLAY S18.
-	   IF LS0-LEV < 3
-	       DISPLAY "N/A" AT 1966
-			WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
-	       DISPLAY "N/A" AT	2065
-			WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
-	       DISPLAY "N/A" AT	2166
-			WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
-	     DISPLAY MENU-INSTRUCT.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 9		 TO TOP-ROW.
-	     MOVE 20		 TO BOTTOM-ROW.
-	     MOVE 8		 TO SCREEN-LIN.
-	     MOVE 49		 TO SCREEN-COL.
-	     MOVE 19		 TO STRING-LENGTH.
-	     PERFORM SAVE-ATTR.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 47                 TO SHADE-COL.
+             MOVE 23                 TO SHADE-WIDTH.
+             MOVE 16                 TO SHADE-LINES.
+             DISPLAY S18.
+           IF LS0-LEV < 3
+               DISPLAY "N/A" AT 1966 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
+               DISPLAY "N/A" AT 2065 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
+               DISPLAY "N/A" AT 2166 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+             DISPLAY MENU-INSTRUCT.
+             PERFORM SCREEN-SHADOW.
+             MOVE 13                 TO TOP-ROW.
+             MOVE 25                 TO BOTTOM-ROW.
+             MOVE 12                 TO SCREEN-LIN.
+             MOVE 49                 TO SCREEN-COL.
+             MOVE 19                 TO STRING-LENGTH.
+             PERFORM SAVE-ATTR.
 
        GG05.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+      *
+      *    ****    W A I T   A N D   R E A D   O N E   K E Y
+      *                       D E P R E S S I O N
+      *
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
 
        GG10.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY	 PERFORM MOVE-BLOCK-UP
-		 WHEN DOWN-KEY	 PERFORM MOVE-BLOCK-DOWN
-		 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
-				 IF MOUSE-ENTER = "Y"
-				     MOVE "N"	 TO MOUSE-ENTER
-				     GO TO GG15
-				 END-IF
-				 IF MOUSE-Y = 24
-				     IF MOUSE-X = 5
-					 MOVE 5  TO KEY-CODE-1
-					 GO TO GG10
-				     ELSE
-				     IF MOUSE-X = 10
-					 MOVE 6  TO KEY-CODE-1
-					 GO TO GG10
-				     ELSE
-				     IF MOUSE-X > 36 AND < 44
-					 MOVE 0  TO KEY-CODE-1
-					 GO TO GG10
-				     ELSE
-				     IF MOUSE-X > 54 AND < 60
-					 MOVE 0  TO KEY-CODE-1
-					 MOVE 1  TO KEY-TYPE
-					 GO TO GG10
-				     END-IF
-				 END-IF
-		 WHEN ENTER-KEY  GO TO GG15
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GG05
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "0"	 TO WS-OPTION
-		     GO TO GG18
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO GG05
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       CALL "CBL_TOUPPER" USING WS-OPTION
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
-	       IF (WS-OPTION < 0 OR > 8) AND
-		  (WS-OPTION < "A" OR > "D")
-		   CALL X"E5"
-		   GO TO GG05
-	       END-IF
-	       GO TO GG16
-	   ELSE
-	       CALL X"E5"
-	       GO TO GG05.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY     PERFORM MOVE-BLOCK-UP
+                 WHEN DOWN-KEY   PERFORM MOVE-BLOCK-DOWN
+                 WHEN MOUSE-KEY  PERFORM POSITION-MOUSE
+                                 IF MOUSE-ENTER = "Y"
+                                     MOVE "N"  TO MOUSE-ENTER
+                                     GO TO GG15
+                                 END-IF
+                                 IF MOUSE-Y = 49
+                                     IF MOUSE-X = 5
+                                         MOVE 5  TO KEY-CODE-1
+                                         GO TO GG10
+                                     ELSE
+                                     IF MOUSE-X = 10
+                                         MOVE 6  TO KEY-CODE-1
+                                         GO TO GG10
+                                     ELSE
+                                     IF MOUSE-X > 36 AND < 44
+                                         MOVE 0  TO KEY-CODE-1
+                                         GO TO GG10
+                                     ELSE
+                                     IF MOUSE-X > 54 AND < 60
+                                         MOVE 0  TO KEY-CODE-1
+                                         MOVE 1  TO KEY-TYPE
+                                         GO TO GG10
+                                     END-IF
+                                 END-IF
+                 WHEN ENTER-KEY  GO TO GG15
+                 WHEN OTHER  PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GG05
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY    MOVE "0"  TO WS-OPTION
+                                 GO TO GG18
+                 WHEN OTHER      PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO GG05
+           ELSE
+           IF DATA-8BIT
+               MOVE KEY-CODE-1X  TO WS-OPTION
+               CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS
+               IF (WS-OPTION < 0 OR > 8) AND (WS-OPTION < "A" OR > "D")
+                   PERFORM AA900-ALARM
+                   GO TO GG05
+               END-IF
+               GO TO GG16
+           ELSE
+               PERFORM AA900-ALARM
+               GO TO GG05.
 
        GG15.
-	   IF SCREEN-LIN < 9
-	       CALL X"E5"
-	       GO TO GG05
-	   ELSE
-	   IF SCREEN-LIN = 9
-	       MOVE "1"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 10
-	       MOVE "2"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 11
-	       MOVE "3"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 12
-	       MOVE "4"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 13
-	       MOVE "5"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 14
-	       MOVE "6"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 15
-	       MOVE "7"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 16
-	       MOVE "8"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 17
-	       MOVE "A"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 18
-	       MOVE "B"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 19
-	       MOVE "C"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 20
-	       MOVE "D"		 TO WS-OPTION
-	   ELSE
-	   IF SCREEN-LIN = 21
-	       MOVE "0"		 TO WS-OPTION.
-	   GO TO GG18.
+             EVALUATE SCREEN-LIN
+               WHEN 13     MOVE "1"  TO WS-OPTION
+               WHEN 14     MOVE "2"  TO WS-OPTION
+               WHEN 15     MOVE "3"  TO WS-OPTION
+               WHEN 16     MOVE "4"  TO WS-OPTION
+               WHEN 17     MOVE "5"  TO WS-OPTION
+               WHEN 18     MOVE "6"  TO WS-OPTION
+               WHEN 19     MOVE "7"  TO WS-OPTION
+               WHEN 20     MOVE "8"  TO WS-OPTION
+               WHEN 21     MOVE "A"  TO WS-OPTION
+               WHEN 22     MOVE "B"  TO WS-OPTION
+               WHEN 23     MOVE "C"  TO WS-OPTION
+               WHEN 24     MOVE "D"  TO WS-OPTION
+               WHEN 25     MOVE "0"  TO WS-OPTION
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO CC05
+             END-EVALUATE.
+             GO TO GG18.
 
        GG16.
-	     PERFORM CLEAR-BLOCK.
-	   IF WS-OPTION = "0"
-	       MOVE 21		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "1"
-	       MOVE 9		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE 10		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE 11		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE 12		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE 13		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE 14		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE 15		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "8"
-	       MOVE 16		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "A"
-	       MOVE 17		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "B"
-	       MOVE 18		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "C"
-	       MOVE 19		 TO SCREEN-LIN
-	   ELSE
-	   IF WS-OPTION = "D"
-	       MOVE 20		 TO SCREEN-LIN.
-	     PERFORM SAVE-ATTR.
-	     PERFORM MARK-BLOCK.
+             PERFORM CLEAR-BLOCK.
+             EVALUATE WS-OPTION
+               WHEN "0"    MOVE 25   TO SCREEN-LIN
+               WHEN "1"    MOVE 13   TO SCREEN-LIN
+               WHEN "2"    MOVE 14   TO SCREEN-LIN
+               WHEN "3"    MOVE 15   TO SCREEN-LIN
+               WHEN "4"    MOVE 16   TO SCREEN-LIN
+               WHEN "5"    MOVE 17   TO SCREEN-LIN
+               WHEN "6"    MOVE 18   TO SCREEN-LIN
+               WHEN "7"    MOVE 19   TO SCREEN-LIN
+               WHEN "8"    MOVE 20   TO SCREEN-LIN
+               WHEN "A"    MOVE 21   TO SCREEN-LIN
+               WHEN "B"    MOVE 22   TO SCREEN-LIN
+               WHEN "C"    MOVE 23   TO SCREEN-LIN
+               WHEN "D"    MOVE 24   TO SCREEN-LIN
+             END-EVALUATE.
+             PERFORM SAVE-ATTR.
+             PERFORM MARK-BLOCK.
 
        GG18.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF WS-OPTION = "0"
-	       GO TO GG999.
-	   IF (WS-OPTION < 1 OR > 8) AND
-	      (WS-OPTION < "A" OR > "D")
-	       CALL X"E5"
-	       GO TO GG05.
-	   IF WS-OPTION = "1"
-	       MOVE "UTP\PRP050" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "2"
-	       MOVE "UTP\PRP051" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "3"
-	       MOVE "UTP\PRP052" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "4"
-	       MOVE "UTP\PRP053" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "5"
-	       MOVE "UTP\PRP054" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "6"
-	       MOVE "UTP\PRP055" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "7"
-	       MOVE "UTP\PRP056" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "8"
-	       MOVE "UTP\PRP057" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "A"
-	       MOVE "UTP\PRP058" TO PRG-NAME
-	   ELSE
-	   IF WS-OPTION = "B"
-	       IF LS0-LEV < 3
-		   MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	       ELSE
-		   MOVE "UTP\PRP061"
-				 TO PRG-NAME
-	       END-IF
-	   ELSE
-	   IF WS-OPTION = "C"
-	       IF LS0-LEV < 3
-		   MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	       ELSE
-		   MOVE "UTP\PRP062"
-				 TO PRG-NAME
-	       END-IF
-	   ELSE
-	   IF WS-OPTION = "D"
-	       IF LS0-LEV < 3
-		   MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	       ELSE
-		   MOVE "UTP\PRP063"
-				 TO PRG-NAME
-	       END-IF.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
-	     GO TO GG05.
+             EVALUATE WS-OPTION
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                          E X I T                          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN "0"    GO TO GG999
+               WHEN "1"    MOVE "UTP\PRP050" TO PRG-NAME
+               WHEN "2"    MOVE "UTP\PRP051" TO PRG-NAME
+               WHEN "3"    MOVE "UTP\PRP052" TO PRG-NAME
+               WHEN "4"    MOVE "UTP\PRP053" TO PRG-NAME
+               WHEN "5"    MOVE "UTP\PRP054" TO PRG-NAME
+               WHEN "6"    MOVE "UTP\PRP055" TO PRG-NAME
+               WHEN "7"    MOVE "UTP\PRP056" TO PRG-NAME
+               WHEN "8"    MOVE "UTP\PRP057" TO PRG-NAME
+               WHEN "A"    MOVE "UTP\PRP058" TO PRG-NAME
+               WHEN "B"    IF LS0-LEV < 3
+                               MOVE "MNU\NOPMENU" TO PRG-NAME
+                           ELSE
+                               MOVE "UTP\PRP061"  TO PRG-NAME
+                           END-IF
+               WHEN "C"    IF LS0-LEV < 3
+                               MOVE "MNU\NOPMENU" TO PRG-NAME
+                           ELSE
+                               MOVE "UTP\PRP062"  TO PRG-NAME
+                           END-IF
+               WHEN "D"    IF LS0-LEV < 3
+                               MOVE "MNU\NOPMENU" TO PRG-NAME
+                           ELSE
+                               MOVE "UTP\PRP063"  TO PRG-NAME
+                           END-IF
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       I N V A L I D                       ³
+      *    ³   Added test as a precaution. It should never happen.     ³   
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               WHEN OTHER  PERFORM AA900-ALARM
+                           GO TO GG05
+             END-EVALUATE.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
+             GO TO GG05.
 
        GG999.
-	     EXIT.
+             EXIT.
 
-       GH000	       SECTION 54.
+       GH000        SECTION 7.
        GH00.
-	   IF LS0-LEV < 3
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	   ELSE
-	       MOVE "UTP\PRP059" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+           IF LS0-LEV < 3
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+           ELSE
+               MOVE "UTP\PRP059"     TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
        GH999.
-	     EXIT.
+             EXIT.
 
-       GI000	       SECTION 54.
+       GI000        SECTION 7.
        GI00.
-	   IF LS0-LEV < 3
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	   ELSE
-	       MOVE "UTP\PRP060" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+           IF LS0-LEV < 3
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+           ELSE
+               MOVE "UTP\PRP060"     TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
        GI999.
-	     EXIT.
+             EXIT.
 
-       GJ000	       SECTION 54.
+       GJ000        SECTION 7.
        GJ00.
-	   IF LS0-LEV < 3
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	   ELSE
-	       MOVE "UTP\PRP063" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+           IF LS0-LEV < 3
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+           ELSE
+               MOVE "UTP\PRP063"     TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
        GJ999.
-	     EXIT.
+             EXIT.
 
-       GK000	       SECTION 54.
+       GK000        SECTION 7.
        GK00.
-	   IF LS0-LEV < 3
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	   ELSE
-	       MOVE "UTP\PRP064" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+           IF LS0-LEV < 3
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+           ELSE
+               MOVE "UTP\PRP064"     TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
        GK999.
-	     EXIT.
+             EXIT.
 
-       HA000	       SECTION 54.
+       HA000        SECTION 7.
        HA00.
-	   IF LS-DSKDRV = "L"
-	       MOVE "Not available on Local drive"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO HA999.
-	     MOVE "UTP\AMDSTAT"	 TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+           IF LS-DSKDRV = "L"
+               MOVE "Not available on Local drive" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO HA999.
+             MOVE "UTP\AMDSTAT"      TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
        HA999.
-	     EXIT.
+             EXIT.
       /
       *    ****    D E L I V E R Y   R O U T E S
       *
-       IA000	       SECTION 55.
+       IA000        SECTION 7.
        IA00.
-	   IF LS-DSKDRV = "L"
-	       MOVE "Not available on Local drive"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO IA999.
-	   IF (LS0-LEV < 3)
-	       MOVE "MNU\NOPMENU"
-				 TO PRG-NAME
-	   ELSE
-	       MOVE "UTP\CRDPRG" TO PRG-NAME.
-	     PERFORM AA100.
-	     DISPLAY MENU-INSTRUCT.
+           IF LS-DSKDRV = "L"
+               MOVE "Not available on Local drive" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO IA999.
+           IF (LS0-LEV < 3)
+               MOVE "MNU\NOPMENU"    TO PRG-NAME
+           ELSE
+               MOVE "UTP\CRDPRG"     TO PRG-NAME.
+             PERFORM AA100.
+             DISPLAY MENU-INSTRUCT.
        IA999.
-	     EXIT.
+             EXIT.
       /
-038140 ZA000-INIT              SECTION 90.
-038150 ZA000-OPEN.
-038160	     PERFORM ZA60.
-	     MOVE LS-PARID	 TO WS-PARID.
-	     MOVE LS-L-OR-N	 TO W02-L-OR-N.
-	     MOVE WS-SYS-ID	 TO W02-SYSID.
-	     MOVE LS-TODAY-DDMMYY
-				 TO TODAY-DDMMYY.
-042000	     DISPLAY CLR-SCREEN.
+       ZA000-INIT              SECTION 9.
+       ZA000-OPEN.
+             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             PERFORM HEADING-AND-CLEAR-SCREEN.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-	     COPY "FUNCTION.PRO".
-
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Setup the file ID's including path names           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      *    *************************************************************
-      *    **** 	  P A R A M E T E R   F I L E		    ****
-      *    *************************************************************
-       ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
-
-       ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
-
-       ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
+       COPY "FUNCTION.PRO".
 
        ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
-	     MOVE "TXTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-TXTRAN.
-039770	     GO TO ZA999.
-      *
-      *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
-      *
-040090 ZA60.
-040650	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
-	   IF LS-USER = LS-SYS-ID
-	       MOVE "SupervisorÄ"
-				 TO WS-WRKHD
-	   ELSE
-	       MOVE "Workstation"
-				 TO WS-WRKHD
-	       MOVE LS-USER	 TO WS-WRKST.
-040750 ZA999.
-040760       EXIT.
 
-040780 I-O-ERRORS      SECTION  91.
+       ZA999.
+             EXIT.
+
+       I-O-ERRORS      SECTION  9.
 
        COPY "ERRORS.PRO".
 
-040950 DISPLAY-FILE-NAME.
-041120*	   IF WS-F-ERROR = 15
-041130*        MOVE WS-PARID	 TO WS-FILE
-041140*        MOVE WS-PARKEY	 TO WS-KEY.
+       DISPLAY-FILE-NAME.
+       
+      *    IF WS-F-ERROR = 15
+      *        MOVE WS-PARID  TO WS-FILE
+      *        MOVE WS-PARKEY  TO WS-KEY.
 
        COPY "DISPERR.PRO".
