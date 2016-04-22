@@ -5,6 +5,7 @@
        CA505.
       *
       * 	 Adjust the average cost for negative or zero quantity
+      *
            IF STK-QUANT < 0.001
                MOVE STK-COST         TO STK-AVGE.
            IF STK-WSALE = ZERO

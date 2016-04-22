@@ -13,16 +13,17 @@
       *    Ё Save the screen contents and attributes as well as the    Ё
       *    Ё current cursor position.                                  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-011050       PERFORM SAVE-SCREEN.
-             MOVE LIN              TO SLIN.
-	       CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY W10-STOCK
-	            ON EXCEPTION GO TO AA55
-	       END-CALL.
-	       CANCEL PRG-NAME.
-	       GO TO AA58.
+             PERFORM SAVE-SCREEN.
+             MOVE LIN                TO SLIN.
+             MOVE PRG-STOCK-LUP      TO PRG-NAME.
+             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY W10-STOCK
+	                 ON EXCEPTION GO TO AA55
+             END-CALL.
+             CANCEL PRG-NAME.
+             GO TO AA58.
 
        AA55.
-             MOVE SPACE            TO WS-ERR-MES.
+             MOVE SPACES             TO WS-ERR-MES.
              STRING "Program- " DELIMITED SIZE PRG-NAME DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
              PERFORM ERROR-MESSAGE.
 
@@ -31,8 +32,8 @@
       *    Ё Restore the screen contents and attributes as well as the Ё
       *    Ё cursor position prior to calling the lookup program.      Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-011320       PERFORM RESTORE-SCREEN.
-             MOVE SLIN             TO LIN.
+             PERFORM RESTORE-SCREEN.
+             MOVE SLIN               TO LIN.
 
        AA59.
              EXIT.

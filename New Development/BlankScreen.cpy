@@ -10,7 +10,7 @@
                    07 LINE  1 COLUMN  1 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
                    07 LINE  2 COLUMN  1 VALUE "³                                                                              ³".
                    07 LINE  3 COLUMN  1 VALUE "³                                                                              ³".
-		   07 LINE  4 COLUMN  1 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
+                   07 LINE  4 COLUMN  1 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
                    07 LINE  5 COLUMN  1 VALUE "³                                                                              ³".
                    07 LINE  6 COLUMN  1 VALUE "³                                                                              ³".
                    07 LINE  7 COLUMN  1 VALUE "³                                                                              ³".
@@ -54,8 +54,8 @@
                    07 LINE 45 COLUMN  1 VALUE "³                                                                              ³".
                    07 LINE 46 COLUMN  1 VALUE "³                                                                              ³".
                    07 LINE 47 COLUMN  1 VALUE "³                                                                              ³".
-		   07 LINE 48 COLUMN  1 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-		   07 LINE 49 COLUMN  1 VALUE "³                                           Note helpdesk number : 082-566-3095³".
+                   07 LINE 48 COLUMN  1 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
+                   07 LINE 49 COLUMN  1 VALUE "³                                           Note helpdesk number : 082-566-3095³".
                    07 LINE 50 COLUMN  1 VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
                    07 LINE  2 COLUMN  3 FOREGROUND-COLOR 7 HIGHLIGHT PIC X(10) FROM FULL-DATE.
                    07         COLUMN 14 FOREGROUND-COLOR 7 HIGHLIGHT VALUE "DOLFIN SYSTEM".

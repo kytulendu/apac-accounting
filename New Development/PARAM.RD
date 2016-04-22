@@ -1,24 +1,21 @@
 
-008690 READ-PARAM.
-008700       READ PARAM IGNORE LOCK.
-008710     IF WS-STATUS = "00"
+       READ-PARAM.
+             READ PARAM IGNORE LOCK.
+           IF WS-STATUS = "00"
                MOVE 1                TO WS-COUNT
-008720         GO TO READ-PARAM-EXIT.
-008730     IF WS-STAT1 = "2" OR "3" OR "4"
-008740         MOVE 15               TO WS-F-ERROR
-008750         PERFORM READ-ERROR.
-008790       MOVE 15                 TO WS-F-ERROR.
-008800       PERFORM READ-ERROR.
-
-008810 READ-PARAM-LOCK.
-008820     READ PARAM WITH KEPT LOCK.
-008830     IF WS-STATUS = "00"
+               GO TO READ-PARAM-EXIT.
+             MOVE 15                 TO WS-F-ERROR.
+             PERFORM READ-ERROR.
+      
+       READ-PARAM-LOCK.
+             READ PARAM WITH KEPT LOCK.
+           IF WS-STATUS = "00"
                MOVE 1                TO WS-COUNT
-008840         GO TO READ-PARAM-EXIT.
-008850     IF WS-STAT1 = "2" OR "3" OR "4"
-008860         MOVE 15               TO WS-F-ERROR
-008870         PERFORM READ-ERROR.
-008880     IF RECORD-LOCKED
+               GO TO READ-PARAM-EXIT.
+           IF WS-STAT1 = "2" OR "3" OR "4"
+               MOVE 15               TO WS-F-ERROR
+               PERFORM READ-ERROR.
+           IF RECORD-LOCKED
                IF WS-PARKEY = "4"
                    UNLOCK PARAM
                    PERFORM LOCK-USERS-REC THRU LOCK-REC-EXIT WS-COUNT TIMES
@@ -30,36 +27,32 @@
                ELSE
                    MOVE W02-PARAM    TO WS-FILE
                    MOVE WS-PARKEY    TO WS-KEY
-008890             PERFORM LOCKED-RECORD WS-COUNT TIMES
+                   PERFORM LOCKED-RECORD WS-COUNT TIMES
                    ADD 1             TO WS-COUNT
                    IF WS-COUNT > 20
                        MOVE 1        TO WS-COUNT
                    END-IF
-008900             GO TO READ-PARAM-LOCK.
-008910     IF TOO-MANY-LOCKS
-008920         UNLOCK PARAM
-008930         GO TO READ-PARAM-LOCK.
-008940       MOVE 15                 TO WS-F-ERROR.
-008950       PERFORM READ-ERROR.
-
-008810 READ-PARAM-LOCK-END.
-008820     READ PARAM WITH KEPT LOCK.
-008830     IF WS-STATUS = "00"
-008840         GO TO READ-PARAM-EXIT.
-008850     IF WS-STAT1 = "2" OR "3" OR "4"
-008860         MOVE 15               TO WS-F-ERROR
-008870         PERFORM READ-ERROR.
-008880     IF RECORD-LOCKED
-000110         DISPLAY SPACE AT 2550
-000120         DISPLAY "PLEASE BE PATIENT" AT 5051 WITH FOREGROUND-COLOR Brown HIGHLIGHT BLINK
+                   GO TO READ-PARAM-LOCK.
+           IF TOO-MANY-LOCKS
+               UNLOCK PARAM
+               GO TO READ-PARAM-LOCK.
+             MOVE 15                 TO WS-F-ERROR.
+             PERFORM READ-ERROR.
+      
+       READ-PARAM-LOCK-END.
+           READ PARAM WITH KEPT LOCK.
+           IF WS-STATUS = "00"
+               GO TO READ-PARAM-EXIT.
+           IF RECORD-LOCKED
+               DISPLAY SPACE AT 5050
+               DISPLAY "PLEASE BE PATIENT" AT 5051 WITH FOREGROUND-COLOR Brown HIGHLIGHT BLINK
                MOVE ZERO             TO WS-KEY
-006290         PERFORM ONE-SECOND-DELAY THRU LOCK-REC-EXIT
-008900         GO TO READ-PARAM-LOCK-END.
-008910     IF TOO-MANY-LOCKS
-008920         UNLOCK PARAM
-008930         GO TO READ-PARAM-LOCK-END.
-008940       MOVE 15                 TO WS-F-ERROR.
-008950       PERFORM READ-ERROR.
-
-008960 READ-PARAM-EXIT.
-008970       EXIT.
+               PERFORM ONE-SECOND-DELAY THRU LOCK-REC-EXIT
+               GO TO READ-PARAM-LOCK-END.
+           IF TOO-MANY-LOCKS UNLOCK PARAM
+               GO TO READ-PARAM-LOCK-END.
+             MOVE 15                 TO WS-F-ERROR.
+             PERFORM READ-ERROR.
+      
+       READ-PARAM-EXIT.
+             EXIT.

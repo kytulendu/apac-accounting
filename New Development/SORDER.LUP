@@ -221,12 +221,12 @@
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё		  Restore the screen attributes.	       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-	     MOVE 1920		 TO W41-LENGTH.
+	     MOVE 3920		 TO W41-LENGTH.
 	     CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS
 					      W42-ATTRIB2
 					      W41-LENGTH
 					RETURNING WS-STATUS.
-001290	     MOVE 2000		 TO W41-LENGTH.
+001290	     MOVE 4000		 TO W41-LENGTH.
 
 001310 SORD-GET-USER-OPT.
       *

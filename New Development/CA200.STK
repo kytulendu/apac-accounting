@@ -21,8 +21,8 @@
            IF WS-F-ERROR = 22
                GO TO CA299.
              PERFORM READ-STOCK-NEXT THRU READ-STOCK-EXIT.
-	   IF NOT (STK-XREF = W50-EXT-ITEM)
-	       GO TO CA299.
+           IF NOT(STK-XREF = W50-EXT-ITEM)
+               GO TO CA299.
              PERFORM CA500.
 
        CA299.
