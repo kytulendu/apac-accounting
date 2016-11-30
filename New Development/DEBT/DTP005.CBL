@@ -15,7 +15,7 @@
       *                                                                *
       *       D E B T O R   M E M O / R E M A R K S   M A I N T        *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -94,7 +94,7 @@
 
        COPY "CONTROL.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEBMEM.SL".
 
@@ -125,13 +125,13 @@
        COPY "PARAM.FDE".
 
       *
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
@@ -267,7 +267,7 @@
 
        01  W80-ACCOUNT.
            03  W80-ACNO              PIC  X(06).
-           03  W80-TYPE              PIC  9(01).
+      *    03  W80-TYPE              PIC  9(01).
 
        01  W85-PASS.
            03  W85-SUPER             PIC  X(06)    OCCURS 9.
@@ -582,9 +582,9 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
+      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
-             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
              END-CALL.
              MOVE W40-ACNO           TO W80-ACNO.
@@ -604,10 +604,9 @@
 
        COPY "AA900.ALM".
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &   M O U S E
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
@@ -616,10 +615,10 @@
       *    ³ To routine is used to display a shadow down the right and ³
       *    ³ along the bottom of a pop-up box. The parameters that are ³
       *    ³ required:                                                 ³
-      *    ³          SHADE-ROW   - Top line of the box + 1.           ³
-      *    ³          SHADE-COL   - Left line of box + 2.              ³
-      *    ³          SHADE-WIDTH - Width of the box - 2.              ³
-      *    ³          SHADE-LINES - Hight of box - 1.                  ³
+      *    ³          SHADE-ROW   - Top line of the box.               ³
+      *    ³          SHADE-COL   - Left line of box.                  ³
+      *    ³          SHADE-WIDTH - Width of the box.                  ³
+      *    ³          SHADE-LINES - Height of box.                     ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
       *    ³                      CHECK-CORRECT                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -630,20 +629,17 @@
       *    ³                                                           ³
       *    ³ To start with the pop-up window higher or lower than row  ³
       *    ³ 20 (default); move another value to WS-MES-LINE.          ³
-      *    *************************************************************
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *            T H I S   R O U T I N E   I S   U S E D   T O
       *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Move the message to WS-DSP-MES and the top line of the   ³
       *    ³  message box to WS-MES-LINE. If WS-MES-LINE is zero the   ³
       *    ³  default will be 20.                                      ³
       *    ³                  PERFORM DISPLAY-MESSAGE                  ³
-      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                      ERROR-MESSAGE                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -666,26 +662,40 @@
       *    ³ spaces.                                                   ³
       *    ³                                                           ³
       *    ³  eg.                                                      ³
-      *    ³     MOVE 8              TO CRT-START.                     ³
-      *    ³     MOVE 28             TO CRT-END.                       ³
-      *    ³     PERFORM ERASE-SCREEN.                                 ³
-      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ³             CLEAR MESSAGE LINE (Line 50)                  ³
-      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³   MOVE 8         TO CRT-START.                            ³
+      *    ³   MOVE 28        TO CRT-END.                              ³
+      *    ³   PERFORM ERASE-SCREEN.                                   ³
       *    ³                                                           ³
-      *    ³     PERFORM CLEAR-L50                                     ³
-      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ³             CHANGE THE TIME ON THE SCREEN                 ³
-      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To clear the entire screen and Display a new screen with  ³
+      *    ³ headings (program/date/time/company):                     ³
       *    ³                                                           ³
-      *    ³     PERFORM CHANGE-TIME.                                  ³
+      *    ³    CRT-PROGRAM (calling program)                          ³
+      *    ³    CRT-HEADING (Screen heading)                           ³
+      *    ³    CRT-COMPANY (Company name)                             ³
+      *    ³    CRT-TERMINAL (consists of two fields:                  ³
+      *    ³                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    ³
+      *    ³    These fields should be populated at the start of the   ³
+      *    ³    program.                                               ³
+      *    ³    PERFORM HEADING-AND-CLEAR-SCREEN.                      ³
+      *    ³                                                           ³
+      *    ³ To change the screen heading:                             ³
+      *    ³    MOVE "The new heading" TO CRT-HEADING.                 ³
+      *    ³    PERFORM CHANGE-HEADING.                                ³
+      *    ³                                                           ³
+      *    ³ To change the time on the screen:                         ³
+      *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear line 50:                                         ³
+      *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
 
-      *
-      *    ****    READ FILES ROUTINES
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                                                           ³
+      *    ³           R E A D   F I L E S   R O U T I N E S           ³
+      *    ³                                                           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -698,9 +708,11 @@
 
        COPY "PARAM.RD".
 
-      *
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                                                           ³
+      *    ³R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S³
+      *    ³                                                           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -729,7 +741,11 @@
                MOVE 2            TO WS-ERROR
            ELSE
                MOVE 0            TO WS-ERROR
-               MOVE DEB-TYPE     TO W80-TYPE.
+      *        MOVE DEB-TYPE     TO W80-TYPE
+      *
+      *    ****    Move the Debtor Record to working storage area
+      *
+               MOVE DEB-RECORD1      TO W40-DEBTREC.
 
        CA160-EXIT.
              EXIT.
@@ -791,12 +807,7 @@
                GO TO CJ05.
              MOVE 6                  TO CRT-START CRT-END.
              PERFORM ERASE-SCREEN.
-           IF NOT VALID-PRICE
-               MOVE "R"              TO DEB-PRICE.
-             MOVE DEB-RECORD1        TO W40-DEBTREC.
-             MOVE 6                  TO CRT-START CRT-END.
-             PERFORM ERASE-SCREEN.
-           IF W80-TYPE NOT = 1
+           IF W40-TYPE NOT = 1
                GO TO CJ15.
              DISPLAY S22.
              DISPLAY S36 AT 0615.
@@ -810,7 +821,7 @@
 
        CJ15.
              DISPLAY S23.
-           IF W80-TYPE = 3
+           IF W40-TYPE = 3
                DISPLAY S06.
              DISPLAY S36 AT 0615.
 
@@ -831,26 +842,26 @@
              DISPLAY S-MEM.
              PERFORM SCREEN-SHADOW.
       *
-      *        S U B S C R I P T S   A N D   P O I N T E R S
+      *     S U B S C R I P T S   A N D   P O I N T E R S
       *
-      *        WS-S1   - Used for moving data to and from the Screen area
-      *                  W200 to Work W205 or Work File MEM-DATA.
-      *        WS-S2   - Current MEMO line on screen.
-      *        WS-S6   - Used when moving date up or down in the work area.
-      *        WS-S7   - Used to store W205-S1 when inserting or deleting
-      *                  lines of data.
-      *        WS-S8   - Used to store W205-S2 when inserting or deleting
-      *                  lines of data.
-      *        WS-S9   - Pointer for Work Area and Keys
-      *        W205-S  - Pointing to the W205-MEM-DET entry that is the
-      *                  first entry in the memo window on the screen.
-      *        W205-S1 - Used as a pointer when moving data from or to
-      *                  W205-MEM-DET and W200-MEM-FLDS (Screen).
-      *        W205-S2 - Pointer to the current line in W205-MEM-DET
-      *        W205-LAST - The last entry in the Work Area W205-MEM-DET
+      *     WS-S1   - Used for moving data to and from the Screen area
+      *               W200 to Work W205 or Work File MEM-DATA.
+      *     WS-S2   - Current MEMO line on screen.
+      *     WS-S6   - Used when moving date up or down in the work area.
+      *     WS-S7   - Used to store W205-S1 when inserting or deleting
+      *               lines of data.
+      *     WS-S8   - Used to store W205-S2 when inserting or deleting
+      *               lines of data.
+      *     WS-S9   - Pointer for Work Area and Keys
+      *     W205-S  - Pointing to the W205-MEM-DET entry that is the
+      *               first entry in the memo window on the screen.
+      *     W205-S1 - Used as a pointer when moving data from or to
+      *               W205-MEM-DET and W200-MEM-FLDS (Screen).
+      *     W205-S2 - Pointer to the current line in W205-MEM-DET
+      *     W205-LAST - The last entry in the Work Area W205-MEM-DET
       *
       *
-      *    ****   C H E C K   I F   T H E R E   I S   A N Y   D A T A
+      *     C H E C K   I F   T H E R E   I S   A N Y   D A T A
       *
              INITIALIZE W200-MEM-FLDS.
              MOVE ZERO               TO W205-LAST W205-S1 W205-S2.
@@ -859,9 +870,9 @@
              MOVE 1                  TO WS-FIRST WS-MEMPOS WS-LAST.
              PERFORM READ-DEBMEM THRU READ-DEBMEM-EXIT.
       *
-      *    ****    I F  T H E R E   I S   N O   D A T A   B Y P A S S
+      *     I F   T H E R E   I S   N O   D A T A   -   B Y P A S S
       *
-           IF WS-F-ERROR NOT = ZERO
+           IF NOT(WS-F-ERROR = ZERO)
                OPEN OUTPUT MEMDEB CLOSE MEMDEB OPEN I-O MEMDEB
                MOVE ZERO             TO WS-S9
                MOVE SPACES           TO W205-MEM-DET W200-KEYS
@@ -869,13 +880,13 @@
                DISPLAY SD-SEQ AT LINE CLIN COLUMN 14
                GO TO CJ40.
       *
-      *    ****   G E T   E X I S T I N G   M E M O   D A T A
+      *     G E T   E X I S T I N G   M E M O   D A T A
       *
              PERFORM GET-DEBMEM-DETAILS.
              MOVE 1                  TO W205-S.
       *
-      *    ****   S E T   S T A R T   P O S I T I O N   F O R
-      *           D I S P L A Y   A N D   A C C E P T
+      *     S E T   S T A R T   P O S I T I O N   F O R   D I S P L A Y 
+      *     A N D   A C C E P T
       *
        CJ28.
            IF W205-S2 > W205-LAST
@@ -884,8 +895,8 @@
              MOVE W205-S             TO W205-S1 W205-S2.
              INITIALIZE W200-MEM-FLDS.
       *
-      *    ****   S T O R E   M E M O   D E T A I L S   I N
-      *           D I S P L A Y   A N D   A C C E P T   A R E A
+      *     S T O R E   M E M O   D E T A I L S   I N   D I S P L A Y   
+      *     A N D   A C C E P T   A R E A
       *
        CJ30.
              MOVE W205-MEM(W205-S1)  TO W200-MEM(WS-S1).
@@ -893,7 +904,7 @@
            IF WS-S1 > 33
                GO TO CJ40.
       *
-      *    ****   C H E C K   F O R   E N D   O F   M E M O   D A T A
+      *     C H E C K   F O R   E N D   O F   M E M O   D A T A
       *
        CJ35.
            IF W205-S1 < W205-LAST
@@ -969,7 +980,7 @@
            IF USER-FUNC
                EVALUATE KEY-CODE-1
       *
-      *                   E X I T
+      *              E X I T
       *
                  WHEN ESC-KEY    GO TO CJ110
       *
@@ -982,7 +993,7 @@
                                      ADD 34      TO W205-S
                                  END-IF
       *
-      *                P A G E   U P
+      *              P A G E   U P
       *
                  WHEN PAGE-UP    PERFORM CK000
                                  IF W205-S < 35
@@ -991,14 +1002,14 @@
                                      SUBTRACT 34  FROM W205-S
                                  END-IF
       *
-      *    I N S E R T   A   L I N E
+      *              I N S E R T   A   L I N E
       *
                  WHEN F2-KEY     PERFORM CK000
                                  IF WS-LAST < 200
                                      PERFORM CL000
                                  END-IF
       *
-      *    D E L E T E   A   L I N E
+      *              D E L E T E   A   L I N E
       *
                  WHEN F3-KEY     MOVE SPACES     TO W200-MEM1
                                  PERFORM CK000
@@ -1008,7 +1019,7 @@
                                  MOVE WS-S6      TO W205-S2
                                  GO TO CJ45
       *
-      *            E N D   I N P U T
+      *              E N D   I N P U T
       *
                  WHEN F10-KEY    PERFORM CK000
                                  ADD 33 W205-S    GIVING W205-S2
@@ -1022,14 +1033,14 @@
                                  PERFORM CN000
                                  GO TO CJ110
       *
-      *    I N V A L I D   K E Y   S T R O K E
+      *              I N V A L I D   K E Y   S T R O K E
       *
                  WHEN OTHER PERFORM AA900-ALARM
                END-EVALUATE
                GO TO CJ28.
       *
-      *    U P D A T E   W 2 0 5   W I T H   A D D E D / A M E N D E D
-      *           D A T A   F R O M   S C R E E N   A R E A
+      *     U P D A T E   W 2 0 5   W I T H   A D D E D / A M E N D E D
+      *            D A T A   F R O M   S C R E E N   A R E A
       *
              MOVE W200-MEM(WS-S2)    TO W205-MEM(W205-S2).
            IF WS-S2 < 34
@@ -1055,9 +1066,9 @@
        CJ999.
              EXIT.
       *
-      *    ****   M O V E   D A T A   F R O M   A C C E P T   A R E A
-      *              T O   W 2 0 5   A N D   W R I T E   T H E S E
-      *             D E T A I L S   T O   T H E   W O R K   F I L E
+      *     M O V E   D A T A   F R O M   A C C E P T   A R E A   T O
+      *     W 2 0 5   A N D   W R I T E   T H E S E   D E T A I L S
+      *     T O   T H E   W O R K   F I L E
       *
        CK000        SECTION 5.
        CK00.
@@ -1080,7 +1091,7 @@
        CK999.
              EXIT.
       *
-      *    ****   I N S E R T   A   B L A N K   L I N E
+      *     I N S E R T   A   B L A N K   L I N E
       *
        CL000        SECTION 5.
        CL00.
@@ -1091,7 +1102,7 @@
              MOVE W205-LAST          TO W205-S2.
              MOVE DEB-ACNO           TO MEM-AC.
       *
-      *    M O V E   D A T A   U P   I N   W O R K   A R E A   A N D
+      *     M O V E   D A T A   U P   I N   W O R K   A R E A   A N D
       *               I N   T H E   W O R K   F I L E
       *
        CL05.
@@ -1120,8 +1131,7 @@
        CL999.
              EXIT.
       *
-      *    ****   D E L E T E   T H E   L I N E   B E I N G
-      *                        E D I T E D
+      *     D E L E T E   T H E   L I N E   B E I N G   E D I T E D
       *
        CM000        SECTION 5.
        CM00.
@@ -1143,7 +1153,7 @@
              ADD 1 W205-S2           GIVING W205-S1.
       *
       *    M O V E   D A T A   D O W N   I N   W O R K   A R E A   A N D
-      *                 I N   T H E   W O R K   F I L E
+      *    I N   T H E   W O R K   F I L E
       *
        CM05.
              MOVE W205-S2            TO MEM-SEQ.
@@ -1169,20 +1179,20 @@
        CM999.
              EXIT.
       *
-      *    ****   U P D A T E   T H E   M E M O   F I L E
+      *     U P D A T E   T H E   M E M O   F I L E
       *
        CN000        SECTION 5.
        CN00.
              MOVE 1                  TO W205-S1 WS-S6.
       *
-      *    F I N D   L A S T   L I N E   W I T H   D A T A
+      *     F I N D   L A S T   L I N E   W I T H   D A T A
       *
        CN02.
            IF W205-MEM(W205-LAST) = SPACES
                SUBTRACT 1            FROM W205-LAST
                GO TO CN02.
       *
-      *         R E M O V E   B L A N K   L I N E S
+      *     R E M O V E   B L A N K   L I N E S
       *
        CN05.
            IF W205-MEM(W205-S1) = SPACES
@@ -1194,13 +1204,13 @@
              MOVE 1                  TO W205-S1.
              MOVE DEB-ACNO           TO DME-AC.
       *
-      *          U P D A T E   M E M O   F I L E
+      *     U P D A T E   M E M O   F I L E
       *
        CN10.
              MOVE W205-S1            TO DME-SEQ.
              MOVE W205-MEM(W205-S1)  TO DME-DATA.
       *
-      *      F I N D   K E Y   I N   K E Y   T A B L E
+      *     F I N D   K E Y   I N   K E Y   T A B L E
       *
        CN15.
            IF DME-KEY < W200-KEY(WS-S6)
@@ -1211,13 +1221,13 @@
                ADD 1   TO WS-S6
                GO TO CN15.
       *
-      *        A D D   N E W   M E M O   R E C O R D
+      *     A D D   N E W   M E M O   R E C O R D
       *
        CN20.
              PERFORM WRITE-DEBMEM THRU WRITE-DEBMEM-EXIT.
              GO TO CN30.
       *
-      *    U P D A T E  E X I S T I N G   M E M O   R E C O R D
+      *     U P D A T E  E X I S T I N G   M E M O   R E C O R D
       *
        CN25.
              PERFORM REWRITE-DEBMEM THRU WRITE-DEBMEM-EXIT.
@@ -1231,12 +1241,12 @@
                ADD 1                 TO W205-S1
                GO TO CN10.
       *
-      *    D E L E T E  R E D U N D A N T   R E C O R D S   F R O M
-      *                      M E M O   F I L E
+      *     D E L E T E  R E D U N D A N T   R E C O R D S   F R O M
+      *     M E M O   F I L E
       *
              MOVE 1                  TO WS-S6.
       *
-      *              F I N D   R E D U N D A N T   K E Y S
+      *     F I N D   R E D U N D A N T   K E Y S
       *
        CN35.
            IF NOT(W200-KEY(WS-S6) = SPACES)
@@ -1250,7 +1260,7 @@
        CN999.
              EXIT.
       *
-      *    M O V E   D A T A   D O W N   I N   W O R K   A R E A
+      *     M O V E   D A T A   D O W N   I N   W O R K   A R E A
       *
        CO000        SECTION 5.
        CO00.
@@ -1268,9 +1278,9 @@
        CO999.
              EXIT.
       *
-      *    M O V E   D A T A   U P   1   L I N E   O N   T H E
-      *    S C R E E N   A N D   G E T   T H E   N E X T   L I N E
-      *    F R O M   T H E   W O R K   A R E A   W 2 0 5
+      *     M O V E   D A T A   U P   1   L I N E   O N   T H E
+      *     S C R E E N   A N D   G E T   T H E   N E X T   L I N E
+      *     F R O M   T H E   W O R K   A R E A   W 2 0 5
       *
        CP000        SECTION 5.
        CP00.
@@ -1291,8 +1301,8 @@
                  END-IF
              END-PERFORM.
       *
-      *    I S   T H E   L A S T   L I N E   I N   T H E   M E M O
-      *    W I N D O W   A   B L A N K   L I N E ?
+      *     I S   T H E   L A S T   L I N E   I N   T H E   M E M O
+      *     W I N D O W   A   B L A N K   L I N E ?
       *
            IF W200-MSQ(34) = ZERO
                SUBTRACT 1 FROM W205-S1 GIVING W200-MSQ(34).
@@ -1325,9 +1335,9 @@
        GET-DEBMEM-DETAILS-EXIT.
              EXIT.
 
-      *
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
@@ -1337,8 +1347,7 @@
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *
-      *    ****    D O   N O T   D I S P L A Y   E R R O R
-      *            M E S S A G E S
+      *     D O   N O T   D I S P L A Y   E R R O R   M E S S A G E S
       *
              MOVE 44                 TO USER-NUMBER.
              MOVE 1                  TO USER-SETTING.
@@ -1357,17 +1366,14 @@
              MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 8                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-           IF NOT(PAR-WS-HD = X"00000000000000000000")
-               MOVE PAR-WS-HD        TO WS-WS-HD.
-           IF NOT(PAR-CS-HD = X"00000000000000000000")
-               MOVE PAR-CS-HD        TO WS-CS-HD.
-           IF NOT(PAR-RT-HD = X"00000000000000000000")
-               MOVE PAR-RT-HD        TO WS-RT-HD.
+             MOVE PAR-WS-HD          TO WS-WS-HD.
+             MOVE PAR-CS-HD          TO WS-CS-HD.
+             MOVE PAR-RT-HD          TO WS-RT-HD.
 
        ZA999-EXIT.
              EXIT.
       *
-      *    ****    I / O   E R R O R   M E S S A G E S
+      *     I / O   E R R O R   M E S S A G E S
       *
        ZB000-ERROR      SECTION 8.
 

@@ -15,7 +15,7 @@
       *                                                                *
       *       D E B T O R   A G E   A C C O U N T S   P R O G R A M    *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -34,6 +34,18 @@
       *                 and if required. The file names are AR_Ayymm   *
       *                 and AR_Tyymm, where yymm is replaced with      *
       *                 the year and month.                            *
+      *                                                                *
+      *  Jan 2013 - Program DTPMEMO introduced to handle memo lookups  *
+      *             reducing code in all programs and removing file    *
+      *             DEBMEM from programs. Copy file 'DEBMEM.PRO' now   *
+      *             copied into all programs that require lookups for  *
+      *             memo/remarks on a Debtor account. Move the Debtor  *
+      *             code/account number to W80-ACCOUNT and then        *
+      *             PERFORM DEBTOR-MEMO. The Debtor lookup program -   *
+      *             DTPLOOK now includes a Memo Lookup so unless there *
+      *             is a requirement to lookup memo details after this *
+      *             lookup, the MEMO lookup can be removed from all    *
+      *             DEBTOR programs.                                   *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -92,7 +104,7 @@
 
        COPY "DBHIST.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "INVOIC.SL".
 
@@ -116,7 +128,7 @@
 
        COPY "CONTROL.FDE".
 
-       COPY "DBTOLD.GFD".
+       COPY "DBTOLD.FD".
 
        COPY "DBTRAN.FDE".
 
@@ -130,18 +142,18 @@
 
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
       *
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
@@ -173,6 +185,7 @@
        77  WS-PERIOD                 PIC  9(02).
        77  WS-NTP                    PIC  X(01).
        77  WS-KEYSTR                 PIC  9(06)    COMP-5.
+       77  WS-INSTR                PIC  X(01).
        77  WS-OPTION                 PIC  X(01).
        77  WS-SKIP                   PIC  X(01)    VALUE "N".
        77  WS-TAX                    PIC  X(01).
@@ -187,7 +200,6 @@
        77  WS-BATCH                  PIC  9(06)    COMP-5.
        77  WS-ERR1                   PIC  X(22)    VALUE "Invalid Account Number".
        77  WS-ERR2                   PIC  X(09)    VALUE "No Record".
-       77  WS-A                      PIC  X(19)    VALUE "Any key to continue".
        77  WS-E                      PIC  X(15)    VALUE "**END** - ENTER".
        77  WS-AC                     PIC  X(07)    VALUE "ACCOUNT".
        77  PRG-DEBT-LUP              PIC  X(12)    VALUE "DTP\DTPLOOK".
@@ -299,7 +311,7 @@
 
        COPY "FUNCTION.WS".
 
-       COPY "W50.WS".
+      *COPY "W50.WS".
 
        01  W60-HIST.
            03 W60-PATH             PIC  X(64).
@@ -316,7 +328,7 @@
 
        01  W80-ACCOUNT.
            03  W80-ACNO            PIC X(06).
-           03  W80-TYPE            PIC 9(01).
+      *    03  W80-TYPE            PIC 9(01).
 
        01  W85-PASS.
            03  W85-SUPER           PIC  X(06)    OCCURS 9.
@@ -423,9 +435,9 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
+      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
-             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
              END-CALL.
              CANCEL PRG-DEBT-LUP.
@@ -445,7 +457,37 @@
 
        COPY "AA900.ALM".
        
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
+      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
+      *    Ё                      SCREEN-SHADOW                        Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To routine is used to display a shadow down the right and Ё
+      *    Ё along the bottom of a pop-up box. The parameters that are Ё
+      *    Ё required:                                                 Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY "FUNCTION.SCR".
+
+      *    *************************************************************
+      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    D I S P L A Y   E R R O R   M E S S A G E S
+      *    *************************************************************
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                      ERROR-MESSAGE                        Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To display the error message higher or lower (default is  Ё
+      *    Ё line 20) Move the line number which must be used as the   Ё
+      *    Ё top line to WS-MES-LINE. The message to be displayed must Ё
+      *    Ё be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "ERROR.SCR".
 
@@ -460,29 +502,72 @@
       *    Ё spaces.                                                   Ё
       *    Ё                                                           Ё
       *    Ё  eg.                                                      Ё
-      *    Ё     MOVE 8              TO CRT-START.                     Ё
-      *    Ё     MOVE 28             TO CRT-END.                       Ё
-      *    Ё     PERFORM ERASE-SCREEN.                                 Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    Ё             CLEAR MESSAGE LINE (Line 50)                  Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё   MOVE 8         TO CRT-START.                            Ё
+      *    Ё   MOVE 28        TO CRT-END.                              Ё
+      *    Ё   PERFORM ERASE-SCREEN.                                   Ё
       *    Ё                                                           Ё
-      *    Ё     PERFORM CLEAR-L50                                     Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    Ё             CHANGE THE TIME ON THE SCREEN                 Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To clear the entire screen and Display a new screen with  Ё
+      *    Ё headings (program/date/time/company):                     Ё
       *    Ё                                                           Ё
-      *    Ё     PERFORM CHANGE-TIME.                                  Ё
+      *    Ё    CRT-PROGRAM (calling program)                          Ё
+      *    Ё    CRT-HEADING (Screen heading)                           Ё
+      *    Ё    CRT-COMPANY (Company name)                             Ё
+      *    Ё    CRT-TERMINAL (consists of two fields:                  Ё
+      *    Ё                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    Ё
+      *    Ё    These fields should be populated at the start of the   Ё
+      *    Ё    program.                                               Ё
+      *    Ё    PERFORM HEADING-AND-CLEAR-SCREEN.                      Ё
+      *    Ё                                                           Ё
+      *    Ё To change the screen heading:                             Ё
+      *    Ё    MOVE "The new heading" TO CRT-HEADING.                 Ё
+      *    Ё    PERFORM CHANGE-HEADING.                                Ё
+      *    Ё                                                           Ё
+      *    Ё To change the time on the screen:                         Ё
+      *    Ё    PERFORM CHANGE-TIME                                    Ё
+      *    Ё                                                           Ё
+      *    Ё To clear line 50:                                         Ё
+      *    Ё    PERFORM CLEAR-L50                                      Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
-       COPY "CLEARW.CRT".
+       COPY "CLEAR.CRT".
+
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                        OPT-MESSAGE                        Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё This routine is used to allow the OPERATOR to respond to  Ё
+      *    Ё a request for an option, so that the correct action can   Ё
+      *    Ё be performed by the program. The routine will display the Ё
+      *    Ё message in a pop-up window and allow the OPERATOR to      Ё
+      *    Ё respond to the 'question'.                                Ё
+      *    Ё                                                           Ё
+      *    Ё The option request must be placed in WS-OPT-MES and may   Ё
+      *    Ё not exceed 48 characters. The message will be centred in  Ё
+      *    Ё the window. An example of a message request follows:      Ё
+      *    Ё                                                           Ё
+      *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-OPT-MES.      Ё
+      *    Ё   MOVE Instruction    TO WS-INSTR.                        Ё
+      *    Ё       [see Accptopt for instruction values]               Ё
+      *    Ё   PERFORM OPT-MESSAGE.                                    Ё
+      *    Ё                                                           Ё
+      *    Ё This would be displayed as:                               Ё
+      *    Ё      здддддддддддддддддддддддддддддддддддддддддддддддд©   Ё
+      *    Ё      Ё          Print transactions (Y/N) [ ]          Ё╟╟ Ё
+      *    Ё      юдддддддддддддддддддддддддддддддддддддддддддддддды╟╟ Ё
+      *    Ё        ╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟ Ё
+      *    Ё                                                           Ё
+      *    Ё The response is returned in WS-OPTION (in upper case).    Ё
+      *    Ё                                                           Ё
+      *    Ё The system will display the message box with the top line Ё
+      *    Ё as the value of WS-MES-LINE. If WS-MES-LINE is zero the   Ё
+      *    Ё default will be 20.                                       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "OPTION.CRT".
 
        COPY "DATE.CHK".
 
       *
-      *    ****    READ FILES ROUTINES
+      *      READ FILES ROUTINES
       *
        AC000              SECTION.
 
@@ -499,7 +584,7 @@
        COPY "SHARED.RD".
 
       *
-      *    ****    REWRITE AND WRITE FILES ROUTINES
+      *      REWRITE AND WRITE FILES ROUTINES
       *
        AD000             SECTION.
 
@@ -560,16 +645,15 @@
        AY59.
              EXIT.
       *
-      *    ****    Start processing transaction
+      *      Start processing transaction
       *
        AY60.
              MOVE 1                  TO WS-COUNT.
              MOVE 5                  TO WS-SHARED.
              PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-      *      MOVE SHR-STOCK          TO WS-STOCK.
       *
-      *    ****    Read PARAM record 4 - Lock record and start recovery
-      *            file procedure.
+      *      Read PARAM record 4 - Lock record and start recovery file
+      *      procedure.
       *
              MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
@@ -578,7 +662,7 @@
                MOVE ZERO             TO WS-WAIT
                GO TO AY62.
       *
-      *    ****   Q   F U L L  -  W A I T   F O R   4   S E C O N D S
+      *     Q   F U L L  -  W A I T   F O R   4   S E C O N D S
       *
              DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
              COMMIT.
@@ -593,26 +677,26 @@
              MOVE LS-USER            TO PAR-USR(WS-USUB).
              PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
       *
-      *    ****    Read the DEBTOR control record in the NETWORK file
-      *            and lock it. Log details to the RECOVERY file.
+      *      Read the DEBTOR control record in the NETWORK file and lock
+      *      it. Log details to the RECOVERY file.
       *
              MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
              PERFORM AY39 THRU AY59.
              GO TO AY999.
       *
-      *    ****   A R E   A N Y   U P D A T E S   I N   P R O G R E S S
+      *     A R E   A N Y   U P D A T E S   I N   P R O G R E S S
       *
        AY62.
            IF NOT(PAR-PROG(WS-SUB) = SPACES OR PAR-USR(WS-SUB) = SPACES)
       *
-      *    ****   A R E   D E B T O R O R   S T O C K   F I L E S
-      *           B E I N G   U P D A T E D
+      *     A R E   D E B T O R O R   S T O C K   F I L E S   B E I N G
+      *     U P D A T E D
       *
                IF NOT(PAR-PROG(WS-SUB) = SPACES)
                    IF PAR-PROG(WS-SUB) = "DB" OR "DS"
       *
-      *    ****   Y E S   -   S E T   W A I T   P E R I O D
+      *     Y E S   -   S E T   W A I T   P E R I O D
       *
                        GO TO AY62-WAIT
                    ELSE
@@ -621,11 +705,11 @@
                    END-IF
                ELSE
       *
-      *    ****   I S T H I S   P R O G R A M   I N   T H E   Q
+      *     I S   T H I S   P R O G R A M   I N   T H E   Q
       *
                IF PAR-USR(WS-SUB) = LS-USER
       *
-      *    ****   I S   I T   N E X T   I N   L I N E   T O   P R O C E S S
+      *     I S   I T   N E X T   I N   L I N E   T O   P R O C E S S
       *
                    IF WS-WAIT = ZERO
                        GO TO AY63
@@ -641,7 +725,7 @@
              PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
              GO TO AY62-CHECK.
       *
-      *    ****   S E T   W A I T   P E R I O D
+      *     S E T   W A I T   P E R I O D
       *
        AY62-WAIT.
              MOVE 300   TO WS-WAIT.
@@ -668,8 +752,8 @@
              MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
       *
-      *    ****    Write links back and unlock PARAM record 4 and
-      *            NETWORK record 1.
+      *      Write links back and unlock PARAM record 4 and NETWORK
+      *      record 1.
       *
             PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
             PERFORM AY49 THRU AY59.
@@ -705,7 +789,7 @@
        AY999.
              EXIT.
       *
-      *    ****    A G E   A C C O U N T S
+      *      A G E   A C C O U N T S
       *
        CI000         SECTION 5.
        CI00.
@@ -885,7 +969,7 @@
              DISPLAY "Reading :" AT 1412.
              DISPLAY "Writing :" AT 1612.
       *
-      *    ****    R E N A M E   D B T R A N   F I L E
+      *      R E N A M E   D B T R A N   F I L E
       *
              CALL "CBL_RENAME_FILE" USING W02-DBTRAN W02-DBTOLD RETURNING WS-STATUS.
            IF NOT(WS-STATUS = X"0000")
@@ -932,7 +1016,7 @@
              CLOSE DBTRAN
                    DBTOLD.
       *
-      *    ****    D E L E T E   O L D   D B T R A N   F I L E
+      *      D E L E T E   O L D   D B T R A N   F I L E
       *
              CALL "CBL_DELETE_FILE" USING W02-DBTOLD RETURNING WS-STATUS.
 
@@ -1114,9 +1198,9 @@
 
        CI999.
              EXIT.
-      *
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
@@ -1150,7 +1234,7 @@
              MOVE W02-DTHIST         TO W60-PATH.
              STRING W60-PATH DELIMITED BY " " W05-DBT-HIS DELIMITED SIZE INTO W02-DTHIST.
       *
-      *    ****    G E T   D E B T O R  M O N T H - E N D   D A Y
+      *      G E T   D E B T O R   M O N T H - E N D   D A Y
       *
              MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
@@ -1272,7 +1356,7 @@
        ZA999-EXIT.
              EXIT.
       *
-      *    ****    I / O   E R R O R   M E S S A G E S
+      *      I / O   E R R O R   M E S S A G E S
       *
        ZB000-ERROR      SECTION 8.
 

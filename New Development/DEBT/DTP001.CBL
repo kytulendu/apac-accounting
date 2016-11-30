@@ -15,7 +15,7 @@
       *                                                                *
       *      D E B T O R   C R E A T I O N S   P R O G R A M           *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -60,6 +60,18 @@
       *             Internal accounts is providing for only 60 charact-*
       *             ers. This allows an additional 20 characters for   *
       *             Company and Internal account names.                *
+      *                                                                *
+      *  Jan 2013 - Program DTPMEMO introduced to handle memo lookups  *
+      *             reducing code in all programs and removing file    *
+      *             DEBMEM from programs. Copy file 'DEBMEM.PRO' now   *
+      *             copied into all programs that require lookups for  *
+      *             memo/remarks on a Debtor account. Move the Debtor  *
+      *             code/account number to W80-ACCOUNT and then        *
+      *             PERFORM DEBTOR-MEMO. The Debtor lookup program -   *
+      *             DTPLOOK now includes a Memo Lookup so unless there *
+      *             is a requirement to lookup memo details after this *
+      *             lookup, the MEMO lookup can be removed from all    *
+      *             DEBTOR programs.                                   *
       *                                                                *
       *  May 2013 - Added Cell phone number field DEB-C-TEL            *
       *             (W40-C-TEL) PIC X(14).                             *
@@ -111,9 +123,7 @@
 
        COPY "DEBALT.SL".
 
-       COPY "DEBTOR.ISL".
-
-       COPY "DEBMEM.SL".
+       COPY "DEBTOR.SL".
 
        COPY "PARAM.SL".
 
@@ -139,11 +149,9 @@
 
        COPY "DEBTOR.FDE".
 
-       COPY "DEBMEM.FDE".
-
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
@@ -157,7 +165,7 @@
       *            *     *       ******    **    **   **    **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)            VALUE "aeWlimemnomLalismJ".
        77  WS-SUB                  PIC  9(04)    COMP-5.
        77  WS-S                    PIC  9(04)    COMP-5.
        77  WS-S1                   PIC  9(04)    COMP-5.
@@ -179,33 +187,34 @@
        77  WS-PARKEY               PIC  9(06)    COMP-5.
        77  WS-RECKEY               PIC  9(06)    COMP-5.
        77  WS-RECOVER              PIC  9(06)    COMP-5.
-       77  WS-SHARED               PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-TRANS                PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-SHARED               PIC  9(04)    COMP-5  VALUE 1.
+       77  WS-TRANS                PIC  9(04)    COMP-5  VALUE 1.
        77  WS-FIN-RATE             PIC S9(03)V99 COMP-3.
        77  WS-PERIOD               PIC  9(02).
        77  WS-NTP                  PIC  X(01).
        77  WS-KEYSTR               PIC  9(06)    COMP-5.
+       77  WS-INSTR                PIC  X(01).
        77  WS-OPTION               PIC  X(01).
-       77  WS-ASSIGN               PIC  X(01)    VALUE "N".
-       77  WS-SKIP                 PIC  X(01)    VALUE "N".
+       77  WS-ASSIGN               PIC  X(01)            VALUE "N".
+       77  WS-SKIP                 PIC  X(01)            VALUE "N".
        77  WS-TAX                  PIC  X(01).
        77  WS-TYPE                 PIC  X(01).
-       77  WS-ERROR                PIC  9(01)    VALUE ZERO.
+       77  WS-ERROR                PIC  9(01)            VALUE ZERO.
        77  WS-EKEY                 PIC  9(06)    COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-CHAR2                PIC  X(01).
        77  WS-COMP                 PIC  9(01).
-       77  WS-RT-HD                PIC  X(10)    VALUE "-Retail   ".
-       77  WS-WS-HD                PIC  X(10)    VALUE "-Wholesale".
-       77  WS-CS-HD                PIC  X(10)    VALUE "-Cash sale".
-       77  WS-ERR1                 PIC  X(22)    VALUE "Invalid Account Number".
-       77  WS-ERR2                 PIC  X(09)    VALUE "No Record".
-       77  WS-ERR3                 PIC  X(15)    VALUE "Data incomplete".
-       77  WS-ERR4                 PIC  X(13)    VALUE "Invalid title".
-       77  WS-ERR8                 PIC  X(16)    VALUE "Invalid category".
-       77  WS-AC                   PIC  X(07)    VALUE "ACCOUNT".
-       77  PRG-NAME                PIC  X(12)    VALUE SPACES.
-       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
+       77  WS-RT-HD                PIC  X(10)            VALUE "-Retail   ".
+       77  WS-WS-HD                PIC  X(10)            VALUE "-Wholesale".
+       77  WS-CS-HD                PIC  X(10)            VALUE "-Cash sale".
+       77  WS-ERR1                 PIC  X(22)            VALUE "Invalid Account Number".
+       77  WS-ERR2                 PIC  X(09)            VALUE "No Record".
+       77  WS-ERR3                 PIC  X(15)            VALUE "Data incomplete".
+       77  WS-ERR4                 PIC  X(13)            VALUE "Invalid title".
+       77  WS-ERR8                 PIC  X(16)            VALUE "Invalid category".
+       77  WS-AC                   PIC  X(07)            VALUE "ACCOUNT".
+       77  PRG-NAME                PIC  X(12)            VALUE SPACES.
+       77  PRG-DEBT-LUP            PIC  X(12)            VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
        77  WS-USUB                 PIC  9(04)    COMP-5.
 
@@ -227,16 +236,16 @@
       *    The following two fields are used for clearing a portion of
       *    the screen. (Start line and end line)
       *
-           03  CRT-START           PIC  9(02) VALUE 5.
-           03  CRT-END             PIC  9(02) VALUE 46.
+           03  CRT-START           PIC  9(02)            VALUE 5.
+           03  CRT-END             PIC  9(02)            VALUE 46.
       *
       *    Calling Program
       *
-           03  CRT-PROGRAM         PIC  X(15) VALUE "DTP001".
+           03  CRT-PROGRAM         PIC  X(15)            VALUE "DTP001".
       *
       *    Screen Heading
       *
-           03  CRT-HEADING         PIC  X(40) VALUE "ACCOUNTS RECEIVABLE - ADD ACCOUNT".
+           03  CRT-HEADING         PIC  X(40)            VALUE "ACCOUNTS RECEIVABLE - ADD ACCOUNT".
       *
       *    Company Name
       *
@@ -253,16 +262,16 @@
        COPY "WS.WS".
 
        01  WS-HELP.
-           03  WS-MODULE           PIC  X(03) VALUE "DTP".
-           03  WS-PROG             PIC  X(03) VALUE "001".
+           03  WS-MODULE           PIC  X(03)            VALUE "DTP".
+           03  WS-PROG             PIC  X(03)            VALUE "001".
 
        01  WS-PARID.
            03  WS-SYS-ID           PIC  X(03).
 
        01  W10-SPARES.
            03  W10-DATE            PIC  X(08).
-           03  W10-RDATE                           REDEFINES W10-DATE.
-               05  W10-EDTE        PIC 99/99/9999.
+           03  W10-RDATE                                 REDEFINES W10-DATE.
+               05  W10-EDTE        PIC  99/99/9999.
 
        01  W10-REF.
            03  W10-NUM             PIC  9(08).
@@ -280,10 +289,10 @@
 
        01  W25-CALCS.
            03  W25-RESULT          PIC  9(05)V99.
-           03  W25-RESULT1                       REDEFINES W25-RESULT.
+           03  W25-RESULT1                               REDEFINES W25-RESULT.
                05  W25-WHOLE       PIC  9(05).
                05  W25-DECIMAL     PIC  9(02).
-           03  W25-RESULT2                       REDEFINES W25-RESULT.
+           03  W25-RESULT2                               REDEFINES W25-RESULT.
                05  W25-KEY         PIC  9(04).
                05  W25-SUB         PIC  9(01).
                05  FILLER          PIC  9(02).
@@ -291,11 +300,11 @@
            03  W25-VALUE           PIC S9(09)V99 COMP-3.
 
        01  W30-AGE-DATES.
-           03  W30-120             PIC  9(08) COMP-3.
-           03  W30-90              PIC  9(08) COMP-3.
-           03  W30-60              PIC  9(08) COMP-3.
-           03  W30-30              PIC  9(08) COMP-3.
-           03  W30-CUR             PIC  9(08) COMP-3.
+           03  W30-120             PIC  9(08)    COMP-3.
+           03  W30-90              PIC  9(08)    COMP-3.
+           03  W30-60              PIC  9(08)    COMP-3.
+           03  W30-30              PIC  9(08)    COMP-3.
+           03  W30-CUR             PIC  9(08)    COMP-3.
 
        COPY "W40.DBT".
 
@@ -326,24 +335,50 @@
 
        COPY "FUNCTION.WS".
 
-       COPY "W50.WS".
+      *COPY "W50.WS".
+
+       01  W50-NAME.
+           03  W50-DATA.
+               05  W50-CCHAR       PIC  X(01)            OCCURS 80.
+           03  W50-DATA-LEFT                             REDEFINES W50-DATA.
+               05  W50-D1          PIC  X(01).
+               05  W50-D79         PIC  X(79).
+           03  W50-INDIVIDUAL                            REDEFINES W50-DATA.
+               05  W50-SURNAME.
+                   07  W50-SNENT   PIC  X(12).
+                   07  FILLER      PIC  X(12).
+               05  W50-FNAME.
+                   07  W50-1NENT   PIC  X(12).
+                   07  FILLER      PIC  X(12).
+               05  W50-SNAME.
+                   07  W50-2NENT   PIC  X(12).
+                   07  FILLER      PIC  X(12).
+               05  W50-INIT.
+                   07  W50-I1      PIC  X(01).
+                   07  W50-I7      PIC  X(07).
+           03  W50-NAME                                  REDEFINES W50-DATA.
+               05  W50-ENTRY.
+                   07  W50-DENT.
+                       09  W50-NKEY PIC  X(12).
+               05  W50-CPY          PIC  X(30).
+               05  FILLER           PIC  X(38).
 
        01  W75-KEYS.
-           03  W75-S               PIC  9(02) COMP-5.
-           03  W75-S1              PIC  9(02) COMP-5.
+           03  W75-S               PIC  9(02)    COMP-5.
+           03  W75-S1              PIC  9(02)    COMP-5.
            03  W75-KEY             PIC  9(06)    COMP-5.
            03  W75-ALLOCATED       PIC S9(09)V99 COMP-3.
            03  W75-BALANCE         PIC S9(09)V99 COMP-3.
-           03  W75-DNO             PIC  X(06) OCCURS 18.
+           03  W75-DNO             PIC  X(06)            OCCURS 18.
 
        COPY "W75.WS".
 
        01  W80-ACCOUNT.
            03  W80-ACNO            PIC  X(06).
-           03  W80-TYPE            PIC  9(01).
+      *    03  W80-TYPE            PIC  9(01).
 
        01  W85-PASS.
-           03  W85-SUPER           PIC  X(06)    OCCURS 9.
+           03  W85-SUPER           PIC  X(06)            OCCURS 9.
            03  W85-ENTRY           PIC  9(02)    COMP-3.
            03  W85-MARG            PIC S9(02)V99.
 
@@ -393,14 +428,22 @@
            03  LINE  5 COLUMN 37 VALUE "INTERNAL" FOREGROUND-COLOR Grey HIGHLIGHT.
 
        01  S-ART11.
-           03  LINE 11 COLUMN 16 VALUE "здддддддддддддддддддддддддддддддддддддддддддддддд" FOREGROUND-COLOR Black BACKGROUND-COLOR Green.
-           03          COLUMN 65 VALUE "©"                                                 FOREGROUND-COLOR Green HIGHLIGHT BACKGROUND-COLOR Green.
-           03  LINE 12 COLUMN 16 VALUE "Ё"                                                 FOREGROUND-COLOR Black BACKGROUND-COLOR Green.
-           03          COLUMN 17 VALUE " Does this A/C qualify for VAT article 11/1g:   "  FOREGROUND-COLOR Grey  BACKGROUND-COLOR Green.
-           03          COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Green HIGHLIGHT BACKGROUND-COLOR Green.
-           03  LINE 13 COLUMN 16 VALUE "ю"                                                 FOREGROUND-COLOR Black BACKGROUND-COLOR Green.
-           03          COLUMN 17 VALUE "дддддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Green HIGHLIGHT BACKGROUND-COLOR Green.
+           03  BACKGROUND-COLOR Green FOREGROUND-COLOR Grey.
+               05  LINE 11 COLUMN 16 VALUE "                                                  ".
+               05  LINE 12 COLUMN 16 VALUE " Does this A/C qualify for VAT article 11/1g:     ".
+               05  LINE 13 COLUMN 16 VALUE "                                                  ".
 
+       01  S-ACT-LUP.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                                                 FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                                         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Account Lookup,".
+               05          COLUMN 34 VALUE                                 "F3"                                 FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 36 VALUE                                   " allocate account No. ".
+               05          COLUMN 58 VALUE                                                         "Esc"        FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 61 VALUE                                                            " to exit".
+       
        01  S20.
            03  LINE  6 COLUMN 12 VALUE "Account Type".
            03          COLUMN 29 VALUE             "(".
@@ -442,7 +485,7 @@
                DISPLAY "Generating Alternate Name Index" AT 5018 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
                PERFORM DEBTOR-NAME-INDEX
                PERFORM AY70 THRU AY999
-               MOVE "Any key to continue" TO WS-ERR-MES
+               MOVE "P R E S S"      TO WS-DSP-MES
                PERFORM DISPLAY-MESSAGE
                GO TO AA05.
              CLOSE RECOVER.
@@ -469,7 +512,7 @@
              END-CALL.
              CANCEL PRG-NAME.
              MOVE W40-ACNO           TO W80-ACNO.
-          GO TO AA58.
+             GO TO AA58.
 
        AA55.
              MOVE SPACE              TO WS-ERR-MES.
@@ -484,10 +527,9 @@
 
        COPY "AA900.ALM".
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &   M O U S E
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
@@ -510,20 +552,17 @@
       *    Ё                                                           Ё
       *    Ё To start with the pop-up window higher or lower than row  Ё
       *    Ё 20 (default); move another value to WS-MES-LINE.          Ё
-      *    *************************************************************
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
       *            T H I S   R O U T I N E   I S   U S E D   T O
       *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё  Move the message to WS-DSP-MES and the top line of the   Ё
       *    Ё  message box to WS-MES-LINE. If WS-MES-LINE is zero the   Ё
       *    Ё  default will be 20.                                      Ё
       *    Ё                  PERFORM DISPLAY-MESSAGE                  Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -549,40 +588,52 @@
       *    Ё   MOVE 8         TO CRT-START.                            Ё
       *    Ё   MOVE 28        TO CRT-END.                              Ё
       *    Ё   PERFORM ERASE-SCREEN.                                   Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    Ё             CLEAR MESSAGE LINE (Line 50)                  Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
       *    Ё                                                           Ё
-      *    Ё     PERFORM CLEAR-L50                                     Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    Ё             CHANGE THE TIME ON THE SCREEN                 Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To clear the entire screen and Display a new screen with  Ё
+      *    Ё headings (program/date/time/company):                     Ё
       *    Ё                                                           Ё
-      *    Ё     PERFORM CHANGE-TIME.                                  Ё
+      *    Ё    CRT-PROGRAM (calling program)                          Ё
+      *    Ё    CRT-HEADING (Screen heading)                           Ё
+      *    Ё    CRT-COMPANY (Company name)                             Ё
+      *    Ё    CRT-TERMINAL (consists of two fields:                  Ё
+      *    Ё                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    Ё
+      *    Ё    These fields should be populated at the start of the   Ё
+      *    Ё    program.                                               Ё
+      *    Ё    PERFORM HEADING-AND-CLEAR-SCREEN.                      Ё
+      *    Ё                                                           Ё
+      *    Ё To change the screen heading:                             Ё
+      *    Ё    MOVE "The new heading" TO CRT-HEADING.                 Ё
+      *    Ё    PERFORM CHANGE-HEADING.                                Ё
+      *    Ё                                                           Ё
+      *    Ё To change the time on the screen:                         Ё
+      *    Ё    PERFORM CHANGE-TIME                                    Ё
+      *    Ё                                                           Ё
+      *    Ё To clear line 50:                                         Ё
+      *    Ё    PERFORM CLEAR-L50                                      Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "CLEAR.CRT".
 
-       COPY "DATE.CHK".
-
-      *
-      *    ****    READ FILES ROUTINES
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
+      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
+      *    Ё                                                           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AC000              SECTION.
 
        COPY "CONTROL.RD".
 
        COPY "DEBTOR.RD".
 
-       COPY "DEBMEM.RD".
-
        COPY "PARAM.RD".
 
        COPY "SHARED.RD".
 
-      *
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
+      *    ЁR E W R I T E   &   W R I T E   F I L E S   R O U T I N E SЁ
+      *    Ё                                                           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -858,16 +909,7 @@
              DISPLAY S22.
              DISPLAY S25.
        CB08.
-             DISPLAY "F1"                     AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     "=Help,"                         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F2"                             WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to do Account Lookup,"         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F3"                             WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " allocate account No. "         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F9"                             WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " Debtor Lookup (Any Word),"     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "Esc"                            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to exit"                       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             DISPLAY S-ACT-LUP.
              ACCEPT S36 AT 0615.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
@@ -897,7 +939,7 @@
                 GO TO CB00.
              PERFORM CLEAR-L50.
              MOVE 6                  TO WS-LENGTH.
-             CALL "CBL_TOUPPER" USING W80-ACNO     BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             CALL "CBL_TOUPPER" USING W80-ACNO BY VALUE WS-LENGTH RETURNING WS-STATUS.
              MOVE 1                  TO WS-LENGTH.
              MOVE W80-ACNO           TO DEB-ACNO W40-ACNO.
              PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT.
@@ -998,20 +1040,13 @@
       *    ****   C O M P A N Y  /  I N T E R N A L   A / C
       *
        CB15.
+             DISPLAY S23.
            IF WS-TYPE = "N"
                DISPLAY S06.
-             DISPLAY S23.
              DISPLAY S24.
 
        CB16.
-             DISPLAY "F1" AT 5002             WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     "=Help,"                 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F2"                     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to do Account Lookup," WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F3"                     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " allocate account No. " WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "Esc"                    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to exit"               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             DISPLAY S-ACT-LUP.
              ACCEPT S36 AT 0615.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
@@ -1193,9 +1228,9 @@
 
            COPY "DEBTOR.NIX".
 
-      *
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
@@ -1203,11 +1238,6 @@
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
-      *    IF LS-USER = LS-SYS-ID
-      *        MOVE "Supervisorд"    TO CRT-WRKHD
-      *    ELSE
-      *        MOVE "Workstation"    TO CRT-WRKHD
-      *        MOVE LS-USER          TO CRT-WRKST.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё  Setup various keys and the mouse for use with menus and  Ё
@@ -1224,12 +1254,9 @@
              MOVE PAR-ART11          TO W40-ART11.
              MOVE 8                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-           IF NOT(PAR-WS-HD = X"00000000000000000000")
-               MOVE PAR-WS-HD        TO WS-WS-HD.
-           IF NOT(PAR-CS-HD = X"00000000000000000000")
-               MOVE PAR-CS-HD        TO WS-CS-HD.
-           IF NOT(PAR-RT-HD = X"00000000000000000000")
-               MOVE PAR-RT-HD        TO WS-RT-HD.
+             MOVE PAR-WS-HD          TO WS-WS-HD.
+             MOVE PAR-CS-HD          TO WS-CS-HD.
+             MOVE PAR-RT-HD          TO WS-RT-HD.
              OPEN OUTPUT RECOVER.
              CLOSE RECOVER.
              OPEN I-O RECOVER.
@@ -1263,9 +1290,6 @@
                                
                WHEN 18         MOVE W02-RECOVER  TO WS-FILE
                                MOVE WS-RECKEY    TO WS-KEY
-                               
-               WHEN 27         MOVE W02-DEBMEM   TO WS-FILE
-                               MOVE DME-KEY      TO WS-KEYX
                                
                WHEN 37         MOVE W02-SHARED   TO WS-FILE
                                MOVE WS-SHARED    TO WS-KEY

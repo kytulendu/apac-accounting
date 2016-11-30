@@ -4,13 +4,12 @@
       *    Ё          Save the screen contents and attributes.         Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              MOVE PRG-DEBT-LUP       TO PRG-NAME.
-             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
 	                 ON EXCEPTION GO TO AA55
              END-CALL.
-             GO TO AA58.
+             GO TO AA54.
 
        AA50.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -21,6 +20,8 @@
              CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY W10-STOCK
 	                 ON EXCEPTION GO TO AA55
              END-CALL.
+
+       AA54.
              CANCEL PRG-NAME.
              GO TO AA58.
 

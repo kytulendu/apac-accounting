@@ -1,9 +1,9 @@
-      /    *************************************************************
+      *    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &  M O U S E
       *    *************************************************************
       *    ****    As this routine uses the variables defined in
-      *            W40.WS, include the following 'COPY W40.WS' in
+      *            W40.WS, include the following 'COPY "W40.WS"' in
       *            the WORKING-STORAGE SECTION.
       *
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -30,8 +30,8 @@
              CALL "CBL_READ_SCR_ATTRS" USING SAVE-POS W42-ATTRIB4 W41-LENGTH RETURNING WS-STATUS.
 
        RESTORE-ATTRIB.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS W42-ATTRIB4 W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        SCREEN-CONTENTS.
              CALL "CBL_CLEAR_SCR" USING X"20" X"00" RETURNING WS-STATUS.
@@ -46,16 +46,16 @@
              CALL "CBL_READ_SCR_CHATTRS" USING SAVE-POS W43-SCREEN3 W42-ATTRIB3 W41-LENGTH RETURNING WS-STATUS.
 
        RESTORE-SCREEN.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_CHATTRS" USING SAVE-POS W43-SCREEN W42-ATTRIB W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        RESTORE-SCREEN-2.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_CHATTRS" USING SAVE-POS W43-SCREEN2 W42-ATTRIB2 W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        RESTORE-SCREEN-3.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_CHATTRS" USING SAVE-POS W43-SCREEN3 W42-ATTRIB3 W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        POSITION-MOUSE.
              MOVE 67                 TO MOUSE-FUNC.
@@ -143,10 +143,10 @@
        SCREEN-SHADOW.
              CALL "CBL_READ_SCR_ATTRS" USING SAVE-POS W42-ATTRIB4 W41-LENGTH RETURNING WS-STATUS.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё           SHADE-ROW   - Top line of the box + 1.          Ё
-      *    Ё           SHADE-COL   - Left line of box + 2.             Ё
-      *    Ё           SHADE-WIDTH - Width of the box - 2.             Ё
-      *    Ё           SHADE-LINES - Height of box - 1.                Ё
+      *    Ё           SHADE-ROW   - Top line of the box.              Ё
+      *    Ё           SHADE-COL   - Left line of box.                 Ё
+      *    Ё           SHADE-WIDTH - Width of the box.                 Ё
+      *    Ё           SHADE-LINES - Height of box.                    Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
              ADD 1                   TO SHADE-ROW.
              ADD 2                   TO SHADE-COL.
@@ -215,7 +215,7 @@
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        DISPLAY-MESSAGE-2 SECTION.
        DISPLAY-SETUP.
-           CALL "UTP\DISPMES2" USING WS-DSP-MES WS-DSP-MES-2 WS-MES-LINE LS-USER-ID.
+             CALL "UTP\DISPMES2" USING WS-DSP-MES WS-DSP-MES-2 WS-MES-LINE LS-USER-ID.
 
        DISPLAY-EXIT.
            EXIT.
@@ -228,7 +228,7 @@
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        ERROR-MESSAGE   SECTION.
        ERROR-SETUP.
-           CALL "UTP\ERRORMES" USING WS-OPTION WS-ERR-MES WS-MES-LINE LS-USER-ID.
+             CALL "UTP\ERRORMES" USING WS-OPTION WS-ERR-MES WS-MES-LINE LS-USER-ID.
 
        ERROR-EXIT.
              EXIT.
@@ -238,7 +238,7 @@
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        ERROR-MESSAGE-2 SECTION.
        ERROR-SETUP-2.
-           CALL "UTP\ERRORMS2" USING WS-OPTION WS-ERR-MES WS-ERR-MES-2 WS-MES-LINE LS-USER-ID.
+             CALL "UTP\ERRORMS2" USING WS-OPTION WS-ERR-MES WS-ERR-MES-2 WS-MES-LINE LS-USER-ID.
 
        ERROR-EXIT-2.
            EXIT.

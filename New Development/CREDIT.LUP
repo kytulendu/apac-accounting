@@ -26,8 +26,8 @@
                END-EVALUATE
                GO TO CREDIT-LUP-DATA.
              MOVE SPACES             TO WS-BLNK78.
-             DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
-             DISPLAY SPACE     AT 2501 WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+             DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan.
+             DISPLAY SPACE     AT 2501 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
              MOVE ALL "°"            TO WS-BLNK78.
              MOVE 6                  TO CLIN.
              MOVE 1                  TO W75-S W75-S1.
@@ -67,18 +67,18 @@
 027720               GO TO CREDIT-GET-CRED-RECORD.
 
        CREDIT-FULL-SCREEN.
-001020       DISPLAY " "       AT 2303 WITH FOREGROUND-COLOR 14
-001030               " highlight - "         WITH FOREGROUND-COLOR 7
-                     "PgUp"                  WITH FOREGROUND-COLOR 14
-                     "/"                     WITH FOREGROUND-COLOR 7
-                     "PgDn"                  WITH FOREGROUND-COLOR 14
-                     " - "                   WITH FOREGROUND-COLOR 7
-001040               "ENTER"                 WITH FOREGROUND-COLOR 14
-001050               " select - "            WITH FOREGROUND-COLOR 7
-001170               "Esc"                   WITH FOREGROUND-COLOR 14
-                     "ape - "                WITH FOREGROUND-COLOR 7
-                     "F9"                    WITH FOREGROUND-COLOR 14
-                     " memo/remarks"         WITH FOREGROUND-COLOR 7.
+001020       DISPLAY " "       AT 2303 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+001030               " highlight - "         WITH FOREGROUND-COLOR Grey
+                     "PgUp"                  WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "/"                     WITH FOREGROUND-COLOR Grey
+                     "PgDn"                  WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     " - "                   WITH FOREGROUND-COLOR Grey
+001040               "ENTER"                 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+001050               " select - "            WITH FOREGROUND-COLOR Grey
+001170               "Esc"                   WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "ape - "                WITH FOREGROUND-COLOR Grey
+                     "F9"                    WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     " memo/remarks"         WITH FOREGROUND-COLOR Grey.
 
        CREDIT-SAVE-FULL-SCREEN.
              PERFORM SAVE-SCREEN-2.
@@ -86,7 +86,7 @@
              MOVE 0601               TO CPOS.
 
        CREDIT-CRT-ATTRIB.
-             MOVE 4920               TO W41-LENGTH.
+             MOVE 3920               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS W42-ATTRIB2 W41-LENGTH RETURNING WS-STATUS.
              MOVE 4000               TO W41-LENGTH.
 
@@ -149,14 +149,14 @@
              GO TO CREDIT-NEW-PAGE.
 
 027970 CREDIT-NO-RECORD.
-027730       DISPLAY "No record - " AT 2512 WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-                     "N"                    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-                     "ext or "              WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-                     "Q"                    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-                     "uit > <"              WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+027730       DISPLAY "No record - " AT 2512 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT
+                     "N"                    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     "ext or "              WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT
+                     "Q"                    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                     "uit > <"              WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
 
        CREDIT-GET-USER-OPT-2.
-027990       ACCEPT WS-OPTION AT 2538 WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+027990       ACCEPT WS-OPTION AT 2538 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
              CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
            IF NOT(WS-OPTION = "N" OR "Q")
                GO TO CREDIT-GET-USER-OPT-2.
@@ -198,8 +198,8 @@
 002000       MOVE W75-CNO(W75-S1)    TO CME-AC W15-ACNO.
              MOVE 1                  TO CME-SEQ.
              PERFORM READ-CRDMEM THRU READ-CRDMEM-EXIT.
-           IF WS-F-ERROR NOT = ZERO
-               DISPLAY "No Memo or remarks" AT 2502 WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+           IF NOT(WS-F-ERROR = ZERO)
+               DISPLAY "No Memo or remarks" AT 2502 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
                CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS
                GO TO CREDIT-ADD-EXIT.
              INITIALIZE W200-MEM-FLDS.
@@ -219,7 +219,7 @@
              DISPLAY S-MEM.
              PERFORM SCREEN-SHADOW.
              DISPLAY SA-MEM.
-021280       DISPLAY " ENTER to continue  " AT 2502 WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+021280       DISPLAY " ENTER to continue  " AT 2502 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT.
              CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
              PERFORM RESTORE-SCREEN-3.
 
@@ -227,9 +227,9 @@
              EXIT.
 
        CREDIT-CRT-EDGE.
-002130       DISPLAY WS-MCR1  AT CPOS WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3
-                     WS-MCR78         WITH FOREGROUND-COLOR 3
-                     WS-MCR80         WITH BACKGROUND-COLOR 0 FOREGROUND-COLOR 3.
+002130       DISPLAY WS-MCR1  AT CPOS WITH BACKGROUND-COLOR Black FOREGROUND-COLOR Cyan
+                     WS-MCR78         WITH FOREGROUND-COLOR Cyan
+                     WS-MCR80         WITH BACKGROUND-COLOR Black FOREGROUND-COLOR Cyan.
 019260       ADD 1                   TO CLIN.
 
        CREDIT-LOOKUP-EXIT.

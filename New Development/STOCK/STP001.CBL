@@ -13,7 +13,7 @@
       *                                                                *
       *        S T O C K   C R E A T E   N E W   R E C O R D           *
       *                                                                *
-      *       Version 9.00.70 - March 2015                             *
+      *       Version 9.04.01 - September 2016                         *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -136,14 +136,14 @@
 
        COPY "STOCK.FDE".
 
-      /
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
@@ -229,10 +229,10 @@
        01  CRT-HEADINGS.
       *
       *    TYPE:
-      *       C = Clear comment line (50)
-      *       E = Clear lines (any line or lines between 5 and 46)
-      *       H = Change heading
-      *       S = Clear the screen and display headings
+      *         C = Clear comment line (50)
+      *         E = Clear lines (any line or lines between 5 and 46)
+      *         H = Change heading
+      *         S = Clear the screen and display headings
       *
            03  CRT-TYPE            PIC  X(01).
       *
@@ -362,14 +362,14 @@
            03  W200-MEM-FOC REDEFINES W200-MEM-FLDS.
                05  W200-MEM          PIC  X(60) OCCURS 12.
 
-      /
-      *    **        ********  **    **  **    **    ****     ******   ********
-      *    **           **     ***   **  **   **    **  **   **    **  **
-      *    **           **     ****  **  **  **    **    **  **        ** 
-      *    **           **     ** ** **  *****     ********  **        *****
-      *    **           **     **  ****  **  **    **    **  **   ***  **  
-      *    **           **     **   ***  **   **   **    **  **    **  **
-      *    ********  ********  **    **  **    **  **    **   ******   ********
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
       *
        LINKAGE SECTION.
 
@@ -377,14 +377,14 @@
 
        COPY "FILE.IDS".
 
-      /
-      *   ******    ******   *******   ********  ********  **     **
-      *  **    **  **    **  **    **  **        **        ***    **
-      *  **        **        **   **   **        **        ** *   **
-      *   ******   **        ******    *****     *****     **  *  **
-      *        **  **        **   **   **        **        **   * **
-      *  **    **  **    **  **    **  **        **        **    ***
-      *   ******    ******   **    **  ********  ********  **     **
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
       *
        SCREEN SECTION.
 
@@ -463,14 +463,14 @@
        01  SA-FACT.
            03  LINE 11 COLUMN 45 PIC ZZZZZ9.999 USING W10-FACT AUTO FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta.
 
-      /
-      *        *******   *******    ******    ******   ********  *******   **     **  *******    ******** 
-      *        **    **  **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **    **  **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        *******   ******    **    **  **        *****     **    **  **     **  ******     *****
-      *        **        **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        **        **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **        **    **   ******    ******   ********  *******    *******   **    **   ********
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
       *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000-MAIN        SECTION.
@@ -479,7 +479,7 @@
       *                Check the security level of the USER.
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
            IF LS0-STLEV < 1
-               MOVE "Not Authorised" TO WS-ERR-MES
+               MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
              PERFORM ZA000-INIT.
@@ -511,10 +511,9 @@
 
        COPY "AA50.LUP".
 
-      /    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &   M O U S E
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
@@ -523,10 +522,10 @@
       *    ³ To routine is used to display a shadow down the right and ³
       *    ³ along the bottom of a pop-up box. The parameters that are ³
       *    ³ required:                                                 ³
-      *    ³          SHADE-ROW   - Top line of the box + 1.           ³
-      *    ³          SHADE-COL   - Left line of box + 2.              ³
-      *    ³          SHADE-WIDTH - Width of the box - 2.              ³
-      *    ³          SHADE-LINES - Hight of box - 1.                  ³
+      *    ³          SHADE-ROW   - Top line of the box.               ³
+      *    ³          SHADE-COL   - Left line of box.                  ³
+      *    ³          SHADE-WIDTH - Width of the box.                  ³
+      *    ³          SHADE-LINES - Height of box.                     ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
       *    ³                      CHECK-CORRECT                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -537,20 +536,17 @@
       *    ³                                                           ³
       *    ³ To start with the pop-up window higher or lower than row  ³
       *    ³ 20 (default); move another value to WS-MES-LINE.          ³
-      *    *************************************************************
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *            T H I S   R O U T I N E   I S   U S E D   T O
       *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Move the message to WS-DSP-MES and the top line of the   ³
       *    ³  message box to WS-MES-LINE. If WS-MES-LINE is zero the   ³
       *    ³  default will be 20.                                      ³
       *    ³                  PERFORM DISPLAY-MESSAGE                  ³
-      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                      ERROR-MESSAGE                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -571,11 +567,13 @@
       *    ³ message in a pop-up window and allow the OPERATOR to      ³
       *    ³ respond to the 'question'.                                ³
       *    ³                                                           ³
-      *    ³ The option request must be placed in WS-ERR-MES and may   ³
+      *    ³ The option request must be placed in WS-OPT-MES and may   ³
       *    ³ not exceed 48 characters. The message will be centred in  ³
       *    ³ the window. An example of a message request follows:      ³
       *    ³                                                           ³
-      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-OPT-MES.      ³
+      *    ³   MOVE Instruction    TO WS-INSTR.                        ³
+      *    ³       [see Accptopt for instruction values]               ³
       *    ³   PERFORM OPT-MESSAGE.                                    ³
       *    ³                                                           ³
       *    ³ This would be displayed as:                               ³
@@ -595,9 +593,47 @@
 
        COPY "LOCKED.RC2".
 
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³           ERASE SCREEN FROM SPECIFIED LOCATION            ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ Uses CRT-START as starting line and increases and CRT-END ³
+      *    ³ as the ending line. The screen is cleared with Column 1   ³
+      *    ³ and 80 containing "³" and columns 2 to 79 containing      ³
+      *    ³ spaces.                                                   ³
+      *    ³                                                           ³
+      *    ³  eg.                                                      ³
+      *    ³   MOVE 8         TO CRT-START.                            ³
+      *    ³   MOVE 28        TO CRT-END.                              ³
+      *    ³   PERFORM ERASE-SCREEN.                                   ³
+      *    ³                                                           ³
+      *    ³ To clear the entire screen and Display a new screen with  ³
+      *    ³ headings (program/date/time/company):                     ³
+      *    ³                                                           ³
+      *    ³    CRT-PROGRAM (calling program)                          ³
+      *    ³    CRT-HEADING (Screen heading)                           ³
+      *    ³    CRT-COMPANY (Company name)                             ³
+      *    ³    CRT-TERMINAL (consists of two fields:                  ³
+      *    ³                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    ³
+      *    ³    These fields should be populated at the start of the   ³
+      *    ³    program.                                               ³
+      *    ³    PERFORM HEADING-AND-CLEAR-SCREEN.                      ³
+      *    ³                                                           ³
+      *    ³ To change the screen heading:                             ³
+      *    ³    MOVE "The new heading" TO CRT-HEADING.                 ³
+      *    ³    PERFORM CHANGE-HEADING.                                ³
+      *    ³                                                           ³
+      *    ³ To change the time on the screen:                         ³
+      *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear line 50:                                         ³
+      *    ³    PERFORM CLEAR-L50                                      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
        COPY "CLEAR.CRT".
 
        COPY "AA300.STK".
+
+       COPY "AA900.ALM".
 
       *
       *    ****    D I S P L A Y   D E P A R T M E N T   N A M E
@@ -610,7 +646,7 @@
              MOVE WS-NODEP           TO W10-DEPT
          ELSE
              MOVE DPT-DESC           TO W10-DEPT.
-           DISPLAY W10-DEPT AT 0623 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Magenta.
+           DISPLAY W10-DEPT AT 1226 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Magenta.
 
        AA405.
              EXIT.
@@ -619,10 +655,12 @@
 
        COPY "DATE.CNV".
 
-      /
-      *    ****    READ FILES ROUTINES
-      *
-       AC000-READ              SECTION.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                                                           ³
+      *    ³           R E A D   F I L E S   R O U T I N E S           ³
+      *    ³                                                           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+        AC000-READ              SECTION.
 
        COPY "CONTROL.RD".
 
@@ -638,9 +676,11 @@
 
        COPY "SPARTS.RD".
 
-      /
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                                                           ³
+      *    ³R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S³
+      *    ³                                                           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AD000-WRITE             SECTION.
 
        COPY "CONTROL.WR".
@@ -930,7 +970,7 @@
              CALL "UTP\CRTHEAD" USING CRT-HEADINGS LS-USER-ID.
              DISPLAY S04-N.
            IF WS-USE-ITM = "Y"
-               DISPLAY "/ITM" AT 0312 "/" AT 0332.
+               DISPLAY "/ITM" AT 0612 "/" AT 0635.
 
        BB01-INIT.
              MOVE "      1"          TO W10-BIN.
@@ -951,7 +991,20 @@
                GO TO BB02.
              MOVE 1                  TO W10-UNIT.
            IF W10-STCK = "N"
-               MOVE ZERO             TO W10-I14.
+               EVALUATE W10-SLNGTH
+                 WHEN 3   MOVE ZERO  TO W10-I3            
+                 WHEN 4   MOVE ZERO  TO W10-I4            
+                 WHEN 5   MOVE ZERO  TO W10-I5            
+                 WHEN 6   MOVE ZERO  TO W10-I6            
+                 WHEN 7   MOVE ZERO  TO W10-I7            
+                 WHEN 8   MOVE ZERO  TO W10-I8            
+                 WHEN 9   MOVE ZERO  TO W10-I9            
+                 WHEN 10  MOVE ZERO  TO W10-I10            
+                 WHEN 11  MOVE ZERO  TO W10-I11            
+                 WHEN 12  MOVE ZERO  TO W10-I12            
+                 WHEN 13  MOVE ZERO  TO W10-I13            
+                 WHEN 14  MOVE ZERO  TO W10-I14
+               END-EVALUATE.
 
        BB02-EXIT.
              GO TO BB05-ACCEPT.
@@ -959,7 +1012,7 @@
        BB03.
            IF W10-EXT-ITEM = SPACE
                GO TO BB01-INIT.
-             MOVE W10-EXT-ITEM  TO WS-ITM.
+             MOVE W10-EXT-ITEM       TO WS-ITM.
              PERFORM BB01-INIT THRU BB02.
              MOVE WS-ITM             TO W10-EXT-ITEM.
              PERFORM BA000.
@@ -1025,7 +1078,7 @@
                  WHEN F5-KEY    MOVE "2"       TO W10-ETYPE
                  WHEN F6-KEY    MOVE "X"       TO W10-ETYPE
                  WHEN F9-KEY    MOVE "W"       TO W10-ETYPE
-                 WHEN OTHER     CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER     PERFORM AA900-ALARM
                                 GO TO BB05-ACCEPT
                END-EVALUATE
                PERFORM AA50-LOOKUP
@@ -1072,7 +1125,7 @@
                                  PERFORM DEPART-VIEW
                                  PERFORM RESTORE-SCREEN
                                  GO TO BB15-NEW-DET
-                 WHEN OTHER      CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER      PERFORM AA900-ALARM
                                  GO TO BB16-NEW-DET
                END-EVALUATE
                GO TO BB16-NEW-DET.
@@ -1128,7 +1181,7 @@
 
        BB20-CREATE.
            IF W10-IND > 4
-               IF NOT (W10-IND = 8 OR 9)
+               IF NOT(W10-IND = 8 OR 9)
                    MOVE "Invalid indicator"  TO WS-ERR-MES
                    PERFORM ERROR-MESSAGE
                    GO TO BB15-NEW-DET.
@@ -1140,9 +1193,9 @@
        BB20-ART11.
              PERFORM SAVE-SCREEN-3.
              MOVE 12                 TO SHADE-ROW.
-             MOVE 17                 TO SHADE-COL.
-             MOVE 49                 TO SHADE-WIDTH.
-             MOVE 2                  TO SHADE-LINES.
+             MOVE 15                 TO SHADE-COL.
+             MOVE 51                 TO SHADE-WIDTH.
+             MOVE 3                  TO SHADE-LINES.
              DISPLAY S-ART11.
              PERFORM SCREEN-SHADOW.
 
@@ -1212,13 +1265,15 @@
              MOVE W10-COST           TO W10-CCOST.
              MOVE W10-SELL           TO W10-CSELL.
            IF W10-COST = ZERO
-               IF (W10-SELL NOT = ZERO) AND (W10-MARKUP NOT = ZERO)
-                   COMPUTE W10-CCOST ROUNDED = (W10-CSELL / (100 + W10-MARKUP) * 100).
+               IF NOT(W10-SELL = ZERO) 
+                   IF NOT(W10-MARKUP = ZERO)
+                       COMPUTE W10-CCOST ROUNDED = (W10-CSELL / (100 + W10-MARKUP) * 100).
            IF W10-SELL = ZERO
-               IF (W10-COST NOT = ZERO) AND (W10-MARKUP NOT = ZERO)
-                   COMPUTE W10-CSELL ROUNDED = (W10-CCOST + ((W10-CCOST * W10-MARKUP) / 100))
-                   IF W10-CSELL = ZERO
-                       MOVE W10-CCOST  TO W10-CSELL.
+               IF NOT(W10-COST = ZERO)
+                   IF NOT(W10-MARKUP = ZERO)
+                       COMPUTE W10-CSELL ROUNDED = (W10-CCOST + ((W10-CCOST * W10-MARKUP) / 100))
+                       IF W10-CSELL = ZERO
+                           MOVE W10-CCOST TO W10-CSELL.
              MOVE W10-CCOST          TO W10-COST.
              MOVE W10-CSELL          TO W10-SELL.
              MOVE W10-COST           TO STK-COST.
@@ -1245,9 +1300,10 @@
            IF W10-CMARKUP = ZERO
                MOVE W10-CASH         TO W10-CSELL
                COMPUTE W10-CMARKUP ROUNDED = (((W10-CSELL - W10-CCOST) / W10-CCOST) * 100).
-           IF (W10-CASH = ZERO) AND (W10-COST NOT = ZERO)
-               COMPUTE W10-CSELL ROUNDED = (W10-CCOST + ((W10-CCOST * W10-CMARKUP) / 100))
-               MOVE W10-CSELL        TO W10-CASH.
+           IF (W10-CASH = ZERO) 
+               IF NOT(W10-COST = ZERO)
+                   COMPUTE W10-CSELL ROUNDED = (W10-CCOST + ((W10-CCOST * W10-CMARKUP) / 100))
+                   MOVE W10-CSELL    TO W10-CASH.
 
        BB21C.
              MOVE W10-CMARKUP  TO STK-CMARKUP.
@@ -1276,7 +1332,7 @@
                MOVE W10-CASH         TO W10-RSELL
                PERFORM CB100
                MOVE W10-RSELL        TO W10-CASH.
-           IF STK-TAX NOT = ZERO
+           IF NOT(STK-TAX = ZERO)
                MOVE W05-VAT(STK-TAX) TO W05-RATE
                COMPUTE W10-VSELL ROUNDED = W10-SELL + (W10-SELL * W05-RTE)
                COMPUTE W10-VWSALE ROUNDED = W10-WSALE + (W10-WSALE * W05-RTE)
@@ -1314,7 +1370,7 @@
 
        BB21E.
              DISPLAY S06A.
-           IF NOT (W10-IND = 4)
+           IF NOT(W10-IND = 4)
                DISPLAY S06C.
 
        BB21F.
@@ -1431,7 +1487,7 @@
 
        BB24.
            IF WS-CARDEX = "Y"
-               IF NOT (W10-QUANT = ZERO)
+               IF NOT(W10-QUANT = ZERO)
                    INITIALIZE STX-REC1
                    MOVE W10-EXT-ITEM TO STX-EXT-CODE
                    MOVE W12-T-YMD    TO STX-DTE
@@ -1545,8 +1601,7 @@
                GO TO BB61.
 
        BB63.
-             MOVE 0501               TO CPOS.
-             PERFORM ERASE-SCREEN-LOOP UNTIL CLIN = 24.
+             PERFORM ERASE-SCREEN.
              DISPLAY S32.
 
        BB64.
@@ -1579,25 +1634,17 @@
                    ACCEPT S32C AT LINE LIN.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN ESC-KEY
-                      MOVE SPACES    TO W10-EXT-CODE2
-                      GO TO BB75A
-                 WHEN F1-KEY
-                      PERFORM HELP-ROUTINE
-                      GO TO BB75
-                 WHEN F2-KEY
-                      MOVE "I"       TO W10-ETYPE
-                 WHEN F3-KEY
-                      MOVE "A"       TO W10-ETYPE
-                 WHEN F4-KEY
-                      MOVE "D"       TO W10-ETYPE
-                 WHEN F5-KEY
-                      MOVE "2"       TO W10-ETYPE
-                 WHEN F6-KEY
-                      MOVE "X"       TO W10-ETYPE
-                 WHEN OTHER
-                      CALL X"E5"
-                      GO TO BB75
+                 WHEN ESC-KEY MOVE SPACES    TO W10-EXT-CODE2
+                              GO TO BB75A
+                 WHEN F1-KEY  PERFORM HELP-ROUTINE
+                              GO TO BB75
+                 WHEN F2-KEY  MOVE "I"       TO W10-ETYPE
+                 WHEN F3-KEY  MOVE "A"       TO W10-ETYPE
+                 WHEN F4-KEY  MOVE "D"       TO W10-ETYPE
+                 WHEN F5-KEY  MOVE "2"       TO W10-ETYPE
+                 WHEN F6-KEY  MOVE "X"       TO W10-ETYPE
+                 WHEN OTHER   PERFORM AA900-ALARM
+                              GO TO BB75
                END-EVALUATE
                PERFORM AA50-LOOKUP
                MOVE W10-EXT-ITEM     TO W10-EXT-CODE2
@@ -1723,7 +1770,7 @@
                MOVE W10-CASH         TO W10-RSELL
                PERFORM CB100
                MOVE W10-RSELL        TO W10-CASH.
-           IF STK-TAX NOT = ZERO
+           IF NOT(STK-TAX = ZERO)
                MOVE W05-VAT(STK-TAX) TO W05-RATE
                COMPUTE W10-VSELL ROUNDED = W10-SELL + (W10-SELL * W05-RTE)
                COMPUTE W10-VWSALE ROUNDED = W10-WSALE + (W10-WSALE * W05-RTE)
@@ -1790,9 +1837,7 @@
             EXIT.
 
        BB100.
-             MOVE 0301               TO CPOS.
-             PERFORM ERASE-SCREEN-LOOP UNTIL CLIN = 24.
-             DISPLAY S04A.
+             PERFORM ERASE-SCREEN.
              DISPLAY S04-N.
              MOVE STK-CODE           TO W10-EXT-ITEM.
              MOVE STK-XREF           TO W10-EXT-CODE2.
@@ -1854,12 +1899,10 @@
              ACCEPT S06D.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN F11-KEY
-                      PERFORM BB200
-                      GO TO BB104
-                 WHEN OTHER
-                      CALL X"E5"
-                      GO TO BB120
+                 WHEN F11-KEY PERFORM BB200
+                              GO TO BB104
+                 WHEN OTHER   PERFORM AA900-ALARM
+                              GO TO BB120
                END-EVALUATE.
              MOVE W10-COST           TO W10-MCOST W10-CCOST.
              COMPUTE W10-CSELL ROUNDED = (W10-CCOST + ((W10-CCOST * STK-MARKUP) / 100)).
@@ -1907,7 +1950,7 @@
                MOVE W10-CASH         TO W10-RSELL
                PERFORM CB100
                MOVE W10-RSELL        TO W10-CASH.
-           IF STK-TAX NOT = ZERO
+           IF NOT(STK-TAX = ZERO)
                MOVE W05-VAT(STK-TAX) TO W05-RATE
                COMPUTE W10-VSELL ROUNDED = W10-SELL + (W10-SELL * W05-RTE)
                COMPUTE W10-VWSALE ROUNDED = W10-WSALE + (W10-WSALE * W05-RTE)
@@ -1941,7 +1984,7 @@
        BC00.
              MOVE W10-EXT-ITEM       TO W10-EXT-ENTRY.
              MOVE STK-BC             TO W10-EXT-ITEM W10-EXT-CODE2 STK-XREF.
-             DISPLAY W10-EXT-CODE2 AT 0361 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
+             DISPLAY W10-EXT-CODE2 AT 0821 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
              MOVE 14                 TO WS-S8.
 
        BC05.
@@ -1950,24 +1993,15 @@
                GO TO BC05.
              MOVE WS-S8              TO W10-SLNGTH.
              EVALUATE W10-SLNGTH
-               WHEN 6
-                    ADD 1            TO W10-I6
-               WHEN 7
-                    ADD 1            TO W10-I7
-               WHEN 8
-                    ADD 1            TO W10-I8
-               WHEN 9
-                    ADD 1            TO W10-I9
-               WHEN 10
-                    ADD 1            TO W10-I10
-               WHEN 11
-                    ADD 1            TO W10-I11
-               WHEN 12
-                    ADD 1            TO W10-I12
-               WHEN 13
-                    ADD 1            TO W10-I13
-               WHEN 14
-                    ADD 1            TO W10-I14
+               WHEN 6     ADD 1      TO W10-I6
+               WHEN 7     ADD 1      TO W10-I7
+               WHEN 8     ADD 1      TO W10-I8
+               WHEN 9     ADD 1      TO W10-I9
+               WHEN 10    ADD 1      TO W10-I10
+               WHEN 11    ADD 1      TO W10-I11
+               WHEN 12    ADD 1      TO W10-I12
+               WHEN 13    ADD 1      TO W10-I13
+               WHEN 14    ADD 1      TO W10-I14
              END-EVALUATION.
              MOVE W10-ITEM           TO STK-BC.
              MOVE W10-EXT-ENTRY      TO W10-EXT-ITEM.
@@ -1980,19 +2014,19 @@
        BD000        SECTION 5.
        BD00.
              PERFORM SAVE-SCREEN-3.
-             MOVE 11                 TO SHADE-ROW.
-             MOVE 27                 TO SHADE-COL.
-             MOVE 30                 TO SHADE-WIDTH.
-             MOVE 2                  TO SHADE-LINES.
-             DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1025 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey
-                     "¿"                               WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Grey.
-             DISPLAY "³"                               AT 1125 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey
-                     " Convertion Factor "             WITH FOREGROUND-COLOR Red BACKGROUND-COLOR Grey
-                     "          "                      WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
-                     " "                               WITH FOREGROUND-COLOR Grey BACKGROUND-COLOR Grey
-                     "³"                               WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Grey.
-             DISPLAY "À"                               AT 1225 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey
-                     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Grey.
+             MOVE 10                 TO SHADE-ROW.
+             MOVE 25                 TO SHADE-COL.
+             MOVE 32                 TO SHADE-WIDTH.
+             MOVE 3                  TO SHADE-LINES.
+             DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"  AT 1025 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
+                                                    "¿"         WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
+             DISPLAY "³"                                AT 1125 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
+                      " Convertion Factor "                     WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Red
+                                         "          "           WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Cyan HIGHLIGHT
+                                                   " "          WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey
+                                                    "³"         WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
+             DISPLAY "À"                                AT 1225 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
+                      "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"         WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
              PERFORM SCREEN-SHADOW.
 
        BD05.
@@ -2005,99 +2039,25 @@
 
        BD999.
              EXIT.
-      /
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
-             PERFORM ZA55 THRU ZA60.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-L-OR-N          TO W02-L-OR-N.
-             MOVE WS-SYS-ID          TO W02-SYSID.
              MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
              MOVE LS-USUB            TO WS-USUB.
-             PERFORM ERASE-SCREEN.
+             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-      COPY "FUNCTION.PRO".
-
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³        Setup the file ID's including path names           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      *    *************************************************************
-      *    ****    P A R A M E T E R   F I L E      ****
-      *    *************************************************************
-       ZA00A.
-             MOVE "PARAM"            TO AFID-KEY.
-
-       ZA00-READ-APACFIDS.
-             READ APACFIDS WITH IGNORE LOCK KEY IS AFID-KEY.
-           IF WS-STATUS = "00"
-               GO TO ZA00-READ-APACFIDS-EXIT.
-             STRING "Missing " DELIMITED SIZE AFID-KEY DELIMITED BY " " " file ID - Status " DELIMITED SIZE WS-STATUS DELIMITED SIZE INTO WS-ERR-MES.
-             PERFORM ERROR-MESSAGE.
-             STOP RUN.
-
-       ZA00-READ-APACFIDS-EXIT.
-             EXIT.
+             COPY "FUNCTION.PRO".
 
        ZA00A-CONTINUE.
-             MOVE AFID-PATH          TO W02-PARAM.
-      *    *************************************************************
-      *    ****            D E P A R T M E N T   F I L E            ****
-      *    *************************************************************
-             MOVE "DEPART"           TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-DEPART.
-      *    *************************************************************
-      *    ****      C O N T R O L   F I L E      ****
-      *    *************************************************************
-             MOVE "NETWORK"          TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-NETWORK.
-      *    *************************************************************
-      *    ****      R E C O V E R Y   F I L E      ****
-      *    *************************************************************
-             MOVE "RECOVER"          TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             INSPECT AFID-PATH REPLACING FIRST "XXX" BY LS-USER.
-             MOVE AFID-PATH          TO W02-RECOVER.
-      *    *************************************************************
-      *    ****      N E T W O R K   (S H A R E D)   F I L E     ****
-      *    *************************************************************
-             MOVE "SHARED"           TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-SHARED.
-             MOVE "SPARTS"           TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-SPARTS.
-      *    *************************************************************
-      *    **** S T O C K   A L T E R N A T E I N D E X   F I L E ****
-      *    *************************************************************
-             MOVE "STKALT"           TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-STKALT.
-             MOVE "STKDEX"           TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-STKDEX.
-             MOVE "STKMEM"           TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-STKMEM.
-      *    *************************************************************
-      *    ****         S T O C K   F I L E      ****
-      *    *************************************************************
-             MOVE "STOCKF"           TO AFID-KEY.
-             PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-             MOVE AFID-PATH          TO W02-STOCKF.
-      *    *************************************************************
-      *    W A R E H O U S E  -  S T O C K  ( I V E N T O R Y )  F I L E
-      *    *************************************************************
-      MOVE "WSTOCK"  TO AFID-KEY.
-      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-      MOVE AFID-PATH  TO W02-WSTOCK.
              MOVE 3                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
            IF NOT(PAR-STOCK = "A" OR "N")
@@ -2112,8 +2072,8 @@
            ELSE
            IF W10-SLNGTH > 14
                MOVE 14               TO W10-SLNGTH.
-             MOVE PAR-BAR-CODE  TO W50-BAR-CODE.
-             MOVE PAR-ALLOC-BC  TO W50-ALLOC-BC.
+             MOVE PAR-BAR-CODE       TO W50-BAR-CODE.
+             MOVE PAR-ALLOC-BC       TO W50-ALLOC-BC.
              MOVE PAR-CASES          TO WS-USE-CASES.
              MOVE PAR-PACKS          TO WS-USE-PACKS.
              MOVE PAR-USE-ITM        TO WS-USE-ITM.
@@ -2140,7 +2100,7 @@
              MOVE STK-CON-FACT       TO WS-CON-FACT.
              MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-ROUND        TO W05-ROUND.
+             MOVE PAR-ROUND          TO W05-ROUND.
              MOVE PAR-ROUND-VAL      TO W05-ROUND-VAL.
            IF W05-ROUND-VAL > 0.01
                COMPUTE W05-HLF-VAL = W05-ROUND-VAL / 2
@@ -2168,99 +2128,54 @@
                MOVE PAR-DESC-H1      TO WS-DESC-H1.
            IF NOT(PAR-DESC-H2 = X"0000000000000000000000000000")
                MOVE PAR-DESC-H2      TO WS-DESC-H2.
-           IF NOT(PAR-WS-HD = X"00000000000000000000")
-               MOVE PAR-WS-HD        TO WS-WS-HD.
-           IF NOT(PAR-CS-HD = X"00000000000000000000")
-               MOVE PAR-CS-HD        TO WS-CS-HD.
-           IF NOT(PAR-RT-HD = X"00000000000000000000")
-               MOVE PAR-RT-HD        TO WS-RT-HD.
+             MOVE PAR-WS-HD          TO WS-WS-HD.
+             MOVE PAR-CS-HD          TO WS-CS-HD.
+             MOVE PAR-RT-HD          TO WS-RT-HD.
              MOVE 6                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              GO TO ZA999-EXIT.
 
        COPY "ZA49.PRO".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³ Setup the Screen Graphics Characters: ³ Ä Ú ¿ À Ù Â Á etc ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-       ZA55.
-             MOVE 1                  TO WS-S1.
-             MOVE SPACES             TO WS-MID-LNE.
-
-       ZA60.
-             MOVE WS-G1              TO WS-TCHR (WS-S1) WS-BCHR (WS-S1).
-             MOVE WS-G8              TO WS-BCH (WS-S1).
-           IF WS-S1 < 80
-               ADD 1                 TO WS-S1
-               GO TO ZA60.
-             MOVE WS-G11             TO WS-BCH(1).
-             MOVE WS-G12             TO WS-BCH(80).
-             MOVE WS-G14             TO WS-TCHR(1) WS-BCHR(1).
-             MOVE WS-G13             TO WS-TCHR(80) WS-BCHR(80).
-             MOVE WS-G2              TO WS-TCHR(18) WS-TCHR(49) WS-TCHR(60) WS-TCHR(70).
-             MOVE WS-G3              TO WS-MCHR(18) WS-MCHR(49) WS-MCHR(60) WS-MCHR(70) WS-MCHR(1) WS-MCHR(80).
-             MOVE WS-G4              TO WS-BCHR(18) WS-BCHR(49) WS-BCHR(60) WS-BCHR(70).
-             MOVE LS-COMPANY         TO WS-TOP-COMP.
-           IF LS-USER = LS-SYS-ID
-               MOVE "SupervisorÄ"    TO CRT-WRKHD
-           ELSE
-               MOVE "Workstation"    TO CRT-WRKHD
-               MOVE LS-USER        TO CRT-WRKST.
-
        ZA200.
-             STRING "Files locked - Try later " DELIMITRED SIZE WS-STATUS DELIMITED SIZE INTO WS-ERR-MES.
-             PERFORM ERROR-MESSAGE.
+
+       COPY "LOCKED.PRO".
 
        ZA205.
              EXIT PROGRAM.
 
        ZA999-EXIT.
              EXIT.
-      /
-       ZB000-ERROR        SECTION 8.
+      *
+      *    ****    I / O   E R R O R   M E S S A G E S
+      *
+       ZB000-ERROR      SECTION 8.
 
        COPY "ERRORS.PRO".
 
        DISPLAY-FILE-NAME.
-           IF WS-F-ERROR = 2
-               MOVE W02-NETWORK      TO WS-FILE
-               MOVE WS-NETKEY        TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 7
-               MOVE W02-DEPART       TO WS-FILE
-               MOVE ZERO             TO WS-KEY
-               MOVE DPT-CODE         TO WS-KEYX
-           ELSE
-           IF WS-F-ERROR = 15
-               MOVE W02-PARAM        TO WS-FILE
-               MOVE WS-PARKEY        TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 18
-               MOVE W02-RECOVER      TO WS-FILE
-               MOVE WS-RECKEY        TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 21
-               MOVE W02-SPARTS       TO WS-FILE
-               MOVE ZERO             TO WS-KEY
-               MOVE PRT-ITEM         TO WS-KEYX
-           ELSE
-           IF WS-F-ERROR = 22
-               MOVE W02-STOCKF       TO WS-FILE
-               MOVE ZERO             TO WS-KEY
-               MOVE STK-CODE         TO WS-KEYX
-           ELSE
-           IF WS-F-ERROR = 25
-               MOVE W02-STKMEM       TO WS-FILE
-               MOVE ZERO             TO WS-KEY
-               MOVE SME-KEY          TO WS-KEYX
-           ELSE
-           IF WS-F-ERROR = 37
-               MOVE W02-SHARED       TO WS-FILE
-               MOVE WS-SHARED        TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 46
-               MOVE W02-STKDEX       TO WS-FILE
-               MOVE ZERO             TO WS-KEY
-               MOVE STX-KEY          TO WS-KEYX.
+             MOVE ZERO               TO WS-KEY.
+             EVALUATE WS-F-ERROR
+               WHEN 2     MOVE W02-NETWORK  TO WS-FILE
+                          MOVE WS-NETKEY    TO WS-KEY
+               WHEN 7     MOVE W02-DEPART   TO WS-FILE
+                          MOVE DPT-CODE     TO WS-KEYX
+               WHEN 15    MOVE WS-PARID     TO WS-FILE
+                          MOVE WS-PARKEY    TO WS-KEY
+               WHEN 18    MOVE W02-RECOVER  TO WS-FILE
+                          MOVE WS-RECKEY    TO WS-KEY
+               WHEN 21    MOVE W02-SPARTS   TO WS-FILE
+                          MOVE PRT-ITEM     TO WS-KEYX
+               WHEN 22    MOVE W02-STOCKF   TO WS-FILE
+                          MOVE STK-CODE     TO WS-KEYX
+               WHEN 25    MOVE W02-STKMEM   TO WS-FILE
+                          MOVE SME-KEY      TO WS-KEYX
+               WHEN 37    MOVE W02-SHARED   TO WS-FILE
+                          MOVE WS-SHARED    TO WS-KEY
+               WHEN 46    MOVE W02-STKDEX   TO WS-FILE
+                          MOVE STX-KEY      TO WS-KEYX
+               WHEN OTHER MOVE "ERROR"      TO WS-FILE
+                          MOVE "STP001"     TO WS-KEYX
+             END-EVALUATE.
 
        COPY "DISPERR.PRO".

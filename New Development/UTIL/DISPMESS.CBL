@@ -46,6 +46,15 @@
                          CRT STATUS IS KEY-STATUS.
 
        DATA DIVISION.
+      *
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
+      *
        WORKING-STORAGE SECTION.
        77  WS-S1             PIC S9(04)    COMP-3.
        77  WS-S2             PIC S9(04)    COMP-3.
@@ -62,6 +71,15 @@
 
        COPY "FUNCTION.WS".
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        01  L-MESSAGE     PIC  X(48).
@@ -69,21 +87,35 @@
 
        COPY "USER.LS".
 
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
 
        01  DISPLAY-LINE.
-           03  BACKGROUND-COLOR Green.
-               05           COLUMN 16 VALUE "здддддддддддддддддддддддддддддддддддддддддддддддд" FOREGROUND-COLOR Green HIGHLIGHT.
-               05           COLUMN 65 VALUE "©"                                                 FOREGROUND-COLOR Black.
-               05  LINE + 1 COLUMN 16 VALUE "Ё"                                                 FOREGROUND-COLOR Green HIGHLIGHT.
+           03  BACKGROUND-COLOR Green FOREGROUND-COLOR Black.
+               05           COLUMN 16 VALUE "                                                  ".
+               05  LINE + 1 COLUMN 16 VALUE " ".
                05           COLUMN 17 PIC  X(48) FROM WS-DSP-MES                                FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05           COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
-               05  LINE + 1 COLUMN 16 VALUE "Ё"                                                 FOREGROUND-COLOR Green HIGHLIGHT.
-               05           COLUMN 17 VALUE "           Press any key to continue            "  FOREGROUND-COLOR Grey.
-               05           COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
-               05  LINE + 1 COLUMN 16 VALUE "ю"                                                 FOREGROUND-COLOR Green HIGHLIGHT.
-               05           COLUMN 17 VALUE "дддддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
+               05           COLUMN 65 VALUE                                                  " ".
+               05  LINE + 1 COLUMN 16 VALUE "            Press any key to continue             ".
+               05  LINE + 1 COLUMN 16 VALUE "                                                  ".
 
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
        PROCEDURE DIVISION USING L-MESSAGE L-LINE LS-USER-ID.
        A-MAIN SECTION.
        AA000.
@@ -98,22 +130,21 @@
        AA999.
              EXIT PROGRAM.
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
-      *           S C R E E N ,   K E Y B O A R D   &  M O U S E
-      *    *************************************************************
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё       SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3      Ё
+      *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    Ё                       SCREEN-SHADOW                       Ё
+      *    Ё                      SCREEN-SHADOW                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
       *    Ё To routine is used to display a shadow down the right and Ё
       *    Ё along the bottom of a pop-up box. The parameters that are Ё
       *    Ё required:                                                 Ё
-      *    Ё           SHADE-ROW   - Top line of the box + 1.          Ё
-      *    Ё           SHADE-COL   - Left line of box + 2.             Ё
-      *    Ё           SHADE-WIDTH - Width of the box - 2.             Ё
-      *    Ё           SHADE-LINES - Hight of box - 1.                 Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "FUNCTION.SCR".

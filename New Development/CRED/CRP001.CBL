@@ -114,7 +114,7 @@
 
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
@@ -328,22 +328,21 @@
 
        COPY "AA900.ALM".
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
-      *     S C R E E N ,   K E Y B O A R D   &  M O U S E
-      *    *************************************************************
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³    SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3    ³
+      *    ³      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
       *    ³                      SCREEN-SHADOW                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
       *    ³ To routine is used to display a shadow down the right and ³
       *    ³ along the bottom of a pop-up box. The parameters that are ³
       *    ³ required:                                                 ³
-      *    ³          SHADE-ROW   - Top line of the box + 1.           ³
-      *    ³          SHADE-COL   - Left line of box + 2.              ³
-      *    ³          SHADE-WIDTH - Width of the box - 2.              ³
-      *    ³          SHADE-LINES - Hight of box - 1.                  ³
+      *    ³          SHADE-ROW   - Top line of the box.               ³
+      *    ³          SHADE-COL   - Left line of box.                  ³
+      *    ³          SHADE-WIDTH - Width of the box.                  ³
+      *    ³          SHADE-LINES - Height of box.                     ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
       *    ³                      CHECK-CORRECT                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -353,12 +352,18 @@
       *    ³ The response is returned in WS-OPTION (in upper case).    ³
       *    ³                                                           ³
       *    ³ To start with the pop-up window higher or lower than row  ³
-      *    ³ 13 (default); move another value to SLIN and PERFORM      ³
-      *    ³ CHECK-SETUP THRU CHECK-EXIT.                              ³
-      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
-      *         D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
+      *    ³ 20 (default); move another value to WS-MES-LINE.          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *            T H I S   R O U T I N E   I S   U S E D   T O
+      *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Move the message to WS-DSP-MES and the top line of the   ³
+      *    ³  message box to WS-MES-LINE. If WS-MES-LINE is zero the   ³
+      *    ³  default will be 20.                                      ³
+      *    ³                  PERFORM DISPLAY-MESSAGE                  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      *            D I S P L A Y   E R R O R   M E S S A G E S
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                      ERROR-MESSAGE                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -371,6 +376,42 @@
        COPY "FUNCTION.CRT".
 
        COPY "LOCKED.REC".
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³           ERASE SCREEN FROM SPECIFIED LOCATION            ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ Uses CRT-START as starting line and increases and CRT-END ³
+      *    ³ as the ending line. The screen is cleared with Column 1   ³
+      *    ³ and 80 containing "³" and columns 2 to 79 containing      ³
+      *    ³ spaces.                                                   ³
+      *    ³                                                           ³
+      *    ³  eg.                                                      ³
+      *    ³   MOVE 8         TO CRT-START.                            ³
+      *    ³   MOVE 28        TO CRT-END.                              ³
+      *    ³   PERFORM ERASE-SCREEN.                                   ³
+      *    ³                                                           ³
+      *    ³ To clear the entire screen and Display a new screen with  ³
+      *    ³ headings (program/date/time/company):                     ³
+      *    ³                                                           ³
+      *    ³    CRT-PROGRAM (calling program)                          ³
+      *    ³    CRT-HEADING (Screen heading)                           ³
+      *    ³    CRT-COMPANY (Company name)                             ³
+      *    ³    CRT-TERMINAL (consists of two fields:                  ³
+      *    ³                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    ³
+      *    ³    These fields should be populated at the start of the   ³
+      *    ³    program.                                               ³
+      *    ³    PERFORM HEADING-AND-CLEAR-SCREEN.                      ³
+      *    ³                                                           ³
+      *    ³ To change the screen heading:                             ³
+      *    ³    MOVE "The new heading" TO CRT-HEADING.                 ³
+      *    ³    PERFORM CHANGE-HEADING.                                ³
+      *    ³                                                           ³
+      *    ³ To change the time on the screen:                         ³
+      *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear line 50:                                         ³
+      *    ³    PERFORM CLEAR-L50                                      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
 
@@ -673,7 +714,12 @@
            IF W15-ADDRESS = SPACES
                MOVE WS-ER11          TO WS-ERR-MES
                GO TO CB035.
-             PERFORM CE000.
+      *
+      *    Format Addresses - Remove leading spaces
+      *
+             MOVE "F"                TO W15-INSTR.
+             CALL "CRP\CRPADDR" USING W15-INPUT-AREA.
+             DISPLAY S06-ADDR.
            IF WS-ERROR > ZERO
                MOVE WS-ER1           TO WS-ERR-MES
                GO TO CB035.
@@ -735,62 +781,6 @@
 
        CB999.
              EXIT.
-      *
-      *    ****    P A C K   A D D R E S S
-      *
-       CE000      SECTION 5.
-       CE00.
-             MOVE ZERO               TO WS-ERROR.
-             MOVE 1                  TO WS-S1 WS-S2.
-             MOVE 30                 TO WS-S3.
-             MOVE SPACES             TO W40-ADD.
-
-       CE05.
-           IF NOT(W15-ACHAR(WS-S3) = SPACE)
-               GO TO CE10.
-           IF WS-S3 > WS-S2
-               SUBTRACT 1            FROM WS-S3
-               GO TO CE05.
-
-       CE10.
-             MOVE W15-ACHAR(WS-S2)   TO W40-ACHAR(WS-S1).
-           IF WS-S2 = WS-S3
-               GO TO CE15.
-             ADD 1                   TO WS-S1.
-             ADD 1                   TO WS-S2.
-           IF WS-S1 > 70
-               MOVE 1                TO WS-ERROR
-           ELSE
-               GO TO CE10.
-
-       CE15.
-           IF WS-ERROR = 1
-               GO TO CE20.
-           IF WS-S1 < 70
-               ADD 1                 TO WS-S1
-               MOVE "*"              TO W40-ACHAR(WS-S1).
-
-       CE20.
-             ADD 1                   TO WS-S1.
-
-       CE25.
-             MOVE 31                 TO WS-S2.
-             MOVE 60                 TO WS-S3.
-             PERFORM CE05 THRU CE20.
-           IF WS-ERROR = 1
-               GO TO CE999.
-             MOVE 61                 TO WS-S2.
-             MOVE 90                 TO WS-S3.
-             PERFORM CE05 THRU CE20.
-           IF WS-ERROR = 1
-               GO TO CE999.
-             MOVE 91                 TO WS-S2.
-             MOVE 120                TO WS-S3.
-             PERFORM CE05 THRU CE20.
-
-       CE999.
-             EXIT.
-
       *
        ZA000-INIT    SECTION 8.
        ZA000-START.

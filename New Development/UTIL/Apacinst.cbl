@@ -13,7 +13,7 @@
       *                                                                *
       *     A P A C   I N I T I A L I Z E   P R O G R A M              *
       *                                                                *
-      *     VERSION 9.00.00 - October 2012                             *
+      *       Version 9.04.02 - October 2016                           *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -101,23 +101,31 @@
 
        COPY "APCCOM.FD".
 
-       COPY "AUDIT.IFD".
+       COPY "AUDIT.FD".
 
-       COPY "CONTROL.IFD".
+       COPY "CONTROL.FD".
 
        COPY "CHEQUE.FD".
 
-       COPY "DEPART.GFD".
+       COPY "DEPART.FD".
 
-       COPY "PARAM.IFD".
+       COPY "PARAM.FD".
 
        COPY "SYSTEM.FD".
 
        COPY "SYSUSE.FD".
 
-       COPY "TXTRAN.IFD".
+       COPY "TXTRAN.FD".
 
-      /
+      *
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
+      *
        WORKING-STORAGE SECTION.
        77  WS-CHECK    PIC  X(18)  VALUE "aeWlimemnomLalismJ".
        77  WS-S1     PIC  9(04)    COMP-5.
@@ -294,17 +302,34 @@
 
        COPY "W40.WS".
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
-      /
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
 
        COPY "BLANK.CRT".
 
        01  S01.
-           03  LINE  4 COLUMN  4 VALUE " Please be patient - Initializing files " FOREGROUND-COLOR 6 HIGHLIGHT.
+           03  LINE  4 COLUMN  4 VALUE " Please be patient - Initializing files " FOREGROUND-COLOR Brown HIGHLIGHT.
            03  LINE  6 COLUMN  4 PIC X(18) USING WS-PARID.
            03  LINE  8 COLUMN  4 PIC X(20) USING W02-NETWORK.
            03  LINE 10 COLUMN  4 PIC X(19) USING W02-DEPART.
@@ -317,7 +342,15 @@
 
        COPY "ERROR.CRT".
 
-      /
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
        PROCEDURE DIVISION
    USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
        AA000-MAIN              SECTION.
@@ -366,8 +399,7 @@
             STRING "Missing " DELIMITED SIZE
        AFID-KEY DELIMITED BY " "
        " file ID - Status " DELIMITED SIZE
-       WS-STATUS DELIMITED SIZE
-       INTO WS-ERR-MES.
+       WS-STATUS DELIMITED SIZE INTO WS-ERR-MES.
       PERFORM ERROR-LENGTH THRU ERROR-EXIT.
             STOP RUN.
 
@@ -448,9 +480,70 @@
       PERFORM AI000-SYSUSE.
              GO TO AZ000-EOJ.
 
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
+      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
+      *    Ё                      SCREEN-SHADOW                        Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To routine is used to display a shadow down the right and Ё
+      *    Ё along the bottom of a pop-up box. The parameters that are Ё
+      *    Ё required:                                                 Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY "FUNCTION.SCR".
 
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                      OPT-MESSAGE                          Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё This routine is used to allow the OPERATOR to respond to  Ё
+      *    Ё a request for an option, so that the correct action can   Ё
+      *    Ё be performed by the program. The routine will display the Ё
+      *    Ё message in a pop-up window and allow the OPERATOR to      Ё
+      *    Ё respond to the 'question'.                                Ё
+      *    Ё                                                           Ё
+      *    Ё The option request must be placed in WS-OPT-MES and may   Ё
+      *    Ё not exceed 48 characters. The message will be centred in  Ё
+      *    Ё the window. An example of a message request follows:      Ё
+      *    Ё                                                           Ё
+      *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-OPT-MES.      Ё
+      *    Ё   MOVE Instruction    TO WS-INSTR.                        Ё
+      *    Ё       [see Accptopt for instruction values]               Ё
+      *    Ё   PERFORM OPT-MESSAGE.                                    Ё
+      *    Ё                                                           Ё
+      *    Ё This would be displayed as:                               Ё
+      *    Ё      здддддддддддддддддддддддддддддддддддддддддддддддд©   Ё
+      *    Ё      Ё          Print transactions (Y/N) [ ]          Ё╟╟ Ё
+      *    Ё      юдддддддддддддддддддддддддддддддддддддддддддддддды╟╟ Ё
+      *    Ё        ╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟ Ё
+      *    Ё                                                           Ё
+      *    Ё The response is returned in WS-OPTION (in upper case).    Ё
+      *    Ё                                                           Ё
+      *    Ё The system will display the message box with the top line Ё
+      *    Ё as the value of WS-MES-LINE. If WS-MES-LINE is zero the   Ё
+      *    Ё default will be 20.                                       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY "OPTION.CRT".
+
+      *    *************************************************************
+      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    D I S P L A Y   E R R O R   M E S S A G E S
+      *    *************************************************************
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                      ERROR-MESSAGE                        Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To display the error message higher or lower (default is  Ё
+      *    Ё line 20) Move the line number which must be used as the   Ё
+      *    Ё top line to WS-MES-LINE. The message to be displayed must Ё
+      *    Ё be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "ERROR.SCR".
 
@@ -462,8 +555,8 @@
              LS0-JCP = 2 OR LS0-VHP = 2
                OPEN I-O PARAM
               DISPLAY "Updated" AT 0633
-   WITH FOREGROUND-COLOR 7 HIGHLIGHT
-        BACKGROUND-COLOR 5
+   WITH FOREGROUND-COLOR Grey HIGHLIGHT
+        BACKGROUND-COLOR Magenta
                GO TO AC999-EXIT.
       *
       *    ****   PRINTER CONTROL CHARACTERS
@@ -491,12 +584,12 @@
        AC00.
              MOVE WS-PARKEY      TO WS-NUM.
             DISPLAY WS-NUM AT 0626
-       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5.
+       WITH FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta.
        AC005-LOOP.
             DISPLAY "Company Details" AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD1.
              MOVE SEC-COMP       TO PAR-COMPANY PAR-CSHEAD.
              MOVE SEC-DATE       TO PAR-DMY.
@@ -520,8 +613,8 @@
              PERFORM AC00.
              ADD 1               TO WS-PARKEY.
             DISPLAY "File Locations " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD3.
       *      MOVE ZERO   TO PAR-POS.
       MOVE 7   TO PAR-INV.
@@ -564,29 +657,25 @@
       SUBTRACT 1   FROM PAR-PRV-CEN.
 
        AC05A.
-      MOVE "Record stock sales on a CARDEX file Y/N  [N]"
-     TO WS-ERR-MES.
+      MOVE "Record stock sales on a CARDEX file Y/N  [N]" TO WS-OPT-MES.
       MOVE "N"   TO WS-OPTION.
       PERFORM OPT-MESSAGE TEST AFTER
        UNTIL WS-OPTION = "N" OR "Y".
       MOVE WS-OPTION  TO PAR-CRDX.
        AC05B.
-      MOVE "Update quantities on a PRICED item Y/N  [N]"
-     TO WS-ERR-MES.
+      MOVE "Update quantities on a PRICED item Y/N  [N]" TO WS-OPT-MES.
       MOVE "N"   TO WS-OPTION.
       PERFORM OPT-MESSAGE TEST AFTER
        UNTIL WS-OPTION = "N" OR "Y".
       MOVE WS-OPTION  TO PAR-PRICED-IND.
        AC05C.
-      MOVE "Use the BANK DEPOSIT module Y/N  [N]"
-     TO WS-ERR-MES.
+      MOVE "Use the BANK DEPOSIT module Y/N  [N]" TO WS-OPT-MES.
       MOVE "N"   TO WS-OPTION.
       PERFORM OPT-MESSAGE TEST AFTER
        UNTIL WS-OPTION = "N" OR "Y".
       MOVE WS-OPTION  TO PAR-BANK-IND.
        AC05D.
-      MOVE "Use PROMPTS with sales Y/N  [Y]"
-     TO WS-ERR-MES.
+      MOVE "Use PROMPTS with sales Y/N  [Y]" TO WS-OPT-MES.
       MOVE "Y"   TO WS-OPTION.
       PERFORM OPT-MESSAGE TEST AFTER
        UNTIL WS-OPTION = "N" OR "Y".
@@ -597,8 +686,8 @@
              ADD 1               TO WS-PARKEY.
              INITIALIZE PAR-RECORD4.
             DISPLAY "Operator Details " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
       MOVE SEC-TERMS  TO PAR-TRMS.
              MOVE "N"            TO PAR-AGE.
              WRITE PAR-RECORD4.
@@ -606,8 +695,8 @@
              ADD 1               TO WS-PARKEY.
              MOVE "DS"           TO PAR-SYS.
             DISPLAY "Debtor Discount Codes" AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
        AC06.
              INITIALIZE PAR-RECORD5.
             MOVE "APACPW"  TO PAR-SUPER (1)
@@ -626,8 +715,8 @@
              WRITE PAR-RECORD5.
              PERFORM AC00.
             DISPLAY "Purchase Journal     " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
             ADD 1   TO WS-PARKEY.
              INITIALIZE PAR-RECORD6.
              MOVE "QWERTYUIOP"   TO PAR-COST-CODE.
@@ -645,8 +734,8 @@
              PERFORM AC00.
             ADD 1   TO WS-PARKEY.
             DISPLAY "Cash Sale - control  " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD7.
       MOVE 1   TO PAR-PIC-REF.
              WRITE PAR-RECORD7.
@@ -657,8 +746,8 @@
             PERFORM AC00.
              ADD 1               TO WS-PARKEY.
             DISPLAY "Cost of Sales        " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD8.
       MOVE "Description"  TO PAR-DESC-H1.
       MOVE "Description 2"
@@ -670,15 +759,15 @@
              PERFORM AC00.
             ADD 1   TO WS-PARKEY.
             DISPLAY "VAT Control Account  " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD9.
              MOVE "V"            TO PAR-VAT-GST.
              WRITE PAR-RECORD9.
              PERFORM AC00.
             ADD 1   TO WS-PARKEY.
             DISPLAY "╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟" AT 0645
-        WITH BACKGROUND-COLOR 1 FOREGROUND-COLOR 3.
+        WITH BACKGROUND-COLOR Blue HIGHLIGHT FOREGROUND-COLOR Cyan.
              MOVE 1              TO WS-S1.
 
        AC08.
@@ -691,8 +780,8 @@
              PERFORM AC00.
             ADD 1   TO WS-PARKEY.
             DISPLAY "Transaction Codes" AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
        AC09.
              INITIALIZE PAR-RECORD11.
 
@@ -789,8 +878,8 @@
        AC20.
              INITIALIZE PAR-RECORD101.
             DISPLAY "Salesman Details " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
 
        AC40.
              WRITE PAR-RECORD101.
@@ -799,8 +888,8 @@
            IF WS-PARKEY < 151
                GO TO AC40.
             DISPLAY "Cash Draw Details" AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD151.
       MOVE ZERO   TO PAR-CSHDTE
         PAR-FLOAT
@@ -851,8 +940,8 @@
            IF WS-PARKEY < 191
                GO TO AC45.
             DISPLAY "Creditor Tr codes" AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
 
        AC50.
              INITIALIZE PAR-RECORD191.
@@ -927,8 +1016,8 @@
                MOVE 1            TO WS-S1
                GO TO AC50.
             DISPLAY "Technician details" AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD201.
 
        AC60.
@@ -938,8 +1027,8 @@
            IF WS-PARKEY < 251
                GO TO AC60.
             DISPLAY "Pinter specifications" AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD251.
             MOVE SEC-PRNCOND  TO W10-CONP.
             MOVE SEC-PRNNORM  TO W10-NORP.
@@ -981,8 +1070,8 @@
            IF WS-PARKEY < 255
                GO TO AC65.
             DISPLAY "Terminal printers    " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD255.
              MOVE 1              TO WS-S1.
 
@@ -1010,8 +1099,8 @@
            IF WS-PARKEY < 266
                GO TO AC75.
             DISPLAY "Quotation Remarks    " AT 0645
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              INITIALIZE PAR-RECORD266.
 
        AC80.
@@ -1037,10 +1126,10 @@
           IF WS-PARKEY < 285
               GO TO AC81.
             DISPLAY "╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟" AT 0645
-        WITH BACKGROUND-COLOR 1 FOREGROUND-COLOR 3.
+        WITH BACKGROUND-COLOR Blue HIGHLIGHT FOREGROUND-COLOR Cyan.
             DISPLAY WS-MES AT 0633
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
 
        AC999-EXIT.
              EXIT.
@@ -1066,8 +1155,8 @@
        AD05.
             MOVE WS-NETKEY  TO WS-NUM.
             DISPLAY WS-NUM AT 0826
-        WITH FOREGROUND-COLOR 7 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Grey HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
        AD10.
              ADD 1               TO WS-NETKEY.
              INITIALIZE NET-CREDITOR.
@@ -1099,8 +1188,8 @@
              PERFORM AD05.
        AD30.
             DISPLAY WS-MES AT 0833
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
        AD999-EXIT.
              EXIT.
       /
@@ -1121,8 +1210,8 @@
 
        AE10.
             DISPLAY DPT-CODE AT 1026
-        WITH FOREGROUND-COLOR 7 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Grey HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
              WRITE DPT-RECORD.
 
        AE12.
@@ -1161,8 +1250,8 @@
 
        AE15.
             DISPLAY WS-MES AT 1033
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
        AE999.
              EXIT.
       /
@@ -1181,8 +1270,8 @@
 
        AF05.
             DISPLAY WS-MES AT 1433
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
 
        AF999-EXIT.
              EXIT.
@@ -1200,8 +1289,8 @@
 
        AG05.
             DISPLAY WS-MES AT 1233
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
 
        AG999-EXIT.
              EXIT.
@@ -1210,8 +1299,8 @@
        AH000-INIT.
              OPEN OUTPUT CHEQUE.
             DISPLAY WS-MES AT 1633
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
 
        AH999-EXIT.
              EXIT.
@@ -1232,8 +1321,8 @@
         USE-JBLEV USE-WGLEV.
             WRITE USE-RECORD.
             DISPLAY WS-MES AT 1833
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
+        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+      BACKGROUND-COLOR Magenta.
 
        AI999-EXIT.
              EXIT.
@@ -1254,7 +1343,7 @@
 
        AZ02.
              DISPLAY "***** Initialization Complete ****" AT 2212
-             WITH FOREGROUND-COLOR 6 HIGHLIGHT.
+             WITH FOREGROUND-COLOR Brown HIGHLIGHT.
 
        AZ05.
              PERFORM ERASE-SCREEN.

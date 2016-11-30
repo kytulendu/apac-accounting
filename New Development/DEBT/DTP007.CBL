@@ -15,7 +15,7 @@
       *                                                                *
       *   D E B T O R   F L A G   B A D   D E B T S   P R O G R A M    *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -92,7 +92,7 @@
 
        COPY "CONTROL.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEPART.SL".
 
@@ -126,18 +126,18 @@
 
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
       *
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
@@ -181,7 +181,6 @@
       *77  WS-BATCH                PIC  9(06)    COMP-5.
        77  WS-ERR1                 PIC  X(22)    VALUE "Invalid Account Number".
        77  WS-ERR2                 PIC  X(09)    VALUE "No Record".
-       77  WS-A                    PIC  X(19)    VALUE "Any key to continue".
        77  WS-E                    PIC  X(15)    VALUE "**END** - ENTER".
        77  WS-AC                   PIC  X(07)    VALUE "ACCOUNT".
        77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
@@ -288,7 +287,7 @@
 
        01  W80-ACCOUNT.
            03  W80-ACNO            PIC  X(06).
-           03  W80-TYPE            PIC  9(01).
+      *    03  W80-TYPE            PIC  9(01).
 
        01  W85-PASS.
            03  W85-SUPER           PIC  X(06)    OCCURS 9.
@@ -407,9 +406,9 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
+      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
-             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
              END-CALL.
              CANCEL PRG-DEBT-LUP.
@@ -488,6 +487,37 @@
 
        COPY "FUNCTION.CRT".
 
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                        OPT-MESSAGE                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine is used to allow the OPERATOR to respond to  ³
+      *    ³ a request for an option, so that the correct action can   ³
+      *    ³ be performed by the program. The routine will display the ³
+      *    ³ message in a pop-up window and allow the OPERATOR to      ³
+      *    ³ respond to the 'question'.                                ³
+      *    ³                                                           ³
+      *    ³ The option request must be placed in WS-OPT-MES and may   ³
+      *    ³ not exceed 48 characters. The message will be centred in  ³
+      *    ³ the window. An example of a message request follows:      ³
+      *    ³                                                           ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-OPT-MES.      ³
+      *    ³   MOVE Instruction    TO WS-INSTR.                        ³
+      *    ³       [see Accptopt for instruction values]               ³
+      *    ³   PERFORM OPT-MESSAGE.                                    ³
+      *    ³                                                           ³
+      *    ³ This would be displayed as:                               ³
+      *    ³      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³
+      *    ³      ³          Print transactions (Y/N) [ ]          ³°° ³
+      *    ³      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°° ³
+      *    ³        °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°° ³
+      *    ³                                                           ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³                                                           ³
+      *    ³ The system will display the message box with the top line ³
+      *    ³ as the value of WS-MES-LINE. If WS-MES-LINE is zero the   ³
+      *    ³ default will be 20.                                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
        COPY "OPTION.CRT".
 
        COPY "LOCKED.REC".
@@ -519,7 +549,7 @@
        COPY "CLEARW.CRT".
 
       *
-      *    ****    READ FILES ROUTINES
+      *      READ FILES ROUTINES
       *
        AC000              SECTION.
 
@@ -536,7 +566,7 @@
        COPY "SHARED.RD".
 
       *
-      *    ****    REWRITE AND WRITE FILES ROUTINES
+      *      REWRITE AND WRITE FILES ROUTINES
       *
        AD000             SECTION.
 
@@ -606,15 +636,15 @@
        AY59.
              EXIT.
       *
-      *    ****    Start processing transaction
+      *      Start processing transaction
       *
              MOVE 1                  TO WS-COUNT.
              MOVE 5                  TO WS-SHARED.
              PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
       *      MOVE SHR-STOCK          TO WS-STOCK.
       *
-      *    ****    Read PARAM record 4 - Lock record and start recovery
-      *            file procedure.
+      *      Read PARAM record 4 - Lock record and start recovery file
+      *      procedure.
       *
              MOVE 4         TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
@@ -623,7 +653,7 @@
                MOVE ZERO             TO WS-WAIT
                GO TO AY62.
       *
-      *    ****   Q   F U L L  -  W A I T   F O R   4   S E C O N D S
+      *     Q   F U L L  -  W A I T   F O R   4   S E C O N D S
       *
              DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
              COMMIT.
@@ -638,26 +668,26 @@
              MOVE LS-USER            TO PAR-USR(WS-USUB).
              PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
       *
-      *    ****    Read the DEBTOR control record in the NETWORK file
-      *            and lock it. Log details to the RECOVERY file.
+      *      Read the DEBTOR control record in the NETWORK file and lock
+      *      it. Log details to the RECOVERY file.
       *
              MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
              PERFORM AY39 THRU AY59.
              GO TO AY999.
       *
-      *    ****   A R E   A N Y   U P D A T E S   I N   P R O G R E S S
+      *     A R E   A N Y   U P D A T E S   I N   P R O G R E S S
       *
        AY62.
-           IF NOT (PAR-PROG(WS-SUB) = SPACES OR PAR-USR(WS-SUB) = SPACES)
+           IF NOT(PAR-PROG(WS-SUB) = SPACES OR PAR-USR(WS-SUB) = SPACES)
       *
-      *    ****   A R E   D E B T O R   O R   S T O C K   F I L E S
-      *                     B E I N G   U P D A T E D
+      *     A R E   D E B T O R   O R   S T O C K   F I L E S
+      *     B E I N G   U P D A T E D
       *
-               IF NOT (PAR-PROG(WS-SUB) = SPACES)
+               IF NOT(PAR-PROG(WS-SUB) = SPACES)
                    IF PAR-PROG(WS-SUB) = "DB" OR "DS"
       *
-      *    ****   Y E S   -   S E T   W A I T P E R I O D
+      *     Y E S   -   S E T   W A I T   P E R I O D
       *
                        GO TO AY62-WAIT
                    ELSE
@@ -666,11 +696,11 @@
                    END-IF
                ELSE
       *
-      *    ****   I S   T H I S   P R O G R A M   I N   T H E   Q
+      *     I S   T H I S   P R O G R A M   I N   T H E   Q
       *
                IF PAR-USR(WS-SUB) = LS-USER
       *
-      *    ****   I S   I T   N E X T   I N   L I N E   T O   P R O C E S S
+      *     I S   I T   N E X T   I N   L I N E   T O   P R O C E S S
       *
                    IF WS-WAIT = ZERO
                        GO TO AY63
@@ -686,7 +716,7 @@
              PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
              GO TO AY62-CHECK.
       *
-      *    ****   S E T   W A I T   P E R I O D
+      *     S E T   W A I T   P E R I O D
       *
        AY62-WAIT.
              MOVE 300                    TO WS-WAIT.
@@ -713,8 +743,8 @@
              MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
       *
-      *    ****    Write links back and unlock PARAM record 4 and
-      *            NETWORK record 2.
+      *      Write links back and unlock PARAM record 4 and NETWORK
+      *      record 2.
       *
              PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
              PERFORM AY49 THRU AY59.
@@ -750,7 +780,7 @@
        AY999.
              EXIT.
       *
-      *    ****    Read debtor record - using account number.
+      *      Read debtor record - using account number.
       *
        CA155-GET-DEBTOR  SECTION 2.
        CA155.
@@ -763,9 +793,11 @@
                MOVE 2                TO WS-ERROR
            ELSE
                MOVE 0                TO WS-ERROR
-               MOVE DEB-TYPE         TO W80-TYPE.
-           IF DEB-CONAC = LOW-VALUES
-               MOVE SPACES           TO DEB-CONAC.
+      *        MOVE DEB-TYPE         TO W80-TYPE
+      *
+      *      Move the Debtor Record to working storage area
+      *
+               MOVE DEB-RECORD1      TO W40-DEBTREC.
 
        CA160-EXIT.
              EXIT.
@@ -773,7 +805,7 @@
        COPY "LEDTRF.UPD".
 
       *
-      *    ****    F L A G   A C C O U N T   A S   B A D   D E B T
+      *      F L A G   A C C O U N T   A S   B A D   D E B T
       *
        CN000         SECTION 5.
        CN0.
@@ -842,10 +874,6 @@
                MOVE WS-ERR1          TO WS-ERR-MES
                PERFORM ERROR-MESSAGE
                GO TO CN05.
-      *
-      *    ****    Move the Debtor Record to working storage area
-      *
-             MOVE DEB-RECORD1        TO W40-DEBTREC.
              MOVE 5                  TO CRT-START.
              MOVE 46                 TO CRT-END.
              PERFORM ERASE-SCREEN.
@@ -878,7 +906,7 @@
                END-EVALUATE.
 
        CN10.
-             MOVE "Transfer to Bad Debts Y/N  [N]" TO WS-ERR-MES.
+             MOVE "Transfer to Bad Debts Y/N  [N]" TO WS-OPT-MES.
              MOVE "N"                TO WS-OPTION.
              PERFORM OPT-MESSAGE.
            IF NOT(WS-OPTION = "Y" OR "N")
@@ -896,7 +924,7 @@
                GO TO CN20.
 
        CN15.
-             MOVE "Must VAT be calculated Y/N  [ ]"  TO WS-ERR-MES.
+             MOVE "Must VAT be calculated Y/N  [ ]"  TO WS-OPT-MES.
              MOVE SPACE              TO WS-OPTION.
              PERFORM OPT-MESSAGE.
            IF NOT(WS-OPTION = "Y" OR "N")
@@ -941,11 +969,11 @@
              PERFORM AY70 THRU AY999.
              GO TO CN00.
       *
-      *    ****    F L A G G E D   A S   A   B A D   D E B T
+      *      F L A G G E D   A S   A   B A D   D E B T
       *
       *
        CN30.
-             MOVE "Flagged as a Bad Debt - Remove flag Y/N  [ ]" TO WS-ERR-MES.
+             MOVE "Flagged as a Bad Debt - Remove flag Y/N  [ ]" TO WS-OPT-MES.
              MOVE "N"                TO WS-OPTION.
 
        CN35.
@@ -967,7 +995,7 @@
                GO TO CN45.
 
        CN40.
-             MOVE "Must VAT be calculated Y/N  [ ]" TO WS-ERR-MES.
+             MOVE "Must VAT be calculated Y/N  [ ]" TO WS-OPT-MES.
              MOVE SPACE              TO WS-OPTION.
              PERFORM OPT-MESSAGE.
            IF NOT(WS-OPTION = "Y" OR "N")
@@ -1010,9 +1038,9 @@
 
        CN999.
              EXIT.
-      *
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
@@ -1077,7 +1105,7 @@
        ZA999-EXIT.
              EXIT.
       *
-      *    ****    I / O   E R R O R   M E S S A G E S
+      *      I / O   E R R O R   M E S S A G E S
       *
        ZB000-ERROR      SECTION 8.
 

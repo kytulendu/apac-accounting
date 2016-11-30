@@ -1,4 +1,4 @@
-      /*****************************************************************
+      ******************************************************************
       *                                                                *
       *                     V E R S I O N   9                          *
       *                                                                *
@@ -176,10 +176,16 @@
                88  PRINT-ADDRESS                   VALUE "P".
                88  FRMT-ADDRESS                    VALUE "F".
       *
-               88  ALLOCATE-CRED                   VALUE "A".
+               88  ALLOCATE-AUTO                   VALUE "A".
+               88  ALLOCATE-MANUAL                 VALUE "M".
                88  ALLOCATE-UPDATE                 VALUE "U".
       *
       *     W40-INST is also used by DTPReadAR:
+      *              G = Read Debtor Record for account per W40-ACT-NO
+      *              H = If account W40-ACT-NO change to "I" otherwise 
+      *                  EXIT with error code in W40-RESULT
+      *              I = Start the access depending on W40-LUP
+      *              N = next Debtor record: Current/Previous Period.
       *              R = Select a range of account numbers START and END
       *              S = Select a starting number.
       *              P = Select a previous period and check if files
@@ -229,7 +235,9 @@
                05  W40-PERIOD        PIC  X(01)    VALUE "C".
                    88  PREVIOUS-PERIOD             VALUE "P".
                05  W40-RESULT        PIC  X(01).
-               05  FILLER            PIC  X(13).
+               05  W40-DSP-OR-PRN    PIC  X(01).
+               05  W40-ACT-NO        PIC  X(06).
+               05  FILLER            PIC  X(06).
            03  W40-PRNINV            PIC  X(01).
            03  W40-LAST              PIC  9(03).
            03  W40-REPRINT           PIC  X(01).
@@ -251,14 +259,19 @@
                05  FILLER            PIC  X(01).
            03  W40-ONE               PIC S9(09)V99 COMP-3.
            03  W40-MTD               PIC S9(09)V99 COMP-3.
+           03  W40-CURW              PIC S9(09)V99 COMP-3.
+           03  W40-30W               PIC S9(09)V99 COMP-3.
+           03  W40-60W               PIC S9(09)V99 COMP-3.
+           03  W40-90W               PIC S9(09)V99 COMP-3.
+           03  W40-120W              PIC S9(09)V99 COMP-3.
            03  W40-INT               PIC S9(09)V99 COMP-3.
            03  W40-ARREARS           PIC S9(09)V99 COMP-3 REDEFINES W40-INT.
            03  W40-OOI               PIC  X(01).
            03  W40-EXEMPT            PIC  X(01).
            03  W40-STATUS            PIC  9(03)    COMP-3.
-       *
-       *   ***   U S E D   F O R   C O D   A C C O U N T 
-       *
+      *
+      *   ***   U S E D   F O R   C O D   A C C O U N T 
+      *
            03  W40-CUS-DET.
                05  W40-NM1           PIC  X(40).
                05  W40-AD1           PIC  X(30).

@@ -13,7 +13,7 @@
       *                                                                *
       *     B U S I N E S S   S Y S T E M   M E N U   P R O G R A M    *
       *                                                                *
-      *       Version 9.00.70 - March 2015                             *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -59,7 +59,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2014
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2016
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -107,7 +107,6 @@
 
        COPY "TXTRAN.SL".
 
-      /
        DATA DIVISION.
       *
       *          ********  ********  **        ******** 
@@ -133,13 +132,13 @@
        COPY "TXTRAN.FDE".
 
       *
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
@@ -151,6 +150,7 @@
        77  WS-NETKEY                 PIC  9(04)    COMP-5.
        77  WS-PARKEY                 PIC  9(04)    COMP-5.
        77  WS-TEMP-LIN               PIC  9(02)    COMP-5.
+       77  WS-REG                    PIC  9(02)    COMP-5.
        77  WS-OPTION                 PIC  X(01).
        77  PRG-NAME                  PIC  X(18)    VALUE SPACES.
        77  WS-NUM                    PIC  Z9.
@@ -193,8 +193,8 @@
       *    WorkStation / Supervisor
       *
            03  CRT-TERMINAL.
-               05  CRT-WRKHD         PIC  X(11)  VALUE "Supervisorд".
-               05  CRT-WRKST         PIC  X(03)  VALUE "ддд".
+               05  CRT-WRKHD         PIC  X(11)  VALUE "Supervisor ".
+               05  CRT-WRKST         PIC  X(03)  VALUE "   ".
 
        COPY "WS.WS".
 
@@ -233,101 +233,85 @@
        COPY "MENUINST.CRT".
 
        01  S-MENU.
-           03  BACKGROUND-COLOR Magenta FOREGROUND-COLOR Magenta.
-               05  LINE  6 COLUMN 30 VALUE "здддддддддддддддддддд"                         HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "©" FOREGROUND-COLOR Black.
-               05  LINE  7 COLUMN 30 VALUE "Ё  "                                           HIGHLIGHT.
-               05          COLUMN 33 VALUE    "PROGRAM  CONTROL"    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 49 VALUE                    "  Ё" FOREGROUND-COLOR Black.
-               05  LINE  8 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "1"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Stock            "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE  9 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "2"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Creditors        "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 10 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "3"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Debtors          "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 11 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "4"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " General Ledger   "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 12 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "5"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Sales / Orders   "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "6"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Point-of-Sale    "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "7"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Job Costing      "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "8"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Period End/Dates "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "A"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Utilities        "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "B"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Add Bus/Company  "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "C"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Switch Companies "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "D"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Print Spool File "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "E"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Cheque Processing"  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "F"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Orders Spec.     "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 22 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "L"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " Login/Logout     "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 23 COLUMN 30 VALUE "Ё "                                            HIGHLIGHT.
-               05          COLUMN 32 VALUE   "9"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 33 VALUE    " End System       "  FOREGROUND-COLOR Cyan  HIGHLIGHT.
-               05          COLUMN 51 VALUE                      "Ё" FOREGROUND-COLOR Black.
-               05  LINE 24 COLUMN 30 VALUE "ю"                                             HIGHLIGHT.
-               05          COLUMN 31 VALUE  "дддддддддддддддддддды" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE  6 COLUMN 30 VALUE "                     ".
+               05  LINE  7 COLUMN 30 VALUE "  PROGRAM  CONTROL   ".
+               05  LINE  8 COLUMN 30 VALUE " 1".
+               05          COLUMN 32 VALUE   " Stock             " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE  9 COLUMN 30 VALUE " 2".
+               05          COLUMN 32 VALUE   " Creditors         " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 10 COLUMN 30 VALUE " 3".
+               05          COLUMN 32 VALUE   " Debtors           " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 11 COLUMN 30 VALUE " 4".
+               05          COLUMN 32 VALUE   " General Ledger    " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 12 COLUMN 30 VALUE " 5".
+               05          COLUMN 32 VALUE   " Sales / Orders    " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 13 COLUMN 30 VALUE " 6".
+               05          COLUMN 32 VALUE   " Point-of-Sale     " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 14 COLUMN 30 VALUE " 7".
+               05          COLUMN 32 VALUE   " Job Costing       " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 15 COLUMN 30 VALUE " 8".
+               05          COLUMN 32 VALUE   " Period End/Dates  " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 16 COLUMN 30 VALUE " A".
+               05          COLUMN 32 VALUE   " Utilities         " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 17 COLUMN 30 VALUE " B".
+               05          COLUMN 32 VALUE   " Add Bus/Company   " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 18 COLUMN 30 VALUE " C".
+               05          COLUMN 32 VALUE   " Switch Companies  " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 19 COLUMN 30 VALUE " D".
+               05          COLUMN 32 VALUE   " Print Spool File  " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 20 COLUMN 30 VALUE " E".
+               05          COLUMN 32 VALUE   " Cheque Processing " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 21 COLUMN 30 VALUE " F".
+               05          COLUMN 32 VALUE   " Orders Spec.      " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 22 COLUMN 30 VALUE " L".
+               05          COLUMN 32 VALUE   " Login/Logout      " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 23 COLUMN 30 VALUE " 9".
+               05          COLUMN 32 VALUE   " End System        " FOREGROUND-COLOR Cyan  HIGHLIGHT.
+               05  LINE 24 COLUMN 30 VALUE "                     ".
 
+       01  SD-CONF.
+           03  BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE  8 COLUMN 14 VALUE "                                                       ".
+               05  LINE  9 COLUMN 14 VALUE " The System parameters, Company details, Departments,  ".        
+               05  LINE 10 COLUMN 14 VALUE "     Divisions, Hardware configurations, Integration,  ".        
+               05  LINE 11 COLUMN 14 VALUE "     Rate structures & Stationery choices need to be   ".        
+               05  LINE 12 COLUMN 14 VALUE "     set up!                                           ".        
+               05  LINE 13 COLUMN 14 VALUE " These details include:                                ".        
+               05  LINE 14 COLUMN 14 VALUE "     Address, Telephone, VAT registration number,      ".        
+               05  LINE 15 COLUMN 14 VALUE "     Sales staff, Technicians, Debtor Categories,      ".        
+               05  LINE 16 COLUMN 14 VALUE "     Sales Ledgers, Printers, Cash Drawer/s, Interest  ".        
+               05  LINE 17 COLUMN 14 VALUE "     rates, Price rounding, Stationery choices, User   ".        
+               05  LINE 18 COLUMN 14 VALUE "     codes, Passwords and Integration account numbers. ".        
+               05  LINE 19 COLUMN 14 VALUE " If you are not sure of the above, please read pages   ".        
+               05  LINE 20 COLUMN 14 VALUE " 30 to 36 of the manual and then select the Demonstra- ".        
+               05  LINE 21 COLUMN 14 VALUE " tion system and selecting option 8 from the PROGRAM   ".        
+               05  LINE 22 COLUMN 14 VALUE " CONTROL menu study the various PARAMETER options to   ".        
+               05  LINE 23 COLUMN 14 VALUE " familiarise yourself with the requirements.           ".        
+               05  LINE 24 COLUMN 14 VALUE "                                                       ".        
+               05  LINE 25 COLUMN 14 VALUE " DO THE SETUP NOW ?                                    ".        
+               05  LINE 26 COLUMN 14 VALUE "                                                       ".
+                                   
        01  S98.
-           03  BACKGROUND-COLOR Red.
-               05  LINE 21 COLUMN 14 VALUE "зддддддддддддддддддддддддддддддддддддддддддддддддддд" FOREGROUND-COLOR Red HIGHLIGHT. 
-               05          COLUMN 66 VALUE "©"                                                    FOREGROUND-COLOR Black.          
-               05  LINE 22 COLUMN 14 VALUE "Ё"                                                    FOREGROUND-COLOR Red HIGHLIGHT.
-               05          COLUMN 15 VALUE "Do not forget to make security copies of your files"  FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 66 VALUE "Ё"                                                    FOREGROUND-COLOR Black.           
-               05  LINE 23 COLUMN 14 VALUE "ю"                                                    FOREGROUND-COLOR Red  HIGHLIGHT. 
-               05          COLUMN 15 VALUE "ддддддддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.          
-               05  LINE 49 COLUMN 79 VALUE "д"                                                    BACKGROUND-COLOR Blue  FOREGROUND-COLOR Cyan.
+           03  BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 27 COLUMN 14 VALUE "                                                     ".         
+               05  LINE 28 COLUMN 14 VALUE " Do not forget to make security copies of your files ".          
+               05  LINE 29 COLUMN 14 VALUE "                                                     ".
+               05  LINE 49 COLUMN 79 VALUE "д"                                                     BACKGROUND-COLOR Blue  FOREGROUND-COLOR Cyan.
 
        01  S98T.
-           03  BACKGROUND-COLOR Red.
-               05  LINE 21 COLUMN 22 VALUE "здддддддддддддддддддддддддддддддддддд" FOREGROUND-COLOR Red  HIGHLIGHT.
-               05          COLUMN 59 VALUE "©"                                     FOREGROUND-COLOR Black.
-               05  LINE 22 COLUMN 22 VALUE "Ё"                                     FOREGROUND-COLOR Red  HIGHLIGHT.
-               05          COLUMN 23 VALUE "The terminal may now be switched off"  FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 59 VALUE "Ё"                                     FOREGROUND-COLOR Black.
-               05  LINE 23 COLUMN 22 VALUE "ю"                                     FOREGROUND-COLOR Red  HIGHLIGHT.
-               05          COLUMN 23 VALUE "дддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 27 COLUMN 22 VALUE "                                      ".
+               05  LINE 28 COLUMN 22 VALUE " The terminal may now be switched off ".
+               05  LINE 29 COLUMN 22 VALUE "                                      ".
                05  LINE 49 COLUMN 79 VALUE "д"                                     BACKGROUND-COLOR Blue  FOREGROUND-COLOR Cyan.
 
+       01  S-LEGAL.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
+               05  LINE 50 COLUMN  2 VALUE "This package must be registered within ".
+               05          COLUMN 42 PIC Z9 USING WS-REG FOREGROUND-COLOR Grey HIGHLIGHT BLINK.
+               05          COLUMN 44 VALUE " days".
+               
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
       *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
@@ -347,18 +331,23 @@
       *        IF WS0-CRED = "N" AND WS0-STOCK = "N" AND WS0-DEBT = "N" AND WS0-JOBS = "N" AND WS0-PARM = "N" AND WS0-WAGES = "N" AND WS0-GL = "N"
                    GO TO AA10.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
+           IF MOUSE-ATTACHED = "Y"
+               MOVE 66               TO MOUSE-FUNC
+               MOVE 1                TO MOUSE-PARAM
+               CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
              PERFORM BA000.
            IF MOUSE-ATTACHED = "Y"
                MOVE 66               TO MOUSE-FUNC
                MOVE 0                TO MOUSE-PARAM
                CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
            IF WS-USER NUMERIC
-               MOVE 21               TO SHADE-ROW
+               MOVE 27               TO SHADE-ROW
                MOVE 22               TO SHADE-COL
                MOVE 38               TO SHADE-WIDTH
                MOVE 3                TO SHADE-LINES
                DISPLAY S98T
                PERFORM SCREEN-SHADOW
+               CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS
                STOP RUN.
        AA05.
       *    *************************************************************
@@ -373,7 +362,7 @@
            IF WS-STATUS NOT = "00" AND WS-STAT1 NOT = "4"
                MOVE 15               TO WS-F-ERROR
                PERFORM OPEN-ERROR.
-               MOVE 4                TO WS-PARKEY.
+             MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
              MOVE ZERO               TO PAR-LOGON.
              REWRITE PAR-RECORD1.
@@ -381,13 +370,14 @@
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
              UNLOCK PARAM.
              CLOSE PARAM.
-             MOVE 21                 TO SHADE-ROW.
+             MOVE 27                 TO SHADE-ROW.
              MOVE 14                 TO SHADE-COL.
              MOVE 53                 TO SHADE-WIDTH.
              MOVE 3                  TO SHADE-LINES.
              DISPLAY S98.
              PERFORM SCREEN-SHADOW.
              CLOSE APACFIDS.
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
              STOP RUN.
 
        AA10.
@@ -398,7 +388,13 @@
                MOVE 0                TO MOUSE-PARAM
                CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM.
              PERFORM ERASE-SCREEN.
+             MOVE 27                 TO SHADE-ROW.
+             MOVE 14                 TO SHADE-COL.
+             MOVE 53                 TO SHADE-WIDTH.
+             MOVE 3                  TO SHADE-LINES.
              DISPLAY S98.
+             PERFORM SCREEN-SHADOW.
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
              STOP RUN.
 
        AA100        SECTION.
@@ -421,7 +417,7 @@
 
        AA102.
              MOVE SPACES             TO WS-NEXT-PRG.
-             CALL PRG-NAME USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
+             CALL PRG-NAME USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY DATA-FILE-IDS
              ON EXCEPTION GO TO AA110
              END-CALL.
             CANCEL PRG-NAME.
@@ -431,7 +427,7 @@
 
        AA105.
            IF WS-DEM = 1 AND WS-DAYS > 80
-               CALL "UTP\SYS001" USING WS-PARID WS-USER-ID WS0-PROGRAMS
+               CALL "UTP\SYS001" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
                CANCEL "UTP\SYS001".
              PERFORM RESTORE-SCREEN-3.
            IF MOUSE-ATTACHED = "Y"
@@ -444,6 +440,7 @@
        AA110.
              MOVE SPACE              TO WS-ERR-MES.
              STRING "Program- " DELIMITED SIZE PRG-NAME DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             MOVE 27                 TO WS-MES-LINE.
              PERFORM ERROR-MESSAGE.
              GO TO AA105.
 
@@ -452,29 +449,29 @@
 
        COPY "AA900.ALM".
 
-      /    *************************************************************
+      *    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
-      *           S C R E E N ,   K E Y B O A R D   &  M O U S E
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
       *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё       SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3      Ё
+      *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    Ё                        SCREEN-SHADOW                      Ё
+      *    Ё                      SCREEN-SHADOW                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
       *    Ё To routine is used to display a shadow down the right and Ё
       *    Ё along the bottom of a pop-up box. The parameters that are Ё
       *    Ё required:                                                 Ё
-      *    Ё           SHADE-ROW   - Top line of the box + 1.          Ё
-      *    Ё           SHADE-COL   - Left line of box + 2.             Ё
-      *    Ё           SHADE-WIDTH - Width of the box - 2.             Ё
-      *    Ё           SHADE-LINES - Hight of box - 1.                 Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "FUNCTION.SCR".
 
-      /    *************************************************************
+      *    *************************************************************
       *    ****   T H I S   R O U T I N E   I S   U S E D   T O
-      *    D I S P L A Y   E R R O R   M E S S A G E S
+      *           D I S P L A Y   E R R O R   M E S S A G E S
       *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
@@ -487,7 +484,7 @@
 
        COPY "ERRORW.SCR".
 
-       COPY "LOCKED.RC2".
+       COPY "LOCKED.REC".
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё           ERASE SCREEN FROM SPECIFIED LOCATION            Ё
@@ -505,9 +502,9 @@
 
        COPY "CLEARW.CRT".
 
-      /    *************************************************************
-      *    ****    READ FILES ROUTINES
-      *    *************************************************************
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AC000              SECTION.
 
        COPY "PARAM.RD".
@@ -518,7 +515,7 @@
        BA00.
              MOVE 6                  TO SHADE-ROW.
              MOVE 30                 TO SHADE-COL.
-             MOVE 22                 TO SHADE-WIDTH.
+             MOVE 21                 TO SHADE-WIDTH.
              MOVE 19                 TO SHADE-LINES.
              DISPLAY S-MENU.
            IF WS0-POS < 2
@@ -538,7 +535,7 @@
              MOVE 7                  TO TOP-ROW.
              MOVE 22                 TO BOTTOM-ROW.
              MOVE 6                  TO SCREEN-LIN.
-             MOVE 32                 TO SCREEN-COL.
+             MOVE 31                 TO SCREEN-COL.
              MOVE 18                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
@@ -789,63 +786,9 @@
        CA00.
              PERFORM SAVE-SCREEN-3.
              PERFORM ERASE-SCREEN.
-             DISPLAY "здддддддддддддддддддддддддддддддддддддддддддддддддддддд" AT 0813 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                                                                            "©"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.
-             DISPLAY "Ё"                                                       AT 0913 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " The System parameters, Company details, Departments, "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1013 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     Divisions, Hardware configurations, Integration, "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1113 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     Rate structures & Stationery choices need to be  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1213 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     set up!                                          "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1313 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " These details include:                               "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1413 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     Address, Telephone, VAT registration number,     "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1513 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     Sales staff, Technicians, Debtor Categories,     "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1613 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     Sales Ledgers, Printers, Cash Drawer/s, Interest "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1713 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     rates, Price rounding, Stationery choices, User  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1813 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "     codes, Passwords and Integration account numbers."         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 1913 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " If you are not sure of the above, please read pages  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 2013 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " 30 to 36 of the manual and then select the Demonstra-"         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 2113 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " tion system and selecting option 8 from the PROGRAM  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 2213 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " CONTROL menu study the various PARAMETER options to  "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 2313 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " familiarise yourself with the requirements.          "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 2413 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "                                                      "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "Ё"                                                       AT 2513 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      " DO THE SETUP NOW ?                                   "         WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Grey HIGHLIGHT
-                                                                            "Ё"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.        
-             DISPLAY "ю"                                                       AT 2613 WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Red HIGHLIGHT
-                      "дддддддддддддддддддддддддддддддддддддддддддддддддддддды"        WITH BACKGROUND-COLOR Red FOREGROUND-COLOR Black.
+             DISPLAY SD-CONF.
              MOVE 8                  TO SHADE-ROW.
-             MOVE 13                 TO SHADE-COL.
+             MOVE 14                 TO SHADE-COL.
              MOVE 56                 TO SHADE-WIDTH.
              MOVE 19                 TO SHADE-LINES.
              PERFORM SCREEN-SHADOW.
@@ -853,8 +796,8 @@
              CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
            IF WS-OPTION = "Y"
                GO TO CA05.
-             DISPLAY " SWITCH THIS MESSAGE OFF ?                            " AT 2514 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
-             ACCEPT WS-OPTION AT 2541 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Red AUTO.
+             DISPLAY " SWITCH THIS MESSAGE OFF ?                            " AT 5014 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Red.
+             ACCEPT WS-OPTION AT 5041 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Red AUTO.
              CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
            IF NOT(WS-OPTION = "Y")
                PERFORM RESTORE-SCREEN-3
@@ -873,7 +816,7 @@
 
        CA999.
              EXIT.
-      /    *************************************************************
+      *    *************************************************************
       *             I N I T I A L I S E   P R O G R A M
       *    *************************************************************
        ZA000-INIT        SECTION 9.
@@ -902,7 +845,7 @@
                GO TO ZA000-OPEN.
              PERFORM ZA60.
            IF (WS-DEM = 1 AND WS-DAYS < 66) OR (WS-DEM > 1)
-               CALL "UTP\SYS001" USING WS-PARID WS-USER-ID WS0-PROGRAMS
+               CALL "UTP\SYS001" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
                CANCEL "UTP\SYS001".
              CALL "UTP\USR001" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY DATA-FILE-IDS.
              CANCEL "UTP\USR001".
@@ -923,9 +866,8 @@
        ZA00.
              PERFORM ERASE-SCREEN.
            IF (WS-DEM = 1) AND (WS-DAYS > 85)
-               COMPUTE WS-NUM = 15 - (WS-DAYS - 85)
-               DISPLAY "This package must be registered within " AT 2102 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT
-                       WS-NUM WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT BLINK " days" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
+               COMPUTE WS-REG = 15 - (WS-DAYS - 65)
+               DISPLAY S-LEGAL
                GO TO ZA999.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё         Setup the file ID's including path names          Ё
@@ -1020,7 +962,7 @@
                PERFORM OPEN-ERROR.
              MOVE 5                  TO WS-SHARED.
              READ SHARED WITH LOCK.
-           IF NOT (SHR-RUN-DATE = W12-TODAY)
+           IF NOT(SHR-RUN-DATE = W12-TODAY)
                MOVE W12-TODAY  TO SHR-RUN-DATE
                MOVE ZERO  TO SHR-UPDATE-SEQ
                REWRITE SHR-RECORD.
@@ -1136,7 +1078,7 @@
       *        CANCEL "CNV\CARCON"
       *        CALL "UTP\CARREB" USING WS-PARID WS-USER-ID WS0-PROGRAMS WS0-SECURITY
       *        PERFORM RESTORE-SCREEN-3.
-           GO TO ZA999.
+             GO TO ZA999.
 
        ZA05.
              MOVE 1                  TO WS-SHARED WS-NETKEY.

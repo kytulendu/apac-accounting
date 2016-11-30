@@ -16,10 +16,12 @@
       *    Ё          Save the screen contents and attributes.         Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
-             PERFORM CREDITOR-LOOKUP.
-             GO TO AA58.
+             MOVE PRG-STOCK-LUP      TO PRG-NAME.
+             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY W15-INPUT-AREA
+	                 ON EXCEPTION GO TO AA55
+             END-CALL.
+             GO TO AA54.
 
        AA50.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -30,6 +32,8 @@
              CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY W10-STOCK
 	                 ON EXCEPTION GO TO AA55
              END-CALL.
+
+       AA54.
              CANCEL PRG-NAME.
              GO TO AA58.
 

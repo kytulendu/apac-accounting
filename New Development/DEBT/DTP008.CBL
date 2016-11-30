@@ -15,7 +15,7 @@
       *                                                                *
       *      D E B T O R   I N V O I C E S   A N A L I S E D           *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -98,7 +98,7 @@
 
        COPY "DBTRAN.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEPART.SL".
 
@@ -136,20 +136,20 @@
 
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
        COPY "TXTRAN.FDE".
 
       *
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                  PIC  X(18)           VALUE "aeWlimemnomLalismJ".
@@ -267,7 +267,7 @@
            03  W02-PGE-LENGTH      PIC  9(03).
            03  W02-PRN-LENGTH      PIC  9(03).
            03  W02-LINAGE          PIC  9(03).
-           03  W02-PRN-STATUS      PIC  X(01) VALUE "C".
+           03  W02-PRN-STATUS      PIC  X(01)    VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -360,10 +360,10 @@
            03  W05-DISCOUNT.
                05  W05-DSETT       PIC S9(03)V99   COMP-3 OCCURS 10.
 
-       01  W08-EXPD.
-           03  W08-CHAR            PIC  X(06).
-           03  W08-DEC                             REDEFINES W08-CHAR
-                                   PIC  X(01)      COMP-X OCCURS 6.
+      *01  W08-EXPD.
+      *    03  W08-CHAR              PIC  X(06).
+      *    03  W08-RCHAR                           REDEFINES W08-CHAR.
+      *        05 W08-DEC            PIC  X(01)    COMP-X OCCURS 6.
 
        01  W10-SPARES.
            03  W10-DATE            PIC  X(10).
@@ -424,7 +424,7 @@
 
        COPY "FUNCTION.WS".
 
-       COPY "W50.WS".
+      *COPY "W50.WS".
 
        01  W75-KEYS.
            03  W75-S               PIC  9(02)    COMP-5.
@@ -439,7 +439,7 @@
 
        01  W80-ACCOUNT.
            03  W80-ACNO            PIC  X(06).
-           03  W80-TYPE            PIC  9(01).
+      *    03  W80-TYPE            PIC  9(01).
 
        01  W85-PASS.
            03  W85-SUPER           PIC  X(06)           OCCURS 9.
@@ -607,9 +607,9 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
+      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
-             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
              END-CALL.
              CANCEL PRG-DEBT-LUP.
@@ -639,10 +639,9 @@
 
        COPY "DEBMEM.PRO".
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &   M O U S E
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
@@ -651,10 +650,10 @@
       *    ³ To routine is used to display a shadow down the right and ³
       *    ³ along the bottom of a pop-up box. The parameters that are ³
       *    ³ required:                                                 ³
-      *    ³          SHADE-ROW   - Top line of the box + 1.           ³
-      *    ³          SHADE-COL   - Left line of box + 2.              ³
-      *    ³          SHADE-WIDTH - Width of the box - 2.              ³
-      *    ³          SHADE-LINES - Hight of box - 1.                  ³
+      *    ³          SHADE-ROW   - Top line of the box.               ³
+      *    ³          SHADE-COL   - Left line of box.                  ³
+      *    ³          SHADE-WIDTH - Width of the box.                  ³
+      *    ³          SHADE-LINES - Height of box.                     ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
       *    ³                      CHECK-CORRECT                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -665,20 +664,17 @@
       *    ³                                                           ³
       *    ³ To start with the pop-up window higher or lower than row  ³
       *    ³ 20 (default); move another value to WS-MES-LINE.          ³
-      *    *************************************************************
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *            T H I S   R O U T I N E   I S   U S E D   T O
       *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Move the message to WS-DSP-MES and the top line of the   ³
       *    ³  message box to WS-MES-LINE. If WS-MES-LINE is zero the   ³
       *    ³  default will be 20.                                      ³
       *    ³                  PERFORM DISPLAY-MESSAGE                  ³
-      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                      ERROR-MESSAGE                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -689,6 +685,37 @@
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "FUNCTION.CRT".
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                        OPT-MESSAGE                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine is used to allow the OPERATOR to respond to  ³
+      *    ³ a request for an option, so that the correct action can   ³
+      *    ³ be performed by the program. The routine will display the ³
+      *    ³ message in a pop-up window and allow the OPERATOR to      ³
+      *    ³ respond to the 'question'.                                ³
+      *    ³                                                           ³
+      *    ³ The option request must be placed in WS-OPT-MES and may   ³
+      *    ³ not exceed 48 characters. The message will be centred in  ³
+      *    ³ the window. An example of a message request follows:      ³
+      *    ³                                                           ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-OPT-MES.      ³
+      *    ³   MOVE Instruction    TO WS-INSTR.                        ³
+      *    ³       [see Accptopt for instruction values]               ³
+      *    ³   PERFORM OPT-MESSAGE.                                    ³
+      *    ³                                                           ³
+      *    ³ This would be displayed as:                               ³
+      *    ³      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³
+      *    ³      ³          Print transactions (Y/N) [ ]          ³°° ³
+      *    ³      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°° ³
+      *    ³        °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°° ³
+      *    ³                                                           ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³                                                           ³
+      *    ³ The system will display the message box with the top line ³
+      *    ³ as the value of WS-MES-LINE. If WS-MES-LINE is zero the   ³
+      *    ³ default will be 20.                                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "OPTION.CRT".
 
@@ -720,13 +747,25 @@
 
        COPY "CLEARW.CRT".
 
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                       DEBTOR-MEMO                         ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ The account number of the Debtor record for which the MEMO³
+      *    ³ details are to be displayed must be in W80-ACNO.          ³
+      *    ³ PERFORM DEBTOR-MEMO.                                      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+       COPY "DEBMEM.PRO".
+
        COPY "DEBTOR.TRN".
 
        COPY "DATE.CHK".
 
-      *
-      *    ****    READ FILES ROUTINES
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                                                           ³
+      *    ³           R E A D   F I L E S   R O U T I N E S           ³
+      *    ³                                                           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -743,9 +782,11 @@
 
        COPY "SHARED.RD".
 
-      *
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                                                           ³
+      *    ³R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S³
+      *    ³                                                           ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -1007,7 +1048,11 @@
                MOVE 2            TO WS-ERROR
            ELSE
                MOVE 0            TO WS-ERROR
-               MOVE DEB-TYPE     TO W80-TYPE.
+      *        MOVE DEB-TYPE     TO W80-TYPE
+      *
+      *    ****    Move the Debtor Record to working storage area
+      *
+               MOVE DEB-RECORD1      TO W40-DEBTREC.
 
        CA160-EXIT.
              EXIT.
@@ -1064,30 +1109,31 @@
                IF NOT(TRA-DATE > W30-CUR)
                    MOVE 1            TO TRA-AGE.
            IF TRA-VALUE > ZERO
-               IF NOT(TRA-CODE = 17 OR 20) AND (TRA-AGE NOT = ZERO)
-                   IF TRA-AGE = 5
-                       ADD TRA-VALUE      TO DEB-120
-                       SUBTRACT TRA-VALUE FROM W90-120
-                   ELSE
-                   IF TRA-AGE = 4
-                       ADD TRA-VALUE      TO DEB-90
-                       SUBTRACT TRA-VALUE FROM W90-90
-                   ELSE
-                   IF TRA-AGE = 3
-                       ADD TRA-VALUE      TO DEB-60
-                       SUBTRACT TRA-VALUE FROM W90-60
-                   ELSE
-                   IF TRA-AGE = 2
-                       ADD TRA-VALUE      TO DEB-30
-                       SUBTRACT TRA-VALUE FROM W90-30
-                   ELSE
-                   IF TRA-AGE = 1
-                       ADD TRA-VALUE      TO DEB-CUR
-                       SUBTRACT TRA-VALUE FROM W90-CUR.
+               IF NOT(TRA-CODE = 17 OR 20) 
+                   IF NOT(TRA-AGE = ZERO)
+                       IF TRA-AGE = 5
+                           ADD TRA-VALUE      TO DEB-120
+                           SUBTRACT TRA-VALUE FROM W90-120
+                       ELSE
+                       IF TRA-AGE = 4
+                           ADD TRA-VALUE      TO DEB-90
+                           SUBTRACT TRA-VALUE FROM W90-90
+                       ELSE
+                       IF TRA-AGE = 3
+                           ADD TRA-VALUE      TO DEB-60
+                           SUBTRACT TRA-VALUE FROM W90-60
+                       ELSE
+                       IF TRA-AGE = 2
+                           ADD TRA-VALUE      TO DEB-30
+                           SUBTRACT TRA-VALUE FROM W90-30
+                       ELSE
+                       IF TRA-AGE = 1
+                           ADD TRA-VALUE      TO DEB-CUR
+                           SUBTRACT TRA-VALUE FROM W90-CUR.
              PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
              MOVE 1                  TO WS-ACTION.
              PERFORM AY04 THRU AY59.
-           IF (TRA-TAX NOT = ZERO) OR (TRA-CODE = 01) OR (TRA-CODE > 02 AND < 05) OR (TRA-CODE = 20)
+           IF NOT(TRA-TAX = ZERO) OR (TRA-CODE = 01) OR (TRA-CODE > 02 AND < 05) OR (TRA-CODE = 20)
                MOVE 1                TO TAX-ACTYPE
                MOVE TRA-CODE         TO TAX-CODE
                MOVE TRA-DATE         TO TAX-DATE
@@ -1343,10 +1389,6 @@
                MOVE WS-ERR1          TO WS-ERR-MES
                PERFORM ERROR-MESSAGE
                GO TO CK25.
-      *
-      *    ****    Move the Debtor Record to working storage area
-      *
-             MOVE DEB-RECORD1        TO W40-DEBTREC.
       *    *************************************************************
       *    ****         T E S T   F O R   I N D I V I D U A L       ****
       *    *************************************************************
@@ -1415,7 +1457,7 @@
                GO TO CK32.
 
        CK31.
-             MOVE "Does settlement discount apply Y/N?  [Y]" TO WS-ERR-MES.
+             MOVE "Does settlement discount apply Y/N?  [Y]" TO WS-OPT-MES.
              MOVE "Y"                TO WS-OPTION.
              PERFORM OPT-MESSAGE.
            IF NOT(WS-OPTION = "Y" OR "N")
@@ -1425,7 +1467,7 @@
                MOVE W05-DSETT(W40-SDISC) TO W90-DISC.
 
        CK32.
-             MOVE "Allocate to selected Sales Analyses Y/N  [ ]" TO WS-ERR-MES.
+             MOVE "Allocate to selected Sales Analyses Y/N  [ ]" TO WS-OPT-MES.
              DISPLAY "Press "       AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
                            "Esc"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
                               " to CANCEL"  WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
@@ -1506,7 +1548,7 @@
                GO TO CK40.
 
        CK52.
-           IF W40-LEDG NOT = ZERO
+           IF NOT(W40-LEDG = ZERO)
                ACCEPT S35 AT 1862
            ELSE
                MOVE W90-INT          TO W40-INT
@@ -1568,10 +1610,10 @@
                GO TO CK60B.
 
        CK60A.
-             MOVE "'M'td,'C'ur, '3'0, '6'0, '9'0 or '1'20days  [M]" TO WS-ERR-MES.
+             MOVE "'M'td,'C'ur, '3'0, '6'0, '9'0 or '1'20days  [M]" TO WS-OPT-MES.
              MOVE "M"                TO WS-OPTION.
              PERFORM OPT-MESSAGE.
-          IF NOT (WS-OPTION = "M" OR "C" OR "3" OR "6" OR "9" OR "1")
+          IF NOT(WS-OPTION = "M" OR "C" OR "3" OR "6" OR "9" OR "1")
                GO TO CK60A.
              ADD W90-DB              TO W90-BDT.
              MOVE W90-DB             TO W90-INT.
@@ -1654,11 +1696,12 @@
              ADD W90-EX              TO PAR-DNGS-DAY  PAR-DNGS-MTD  PAR-DNGS-YTD.
              ADD W90-CAP             TO PAR-DVAT-DAY  PAR-DVAT-MTD  PAR-DVAT-YTD DPT-V-SALES-DAY DPT-V-SALES-MTD DPT-V-SALES-YTD.
              ADD W90-TX              TO DPT-O-VAT-DAY DPT-O-VAT-MTD DPT-O-VAT-YTD.
-           IF (WX-INT = "Y") AND (W90-TX NOT = ZERO)
-               COMPUTE WX-VALUE = W90-TX * -1
-               MOVE DPT-O-VAT-GL     TO WX-AC
-               MOVE 10               TO WX-TYPE
-               PERFORM GL-TRF-UPDATE.
+           IF (WX-INT = "Y") 
+               IF NOT(W90-TX = ZERO)
+                   COMPUTE WX-VALUE = W90-TX * -1
+                   MOVE DPT-O-VAT-GL TO WX-AC
+                   MOVE 10           TO WX-TYPE
+                   PERFORM GL-TRF-UPDATE.
             PERFORM REWRITE-PARAM  THRU WRITE-PARAM-EXIT.
             PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
        CK75.
@@ -1680,7 +1723,7 @@
              MOVE 07                 TO CRT-START.
              MOVE 24                 TO CRT-END.
              PERFORM ERASE-SCREEN.
-             MOVE "New Batch Y/N?  [ ]" TO WS-ERR-MES.
+             MOVE "New Batch Y/N?  [ ]" TO WS-OPT-MES.
              MOVE SPACE              TO WS-OPTION.
              PERFORM OPT-MESSAGE.
            IF WS-OPTION = "N"
@@ -1688,7 +1731,7 @@
              GO TO CK00.
 
        CK80.
-             MOVE "Do you want to adjust - TAX Y/N?  [ ]" TO WS-ERR-MES.
+             MOVE "Do you want to adjust - TAX Y/N?  [ ]" TO WS-OPT-MES.
              MOVE SPACE   TO WS-OPTION.
              PERFORM OPT-MESSAGE.
            IF NOT(WS-OPTION = "N" OR "Y")
@@ -1723,9 +1766,9 @@
        DA99.
              EXIT.
 
-      *
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.

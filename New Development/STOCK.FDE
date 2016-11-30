@@ -165,7 +165,7 @@
            03  STK-ALT-DISC          PIC  X(01).
       ******************************************************************
       *                                                                *
-      *  Nov 2010 - When placing an order the system checks the stock  *
+      *  Nov 2016 - When placing an order the system checks the stock  *
       *             available and if the quantity required is more the *
       *             system only allows for the quantity available to   *
       *             be ordered. To allow for stock descrepencies the   *
@@ -175,6 +175,9 @@
       *             authority may set the override indicator. If this  *
       *             indicator is set the system allows the order to be *
       *             placed and turns the indicator off.                *
+      *                                                                *
+      *       THE INDICATOR BELOW HAS BEEN ADDED AND THE AMENDMENTS TO *
+      *       PROGRAMS WILL BE MADE DURING 2017                        * 
       *                                                                *
       ******************************************************************
            03  STK-QNT-OVER          PIC  X(01).

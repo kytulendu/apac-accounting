@@ -1,4 +1,4 @@
-      /    *************************************************************
+      *    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &  M O U S E
       *    *************************************************************
@@ -30,8 +30,8 @@
              CALL "CBL_READ_SCR_ATTRS" USING SAVE-POS W42-ATTRIB4 W41-LENGTH RETURNING WS-STATUS.
 
        RESTORE-ATTRIB.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS W42-ATTRIB4 W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        SCREEN-CONTENTS.
              CALL "CBL_CLEAR_SCR" USING X"20" X"00" RETURNING WS-STATUS.
@@ -46,16 +46,16 @@
              CALL "CBL_READ_SCR_CHATTRS" USING SAVE-POS W43-SCREEN3 W42-ATTRIB3 W41-LENGTH RETURNING WS-STATUS.
 
        RESTORE-SCREEN.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_CHATTRS" USING SAVE-POS W43-SCREEN W42-ATTRIB W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        RESTORE-SCREEN-2.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_CHATTRS" USING SAVE-POS W43-SCREEN2 W42-ATTRIB2 W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        RESTORE-SCREEN-3.
-             MOVE 4000               TO W41-LENGTH.
              CALL "CBL_WRITE_SCR_CHATTRS" USING SAVE-POS W43-SCREEN3 W42-ATTRIB3 W41-LENGTH RETURNING WS-STATUS.
+             MOVE 4000               TO W41-LENGTH.
 
        POSITION-MOUSE.
              MOVE 67                 TO MOUSE-FUNC.

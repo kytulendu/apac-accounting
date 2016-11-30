@@ -13,7 +13,7 @@
       *                                                                *
       *  A P A C   S Y S T E M :  A C C E P T   U S E R   O P T I O N  *
       *                                                                *
-      *       Version 9.00.70 - June 2015                              *
+      *       Version 9.04.01 - June 2016                              *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -53,7 +53,7 @@
       *
       *  If character 48 of the message contains a value of X"FA" then do not display the 
       *  message in a window, only get the User reponse at the position specified by
-      *  WS-MES-LIN and WS-MES-COL.
+      *  WS-MES-LINE and WS-MES-COL.
       *
       *  Used to display a request in a window and get a one character
       *  reponse from a User. The message, including the response
@@ -96,6 +96,8 @@
       *
       *                     8 = "A", "D" OR "E"
       *
+      *         (Hex 66)    f = "A" OR "E"
+      *
       *                     T = "A" OR "E" OR "O"
       *                          Allow for Escape key
       *
@@ -104,6 +106,8 @@
       *                     R = "A" OR "N"
       *
       *                     N = "A" OR "R"
+      *
+      *         (Hex 65)    e = "A" OR "S"
       *
       *                     5 = "B", "N" OR "P"
       *
@@ -145,6 +149,9 @@
       *                     G = "E" OR "I" OR "X"
       *                          Allow for Escape key
       *
+      *         (Hex 64)    d = "E" OR "M" OR "P"
+      *                          Allow for Escape key
+      *
       *                     I = "E" OR "N"
       *
       *                     B = "E", "N" OR "R"
@@ -159,6 +166,7 @@
       *
       *                     1 = "N" OR "Y"
       *
+      *         (Hex 63)    c = "P" OR "R"
       ****
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -169,13 +177,13 @@
 
        DATA DIVISION.
       *
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-S1                     PIC S9(04)    COMP-3.
@@ -221,6 +229,10 @@
            88  OPT-Y                               VALUES "B" "S".
            88  OPT-61                              VALUES "C" "S".
            88  OPT-62                              VALUES "3" "6" "7" "A" "C".
+           88  OPT-63                              VALUES "P" "R".
+           88  OPT-64                              VALUES "E" "M" "P".
+           88  OPT-65                              VALUES "A" "S".
+           88  OPT-66                              VALUES "A" "E".
 
        COPY "HEADING.CRT".
 
@@ -244,7 +256,9 @@
 
        77  LS-OPTION                 PIC  X(01).
 
-       01  L-MESSAGE                 PIC  X(48).
+       01  L-MESSAGE.
+           03  FILLER                PIC  X(47).
+           03  L-C48                 PIC  X(01).
        01  L-LINE                    PIC  9(02).
 
        COPY "USER.LS".
@@ -262,29 +276,23 @@
 
        01  OPT-LINE.
            02  BACKGROUND-COLOR Cyan.
-               03           COLUMN 16 VALUE "здддддддддддддддддддддддддддддддддддддддддддддддд" HIGHLIGHT.
-               03           COLUMN 65 VALUE "©"                                                 FOREGROUND-COLOR Black.
-               03  LINE + 1 COLUMN 16 VALUE "Ё"                                                 HIGHLIGHT.
+               03           COLUMN 16 VALUE "                                                  ".
+               03  LINE + 1 COLUMN 16 VALUE " ".
                03           COLUMN 17 PIC  X(48) FROM WS-OPT-MES                                FOREGROUND-COLOR Brown HIGHLIGHT.
-               03           COLUMN 65 VALUE "Ё"                                                 FOREGROUND-COLOR Black.
-               03  LINE + 1 COLUMN 16 VALUE "ю"                                                 HIGHLIGHT.
-               03           COLUMN 17 VALUE "дддддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
+               03           COLUMN 65 VALUE                                                  " ".
+               03  LINE + 1 COLUMN 16 VALUE "                                                  ".
 
        01  S99.
            02  BACKGROUND-COLOR Cyan.
-               03           COLUMN 19 VALUE "здддддддддддддддддддддддддддддддддддддддд" HIGHLIGHT.
-               03           COLUMN 60 VALUE "©"                                         FOREGROUND-COLOR Black.
-               03  LINE + 1 COLUMN 19 VALUE "Ё"                                         HIGHLIGHT.
-               03           COLUMN 20 VALUE " Press "                                   FOREGROUND-COLOR Blue.
-               03           COLUMN 27 VALUE "Y"                                         FOREGROUND-COLOR Brown HIGHLIGHT.
-               03           COLUMN 28 VALUE " if correct - "                            FOREGROUND-COLOR Blue.
-               03           COLUMN 42 VALUE "N"                                         FOREGROUND-COLOR Brown HIGHLIGHT.
-               03           COLUMN 43 VALUE " if incorrect ["                           FOREGROUND-COLOR Blue.
-               03           COLUMN 58 PIC X(01) USING WS-OPTION                         FOREGROUND-COLOR Grey  HIGHLIGHT.
-               03           COLUMN 59 VALUE "] "                                        FOREGROUND-COLOR Blue.
-               03           COLUMN 60 VALUE "Ё"                                         FOREGROUND-COLOR Black.
-               03  LINE + 1 COLUMN 19 VALUE "ю"                                         HIGHLIGHT.
-               03           COLUMN 20 VALUE "дддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
+               03           COLUMN 19 VALUE "                                          ".
+               03  LINE + 1 COLUMN 19 VALUE "  Press "                                   FOREGROUND-COLOR Blue.
+               03           COLUMN 27 VALUE         "Y"                                  FOREGROUND-COLOR Brown HIGHLIGHT.
+               03           COLUMN 28 VALUE          " if correct - "                    FOREGROUND-COLOR Blue.
+               03           COLUMN 42 VALUE                        "N"                   FOREGROUND-COLOR Brown HIGHLIGHT.
+               03           COLUMN 43 VALUE                         " if incorrect ["    FOREGROUND-COLOR Blue.
+               03           COLUMN 58 PIC X(01) USING WS-OPTION                          FOREGROUND-COLOR Grey  HIGHLIGHT.
+               03           COLUMN 59 VALUE                                         "] " FOREGROUND-COLOR Blue.
+               03  LINE + 1 COLUMN 19 VALUE "                                          ".
 
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
@@ -306,8 +314,15 @@
            ELSE
                MOVE 20               TO SLIN
            END-IF.
-           IF WS-MES-CHAR(48) = X"FA"
+      *
+      *    Check to find out if only an ACCEPT is required
+      *
+           IF L-C48 = X"FA"
                PERFORM GET-INPUT
+      *
+      *    Clear character 48
+      *
+               MOVE SPACE            TO L-C48
            ELSE    
                EVALUATE WS-INSTR
                  WHEN "C"    PERFORM CHECK-CORRECT
@@ -339,6 +354,23 @@
        CLEAR-EXIT.
              EXIT.
              
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
+      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
+      *    Ё                      SCREEN-SHADOW                        Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To routine is used to display a shadow down the right and Ё
+      *    Ё along the bottom of a pop-up box. The parameters that are Ё
+      *    Ё required:                                                 Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY "FUNCTION.SCR".
 
        OPT-MESSAGE   SECTION.
@@ -449,7 +481,7 @@
            ELSE
            IF USER-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z"
+                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z" OR "d"
                                      MOVE X"EC"  TO WS-OPTION
                                      GO TO OPT-END
                                  ELSE
@@ -501,6 +533,10 @@
                WHEN "Z"    GO TO OPT-END
                WHEN "a"    IF OPT-61 GO TO OPT-END
                WHEN "b"    IF OPT-62 GO TO OPT-END
+               WHEN "c"    IF OPT-63 GO TO OPT-END
+               WHEN "d"    IF OPT-64 GO TO OPT-END
+               WHEN "e"    IF OPT-65 GO TO OPT-END
+               WHEN "f"    IF OPT-66 GO TO OPT-END
                WHEN OTHER  GO TO OPT-END
              END-EVALUATE.
              MOVE L-LINE             TO SLIN.
@@ -570,7 +606,7 @@
        CHECK-EXIT.
              EXIT.
 
-      *      Accept option from position specified in WS-MES-LIN and
+      *      Accept option from position specified in WS-MES-LINE and
       *      WS-MES-COL. Do not display the message in a window.
        GET-INPUT       SECTION.
        GET-POS.
@@ -585,6 +621,13 @@
              CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
            IF ADIS-FUNC
                EVALUATE KEY-CODE-1
+                 WHEN F9-KEY     IF WS-INSTR = "F" OR "Z"
+                                     MOVE X"F9"  TO WS-OPTION
+                                     GO TO GET-END
+                                 ELSE
+                                     GO TO GET-ACCEPT
+                                 END-IF
+
                  WHEN ENTER-KEY  GO TO GET-VALID
 
                  WHEN OTHER      PERFORM AA900-ALARM
@@ -593,7 +636,7 @@
            ELSE
            IF USER-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z"
+                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z" OR "d"
                                      MOVE X"EC"  TO WS-OPTION
                                      GO TO GET-END
                                  ELSE
@@ -645,9 +688,13 @@
                WHEN "Z"    GO TO GET-END
                WHEN "a"    IF OPT-61 GO TO GET-END
                WHEN "b"    IF OPT-62 GO TO GET-END
+               WHEN "c"    IF OPT-63 GO TO GET-END
+               WHEN "d"    IF OPT-64 GO TO GET-END
+               WHEN "e"    IF OPT-65 GO TO GET-END
+               WHEN "f"    IF OPT-66 GO TO GET-END
                WHEN OTHER  GO TO GET-END
              END-EVALUATE.
-             GO TO GET-REPLY.
+             GO TO GET-INPUT.
 
        GET-END.
            IF NOT(WS-OPTION = X"EC" OR X"F9")

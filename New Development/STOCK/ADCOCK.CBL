@@ -1,18 +1,18 @@
       ******************************************************************
       *                                                                *
-      *       **     *******	******	  ******    ******   **   **   *
-      *      ****    **    **  **    **  **    **  **	 **  **  **    *
-      *     **	**   **    **  **	 **    **  **	     ** **     *
-      *    **	 **  **    **  **	 **    **  **	     ****      *
-      *    ********  **    **  **	 **    **  **	     ** **     *
-      *    **	 **  **    **  **    **  **    **  **	 **  **  **    *
-      *    **	 **  *******	******	  ******    ******   **   **   *
+      *       **     ******* ******   ******    ******   **   **   *
+      *      ****    **    **  **    **  **    **  **  **  **  **    *
+      *     ** **   **    **  **  **    **  **      ** **     *
+      *    **  **  **    **  **  **    **  **      ****      *
+      *    ********  **    **  **  **    **  **      ** **     *
+      *    **  **  **    **  **    **  **    **  **  **  **  **    *
+      *    **  **  ******* ******   ******    ******   **   **   *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *      S T O C K   U P D A T E   P R I C E S   P R O G R A M     *
       *                                                                *
-      *    VERSION 6.4 - August 1993.				       *
+      *    VERSION 6.4 - August 1993.           *
       *                                                                *
       ******************************************************************
 000010 IDENTIFICATION DIVISION.
@@ -23,8 +23,8 @@
 000060 CONFIGURATION SECTION.
 000070 SPECIAL-NAMES.
                        CURSOR IS CSTART
-000080		       CONSOLE IS CRT
-		       CRT STATUS IS KEY-STATUS.
+000080         CONSOLE IS CRT
+         CRT STATUS IS KEY-STATUS.
 000090 INPUT-OUTPUT SECTION.
 000100 FILE-CONTROL.
 
@@ -43,26 +43,26 @@
 000250 DATA DIVISION.
 000260 FILE SECTION.
 
-000120 COPY CONTROL.IFD.
+000120 COPY CONTROL.FD.
 
-000120 COPY DEPART.GFD.
+000120 COPY DEPART.FD.
 
-000280 COPY PARAM.IFD.
+000280 COPY PARAM.FD.
 
-000300 COPY STOCK.GFD.
+000300 COPY STOCK.FD.
 
 000290 FD  PRICES    LABEL RECORD STANDARD
 000300               VALUE OF FILE-ID W02-PRICES.
 000310 01  PRC-RECORD1.
-000320	   03  PRC-CODE        PIC  X(07).
-000330	   03  PRC-DESC        PIC  X(32).
-000360	   03  PRC-COST        PIC  9(04)V999.
-	   03  PRC-SELL        PIC  9(04)V999.
+000320    03  PRC-CODE        PIC  X(07).
+000330    03  PRC-DESC        PIC  X(32).
+000360    03  PRC-COST        PIC  9(04)V999.
+    03  PRC-SELL        PIC  9(04)V999.
            03  PRC-VENDOR      PIC  9(06).
-	   03  PRC-LEDG        PIC  9(04).
-	   03  PRC-MARKUP      PIC  9(02).99.
-	   03  PRC-TAX	       PIC  X(01).
-	   03  PRC-DISCOUNT    PIC  9(02).99.
+    03  PRC-LEDG        PIC  9(04).
+    03  PRC-MARKUP      PIC  9(02).99.
+    03  PRC-TAX        PIC  X(01).
+    03  PRC-DISCOUNT    PIC  9(02).99.
       /
 001690 WORKING-STORAGE SECTION.
 001710 77  WS-SUB           PIC 9(04)     COMP-5.
@@ -148,10 +148,10 @@
        COPY STOCK.ID.
 
 002440     03  W02-PRICES.
-	       05  W02-DSKP    PIC  X(01) VALUE "A".
-002460	       05  FILLER      PIC  X(08) VALUE ":STK.".
-	       05  W02-EXTP    PIC  X(02) VALUE "01".
-	       05  FILLER      PIC  X(04) VALUE ".POS".
+        05  W02-DSKP    PIC  X(01) VALUE "A".
+002460        05  FILLER      PIC  X(08) VALUE ":STK.".
+        05  W02-EXTP    PIC  X(02) VALUE "01".
+        05  FILLER      PIC  X(04) VALUE ".POS".
 
 002550 01  W10-STOCK.
 002560     03  W10-ENTRY      PIC X(14).
@@ -342,16 +342,16 @@
        COPY BLANK.CRT.
 
        01  ERROR-LINE.
-	   03  LINE 25 COLUMN  2 BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 6
-				 HIGHLIGHT
-				 PIC  X(48) FROM WS-ERR-MES.
+    03  LINE 25 COLUMN  2 BACKGROUND-COLOR 3
+     FOREGROUND-COLOR 6
+     HIGHLIGHT
+     PIC  X(48) FROM WS-ERR-MES.
       /
 007730 PROCEDURE DIVISION.
 007740 AA000-MAIN              SECTION.
 007750 AA000-INIT.
 007760       PERFORM ZA000-INIT.
-	     PERFORM BA000.
+      PERFORM BA000.
 007790       GO TO AZ000-EOJ.
 
        COPY LOCKED.REC.
@@ -395,7 +395,7 @@
 
 012510 BA000           SECTION 1.
 012520 BA00.
-012530       DISPLAY CLR-SCREEN. 
+012530       PERFORM ERASE-SCREEN.
              DISPLAY "Updating Stock Prices" AT 0230
                       WITH FOREGROUND-COLOR 9.
              DISPLAY "PRICES Record :" AT 0603.
@@ -404,7 +404,7 @@
        BA05.
              READ PRICES AT END
                          GO TO BA10.
-	   IF PRC-CODE = SPACES
+    IF PRC-CODE = SPACES
                GO TO BA05.
              ADD 1 TO WS-PRCKEY WS-RECKEY.
              MOVE WS-PRCKEY      TO W80-REC.
@@ -419,8 +419,8 @@
              PERFORM BB000.
              GO TO BA05.
        BA10.
-             DISPLAY "Update complete - Press " AT 2312 
-                      WITH FOREGROUND-COLOR 14 "ENTER" 
+             DISPLAY "Update complete - Press " AT 2312
+                      WITH FOREGROUND-COLOR 14 "ENTER"
                       WITH FOREGROUND-COLOR 15.
              ACCEPT WS-OPTION AT 2342 WITH FOREGROUND-COLOR 15 AUTO.
        BA999.
@@ -435,11 +435,11 @@
 013320       MOVE W10-ITEM       TO W50-DATA.
            IF W50-1 = SPACE
                MOVE W50-13       TO W10-ITEM
-               GO TO CA505.      
-	     CALL "CBL_TOUPPER" USING W50-DATA
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-013380	     MOVE W50-ITEM	 TO W10-ITEM.
+               GO TO CA505.
+      CALL "CBL_TOUPPER" USING W50-DATA
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+013380      MOVE W50-ITEM  TO W10-ITEM.
 013380       MOVE W50-ITEM       TO STK-CODE.
              PERFORM READ-STOCK-LOCK THRU READ-STOCK-EXIT.
        CA599.
@@ -449,12 +449,12 @@
       *
 015670 BB000           SECTION.
 015680 BB00.
-      *       MOVE PRC-TS	  TO W10-BIN.
-	     MOVE "001" 	 TO W10-BIN.
-	   IF PRC-TAX = "E"
-	       MOVE ZERO	 TO W10-TAX
-	   ELSE
-	       MOVE 1		 TO W10-TAX.
+      *       MOVE PRC-TS   TO W10-BIN.
+      MOVE "001"   TO W10-BIN.
+    IF PRC-TAX = "E"
+        MOVE ZERO  TO W10-TAX
+    ELSE
+        MOVE 1   TO W10-TAX.
              MOVE PRC-DESC       TO W10-DESC.
 015760       MOVE SPACES         TO W10-CODE2 W10-ACODE.
              MOVE PRC-COST       TO W10-COST W10-AVRG.
@@ -463,9 +463,9 @@
            ELSE
                MOVE PRC-LEDG     TO W10-LEDG.
              MOVE PRC-SELL       TO W10-SELL W10-CASH W10-WSALE.
-015780       MOVE ZERO           TO W10-QUANT W10-ODTE 
-015790                              W10-ORDER W10-GUAR 
-                                    W10-PURCH W10-LTIME 
+015780       MOVE ZERO           TO W10-QUANT W10-ODTE
+015790                              W10-ORDER W10-GUAR
+                                    W10-PURCH W10-LTIME
                                     W10-REORD W10-IND.
              MOVE W10-LEDG       TO WS-DEPKEY.
              PERFORM READ-DEPART THRU READ-DEPART-EXIT.
@@ -486,11 +486,11 @@
 016790       MOVE W10-SELL       TO W10-CSELL.
 016800     IF W10-COST = ZERO
 016810         IF W10-SELL NOT = ZERO
-016820             COMPUTE W10-CCOST ROUNDED = (W10-CSELL / 
+016820             COMPUTE W10-CCOST ROUNDED = (W10-CSELL /
 016830                     (100 + W10-MARKUP) * 100).
 016840     IF W10-SELL = ZERO
 016850         IF W10-COST NOT = ZERO
-016860             COMPUTE W10-CSELL ROUNDED = (W10-CCOST + 
+016860             COMPUTE W10-CSELL ROUNDED = (W10-CCOST +
 016870                     ((W10-CCOST * W10-MARKUP) / 100)).
 016880       MOVE W10-CCOST      TO W10-COST.
 016890       MOVE W10-CSELL      TO W10-SELL.
@@ -548,7 +548,7 @@
 017500       GO TO BB999.
       *
       *    ****  D E F A U L T   M A R K U P
-      *  
+      *
 017540 BB50.
 017600     IF W10-SELL > ZERO AND W10-COST > ZERO
 017610         MOVE W10-SELL     TO W10-CSELL
@@ -561,7 +561,7 @@
              EXIT.
       *
       *    ****  D E F A U L T   C A S H   M A R K U P
-      *  
+      *
        BB52.
 017600     IF W10-CASH > ZERO AND W10-COST > ZERO
 017610         MOVE W10-CASH     TO W10-CSELL
@@ -574,13 +574,13 @@
 017660       EXIT.
       *
       *    ****  D E F A U L T   W H O L E S A L E   M A R K U P
-      *  
+      *
        BB54.
 017600     IF W10-WSALE > ZERO AND W10-COST > ZERO
 017610         MOVE W10-WSALE    TO W10-CSELL
 017620         MOVE W10-COST     TO W10-CCOST
 017630         COMPUTE W10-WMARKUP ROUNDED = (((W10-CSELL - W10-CCOST)
-017640                                        / W10-COST) * 100) 
+017640                                        / W10-COST) * 100)
 017590     ELSE
 017580         MOVE DPT-WMRKUP   TO W10-WMARKUP.
 017650 BB55.
@@ -603,12 +603,12 @@
                                     STK-CASH W10-CSELL.
 017070       COMPUTE W10-MARKUP ROUNDED = (((W10-CSELL - W10-CCOST)
 017080                                     / W10-CCOST) * 100).
-016870       MOVE W10-MARKUP     TO STK-MARKUP 
-016870                              STK-CMARKUP 
+016870       MOVE W10-MARKUP     TO STK-MARKUP
+016870                              STK-CMARKUP
 016870                              STK-WMARKUP.
        BC05.
-      *      MOVE PRC-TS	 TO STK-BIN.
-             MOVE PRC-LEDG       TO STK-LEDG.  
+      *      MOVE PRC-TS  TO STK-BIN.
+             MOVE PRC-LEDG       TO STK-LEDG.
              PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
        BC999.
              EXIT.
@@ -616,94 +616,94 @@
 044130 ZA000-INIT              SECTION 80.
 044140 ZA000-OPEN.
              PERFORM ZA55 THRU ZA60.
-042000	     DISPLAY CLR-SCREEN.
+042000      PERFORM ERASE-SCREEN.
       *
-      *    ****    D O	 N O T	 D I S P L A Y	 E R R O R
-      * 	   M E S S A G E S
+      *    ****    D O  N O T  D I S P L A Y  E R R O R
+      *     M E S S A G E S
       *
-	     MOVE 44		 TO USER-NUMBER.
-	     MOVE 1		 TO USER-SETTING.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE 44   TO USER-NUMBER.
+      MOVE 1   TO USER-SETTING.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *
       *    ****    S E T   U P   T H E   F U N C T I O N   K E Y S
       *
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
+      MOVE 1   TO USER-ACTION
+        USER-SETTING.
       *
       *    ESC, F1 to F10 keys
       *
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 11		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE ZERO   TO USER-NUMBER.
+      MOVE 11   TO USER-KEYS.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *
       *    PAGE-UP AND PAGE-DOWN KEYS
       *
-	     MOVE 53		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE 53   TO USER-NUMBER.
+      MOVE 2   TO USER-KEYS.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *
       *    PRE-DISPLAY ACCEPT FIELDS BEFORE DATA-ENTRY
       *
-      *      MOVE 76		 TO USER-NUMBER.
-      *      MOVE 3		 TO USER-SETTING.
-      *      MOVE 1		 TO USER-KEYS.
+      *      MOVE 76   TO USER-NUMBER.
+      *      MOVE 3   TO USER-SETTING.
+      *      MOVE 1   TO USER-KEYS.
       *      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *
       *    ****    A C T I V A T E   M O U S E
       *
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
+      MOVE 64   TO MOUSE-FUNC.
+      MOVE 1   TO MOUSE-PARAM.
+      CALL X"AF" USING MOUSE-FUNC
+         MOUSE-PARAM.
+    IF MOUSE-FUNC NOT = 255
+        MOVE "Y"   TO MOUSE-ATTACHED
+        MOVE 66   TO MOUSE-FUNC
+        MOVE 0   TO MOUSE-PARAM
+        CALL X"AF" USING MOUSE-FUNC
+    MOUSE-PARAM
+    ELSE
+        GO TO ZA00A.
       *
       *    ****    S E T   M O U S E   K E Y   T O   A C T
-      * 	   A S	 F U N C T I O N   K E Y
+      *     A S  F U N C T I O N   K E Y
       *
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE 3   TO USER-ACTION.
+      MOVE 27   TO USER-NUMBER.
+      MOVE 2   TO USER-KEYS.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *      CALL CBL_INIT_MOUSE USING MOUSE-HANDLE
-      *				       MOUSE-BUTTONS
-      *				 RETURNING MOUSE-STATUS.
+      *           MOUSE-BUTTONS
+      *     RETURNING MOUSE-STATUS.
       *    IF MOUSE-STATUS = ZERO
-      *        MOVE "Y"		 TO MOUSE-ATTACHED.
+      *        MOVE "Y"   TO MOUSE-ATTACHED.
       *
       *    ****    P A R A M E T E R   F I L E
       *
        ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
+      MOVE "PARAM"  TO AFID-KEY.
 
        ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
+000030      READ APACFIDS WITH IGNORE LOCK
+        KEY IS AFID-KEY.
+    IF WS-STATUS = "00"
+        GO TO ZA00-READ-APACFIDS-EXIT.
+006260      STRING "Missing " DELIMITED SIZE
+       AFID-KEY DELIMITED BY " "
+       " file ID - Status " DELIMITED SIZE
+       WS-STATUS DELIMITED SIZE
+       INTO WS-ERR-MES.
+      PERFORM ERROR-LENGTH THRU ERROR-EXIT.
+006370      STOP RUN.
 
        ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
+      EXIT.
 
        ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
+      MOVE AFID-PATH  TO W02-PARAM.
 
 
 
-044170	    OPEN I-O PARAM.
+044170     OPEN I-O PARAM.
 044180     IF RUNTIME-ERROR
                IF FLE-LOCKED
 042030             GO TO ZA200
@@ -717,29 +717,29 @@
 044240       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
 044250       MOVE PAR-DISC       TO W02-DSK22 W02-DSK7 W02-DSK2.
 044260       MOVE PAR-EXT        TO W02-EXT22 W02-EXT7 W02-EXT2.
-	     DISPLAY "Disk drive for STK??.POS ?   " AT 0812
-                     "*" WITH FOREGROUND-COLOR 14 
+      DISPLAY "Disk drive for STK??.POS ?   " AT 0812
+                     "*" WITH FOREGROUND-COLOR 14
                      " to EXIT".
-	     DISPLAY "Stock File No. ?" AT 1012.
+      DISPLAY "Stock File No. ?" AT 1012.
              MOVE "A" TO W02-DSKP.
        ZA05.
-             ACCEPT W02-DSKP AT 0836 
+             ACCEPT W02-DSKP AT 0836
                     WITH FOREGROUND-COLOR 15 UPDATE AUTO.
            IF W02-DSKP = "*"
                CLOSE PARAM
                GO TO ZA205.
-	     CALL "CBL_TOUPPER" USING W02-DSKP
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
+      CALL "CBL_TOUPPER" USING W02-DSKP
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
        ZA10.
-             ACCEPT W02-EXTP AT 1029 
+             ACCEPT W02-EXTP AT 1029
                     WITH FOREGROUND-COLOR 15 UPDATE AUTO.
 018450       DISPLAY WS-CHK AT 2318 WITH FOREGROUND-COLOR 14.
 018460       ACCEPT WS-OPTION AT 2352 WITH FOREGROUND-COLOR 15 AUTO.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-018520	   IF WS-OPTION = "N"
+      CALL "CBL_TOUPPER" USING WS-OPTION
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+018520    IF WS-OPTION = "N"
 018530         GO TO ZA05.
 044300       OPEN I-O NETWORK.
 044310     IF RUNTIME-ERROR
@@ -817,14 +817,14 @@
 021940                      WS-TCHR (64) WS-TCHR (71).
 021950       MOVE WS-G3  TO WS-MCHR (16) WS-MCHR (41)
 021960                      WS-MCHR (64) WS-MCHR (71)
-                            WS-MCHR (1)  WS-MCHR (80) 
+                            WS-MCHR (1)  WS-MCHR (80)
                             WS-MCH  (1)  WS-MCH  (80).
 021970       MOVE WS-G4  TO WS-BCHR (16) WS-BCHR (41)
 021980                      WS-BCHR (64) WS-BCHR (71).
 044790 ZA200.
 044800       DISPLAY "Files locked - Try later" AT 2412
 044810                WITH FOREGROUND-COLOR 14.
-044820       DISPLAY "Press any key" AT 2512 
+044820       DISPLAY "Press any key" AT 2512
 044830                WITH FOREGROUND-COLOR 14.
 044840       ACCEPT WS-OPTION AT 2526 WITH FOREGROUND-COLOR 15 AUTO.
        ZA205.
@@ -833,22 +833,22 @@
 044880       EXIT.
       /
 044890 ZB000-ERROR             SECTION 81.
-      
+
 041480 OPEN-ERROR.
-041490       DISPLAY CLR-SCREEN.
+041490       PERFORM ERASE-SCREEN.
 041500       DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041480 READ-ERROR.
-041490       DISPLAY CLR-SCREEN.
+041490       PERFORM ERASE-SCREEN.
 041500       DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       GO TO DISPLAY-FILE-NAME.
-      
+
 041520 WRITE-ERROR.
-041530       DISPLAY CLR-SCREEN.
+041530       PERFORM ERASE-SCREEN.
 041540       DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
 041510       PERFORM DISPLAY-FILE-NAME.
-      
+
 041560 DISPLAY-FILE-NAME.
 041610     IF WS-F-ERROR = 2
 041620         MOVE W02-NETWORK  TO WS-FILE
@@ -883,11 +883,11 @@
 042030     IF WS-STATUS = "94"
 042040         MOVE "FILE locked" TO WS-STAT-MESSAGE.
 045380       DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-045390       DISPLAY "Status " AT 1212 
+045390       DISPLAY "Status " AT 1212
                       WS-STATUS WITH FOREGROUND-COLOR 11
                      ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-045400     IF WS-STATUS NOT = "94" 
-045410         DISPLAY "Key    " AT 1412 
+045400     IF WS-STATUS NOT = "94"
+045410         DISPLAY "Key    " AT 1412
                         WS-KEY WITH FOREGROUND-COLOR 11
 045420         DISPLAY "Reverse backup or contact program Support"
                         AT 1612.

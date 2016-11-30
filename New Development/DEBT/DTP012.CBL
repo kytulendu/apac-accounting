@@ -15,7 +15,7 @@
       *                                                                *
       *         D E B T O R   R E C E I P T S   P R O G R A M          *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -81,7 +81,7 @@
 
        COPY "DBTRAN.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEBTRN.SL".
 
@@ -127,7 +127,7 @@
 
        COPY "DEBTOR.FDE".
 
-       COPY "DEBTRN.GFD".
+       COPY "DEBTRN.FD".
 
        COPY "DEPART.FDE".
 
@@ -137,7 +137,7 @@
 
        COPY "RECEIPTS.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
@@ -229,7 +229,6 @@
        77  WS-BATCH                PIC  9(06)    COMP-5.
        77  WS-ERR1                 PIC  X(22)    VALUE "Invalid Account Number".
        77  WS-ERR2                 PIC  X(09)    VALUE "No Record".
-       77  WS-A                    PIC  X(19)    VALUE "Any key to continue".
        77  WS-E                    PIC  X(15)    VALUE "**END** - ENTER".
        77  WS-AC                   PIC  X(07)    VALUE "ACCOUNT".
        77  PRG-NAME                PIC  X(12)    VALUE SPACES.
@@ -438,7 +437,7 @@
 
        COPY "FUNCTION.WS".
 
-       COPY "W50.WS".
+      *COPY "W50.WS".
 
       *
       *    November 2012 DTPNAME and DTPADDR introduced to handle the
@@ -469,7 +468,7 @@
 
        01  W80-ACCOUNT.
            03  W80-ACNO              PIC  X(06).
-           03  W80-TYPE              PIC  9(01).
+      *    03  W80-TYPE              PIC  9(01).
 
        COPY "W85.WS".
 
@@ -570,12 +569,12 @@
                05  LINE 22 COLUMN 50 VALUE "ю"                       FOREGROUND-COLOR Grey HIGHLIGHT.
                05          COLUMN 51 VALUE "дддддддддддддддддддддды" FOREGROUND-COLOR Black.
                05  LINE 15 COLUMN 59 PIC Z(08)9.99- FROM W40-ONE     FOREGROUND-COLOR Magenta.
-               05  LINE 16 COLUMN 59 PIC Z(08)9.99- FROM DEB-CUR     FOREGROUND-COLOR Magenta.
-               05  LINE 17 COLUMN 59 PIC Z(08)9.99- FROM DEB-30      FOREGROUND-COLOR Magenta.
-               05  LINE 18 COLUMN 59 PIC Z(08)9.99- FROM DEB-60      FOREGROUND-COLOR Magenta.
-               05  LINE 19 COLUMN 59 PIC Z(08)9.99- FROM DEB-90      FOREGROUND-COLOR Magenta.
-               05  LINE 20 COLUMN 59 PIC Z(08)9.99- FROM DEB-120     FOREGROUND-COLOR Magenta.
-               05  LINE 21 COLUMN 59 PIC Z(08)9.99- FROM DEB-INT     FOREGROUND-COLOR Magenta.
+               05  LINE 16 COLUMN 59 PIC Z(08)9.99- FROM W40-CUR     FOREGROUND-COLOR Magenta.
+               05  LINE 17 COLUMN 59 PIC Z(08)9.99- FROM W40-30      FOREGROUND-COLOR Magenta.
+               05  LINE 18 COLUMN 59 PIC Z(08)9.99- FROM W40-60      FOREGROUND-COLOR Magenta.
+               05  LINE 19 COLUMN 59 PIC Z(08)9.99- FROM W40-90      FOREGROUND-COLOR Magenta.
+               05  LINE 20 COLUMN 59 PIC Z(08)9.99- FROM W40-120     FOREGROUND-COLOR Magenta.
+               05  LINE 21 COLUMN 59 PIC Z(08)9.99- FROM W40-INTEREST  FOREGROUND-COLOR Magenta.
            
        01  S12.
            03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
@@ -583,28 +582,28 @@
                05  LINE 13 COLUMN 11 VALUE "╨    BALANCE FORWARD ALLOCATIONS    ╨".
                05  LINE 14 COLUMN 11 VALUE "гддддддддддддддддддддддддддддддддддд╤".
                05  LINE 15 COLUMN 11 VALUE "╨ Mtd  : ".
-               05          COLUMN 20 PIC Z(08)9.99- FROM W40-ONE  FOREGROUND-COLOR Cyan HIGHLIGHT.
+               05          COLUMN 20 PIC Z(08)9.99- FROM W40-ONE      FOREGROUND-COLOR Cyan HIGHLIGHT.
                05          COLUMN 32 VALUE "               ╨".
                05  LINE 16 COLUMN 11 VALUE "╨ Cur  : ".
-               05          COLUMN 20 PIC Z(08)9.99- FROM DEB-CUR  FOREGROUND-COLOR Cyan HIGHLIGHT.
+               05          COLUMN 20 PIC Z(08)9.99- FROM W40-CUR      FOREGROUND-COLOR Cyan HIGHLIGHT.
                05          COLUMN 32 VALUE "               ╨".
                05  LINE 17 COLUMN 11 VALUE "╨ 30d  : ".
-               05          COLUMN 20 PIC Z(08)9.99- FROM DEB-30   FOREGROUND-COLOR Cyan HIGHLIGHT.
+               05          COLUMN 20 PIC Z(08)9.99- FROM W40-30       FOREGROUND-COLOR Cyan HIGHLIGHT.
                05          COLUMN 32 VALUE "               ╨".
                05  LINE 18 COLUMN 11 VALUE "╨ 60d  : ".
-               05          COLUMN 20 PIC Z(08)9.99- FROM DEB-60   FOREGROUND-COLOR Cyan HIGHLIGHT.
+               05          COLUMN 20 PIC Z(08)9.99- FROM W40-60       FOREGROUND-COLOR Cyan HIGHLIGHT.
                05          COLUMN 32 VALUE "               ╨".
                05  LINE 19 COLUMN 11 VALUE "╨ 90d  : ".
-               05          COLUMN 20 PIC Z(08)9.99- FROM DEB-90   FOREGROUND-COLOR Cyan HIGHLIGHT.
+               05          COLUMN 20 PIC Z(08)9.99- FROM W40-90       FOREGROUND-COLOR Cyan HIGHLIGHT.
                05          COLUMN 32 VALUE "               ╨".
                05  LINE 20 COLUMN 11 VALUE "╨ 120d : ".
-               05          COLUMN 20 PIC Z(08)9.99- FROM DEB-120  FOREGROUND-COLOR Cyan HIGHLIGHT.
+               05          COLUMN 20 PIC Z(08)9.99- FROM W40-120      FOREGROUND-COLOR Cyan HIGHLIGHT.
                05          COLUMN 32 VALUE "               ╨".
                05  LINE 21 COLUMN 11 VALUE "╨ Int  : ".
-               05          COLUMN 20 PIC Z(08)9.99- FROM DEB-INT  FOREGROUND-COLOR Cyan HIGHLIGHT.
+               05          COLUMN 20 PIC Z(08)9.99- FROM W40-INTEREST FOREGROUND-COLOR Cyan HIGHLIGHT.
                05          COLUMN 32 VALUE "               ╨".
                05  LINE 22 COLUMN 11 VALUE "╨ ".
-               05          COLUMN 13 VALUE "Transaction balance:" FOREGROUND-COLOR Blue.
+               05          COLUMN 13 VALUE "Transaction balance:"     FOREGROUND-COLOR Blue.
                05          COLUMN 33 VALUE "      ╨".
                05  LINE 23 COLUMN 11 VALUE "хммммммммммммммммммммммммммммммммммм╪".
 
@@ -631,15 +630,15 @@
                05  S29.
                    07  PIC Z(08)9.99- USING W40-MTD AUTO.
                05  S30.
-                   07  PIC Z(08)9.99- USING W40-CUR AUTO.
+                   07  PIC Z(08)9.99- USING W40-CURW AUTO.
                05  S31.
-                   07  PIC Z(08)9.99- USING W40-30 AUTO.
+                   07  PIC Z(08)9.99- USING W40-30W AUTO.
                05  S32.
-                   07  PIC Z(08)9.99- USING W40-60 AUTO.
+                   07  PIC Z(08)9.99- USING W40-60W AUTO.
                05  S33.
-                   07  PIC Z(08)9.99- USING W40-90 AUTO.
+                   07  PIC Z(08)9.99- USING W40-90W AUTO.
                05  S34.
-                   07  PIC Z(08)9.99- USING W40-120 AUTO.
+                   07  PIC Z(08)9.99- USING W40-120W AUTO.
                05  S35.
                    07  PIC Z(06)9.99- USING W40-INT AUTO.
                05  S36.
@@ -649,6 +648,17 @@
            03  LINE 22 COLUMN 6 VALUE "Total Receipts (Batch): ".
            03  FOREGROUND-COLOR Cyan HIGHLIGHT PIC Z(08)9.99- USING W25-TOTAL AUTO.
 
+       01  S-ACT-LUP.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                                                     FOREGROUND-COLOR Brown HIGHLIGHT
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                                             FOREGROUND-COLOR Brown HIGHLIGHT
+               05          COLUMN 12 VALUE           " to do Debtor Lookup ".
+               05          COLUMN 33 VALUE                                "F9"                                      FOREGROUND-COLOR Brown HIGHLIGHT
+               05          COLUMN 35 VALUE                                  " Debtor Lookup (Any Word),".
+               05          COLUMN 61 VALUE                                                            "Esc"         FOREGROUND-COLOR Brown HIGHLIGHT
+               05          COLUMN 64 VALUE                                                               " to exit".
+           
        01  S-ALLOC.
            03  LINE 21 COLUMN 14 VALUE "Un-allocated balance : ".
            03          COLUMN 37 PIC Z(08)9.99 FROM W75-BALANCE   FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Magenta.
@@ -708,7 +718,7 @@
              MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              MOVE PRG-DEBT-LUP       TO PRG-NAME.
-             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
              END-CALL.
              CANCEL PRG-NAME.
@@ -728,10 +738,9 @@
 
        COPY "AA900.ALM".
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &   M O U S E
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
@@ -740,10 +749,10 @@
       *    Ё To routine is used to display a shadow down the right and Ё
       *    Ё along the bottom of a pop-up box. The parameters that are Ё
       *    Ё required:                                                 Ё
-      *    Ё          SHADE-ROW   - Top line of the box + 1.           Ё
-      *    Ё          SHADE-COL   - Left line of box + 2.              Ё
-      *    Ё          SHADE-WIDTH - Width of the box - 2.              Ё
-      *    Ё          SHADE-LINES - Hight of box - 1.                  Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
       *    Ё                      CHECK-CORRECT                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -754,20 +763,17 @@
       *    Ё                                                           Ё
       *    Ё To start with the pop-up window higher or lower than row  Ё
       *    Ё 20 (default); move another value to WS-MES-LINE.          Ё
-      *    *************************************************************
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
       *            T H I S   R O U T I N E   I S   U S E D   T O
       *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё  Move the message to WS-DSP-MES and the top line of the   Ё
       *    Ё  message box to WS-MES-LINE. If WS-MES-LINE is zero the   Ё
       *    Ё  default will be 20.                                      Ё
       *    Ё                  PERFORM DISPLAY-MESSAGE                  Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -793,18 +799,21 @@
       *    Ё the window. An example of a message request follows:      Ё
       *    Ё                                                           Ё
       *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-OPT-MES.      Ё
+      *    Ё   MOVE Instruction    TO WS-INSTR.                        Ё
+      *    Ё       [see Accptopt for instruction values]               Ё
       *    Ё   PERFORM OPT-MESSAGE.                                    Ё
       *    Ё                                                           Ё
       *    Ё This would be displayed as:                               Ё
       *    Ё      здддддддддддддддддддддддддддддддддддддддддддддддд©   Ё
-      *    Ё      Ё          Print transactions (Y/N) [ ]          Ё   Ё
-      *    Ё      юдддддддддддддддддддддддддддддддддддддддддддддддды   Ё
+      *    Ё      Ё          Print transactions (Y/N) [ ]          Ё╟╟ Ё
+      *    Ё      юдддддддддддддддддддддддддддддддддддддддддддддддды╟╟ Ё
+      *    Ё        ╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟ Ё
       *    Ё                                                           Ё
       *    Ё The response is returned in WS-OPTION (in upper case).    Ё
       *    Ё                                                           Ё
       *    Ё The system will display the message box with the top line Ё
-      *    Ё at line as the value of WS-MES-LINE. If WS-MES-LINE is    Ё
-      *    Ё zero the default will be 20.                              Ё
+      *    Ё as the value of WS-MES-LINE. If WS-MES-LINE is zero the   Ё
+      *    Ё default will be 20.                                       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "OPTION.CRT".
@@ -837,25 +846,26 @@
 
        COPY "CLEARW.CRT".
 
-       COPY "DEBTOR.TRN".
-
-      *    *************************************************************
-      *    ****        D A T E   C H E C K   R O U T I N E
-      *    *************************************************************
+      *    
+      *          G E T   D E T A I L S   F O R   A   D E B T O R   
+      *                  T R A N S A C T I O N   C O D E
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё  Perform this routine with the date in W10-DATE (PIC      Ё
-      *    Ё  99/99/9999) with the format as DD/MM/CCYY                Ё
+      *    Ё PERFORM THIS ROUTINE WITH THE TRANSACTION CODE IN W90-CODEЁ
       *    Ё                                                           Ё
-      *    Ё  On exiting - WS-ERROR will be zero (0) if the date is    Ё
-      *    Ё  correct or one (1) if the date is incorrect.             Ё
+      *    Ё ON EXITING THE TRANSACTION CODE DETAILS ARE IN W00-       Ё
+      *    Ё WHILE W90-TRNKEY CONTAINS THE KEY TO THE PARAMETER FILE   Ё
+      *    Ё WHERE THIS TRANSACTION CODE IS FOUND AND W90-TS IS THE    Ё
+      *    Ё TRANSACTION CODE SUBSCRIPT IN THE RECORD.                 Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
-       COPY "DATE.CHK".
+       COPY "DEBTOR.TRN".
 
        COPY "LEDTRF.UPD".
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
       *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
+      *    Ё                                                           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AC000             SECTION.
 
@@ -880,7 +890,9 @@
        COPY "SHARED.RD".
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
       *    ЁR E W R I T E   &   W R I T E   F I L E S   R O U T I N E SЁ
+      *    Ё                                                           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AD000             SECTION.
 
@@ -1168,50 +1180,14 @@
                MOVE 2                TO WS-ERROR
            ELSE
                MOVE 0                TO WS-ERROR
-               MOVE DEB-TYPE         TO W80-TYPE.
+      *        MOVE DEB-TYPE         TO W80-TYPE
+      *
+      *    ****    Move the Debtor Record to working storage area
+      *
+               MOVE DEB-RECORD1      TO W40-DEBTREC.
+
        CA160-EXIT.
              EXIT.
-      *
-      *    DTPNAME and DTPADDR programs introduced November 2012 to
-      *    process new Debtor Record layout for storage, display and
-      *    print purposes. These routines are no longer required and
-      *    will be removed on the next source code cleanup.
-      *
-      *CA165-NAME        SECTION 2.
-      *CA165.
-      *      UNSTRING W60-NAME DELIMITED BY "*" OR "!"
-      *                          INTO W40-SURNAME
-      *                               W40-FNAME
-      *                               W40-SNAME
-      *      OVERFLOW
-      *          MOVE 1          TO WS-ERROR.
-      *CA170-EXIT.
-      *      EXIT.
-      *
-      *CA175-ADDRESS     SECTION 2.
-      *CA175.
-      *      UNSTRING W60-ADDRESS DELIMITED BY "*"
-      *                          INTO W40-ADD1
-      *                               W40-ADD2
-      *                               W40-ADD3
-      *                               W40-ADD4
-      *      OVERFLOW
-      *          MOVE 1          TO WS-ERROR.
-      *CA175-EXIT.
-      *      EXIT.
-      *
-      *CA180-ADDRESS     SECTION 2.
-      *CA180.
-      *      UNSTRING W60-ADDRESS1 DELIMITED BY "*"
-      *                          INTO W40-PADD1
-      *                               W40-PADD2
-      *                               W40-PADD3
-      *                               W40-PADD4
-      *      OVERFLOW
-      *          MOVE 1          TO WS-ERROR.
-      *CA180-EXIT.
-      *      EXIT.
-
       *    *************************************************************
       *    ****    G E N E R A T E   A   D E B T O R
       *                  T R A N S A C T I O N
@@ -1224,17 +1200,17 @@
              INITIALIZE TRA-RECORD1.
              MOVE W20-DTE            TO TRA-DATE.
            IF W90-CODE = 02
-               IF NOT(W20-DTE < DEB-ACTIVE)
-                   MOVE W20-DTE      TO DEB-ACTIVE
+               IF NOT(W20-DTE < W40-ACTIVE)
+                   MOVE W20-DTE      TO W40-ACTIVE
                END-IF
-               IF NOT(W20-DTE < DEB-PMT)
-                   MOVE W20-DTE      TO DEB-PMT
-                   MOVE W90-CR       TO DEB-LAST-PMT
+               IF NOT(W20-DTE < W40-PMT)
+                   MOVE W20-DTE      TO W40-PMT
+                   MOVE W90-CR       TO W40-LAST-PMT
                END-IF
                PERFORM DEBTOR-PAYMENT-PROFILE.
              MOVE W90-CODE           TO TRA-CODE.
              MOVE W90-REF            TO TRA-REF TRA-REG.
-             MOVE DEB-ACNO           TO TRA-AC.
+             MOVE W40-ACNO           TO TRA-AC.
              SUBTRACT W90-CR FROM W90-DB GIVING TRA-VALUE.
            IF W90-CODE = 19
                MULTIPLY -1 BY W90-VAT(1) GIVING TRA-TAX
@@ -1274,7 +1250,7 @@
            IF WX-INT = "Y"
                PERFORM DEBTOR-INTEGRATE.
              PERFORM UPDATE-TRAN-RECORD.
-             ADD W90-CR              TO DEB-CRED.
+             ADD W90-CR              TO W40-CRED.
              MOVE W90-CR             TO W25-VALUE.
              GO TO DEBTOR-TRAN-EXIT.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
@@ -1294,7 +1270,7 @@
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё              Update the Debtors payment profile           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-             ADD W90-CR              TO DEB-MTHPMT(WS-SUB).
+             ADD W90-CR              TO W40-MTHPMT(WS-SUB).
       
        DEBTOR-TAX.
              MOVE ZERO               TO TAX-VAL(WS-S9) TAX-VAT(WS-S9).
@@ -1320,50 +1296,50 @@
              PERFORM GL-TRF-UPDATE.
 
        DEBTOR-CREDITS.
-             SUBTRACT W90-CR         FROM DEB-BAL.
-           IF W25-VALUE < DEB-120
-               SUBTRACT W25-VALUE    FROM DEB-120
+             SUBTRACT W90-CR         FROM W40-BAL.
+           IF W25-VALUE < W40-120
+               SUBTRACT W25-VALUE    FROM W40-120
                ADD W25-VALUE         TO W90-120
                GO TO DEBTOR-TRAN-EXIT.
-             SUBTRACT DEB-120        FROM W25-VALUE.
-             ADD DEB-120             TO W90-120.
-             MOVE ZERO               TO DEB-120.
-           IF W25-VALUE < DEB-90
-               SUBTRACT W25-VALUE    FROM DEB-90
+             SUBTRACT W40-120        FROM W25-VALUE.
+             ADD W40-120             TO W90-120.
+             MOVE ZERO               TO W40-120.
+           IF W25-VALUE < W40-90
+               SUBTRACT W25-VALUE    FROM W40-90
                ADD W25-VALUE         TO W90-90
                GO TO DEBTOR-TRAN-EXIT.
-             SUBTRACT DEB-90         FROM W25-VALUE.
-             ADD DEB-90              TO W90-90.
-             MOVE ZERO               TO DEB-90.
-           IF W25-VALUE < DEB-60
-               SUBTRACT W25-VALUE    FROM DEB-60
+             SUBTRACT W40-90         FROM W25-VALUE.
+             ADD W40-90              TO W90-90.
+             MOVE ZERO               TO W40-90.
+           IF W25-VALUE < W40-60
+               SUBTRACT W25-VALUE    FROM W40-60
                ADD W25-VALUE         TO W90-60
                GO TO DEBTOR-TRAN-EXIT.
-             SUBTRACT DEB-60         FROM W25-VALUE.
-             ADD DEB-60              TO W90-60.
-             MOVE ZERO               TO DEB-60.
-           IF W25-VALUE < DEB-30
-               SUBTRACT W25-VALUE    FROM DEB-30
+             SUBTRACT W40-60         FROM W25-VALUE.
+             ADD W40-60              TO W90-60.
+             MOVE ZERO               TO W40-60.
+           IF W25-VALUE < W40-30
+               SUBTRACT W25-VALUE    FROM W40-30
                ADD W25-VALUE         TO W90-30
                GO TO DEBTOR-TRAN-EXIT.
-             SUBTRACT DEB-30         FROM W25-VALUE.
-             ADD DEB-30              TO W90-30.
-             MOVE ZERO               TO DEB-30.
-           IF W25-VALUE < DEB-CUR
-               SUBTRACT W25-VALUE    FROM DEB-CUR
+             SUBTRACT W40-30         FROM W25-VALUE.
+             ADD W40-30              TO W90-30.
+             MOVE ZERO               TO W40-30.
+           IF W25-VALUE < W40-CUR
+               SUBTRACT W25-VALUE    FROM W40-CUR
                ADD W25-VALUE         TO W90-CUR
                GO TO DEBTOR-TRAN-EXIT.
-             SUBTRACT DEB-CUR        FROM W25-VALUE.
-             ADD DEB-CUR             TO W90-CUR.
-             MOVE ZERO               TO DEB-CUR.
+             SUBTRACT W40-CUR        FROM W25-VALUE.
+             ADD W40-CUR             TO W90-CUR.
+             MOVE ZERO               TO W40-CUR.
            IF W90-CODE = 02
-               IF W25-VALUE < DEB-INT
-                   SUBTRACT W25-VALUE  FROM DEB-INT
+               IF W25-VALUE < W40-INTEREST
+                   SUBTRACT W25-VALUE  FROM W40-INTEREST
                    ADD W25-VALUE     TO W90-INT
                    GO TO DEBTOR-TRAN-EXIT
                ELSE
-                   ADD DEB-INT       TO W90-INT
-                   MOVE ZERO         TO DEB-INT.
+                   ADD W40-INTEREST  TO W90-INT
+                   MOVE ZERO         TO W40-INTEREST.
 
        DEBTOR-TRAN-EXIT.
              EXIT.
@@ -1398,14 +1374,7 @@
              MOVE ZERO               TO W90-DB W90-CR.
 
        DA15.
-             DISPLAY "F1"                 AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     "=Help,"                     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F2"                         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to do Debtor Lookup "      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F9"                         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " Debtor Lookup (Any Word)," WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "Esc"                        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to exit"                   WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             DISPLAY S-ACT-LUP.
              ACCEPT S36 AT 0819.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
@@ -1442,10 +1411,6 @@
                MOVE WS-ERR1          TO WS-ERR-MES
                PERFORM ERROR-MESSAGE
                GO TO DA15.
-      *
-      *    ****    Move the Debtor Record to working storage area
-      *
-             MOVE DEB-RECORD1        TO W40-DEBTREC.
       *    *************************************************************
       *    ****         T E S T   F O R   I N D I V I D U A L       ****
       *    *************************************************************
@@ -1455,12 +1420,12 @@
            ELSE
                MOVE W40-NAME         TO W40-DSP-NAME.
              DISPLAY W40-DSP-NAME AT 0839 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
-             MOVE DEB-BAL            TO W100-BAL.
+             MOVE W40-BAL            TO W100-BAL.
              DISPLAY W100-BAL AT 0939 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
              PERFORM CHECK-CORRECT.
            IF WS-OPTION = "N"
                GO TO DA10.
-             MOVE DEB-ACNO           TO W15-ACCNO.
+             MOVE W40-ACNO           TO W15-ACCNO.
              DISPLAY "Esc"      AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
                      " to exit"         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
       *    *************************************************************
@@ -1529,8 +1494,8 @@
              MOVE 8                  TO SHADE-LINES.
              DISPLAY S10.
              PERFORM SCREEN-SHADOW.
-             DISPLAY "Press any key to continue" AT 5050 WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Cyan.
-             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             MOVE "P R E S S"        TO WS-DSP-MES.
+             PERFORM DISPLAY-MESSAGE.
              PERFORM RESTORE-SCREEN-3.
 
        DA21E.
@@ -1624,10 +1589,10 @@
                MOVE SPACES           TO W40-TEL W40-CONTACT
                GO TO DA53.
              MOVE W40-DSP-NAME       TO W40-CONTACT.
-           IF DEB-TYPE = 1
-               MOVE DEB-H-TEL        TO W40-TEL
+           IF W40-TYPE = 1
+               MOVE W40-H-TEL        TO W40-TEL
            ELSE
-               MOVE DEB-B-TEL        TO W40-TEL.
+               MOVE W40-B-TEL        TO W40-TEL.
       *    *************************************************************
       *                     C U S T O M E R   N A M E
       *    *************************************************************
@@ -1687,6 +1652,11 @@
                ELSE
                IF WS-ALLOCATE = "A"
                    PERFORM ALLOCATE-CREDIT
+                   IF W40-RESULT = X"EC"
+                   
+      *             ABORT ALLOCATION
+                   
+                   
                ELSE
                    DISPLAY S08A
                    MOVE 19           TO CLIN
@@ -1721,9 +1691,6 @@
                EVALUATE KEY-CODE-1
                  WHEN ESC-KEY      MOVE "X"  TO WS-OPTION
                END-EVALUATE.
-             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
-           IF NOT(WS-OPTION = "A" OR "M" OR "X")
-               GO TO DA54C.
              MOVE WS-OPTION          TO WS-ALLOCATE.
 
        DA54-EXIT.
@@ -1732,11 +1699,8 @@
        DA55.
              MOVE "Short paid - REKEY 'P'ayment or 'R'eceipt amount" TO WS-ERR-MES.
              MOVE "P"                TO WS-OPTION.
-
-       DA56.
-             PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-           IF NOT(WS-OPTION = "P" OR "R")
-               GO TO DA55.
+             MOVE "c"                TO WS-INSTR.
+             PERFORM OPT-MESSAGE.
            IF WS-OPTION = "P"
                MOVE ZERO TO W90-PMT
                GO TO DA25.
@@ -1745,9 +1709,8 @@
        DA58.
              MOVE "Print a receipt Y/N?  [Y]" TO WS-ERR-MES.
              MOVE "Y"                TO WS-OPTION.
+             MOVE "1"                TO WS-INSTR.
              PERFORM OPT-MESSAGE.
-           IF NOT(WS-OPTION = "Y" OR "N")
-               GO TO DA58.
              MOVE WS-OPTION          TO WS-CSLIP.
              MOVE 02                 TO W90-CODE.
              PERFORM GET-DEBTOR-TRAN THRU GET-DEBTOR-TRAN-EXIT.
@@ -1767,19 +1730,19 @@
                PERFORM GET-DEBTOR-TRAN THRU GET-DEBTOR-TRAN-EXIT
                PERFORM AY01 THRU AY59
                MOVE ZERO             TO W90-VAT(1) W90-VAL
-               IF NOT(DEB-INV-TYPE = "X")
+               IF NOT(W40-INV-TYPE = "X")
                    MOVE W05-VAT(1)   TO W05-RATE
                    COMPUTE W90-VAT(1) ROUNDED = ((W90-DISCOUNT / (100.000 + W05-RATE)) * W05-RATE)
                    SUBTRACT W90-VAT(1) FROM W90-DISCOUNT GIVING W90-VAL
                END-IF
                PERFORM GENERATE-DEBTOR-TRAN
                ADD W90-PMT           TO W90-CR.
-               MOVE W90-CR           TO W25-VALUE.
+             MOVE W90-CR             TO W25-VALUE.
            IF OPEN-ITEM
-               SUBTRACT W90-CR       FROM DEB-BAL
+               SUBTRACT W90-CR       FROM W40-BAL
                GO TO DA65B.
              PERFORM SAVE-SCREEN-3.
-             COMPUTE W40-ONE = DEB-BAL - (DEB-CUR + DEB-30 + DEB-60 + DEB-90 + DEB-120 + DEB-INT).
+             COMPUTE W40-ONE = W40-BAL - (W40-CUR + W40-30 + W40-60 + W40-90 + W40-120 + W40-INTEREST).
              MOVE 13                 TO SHADE-ROW.
              MOVE 13                 TO SHADE-COL.
              MOVE 35                 TO SHADE-WIDTH.
@@ -1790,7 +1753,7 @@
              MOVE SPACE              TO WS-OPTION.
              MOVE "1"                TO WS-INSTR.
              PERFORM OPT-MESSAGE.
-             MOVE ZERO               TO W40-MTD W40-CUR W40-30 W40-60 W40-120 W40-INT W40-90.
+             MOVE ZERO               TO W40-MTD W40-CURW W40-30W W40-60W W40-90W W40-120W W40-INT.
            IF WS-OPTION = "N"
                PERFORM RESTORE-SCREEN-3
                PERFORM DEBTOR-CREDITS THRU DEBTOR-TRAN-EXIT
@@ -1817,7 +1780,7 @@
                GO TO DA60C.
            IF W40-MTD NOT = ZERO
                IF W40-MTD > W40-ONE
-                   IF W40-MTD < DEB-BAL
+                   IF W40-MTD < W40-BAL
                        PERFORM DA60I
                        GO TO DA60C.
              SUBTRACT W40-MTD        FROM W25-VALUE.
@@ -1827,73 +1790,73 @@
 
        DA60D.
              ACCEPT S30 AT 1634.
-           IF W40-CUR > W25-VALUE
+           IF W40-CURW > W25-VALUE
                PERFORM DA60H
                GO TO DA60D.
-           IF W40-CUR NOT = ZERO
-               IF W40-CUR > DEB-CUR
+           IF W40-CURW NOT = ZERO
+               IF W40-CURW > W40-CUR
                    PERFORM DA60I
                    GO TO DA60D.
-             SUBTRACT W40-CUR        FROM W25-VALUE.
+             SUBTRACT W40-CURW       FROM W25-VALUE.
              PERFORM DA60B.
            IF W25-VALUE = ZERO
                GO TO DA60J.
 
        DA60E.
              ACCEPT S31 AT 1734.
-           IF W40-30 > W25-VALUE
+           IF W40-30W > W25-VALUE
                PERFORM DA60H
                GO TO DA60E.
-           IF W40-30 > DEB-30
+           IF W40-30W > W40-30
                PERFORM DA60I
                GO TO DA60E.
-             SUBTRACT W40-30         FROM W25-VALUE.
+             SUBTRACT W40-30W        FROM W25-VALUE.
              PERFORM DA60B.
            IF W25-VALUE = ZERO
                GO TO DA60J.
 
        DA60F.
              ACCEPT S32 AT 1834.
-           IF W40-60 > W25-VALUE
+           IF W40-60W > W25-VALUE
                PERFORM DA60H
                GO TO DA60F.
-           IF W40-60 > DEB-60
+           IF W40-60W > W40-60
                PERFORM DA60I
                GO TO DA60F.
-             SUBTRACT W40-60         FROM W25-VALUE.
+             SUBTRACT W40-60W        FROM W25-VALUE.
              PERFORM DA60B.
            IF W25-VALUE = ZERO
                GO TO DA60J.
 
        DA60G.
              ACCEPT S33 AT 1934.
-           IF W40-90 > W25-VALUE
+           IF W40-90W > W25-VALUE
                PERFORM DA60H
                GO TO DA60G.
-           IF W40-90 > DEB-90
+           IF W40-90W > W40-90
                PERFORM DA60I
                GO TO DA60G.
-             SUBTRACT W40-90         FROM W25-VALUE.
+             SUBTRACT W40-90W        FROM W25-VALUE.
              PERFORM DA60B.
            IF W25-VALUE = ZERO
                GO TO DA60J.
 
        DA60GA.
              ACCEPT S34 AT 2034.
-           IF W40-120 > W25-VALUE
+           IF W40-120W > W25-VALUE
                PERFORM DA60H
                GO TO DA60GA.
-           IF W40-120 > DEB-120
+           IF W40-120W > W40-120
                PERFORM DA60I
                GO TO DA60G.
-             SUBTRACT W40-120        FROM W25-VALUE.
+             SUBTRACT W40-120W       FROM W25-VALUE.
              PERFORM DA60B.
            IF W25-VALUE = ZERO
                GO TO DA60J.
-           IF W25-VALUE NOT > DEB-INT
+           IF W25-VALUE NOT > W40-INTEREST
                MOVE W25-VALUE        TO W40-INT
            ELSE
-               MOVE DEB-INT          TO W40-INT.
+               MOVE W40-INTEREST     TO W40-INT.
              MOVE W40-INT            TO W95-B.
              DISPLAY W95-V2 AT 2134 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
              SUBTRACT W40-INT        FROM W25-VALUE.
@@ -1906,7 +1869,7 @@
            IF WS-OPTION = "A"
                PERFORM DEBTOR-CREDITS THRU DEBTOR-TRAN-EXIT
                GO TO DA65B.
-             MOVE ZERO               TO W40-CUR W40-30 W40-60 W40-90 W40-120 W40-INT.
+             MOVE ZERO               TO W40-CURW W40-30W W40-60W W40-90W W40-120W W40-INT.
              MOVE W90-CR             TO W25-VALUE.
              GO TO DA60AB.
 
@@ -1922,28 +1885,28 @@
              PERFORM CHECK-CORRECT.
            IF WS-OPTION = "N"
                MOVE W90-CR           TO W25-VALUE
-               MOVE ZERO             TO W40-CUR W40-30 W40-60 W40-INT W40-90 W40-120
+               MOVE ZERO             TO W40-CURW W40-30W W40-60W W40-90W W40-120W W40-INT
                GO TO DA60AB.
-             SUBTRACT W40-30         FROM DEB-30.
-             SUBTRACT W40-60         FROM DEB-60.
-             SUBTRACT W40-90         FROM DEB-90.
-             SUBTRACT W40-120        FROM DEB-120.
-             SUBTRACT W40-INT        FROM DEB-INT.
-             SUBTRACT W90-CR         FROM DEB-BAL.
-             ADD W40-30              TO W90-30.
-             ADD W40-60              TO W90-60.
-             ADD W40-90              TO W90-90.
-             ADD W40-120             TO W90-120.
+             SUBTRACT W40-30W        FROM W40-30.
+             SUBTRACT W40-60W        FROM W40-60.
+             SUBTRACT W40-90W        FROM W40-90.
+             SUBTRACT W40-120W       FROM W40-120.
+             SUBTRACT W40-INT        FROM W40-INTEREST.
+             SUBTRACT W90-CR         FROM W40-BAL.
+             ADD W40-30W             TO W90-30.
+             ADD W40-60W             TO W90-60.
+             ADD W40-90W             TO W90-90.
+             ADD W40-120W            TO W90-120.
              ADD W40-INT             TO W90-INT.
-           IF W40-CUR < DEB-CUR
-               SUBTRACT W40-CUR      FROM DEB-CUR
-               ADD W40-CUR           TO W90-CUR
+           IF W40-CURW < W40-CUR
+               SUBTRACT W40-CURW     FROM W40-CUR
+               ADD W40-CURW          TO W90-CUR
            ELSE
-               ADD DEB-CUR           TO W90-CUR
-               MOVE ZERO             TO DEB-CUR.
+               ADD W40-CUR           TO W90-CUR
+               MOVE ZERO             TO W40-CUR.
              PERFORM RESTORE-SCREEN-3.
        DA65B.
-             ADD 121 DEB-CAT         GIVING W90-RESULT.
+             ADD 121 W40-CAT         GIVING W90-RESULT.
              DIVIDE W90-RESULT BY 2  GIVING W90-CATKEY REMAINDER W90-CS.
              ADD 1                   TO W90-CS.
              MOVE W90-CATKEY         TO WS-PARKEY.
@@ -1995,7 +1958,7 @@
                MOVE W15-L13          TO CSH-DATA
                WRITE CSH-L.
              MOVE "Outstanding Balance" TO W15-REMK.
-             MOVE DEB-BAL            TO W15-VAL.
+             MOVE W40-BAL            TO W15-VAL.
              MOVE W15-L13            TO CSH-DATA.
              WRITE CSH-L.
              MOVE SPACE              TO CSH-DATA.
@@ -2043,6 +2006,10 @@
            IF OPEN-ITEM
                PERFORM DA80 THRU DA90
                CLOSE DEBTRN.
+      *
+      *    ****    Move the working storage area to Debtor Record 
+      *
+             MOVE W40-DEBTREC        TO DEB-RECORD1.
              PERFORM REWRITE-DEBTOR THRU WRITE-DEBTOR-EXIT.
              ADD 150 WS-DRAW         GIVING WS-PARKEY.
              PERFORM AY01 THRU AY59.
@@ -2078,7 +2045,7 @@
              MOVE LOW-VALUES         TO AUD-REC1.
              PERFORM AY16 THRU AY59.
              MOVE 11                 TO AUD-TYPE
-             MOVE DEB-ACNO           TO AUD-AC.
+             MOVE W40-ACNO           TO AUD-AC.
              MOVE WS-DRAW            TO AUD-SUB.
              MOVE W90-REF            TO AUD-REF.
              MOVE W90-PMT            TO AUD-VAL.
@@ -2089,7 +2056,7 @@
       *    ****   L O G   D E T A I L S   T O   R E C E I P T   F I L E
       *    *************************************************************
              MOVE W22-DTE1           TO RCT-DATE.
-             MOVE DEB-ACNO           TO RCT-AC.
+             MOVE W40-ACNO           TO RCT-AC.
              MOVE W90-REF            TO RCT-REF.
              MOVE ZERO               TO RCT-REF-EXT.
              MOVE W40-DSP-NAME       TO RCT-NAME.
@@ -2146,7 +2113,10 @@
                CLOSE PRNREP
                GO TO DA999.
              GO TO DA00.
-
+      *
+      *    ***  Update Debtor transactions that have had payments/
+      *         credits allocated.
+      *
        DA80.
            IF W75-KEY < WS-DBTKEY
                GO TO DA90.
@@ -2162,28 +2132,21 @@
            ELSE
                MOVE "P"              TO DBT-TYPE.
            IF DBT-CODE = 17
-               SUBTRACT DBT-ALLOC    FROM DEB-INT
+               SUBTRACT DBT-ALLOC    FROM W40-INTEREST
                ADD DBT-ALLOC         TO W90-INT
            ELSE
-           IF DBT-AGE = 5
-               SUBTRACT DBT-ALLOC    FROM DEB-120
-               ADD DBT-ALLOC         TO W90-120
-           ELSE
-           IF DBT-AGE = 4
-               SUBTRACT DBT-ALLOC    FROM DEB-90
-               ADD DBT-ALLOC         TO W90-90
-           ELSE
-           IF DBT-AGE = 3
-               SUBTRACT DBT-ALLOC    FROM DEB-60
-               ADD DBT-ALLOC         TO W90-60
-           ELSE
-           IF DBT-AGE = 2
-               SUBTRACT DBT-ALLOC    FROM DEB-30
-               ADD DBT-ALLOC         TO W90-30
-           ELSE
-           IF DBT-AGE = 1
-               SUBTRACT DBT-ALLOC    FROM DEB-CUR
-               ADD DBT-ALLOC         TO W90-CUR.
+               EVALUATE DBT-AGE
+                 WHEN 5  SUBTRACT DBT-ALLOC  FROM W40-120
+                         ADD DBT-ALLOC       TO   W90-120
+                 WHEN 4  SUBTRACT DBT-ALLOC  FROM W40-90
+                         ADD DBT-ALLOC       TO   W90-90
+                 WHEN 3  SUBTRACT DBT-ALLOC  FROM W40-60
+                         ADD DBT-ALLOC       TO   W90-60
+                 WHEN 2  SUBTRACT DBT-ALLOC  FROM W40-30
+                         ADD DBT-ALLOC       TO   W90-30
+                 WHEN 1  SUBTRACT DBT-ALLOC  FROM W40-CUR
+                         ADD DBT-ALLOC       TO   W90-CUR
+               END-EVALUATE.
              MOVE DBT-TRA            TO TRA-RECORD1.
              MOVE W90-REF            TO TRA-REC.
              PERFORM REWRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
@@ -2194,10 +2157,11 @@
 
        DA90.
              EXIT.
+
        DA999.
              EXIT.
       *    *************************************************************
-      *   I N I T I A L I S E   P R O G R A M
+      *                I N I T I A L I S E   P R O G R A M
       *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.

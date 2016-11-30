@@ -13,7 +13,7 @@
       *                                            1         2         3         4         5         6         7         8
       *                                   12345678901234567890123456789012345678901234567890123456789012345678901234567890
       *                                                                                  dd/mm/yyyy       HH:MM:SS
-             05  LINE  1 COLUMN  1 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´          ÃÄÄÄÄÄ´        ÃÄÄÄÄÄÄ¿".
+             05  LINE  1 COLUMN  1 VALUE "Ú´              ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´          ÃÄÄÄÄÄ´        ÃÄÄÄÄÄÄ¿".
              05  LINE  2 COLUMN  1 VALUE "³                                                                              ³".
              05  LINE  3 COLUMN  1 VALUE "³                                                                              ³".
              05  LINE  4 COLUMN  1 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
@@ -65,7 +65,7 @@
 
            03  CLR-COMPANY-HEAD.
                05  FOREGROUND-COLOR Cyan HIGHLIGHT.
-                   07  LINE  1 COLUMN  2 PIC  X(14)      FROM W05-WORK-STATION.
+                   07  LINE  1 COLUMN  3 PIC  X(14)      FROM W05-WORK-STATION.
                    07          COLUMN 48 PIC  Z9/99/9999 FROM LS-TODAY-DDMMYY FOREGROUND-COLOR Brown HIGHLIGHT.
                    07  CLR-TIME.
                        09      COLUMN 65 PIC  X(08)      FROM W05-HHMMSS      FOREGROUND-COLOR Brown HIGHLIGHT.
@@ -73,6 +73,7 @@
            03  CLR-VERSION-HEAD.
                05  FOREGROUND-COLOR Red HIGHLIGHT.
                    07  LINE  2 COLUMN  2 VALUE "APAC ".
+                   
                    07          COLUMN  7 PIC  X(12)      FROM APAC-SYSTEM.
                    07          COLUMN 21 PIC  X(40)      FROM W05-COMPANY FOREGROUND-COLOR Cyan HIGHLIGHT.
                    07          COLUMN 65 VALUE " Version - ".

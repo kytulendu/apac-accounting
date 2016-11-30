@@ -116,7 +116,7 @@
 
        COPY "DEBDEP.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEBMEM.SL".
 
@@ -156,7 +156,7 @@
 
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
@@ -404,7 +404,7 @@
              MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              MOVE PRG-DEBT-LUP       TO PRG-NAME.
-             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
              END-CALL.
              CANCEL PRG-DEBT-LUP.
@@ -1096,12 +1096,9 @@
              MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 8                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-           IF NOT (PAR-WS-HD = X"00000000000000000000")
-               MOVE PAR-WS-HD        TO WS-WS-HD.
-           IF NOT (PAR-CS-HD = X"00000000000000000000")
-               MOVE PAR-CS-HD        TO WS-CS-HD.
-           IF NOT (PAR-RT-HD = X"00000000000000000000")
-               MOVE PAR-RT-HD        TO WS-RT-HD.
+             MOVE PAR-WS-HD          TO WS-WS-HD.
+             MOVE PAR-CS-HD          TO WS-CS-HD.
+             MOVE PAR-RT-HD          TO WS-RT-HD.
              GO TO ZA999-EXIT.
 
        COPY "ZA49.PRO".

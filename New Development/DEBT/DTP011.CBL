@@ -15,7 +15,7 @@
       *                                                                *
       *     D E B T O R   P O S T   A R R E A R   I N T E R E S T      *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -81,7 +81,7 @@
 
        COPY "DBTRAN.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEPART.SL".
 
@@ -119,7 +119,7 @@
 
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
@@ -178,7 +178,6 @@
        77  WS-BATCH                PIC  9(06)    COMP-5.
        77  WS-ERR1                 PIC  X(22)           VALUE "Invalid Account Number".
        77  WS-ERR2                 PIC  X(09)           VALUE "No Record".
-       77  WS-A                    PIC  X(19)           VALUE "Any key to continue".
        77  WS-E                    PIC  X(15)           VALUE "**END** - ENTER".
        77  WS-M                    PIC  X(17)           VALUE "New batch (Y/N) ?".
        77  WS-AC                   PIC  X(07)           VALUE "ACCOUNT".
@@ -242,14 +241,14 @@
            03  W00-T-YTDV          PIC S9(09)V99 COMP-3.
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+          03  WS-SYS-ID            PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
-           03  W02-PRINTER           PIC  X(12).
-           03  W02-PGE-LENGTH        PIC  9(03).
-           03  W02-PRN-LENGTH        PIC  9(03).
-           03  W02-LINAGE            PIC  9(03).
-           03  W02-PRN-STATUS        PIC  X(01)    VALUE "C".
+           03  W02-PRINTER         PIC  X(12).
+           03  W02-PGE-LENGTH      PIC  9(03).
+           03  W02-PRN-LENGTH      PIC  9(03).
+           03  W02-LINAGE          PIC  9(03).
+           03  W02-PRN-STATUS      PIC  X(01)    VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -262,83 +261,83 @@
       *            6  =  6 Lines per inch
       *            8  =  8 Lines per inch
       *
-           03  W02-PRN-TYPE          PIC  X(01).
-           03  W02-PRN-LINE          PIC  X(136).
+           03  W02-PRN-TYPE        PIC  X(01).
+           03  W02-PRN-LINE        PIC  X(136).
 
-           03  R-SL1                               REDEFINES W02-PRN-LINE.
-               05  R-SLA             PIC  X(78).
-               05  FILLER            PIC  X(58).
-           03  R-SL2                               REDEFINES W02-PRN-LINE.
-               05  FILLER            PIC  X(58).
-               05  R-SLB             PIC  X(78).
-           03  R-L1                                REDEFINES W02-PRN-LINE.
-               05  R-DET1            PIC  X(136).
-           03  R-L2                                REDEFINES W02-PRN-LINE.
-               05  R-DET2            PIC  X(80).
-           03  R-L3                                REDEFINES W02-PRN-LINE.
-               05  R-DATE            PIC  X(06).
-               05  R-DTE             PIC  Z9/99/9999.
-               05  FILLER            PIC  X(04).
-               05  R-H5              PIC  X(46).
-               05  R-H6              PIC  X(07).
-               05  R-BATCH           PIC  Z(05)9.
-               05  FILLER            PIC  X(07).
-               05  R-PAGE            PIC  X(06).
-               05  R-P-NO            PIC  Z(03)9.
+           03  R-SL1                             REDEFINES W02-PRN-LINE.
+               05  R-SLA           PIC  X(78).
+               05  FILLER          PIC  X(58).
+           03  R-SL2                             REDEFINES W02-PRN-LINE.
+               05  FILLER          PIC  X(58).
+               05  R-SLB           PIC  X(78).
+           03  R-L1                              REDEFINES W02-PRN-LINE.
+               05  R-DET1          PIC  X(136).
+           03  R-L2                              REDEFINES W02-PRN-LINE.
+               05  R-DET2          PIC  X(80).
+           03  R-L3                              REDEFINES W02-PRN-LINE.
+               05  R-DATE          PIC  X(06).
+               05  R-DTE           PIC  Z9/99/9999.
+               05  FILLER          PIC  X(04).
+               05  R-H5            PIC  X(46).
+               05  R-H6            PIC  X(07).
+               05  R-BATCH         PIC  Z(05)9.
+               05  FILLER          PIC  X(07).
+               05  R-PAGE          PIC  X(06).
+               05  R-P-NO          PIC  Z(03)9.
 
-           03  R-L3A                               REDEFINES W02-PRN-LINE.
-               05  FILLER            PIC  X(04).
-               05  R-CO              PIC  X(40).
-               05  FILLER            PIC  X(04).
-           03  R-L4                                REDEFINES W02-PRN-LINE.
-               05  FILLER            PIC  X(11).
-               05  R-H1              PIC  X(04).
-               05  FILLER            PIC  X(06).
-               05  R-H2              PIC  X(15).
-               05  FILLER            PIC  X(06).
-               05  R-H3              PIC  X(15).
-               05  FILLER            PIC  X(06).
-               05  R-H4              PIC  X(06).
-               05  FILLER            PIC  X(11).
-           03  R-L5                                REDEFINES W02-PRN-LINE.
-               05  FILLER            PIC  X(12).
-               05  R-TRAN            PIC  9(02).
-               05  FILLER            PIC  X(09).
-               05  R-ENG             PIC  X(12).
-               05  FILLER            PIC  X(09).
-               05  R-AFR             PIC  X(12).
-               05  FILLER            PIC  X(10).
-               05  R-ACT             PIC  X(01).
-               05  FILLER            PIC  X(13).
-           03  R-L7                                REDEFINES W02-PRN-LINE.
-               05  R-H7              PIC  X(07).
-               05  R-H7A             PIC  X(27).
-               05  R-H8              PIC  X(07).
-               05  R-H10             PIC  X(09).
-               05  R-H11             PIC  X(15).
-               05  R-H12             PIC  X(14).
-               05  R-H13             PIC  X(11).
-               05  R-H14             PIC  X(06).
-           03  R-L8                                REDEFINES W02-PRN-LINE.
-               05  R-TAC             PIC  X(06).
-               05  FILLER            PIC  X(01).
-               05  R-DNME            PIC  X(23).
-               05  FILLER            PIC  X(01).
-               05  R-TDTE            PIC  X(10).
-               05  FILLER            PIC  X(01).
-               05  R-TDESC           PIC  X(07).
-               05  FILLER            PIC  X(01).
-               05  R-TREF            PIC  X(08).
-               05  FILLER            PIC  X(01).
-               05  R-VAL             PIC  Z(07)9.99-.
-               05  FILLER            PIC  X(01).
-               05  R-TAX             PIC  Z(06)9.99-.
-               05  FILLER            PIC  X(01).
-               05  R-TOT             PIC  Z(07)9.99-.
-           03  R-L9                                REDEFINES W02-PRN-LINE.
-               05  FILLER            PIC  X(54).
-               05  R-BTOT            PIC  Z(06)9.99-.
-               05  FILLER            PIC  X(15).
+           03  R-L3A                             REDEFINES W02-PRN-LINE.
+               05  FILLER          PIC  X(04).
+               05  R-CO            PIC  X(40).
+               05  FILLER          PIC  X(04).
+           03  R-L4                              REDEFINES W02-PRN-LINE.
+               05  FILLER          PIC  X(11).
+               05  R-H1            PIC  X(04).
+               05  FILLER          PIC  X(06).
+               05  R-H2            PIC  X(15).
+               05  FILLER          PIC  X(06).
+               05  R-H3            PIC  X(15).
+               05  FILLER          PIC  X(06).
+               05  R-H4            PIC  X(06).
+               05  FILLER          PIC  X(11).
+           03  R-L5                              REDEFINES W02-PRN-LINE.
+               05  FILLER          PIC  X(12).
+               05  R-TRAN          PIC  9(02).
+               05  FILLER          PIC  X(09).
+               05  R-ENG           PIC  X(12).
+               05  FILLER          PIC  X(09).
+               05  R-AFR           PIC  X(12).
+               05  FILLER          PIC  X(10).
+               05  R-ACT           PIC  X(01).
+               05  FILLER          PIC  X(13).
+           03  R-L7                              REDEFINES W02-PRN-LINE.
+               05  R-H7            PIC  X(07).
+               05  R-H7A           PIC  X(27).
+               05  R-H8            PIC  X(07).
+               05  R-H10           PIC  X(09).
+               05  R-H11           PIC  X(15).
+               05  R-H12           PIC  X(14).
+               05  R-H13           PIC  X(11).
+               05  R-H14           PIC  X(06).
+           03  R-L8                              REDEFINES W02-PRN-LINE.
+               05  R-TAC           PIC  X(06).
+               05  FILLER          PIC  X(01).
+               05  R-DNME          PIC  X(23).
+               05  FILLER          PIC  X(01).
+               05  R-TDTE          PIC  X(10).
+               05  FILLER          PIC  X(01).
+               05  R-TDESC         PIC  X(07).
+               05  FILLER          PIC  X(01).
+               05  R-TREF          PIC  X(08).
+               05  FILLER          PIC  X(01).
+               05  R-VAL           PIC  Z(07)9.99-.
+               05  FILLER          PIC  X(01).
+               05  R-TAX           PIC  Z(06)9.99-.
+               05  FILLER          PIC  X(01).
+               05  R-TOT           PIC  Z(07)9.99-.
+           03  R-L9                              REDEFINES W02-PRN-LINE.
+               05  FILLER          PIC  X(54).
+               05  R-BTOT          PIC  Z(06)9.99-.
+               05  FILLER          PIC  X(15).
 
        COPY "W05.VAT".
 
@@ -402,7 +401,7 @@
 
        COPY "FUNCTION.WS".
 
-       COPY "W50.WS".
+      *COPY "W50.WS".
 
        01  W75-KEYS.
            03  W75-S          PIC 9(02) COMP-5.
@@ -416,7 +415,7 @@
 
        01  W80-ACCOUNT.
            03  W80-ACNO        PIC X(06).
-           03  W80-TYPE        PIC 9(01).
+      *    03  W80-TYPE        PIC 9(01).
 
        01  W85-PASS.
            03  W85-SUPER       PIC  X(06)    OCCURS 9.
@@ -515,10 +514,9 @@
        AA49.
              EXIT PROGRAM.
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *           S C R E E N ,   K E Y B O A R D   &   M O U S E
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
@@ -531,30 +529,12 @@
       *    Ё          SHADE-COL   - Left line of box.                  Ё
       *    Ё          SHADE-WIDTH - Width of the box.                  Ё
       *    Ё          SHADE-LINES - Height of box.                     Ё
-      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    Ё                      CHECK-CORRECT                        Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    Ё This routine displays a pop-up window with the message    Ё
-      *    Ё           "Press Y if correct - N if incorrect"           Ё
-      *    Ё                                                           Ё
-      *    Ё The response is returned in WS-OPTION (in upper case).    Ё
-      *    Ё                                                           Ё
-      *    Ё To start with the pop-up window higher or lower than row  Ё
-      *    Ё 20 (default); move another value to WS-MES-LINE.          Ё
-      *    *************************************************************
-      *            T H I S   R O U T I N E   I S   U S E D   T O
-      *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
-      *    *************************************************************
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё  Move the message to WS-DSP-MES and the top line of the   Ё
-      *    Ё  message box to WS-MES-LINE. If WS-MES-LINE is zero the   Ё
-      *    Ё  default will be 20.                                      Ё
-      *    Ё                  PERFORM DISPLAY-MESSAGE                  Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
+       COPY "FUNCTION.SCR".
+
+      *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -562,23 +542,123 @@
       *    Ё line 20) Move the line number which must be used as the   Ё
       *    Ё top line to WS-MES-LINE. The message to be displayed must Ё
       *    Ё be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё                  ERROR-MESSAGE (2 LINES)                  Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё See above for details of the first line and the second    Ё
+      *    Ё line of the message must be in WS-ERR-MES-2.              Ё
+      *    Ё               PERFORM ERROR-MESSAGE-2.                    Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-
-       COPY "FUNCTION.SCR".
 
        COPY "ERROR.SCR".
 
        COPY "LOCKED.REC".
 
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё           ERASE SCREEN FROM SPECIFIED LOCATION            Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё Uses CRT-START as starting line and increases and CRT-END Ё
+      *    Ё as the ending line. The screen is cleared with Column 1   Ё
+      *    Ё and 80 containing "Ё" and columns 2 to 79 containing      Ё
+      *    Ё spaces.                                                   Ё
+      *    Ё                                                           Ё
+      *    Ё  eg.                                                      Ё
+      *    Ё     MOVE 8              TO CRT-START.                     Ё
+      *    Ё     MOVE 28             TO CRT-END.                       Ё
+      *    Ё     PERFORM ERASE-SCREEN.                                 Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё             CLEAR MESSAGE LINE (Line 50)                  Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё                                                           Ё
+      *    Ё     PERFORM CLEAR-L50                                     Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё             CHANGE THE TIME ON THE SCREEN                 Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё                                                           Ё
+      *    Ё     PERFORM CHANGE-TIME.                                  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY "CLEARW.CRT".
+
+      *    
+      *          G E T   D E T A I L S   F O R   A   D E B T O R   
+      *                  T R A N S A C T I O N   C O D E
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё PERFORM THIS ROUTINE WITH THE TRANSACTION CODE IN W90-CODEЁ
+      *    Ё                                                           Ё
+      *    Ё ON EXITING THE TRANSACTION CODE DETAILS ARE IN W00-       Ё
+      *    Ё WHILE W90-TRNKEY CONTAINS THE KEY TO THE PARAMETER FILE   Ё
+      *    Ё WHERE THIS TRANSACTION CODE IS FOUND AND W90-TS IS THE    Ё
+      *    Ё TRANSACTION CODE SUBSCRIPT IN THE RECORD.                 Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "DEBTOR.TRN".
 
+      *
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *                PRINTER SUCH AS OPEN AND PRINT
+      *
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё             PERFORM OPEN-PRINT-FILE                       Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *
+      *         PRINT A LINE, ADVANCE LINE/PAGE, CHANGE STYLE ETC
+      *     The following variables need to be set before calling this
+      *     routine.
+      *     
+      *    COMMAND: C = Close printer
+      *             E = End of report
+      *             O = Open printer
+      *             P = Print a line
+      *             S = Skip to new page
+      *
+      *       WS-COMMAND      PIC  X(01).
+      *
+      *    PRINTER: D = Disk
+      *             S = Screen
+      *             1 = Lpt1
+      *             2 = Lpt2
+      *             3 = Lpt3
+      *             4 = Com1
+      *             5 = Com2
+      *             8 = USB/WINDOWS
+      *
+      *       WS-PRINTER.
+      *         WS-PRINT-NO PIC  9(01).
+      *
+      *    ADVANCE:   0 = Print - No advance
+      *             1-3 = Print advance lines specified
+      *             4-? = Print advance 1 line, then use a loop
+      *                   to advance the remaining lines.
+      *              99 = Print and advance to a new page.
+      *
+      *       WS-ADVANCE      PIC  9(02).
+      *
+      *    REPORT: 1 = Picking Slips
+      *            2 = Invoices/Credit Notes
+      *            3 = General Reports (Stock)
+      *            4 = General Reports (Creditors)
+      *            5 = General Reports (Debtors)
+      *            6 = General Reports (G/Ledger)
+      *            7 = Statements
+      *            8 = Labels
+      *            9 = Quotations
+      *
+      *      WS-REPORT           PIC  9(01).
+      *
+      *      See W02-PRN-TYPE for details of Print style.
+      *
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё               PERFORM CALL-PRINTUTL                       Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+
        COPY "PRINTUTL.AS5".
 
-      *
-      *    ****    READ FILES ROUTINES
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
+      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
+      *    Ё                                                           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -595,9 +675,11 @@
 
        COPY "SHARED.RD".
 
-      *
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
+      *    ЁR E W R I T E   &   W R I T E   F I L E S   R O U T I N E SЁ
+      *    Ё                                                           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -933,7 +1015,7 @@
                GO TO CF12.
              MOVE W90-DB             TO W90-EX.
              MOVE DEB-ACNO           TO W80-ACNO.
-             MOVE DEB-TYPE           TO W80-TYPE.
+      *      MOVE DEB-TYPE           TO W80-TYPE.
       *    *************************************************************
       *    ****         T E S T   F O R   I N D I V I D U A L       ****
       *    *************************************************************
@@ -1091,9 +1173,9 @@
        CG70B.
             PERFORM AY70 THRU AY999.
 
-      *
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.

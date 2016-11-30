@@ -1,4 +1,4 @@
-      $set LINKCOUNT"512"
+      $set LINKCOUNT"512" GNT"STPREAD.GNT"
       ******************************************************************
       *                                                                *
       *    ******  ******** *******  ******   ******   ***   ******    *
@@ -58,112 +58,122 @@
       *             on the Debtor account record.                      *
       *                                                                *
       ******************************************************************
-000010 IDENTIFICATION DIVISION.
-000020 PROGRAM-ID.     STPREAD.
-000030 AUTHOR.         J.W.LEMMON (CSS).
-000040 DATE-WRITTEN.   JANUARY 1982.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.     STPREAD.
+       AUTHOR.         J.W.LEMMON (CSS).
+       DATE-WRITTEN.   JANUARY 1982.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2013
-				     by James William Lemmon.
-				       (Id No. 4412165050082).
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                    by James William Lemmon.
+                      (Id No. 4412165050082).
+                
+                All rights reserved.
+                
+                e-mail jwlemmon@gmail.com.
 
-		   All rights reserved.
+       SECURITY.
+                This program is free software; you can redistribute
+                it and/or modify it under the terms of the GNU General
+                Public License as published by the Free Software
+                Foundation; either version 3 of the License, or (at
+                your option) any later version.
 
-		   e-mail jwlemmon@gmail.com.
+                This program is distributed in the hope that it will
+                be useful, but WITHOUT ANY WARRANTY; without even the
+                implied warranty of MERCHANTABILITY or FITNESS FOR A
+                PARTICULAR PURPOSE. See the GNU General Public License
+                for more details.
 
-000050 SECURITY.
-		   This program is free software; you can redistribute
-		   it and/or modify it under the terms of the GNU General
-		   Public License as published by the Free Software
-		   Foundation; either version 2 of the License, or (at
-		   your option) any later version.
+                You should have received a copy of the GNU General
+                Public License along with this program. If not, see
+                <http://www.gnu.org/licenses/>.
 
-		   This program is distributed in the hope that it will
-		   be useful, but WITHOUT ANY WARRANTY; without even the
-		   implied warranty of MERCHANTABILITY or FITNESS FOR A
-		   PARTICULAR PURPOSE.	See the GNU General Public License
-		   for more details.
+       INSTALLATION.          APAC.
 
-		   You should have received a copy of the GNU General
-		   Public License along with this program; if not, write
-		   to the Free Software Foundation, Inc., 59 Temple Place
-		   - Suite 330, Boston, MA 02111-1307, USA.
-
-000050 ENVIRONMENT DIVISION.
-000060 CONFIGURATION SECTION.
-000070 SPECIAL-NAMES.
-000080                 CURSOR IS CSTART
-000090                 CONSOLE IS CRT
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+                       CURSOR IS CSTART
+                       CONSOLE IS CRT
                        CRT STATUS IS KEY-STATUS.
-000090 INPUT-OUTPUT SECTION.
-000100 FILE-CONTROL.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
 
-000120 COPY "DEPART.SL".
+       COPY "DEPART.SL".
 
-000120 COPY "PARAM.SL".
+       COPY "PARAM.SL".
 
-000140 COPY "STOCK.SL".
+       COPY "STOCK.SL".
 
-000140 COPY "WSTOCK.SL".
+       COPY "WSTOCK.SL".
 
-000250 DATA DIVISION.
-000260 FILE SECTION.
+       DATA DIVISION.
+       FILE SECTION.
 
        COPY "DEPART.FDE".
 
-000280 COPY "PARAM.FDE".
+       COPY "PARAM.FDE".
 
-000300 COPY "STOCK.FDE".
+       COPY "STOCK.FDE".
 
-000300 COPY "WSTOCK.FDE".
+       COPY "WSTOCK.FDE".
 
-      /
-001690 WORKING-STORAGE SECTION.
+      *
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
+      *
+       WORKING-STORAGE SECTION.
        77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-001710 77  WS-S1                     PIC  9(04)    COMP-5.
-001720 77  WS-S2                     PIC  9(04)    COMP-5.
-001730 77  WS-S3                     PIC  9(04)    COMP-5.
-001740 77  WS-S4                     PIC  9(04)    COMP-5.
-001860 77  WS-PARKEY                 PIC  9(06)    COMP-5.
+       77  WS-S1                     PIC  9(04)    COMP-5.
+       77  WS-S2                     PIC  9(04)    COMP-5.
+       77  WS-S3                     PIC  9(04)    COMP-5.
+       77  WS-S4                     PIC  9(04)    COMP-5.
+       77  WS-PARKEY                 PIC  9(06)    COMP-5.
        77  WS-OPTION                 PIC  X(01).
        77  WS-EXT-STK                PIC  X(01).
 
       *    здддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё Used by calling program (WORKING-STORAGE) and called program Ё
-      *    Ё (LINKAGE SECTION) for Main screen layout and headings.	  Ё
+      *    Ё (LINKAGE SECTION) for Main screen layout and headings.   Ё
       *    юдддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        01  CRT-HEADINGS.
       *
       *    TYPE:
-      * 	 C =  Clear comment line (50)
-      *	 E =  Clear lines (any line or lines between 5 and 46)
-      * 	 H =  Change heading
-      * 	 S =  Clear the screen
+      *         C = Clear comment line (50)
+      *         E = Clear lines (any line or lines between 5 and 46)
+      *         H = Change heading
+      *         S = Clear the screen and display headings
       *
-           03  CRT-TYPE              PIC  X(01).
+           03  CRT-TYPE            PIC  X(01).
       *
       *    The following two fields are used for clearing a portion of
       *    the screen. (Start line and end line)
       *
-           03  CRT-START             PIC  9(02).
-           03  CRT-END	             PIC  9(02).
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
       *
       *    Calling Program
       *
-           03  CRT-PROGRAM           PIC  X(15) VALUE "STPREAD".
+           03  CRT-PROGRAM         PIC  X(15) VALUE "STPREAD".
       *
       *    Screen Heading
       *
-           03  CRT-HEADING           PIC  X(40) VALUE "STOCK/INVENTORY READ RECORD".
+           03  CRT-HEADING         PIC  X(40) VALUE "STOCK/INVENTORY READ RECORD".
       *
       *    Company Name
       *
-           03  CRT-COMP              PIC  X(40).
+           03  CRT-COMPANY         PIC  X(40).
       *
       *    WorkStation / Supervisor
       *
-           03  CRT-WRKHD             PIC  X(11).
-           03  CRT-WRKST             PIC  X(03) VALUE "ддд".
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD       PIC  X(11).
+               05  CRT-WRKST       PIC  X(03).
 
        COPY "FUNCTION.WS".
 
@@ -176,8 +186,17 @@
        COPY "W40.WS".
 
 
-003800 COPY "W50.WS".
+       COPY "W50.WS".
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        77  LS-F-ERROR                PIC  9(02) COMP-5.
@@ -186,19 +205,28 @@
        COPY "CHAIN.LS".
 
        01  STOCK-READ.
-000010     03  W02-DEPART            PIC  X(64).
-000010     03  W02-PARAM             PIC  X(64).
-000010     03  W02-STOCKF            PIC  X(64).
-000970     03  W02-WSTOCK            PIC  X(64).
+           03  W02-DEPART            PIC  X(64).
+           03  W02-PARAM             PIC  X(64).
+           03  W02-STOCKF            PIC  X(64).
+           03  W02-WSTOCK            PIC  X(64).
 
        COPY "W10.STK".
 
 
-001230 PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY STOCK-READ W10-STOCK LS-F-ERROR W40-CODE.
-007740 AA000-MAIN	       SECTION.
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
+       PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY STOCK-READ W10-STOCK LS-F-ERROR W40-CODE.
+       AA000-MAIN        SECTION.
        AA00.
              PERFORM SAVE-SCREEN-3.
-007760       PERFORM ZA000-INIT.
+             PERFORM ZA000-INIT.
       *
       *      LS-INSTR:
       *               A = Alternate Code
@@ -206,12 +234,9 @@
       *               X = X-Ref Code
       *
              EVALUATE LS-INSTR
-               WHEN "A"
-                    PERFORM CA100
-               WHEN "I"
-                    PERFORM CA000
-               WHEN "X"
-                    PERFORM CA200
+               WHEN "A"   PERFORM CA100
+               WHEN "I"   PERFORM CA000
+               WHEN "X"   PERFORM CA200
                WHEN OTHER
                     MOVE "Invalid parameter passed to STPREAD" TO WS-ERR-MES
                     PERFORM ERROR-MESSAGE
@@ -224,25 +249,23 @@
              PERFORM RESTORE-SCREEN-3.
 
        AA99.
-	     EXIT PROGRAM.
+             EXIT PROGRAM.
 
-
-      /    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
-      * 	   S C R E E N ,   K E Y B O A R D   &	 M O U S E
-      *    *************************************************************
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё	   SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3    Ё
+      *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
       *    Ё                      SCREEN-SHADOW                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
       *    Ё To routine is used to display a shadow down the right and Ё
       *    Ё along the bottom of a pop-up box. The parameters that are Ё
       *    Ё required:                                                 Ё
-      *    Ё          SHADE-ROW   - Top line of the box + 1.           Ё
-      *    Ё          SHADE-COL   - Left line of box + 2.              Ё
-      *    Ё          SHADE-WIDTH - Width of the box - 2.              Ё
-      *    Ё          SHADE-LINES - Hight of box - 1.                  Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
       *    Ё                      CHECK-CORRECT                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -252,12 +275,18 @@
       *    Ё The response is returned in WS-OPTION (in upper case).    Ё
       *    Ё                                                           Ё
       *    Ё To start with the pop-up window higher or lower than row  Ё
-      *    Ё 13 (default); move another value to SLIN and PERFORM      Ё
-      *    Ё CHECK-SETUP THRU CHECK-EXIT.	                             Ё
-      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
-      * 	       D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
+      *    Ё 20 (default); move another value to WS-MES-LINE.          Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *            T H I S   R O U T I N E   I S   U S E D   T O
+      *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё  Move the message to WS-DSP-MES and the top line of the   Ё
+      *    Ё  message box to WS-MES-LINE. If WS-MES-LINE is zero the   Ё
+      *    Ё  default will be 20.                                      Ё
+      *    Ё                  PERFORM DISPLAY-MESSAGE                  Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      *            D I S P L A Y   E R R O R   M E S S A G E S
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -271,10 +300,12 @@
 
        COPY "LOCKED.RC2".
 
-      /
-      *    ****    READ FILES ROUTINES
-      *
-008180 AC000-READ              SECTION.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
+      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
+      *    Ё                                                           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+       AC000-READ              SECTION.
 
        COPY "DEPART.RD".
 
@@ -287,13 +318,13 @@
       *
       *    ****   G E T   S T O C K   R E C O R D   U S I N G   C O D E
       *
-015170 CA000         SECTION.
-015180 CA00.
-013310       MOVE 18                 TO W50-LENGTH.
+       CA000         SECTION.
+       CA00.
+             MOVE 18                 TO W50-LENGTH.
 
        CA05.
            IF WS-EXT-STK = "Y"
-013320         MOVE W10-EXT-ITEM     TO W50-DATA
+               MOVE W10-EXT-ITEM     TO W50-DATA
            ELSE
                MOVE W10-ITEM         TO W50-DATA
                MOVE W10-ITM          TO W50-ITM.
@@ -305,10 +336,10 @@
                END-IF
                GO TO CA05.
              CALL "CBL_TOUPPER" USING W50-DATA BY VALUE W50-LENGTH RETURNING W50-STATUS.
-013380       MOVE W50-EXT-ITEM       TO W10-EXT-ITEM.
+             MOVE W50-EXT-ITEM       TO W10-EXT-ITEM.
 
        CA06.
-013380       MOVE W50-EXT-ITEM       TO STK-CODE.
+             MOVE W50-EXT-ITEM       TO STK-CODE.
 
        CA10.
              PERFORM READ-STOCK THRU READ-STOCK-EXIT.
@@ -333,16 +364,16 @@
       *    ****   G E T   S T O C K   R E C O R D   U S I N G
       *           A L T E R N A T E   C O D E
       *
-015170 CA100         SECTION.
-015180 CA101.
-013310       MOVE 10                 TO W50-LENGTH.
+       CA100         SECTION.
+       CA101.
+             MOVE 10                 TO W50-LENGTH.
        CA105.
-013320       MOVE W10-ACODE          TO W50-DATA.
+             MOVE W10-ACODE          TO W50-DATA.
            IF W50-1 = SPACE
                MOVE W50-9            TO W10-ACODE
                GO TO CA105.
              CALL "CBL_TOUPPER" USING W50-DATA BY VALUE W50-LENGTH RETURNING W50-STATUS.
-013380       MOVE W50-ACODE          TO STK-ACODE W10-ACODE.
+             MOVE W50-ACODE          TO STK-ACODE W10-ACODE.
        CA110.
              PERFORM START-AT-ALT-CODE THRU READ-STOCK-EXIT.
            IF WS-F-ERROR = 22
@@ -359,28 +390,28 @@
       *
       *    ****   G E T   S T O C K   R E C O R D   U S I N G   X R E F
       *
-015170 CA200         SECTION.
-015180 CA201.
-013310       MOVE 18                 TO W50-LENGTH.
+       CA200         SECTION.
+       CA201.
+             MOVE 18                 TO W50-LENGTH.
 
        CA205.
-013320       MOVE W10-EXT-CODE2      TO W50-DATA.
+             MOVE W10-EXT-CODE2      TO W50-DATA.
            IF W50-1 = SPACE
                MOVE W50-17           TO W10-EXT-CODE2
                GO TO CA205.
              CALL "CBL_TOUPPER" USING W50-DATA BY VALUE W50-LENGTH RETURNING W50-STATUS.
-013380       MOVE W50-EXT-ITEM       TO W10-EXT-CODE2.
+             MOVE W50-EXT-ITEM       TO W10-EXT-CODE2.
 
        CA206.
-013380       MOVE W50-EXT-ITEM       TO STK-XREF.
+             MOVE W50-EXT-ITEM       TO STK-XREF.
 
        CA210.
              PERFORM START-AT-STOCK-XREF THRU READ-STOCK-EXIT.
            IF WS-F-ERROR = 22
                GO TO CA299.
              PERFORM READ-STOCK-NEXT THRU READ-STOCK-EXIT.
-	   IF NOT(STK-XREF = W50-EXT-ITEM)
-	       GO TO CA299.
+    IF NOT(STK-XREF = W50-EXT-ITEM)
+        GO TO CA299.
          IF LS0-INSTR = "W"
              PERFORM CA600
          ELSE
@@ -395,7 +426,7 @@
        CA500         SECTION.
        CA505.
       *
-      * 	 Adjust the average cost for negative or zero quantity
+      *   Adjust the average cost for negative or zero quantity
       *
            IF STK-QUANT < 0.001
                MOVE STK-COST         TO STK-AVGE.
@@ -407,8 +438,8 @@
                    MOVE STK-CSH(W50-S1)  TO STK-WSL(W50-S1)
                ELSE
                    MOVE STK-SL(W50-S1)   TO STK-WSL(W50-S1).
-015630     IF STK-CSH(W50-S1) = ZERO
-015640         MOVE STK-SL(W50-S1)   TO STK-CSH(W50-S1).
+           IF STK-CSH(W50-S1) = ZERO
+               MOVE STK-SL(W50-S1)   TO STK-CSH(W50-S1).
              MOVE STK-SL(W50-S1)     TO W10-SL(W50-S1).
              MOVE STK-CSH(W50-S1)    TO W10-CSH(W50-S1).
              MOVE STK-WSL(W50-S1)    TO W10-WSL(W50-S1).
@@ -424,8 +455,8 @@
            IF STK-PRC = ZERO
                MOVE 1                TO STK-PRC.
 
-015650 CA599.
-015660       EXIT.
+       CA599.
+             EXIT.
 
       *
       *    ****    Calculate the inclusive prices
@@ -433,7 +464,7 @@
        CA600         SECTION.
        CA605.
       *
-      * 	 Adjust the average cost for negative or zero quantity
+      *   Adjust the average cost for negative or zero quantity
       *
            IF STK-QUANT < 0.001
                MOVE STK-COST         TO STK-AVGE.
@@ -442,8 +473,8 @@
                    MOVE STK-CASH     TO STK-WSALE
                ELSE
                    MOVE STK-SELL     TO STK-WSALE.
-015630     IF STK-CASH = ZERO
-015640         MOVE STK-SELL         TO STK-CASH.
+           IF STK-CASH = ZERO
+               MOVE STK-SELL         TO STK-CASH.
              MOVE STK-CASH           TO W10-CASH.
              MOVE STK-SELL           TO W10-SELL.
              MOVE STK-WSALE          TO W10-WSALE.
@@ -465,30 +496,30 @@
                MOVE ZERO             TO WST-QUANT.
              MOVE ZERO               TO WS-F-ERROR.
 
-015650 CA699.
-015660       EXIT.
+       CA699.
+             EXIT.
 
       /
-044130 ZA000-INIT	       SECTION.
-044140 ZA000-OPEN.
+       ZA000-INIT        SECTION.
+       ZA000-OPEN.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё  Setup various keys and the mouse for use with menus and  Ё
       *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
-	     COPY "FUNCTION.PRO".
+      COPY "FUNCTION.PRO".
 
        ZA00A.
            IF LS-USER = LS-SYS-ID
                MOVE "Supervisorд"    TO CRT-WRKHD
            ELSE
                MOVE "Workstation"    TO CRT-WRKHD
-               MOVE LS-USER	       TO CRT-WRKST.
+               MOVE LS-USER        TO CRT-WRKST.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё             Get VAT rates and rounding details.           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-042520       MOVE 5                  TO WS-PARKEY.
-042550       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             MOVE 5                  TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-ROUND          TO W05-ROUND.
              MOVE PAR-ROUND-VAL      TO W05-ROUND-VAL.
            IF W05-ROUND-VAL > 0.01
@@ -512,21 +543,21 @@
                ADD 1                 TO W05-V-RATE
                GO TO ZA05-VAT.
 
-044870 ZA999-EXIT.
-044880       EXIT.
+       ZA999-EXIT.
+             EXIT.
       /
-044890 ZB000-ERROR	       SECTION.
+       ZB000-ERROR        SECTION.
 
        COPY "ERRORS.PRO".
 
-041560 DISPLAY-FILE-NAME.
-041850     IF WS-F-ERROR = 15
-041860         MOVE W02-PARAM        TO WS-FILE
-041870         MOVE WS-PARKEY        TO WS-KEY
-041840     ELSE
-041850     IF WS-F-ERROR = 22
-041860         MOVE W02-STOCKF       TO WS-FILE
-041870         MOVE ZERO             TO WS-KEY
+       DISPLAY-FILE-NAME.
+           IF WS-F-ERROR = 15
+               MOVE W02-PARAM        TO WS-FILE
+               MOVE WS-PARKEY        TO WS-KEY
+           ELSE
+           IF WS-F-ERROR = 22
+               MOVE W02-STOCKF       TO WS-FILE
+               MOVE ZERO             TO WS-KEY
                MOVE STK-CODE         TO WS-KEYX.
 
        COPY "DISPERR.PRO".

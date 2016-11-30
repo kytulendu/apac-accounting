@@ -18,6 +18,7 @@
            03  WS-USUB             PIC  9(04) COMP-5.
            03  WS-DRAW             PIC  9(02) VALUE 0.
            03  WS-CSS              PIC  X(01) VALUE "N".
+           03  WS-CLR              PIC  X(01)         REDEFINES WS-CSS.
            03  WS-OK               PIC  X(01) VALUE "N".
            03  WS-RET              PIC  X(01) VALUE " ".
            03  TODAY-DDMMYY        PIC  9(08) COMP-5.

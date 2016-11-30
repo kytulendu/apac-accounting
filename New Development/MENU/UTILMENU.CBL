@@ -13,7 +13,7 @@
       *                                                                *
       *     U T I L I T I E S   M E N U   P R O G R A M                *
       *                                                                *
-      *   Version 9.00.70 - March 2015                                 *
+      *    Version 9.04.01 - May 2016                                  *
       *                                                                *
       ******************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -97,13 +97,29 @@
 
        COPY "TXTRAN.SL".
 
-      /
        DATA DIVISION.
+      *
+      *          ********  ********  **        ******** 
+      *          **           **     **        **
+      *          **           **     **        ** 
+      *          *****        **     **        *****
+      *          **           **     **        **  
+      *          **           **     **        **
+      *          **        ********  ********  ********
+      *
        FILE SECTION.
 
        COPY "TXTRAN.FDE".
 
-      /
+      *
+      *         **         **    ******    *******    **    **
+      *         **         **   **    **   **    **   **   **
+      *         **    *    **   **    **   **   **    **  **
+      *         **   ***   **   **    **   ******     *****
+      *          ** ** ** **    **    **   **   **    **  **
+      *           ***   ***     **    **   **    **   **   **
+      *            *     *       ******    **    **   **    **
+      *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
        77  WS-S1    PIC 9(04)  COMP-5.
@@ -150,24 +166,9 @@
       *
       *    WorkStation / Supervisor
       *
-           03  CRT-WRKHD             PIC  X(11).
-           03  CRT-WRKST             PIC  X(03) VALUE "ÄÄÄ".
-
-       01  WS-CRT-LINES.
-           03  WS-TOP-LNE2.
-               05  WS-TCR      PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-               05  FILLER      PIC  X(23).
-               05  WS-WRKHD    PIC  X(11).
-               05  FILLER      PIC  X(01).
-               05  WS-WRKST    PIC  X(03).
-               05  FILLER      PIC  X(01).
-           03  WS-MID-LNE2.
-               05  FILLER      PIC  X(01) VALUE "³".
-               05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-               05  FILLER      PIC  X(01) VALUE "³".
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD         PIC  X(11).
+               05  CRT-WRKST         PIC  X(03).
 
        COPY "WS.WS".
 
@@ -222,255 +223,187 @@
 
        COPY "W50.WS".
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
        COPY "FILE.IDS".
 
-      /
+      *
+      *   ******    ******   *******   ********  ********  **     **
+      *  **    **  **    **  **    **  **        **        ***    **
+      *  **        **        **    **  **        **        ** *   **
+      *   ******   **        ******    *****     *****     **  *  **
+      *        **  **        **   **   **        **        **   * **
+      *  **    **  **    **  **    **  **        **        **    ***
+      *   ******    ******   **    **  ********  ********  **     **
+      *
        SCREEN SECTION.
 
        COPY "MENUINST.CRT".
 
        01  S02.
-           03  BACKGROUND-COLOR Green FOREGROUND-COLOR Green.
-               05  LINE  8 COLUMN  7 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                         HIGHLIGHT.
-               05          COLUMN 28 VALUE                      "¿" FOREGROUND-COLOR Black.
-               05  LINE  9 COLUMN  7 VALUE "³  "                                           HIGHLIGHT.
-               05          COLUMN 10 VALUE    "UTILITY CONTROL"     FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 25 VALUE                   "   ³" FOREGROUND-COLOR Black.
-               05  LINE 10 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN  9 VALUE   "1"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 10 VALUE    " Parameters       ³" FOREGROUND-COLOR Black.
-               05  LINE 11 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN  9 VALUE   "2"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 10 VALUE    " Rebuild Files    ³" FOREGROUND-COLOR Black.
-               05  LINE 12 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN  9 VALUE   "3"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 10 VALUE    " Delivery Routes  ³" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN  9 VALUE   "4"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 10 VALUE    " Clear USER Log   ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN  9 VALUE   "5"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 10 VALUE    " Clear Values     ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN  9 VALUE   "6"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 10 VALUE    " Purge Cardex File³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN  7 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN  9 VALUE   "0"                    FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 10 VALUE    " Exit             ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN  7 VALUE "À"                                             HIGHLIGHT.
-               05          COLUMN  8 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Green FOREGROUND-COLOR Black.
+               05  LINE  8 COLUMN  7 VALUE "                     ".
+               05  LINE  9 COLUMN  7 VALUE "   UTILITY CONTROL   " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 10 COLUMN  7 VALUE " 1"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN  9 VALUE   " Parameters        ".
+               05  LINE 11 COLUMN  7 VALUE " 2"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN  9 VALUE   " Rebuild Files     ".
+               05  LINE 12 COLUMN  7 VALUE " 3"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN  9 VALUE   " Delivery Routes   ".
+               05  LINE 13 COLUMN  7 VALUE " 4"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN  9 VALUE   " Clear USER Log    ".
+               05  LINE 14 COLUMN  7 VALUE " 5"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN  9 VALUE   " Clear Values      ".
+               05  LINE 15 COLUMN  7 VALUE " 6"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN  9 VALUE   " Purge Cardex File ".
+               05  LINE 16 COLUMN  7 VALUE " 0"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN  9 VALUE   " Exit              ".
+               05  LINE 17 COLUMN  7 VALUE "                     ".
 
        01  S03.
-           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
-               05  LINE 10 COLUMN 26 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 45 VALUE                    "¿" FOREGROUND-COLOR Black.
-               05  LINE 11 COLUMN 26 VALUE "³  "                                         HIGHLIGHT.
-               05          COLUMN 29 VALUE    "REBUILD FILES"     FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 42 VALUE                 "   ³" FOREGROUND-COLOR Black.
-               05  LINE 12 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 28 VALUE   "1"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Creditors      ³" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 28 VALUE   "2"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Debtors        ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 28 VALUE   "3"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 29 VALUE    " General Ledger ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 28 VALUE   "4"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Job Costing    ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 28 VALUE   "5"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Stock          ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 28 VALUE   "6"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Sundry         ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 26 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 28 VALUE   "0"                  FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 26 VALUE "À"                                           HIGHLIGHT.
-               05          COLUMN 27 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
+               05  LINE 10 COLUMN 26 VALUE "                  ".
+               05  LINE 11 COLUMN 26 VALUE "  REBUILD FILES   " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 12 COLUMN 26 VALUE " 1"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Creditors      ".
+               05  LINE 13 COLUMN 26 VALUE " 2"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Debtors        ".
+               05  LINE 14 COLUMN 26 VALUE " 3"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " General Ledger ".
+               05  LINE 15 COLUMN 26 VALUE " 4"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Job Costing    ".
+               05  LINE 16 COLUMN 26 VALUE " 5"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Stock          ".
+               05  LINE 17 COLUMN 26 VALUE " 6"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Sundry         ".
+               05  LINE 18 COLUMN 26 VALUE " 0"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Exit           ".
+               05  LINE 19 COLUMN 26 VALUE "                  ".
 
        01  S04.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                         HIGHLIGHT.
-               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 44 VALUE "³  "                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    "CREDITOR FILES"                           HIGHLIGHT.
-               05          COLUMN 61 VALUE                  "  ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 46 VALUE   "1"                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Account File   ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 46 VALUE   "2"                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Purchase Orders³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 46 VALUE   "3"                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    " PD Cheques     ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 46 VALUE   "4"                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Transactions   ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 46 VALUE   "5"                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Memo/Remarks   ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 46 VALUE   "6"                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Cardex (Purch) ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 44 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 46 VALUE   "0"                                         HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
-               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 44 VALUE "                   ".
+               05  LINE 13 COLUMN 44 VALUE "  CREDITOR FILES   " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 44 VALUE " 1"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Account File    ".
+               05  LINE 15 COLUMN 44 VALUE " 2"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Purchase Orders ".
+               05  LINE 16 COLUMN 44 VALUE " 3"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " PD Cheques      ".
+               05  LINE 17 COLUMN 44 VALUE " 4"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Transactions    ".
+               05  LINE 18 COLUMN 44 VALUE " 5"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Memo/Remarks    ".
+               05  LINE 19 COLUMN 44 VALUE " 6"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Cardex (Purch)  ".
+               05  LINE 20 COLUMN 44 VALUE " 0"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Exit            ".
+               05  LINE 21 COLUMN 44 VALUE "                   ".
 
        01  S05.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 44 VALUE "³   "                                       HIGHLIGHT.
-               05          COLUMN 48 VALUE     "DEBTOR FILES"                           HIGHLIGHT.
-               05          COLUMN 60 VALUE                 "   ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Account File   ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Invoice File   ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Memo/Remarks   ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Sales Orders   ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Transactions   ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "6"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Rec.Transact's ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "7"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " ALT NAME Index ³" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
-               05  LINE 22 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
-               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 44 VALUE "                  ".
+               05  LINE 13 COLUMN 44 VALUE "   DEBTOR FILES   " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 44 VALUE " 1"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Account File   ".
+               05  LINE 15 COLUMN 44 VALUE " 2"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Invoice File   ".
+               05  LINE 16 COLUMN 44 VALUE " 3"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Memo/Remarks   ".
+               05  LINE 17 COLUMN 44 VALUE " 4"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Sales Orders   ".
+               05  LINE 18 COLUMN 44 VALUE " 5"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Transactions   ".
+               05  LINE 19 COLUMN 44 VALUE " 6"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Rec.Transact's ".
+               05  LINE 20 COLUMN 44 VALUE " 7"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " ALT NAME Index ".
+               05  LINE 21 COLUMN 44 VALUE " 0"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Exit           ".
+               05  LINE 22 COLUMN 44 VALUE "                  ".
 
        01  S06.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 44 VALUE "³  "                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    "GENERAL LEDGER"                          HIGHLIGHT.
-               05          COLUMN 61 VALUE                  "  ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Account File   ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Batch File     ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Integration    ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Transactions   ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Cheque Batch   ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
-               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 44 VALUE "                  ".
+               05  LINE 13 COLUMN 44 VALUE "  GENERAL LEDGER  " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 44 VALUE " 1"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Account File   ".
+               05  LINE 15 COLUMN 44 VALUE " 2"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Batch File     ".
+               05  LINE 16 COLUMN 44 VALUE " 3"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Integration    ".
+               05  LINE 17 COLUMN 44 VALUE " 4"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Transactions   ".
+               05  LINE 18 COLUMN 44 VALUE " 5"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Cheque Batch   ".
+               05  LINE 19 COLUMN 44 VALUE " 0"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Exit           ".
+               05  LINE 20 COLUMN 44 VALUE "                  ".
 
        01  S07.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 44 VALUE "³   "                                       HIGHLIGHT.
-               05          COLUMN 48 VALUE     "JOB COSTING"                            HIGHLIGHT.
-               05          COLUMN 59 VALUE                "    ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Job File       ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Job Types      ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Requisitions   ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Rev. Warranty  ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
-               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 44 VALUE "                  ".
+               05  LINE 13 COLUMN 44 VALUE "   JOB COSTING    " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 44 VALUE " 1"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Job File       ".
+               05  LINE 15 COLUMN 44 VALUE " 2"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Job Types      ".
+               05  LINE 16 COLUMN 44 VALUE " 3"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Requisitions   ".
+               05  LINE 17 COLUMN 44 VALUE " 4"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Rev. Warranty  ".
+               05  LINE 18 COLUMN 44 VALUE " 0"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Exit           ".
+               05  LINE 19 COLUMN 44 VALUE "                  ".
 
        01  S08.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 44 VALUE "³   "                                       HIGHLIGHT.
-               05          COLUMN 48 VALUE     "STOCK FILES"                            HIGHLIGHT.
-               05          COLUMN 59 VALUE                "    ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Memo/Remarks   ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Production     ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Stock File     ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Cardex File    ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Warehouse File ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "6"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " W/H Stock File ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
-               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 44 VALUE "                  ".
+               05  LINE 13 COLUMN 44 VALUE "   STOCK FILES    " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 44 VALUE " 1"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Memo/Remarks   ".
+               05  LINE 15 COLUMN 44 VALUE " 2"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Production     ".
+               05  LINE 16 COLUMN 44 VALUE " 3"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Stock File     ".
+               05  LINE 17 COLUMN 44 VALUE " 4"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Cardex File    ".
+               05  LINE 18 COLUMN 44 VALUE " 5"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Warehouse File ".
+               05  LINE 19 COLUMN 44 VALUE " 6"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " W/H Stock File ".
+               05  LINE 20 COLUMN 44 VALUE " 0"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Exit           ".
+               05  LINE 21 COLUMN 44 VALUE "                  ".
 
        01  S09.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 44 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 63 VALUE                    "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 44 VALUE "³  "                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    "SUNDRY FILES"                            HIGHLIGHT.
-               05          COLUMN 59 VALUE                "    ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "1"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Cheques        ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "2"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Guarantees     ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "3"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Tax (VAT)      ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "4"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Cash Slips     ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "5"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Department     ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 44 VALUE "³ "                                         HIGHLIGHT.
-               05          COLUMN 46 VALUE   "0"                                        HIGHLIGHT.
-               05          COLUMN 47 VALUE    " Exit           ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 44 VALUE "À"                                          HIGHLIGHT.
-               05          COLUMN 45 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 44 VALUE "                  ".
+               05  LINE 13 COLUMN 44 VALUE "   SUNDRY FILES   " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 44 VALUE " 1"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Cheques        ".
+               05  LINE 15 COLUMN 44 VALUE " 2"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Guarantees     ".
+               05  LINE 16 COLUMN 44 VALUE " 3"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Tax (VAT)      ".
+               05  LINE 17 COLUMN 44 VALUE " 4"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Cash Slips     ".
+               05  LINE 18 COLUMN 44 VALUE " 5"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Department     ".
+               05  LINE 19 COLUMN 44 VALUE " 0"                 FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 46 VALUE   " Exit           ".
+               05  LINE 20 COLUMN 44 VALUE "                  ".
 
        01  S11.
            03  S11A.
@@ -479,235 +412,162 @@
                05  LINE 23 COLUMN 22 PIC  X(08) USING WS-PASSWORD SECURE AUTO.
 
        01  S12.
-           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
-               05  LINE 10 COLUMN 26 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 49 VALUE                        "¿" FOREGROUND-COLOR Black.
-               05  LINE 11 COLUMN 26 VALUE "³      "                                        HIGHLIGHT.
-               05          COLUMN 33 VALUE        "PARAMETERS"        FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 43 VALUE                  "      ³" FOREGROUND-COLOR Black.
-               05  LINE 12 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "1"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Company/Staff Data ³" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "2"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Transaction Codes  ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "3"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Printer Details    ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "4"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Tax/Int/Disc Rates ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "5"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Account Numbers    ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "6"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Sundry Parameters  ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "7"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Cheque Printing    ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "8"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Inhouse Bar Codes  ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "A"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Bar Code Labels    ³" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "B"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Stock Conv. Factor ³" FOREGROUND-COLOR Black.
-               05  LINE 22 COLUMN 26 VALUE "³ "                                             HIGHLIGHT.
-               05          COLUMN 28 VALUE   "0"                      FOREGROUND-COLOR Grey HIGHLIGHT.
-               05          COLUMN 29 VALUE    " Exit               ³" FOREGROUND-COLOR Black.
-               05  LINE 23 COLUMN 26 VALUE "À"                                              HIGHLIGHT.
-               05          COLUMN 27 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
+               05  LINE 10 COLUMN 26 VALUE "                      ".
+               05  LINE 11 COLUMN 26 VALUE "      PARAMETERS      " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 12 COLUMN 26 VALUE " 1"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Company/Staff Data ".
+               05  LINE 13 COLUMN 26 VALUE " 2"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Transaction Codes  ".
+               05  LINE 14 COLUMN 26 VALUE " 3"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Printer Details    ".
+               05  LINE 15 COLUMN 26 VALUE " 4"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Tax/Int/Disc Rates ".
+               05  LINE 16 COLUMN 26 VALUE " 5"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Account Numbers    ".
+               05  LINE 17 COLUMN 26 VALUE " 6"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Sundry Parameters  ".
+               05  LINE 18 COLUMN 26 VALUE " 7"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Cheque Printing    ".
+               05  LINE 19 COLUMN 26 VALUE " 8"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Inhouse Bar Codes  ".
+               05  LINE 20 COLUMN 26 VALUE " A"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Bar Code Labels    ".
+               05  LINE 21 COLUMN 26 VALUE " B"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Stock Conv. Factor ".
+               05  LINE 22 COLUMN 26 VALUE " 0"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 28 VALUE   " Exit               ".
+               05  LINE 23 COLUMN 26 VALUE "                      ".
 
        01  S13.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 69 VALUE                       "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "COMPANY/STAFF DATA"                          HIGHLIGHT.
-               05          COLUMN 67 VALUE                     "  ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "1"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Company Details   ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "2"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Debtor Categories ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "3"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Sales Ledgers     ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "4"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Sales Staff Data  ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "5"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Technicians Data  ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "6"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Branch Details    ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "7"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Bank Details      ³" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "0"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Exit              ³" FOREGROUND-COLOR Black.
-               05  LINE 22 COLUMN 47 VALUE "À"                                             HIGHLIGHT.
-               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 47 VALUE "                     ".
+               05  LINE 13 COLUMN 47 VALUE " COMPANY/STAFF DATA  " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 47 VALUE " 1"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Company Details   ".
+               05  LINE 15 COLUMN 47 VALUE " 2"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Debtor Categories ".
+               05  LINE 16 COLUMN 47 VALUE " 3"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Sales Ledgers     ".
+               05  LINE 17 COLUMN 47 VALUE " 4"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Sales Staff Data  ".
+               05  LINE 18 COLUMN 47 VALUE " 5"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Technicians Data  ".
+               05  LINE 19 COLUMN 47 VALUE " 6"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Branch Details    ".
+               05  LINE 20 COLUMN 47 VALUE " 7"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Bank Details      ".
+               05  LINE 21 COLUMN 47 VALUE " 0"                    FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Exit              ".
+               05  LINE 22 COLUMN 47 VALUE "                     ".
 
        01  S14.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 67 VALUE                     "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 49 VALUE   "TRANSACTION CODES"                         HIGHLIGHT.
-               05          COLUMN 66 VALUE                    " ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 49 VALUE   "1"                                         HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Creditor Codes  ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 49 VALUE   "2"                                         HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Debtor Codes    ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 49 VALUE   "0"                                         HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Exit            ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 47 VALUE "À"                                           HIGHLIGHT.
-               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 47 VALUE "                   ".
+               05  LINE 13 COLUMN 47 VALUE " TRANSACTION CODES " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 47 VALUE " 1"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Creditor Codes  ".
+               05  LINE 15 COLUMN 47 VALUE " 2"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Debtor Codes    ".
+               05  LINE 16 COLUMN 47 VALUE " 0"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Exit            ".
+               05  LINE 17 COLUMN 47 VALUE "                   ".
 
        01  S15.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 74 VALUE                            "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 47 VALUE "³   "                                               HIGHLIGHT.
-               05          COLUMN 51 VALUE     "PRINTERS/STATIONERY"                            HIGHLIGHT.
-               05          COLUMN 70 VALUE                        "    ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "1"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Printer Specifications ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "2"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Supervisor Printers    ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "3"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Work Station Printers  ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "4"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Cash Slip Headings     ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "5"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Cash Slip/Drawer Cont. ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "6"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Statement/Inv. Formats ³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "7"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Statement/Inv. Heading ³" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "8"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Consol. Statements     ³" FOREGROUND-COLOR Black .
-               05  LINE 22 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "A"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Stm Det. Lines USB/WIN ³" FOREGROUND-COLOR Black.
-               05  LINE 23 COLUMN 47 VALUE "³ "                                                 HIGHLIGHT.
-               05          COLUMN 49 VALUE   "0"                                                HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Exit                   ³" FOREGROUND-COLOR Black.
-               05  LINE 24 COLUMN 47 VALUE "À"                                                  HIGHLIGHT.
-               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 47 VALUE "                          ".
+               05  LINE 13 COLUMN 47 VALUE "   PRINTERS/STATIONERY    " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 47 VALUE " 1"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Printer Specifications ".
+               05  LINE 15 COLUMN 47 VALUE " 2"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Supervisor Printers    ".
+               05  LINE 16 COLUMN 47 VALUE " 3"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Work Station Printers  ".
+               05  LINE 17 COLUMN 47 VALUE " 4"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Cash Slip Headings     ".
+               05  LINE 18 COLUMN 47 VALUE " 5"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Cash Slip/Drawer Cont. ".
+               05  LINE 19 COLUMN 47 VALUE " 6"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Statement/Inv. Formats ".
+               05  LINE 20 COLUMN 47 VALUE " 7"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Statement/Inv. Heading ".
+               05  LINE 21 COLUMN 47 VALUE " 8"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Consol. Statements     " .
+               05  LINE 22 COLUMN 47 VALUE " A"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Stm Det. Lines USB/WIN ".
+               05  LINE 23 COLUMN 47 VALUE " 0"                         FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Exit                   ".
+               05  LINE 24 COLUMN 47 VALUE "                          ".
 
        01  S16.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 69 VALUE                       "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "TAX/INT/DISC RATES"                          HIGHLIGHT.
-               05          COLUMN 67 VALUE                     "  ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "1"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Value Added Tax   ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "2"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Ad-Valorem Tax    ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "3"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Arrear Interest   ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "4"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Settlement Discnt.³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "0"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Exit              ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 47 VALUE "À"                                             HIGHLIGHT.
-               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 47 VALUE "                      ".
+               05  LINE 13 COLUMN 47 VALUE "  TAX/INT/DISC RATES  " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 47 VALUE " 1"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Value Added Tax    ".
+               05  LINE 15 COLUMN 47 VALUE " 2"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Ad-Valorem Tax     ".
+               05  LINE 16 COLUMN 47 VALUE " 3"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Arrear Interest    ".
+               05  LINE 17 COLUMN 47 VALUE " 4"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Settlement Discnt. ".
+               05  LINE 18 COLUMN 47 VALUE " 0"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Exit               ".
+               05  LINE 19 COLUMN 47 VALUE "                      ".
 
        01  S17.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 67 VALUE                     "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 47 VALUE "³  "                                         HIGHLIGHT.
-               05          COLUMN 50 VALUE    "ACCOUNT NUMBERS"                          HIGHLIGHT.
-               05          COLUMN 65 VALUE                   "  ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 49 VALUE   "1"                                         HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Cash Sales      ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 49 VALUE   "2"                                         HIGHLIGHT.
-               05          COLUMN 50 VALUE    " General Ledger  ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 47 VALUE "³ "                                          HIGHLIGHT.
-               05          COLUMN 49 VALUE   "0"                                         HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Exit            ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 47 VALUE "À"                                           HIGHLIGHT.
-               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 47 VALUE "                   ".
+               05  LINE 13 COLUMN 47 VALUE "  ACCOUNT NUMBERS  " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 47 VALUE " 1"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Cash Sales      ".
+               05  LINE 15 COLUMN 47 VALUE " 2"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " General Ledger  ".
+               05  LINE 16 COLUMN 47 VALUE " 0"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Exit            ".
+               05  LINE 17 COLUMN 47 VALUE "                   ".
 
        01  S18.
-           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey.
-               05  LINE 12 COLUMN 47 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"                        HIGHLIGHT.
-               05          COLUMN 69 VALUE                       "¿" FOREGROUND-COLOR Black.
-               05  LINE 13 COLUMN 47 VALUE "³  "                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    "SUNDRY PARAMETERS"                          HIGHLIGHT.
-               05          COLUMN 67 VALUE                     "  ³" FOREGROUND-COLOR Black.
-               05  LINE 14 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "1"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Starting Numbers  ³" FOREGROUND-COLOR Black.
-               05  LINE 15 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "2"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Price Rounding    ³" FOREGROUND-COLOR Black.
-               05  LINE 16 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "3"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " System Passwords  ³" FOREGROUND-COLOR Black.
-               05  LINE 17 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "4"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Minimum Margin    ³" FOREGROUND-COLOR Black.
-               05  LINE 18 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "5"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Cost Codes        ³" FOREGROUND-COLOR Black.
-               05  LINE 19 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "6"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Debtor Title Codes³" FOREGROUND-COLOR Black.
-               05  LINE 20 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "7"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Special Routines  ³" FOREGROUND-COLOR Black.
-               05  LINE 21 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "8"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Cash Voucher Code ³" FOREGROUND-COLOR Black.
-               05  LINE 22 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "A"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Batch/Realtime POS³" FOREGROUND-COLOR Black.
-               05  LINE 23 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "B"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Cash Slip Rounding³" FOREGROUND-COLOR Black.
-               05  LINE 24 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "C"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Article 11/1g(VAT)³" FOREGROUND-COLOR Black.
-               05  LINE 25 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "D"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Stock Conv.Factor ³" FOREGROUND-COLOR Black.
-               05  LINE 26 COLUMN 47 VALUE "³ "                                            HIGHLIGHT.
-               05          COLUMN 49 VALUE   "0"                                           HIGHLIGHT.
-               05          COLUMN 50 VALUE    " Exit              ³" FOREGROUND-COLOR Black.
-               05  LINE 27 COLUMN 47 VALUE "À"                                             HIGHLIGHT.
-               05          COLUMN 48 VALUE  "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" FOREGROUND-COLOR Black.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 47 VALUE "                      ".
+               05  LINE 13 COLUMN 47 VALUE "  SUNDRY PARAMETERS   " FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE 14 COLUMN 47 VALUE " 1"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Starting Numbers   ".
+               05  LINE 15 COLUMN 47 VALUE " 2"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Price Rounding     ".
+               05  LINE 16 COLUMN 47 VALUE " 3"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " System Passwords   ".
+               05  LINE 17 COLUMN 47 VALUE " 4"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Minimum Margin     ".
+               05  LINE 18 COLUMN 47 VALUE " 5"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Cost Codes         ".
+               05  LINE 19 COLUMN 47 VALUE " 6"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Debtor Title Codes ".
+               05  LINE 20 COLUMN 47 VALUE " 7"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Special Routines   ".
+               05  LINE 21 COLUMN 47 VALUE " 8"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Cash Voucher Code  ".
+               05  LINE 22 COLUMN 47 VALUE " A"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Batch/Realtime POS ".
+               05  LINE 23 COLUMN 47 VALUE " B"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Cash Slip Rounding ".
+               05  LINE 24 COLUMN 47 VALUE " C"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Article 11/1g(VAT) ".
+               05  LINE 25 COLUMN 47 VALUE " D"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Stock Conv.Factor  ".
+               05  LINE 26 COLUMN 47 VALUE " 0"                     FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 49 VALUE   " Exit               ".
+               05  LINE 27 COLUMN 47 VALUE "                      ".
 
-      /
+      *
+      *        *******   *******    ******    ******   ********  *******   **     **  *******    ******** 
+      *        **    **  **    **  **    **  **    **  **        **    **  **     **  **    **   **
+      *        **    **  **   **   **    **  **        **        **    **  **     **  **   **    **
+      *        *******   ******    **    **  **        *****     **    **  **     **  ******     *****
+      *        **        **   **   **    **  **        **        **    **  **     **  **   **    **
+      *        **        **    **  **    **  **    **  **        **    **  **     **  **    **   **
+      *        **        **    **   ******    ******   ********  *******    *******   **    **   ********
+      *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000        SECTION.
        AA00.
@@ -716,6 +576,11 @@
                PERFORM ERROR-MESSAGE
                GO TO AA99.
              PERFORM ZA000-INIT.
+           IF MOUSE-ATTACHED = "Y"
+               MOVE 66               TO MOUSE-FUNC
+               MOVE 1                TO MOUSE-PARAM
+               CALL X"AF" USING MOUSE-FUNC MOUSE-PARAM
+               END-IF.
              PERFORM BA000.
            IF MOUSE-ATTACHED = "Y"
                MOVE 66   TO MOUSE-FUNC
@@ -757,6 +622,7 @@
              STRING "Program- " DELIMITED SIZE LS-PRG-NAME DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
              MOVE W43-SCREEN         TO W43-SCREEN2.
              MOVE W42-ATTRIB         TO W42-ATTRIB2.
+             MOVE 29                 TO WS-MES-LINE.
              PERFORM ERROR-MESSAGE.
              MOVE W43-SCREEN2        TO W43-SCREEN.
              MOVE W42-ATTRIB2        TO W42-ATTRIB.
@@ -765,9 +631,62 @@
        AA199.
              EXIT.
 
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      SCREEN-SHADOW                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To routine is used to display a shadow down the right and ³
+      *    ³ along the bottom of a pop-up box. The parameters that are ³
+      *    ³ required:                                                 ³
+      *    ³          SHADE-ROW   - Top line of the box.               ³
+      *    ³          SHADE-COL   - Left line of box.                  ³
+      *    ³          SHADE-WIDTH - Width of the box.                  ³
+      *    ³          SHADE-LINES - Height of box.                     ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
        COPY "FUNCTION.SCR".
 
        COPY "ERROR.SCR".
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³           ERASE SCREEN FROM SPECIFIED LOCATION            ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ Uses CRT-START as starting line and increases and CRT-END ³
+      *    ³ as the ending line. The screen is cleared with Column 1   ³
+      *    ³ and 80 containing "³" and columns 2 to 79 containing      ³
+      *    ³ spaces.                                                   ³
+      *    ³                                                           ³
+      *    ³  eg.                                                      ³
+      *    ³   MOVE 8         TO CRT-START.                            ³
+      *    ³   MOVE 28        TO CRT-END.                              ³
+      *    ³   PERFORM ERASE-SCREEN.                                   ³
+      *    ³                                                           ³
+      *    ³ To clear the entire screen and Display a new screen with  ³
+      *    ³ headings (program/date/time/company):                     ³
+      *    ³                                                           ³
+      *    ³    CRT-PROGRAM (calling program)                          ³
+      *    ³    CRT-HEADING (Screen heading)                           ³
+      *    ³    CRT-COMPANY (Company name)                             ³
+      *    ³    CRT-TERMINAL (consists of two fields:                  ³
+      *    ³                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    ³
+      *    ³    These fields should be populated at the start of the   ³
+      *    ³    program.                                               ³
+      *    ³    PERFORM HEADING-AND-CLEAR-SCREEN.                      ³
+      *    ³                                                           ³
+      *    ³ To change the screen heading:                             ³
+      *    ³    MOVE "The new heading" TO CRT-HEADING.                 ³
+      *    ³    PERFORM CHANGE-HEADING.                                ³
+      *    ³                                                           ³
+      *    ³ To change the time on the screen:                         ³
+      *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear line 50:                                         ³
+      *    ³    PERFORM CLEAR-L50                                      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
 
@@ -777,7 +696,7 @@
        BA00.
              MOVE 8                  TO SHADE-ROW.
              MOVE 7                  TO SHADE-COL.
-             MOVE 22                 TO SHADE-WIDTH.
+             MOVE 21                 TO SHADE-WIDTH.
              MOVE 10                 TO SHADE-LINES.
              DISPLAY S02.
            IF (LS0-LEV < 4) OR (LS0-RTE = 0)
@@ -790,7 +709,7 @@
              MOVE 9                  TO TOP-ROW.
              MOVE 15                 TO BOTTOM-ROW.
              MOVE 8                  TO SCREEN-LIN.
-             MOVE 9                  TO SCREEN-COL.
+             MOVE 8                  TO SCREEN-COL.
              MOVE 18                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
            IF LS-OK = "Z"
@@ -910,7 +829,7 @@
        BA999.
              EXIT.
 
-      /
+      *
       *    ****    R E B U I L D   F I L E S
       *
        CA000        SECTION 5.
@@ -927,7 +846,7 @@
                GO TO CA999.
              MOVE 10                 TO SHADE-ROW.
              MOVE 26                 TO SHADE-COL.
-             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 18                 TO SHADE-WIDTH.
              MOVE 10                 TO SHADE-LINES.
              DISPLAY S03.
            IF LS0-LEV < 1
@@ -939,8 +858,8 @@
              MOVE 11                 TO TOP-ROW.
              MOVE 17                 TO BOTTOM-ROW.
              MOVE 10                 TO SCREEN-LIN.
-             MOVE 28                 TO SCREEN-COL.
-             MOVE 16                 TO STRING-LENGTH.
+             MOVE 27                 TO SCREEN-COL.
+             MOVE 15                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        CA05.
@@ -1065,7 +984,7 @@
        CB00.
              MOVE 12  TO SHADE-ROW.
              MOVE 44   TO SHADE-COL.
-             MOVE 20   TO SHADE-WIDTH.
+             MOVE 19   TO SHADE-WIDTH.
              MOVE 10  TO SHADE-LINES.
              DISPLAY S04.
              DISPLAY MENU-INSTRUCT.
@@ -1073,7 +992,7 @@
              MOVE 13  TO TOP-ROW.
              MOVE 19   TO BOTTOM-ROW.
              MOVE 12  TO SCREEN-LIN.
-             MOVE 46   TO SCREEN-COL.
+             MOVE 45   TO SCREEN-COL.
              MOVE 16   TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
@@ -1192,12 +1111,12 @@
           IF LS0-DEBT = "N" OR LS0-DBLEV < 9
               MOVE "Not Authorised"  TO WS-ERR-MES
               PERFORM ERROR-MESSAGE
-        GO TO CC999.
+              GO TO CC999.
 
        CC00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 44                 TO SHADE-COL.
-             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 18                 TO SHADE-WIDTH.
              MOVE 11                 TO SHADE-LINES.
              DISPLAY S05.
              DISPLAY MENU-INSTRUCT.
@@ -1205,8 +1124,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 20                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 46                 TO SCREEN-COL.
-             MOVE 16                 TO STRING-LENGTH.
+             MOVE 45                 TO SCREEN-COL.
+             MOVE 15                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        CC05.
@@ -1342,7 +1261,7 @@
        CD00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 44                 TO SHADE-COL.
-             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 18                 TO SHADE-WIDTH.
              MOVE 9                  TO SHADE-LINES.
              DISPLAY S06.
              DISPLAY MENU-INSTRUCT.
@@ -1350,8 +1269,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 18                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 46                 TO SCREEN-COL.
-             MOVE 16                 TO STRING-LENGTH.
+             MOVE 45                 TO SCREEN-COL.
+             MOVE 15                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        CD05.
@@ -1485,7 +1404,7 @@
        CE00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 44                 TO SHADE-COL.
-             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 18                 TO SHADE-WIDTH.
              MOVE 8                  TO SHADE-LINES.
              DISPLAY S07.
              DISPLAY MENU-INSTRUCT.
@@ -1493,8 +1412,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 17                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 46                 TO SCREEN-COL.
-             MOVE 16                 TO STRING-LENGTH.
+             MOVE 45                 TO SCREEN-COL.
+             MOVE 15                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        CE05.
@@ -1617,7 +1536,7 @@
        CF00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 44                 TO SHADE-COL.
-             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 18                 TO SHADE-WIDTH.
              MOVE 10                 TO SHADE-LINES.
              DISPLAY S08.
              DISPLAY MENU-INSTRUCT.
@@ -1625,8 +1544,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 19                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 46                 TO SCREEN-COL.
-             MOVE 16                 TO STRING-LENGTH.
+             MOVE 45                 TO SCREEN-COL.
+             MOVE 15                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        CF05.
@@ -1759,7 +1678,7 @@
        CG00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 44                 TO SHADE-COL.
-             MOVE 20                 TO SHADE-WIDTH.
+             MOVE 18                 TO SHADE-WIDTH.
              MOVE 9                  TO SHADE-LINES.
              DISPLAY S09.
              DISPLAY MENU-INSTRUCT.
@@ -1767,8 +1686,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 18                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 46                 TO SCREEN-COL.
-             MOVE 16                 TO STRING-LENGTH.
+             MOVE 45                 TO SCREEN-COL.
+             MOVE 15                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        CG05.
@@ -1884,7 +1803,7 @@
 
        CG999.
              EXIT.
-      /
+      *
       *    ****    D E L I V E R Y   R O U T E S
       *
        DA000        SECTION 6.
@@ -1901,7 +1820,7 @@
              DISPLAY MENU-INSTRUCT.
        DA999.
              EXIT.
-      /
+      *
       *    ****    C L E A R   U S E R  L O G
       *
        EA000        SECTION 6.
@@ -1912,7 +1831,7 @@
 
        EA999.
              EXIT.
-      /
+      *
       *    ****    C L E A R   V A L U E S
       *
        FA000        SECTION 6.
@@ -1934,7 +1853,7 @@
 
        FA999.
              EXIT.
-      /
+      *
       *    ****    P A R A M E T E R S
       *
        GA000        SECTION 7.
@@ -1951,7 +1870,7 @@
        GA02.
              MOVE 10                 TO SHADE-ROW.
              MOVE 26                 TO SHADE-COL.
-             MOVE 24                 TO SHADE-WIDTH.
+             MOVE 22                 TO SHADE-WIDTH.
              MOVE 14                 TO SHADE-LINES.
              DISPLAY S12.
            IF LS0-LEV < 3
@@ -1963,9 +1882,9 @@
              PERFORM SCREEN-SHADOW.
              MOVE 11                 TO TOP-ROW.
              MOVE 21                 TO BOTTOM-ROW.
-             MOVE 12                 TO SCREEN-LIN.
-             MOVE 28                 TO SCREEN-COL.
-             MOVE 20                 TO STRING-LENGTH.
+             MOVE 10                 TO SCREEN-LIN.
+             MOVE 27                 TO SCREEN-COL.
+             MOVE 19                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        GA05.
@@ -2096,7 +2015,7 @@
        GB00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 47                 TO SHADE-COL.
-             MOVE 23                 TO SHADE-WIDTH.
+             MOVE 21                 TO SHADE-WIDTH.
              MOVE 11                 TO SHADE-LINES.
              DISPLAY S13.
              DISPLAY MENU-INSTRUCT.
@@ -2104,8 +2023,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 20                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 49                 TO SCREEN-COL.
-             MOVE 19                 TO STRING-LENGTH.
+             MOVE 48                 TO SCREEN-COL.
+             MOVE 18                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        GB05.
@@ -2223,7 +2142,7 @@
        GC00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 47                 TO SHADE-COL.
-             MOVE 21                 TO SHADE-WIDTH.
+             MOVE 19                 TO SHADE-WIDTH.
              MOVE 6                  TO SHADE-LINES.
              DISPLAY S14.
              DISPLAY MENU-INSTRUCT.
@@ -2231,8 +2150,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 15                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 49                 TO SCREEN-COL.
-             MOVE 17                 TO STRING-LENGTH.
+             MOVE 48                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        GC05.
@@ -2341,7 +2260,7 @@
        GD00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 47                 TO SHADE-COL.
-             MOVE 28                 TO SHADE-WIDTH.
+             MOVE 26                 TO SHADE-WIDTH.
              MOVE 13                 TO SHADE-LINES.
              DISPLAY S15.
              DISPLAY MENU-INSTRUCT.
@@ -2349,8 +2268,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 22                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 49                 TO SCREEN-COL.
-             MOVE 24                 TO STRING-LENGTH.
+             MOVE 48                 TO SCREEN-COL.
+             MOVE 23                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        GD05.
@@ -2481,7 +2400,7 @@
        GE00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 47                 TO SHADE-COL.
-             MOVE 23                 TO SHADE-WIDTH.
+             MOVE 22                 TO SHADE-WIDTH.
              MOVE 8                  TO SHADE-LINES.
              DISPLAY S16.
              DISPLAY MENU-INSTRUCT.
@@ -2489,7 +2408,7 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 17                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 49                 TO SCREEN-COL.
+             MOVE 48                 TO SCREEN-COL.
              MOVE 19                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
@@ -2605,7 +2524,7 @@
        GF00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 47                 TO SHADE-COL.
-             MOVE 21                 TO SHADE-WIDTH.
+             MOVE 19                 TO SHADE-WIDTH.
              MOVE 6                  TO SHADE-LINES.
              DISPLAY S17.
              DISPLAY MENU-INSTRUCT.
@@ -2613,8 +2532,8 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 15                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 49                 TO SCREEN-COL.
-             MOVE 17                 TO STRING-LENGTH.
+             MOVE 48                 TO SCREEN-COL.
+             MOVE 16                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
        GF05.
@@ -2723,7 +2642,7 @@
        GG00.
              MOVE 12                 TO SHADE-ROW.
              MOVE 47                 TO SHADE-COL.
-             MOVE 23                 TO SHADE-WIDTH.
+             MOVE 22                 TO SHADE-WIDTH.
              MOVE 16                 TO SHADE-LINES.
              DISPLAY S18.
            IF LS0-LEV < 3
@@ -2735,7 +2654,7 @@
              MOVE 13                 TO TOP-ROW.
              MOVE 25                 TO BOTTOM-ROW.
              MOVE 12                 TO SCREEN-LIN.
-             MOVE 49                 TO SCREEN-COL.
+             MOVE 48                 TO SCREEN-COL.
              MOVE 19                 TO STRING-LENGTH.
              PERFORM SAVE-ATTR.
 
@@ -2939,7 +2858,7 @@
              DISPLAY MENU-INSTRUCT.
        HA999.
              EXIT.
-      /
+      *
       *    ****    D E L I V E R Y   R O U T E S
       *
        IA000        SECTION 7.
@@ -2956,14 +2875,14 @@
              DISPLAY MENU-INSTRUCT.
        IA999.
              EXIT.
-      /
+      *
        ZA000-INIT              SECTION 9.
        ZA000-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              MOVE LS-PARID           TO WS-PARID.
              MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
-             PERFORM HEADING-AND-CLEAR-SCREEN.
+             PERFORM CHANGE-HEADING.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³

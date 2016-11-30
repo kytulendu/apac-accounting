@@ -15,7 +15,7 @@
       *                                                                *
       *         D E B T O R   R E C E I P T   R E V E R S A L S        *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - June 2016                              *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -85,7 +85,7 @@
 
        COPY "DBTRAN.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEBTRN.SL".
 
@@ -131,7 +131,7 @@
 
        COPY "DEBTOR.FDE".
 
-       COPY "DEBTRN.GFD".
+       COPY "DEBTRN.FD".
 
        COPY "DEPART.FDE".
 
@@ -141,7 +141,7 @@
 
        COPY "RECEIPTS.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
@@ -158,13 +158,13 @@
        01  CSH-L.
            03  CSH-DATA        PIC  X(80).
       *
-      *         **         **    ******    *******    **    **
-      *         **         **   **    **   **    **   **   **
-      *         **    *    **   **    **   **   **    **  **
-      *         **   ***   **   **    **   ******     *****
-      *          ** ** ** **    **    **   **   **    **  **
-      *           ***   ***     **    **   **    **   **   **
-      *            *     *       ******    **    **   **    **
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
        77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
@@ -233,7 +233,6 @@
        77  WS-BATCH                PIC  9(06)    COMP-5.
        77  WS-ERR1                 PIC  X(22)           VALUE "Invalid Account Number".
        77  WS-ERR2                 PIC  X(09)           VALUE "No Record".
-       77  WS-A                    PIC  X(19)           VALUE "Any key to continue".
        77  WS-E                    PIC  X(15)           VALUE "**END** - ENTER".
        77  WS-AC                   PIC  X(07)           VALUE "ACCOUNT".
        77  PRG-DEBT-LUP            PIC  X(12)           VALUE "DTP\DTPLOOK".
@@ -449,7 +448,7 @@
 
        COPY "FUNCTION.WS".
 
-       COPY "W50.WS".
+      *COPY "W50.WS".
 
        01  W75-KEYS.
            03  W75-S               PIC  9(02)    COMP-5.
@@ -484,13 +483,13 @@
 
 
       *
-      *    **        ********  **    **  **    **    ****     ******   ********
-      *    **           **     ***   **  **   **    **  **   **    **  **
-      *    **           **     ****  **  **  **    **    **  **        ** 
-      *    **           **     ** ** **  *****     ********  **        *****
-      *    **           **     **  ****  **  **    **    **  **   ***  **  
-      *    **           **     **   ***  **   **   **    **  **    **  **
-      *    ********  ********  **    **  **    **  **    **   ******   ********
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
       *
        LINKAGE SECTION.
 
@@ -498,14 +497,14 @@
 
        COPY "FILE.IDS".
 
-      *
-      *   ******    ******   *******   ********  ********  **     **
-      *  **    **  **    **  **    **  **        **        ***    **
-      *  **        **        **   **   **        **        ** *   **
-      *   ******   **        ******    *****     *****     **  *  **
-      *        **  **        **   **   **        **        **   * **
-      *  **    **  **    **  **    **  **        **        **    ***
-      *   ******    ******   **    **  ********  ********  **     **
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
       *
        SCREEN SECTION.
 
@@ -635,13 +634,13 @@
                05  COLUMN 65 PIC Z(08)9.99  USING DBT-ALLOC AUTO.
 
       *
-      *        *******   *******    ******    ******   ********  *******   **     **  *******    ******** 
-      *        **    **  **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **    **  **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        *******   ******    **    **  **        *****     **    **  **     **  ******     *****
-      *        **        **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        **        **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **        **    **   ******    ******   ********  *******    *******   **    **   ********
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
       *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000         SECTION.
@@ -674,10 +673,10 @@
        AA50-LOOKUP       SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
+      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              MOVE PRG-DEBT-LUP       TO PRG-NAME.
-             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
              END-CALL.
              CANCEL PRG-NAME.
@@ -749,7 +748,7 @@
        COPY "FUNCTION.CRT".
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё                      OPT-MESSAGE                          Ё
+      *    Ё                        OPT-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
       *    Ё This routine is used to allow the OPERATOR to respond to  Ё
       *    Ё a request for an option, so that the correct action can   Ё
@@ -762,25 +761,76 @@
       *    Ё the window. An example of a message request follows:      Ё
       *    Ё                                                           Ё
       *    Ё   MOVE "Print transactions (Y/N) [ ]" TO WS-OPT-MES.      Ё
+      *    Ё   MOVE Instruction    TO WS-INSTR.                        Ё
+      *    Ё       [see Accptopt for instruction values]               Ё
       *    Ё   PERFORM OPT-MESSAGE.                                    Ё
       *    Ё                                                           Ё
       *    Ё This would be displayed as:                               Ё
       *    Ё      здддддддддддддддддддддддддддддддддддддддддддддддд©   Ё
-      *    Ё      Ё          Print transactions (Y/N) [ ]          Ё   Ё
-      *    Ё      юдддддддддддддддддддддддддддддддддддддддддддддддды   Ё
+      *    Ё      Ё          Print transactions (Y/N) [ ]          Ё╟╟ Ё
+      *    Ё      юдддддддддддддддддддддддддддддддддддддддддддддддды╟╟ Ё
+      *    Ё        ╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟╟ Ё
       *    Ё                                                           Ё
       *    Ё The response is returned in WS-OPTION (in upper case).    Ё
       *    Ё                                                           Ё
       *    Ё The system will display the message box with the top line Ё
-      *    Ё at line as the value of WS-MES-LINE. If WS-MES-LINE is    Ё
-      *    Ё zero the default will be 20.                              Ё
+      *    Ё as the value of WS-MES-LINE. If WS-MES-LINE is zero the   Ё
+      *    Ё default will be 20.                                       Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "OPTION.CRT".
 
        COPY "LOCKED.REC".
 
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё           ERASE SCREEN FROM SPECIFIED LOCATION            Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё Uses CRT-START as starting line and increases and CRT-END Ё
+      *    Ё as the ending line. The screen is cleared with Column 1   Ё
+      *    Ё and 80 containing "Ё" and columns 2 to 79 containing      Ё
+      *    Ё spaces.                                                   Ё
+      *    Ё                                                           Ё
+      *    Ё  eg.                                                      Ё
+      *    Ё   MOVE 8         TO CRT-START.                            Ё
+      *    Ё   MOVE 28        TO CRT-END.                              Ё
+      *    Ё   PERFORM ERASE-SCREEN.                                   Ё
+      *    Ё                                                           Ё
+      *    Ё To clear the entire screen and Display a new screen with  Ё
+      *    Ё headings (program/date/time/company):                     Ё
+      *    Ё                                                           Ё
+      *    Ё    CRT-PROGRAM (calling program)                          Ё
+      *    Ё    CRT-HEADING (Screen heading)                           Ё
+      *    Ё    CRT-COMPANY (Company name)                             Ё
+      *    Ё    CRT-TERMINAL (consists of two fields:                  Ё
+      *    Ё                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    Ё
+      *    Ё    These fields should be populated at the start of the   Ё
+      *    Ё    program.                                               Ё
+      *    Ё    PERFORM HEADING-AND-CLEAR-SCREEN.                      Ё
+      *    Ё                                                           Ё
+      *    Ё To change the screen heading:                             Ё
+      *    Ё    MOVE "The new heading" TO CRT-HEADING.                 Ё
+      *    Ё    PERFORM CHANGE-HEADING.                                Ё
+      *    Ё                                                           Ё
+      *    Ё To change the time on the screen:                         Ё
+      *    Ё    PERFORM CHANGE-TIME                                    Ё
+      *    Ё                                                           Ё
+      *    Ё To clear line 50:                                         Ё
+      *    Ё    PERFORM CLEAR-L50                                      Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
        COPY "CLEAR.CRT".
+
+      *    
+      *          G E T   D E T A I L S   F O R   A   D E B T O R   
+      *                  T R A N S A C T I O N   C O D E
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё PERFORM THIS ROUTINE WITH THE TRANSACTION CODE IN W90-CODEЁ
+      *    Ё                                                           Ё
+      *    Ё ON EXITING THE TRANSACTION CODE DETAILS ARE IN W00-       Ё
+      *    Ё WHILE W90-TRNKEY CONTAINS THE KEY TO THE PARAMETER FILE   Ё
+      *    Ё WHERE THIS TRANSACTION CODE IS FOUND AND W90-TS IS THE    Ё
+      *    Ё TRANSACTION CODE SUBSCRIPT IN THE RECORD.                 Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "DEBTOR.TRN".
 
@@ -800,7 +850,9 @@
        COPY "LEDTRF.UPD".
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё        R E A D  F I L E S   R O U T I N E S        Ё
+      *    Ё                                                           Ё
+      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
+      *    Ё                                                           Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AC000    SECTION.
 
@@ -1116,7 +1168,12 @@
                MOVE 2            TO WS-ERROR
            ELSE
                MOVE 0            TO WS-ERROR
-               MOVE DEB-TYPE     TO W80-TYPE.
+      *        MOVE DEB-TYPE     TO W80-TYPE
+      *
+      *    ****    Move the Debtor Record to working storage area
+      *
+               MOVE DEB-RECORD1      TO W40-DEBTREC.
+
        CA160-EXIT.
              EXIT.
 
@@ -1131,12 +1188,11 @@
        LINK-DEBTOR-TRANS.
              INITIALIZE TRA-RECORD1.
              MOVE W20-DTE        TO TRA-DATE.
-            MOVE W90-CODE  TO TRA-CODE.
+             MOVE W90-CODE       TO TRA-CODE.
              MOVE W90-REF        TO TRA-REF TRA-REG.
              MOVE DEB-ACNO       TO TRA-AC.
-             SUBTRACT W90-CR FROM W90-DB
-                                 GIVING TRA-VALUE.
-            PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
+             SUBTRACT W90-CR FROM W90-DB GIVING TRA-VALUE.
+             PERFORM WRITE-DBTRAN THRU WRITE-DBTRAN-EXIT.
              MOVE 1              TO WS-ACTION.
              PERFORM AY04 THRU AY59.
              ADD TRA-VALUE       TO W00-T-VAL W00-T-MTDV W00-T-YTDV.
@@ -1144,7 +1200,7 @@
            IF WX-INT = "Y"
                PERFORM DEBTOR-INTEGRATE.
              PERFORM UPDATE-TRAN-RECORD.
-            ADD W90-DB   TO DEB-DEBT.
+             ADD W90-DB          TO DEB-DEBT.
              ADD W90-DB          TO DEB-BAL.
             GO TO DEBTOR-TRAN-EXIT.
 
@@ -1158,7 +1214,7 @@
              MOVE 01             TO WX-TYPE.
              PERFORM GL-TRF-UPDATE.
              MOVE 14             TO WX-TYPE.
-      COMPUTE WX-VALUE = TRA-VALUE * -1.
+             COMPUTE WX-VALUE = TRA-VALUE * -1.
              MOVE W00-T-GL       TO WX-AC.
              PERFORM GL-TRF-UPDATE.
 
@@ -1182,7 +1238,7 @@
        DA05.
              PERFORM ERASE-SCREEN.
              DISPLAY S08.
-           IF W25-TOTAL NOT = ZERO
+           IF NOT(W25-TOTAL = ZERO)
                DISPLAY S37.
              MOVE SPACES             TO W80-ACNO.
              MOVE 02                 TO W90-CODE.
@@ -1228,7 +1284,6 @@
              CALL "CBL_TOUPPER" USING W80-ACNO BY VALUE WS-LENGTH RETURNING WS-STATUS.
              MOVE 1                  TO WS-LENGTH.
              PERFORM CA155-GET-DEBTOR.
-             DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan.
            IF WS-ERROR = 1
               MOVE WS-ERR2  TO WS-ERR-MES
               PERFORM ERROR-MESSAGE
@@ -1237,10 +1292,6 @@
                MOVE WS-ERR1  TO WS-ERR-MES
                PERFORM ERROR-MESSAGE
                GO TO DA15.
-      *
-      *    ****    Move the Debtor Record to working storage area
-      *
-             MOVE DEB-RECORD1        TO W40-DEBTREC.
       *    *************************************************************
       *    ****         T E S T   F O R   I N D I V I D U A L       ****
       *    *************************************************************
@@ -1528,10 +1579,10 @@
              MOVE W90-REF            TO RCT-REF.
              MOVE ZERO               TO RCT-REF-EXT.
              MOVE W40-NAME           TO RCT-NAME.
-           IF NOT (W90-CASH = ZERO)
+           IF NOT(W90-CASH = ZERO)
                MOVE "C"              TO RCT-TYPE
            ELSE
-           IF NOT (W90-CHQ = ZERO)
+           IF NOT(W90-CHQ = ZERO)
                MOVE "Q"              TO RCT-TYPE
            ELSE
                MOVE "T"              TO RCT-TYPE.
@@ -1552,7 +1603,7 @@
              OPEN I-O AUDIT DEBTOR NETWORK PARAM RECEIPTS.
 
        DA75.
-             MOVE "'ENTER' to continue - 'E' to exit" TO WS-ERR-MES.
+             MOVE "'ENTER' to continue - 'E' to exit" TO WS-OPT-MES.
              MOVE SPACE              TO WS-OPTION.
              MOVE "Z"                TO WS-INSTR.
              PERFORM OPT-MESSAGE.
@@ -1564,7 +1615,7 @@
        DA999.
              EXIT.
       *    *************************************************************
-      *   I N I T I A L I S E   P R O G R A M
+      *                I N I T I A L I S E   P R O G R A M
       *    *************************************************************
        ZA000-INIT        SECTION 88.
        ZA000-OPEN.
@@ -1799,10 +1850,10 @@
 
        ZA999-EXIT.
              EXIT.
-      *    *************************************************************
+      *
       *    ****    I / O   E R R O R   M E S S A G E S
-      *    *************************************************************
-       ZB000-ERROR      SECTION 89.
+      *
+       ZB000-ERROR      SECTION 8.
 
        COPY "ERRORS.PRO".
 

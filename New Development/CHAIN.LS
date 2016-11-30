@@ -2,7 +2,7 @@
            03  LS-USER.
                05  LS-USE          PIC  9(03).
            03  LS-COMPANY.
-               05  LS-COMPCHR      PIC  X(01) OCCURS 40.
+               05  LS-COMPCHR      PIC  X(01)        OCCURS 40.
            03  LS-TERMINAL         PIC  X(14).
            03  LS-INSTR            PIC  X(01).
            03  LS-STOCK-CODE.
@@ -12,8 +12,9 @@
            03  LS-DAYS             PIC  9(02) COMP-5.
            03  LS-DEM              PIC  9(02) COMP-5.
            03  LS-USUB             PIC  9(04) COMP-5.
-           03  LS-DRAW             PIC  9(02) VALUE 40.
+           03  LS-DRAW             PIC  9(02)         VALUE 40.
            03  LS-CSS              PIC  X(01).
+           03  LS-CLR              PIC  X(01)         REDEFINES LS-CSS.
            03  LS-OK               PIC  X(01).
            03  LS-RET              PIC  X(01).
            03  LS-TODAY-DDMMYY     PIC  9(08) COMP-5.
@@ -22,13 +23,13 @@
            03  LS-PRV-CEN          PIC  X(01) COMP-X.
            03  LS-NXT-CEN          PIC  X(01) COMP-X.
            03  LS-SLS-ORDNO.
-               05  LS-SLS-JOBNO    PIC  X(08) VALUE SPACES.
+               05  LS-SLS-JOBNO    PIC  X(08)        VALUE SPACES.
            03  LS-CARDEX           PIC  X(01).
-           03  LS-DSKDRV           PIC  X(01) VALUE "N".
+           03  LS-DSKDRV           PIC  X(01)        VALUE "N".
            03  APAC-SYSTEM         PIC  X(12).
            03  APAC-VERSION        PIC  X(04).
-           03  LS-PRG-NAME         PIC  X(08) VALUE "APAC-POS".
-           03  LS-L-OR-N           PIC  X(08) VALUE "SYSTEMS\".
+           03  LS-PRG-NAME         PIC  X(08)        VALUE "APAC-POS".
+           03  LS-L-OR-N           PIC  X(08)        VALUE "SYSTEMS\".
 
        01  LS-PARID.
            03  LS-SYS-ID           PIC  X(03).

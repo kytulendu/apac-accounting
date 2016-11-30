@@ -40,7 +40,8 @@
            03  WS-FILE.
                05  WS-DSP-FILE.
                    07  WS-SHRT-FN    PIC  X(08).
-                   07  FILLER        PIC  X(20).
+                   07  FILLER        PIC  X(04).
+                   07  WS-AUD-DESC   PIC  X(16).
                05  FILLER            PIC  X(36).
            03  WS-FILE-CHAR                      REDEFINES WS-FILE  PIC  X(01) OCCURS 64.
            03  WS-KEY                PIC  Z(05)9 BLANK WHEN ZERO.
@@ -96,14 +97,14 @@
            03  WS-ADVANCE            PIC  9(02).
       *
       *    REPORT: 1 = Picking Slips
-      *         2 = Invoices/Credit Notes
-      *         3 = General Reports (Stock)
-      *         4 = General Reports (Creditors)
-      *         5 = General Reports (Debtors)
-      *         6 = General Reports (G/Ledger)
-      *         7 = Statements
-      *         8 = Labels
-      *         9 = Quotations
+      *            2 = Invoices/Credit Notes
+      *            3 = General Reports (Stock)
+      *            4 = General Reports (Creditors)
+      *            5 = General Reports (Debtors)
+      *            6 = General Reports (G/Ledger)
+      *            7 = Statements
+      *            8 = Labels
+      *            9 = Quotations
       *
            03  WS-REPORT             PIC  9(01).
            03  WS-SCREEN             PIC  9(01).
@@ -221,7 +222,6 @@
            78  Brown                             value 6.
            78  Grey                              value 7.
       *****************************************************************
-      *****************************************************************
       *
       *   USE HIGHLIGHT TO CHANGE COLOURS AS FOLLOWS:
       *
@@ -234,7 +234,6 @@
       *                    Brown      = Yellow
       *                    Grey       = White
       *
-      *****************************************************************
       *****************************************************************
 
        01  X91-CALL.

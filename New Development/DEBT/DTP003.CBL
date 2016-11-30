@@ -15,7 +15,7 @@
       *                                                                *
       *       D E B T O R   D E L E T I O N S   P R O G R A M          *
       *                                                                *
-      *       Version 9.00.81 - November 2015                          *
+      *       Version 9.04.01 - May 2016                               *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -98,7 +98,7 @@
 
        COPY "DEBDEP.SL".
 
-       COPY "DEBTOR.ISL".
+       COPY "DEBTOR.SL".
 
        COPY "DEBMEM.SL".
 
@@ -134,7 +134,7 @@
 
        COPY "PARAM.FDE".
 
-       COPY "RECOVER.GFD".
+       COPY "RECOVER.FD".
 
        COPY "SHARED.FDE".
 
@@ -197,7 +197,6 @@
        77  WS-ERR6                 PIC  X(20)     VALUE "Name > 38 characters".
        77  WS-ERR7                 PIC  X(23)     VALUE "Address > 67 characters".
        77  WS-ERR8                 PIC  X(16)     VALUE "Invalid category".
-       77  WS-A                    PIC  X(19)     VALUE "Any key to continue".
        77  WS-E                    PIC  X(15)     VALUE "**END** - ENTER".
        77  WS-AC                   PIC  X(07)     VALUE "ACCOUNT".
        77  PRG-DEBT-LUP            PIC  X(12)     VALUE "DTP\DTPLOOK".
@@ -206,7 +205,7 @@
 
       *    здддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё Used by calling program (WORKING-STORAGE) and called program Ё
-      *    Ё (LINKAGE SECTION) for Main screen layout and headings.   Ё
+      *    Ё (LINKAGE SECTION) for Main screen layout and headings.       Ё
       *    юдддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        01  CRT-HEADINGS.
       *
@@ -342,7 +341,7 @@
 
        01  W80-ACCOUNT.
            03  W80-ACNO            PIC  X(06).
-           03  W80-TYPE            PIC  9(01).
+      *    03  W80-TYPE            PIC  9(01).
 
        01  W85-PASS.
            03  W85-SUPER           PIC  X(06)    OCCURS 9.
@@ -365,12 +364,29 @@
            03  W100-CRL            PIC  Z(06)9.
            03  W100-KEY            PIC  Z(05)9.
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
        COPY "FILE.IDS".
 
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
       *
        SCREEN SECTION.
 
@@ -382,6 +398,32 @@
        01  S36.
            03  PIC X(06) USING W80-ACNO FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta AUTO.
 
+       01  S40.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                                                     FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                                             FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Account Lookup,".
+               05          COLUMN 34 VALUE                                 "F9"                                     FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 36 VALUE                                   " Debtor Lookup (Any Word)," .
+               05          COLUMN 62 VALUE                                                             "Esc"        FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 65 VALUE                                                                " to exit".
+
+       01  S45.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F9"                                     FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   " Memo/Rmks,".
+               05          COLUMN 15 VALUE              "Any"                       FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 18 VALUE                 " other key to continue".
+
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
       *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000         SECTION.
@@ -411,7 +453,7 @@
              PERFORM SAVE-SCREEN.
              MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
-             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DEBT-FILE-IDS W40-COMPANY
+             CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                                ON EXCEPTION GO TO AA55
              END-CALL.
              CANCEL PRG-DEBT-LUP.
@@ -439,22 +481,21 @@
 
        COPY "DEBMEM.PRO".
 
-      *    *************************************************************
-      *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
-      *           S C R E E N ,   K E Y B O A R D   &  M O U S E
-      *    *************************************************************
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё    SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3         Ё
+      *    Ё      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
       *    Ё                      SCREEN-SHADOW                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
       *    Ё To routine is used to display a shadow down the right and Ё
       *    Ё along the bottom of a pop-up box. The parameters that are Ё
       *    Ё required:                                                 Ё
-      *    Ё          SHADE-ROW   - Top line of the box + 1.           Ё
-      *    Ё          SHADE-COL   - Left line of box + 2.              Ё
-      *    Ё          SHADE-WIDTH - Width of the box - 2.              Ё
-      *    Ё          SHADE-LINES - Hight of box - 1.                  Ё
+      *    Ё          SHADE-ROW   - Top line of the box.               Ё
+      *    Ё          SHADE-COL   - Left line of box.                  Ё
+      *    Ё          SHADE-WIDTH - Width of the box.                  Ё
+      *    Ё          SHADE-LINES - Height of box.                     Ё
       *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
       *    Ё                      CHECK-CORRECT                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -464,21 +505,18 @@
       *    Ё The response is returned in WS-OPTION (in upper case).    Ё
       *    Ё                                                           Ё
       *    Ё To start with the pop-up window higher or lower than row  Ё
-      *    Ё 13 (default); move another value to WS-MES-LINE.          Ё
-      *    *************************************************************
+      *    Ё 20 (default); move another value to WS-MES-LINE.          Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
       *            T H I S   R O U T I N E   I S   U S E D   T O
       *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё  Move the message to WS-DSP-MES and the top line of the   Ё
       *    Ё  message box to WS-MES-LINE. If WS-MES-LINE is zero the   Ё
       *    Ё  default will be 20.                                      Ё
       *    Ё                  PERFORM DISPLAY-MESSAGE                  Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    фммммммммммммммммммммммммммммммммммммммммммммммммммммммммммм╣
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -520,9 +558,11 @@
 
        COPY "DATE.CHK".
 
-      *
-      *    ****    READ FILES ROUTINES
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
+      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
+      *    Ё                                                           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -541,9 +581,11 @@
 
        COPY "SHARED.RD".
 
-      *
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё                                                           Ё
+      *    ЁR E W R I T E   &   W R I T E   F I L E S   R O U T I N E SЁ
+      *    Ё                                                           Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -697,12 +739,12 @@
       *    Ё   A R E   A N Y   U P D A T E S   I N   P R O G R E S S   Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AY62.
-           IF NOT (PAR-PROG(WS-SUB) = SPACES OR PAR-USR(WS-SUB) = SPACES)
+           IF NOT(PAR-PROG(WS-SUB) = SPACES OR PAR-USR(WS-SUB) = SPACES)
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё     A R E   D E B T O R   O R   S T O C K   F I L E S     Ё
       *    Ё     B E I N G   U P D A T E D                             Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
-               IF NOT (PAR-PROG(WS-SUB) = SPACES)
+               IF NOT(PAR-PROG(WS-SUB) = SPACES)
                    IF PAR-PROG(WS-SUB) = "DB" OR "DS"
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё         Y E S   -   S E T   W A I T   P E R I O D         Ё
@@ -805,13 +847,17 @@
              MOVE W80-ACNO       TO DEB-ACNO.
              PERFORM READ-DEBTOR THRU READ-DEBTOR-EXIT.
            IF WS-F-ERROR = 6
-               MOVE 1            TO WS-ERROR
+               MOVE 1                TO WS-ERROR
            ELSE
            IF DEB-ACNO NOT = W80-ACNO
-               MOVE 2            TO WS-ERROR
+               MOVE 2                TO WS-ERROR
            ELSE
-               MOVE 0            TO WS-ERROR
-               MOVE DEB-TYPE     TO W80-TYPE.
+               MOVE 0                TO WS-ERROR
+      *        MOVE DEB-TYPE         TO W80-TYPE
+      *
+      *    ****    Move the Debtor Record to working storage area
+      *
+               MOVE DEB-RECORD1      TO W40-DEBTREC.
 
        CA160-EXIT.
              EXIT.
@@ -824,14 +870,7 @@
              DISPLAY "Account :" AT 0602.
              MOVE SPACES         TO W80-ACNO.
        CE05.
-             DISPLAY "F1"                        AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     "=Help,"                            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F2"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to do Account Lookup,"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "F9"                                WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " Debtor Lookup (Any Word),"        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "Esc"                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " to exit"                          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             DISPLAY S40.
              ACCEPT S36 AT 0612.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
@@ -870,10 +909,9 @@
                MOVE WS-ERR1          TO WS-ERR-MES
                PERFORM ERROR-MESSAGE
                GO TO CE05.
-             MOVE DEB-RECORD1        TO W40-DEBTREC.
              MOVE 6                  TO CRT-START CRT-END.
              PERFORM ERASE-SCREEN.
-           IF W80-TYPE NOT = 1
+           IF W40-TYPE NOT = 1
                GO TO CE10.
              DISPLAY S22.
              DISPLAY S36 AT 0615.
@@ -881,17 +919,14 @@
              GO TO CE15.
 
        CE10.
-           IF W80-TYPE = 3
+           IF W40-TYPE = 3
                DISPLAY S06.
              DISPLAY S23.
              DISPLAY S36 AT 0615.
              DISPLAY S24.
 
        CE15.
-             DISPLAY "F9"             AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " Memo/Rmks,"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                     "Any"                    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     " other key to continue" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             DISPLAY S45.
              CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
@@ -901,15 +936,13 @@
              PERFORM CHECK-CORRECT.
            IF WS-OPTION = "N"
                GO TO CE00.
-             MOVE 23                 TO CRT-START CRT-END.
-             PERFORM ERASE-SCREEN.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё    Check the account to ensure that it may be deleted.    Ё
       *    Ё    If there is a reason not to delete: Display message.   Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
            IF (DEB-BAL NOT = ZERO) OR (DEB-DEBT NOT = ZERO) OR (DEB-CRED NOT = ZERO) OR (DEB-JOBS NOT = ZERO)
                MOVE "May not delete - ENTER" TO WS-ERR-MES
-               PERFORM ERROR-LENGTH THRU ERROR-EXIT
+               PERFORM ERROR-MESSAGE
                GO TO CE00.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё    Check if there are any outstanding transactions.       Ё
@@ -922,7 +955,7 @@
              PERFORM READ-DBTRAN-NEXT THRU READ-DBTRAN-EXIT.
            IF (WS-F-ERROR = 0) AND (TRA-AC = DEB-ACNO)
                MOVE "Outstanding transactions" TO WS-ERR-MES
-               PERFORM ERROR-LENGTH THRU ERROR-EXIT
+               PERFORM ERROR-MESSAGE
                GO TO CE00.
       *
       *    ****   D E L E T E   T H E   D E B T O R   A C C O U N T
@@ -987,9 +1020,9 @@
 
        CE999.
              EXIT.
-      *
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
@@ -1041,13 +1074,10 @@
              OPEN I-O RECOVER.
              MOVE 8                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-           IF NOT(PAR-WS-HD = X"00000000000000000000")
-               MOVE PAR-WS-HD        TO WS-WS-HD.
-           IF NOT(PAR-CS-HD = X"00000000000000000000")
-               MOVE PAR-CS-HD        TO WS-CS-HD.
-           IF NOT(PAR-RT-HD = X"00000000000000000000")
-               MOVE PAR-RT-HD        TO WS-RT-HD.
-            GO TO ZA999-EXIT.
+             MOVE PAR-WS-HD          TO WS-WS-HD.
+             MOVE PAR-CS-HD          TO WS-CS-HD.
+             MOVE PAR-RT-HD          TO WS-RT-HD.
+             GO TO ZA999-EXIT.
 
        COPY "ZA49.PRO".
 

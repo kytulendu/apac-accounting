@@ -74,17 +74,13 @@
        SCREEN SECTION.
 
        01  ERROR-LINE.
-           03  BACKGROUND-COLOR Red FOREGROUND-COLOR Red.
-               05           COLUMN 16 VALUE "здддддддддддддддддддддддддддддддддддддддддддддддд"                         HIGHLIGHT.
-               05           COLUMN 65 VALUE                                                  "©" FOREGROUND-COLOR Black.
-               05  LINE + 1 COLUMN 16 VALUE "Ё"                                                                         HIGHLIGHT.
+           03  BACKGROUND-COLOR Red FOREGROUND-COLOR Black.
+               05           COLUMN 16 VALUE "                                                  ".
+               05  LINE + 1 COLUMN 16 VALUE " ".
                05           COLUMN 17 PIC  X(48) FROM WS-ERR-MES                                 FOREGROUND-COLOR Grey  HIGHLIGHT.
-               05           COLUMN 65 VALUE                                                  "Ё" FOREGROUND-COLOR Black.
-               05  LINE + 1 COLUMN 16 VALUE "Ё"                                                                         HIGHLIGHT.
-               05           COLUMN 17 VALUE  "           Press any key to continue            "  FOREGROUND-COLOR Grey.
-               05           COLUMN 65 VALUE                                                  "Ё" FOREGROUND-COLOR Black.
-               05  LINE + 1 COLUMN 16 VALUE "ю"                                                                         HIGHLIGHT.
-               05           COLUMN 17 VALUE  "дддддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
+               05           COLUMN 65 VALUE                                                  " ".
+               05  LINE + 1 COLUMN 16 VALUE "            Press any key to continue             ".
+               05  LINE + 1 COLUMN 16 VALUE "                                                  ".
 
        PROCEDURE DIVISION USING LS-OPTION L-MESSAGE L-LINE LS-USER-ID.
        AA000 SECTION.
