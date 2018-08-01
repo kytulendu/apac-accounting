@@ -13,13 +13,20 @@
       *                                                                *
       *     C R E D I T O R   L O O K U P   P R O G R A M              *
       *                                                                *
-      *       Version 9.00.80 - August 2015                            *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.         CRPLUP.
-       AUTHOR.                         J.W.LEMMON (CSS).
-       DATE-WRITTEN.                   JUNE, 1983.
+       AUTHOR.             J.W.LEMMON (CSS).
+       DATE-WRITTEN.       JUNE, 1983.
 
                 COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
                                   by James William Lemmon.
@@ -127,6 +134,8 @@
        77  WS-ER11                 PIC  X(15)           VALUE "Data incomplete".
        77  WS-H1                   PIC  X(05)           VALUE "DATE:".
        77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
+       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
+       77  PRG-CRED-LUP            PIC  X(12)           VALUE "CRP\CRPLOOK".
        77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
        77  WS-USUB                 PIC  9(04)    COMP-5.
 
@@ -183,17 +192,34 @@
            03  W200-MEM-FOC REDEFINES W200-MEM-FLDS.
                05  W200-MEM    PIC  X(60) OCCURS 12.
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
        COPY "FILE.IDS".
 
-      /
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
 
        01  S04.
-          03  LINE  3 COLUMN 30 FOREGROUND-COLOR 7 HIGHLIGHT
+          03  LINE  3 COLUMN 30 FOREGROUND-COLOR Grey HIGHLIGHT
                                  VALUE "CREATE CREDITOR RECORD".
 
        01  S05.
@@ -217,11 +243,11 @@
     03        COLUMN 42 VALUE "30D Disc".
     03        COLUMN 58 VALUE "60D Disc".
     03  LINE 22 COLUMN 13 VALUE "VAT code       ".
-    03        COLUMN 31 FOREGROUND-COLOR 3 HIGHLIGHT VALUE "I".
+    03        COLUMN 31 FOREGROUND-COLOR Cyan HIGHLIGHT VALUE "I".
            03          COLUMN 32 VALUE "n/".
-    03        COLUMN 34 FOREGROUND-COLOR 3 HIGHLIGHT VALUE "E".
+    03        COLUMN 34 FOREGROUND-COLOR Cyan HIGHLIGHT VALUE "E".
            03          COLUMN 35 VALUE "xclusive/".
-    03        COLUMN 44 FOREGROUND-COLOR 3 HIGHLIGHT VALUE "N".
+    03        COLUMN 44 FOREGROUND-COLOR Cyan HIGHLIGHT VALUE "N".
            03          COLUMN 45 VALUE "o VAT".
       *    03  LINE 23 COLUMN 13 VALUE "Account Type   "
       *         COLUMN 31 HIGHLIGHT VALUE "O".
@@ -232,79 +258,96 @@
 
        01  S06.
            02  S06A.
-    03  LINE  5 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE  5 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
      PIC X(06) USING W15-ACNO AUTO.
            02  S06B.
-          03  LINE  6 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE  6 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(40) USING W15-NAME AUTO.
-          03  LINE  7 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE  7 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(30) USING W15-ADDR1 AUTO.
-          03  LINE  8 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE  8 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(30) USING W15-ADDR2 AUTO.
-          03  LINE  9 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE  9 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(30) USING W15-ADDR3 AUTO.
-          03  LINE 10 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 10 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(30) USING W15-ADDR4 AUTO.
-          03  LINE 11 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 11 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
            PIC 9(04) USING W15-PCODE AUTO.
-    03  LINE 12 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE 12 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(30) USING W15-CONTACT AUTO.
-    03  LINE 13 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE 13 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(14) USING W15-TEL AUTO.
-    03  LINE 14 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE 14 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(14) USING W15-FAX AUTO.
-          03  LINE 15 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 15 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
            PIC 9(01) USING W15-30 AUTO.
-          03  LINE 16 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 16 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC 9(01) USING W15-60 AUTO.
-          03  LINE 17 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 17 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC 9(01) USING W15-90 AUTO.
-          03  LINE 18 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 18 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC 9(01) USING W15-120 AUTO.
-          03  LINE 19 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 19 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC 9(01) USING W15-150 AUTO.
-          03  LINE 20 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 20 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC 9(01) USING W15-180 AUTO.
-          03  LINE 21 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  LINE 21 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(12) USING W15-PMNT AUTO.
-    03        COLUMN 51 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 51 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
            PIC Z9.999 USING W15-DISC1 AUTO.
-    03        COLUMN 67 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 67 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
            PIC Z9.999 USING W15-DISC2 AUTO.
-    03  LINE 22 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE 22 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC X(01) USING W15-TAX AUTO.
-      *    03  LINE 23 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
-      *     BACKGROUND-COLOR 5
+      *    03  LINE 23 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
+      *     BACKGROUND-COLOR Magenta
       *     PIC X(01) USING W15-STM AUTO.
+
+       01  S55.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                           FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                   FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Creditor Lookup ".
+               05          COLUMN 35 VALUE                                  "Esc"         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 38 VALUE                                     " to exit".
 
        COPY "CRDLUP.CRT".
 
-      /
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000-START-UP  SECTION.
        AA000.
            IF LS0-CRLEV < 1
-               MOVE "Not Authorised" TO WS-ERR-STRING
+               MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
              PERFORM ZA000-INIT.
@@ -314,20 +357,97 @@
        AA49.
              EXIT PROGRAM.
 
-       AA50-LOOKUP     SECTION.
-       AA50.
-            PERFORM SAVE-SCREEN.
-            MOVE 4                   TO W44-FUNCTION.
-            PERFORM SCREEN-CONTENTS.
-            PERFORM CREDITOR-LOOKUP.
-            PERFORM RESTORE-SCREEN.
+       COPY "AA50C.LUP".
+       
+       COPY "AA900.ALM".
 
-       AA99.
-             EXIT.
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      SCREEN-SHADOW                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To routine is used to display a shadow down the right and ³
+      *    ³ along the bottom of a pop-up box. The parameters that are ³
+      *    ³ required:                                                 ³
+      *    ³          SHADE-ROW   - Top line of the box.               ³
+      *    ³          SHADE-COL   - Left line of box.                  ³
+      *    ³          SHADE-WIDTH - Width of the box.                  ³
+      *    ³          SHADE-LINES - Height of box.                     ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      CHECK-CORRECT                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine displays a pop-up window with the message    ³
+      *    ³           "Press Y if correct - N if incorrect"           ³
+      *    ³                                                           ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³                                                           ³
+      *    ³ To start with the pop-up window higher or lower than row  ³
+      *    ³ 20 (default); move another value to WS-MES-LINE.          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *            T H I S   R O U T I N E   I S   U S E D   T O
+      *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Move the message to WS-DSP-MES and the top line of the   ³
+      *    ³  message box to WS-MES-LINE. If WS-MES-LINE is zero the   ³
+      *    ³  default will be 20.                                      ³
+      *    ³                  PERFORM DISPLAY-MESSAGE                  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      *            D I S P L A Y   E R R O R   M E S S A G E S
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                      ERROR-MESSAGE                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To display the error message higher or lower (default is  ³
+      *    ³ line 20) Move the line number which must be used as the   ³
+      *    ³ top line to WS-MES-LINE. The message to be displayed must ³
+      *    ³ be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "FUNCTION.CRT".
 
        COPY "LOCKED.REC".
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³           ERASE SCREEN FROM SPECIFIED LOCATION            ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ Uses CRT-START as starting line and increases and CRT-END ³
+      *    ³ as the ending line. The screen is cleared with Column 1   ³
+      *    ³ and 80 containing "³" and columns 2 to 79 containing      ³
+      *    ³ spaces.                                                   ³
+      *    ³                                                           ³
+      *    ³  eg.                                                      ³
+      *    ³   MOVE 8         TO CRT-START.                            ³
+      *    ³   MOVE 28        TO CRT-END.                              ³
+      *    ³   PERFORM ERASE-SCREEN.                                   ³
+      *    ³                                                           ³
+      *    ³ To clear the entire screen and Display a new screen with  ³
+      *    ³ headings (program/date/time/company):                     ³
+      *    ³                                                           ³
+      *    ³    CRT-PROGRAM (calling program)                          ³
+      *    ³    CRT-HEADING (Screen heading)                           ³
+      *    ³    CRT-COMPANY (Company name)                             ³
+      *    ³    CRT-TERMINAL (consists of two fields:                  ³
+      *    ³                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    ³
+      *    ³    These fields should be populated at the start of the   ³
+      *    ³    program.                                               ³
+      *    ³    PERFORM HEADING-AND-CLEAR-SCREEN.                      ³
+      *    ³                                                           ³
+      *    ³ To change the screen heading:                             ³
+      *    ³    MOVE "The new heading" TO CRT-HEADING.                 ³
+      *    ³    PERFORM CHANGE-HEADING.                                ³
+      *    ³                                                           ³
+      *    ³ To change the time on the screen:                         ³
+      *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
+      *    ³ To clear line 50:                                         ³
+      *    ³    PERFORM CLEAR-L50                                      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
 
@@ -357,151 +477,165 @@
 
        COPY "PARAM.WR".
 
-       COPY "CREDIT.LUP".
+      *COPY "CREDIT.LUP".
 
        COPY "APAC.HLP".
 
-      /
-      *       ****   *****   ***    ***   *   *  ***** ****   *   *
-      *       *   *  *     * *  *   *  *   *  * *   *  *   *
-      *       ****   ***    *    *   *  *   *  *** **** * *
-      *       *   *  *     * *  *   *   * *  * *   *  *
-      *       *   *  *****   ***    ***     *  ***** *   *  *
+      *
+      *       ****   *****  ***    ***   *   *  *****  ****   *   *
+      *       *   *  *     *   *  *   *  *   *  *      *   *  *   *
+      *       ****   ***   *      *   *  *   *  ***    ****    * *
+      *       *   *  *     *   *  *   *   * *   *      *   *    *
+      *       *   *  *****  ***    ***     *    *****  *   *    *
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       *          THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       *        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *        ³ ORIGINAL ACTION (REC-TYPE)  ÄÄ  RECOVERY PROCESS ³
-      *        ³ 0 = RECORD CHANGED          ÄÄ     (REWRITE)     ³
-      *        ³ 1 = RECORD WAS ADDED        ÄÄ     (DELETE)      ³
-      *        ³ 2 = RECORD WAS DELETED      ÄÄ     (WRITE)       ³
+      *        ³ 0 = RECORD CHANGED          ÄÄ      (REWRITE)    ³
+      *        ³ 1 = RECORD WAS ADDED        ÄÄ      (DELETE)     ³
+      *        ³ 2 = RECORD WAS DELETED      ÄÄ      (WRITE)      ³
       *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY000        SECTION.
+      *    *************************************************************
+      *    ****              C R E D I T O R   F I L E              ****
+      *    *************************************************************
        AY07.
-            MOVE 07   TO REC-FILE.
-             MOVE ZERO           TO REC-KEY.
-             MOVE WS-ACTION      TO REC-TYPE
+             MOVE 07                 TO REC-FILE.
+             MOVE ZERO               TO REC-KEY.
+             MOVE WS-ACTION          TO REC-TYPE
            IF WS-ACTION = 0 OR 2
                PERFORM READ-CREDIT-LOCK THRU READ-CREDIT-EXIT.
-            MOVE P-REC   TO REC-CREDIT.
+             MOVE P-REC              TO REC-CREDIT.
              GO TO AY50.
+      *    *************************************************************
+      *    ****               C O N T R O L   F I L E               ****
+      *    *************************************************************
        AY39.
-             MOVE 39             TO REC-FILE.
-             MOVE WS-NETKEY      TO REC-KEY.
-      MOVE ZERO   TO REC-TYPE
-      MOVE NET-RECORD  TO REC-NETWORK.
+             MOVE 39                 TO REC-FILE.
+             MOVE WS-NETKEY          TO REC-KEY.
+             MOVE ZERO               TO REC-TYPE.
+             MOVE NET-RECORD         TO REC-NETWORK.
              GO TO AY50.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³              End transaction in recovery log              ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY40.
-            MOVE 99   TO REC-FILE.
-            MOVE ZERO   TO REC-KEY.
-            MOVE SPACES  TO REC-DETAIL.
+             MOVE 99                 TO REC-FILE.
+             MOVE ZERO               TO REC-KEY.
+             MOVE SPACES             TO REC-DETAIL.
              PERFORM AY50.
-            ADD 1   TO WS-TRANS.
-           IF WS-RECOVER > 95
+             ADD 1                   TO WS-TRANS.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ If recovery records exceed 195 - Clear (Close and Open    ³
+      *    ³ new). This allows for quicker recoveries when required.   ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+           IF WS-RECOVER > 195
                CLOSE RECOVER
                OPEN OUTPUT RECOVER
                CLOSE RECOVER
                OPEN I-O RECOVER
-              MOVE ZERO  TO WS-RECOVER.
+               MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³         W R I T E   R E C O V E R Y   R E C O R D         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY50.
-            ADD 1   TO WS-RECOVER.
-            MOVE WS-RECOVER  TO WS-RECKEY.
-            MOVE WS-TRANS  TO REC-TRAN.
+             ADD 1                   TO WS-RECOVER.
+             MOVE WS-RECOVER         TO WS-RECKEY.
+             MOVE WS-TRANS           TO REC-TRAN.
              WRITE REC-RECORD.
            IF WS-STATUS NOT = "00"
-               DISPLAY "Write error Recovery file - Status " AT 2212
-               WITH FOREGROUND-COLOR 6 HIGHLIGHT
-              DISPLAY WS-STATUS AT 2247
-         WITH FOREGROUND-COLOR 7 HIGHLIGHT
+               DISPLAY "Write error Recovery file - Status " AT 2212 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+               DISPLAY WS-STATUS                             AT 2247 WITH FOREGROUND-COLOR Grey HIGHLIGHT
                STOP RUN.
+             CLOSE RECOVER.
+             OPEN I-O RECOVER.
        AY59.
              EXIT.
       *
       *    ****    Start processing transaction
       *
        AY60.
-            MOVE 1   TO WS-COUNT.
-            MOVE 5   TO WS-SHARED.
-            PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-      *      MOVE SHR-STOCK  TO WS-STOCK.
+             MOVE 1                  TO WS-COUNT.
+             MOVE 5                  TO WS-SHARED.
+             PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
+      *      MOVE SHR-STOCK          TO WS-STOCK.
       *
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
       *
-            MOVE 4   TO WS-PARKEY.
+             MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
            IF PAR-USERS < 24
-               MOVE 1            TO WS-SUB
-        MOVE ZERO  TO WS-WAIT
+               MOVE 1                TO WS-SUB
+               MOVE ZERO             TO WS-WAIT
                GO TO AY62.
       *
-      *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
+      *    ****   Q   F U L L  -  W A I T   F O R   4   S E C O N D S
       *
-            DISPLAY "WAITING" AT 5051
-        WITH BACKGROUND-COLOR 3
-      FOREGROUND-COLOR 4 HIGHLIGHT.
-            COMMIT.
-      ACCEPT WS-STIME FROM TIME.
-      MOVE 400   TO WS-WAIT.
-            PERFORM LOCK-REC-LOOP.
-            DISPLAY SPACE AT 5051
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+             DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
+             COMMIT.
+             ACCEPT WS-STIME FROM TIME.
+             MOVE 400                TO WS-WAIT.
+             PERFORM LOCK-REC-LOOP.
+             DISPLAY SPACE AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
              GO TO AY60.
 
        AY61.
-            MOVE "CR"   TO PAR-PROG(WS-USUB).
-            MOVE LS-USER  TO PAR-USR(WS-USUB).
+      *
+      *    ****    Updating Creditor Files
+      *
+             MOVE "CR"               TO PAR-PROG(WS-USUB).
+             MOVE LS-USER            TO PAR-USR(WS-USUB).
              PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
       *
       *    ****    Read the CREDITOR control record in the NETWORK file
       *            and lock it. Log details to the RECOVERY file.
       *
-             MOVE 2              TO WS-NETKEY.
-            PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
+             MOVE 2                  TO WS-NETKEY.
+             PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
              PERFORM AY39 THRU AY59.
-            GO TO AY999.
+             GO TO AY999.
       *
-      *    ****   A R E   A N Y   U P D A T E S   I N P R O G R E S S
+      *    ****   A R E   A N Y   U P D A T E S   I N   P R O G R E S S
       *
        AY62.
-    IF NOT(PAR-PROG(WS-SUB) = SPACES OR
-    PAR-USR(WS-SUB) = SPACES)
+           IF NOT(PAR-PROG(WS-SUB) = SPACES OR PAR-USR(WS-SUB) = SPACES)
       *
-      *    ****   A R E   D E B T O R O R   S T O C K   F I L E S
-      *    B E I N G   U P D A T E D
+      *    ****   A R E   C R E D I T O R   F I L E S   B E I N G   U P D A T E D
       *
-        IF NOT(PAR-PROG(WS-SUB) = SPACES)
-           IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
+               IF NOT(PAR-PROG(WS-SUB) = SPACES)
+                   IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
       *
-      *    ****   Y E S   -   S E T   W A I T P E R I O D
+      *    ****   Y E S   -   S E T   W A I T   P E R I O D
       *
-         GO TO AY62-WAIT
-     ELSE
-         ADD 1  TO WS-SUB
-         GO TO AY62
-     END-IF
-        ELSE
+                       GO TO AY62-WAIT
+                   ELSE
+                       ADD 1         TO WS-SUB
+                       GO TO AY62
+                   END-IF
+               ELSE
       *
-      *    ****   I S T H I S   P R O G R A M   I N T H E  Q
+      *    ****   I S   T H I S   P R O G R A M   I N   T H E   Q
       *
-        IF PAR-USR(WS-SUB) = LS-USER
+               IF PAR-USR(WS-SUB) = LS-USER
       *
-      *    ****   I S I T   N E X T I N   L I N E T O   P R O C E S S
+      *    ****   I S   I T   N E X T   I N   L I N E   T O   P R O C E S S
       *
-     IF WS-WAIT = ZERO
-         GO TO AY63
-     ELSE
-         GO TO AY62-WAIT
-     END-IF
-        ELSE
-     GO TO AY62-WAIT
-        END-IF
-    END-IF.
-      MOVE LS-USER  TO PAR-USR(WS-SUB).
-      MOVE WS-SUB  TO PAR-USERS.
-      PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-      GO TO AY62-CHECK.
+                   IF WS-WAIT = ZERO
+                       GO TO AY63
+                   ELSE
+                       GO TO AY62-WAIT
+                   END-IF
+               ELSE
+                   GO TO AY62-WAIT
+               END-IF
+           END-IF.
+             MOVE LS-USER            TO PAR-USR(WS-SUB).
+             MOVE WS-SUB             TO PAR-USERS.
+             PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+             GO TO AY62-CHECK.
       *
       *    ****   S E T   W A I T   P E R I O D
       *
@@ -516,16 +650,16 @@
     IF WS-WAIT > ZERO
         COMMIT
         DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 6 HIGHLIGHT BLINK
+   WITH BACKGROUND-COLOR Cyan
+        FOREGROUND-COLOR Brown HIGHLIGHT BLINK
         ACCEPT WS-STIME FROM TIME
         PERFORM LOCK-REC-LOOP
         DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 6 HIGHLIGHT BLINK
+   WITH BACKGROUND-COLOR Cyan
+        FOREGROUND-COLOR Brown HIGHLIGHT BLINK
         GO TO AY60.
             DISPLAY SPACE AT 5072
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 
        AY63.
             MOVE WS-SUB  TO WS-USUB.
@@ -570,24 +704,24 @@
 
        AY999.
              EXIT.
-      /
-       CA155-GET-CREDITOR      SECTION.
-       CA155-ACCOUNT.
-             MOVE W15-ACNO       TO P-NUMBER.
-             PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
-           IF WS-F-ERROR = 3
-              MOVE 1   TO WS-ERROR
-           ELSE
-           IF P-NUMBER NOT = W15-ACNO
-              MOVE 2   TO WS-ERROR
-           ELSE
-              MOVE 0   TO WS-ERROR.
-       CA160-EXIT.
-             EXIT.
+      *
+      *CA155-GET-CREDITOR      SECTION.
+      *CA155-ACCOUNT.
+      *      MOVE W15-ACNO       TO P-NUMBER.
+      *      PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
+      *    IF WS-F-ERROR = 3
+      *       MOVE 1   TO WS-ERROR
+      *    ELSE
+      *    IF P-NUMBER NOT = W15-ACNO
+      *       MOVE 2   TO WS-ERROR
+      *    ELSE
+      *       MOVE 0   TO WS-ERROR.
+      *CA160-EXIT.
+      *      EXIT.
       /
       *    ****    C R E A T E   N E W   C R E D I T O R
       *
-       CB000      SECTION 50.
+       CB000      SECTION 5.
        CB00.
              PERFORM ERASE-SCREEN.
              DISPLAY S04.
@@ -607,19 +741,7 @@
       DISPLAY S06.
 
        CB010.
-      DISPLAY "F1" AT 5002
-        WITH BACKGROUND-COLOR 3
-      FOREGROUND-COLOR 6 HIGHLIGHT
-       "=Help,"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-       "F2" WITH BACKGROUND-COLOR 3
-          FOREGROUND-COLOR 6 HIGHLIGHT
-       " to do Creditor Lookup "
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-       "Esc" WITH BACKGROUND-COLOR 3
-    FOREGROUND-COLOR 6 HIGHLIGHT
-       " to exit"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+      DISPLAY S55.
             ACCEPT S06A.
     IF USER-FUNC
         EVALUATE KEY-CODE-1
@@ -631,7 +753,7 @@
    WHEN F2-KEY
        PERFORM AA50
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO CB010
         END-EVALUATE
         DISPLAY S06A
@@ -733,7 +855,7 @@
       /
       *    ****    P A C K   A D D R E S S
       *
-       CE000      SECTION 50.
+       CE000      SECTION 5.
        CE00.
             MOVE ZERO   TO WS-ERROR.
             MOVE 1   TO WS-S1 WS-S2.
@@ -787,23 +909,24 @@
        CE999.
              EXIT.
 
-      /
-       ZA000-INIT    SECTION 80.
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
+       ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-             COPY "FUNCTION.PRO".
+       COPY "FUNCTION.PRO".
 
             OPEN OUTPUT RECOVER.
              CLOSE RECOVER.
@@ -859,7 +982,7 @@
        ZA999-EXIT.
              EXIT.
       /
-       ZB000-I-O-ERROR SECTION 90.
+       ZB000-I-O-ERROR SECTION 9.
 
        COPY "ERRORS.PRO".
 

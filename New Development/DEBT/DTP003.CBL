@@ -53,7 +53,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   April 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -148,7 +148,7 @@
       *            *     *       ******    **    **   **    **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-SUB                  PIC  9(04)    COMP-5.
        77  WS-S                    PIC  9(04)    COMP-5.
        77  WS-S1                   PIC  9(04)    COMP-5.
@@ -177,31 +177,31 @@
        77  WS-NTP                  PIC  X(01).
        77  WS-KEYSTR               PIC  9(06)    COMP-5.
        77  WS-OPTION               PIC  X(01).
-       77  WS-SKIP                 PIC  X(01)    VALUE "N".
+       77  WS-SKIP                 PIC  X(01)           VALUE "N".
        77  WS-TAX                  PIC  X(01).
        77  WS-TYP                  PIC  X(01).
        77  WS-TYPE                 PIC  X(01).
-       77  WS-ERROR                PIC  9(01)    VALUE ZERO.
+       77  WS-ERROR                PIC  9(01)           VALUE ZERO.
        77  WS-EKEY                 PIC  9(06)    COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-CHAR2                PIC  X(01).
        77  WS-COMP                 PIC  9(01).
-       77  WS-RT-HD                PIC  X(10)     VALUE "-Retail   ".
-       77  WS-WS-HD                PIC  X(10)     VALUE "-Wholesale".
-       77  WS-CS-HD                PIC  X(10)     VALUE "-Cash sale".
-       77  WS-ERR1                 PIC  X(22)     VALUE "Invalid Account Number".
-       77  WS-ERR2                 PIC  X(09)     VALUE "No Record".
-       77  WS-ERR3                 PIC  X(15)     VALUE "Data incomplete".
-       77  WS-ERR4                 PIC  X(13)     VALUE "Invalid title".
-       77  WS-ERR5                 PIC  X(16)     VALUE "Invalid language".
-       77  WS-ERR6                 PIC  X(20)     VALUE "Name > 38 characters".
-       77  WS-ERR7                 PIC  X(23)     VALUE "Address > 67 characters".
-       77  WS-ERR8                 PIC  X(16)     VALUE "Invalid category".
-       77  WS-E                    PIC  X(15)     VALUE "**END** - ENTER".
-       77  WS-AC                   PIC  X(07)     VALUE "ACCOUNT".
-       77  PRG-DEBT-LUP            PIC  X(12)     VALUE "DTP\DTPLOOK".
-       77  TODAY-DDMMYY            PIC  9(08)     COMP-5.
-       77  WS-USUB                 PIC  9(04)     COMP-5.
+       77  WS-RT-HD                PIC  X(10)           VALUE "-Retail   ".
+       77  WS-WS-HD                PIC  X(10)           VALUE "-Wholesale".
+       77  WS-CS-HD                PIC  X(10)           VALUE "-Cash sale".
+       77  WS-ERR1                 PIC  X(22)           VALUE "Invalid Account Number".
+       77  WS-ERR2                 PIC  X(09)           VALUE "No Record".
+       77  WS-ERR3                 PIC  X(15)           VALUE "Data incomplete".
+       77  WS-ERR4                 PIC  X(13)           VALUE "Invalid title".
+       77  WS-ERR5                 PIC  X(16)           VALUE "Invalid language".
+       77  WS-ERR6                 PIC  X(20)           VALUE "Name > 38 characters".
+       77  WS-ERR7                 PIC  X(23)           VALUE "Address > 67 characters".
+       77  WS-ERR8                 PIC  X(16)           VALUE "Invalid category".
+       77  WS-E                    PIC  X(15)           VALUE "**END** - ENTER".
+       77  WS-AC                   PIC  X(07)           VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)           VALUE "DTP\DTPLOOK".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
       *    здддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё Used by calling program (WORKING-STORAGE) and called program Ё
@@ -451,7 +451,6 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                                ON EXCEPTION GO TO AA55
@@ -470,6 +469,8 @@
 
        AA99.
              EXIT.
+
+       COPY "AA900.ALM".
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                       DEBTOR-MEMO                         Ё
@@ -558,11 +559,9 @@
 
        COPY "DATE.CHK".
 
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё                                                           Ё
-      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
-      *    Ё                                                           Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -581,11 +580,9 @@
 
        COPY "SHARED.RD".
 
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё                                                           Ё
-      *    ЁR E W R I T E   &   W R I T E   F I L E S   R O U T I N E SЁ
-      *    Ё                                                           Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -880,12 +877,12 @@
                  WHEN F1-KEY     PERFORM HELP-ROUTINE
                  
                  WHEN F2-KEY     MOVE SPACE     TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
 
                  WHEN F9-KEY     MOVE "A"       TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
                                  
-                 WHEN OTHER      CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER      PERFORM AA900-ALARM
                                  GO TO CE05
                END-EVALUATE
                DISPLAY S36 AT 0612
@@ -1048,7 +1045,7 @@
       *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
-             COPY "FUNCTION.PRO".
+       COPY "FUNCTION.PRO".
 
        ZA02.
              OPEN I-O DEBDEP.

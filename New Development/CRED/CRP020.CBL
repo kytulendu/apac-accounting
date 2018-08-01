@@ -13,15 +13,22 @@
       *                                                                *
       *       P R I C E   L A B E L S   V I A   I N V O I C I N G      *
       *                                                                *
-      *       Version 9.04.01 - September 2016                         *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.      CRP020.
-       AUTHOR.               J.W. LEMMON (APAC).
-       DATE-WRITTEN.         AUGUST, 1983.
+       AUTHOR.          J.W. LEMMON (APAC).
+       DATE-WRITTEN.    AUGUST, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -98,27 +105,27 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)         VALUE "aeWlimemnomLalismJ".
-       77  WS-STKKEY               PIC  9(04)  COMP-5 VALUE 1.
-       77  WS-NETKEY               PIC  9(04)  COMP-5 VALUE 1.
-       77  WS-PRCKEY               PIC  9(04)  COMP-5 VALUE 1.
-       77  WS-PARKEY               PIC  9(04)  COMP-5 VALUE 1.
-       77  WS-KEYSTR               PIC  9(04)  COMP-5.
-       77  WS-ERROR                PIC  9(01)         VALUE 0.
-       77  WS-S                    PIC  9(04)  COMP-5.
-       77  WS-S1                   PIC  9(04)  COMP-5.
-       77  WS-S2                   PIC  9(04)  COMP-5.
-       77  WS-S3                   PIC  9(04)  COMP-5.
-       77  WS-S4                   PIC  9(04)  COMP-5.
-       77  WS-S5                   PIC  9(04)  COMP-5.
-       77  WS-S6                   PIC  9(04)  COMP-5.
-       77  WS-S7                   PIC  9(04)  COMP-5.
-       77  WS-S8                   PIC  9(04)  COMP-5.
-       77  WS-IXS1                 PIC  9(04)  COMP-5.
-       77  WS-IXS2                 PIC  9(04)  COMP-5.
-       77  WS-IXS3                 PIC  9(04)  COMP-5.
-       77  WS-IXS4                 PIC  9(04)  COMP-5.
-       77  WS-KEY1                 PIC  9(04)  COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-STKKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-NETKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PRCKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PARKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-KEYSTR               PIC  9(04)    COMP-5.
+       77  WS-ERROR                PIC  9(01)           VALUE 0.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S5                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S7                   PIC  9(04)    COMP-5.
+       77  WS-S8                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-KEY1                 PIC  9(04)    COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-ORD                  PIC  X(01).
        77  WS-SEQ                  PIC  X(01).
@@ -126,15 +133,15 @@
        77  WS-LAB                  PIC  X(01).
        77  WS-PRICE                PIC  X(01).
        77  WS-LABCDE               PIC  X(08).
-       77  WS-PRN-NO               PIC  X(01)  COMP-X VALUE 9.
-       77  WS-PRN-STAT             PIC  X(01)  COMP-X.
-       77  WS-LINES                PIC  9(04)  COMP-5 VALUE 0.
-       77  WS-PAGE                 PIC  9(04)  COMP-5 VALUE 0.
+       77  WS-PRN-NO               PIC  X(01)    COMP-X VALUE 9.
+       77  WS-PRN-STAT             PIC  X(01)    COMP-X.
+       77  WS-LINES                PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-PAGE                 PIC  9(04)    COMP-5 VALUE 0.
        77  WS-IND                  PIC  9(01).
-       77  WS-H1                   PIC  X(05)         VALUE "DATE:".
-       77  WS-H3                   PIC  X(05)         VALUE "PAGE:".
-       77  TODAY-DDMMYY            PIC  9(08)  COMP-5.
-       77  WS-USUB                 PIC  9(04)  COMP-5.
+       77  WS-H1                   PIC  X(05)           VALUE "DATE:".
+       77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -174,11 +181,10 @@
                05  CRT-WRKHD       PIC  X(11).
                05  CRT-WRKST       PIC  X(03).
 
-
        COPY "WS.WS".
 
        01  WS-PARID.
-          03  WS-SYS-ID            PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
            03  W02-PRINTER         PIC  X(12).
@@ -354,8 +360,6 @@
                        09  FILLER    PIC  X(02).
                    07  FILLER        PIC  X(08).
 
-       COPY "W05.WS".
-
        COPY "W05.VAT".
 
        01  W10-STOCK.
@@ -405,6 +409,17 @@
            03  W10-ITEM3                         REDEFINES W10-ITEM.
                05  W10-I3          PIC  9(03).
                05  FILLER          PIC  X(11).
+      *
+      *    Date routines for accepting checking and formatting have
+      *    been removed from each program and the DateCheck program
+      *    will be called to handle these routines.
+      *
+      *    The following copy 'DateVariables' now includes the 'W12.WS'
+      *    and 'W20.WS' variables and is passed to DateCheck in the CALL
+      *    statement.
+      *
+       COPY "DateVariables.cpy".
+
        01  W15-LABELS.
            03  W15-DEPTH                         OCCURS 2.
                05  W15-WIDTH                     OCCURS 3.
@@ -654,10 +669,13 @@
        AA000-START-UP  SECTION.
        AA000.
           IF LS0-CRLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA105.
-            PERFORM ZA000-INIT.
+             PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -665,14 +683,16 @@
       * *   * *     *     *  **   *     *   *  *  *  **   *   *     *  *
       *  ***  *     ***** *   *   *     *   * *** *   *   *   ***** *   *
       *
-      PERFORM OPEN-PRINTER.
-      MOVE "P"   TO WS-COMMAND.
-      PERFORM KA000.
-      MOVE "C"   TO WS-COMMAND.
-      PERFORM CALL-PRINTUTL.
+             PERFORM OPEN-PRINTER.
+             MOVE "P"                TO WS-COMMAND.
+             PERFORM KA000.
+             MOVE "C"                TO WS-COMMAND.
+             PERFORM CALL-PRINTUTL.
 
        AA105.
              EXIT PROGRAM.
+
+       COPY "AA900.ALM".
 
       *    
       *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
@@ -742,6 +762,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -752,7 +775,9 @@
 
        COPY "PRINTUTL.AP8".
 
-      /
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB00-READ SECTION.
 
        COPY "CONTROL.RD".
@@ -765,9 +790,9 @@
 
        COPY "PRCLAB.RD".
 
-      /
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AC000-WRITE   SECTION.
 
        COPY "PRCLAB.WR".
@@ -777,18 +802,16 @@
       *
        CA000         SECTION.
        CA00.
-             MOVE 14             TO W50-LENGTH.
+             MOVE 14                 TO W50-LENGTH.
        CA05.
-             MOVE W10-ITEM       TO W50-DATA.
+             MOVE W10-ITEM           TO W50-DATA.
            IF W50-1 = SPACE
-               MOVE W50-13       TO W10-ITEM
+               MOVE W50-13           TO W10-ITEM
                GO TO CA05.
-      CALL "CBL_TOUPPER" USING W50-DATA
-    BY VALUE W50-LENGTH
-    RETURNING W50-STATUS.
-            MOVE W50-ITEM  TO W10-ITEM.
+             CALL "CBL_TOUPPER" USING W50-DATA BY VALUE W50-LENGTH RETURNING W50-STATUS.
+             MOVE W50-ITEM           TO W10-ITEM.
        CA06.
-             MOVE W50-ITEM       TO STK-CODE.
+             MOVE W50-ITEM           TO STK-CODE.
        CA10.
              PERFORM READ-STOCK THRU READ-STOCK-EXIT.
            IF WS-F-ERROR = 0
@@ -802,42 +825,39 @@
        CA505.
       *     Adjust the average cost for negative
       *     or zero quantity
-    IF STK-QUANT < 0.001
-        MOVE STK-COST  TO STK-AVGE.
+           IF STK-QUANT < 0.001
+               MOVE STK-COST         TO STK-AVGE.
            IF STK-WSALE = ZERO
                IF NOT(STK-CASH = ZERO)
-                   MOVE STK-CASH TO STK-WSALE
+                   MOVE STK-CASH     TO STK-WSALE
                ELSE
-                   MOVE STK-SELL TO STK-WSALE.
-          IF STK-CASH = ZERO
-              MOVE STK-SELL  TO STK-CASH.
-    IF STK-IND < 2
-        IF STK-CASH < STK-WSALE
-     MOVE STK-WSALE    TO STK-CASH
-        END-IF
-        IF STK-SELL < STK-CASH
-     MOVE STK-CASH     TO STK-SELL
-        END-IF
-        IF STK-CMARKUP < STK-WMARKUP
-     MOVE STK-WMARKUP  TO STK-CMARKUP
-        END-IF
-        IF STK-MARKUP < STK-CMARKUP
-     MOVE STK-CMARKUP  TO STK-MARKUP
-        END-IF.
-      MOVE STK-CASH  TO W10-CASH
-      MOVE STK-SELL  TO W10-SELL
-      MOVE STK-WSALE  TO W10-WSALE.
-             MOVE ZERO           TO W05-RATE.
+                   MOVE STK-SELL     TO STK-WSALE.
+           IF STK-CASH = ZERO
+               MOVE STK-SELL         TO STK-CASH.
+           IF STK-IND < 2
+               IF STK-CASH < STK-WSALE
+                   MOVE STK-WSALE    TO STK-CASH
+               END-IF
+               IF STK-SELL < STK-CASH
+                   MOVE STK-CASH     TO STK-SELL
+               END-IF
+               IF STK-CMARKUP < STK-WMARKUP
+                   MOVE STK-WMARKUP  TO STK-CMARKUP
+               END-IF
+               IF STK-MARKUP < STK-CMARKUP
+                   MOVE STK-CMARKUP  TO STK-MARKUP
+               END-IF.
+             MOVE STK-CASH           TO W10-CASH
+             MOVE STK-SELL           TO W10-SELL
+             MOVE STK-WSALE          TO W10-WSALE.
+             MOVE ZERO               TO W05-RATE.
            IF STK-TAX > 0
-        MOVE W05-VAT(1)  TO W05-RATE.
-             COMPUTE W10-VCASH ROUNDED
-     = W10-CASH + (W10-CASH * W05-RTE).
-             COMPUTE W10-VWSALE ROUNDED
-     = W10-WSALE + (W10-WSALE * W05-RTE).
-             COMPUTE W10-VSELL ROUNDED
-     = W10-SELL + (W10-SELL * W05-RTE).
-    IF STK-PRC = ZERO
-        MOVE "EA"  TO STK-PACK.
+               MOVE W05-VAT(1)       TO W05-RATE.
+             COMPUTE W10-VCASH  ROUNDED = W10-CASH  + (W10-CASH * W05-RTE).
+             COMPUTE W10-VWSALE ROUNDED = W10-WSALE + (W10-WSALE * W05-RTE).
+             COMPUTE W10-VSELL  ROUNDED = W10-SELL  + (W10-SELL * W05-RTE).
+           IF STK-PRC = ZERO
+               MOVE "EA"             TO STK-PACK.
        CA599.
              EXIT.
 
@@ -905,7 +925,7 @@
                                      END-IF
                                  END-IF
                  WHEN ENTER-KEY  GO TO KA04
-                 WHEN OTHER  CALL X"E5"
+                 WHEN OTHER  PERFORM AA900-ALARM
                END-EVALUATE
                GO TO KA02
            ELSE
@@ -913,7 +933,7 @@
                EVALUATE KEY-CODE-1
                  WHEN ESC-KEY   MOVE "0"  TO WS-OPTION
                                 GO TO KA06
-                 WHEN OTHER     CALL X"E5"
+                 WHEN OTHER     PERFORM AA900-ALARM
                END-EVALUATE
                GO TO KA02
            ELSE
@@ -921,17 +941,17 @@
                MOVE KEY-CODE-1X  TO WS-OPTION
                CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS
                IF (WS-OPTION < "0" OR > "9")
-                   CALL X"E5"
+                   PERFORM AA900-ALARM
                    GO TO KA02
                END-IF
                GO TO KA05
            ELSE
-               CALL X"E5"
+               PERFORM AA900-ALARM
                GO TO KA02.
 
        KA04.
     IF SCREEN-LIN < 5
-        CALL X"E5"
+        PERFORM AA900-ALARM
         GO TO KA02
     ELSE
     IF SCREEN-LIN = 5
@@ -1262,157 +1282,148 @@
              PERFORM KA18.
              GO TO KA35.
        KA40.
-             MOVE 1              TO W35-S1.
+             MOVE 1                  TO W35-S1.
        KA45.
-             MOVE 1              TO W35-S2.
-      MOVE SPACES TO R-L1.
+             MOVE 1                  TO W35-S2.
+             MOVE SPACES             TO R-L1.
 
        KA50.
-           IF W15-ITM (W35-S1, W35-S2) NOT = SPACES
-               MOVE W15-ITM (W35-S1, W35-S2)
-                                 TO LB2-DATA (W35-S2).
+           IF W15-ITM(W35-S1, W35-S2) NOT = SPACES
+               MOVE W15-ITM(W35-S1, W35-S2)
+                                     TO LB2-DATA(W35-S2).
            IF W35-S2 < 3
-               ADD 1             TO W35-S2
+               ADD 1                 TO W35-S2
                GO TO KA50.
 
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA45.
+             MOVE 1   TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA45.
 
        KA55.
-           IF W15-ITM (W35-S1, W35-S2) NOT = SPACES
-               MOVE W15-DSC1 (W35-S1, W35-S2)
-                                 TO LB2-DATA (W35-S2).
+           IF W15-ITM(W35-S1, W35-S2) NOT = SPACES
+               MOVE W15-DSC1(W35-S1, W35-S2) TO LB2-DATA(W35-S2).
            IF W35-S2 < 3
-               ADD 1             TO W35-S2
+               ADD 1                 TO W35-S2
                GO TO KA55.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA45.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA45.
 
        KA58.
-           IF W15-ITM (W35-S1, W35-S2) NOT = SPACES
-               MOVE "VAT inclusive"
-                                 TO LB2-H (W35-S2)
-               MOVE W15-PRC (W35-S1, W35-S2)
-                                 TO LB2-PRC (W35-S2).
+           IF W15-ITM(W35-S1, W35-S2) NOT = SPACES
+               MOVE "VAT inclusive"  TO LB2-H(W35-S2)
+               MOVE W15-PRC(W35-S1, W35-S2) TO LB2-PRC(W35-S2).
            IF W35-S2 < 3
-               ADD 1             TO W35-S2
+               ADD 1                 TO W35-S2
                GO TO KA58.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA45.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA45.
 
        KA60.
-           IF NOT(W15-SUPP (W35-S1, W35-S2) = SPACES OR LOW-VALUES)
-               MOVE W15-SUPP (W35-S1, W35-S2)
-                                 TO LB2-DATA (W35-S2).
+           IF NOT(W15-SUPP(W35-S1, W35-S2) = SPACES OR LOW-VALUES)
+               MOVE W15-SUPP(W35-S1, W35-S2) TO LB2-DATA(W35-S2).
            IF W35-S2 < 3
-               ADD 1             TO W35-S2
+               ADD 1                 TO W35-S2
                GO TO KA60.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA45.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA45.
            IF W35-S1 < 2
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA50.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES TO R-L1.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-L1.
 
        KA65.
            IF W20-NO < 1
-        GO TO KA795.
-             MOVE STK-CODE       TO W15-SCDE (W35-S1).
-             MOVE STK-DESC       TO W15-DSC (W35-S1).
-             MOVE STK-SUPP       TO W15-SUPP2 (W35-S1).
-    IF WS-PRICE = "N"
-               MOVE W10-VSELL    TO W15-PRICE (W35-S1)
+               GO TO KA795.
+             MOVE STK-CODE           TO W15-SCDE(W35-S1).
+             MOVE STK-DESC           TO W15-DSC(W35-S1).
+             MOVE STK-SUPP           TO W15-SUPP2(W35-S1).
+           IF WS-PRICE = "N"
+               MOVE W10-VSELL        TO W15-PRICE(W35-S1)
            ELSE
-               MOVE ZERO         TO W15-PRICE (W35-S1).
-             SUBTRACT 1          FROM W20-NO.
+               MOVE ZERO             TO W15-PRICE(W35-S1).
+             SUBTRACT 1              FROM W20-NO.
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA65.
              PERFORM KA70 THRU KA85.
              PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
               GO TO KA800.
              PERFORM KA18.
              GO TO KA65.
 
        KA70.
-             MOVE 1              TO W35-S1.
-      MOVE SPACES  TO R-L1.
+             MOVE 1                  TO W35-S1.
+             MOVE SPACES             TO R-L1.
 
        KA75.
-           IF W15-SCDE (W35-S1) NOT = SPACES
-               MOVE W15-SCDE (W35-S1)
-                                 TO LB3-DATA (W35-S1).
+           IF W15-SCDE(W35-S1) NOT = SPACES
+               MOVE W15-SCDE(W35-S1) TO LB3-DATA(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA75.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA70.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA70.
 
        KA80.
-           IF W15-SCDE (W35-S1) NOT = SPACES
-               MOVE W15-DSC (W35-S1)
-                                 TO LB3-DATA (W35-S1).
+           IF W15-SCDE(W35-S1) NOT = SPACES
+               MOVE W15-DSC(W35-S1)  TO LB3-DATA(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA80.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA70.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+             MOVE 1   TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA70.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
 
        KA84.
-           IF W15-SCDE (W35-S1) NOT = SPACES
-        IF WS-PRICE = "N"
-                   MOVE "VAT incl"
-                                 TO LB3-H (W35-S1)
-                   MOVE W15-PRICE (W35-S1)
-                                 TO LB3-PRC (W35-S1).
+           IF W15-SCDE(W35-S1) NOT = SPACES
+               IF WS-PRICE = "N"
+                   MOVE "VAT incl"   TO LB3-H(W35-S1)
+                   MOVE W15-PRICE(W35-S1) TO LB3-PRC(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA84.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA70.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA70.
 
        KA85.
-           IF NOT(W15-SUPP2 (W35-S1) = SPACES OR LOW-VALUES)
-               MOVE W15-SUPP2 (W35-S1)
-                                 TO LB3-DATA (W35-S1).
+           IF NOT(W15-SUPP2(W35-S1) = SPACES OR LOW-VALUES)
+               MOVE W15-SUPP2(W35-S1) TO LB3-DATA(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA85.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA70.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA70.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
 
        KA90.
            IF W20-NO < 1
-        GO TO KA795.
-             MOVE STK-CODE       TO W15-ITM4 (W35-S1).
-             MOVE STK-DESC       TO W15-DSC4 (W35-S1).
-             MOVE STK-SUPP       TO W15-SUPP4 (W35-S1).
+               GO TO KA795.
+             MOVE STK-CODE           TO W15-ITM4(W35-S1).
+             MOVE STK-DESC           TO W15-DSC4(W35-S1).
+             MOVE STK-SUPP           TO W15-SUPP4(W35-S1).
            IF WS-PRICE = "N"
-               MOVE W10-VSELL    TO W15-PRC4 (W35-S1)
+               MOVE W10-VSELL        TO W15-PRC4(W35-S1)
            ELSE
-               MOVE ZERO         TO W15-PRC4 (W35-S1).
-             SUBTRACT 1          FROM W20-NO.
+               MOVE ZERO             TO W15-PRC4(W35-S1).
+             SUBTRACT 1              FROM W20-NO.
            IF W35-S1 < 3
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA90.
              PERFORM KA95 THRU KA120.
              PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
               GO TO KA800.
              PERFORM KA18.
              GO TO KA90.
@@ -1421,587 +1432,549 @@
       *
       *      S E T   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
 
        KA100.
-             MOVE 1              TO W35-S1.
-      MOVE SPACES  TO R-L1.
+             MOVE 1                  TO W35-S1.
+             MOVE SPACES             TO R-L1.
 
        KA105.
-           IF W15-ITM4 (W35-S1) NOT = SPACES
-               MOVE W15-ITM4 (W35-S1)
-                                 TO LB4-CODE (W35-S1).
+           IF W15-ITM4(W35-S1) NOT = SPACES
+               MOVE W15-ITM4(W35-S1) TO LB4-CODE(W35-S1).
            IF W35-S1 < 3
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA105.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
       *
       *      C A N C E L   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      PERFORM KA100.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             PERFORM KA100.
 
        KA110.
-           IF W15-ITM4 (W35-S1) NOT = SPACES
-               MOVE W15-DSC4 (W35-S1)
-                                 TO LB4-DESC (W35-S1).
+           IF W15-ITM4(W35-S1) NOT = SPACES
+               MOVE W15-DSC4(W35-S1) TO LB4-DESC(W35-S1).
            IF W35-S1 < 3
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA110.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA100.
+             MOVE 1   TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA100.
 
        KA112.
-           IF W15-ITM4 (W35-S1) NOT = SPACES
-           IF NOT(W15-SUPP4 (W35-S1) = SPACES OR LOW-VALUES)
-               MOVE "Supplier:"  TO LB4-H (W35-S1)
-               MOVE W15-SUPP4 (W35-S1)
-                                 TO LB4-LABCDE (W35-S1).
+           IF W15-ITM4(W35-S1) NOT = SPACES
+           IF NOT(W15-SUPP4(W35-S1) = SPACES OR LOW-VALUES)
+               MOVE "Supplier:"      TO LB4-H(W35-S1)
+               MOVE W15-SUPP4(W35-S1) TO LB4-LABCDE(W35-S1).
            IF W35-S1 < 3
                ADD 1             TO W35-S1
                GO TO KA112.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA100.
+             MOVE 1              TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA100.
 
        KA115.
-           IF W15-ITM4 (W35-S1) NOT = SPACES
+           IF W15-ITM4(W35-S1) NOT = SPACES
                IF WS-PRICE = "N"
-                   MOVE "VAT incl"
-                                 TO LB4-H (W35-S1)
-                   MOVE W15-PRC4 (W35-S1)
-                                 TO LB4-PRC (W35-S1).
+                   MOVE "VAT incl"   TO LB4-H(W35-S1)
+                   MOVE W15-PRC4(W35-S1) TO LB4-PRC(W35-S1).
            IF W35-S1 < 3
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA115.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA100.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA100.
 
        KA120.
-           IF W15-ITM4 (W35-S1) NOT = SPACES
-               MOVE WS-LABCDE    TO LB4-LABCDE (W35-S1)
-               MOVE W05-MMYY     TO LB4-DTE (W35-S1).
+           IF W15-ITM4(W35-S1) NOT = SPACES
+               MOVE WS-LABCDE        TO LB4-LABCDE(W35-S1)
+               MOVE W12-MMYY         TO LB4-DTE(W35-S1).
            IF W35-S1 < 3
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA120.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA100.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA100.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
 
        KA125.
            IF W20-NO < 1
-        GO TO KA795.
-             MOVE STK-CODE       TO W15-ITM5 (W35-S1).
-             MOVE STK-DESC       TO W15-DSC5 (W35-S1).
-      MOVE STK-SUPP  TO W15-SUPP5 (W35-S1).
+               GO TO KA795.
+             MOVE STK-CODE           TO W15-ITM5(W35-S1).
+             MOVE STK-DESC           TO W15-DSC5(W35-S1).
+             MOVE STK-SUPP           TO W15-SUPP5(W35-S1).
            IF WS-PRICE = "N"
-               MOVE W10-VSELL    TO W15-PRC5 (W35-S1)
+               MOVE W10-VSELL        TO W15-PRC5(W35-S1)
            ELSE
-               MOVE ZERO         TO W15-PRC5 (W35-S1).
-             SUBTRACT 1          FROM W20-NO.
+               MOVE ZERO             TO W15-PRC5(W35-S1).
+             SUBTRACT 1              FROM W20-NO.
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA125.
-      PERFORM KA130 THRU KA155B.
+             PERFORM KA130 THRU KA155B.
              PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              GO TO KA800.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               GO TO KA800.
              PERFORM KA18.
              GO TO KA125.
 
        KA130.
-      MOVE SPACES  TO R-L1.
+             MOVE SPACES             TO R-L1.
 
        KA135.
       *
       *      S E T   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
 
        KA140.
-             MOVE 1              TO W35-S1.
-      MOVE SPACES  TO R-L1.
+             MOVE 1                  TO W35-S1.
+             MOVE SPACES             TO R-L1.
 
        KA145.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
+           IF W15-ITM5(W35-S1) NOT = SPACES
                IF W35-S1 = 1
-                   MOVE W15-ITM5 (1)
-                                 TO SAPDC-CDE1
+                   MOVE W15-ITM5(1)  TO SAPDC-CDE1
                ELSE
                IF W35-S1 = 2
-                   MOVE W15-ITM5 (2)
-                                 TO SAPDC-CDE2
+                   MOVE W15-ITM5(2)  TO SAPDC-CDE2
                ELSE
                IF W35-S1 = 3
-                   MOVE W15-ITM5 (3)
-                                 TO SAPDC-CDE3
+                   MOVE W15-ITM5(3)  TO SAPDC-CDE3
                ELSE
-                   MOVE W15-ITM5 (4)
-                                 TO SAPDC-CDE4.
+                   MOVE W15-ITM5(4)  TO SAPDC-CDE4.
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA145.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-L1.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-L1.
       *
       *      C A N C E L   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      PERFORM KA140.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             PERFORM KA140.
 
        KA150.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
-               MOVE W15-DSC5 (W35-S1)
-                                 TO SAPDC-DESC (W35-S1).
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-DSC5(W35-S1) TO SAPDC-DESC (W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA150.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA140.
-      PERFORM CALL-PRINTUTL.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA140.
+             PERFORM CALL-PRINTUTL.
 
        KA155.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
+           IF W15-ITM5(W35-S1) NOT = SPACES
                IF WS-PRICE = "N"
-                   MOVE "VAT incl"
-     TO SAPDC-H (W35-S1).
+                   MOVE "VAT incl"   TO SAPDC-H (W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
+               ADD 1                 TO W35-S1
                GO TO KA155.
-      MOVE 0   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
       *
       *      S E T   E X P A N D E D   P R I N T
       *
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      MOVE SPACES  TO R-L1.
-      PERFORM KA140.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-L1.
+             PERFORM KA140.
 
        KA155A.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
+           IF W15-ITM5(W35-S1) NOT = SPACES
                IF WS-PRICE = "N"
-        IF W35-S1 = 1
-     MOVE W15-PRC5 (1)
-     TO SAPDC-PRC1
-               ELSE
-               IF W35-S1 = 2
-     MOVE W15-PRC5 (2)
-     TO SAPDC-PRC2
-               ELSE
-               IF W35-S1 = 3
-     MOVE W15-PRC5 (3)
-     TO SAPDC-PRC3
-               ELSE
-     MOVE W15-PRC5 (4)
-     TO SAPDC-PRC4.
-    IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA155A.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+                   IF W35-S1 = 1
+                       MOVE W15-PRC5(1) TO SAPDC-PRC1
+                   ELSE
+                   IF W35-S1 = 2
+                       MOVE W15-PRC5(2) TO SAPDC-PRC2
+                   ELSE
+                   IF W35-S1 = 3
+                       MOVE W15-PRC5(3) TO SAPDC-PRC3
+                   ELSE
+                       MOVE W15-PRC5(4) TO SAPDC-PRC4.
+           IF W35-S1 < 4
+               ADD 1                 TO W35-S1
+               GO TO KA155A.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
       *
       *      C A N C E L   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      PERFORM KA140.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             PERFORM KA140.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
 
        KA155B.
-    IF W15-ITM5 (W35-S1) NOT = SPACES
+           IF W15-ITM5(W35-S1) NOT = SPACES
                IF W35-S1 = 1
-     MOVE W15-SUPP5 (1)
-     TO SAPDC-SUP1
-     MOVE W05-MMYY TO SAPDC-DT1
-        ELSE
+                   MOVE W15-SUPP5(1) TO SAPDC-SUP1
+                   MOVE W12-MMYY     TO SAPDC-DT1
+               ELSE
                IF W35-S1 = 2
-     MOVE W15-SUPP5 (2)
-     TO SAPDC-SUP2
-     MOVE W05-MMYY TO SAPDC-DT2
-        ELSE
+                   MOVE W15-SUPP5(2) TO SAPDC-SUP2
+                   MOVE W12-MMYY     TO SAPDC-DT2
+               ELSE
                IF W35-S1 = 3
-     MOVE W15-SUPP5 (3)
-     TO SAPDC-SUP3
-     MOVE W05-MMYY TO SAPDC-DT3
-        ELSE
-     MOVE W15-SUPP5 (4)
-     TO SAPDC-SUP4
-     MOVE W05-MMYY TO SAPDC-DT4.
-    IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA155B.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA140.
-      PERFORM CALL-PRINTUTL.
-      PERFORM CALL-PRINTUTL.
+                   MOVE W15-SUPP5(3) TO SAPDC-SUP3
+                   MOVE W12-MMYY     TO SAPDC-DT3
+               ELSE
+                   MOVE W15-SUPP5(4) TO SAPDC-SUP4
+                   MOVE W12-MMYY     TO SAPDC-DT4.
+           IF W35-S1 < 4
+               ADD 1                 TO W35-S1
+               GO TO KA155B.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA140.
+             PERFORM CALL-PRINTUTL.
+             PERFORM CALL-PRINTUTL.
 
        KA160.
            IF W20-NO < 1
-        GO TO KA795.
-             MOVE STK-CODE       TO W15-ITM5 (W35-S1).
-             MOVE STK-DESC       TO W15-DSC5 (W35-S1).
-    IF WS-PRICE = "N"
-               MOVE W10-VSELL    TO W15-PRC5 (W35-S1)
+               GO TO KA795.
+             MOVE STK-CODE           TO W15-ITM5(W35-S1).
+             MOVE STK-DESC           TO W15-DSC5(W35-S1).
+           IF WS-PRICE = "N"
+               MOVE W10-VSELL        TO W15-PRC5(W35-S1)
            ELSE
-               MOVE ZERO         TO W15-PRC5 (W35-S1).
-             MOVE STK-COST       TO W35-CST.
-            MOVE W35-WHOLE  TO W35-CEDIT.
-            MOVE 1   TO W35-S3.
-      PERFORM KA26.
-      MOVE W20-COST  TO W15-COST (W35-S1).
-      MOVE W20-INV  TO W15-INV (W35-S1).
-      SUBTRACT 1   FROM W20-NO.
+               MOVE ZERO             TO W15-PRC5(W35-S1).
+             MOVE STK-COST           TO W35-CST.
+             MOVE W35-WHOLE          TO W35-CEDIT.
+             MOVE 1                  TO W35-S3.
+             PERFORM KA26.
+             MOVE W20-COST           TO W15-COST(W35-S1).
+             MOVE W20-INV            TO W15-INV(W35-S1).
+             SUBTRACT 1              FROM W20-NO.
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA160.
-      PERFORM KA165 THRU KA192.
+               ADD 1                 TO W35-S1
+               GO TO KA160.
+             PERFORM KA165 THRU KA192.
              PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              GO TO KA800.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               GO TO KA800.
              PERFORM KA18.
-      GO TO KA160.
+             GO TO KA160.
 
        KA165.
-      MOVE SPACES TO R-L1.
+             MOVE SPACES             TO R-L1.
 
        KA170.
       *
       *      S E T   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
 
        KA175.
-             MOVE 1              TO W35-S1.
-      MOVE SPACES  TO R-L1.
+             MOVE 1                  TO W35-S1.
+             MOVE SPACES             TO R-L1.
 
        KA180.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
-        MOVE W15-ITM5 (W35-S1)
-     TO LB5-CODE (W35-S1).
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-ITM5(W35-S1) TO LB5-CODE (W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA180.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-L1.
+               ADD 1                 TO W35-S1
+               GO TO KA180.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-L1.
       *
       *      C A N C E L   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      PERFORM KA175.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             PERFORM KA175.
 
        KA185.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
-               MOVE W15-DSC5 (W35-S1)
-     TO LB5-DESC (W35-S1).
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-DSC5(W35-S1) TO LB5-DESC(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA185.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA175.
+               ADD 1                 TO W35-S1
+               GO TO KA185.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA175.
 
        KA186.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
+           IF W15-ITM5(W35-S1) NOT = SPACES
                IF WS-PRICE = "N"
-                   MOVE "VAT incl"
-     TO LB5-H (W35-S1)
-                   MOVE W15-PRC5 (W35-S1)
-     TO LB5-PRC (W35-S1).
+                   MOVE "VAT incl"   TO LB5-H(W35-S1)
+                   MOVE W15-PRC5(W35-S1) TO LB5-PRC(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA186.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA175.
+               ADD 1                 TO W35-S1
+               GO TO KA186.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA175.
 
        KA190.
-    IF W15-ITM5 (W35-S1) NOT = SPACES
-        MOVE W15-COST (W35-S1)
-     TO LB5-COST (W35-S1)
-        MOVE WS-LABCDE  TO LB5-LABCDE (W35-S1)
-        MOVE W05-MMYY  TO LB5-DTE (W35-S1).
-    IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA190.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA175.
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-COST(W35-S1) TO LB5-COST(W35-S1)
+               MOVE WS-LABCDE        TO LB5-LABCDE(W35-S1)
+               MOVE W12-MMYY         TO LB5-DTE(W35-S1).
+           IF W35-S1 < 4
+               ADD 1                 TO W35-S1
+               GO TO KA190.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA175.
 
        KA192.
-    IF W15-ITM5 (W35-S1) NOT = SPACES
-        MOVE W15-INV (W35-S1)
-     TO LB5-COST (W35-S1).
-    IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA192.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA175.
-      PERFORM CALL-PRINTUTL.
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-INV(W35-S1)  TO LB5-COST(W35-S1).
+           IF W35-S1 < 4
+               ADD 1                 TO W35-S1
+               GO TO KA192.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA175.
+             PERFORM CALL-PRINTUTL.
 
        KA200.
            IF W20-NO < 1
-        GO TO KA795.
-      MOVE STK-CODE  TO W15-ITM4 (W35-S1).
-      MOVE STK-DESC  TO W15-DSC4 (W35-S1).
-    IF WS-PRICE = "N"
-        MOVE W10-VSELL  TO W15-PRC4 (W35-S1)
+               GO TO KA795.
+             MOVE STK-CODE           TO W15-ITM4(W35-S1).
+             MOVE STK-DESC           TO W15-DSC4(W35-S1).
+           IF WS-PRICE = "N"
+               MOVE W10-VSELL        TO W15-PRC4(W35-S1)
            ELSE
-        MOVE ZERO  TO W15-PRC4 (W35-S1).
-             MOVE STK-COST       TO W35-CST.
-            MOVE W35-WHOLE  TO W35-CEDIT.
-            MOVE 1   TO W35-S3.
-      PERFORM KA26.
-      MOVE W20-COST  TO W15-COST4 (W35-S1).
-      MOVE W20-INV  TO W15-INV4 (W35-S1).
-      MOVE STK-SUPP  TO W15-SUPP4 (W35-S1).
-      SUBTRACT 1   FROM W20-NO.
-    IF W35-S1 < 3
-               ADD 1             TO W35-S1
-        GO TO KA200.
-      PERFORM KA205 THRU KA240.
+               MOVE ZERO             TO W15-PRC4(W35-S1).
+             MOVE STK-COST           TO W35-CST.
+             MOVE W35-WHOLE          TO W35-CEDIT.
+             MOVE 1                  TO W35-S3.
+             PERFORM KA26.
+             MOVE W20-COST           TO W15-COST4(W35-S1).
+             MOVE W20-INV            TO W15-INV4(W35-S1).
+             MOVE STK-SUPP           TO W15-SUPP4(W35-S1).
+             SUBTRACT 1              FROM W20-NO.
+           IF W35-S1 < 3
+               ADD 1                 TO W35-S1
+               GO TO KA200.
+             PERFORM KA205 THRU KA240.
              PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              GO TO KA800.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               GO TO KA800.
              PERFORM KA18.
-      GO TO KA200.
+             GO TO KA200.
 
        KA205.
-      MOVE SPACES  TO R-L1.
+             MOVE SPACES             TO R-L1.
 
        KA210.
       *
       *      S E T   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
 
        KA215.
-             MOVE 1              TO W35-S1.
-      MOVE SPACES  TO R-L1.
+             MOVE 1                  TO W35-S1.
+             MOVE SPACES             TO R-L1.
 
        KA220.
-    IF W15-ITM4 (W35-S1) NOT = SPACES
-        MOVE W15-ITM4 (W35-S1)
-     TO LB5-CODE (W35-S1).
-    IF W35-S1 < 3
-               ADD 1             TO W35-S1
-        GO TO KA220.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-L1.
+           IF W15-ITM4(W35-S1) NOT = SPACES
+               MOVE W15-ITM4(W35-S1) TO LB5-CODE(W35-S1).
+           IF W35-S1 < 3
+               ADD 1                 TO W35-S1
+               GO TO KA220.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-L1.
       *
       *      C A N C E L   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      PERFORM KA215.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             PERFORM KA215.
 
        KA225.
-    IF W15-ITM4 (W35-S1) NOT = SPACES
-        MOVE W15-DSC4 (W35-S1)
-     TO LB5-DESC (W35-S1).
-    IF W35-S1 < 3
-               ADD 1             TO W35-S1
-        GO TO KA225.
-      MOVE SPACES  TO LB5-SPC (3).
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA215.
+           IF W15-ITM4(W35-S1) NOT = SPACES
+               MOVE W15-DSC4(W35-S1) TO LB5-DESC(W35-S1).
+           IF W35-S1 < 3
+               ADD 1                 TO W35-S1
+               GO TO KA225.
+             MOVE SPACES             TO LB5-SPC(3).
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA215.
 
        KA230.
-    IF W15-ITM4 (W35-S1) NOT = SPACES
+           IF W15-ITM4(W35-S1) NOT = SPACES
                IF WS-PRICE = "N"
-                   MOVE "VAT incl"
-     TO LB5-H (W35-S1)
-     MOVE W15-PRC4 (W35-S1)
-     TO LB5-PRC (W35-S1).
-    IF W35-S1 < 3
-               ADD 1             TO W35-S1
-        GO TO KA230.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA215.
+                   MOVE "VAT incl"   TO LB5-H (W35-S1)
+                   MOVE W15-PRC4(W35-S1) TO LB5-PRC(W35-S1).
+           IF W35-S1 < 3
+               ADD 1                 TO W35-S1
+               GO TO KA230.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA215.
 
        KA235.
-    IF W15-ITM4 (W35-S1) NOT = SPACES
-        MOVE W15-COST (W35-S1)
-     TO LB5-COST (W35-S1)
-        MOVE WS-LABCDE  TO LB5-LABCDE (W35-S1)
-        MOVE W05-MMYY  TO LB5-DTE (W35-S1).
-    IF W35-S1 < 3
-               ADD 1             TO W35-S1
-        GO TO KA235.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA215.
+           IF W15-ITM4(W35-S1) NOT = SPACES
+               MOVE W15-COST(W35-S1) TO LB5-COST(W35-S1)
+               MOVE WS-LABCDE        TO LB5-LABCDE(W35-S1)
+               MOVE W12-MMYY         TO LB5-DTE(W35-S1).
+           IF W35-S1 < 3
+               ADD 1                 TO W35-S1
+               GO TO KA235.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA215.
 
        KA240.
-    IF W15-ITM4 (W35-S1) NOT = SPACES
-        MOVE W15-INV4 (W35-S1)
-     TO LB5-COST (W35-S1).
-    IF NOT(W15-SUPP4 (W35-S1)= SPACES OR LOW-VALUES)
-        MOVE "Supp:"  TO LB5-H2 (W35-S1)
-        MOVE W15-SUPP4 (W35-S1)
-     TO LB5-SUPP (W35-S1).
-    IF W35-S1 < 3
-               ADD 1             TO W35-S1
-        GO TO KA240.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA215.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+           IF W15-ITM4(W35-S1) NOT = SPACES
+               MOVE W15-INV4(W35-S1) TO LB5-COST(W35-S1).
+           IF NOT(W15-SUPP4(W35-S1)= SPACES OR LOW-VALUES)
+               MOVE "Supp:"          TO LB5-H2(W35-S1)
+               MOVE W15-SUPP4(W35-S1) TO LB5-SUPP(W35-S1).
+           IF W35-S1 < 3
+               ADD 1                 TO W35-S1
+               GO TO KA240.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA215.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
 
        KA260.
            IF W20-NO < 1
-        GO TO KA795.
-             MOVE STK-CODE       TO W15-ITM5 (W35-S1).
-             MOVE STK-DESC       TO W15-DSC5 (W35-S1).
-    IF WS-PRICE = "N"
-               MOVE W10-VSELL    TO W15-PRC5 (W35-S1)
+               GO TO KA795.
+             MOVE STK-CODE           TO W15-ITM5(W35-S1).
+             MOVE STK-DESC           TO W15-DSC5(W35-S1).
+           IF WS-PRICE = "N"
+               MOVE W10-VSELL        TO W15-PRC5(W35-S1)
            ELSE
-               MOVE ZERO         TO W15-PRC5 (W35-S1).
-             MOVE STK-COST       TO W35-CST.
-            MOVE W35-WHOLE  TO W35-CEDIT.
-            MOVE 1   TO W35-S3.
-      PERFORM KA26.
-      MOVE W20-COST  TO W15-COST (W35-S1).
-      MOVE W20-INV  TO W15-INV (W35-S1).
-      SUBTRACT 1   FROM W20-NO.
+               MOVE ZERO             TO W15-PRC5(W35-S1).
+             MOVE STK-COST           TO W35-CST.
+             MOVE W35-WHOLE          TO W35-CEDIT.
+             MOVE 1                  TO W35-S3.
+             PERFORM KA26.
+             MOVE W20-COST           TO W15-COST(W35-S1).
+             MOVE W20-INV            TO W15-INV(W35-S1).
+             SUBTRACT 1              FROM W20-NO.
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA260.
-      PERFORM KA265 THRU KA292.
+               ADD 1                 TO W35-S1
+               GO TO KA260.
+             PERFORM KA265 THRU KA292.
              PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              GO TO KA800.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               GO TO KA800.
              PERFORM KA18.
-      GO TO KA260.
+             GO TO KA260.
 
        KA265.
-      MOVE SPACES  TO R-L1.
+             MOVE SPACES             TO R-L1.
 
        KA270.
       *
       *      S E T   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
 
        KA275.
-             MOVE 1              TO W35-S1.
-      MOVE SPACES  TO R-L1.
+             MOVE 1                  TO W35-S1.
+             MOVE SPACES             TO R-L1.
 
        KA280.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
-        MOVE W15-ITM5 (W35-S1)
-     TO LB6-CODE (W35-S1).
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-ITM5(W35-S1) TO LB6-CODE (W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA280.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-L1.
+               ADD 1                 TO W35-S1
+               GO TO KA280.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-L1.
       *
       *      C A N C E L   E X P A N D E D   P R I N T
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      PERFORM KA275.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             PERFORM KA275.
 
        KA285.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
-               MOVE W15-DSC5 (W35-S1)
-     TO LB6-DESC (W35-S1).
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-DSC5(W35-S1) TO LB6-DESC(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA285.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA275.
+               ADD 1                 TO W35-S1
+               GO TO KA285.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA275.
 
        KA286.
-           IF W15-ITM5 (W35-S1) NOT = SPACES
+           IF W15-ITM5(W35-S1) NOT = SPACES
                IF WS-PRICE = "N"
-                   MOVE "VAT incl"
-     TO LB6-H (W35-S1)
-                   MOVE W15-PRC5 (W35-S1)
-     TO LB6-PRC (W35-S1).
+                   MOVE "VAT incl"   TO LB6-H(W35-S1)
+                   MOVE W15-PRC5(W35-S1) TO LB6-PRC(W35-S1).
            IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA286.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA275.
+               ADD 1                 TO W35-S1
+               GO TO KA286.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA275.
 
        KA290.
-    IF W15-ITM5 (W35-S1) NOT = SPACES
-        MOVE W15-COST (W35-S1)
-     TO LB6-COST (W35-S1)
-        MOVE WS-LABCDE  TO LB6-LABCDE (W35-S1)
-        MOVE W05-MMYY  TO LB6-DTE (W35-S1).
-    IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA290.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA275.
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-COST(W35-S1) TO LB6-COST(W35-S1)
+               MOVE WS-LABCDE        TO LB6-LABCDE(W35-S1)
+               MOVE W12-MMYY         TO LB6-DTE(W35-S1).
+           IF W35-S1 < 4
+               ADD 1                 TO W35-S1
+               GO TO KA290.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA275.
 
        KA292.
-    IF W15-ITM5 (W35-S1) NOT = SPACES
-        MOVE W15-INV (W35-S1)
-     TO LB6-COST (W35-S1).
-    IF W35-S1 < 4
-               ADD 1             TO W35-S1
-        GO TO KA292.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      PERFORM KA275.
-      PERFORM CALL-PRINTUTL.
+           IF W15-ITM5(W35-S1) NOT = SPACES
+               MOVE W15-INV(W35-S1)  TO LB6-COST(W35-S1).
+           IF W35-S1 < 4
+               ADD 1                 TO W35-S1
+               GO TO KA292.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             PERFORM KA275.
+             PERFORM CALL-PRINTUTL.
 
        KA795.
-             ADD 1               TO WS-PRCKEY.
+             ADD 1                   TO WS-PRCKEY.
            IF WS-PRCKEY < WS-KEYSTR
                GO TO KA20.
            IF WS-LAB = "2"
@@ -2013,89 +1986,90 @@
                IF W35-S1 > 1
                    PERFORM KA70 THRU KA85
                END-IF
-    ELSE
+           ELSE
            IF WS-LAB = "4"
                IF W35-S1 > 1
                    PERFORM KA95 THRU KA120
                END-IF
-    ELSE
-    IF WS-LAB = "5"
+           ELSE
+           IF WS-LAB = "5"
                IF W35-S1 > 1
-     PERFORM KA165 THRU KA192
+                   PERFORM KA165 THRU KA192
                END-IF
       *
       *    ****    1 0  C P I
       *
-        MOVE 0   TO WS-ADVANCE
-        MOVE 1   TO W02-PRN-TYPE
-        PERFORM CALL-PRINTUTL
-        MOVE "D"   TO W02-PRN-TYPE
-    ELSE
-    IF WS-LAB = "6"
+               MOVE 0                TO WS-ADVANCE
+               MOVE 1                TO W02-PRN-TYPE
+               PERFORM CALL-PRINTUTL
+               MOVE "D"              TO W02-PRN-TYPE
+           ELSE
+           IF WS-LAB = "6"
                IF W35-S1 > 1
-     PERFORM KA205 THRU KA240
+                   PERFORM KA205 THRU KA240
                END-IF
       *
       *    ****    1 0  C P I
       *
-        MOVE 0   TO WS-ADVANCE
-        MOVE 1   TO W02-PRN-TYPE
-        PERFORM CALL-PRINTUTL
-        MOVE "D"   TO W02-PRN-TYPE
-    ELSE
-    IF WS-LAB = "7"
+               MOVE 0                TO WS-ADVANCE
+               MOVE 1                TO W02-PRN-TYPE
+               PERFORM CALL-PRINTUTL
+               MOVE "D"              TO W02-PRN-TYPE
+           ELSE
+           IF WS-LAB = "7"
                IF W35-S1 > 1
-     PERFORM KA265 THRU KA292
+                   PERFORM KA265 THRU KA292
                END-IF
       *
       *    ****    1 0  C P I
       *
-        MOVE 0   TO WS-ADVANCE
-        MOVE 1   TO W02-PRN-TYPE
-        PERFORM CALL-PRINTUTL
-        MOVE "D"   TO W02-PRN-TYPE
-    ELSE
-    IF WS-LAB = "8"
+               MOVE 0                TO WS-ADVANCE
+               MOVE 1                TO W02-PRN-TYPE
+               PERFORM CALL-PRINTUTL
+               MOVE "D"              TO W02-PRN-TYPE
+           ELSE
+           IF WS-LAB = "8"
                IF W35-S1 > 1
-     PERFORM KA130 THRU KA155B
+                   PERFORM KA130 THRU KA155B
                END-IF
       *
       *    ****    1 0  C P I
       *
-        MOVE 0   TO WS-ADVANCE
-        MOVE 1   TO W02-PRN-TYPE
-        PERFORM CALL-PRINTUTL
-        MOVE "D"   TO W02-PRN-TYPE
+               MOVE 0                TO WS-ADVANCE
+               MOVE 1                TO W02-PRN-TYPE
+               PERFORM CALL-PRINTUTL
+               MOVE "D"              TO W02-PRN-TYPE
       *
       *    ****    6   L P I
       *
-        MOVE 0   TO WS-ADVANCE
-        MOVE 6   TO W02-PRN-TYPE
-        PERFORM CALL-PRINTUTL.
-      CLOSE PRCLAB.
+               MOVE 0                TO WS-ADVANCE
+               MOVE 6                TO W02-PRN-TYPE
+               PERFORM CALL-PRINTUTL.
+             CLOSE PRCLAB.
              OPEN OUTPUT PRCLAB.
-             MOVE 1              TO WS-PRCKEY.
+             MOVE 1                  TO WS-PRCKEY.
              INITIALIZE PLB-REC1.
-             MOVE 2              TO PLB-QUANT.
+             MOVE 2                  TO PLB-QUANT.
              PERFORM WRITE-PRCLAB THRU WRITE-PRCLAB-EXIT.
              CLOSE PRCLAB.
              GO TO KA999.
 
        KA800.
-             MOVE WS-KEYSTR      TO WS-PRCKEY.
+             MOVE WS-KEYSTR          TO WS-PRCKEY.
        KA999.
              EXIT.
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -2118,51 +2092,46 @@
            IF W10-SLNGTH > 14
                MOVE 14               TO W10-SLNGTH.
        ZA05.
-             MOVE 1              TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-COMPANY    TO W60-COMPANY.
-             MOVE PAR-DMY        TO W05-DATE.
-             MOVE PAR-YMD        TO W05-DATE-YMD.
-      MOVE 1   TO W05-V-RATE.
+             MOVE 1                  TO W05-V-RATE.
 
        ZA05-VAT.
-      MOVE W05-VAT-CODE  TO DPT-CODE.
-      PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-      MOVE DPT-R-DATE  TO WS-VAT-DATE(W05-V-RATE).
-      MOVE DPT-RATE  TO W05-VAT(W05-V-RATE).
-      ADD 6 W05-V-RATE  GIVING WS-S1.
-      MOVE DPT-P-RATE  TO W05-VAT(WS-S1).
-    IF W05-V-RATE < 6
-        ADD 1   TO W05-V-RATE
-        GO TO ZA05-VAT.
-      MOVE 6   TO WS-PARKEY.
+             MOVE W05-VAT-CODE       TO DPT-CODE.
+             PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+             MOVE DPT-R-DATE         TO WS-VAT-DATE(W05-V-RATE).
+             MOVE DPT-RATE           TO W05-VAT(W05-V-RATE).
+             ADD 6 W05-V-RATE        GIVING WS-S1.
+             MOVE DPT-P-RATE         TO W05-VAT(WS-S1).
+           IF W05-V-RATE < 6
+               ADD 1                 TO W05-V-RATE
+               GO TO ZA05-VAT.
+             MOVE 6                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-            MOVE PAR-COST-CODE  TO W30-COST-CODE.
-      OPEN I-O PRCLAB.
+             MOVE PAR-COST-CODE      TO W30-COST-CODE.
+             OPEN I-O PRCLAB.
            IF WS-STATUS = "05"
                CLOSE PRCLAB
                OPEN OUTPUT PRCLAB
                INITIALIZE PLB-REC1
-               MOVE 2            TO PLB-QUANT
+               MOVE 2                TO PLB-QUANT
                PERFORM WRITE-PRCLAB THRU WRITE-PRCLAB-EXIT
                CLOSE PRCLAB
                OPEN I-O PRCLAB.
              PERFORM READ-PRCLAB THRU READ-PRCLAB-EXIT.
-             MOVE PLB-QUANT      TO WS-PRCKEY.
-            MOVE 3 TO WS-NETKEY.
+             MOVE PLB-QUANT          TO WS-PRCKEY.
+             MOVE 3                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-             MOVE STK-LABCDE     TO WS-LABCDE.
-            PERFORM ERASE-SCREEN.
+             MOVE STK-LABCDE         TO WS-LABCDE.
+             PERFORM ERASE-SCREEN.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
-
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
        ZA999-EXIT.
              EXIT.

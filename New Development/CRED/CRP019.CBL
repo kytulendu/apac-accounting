@@ -13,16 +13,22 @@
       *                                                                *
       *     C R E D I T O R   C H E Q U E S   I S S U E D              *
       *                                                                *
-      *       Version 9.00.80 - August 2015                            *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.        CRP019.
-       AUTHOR.         J.W.LEMMON (CSS).
-       DATE-WRITTEN.        JUNE, 1983.
+       AUTHOR.            J.W.LEMMON (CSS).
+       DATE-WRITTEN.      JUNE, 1983.
 
-
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -112,64 +118,65 @@
       *            *     *       ******    **    **   **    **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-       77  WS-SUB    PIC 9(04)  COMP-5.
-       77  WS-IXS1         PIC  9(04)    COMP-5.
-       77  WS-IXS2         PIC  9(04)    COMP-5.
-       77  WS-IXS3         PIC  9(04)    COMP-5.
-       77  WS-IXS4         PIC  9(04)    COMP-5.
-       77  WS-PARKEY       PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-RECKEY       PIC  9(04)    COMP-5.
-       77  WS-NETKEY    PIC 9(04)  COMP-5.
-       77  WS-PURKEY       PIC  9(04)    COMP-5.
-       77  WS-KEYSTR       PIC  9(04)    COMP-5.
-       77  WS-RECOVER      PIC  9(04)    COMP-5.
-       77  WS-SHARED    PIC 9(04)  COMP-5 VALUE 1.
-       77  WS-PURLAST      PIC  9(04)    COMP-5.
-       77  WS-TRANS        PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-ERROR        PIC  9(01)    VALUE 0.
-       77  WS-ETYPE        PIC  X(01).
-       77  WS-INT    PIC X(01).
-       77  WS-DEL          PIC  X(01).
-       77  WS-ENT          PIC  X(08).
-       77  WS-ENT1         PIC  X(08).
-       77  WS-INDS         PIC  9(01)    VALUE 0.
-       77  WS-INDI         PIC  9(01)    VALUE 0.
-       77  WS-S            PIC  9(04)    COMP-5.
-       77  WS-S1           PIC  9(04)    COMP-5.
-       77  WS-S2           PIC  9(04)    COMP-5.
-       77  WS-S3           PIC  9(04)    COMP-5.
-       77  WS-S4           PIC  9(04)    COMP-5.
-       77  WS-S9           PIC  9(04)    COMP-5.
-       77  WS-ITM          PIC  X(14).
-       77  WS-ITM1         PIC  X(14).
-       77  WS-ORD          PIC  X(01).
-       77  WS-OPTION       PIC  X(01).
-       77  WS-SKIP         PIC  X(01) VALUE "Y".
-       77  WS-LOOK         PIC  X(01) VALUE "S".
-       77  WS-CHAR1    PIC X(01).
-       77  WS-PASSWORD    PIC X(06).
-       77  WS-IND    PIC  9(01) VALUE 0.
-       77  WS-SKEY         PIC  9(05).
-       77  WS-KEY1         PIC  9(04)     COMP-5.
-       77  WS-LINES        PIC  9(04)     COMP-5 VALUE 0.
-       77  WS-PAGE         PIC  9(04)     COMP-5 VALUE 0.
-       77  WS-ER1    PIC X(09)  VALUE "No record".
-       77  WS-HDTE    PIC X(04)  VALUE "DATE".
-       77  WS-HACNO        PIC X(04)     VALUE "ACNO".
-       77  WS-HNAME        PIC X(04)     VALUE "NAME".
-       77  WS-HAGE         PIC X(12)     VALUE "AGE 30 - 180".
-       77  WS-HCHQ    PIC X(07)  VALUE "CHQ/REF".
-       77  WS-SDTE         PIC X(04)     VALUE "Date".
-       77  WS-SACNO        PIC X(04)     VALUE "Acno".
-       77  WS-SCRED        PIC X(09)     VALUE "Creditor:".
-       77  WS-SNAME        PIC X(04)     VALUE "Name".
-       77  WS-SSETT        PIC X(22)     VALUE
-                           "30  60  90 120 150 180".
-       77  WS-H1           PIC X(05)     VALUE "DATE:".
-       77  WS-H3           PIC X(05)     VALUE "PAGE:".
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-SUB                  PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-PARKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-RECKEY               PIC  9(04)    COMP-5.
+       77  WS-NETKEY               PIC  9(04)    COMP-5.
+       77  WS-PURKEY               PIC  9(04)    COMP-5.
+       77  WS-KEYSTR               PIC  9(04)    COMP-5.
+       77  WS-RECOVER              PIC  9(04)    COMP-5.
+       77  WS-SHARED               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PURLAST              PIC  9(04)    COMP-5.
+       77  WS-TRANS                PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-ERROR                PIC  9(01)           VALUE 0.
+       77  WS-ETYPE                PIC  X(01).
+       77  WS-INT                  PIC  X(01).
+       77  WS-DEL                  PIC  X(01).
+       77  WS-ENT                  PIC  X(08).
+       77  WS-ENT1                 PIC  X(08).
+       77  WS-INDS                 PIC  9(01)           VALUE 0.
+       77  WS-INDI                 PIC  9(01)           VALUE 0.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S9                   PIC  9(04)    COMP-5.
+       77  WS-ITM                  PIC  X(14).
+       77  WS-ITM1                 PIC  X(14).
+       77  WS-ORD                  PIC  X(01).
+       77  WS-OPTION               PIC  X(01).
+       77  WS-SKIP                 PIC  X(01)           VALUE "Y".
+       77  WS-LOOK                 PIC  X(01)           VALUE "S".
+       77  WS-CHAR1                PIC  X(01).
+       77  WS-PASSWORD             PIC  X(06).
+       77  WS-IND                  PIC  9(01)           VALUE 0.
+       77  WS-SKEY                 PIC  9(05).
+       77  WS-KEY1                 PIC  9(04)    COMP-5.
+       77  WS-LINES                PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-PAGE                 PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-ER1                  PIC  X(09)           VALUE "No record".
+       77  WS-HDTE                 PIC  X(04)           VALUE "DATE".
+       77  WS-HACNO                PIC  X(04)           VALUE "ACNO".
+       77  WS-HNAME                PIC  X(04)           VALUE "NAME".
+       77  WS-HAGE                 PIC  X(12)           VALUE "AGE 30 - 180".
+       77  WS-HCHQ                 PIC  X(07)           VALUE "CHQ/REF".
+       77  WS-SDTE                 PIC  X(04)           VALUE "Date".
+       77  WS-SACNO                PIC  X(04)           VALUE "Acno".
+       77  WS-SCRED                PIC  X(09)           VALUE "Creditor:".
+       77  WS-SNAME                PIC  X(04)           VALUE "Name".
+       77  WS-SSETT                PIC  X(22)           VALUE "30  60  90 120 150 180".
+       77  WS-H1                   PIC  X(05)           VALUE "DATE:".
+       77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
+       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
+       77  PRG-CRED-LUP            PIC  X(12)           VALUE "CRP\CRPLOOK".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
       
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -197,7 +204,7 @@
       *
       *    Screen Heading
       *
-           03  CRT-HEADING         PIC  X(40) VALUE "CREDITOR CHEQUES ISSUED".
+           03  CRT-HEADING         PIC  X(40)           VALUE "CREDITOR CHEQUES ISSUED".
       *
       *    Company Name
       *
@@ -209,25 +216,24 @@
                05  CRT-WRKHD       PIC  X(11).
                05  CRT-WRKST       PIC  X(03).
 
-
        COPY "WS.WS".
 
        01  WS-HELP.
-    03  WS-MODULE       PIC  X(03) VALUE "CRP".
-    03  WS-PROG        PIC  X(03) VALUE "019".
+           03  WS-MODULE           PIC  X(03)           VALUE "CRP".
+           03  WS-PROG             PIC  X(03)           VALUE "019".
 
        01  W00-TRAN-CODES.
-           03  W00-C-ABR   PIC  X(03).
-           03  W00-C-DESC  PIC  X(15).
-           03  W00-C-ACT   PIC  9(01).
-           03  W00-C-CODE  PIC  9(02)    COMP-5.
-           03  W00-C-GL    PIC  9(06)    COMP-3.
-           03  W00-C-DAY   PIC  9(06)    COMP-5.
-           03  W00-C-VAL   PIC S9(09)V99 COMP-3.
-           03  W00-C-MTD   PIC  9(06)    COMP-5.
-           03  W00-C-MTDV  PIC S9(09)V99 COMP-3.
-           03  W00-C-YTD   PIC  9(06)    COMP-5.
-           03  W00-C-YTDV  PIC S9(09)V99 COMP-3.
+           03  W00-C-ABR           PIC  X(03).
+           03  W00-C-DESC          PIC  X(15).
+           03  W00-C-ACT           PIC  9(01).
+           03  W00-C-CODE          PIC  9(02)    COMP-5.
+           03  W00-C-GL            PIC  9(06)    COMP-3.
+           03  W00-C-DAY           PIC  9(06)    COMP-5.
+           03  W00-C-VAL           PIC S9(09)V99 COMP-3.
+           03  W00-C-MTD           PIC  9(06)    COMP-5.
+           03  W00-C-MTDV          PIC S9(09)V99 COMP-3.
+           03  W00-C-YTD           PIC  9(06)    COMP-5.
+           03  W00-C-YTDV          PIC S9(09)V99 COMP-3.
 
        01  WS-PARID.
           03  WS-SYS-ID       PIC  X(03).
@@ -381,12 +387,10 @@
         05  CH-150    PIC X(02).
         05  CH-180    PIC X(02).
 
-       COPY "W05.WS".
-
        COPY "W05.VAT".
 
        01  W05-EXTRA.
-    03  W05-ROUND       PIC  X(01).
+           03  W05-ROUND       PIC  X(01).
            03  W05-ROUND-VAL   PIC  9V9(02).
            03  W05-RVAL REDEFINES W05-ROUND-VAL.
                05  W05-RAND    PIC  9(01).
@@ -406,6 +410,17 @@
            03  W10-VSELL       PIC S9(09)V99 COMP-3.
            03  W10-VCASH       PIC S9(09)V99 COMP-3.
            03  W10-VWSALE      PIC S9(09)V99 COMP-3.
+
+      *
+      *    Date routines for accepting checking and formatting have
+      *    been removed from each program and the DateCheck program
+      *    will be called to handle these routines.
+      *
+      *    The following copy 'DateVariables' now includes the 'W12.WS'
+      *    and 'W20.WS' variables and is passed to DateCheck in the CALL
+      *    statement.
+      *
+       COPY "DateVariables.cpy".
 
        COPY "W15.CRP".
 
@@ -573,7 +588,7 @@
        SCREEN SECTION.
 
        01  S07.
-          03  LINE  2 COLUMN 35 FOREGROUND-COLOR 7 HIGHLIGHT
+          03  LINE  2 COLUMN 35 FOREGROUND-COLOR Grey HIGHLIGHT
            VALUE "CHEQUE/PAYMENT".
            03  LINE  4 COLUMN  2 PIC X(09) USING WS-SCRED.
            03  LINE  6 COLUMN 13 PIC X(04) USING WS-SDTE.
@@ -582,40 +597,49 @@
            03          COLUMN 49 PIC X(22) USING WS-SSETT.
 
        01  S19.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+          03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta
       PIC X(06) USING W15-ACNO AUTO.
 
        01  S27.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+          03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta
       PIC Z(05)9 USING W15-GRNN AUTO.
 
        01  S28.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+          03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta
       PIC Z9/99/9999 USING W15-GRND AUTO.
 
        01  S31.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+          03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta
       PIC Z(07)9.99 USING W15-TCOST AUTO.
 
        01  S34.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+          03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta
       PIC Z(07)9.99DB
             USING W15-DISCOUNT AUTO.
 
        01  S35.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
+          03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta
       PIC Z9.99 USING W15-DISC1 AUTO.
 
-       COPY "CRDLUP.CRT".
+       01  S55.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                           FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                   FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Creditor Lookup ".
+               05          COLUMN 35 VALUE                                  "Esc"         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 38 VALUE                                     " to exit".
+
+      *COPY "CRDLUP.CRT".
 
        01  S-CRED.
            03  LINE 23 COLUMN  2 VALUE "Balance :".
-    03        COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC Z(08)9.99DB USING P-BAL.
            03          COLUMN 28 VALUE "Due :".
-    03        COLUMN 34 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 34 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC Z(08)9.99DB USING P-OUT.
 
       /
@@ -653,16 +677,8 @@
        AA49.
              EXIT PROGRAM.
 
-       AA50-LOOKUP     SECTION.
-       AA50.
-            PERFORM SAVE-SCREEN.
-             MOVE 4              TO W44-FUNCTION.
-            PERFORM SCREEN-CONTENTS.
-            PERFORM CREDITOR-LOOKUP.
-            PERFORM RESTORE-SCREEN.
-       AA99.
-            EXIT.
-
+       COPY "AA50C.LUP".
+       
        AA050-HEADINGS  SECTION.
        AA050.
       *
@@ -674,7 +690,7 @@
              MOVE W60-COMPANY    TO R-H2.
              MOVE WS-H3          TO R-H3.
             ADD 1   TO WS-PAGE.
-             MOVE W05-DATE       TO R-DTE1.
+             MOVE W12-TODAY       TO R-DTE1.
              MOVE WS-PAGE        TO R-PGE.
       MOVE 1   TO WS-ADVANCE.
       PERFORM CALL-PRINTUTL.
@@ -691,6 +707,8 @@
 
        AA199.
              EXIT.
+
+       COPY "AA900.ALM".
 
       *    
       *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
@@ -773,6 +791,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -783,8 +804,8 @@
 
        COPY "CREDITOR.TRN".
 
-      /
-      *    ****    READ FILES ROUTINES
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
       *
        AB00-READ      SECTION.
 
@@ -804,9 +825,9 @@
 
        COPY "TXTRAN.RD".
 
-      /
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AC000-WRITE   SECTION.
 
        COPY "CONTROL.WR".
@@ -855,57 +876,69 @@
 
        COPY "APAC.HLP".
 
-      /
-      *       ****   *****   ***    ***   *   *  ***** ****   *   *
-      *       *   *  *     * *  *   *  *   *  * *   *  *   *
-      *       ****   ***    *    *   *  *   *  *** **** * *
-      *       *   *  *     * *  *   *   * *  * *   *  *
-      *       *   *  *****   ***    ***     *  ***** *   *  *
+      *
+      *       ****   *****  ***    ***   *   *  *****  ****   *   *
+      *       *   *  *     *   *  *   *  *   *  *      *   *  *   *
+      *       ****   ***   *      *   *  *   *  ***    ****    * *
+      *       *   *  *     *   *  *   *   * *   *      *   *    *
+      *       *   *  *****  ***    ***     *    *****  *   *    *
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
-      *   THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
+      *          THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       *        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *        ³ ORIGINAL ACTION (REC-TYPE)  ÄÄ  RECOVERY PROCESS ³
-      *        ³ 0 = RECORD CHANGED      ÄÄ     (REWRITE)    ³
-      *        ³ 1 = RECORD WAS ADDED      ÄÄ     (DELETE)    ³
-      *        ³ 2 = RECORD WAS DELETED      ÄÄ     (WRITE)    ³
+      *        ³ 0 = RECORD CHANGED          ÄÄ      (REWRITE)    ³
+      *        ³ 1 = RECORD WAS ADDED        ÄÄ      (DELETE)     ³
+      *        ³ 2 = RECORD WAS DELETED      ÄÄ      (WRITE)      ³
       *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY000        SECTION.
+      *    *************************************************************
+      *    ****             P A R A M E T E R   F I L E             ****
+      *    *************************************************************
        AY01.
-             MOVE 01             TO REC-FILE.
-             MOVE WS-PARKEY      TO REC-KEY.
-             MOVE ZERO           TO REC-TYPE
-            PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-RECORD1    TO REC-PARAM.
+             MOVE 01                 TO REC-FILE.
+             MOVE WS-PARKEY          TO REC-KEY.
+             MOVE ZERO               TO REC-TYPE
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             MOVE PAR-RECORD1        TO REC-PARAM.
              GO TO AY50.
-
+      *    *************************************************************
+      *    ****              C R E D I T O R   F I L E              ****
+      *    *************************************************************
        AY07.
-             MOVE 07 TO REC-FILE.
-             MOVE ZERO           TO REC-KEY.
-             MOVE WS-ACTION      TO REC-TYPE
+             MOVE 07                 TO REC-FILE.
+             MOVE ZERO               TO REC-KEY.
+             MOVE WS-ACTION          TO REC-TYPE
            IF WS-ACTION = 0 OR 2
                PERFORM READ-CREDIT-LOCK THRU READ-CREDIT-EXIT.
-             MOVE P-REC          TO REC-CREDIT.
+             MOVE P-REC              TO REC-CREDIT.
              GO TO AY50.
-
+      *    *************************************************************
+      *    ****  C R E D I T O R   T R A N S A C T I O N   F I L E  ****
+      *    *************************************************************
        AY08.
-             MOVE 08             TO REC-FILE.
-            MOVE ZERO   TO REC-KEY.
-             MOVE WS-ACTION      TO REC-TYPE
-            MOVE CT-REC  TO REC-CRTRAN.
+             MOVE 08                 TO REC-FILE.
+             MOVE ZERO               TO REC-KEY.
+             MOVE WS-ACTION          TO REC-TYPE
+             MOVE CT-REC             TO REC-CRTRAN.
              GO TO AY50.
-
+      *    *************************************************************
+      *    ****       V A L U E   A D D E D   T A X   F I L E       ****
+      *    *************************************************************
        AY19.
-             MOVE 19             TO REC-FILE.
-             MOVE ZERO           TO REC-KEY.
-             MOVE WS-ACTION      TO REC-TYPE.
-             MOVE TAX-RECORD1    TO REC-TXTRAN.
+             MOVE 19                 TO REC-FILE.
+             MOVE ZERO               TO REC-KEY.
+             MOVE WS-ACTION          TO REC-TYPE.
+             MOVE TAX-RECORD1        TO REC-TXTRAN.
              GO TO AY50.
-
+      *    *************************************************************
+      *    ****               C O N T R O L   F I L E               ****
+      *    *************************************************************
        AY39.
-             MOVE 39             TO REC-FILE.
-             MOVE WS-NETKEY      TO REC-KEY.
-             MOVE NET-RECORD     TO REC-NETWORK.
+             MOVE 39                 TO REC-FILE.
+             MOVE WS-NETKEY          TO REC-KEY.
+             MOVE ZERO               TO REC-TYPE.
+             MOVE NET-RECORD         TO REC-NETWORK.
              GO TO AY50.
 
        AY49.
@@ -921,184 +954,260 @@
                OPEN I-O RECOVER
                MOVE ZERO         TO WS-RECOVER.
              GO TO AY59.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³         W R I T E   R E C O V E R Y   R E C O R D         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY50.
-             ADD 1               TO WS-RECOVER.
-             MOVE WS-RECOVER     TO WS-RECKEY.
-             MOVE WS-TRANS       TO REC-TRAN.
+             ADD 1                   TO WS-RECOVER.
+             MOVE WS-RECOVER         TO WS-RECKEY.
+             MOVE WS-TRANS           TO REC-TRAN.
              WRITE REC-RECORD.
            IF WS-STATUS NOT = "00"
-               DISPLAY "Write error Recovery file - Status " AT 2312
-                        WITH FOREGROUND-COLOR 14
-                        WS-STATUS WITH FOREGROUND-COLOR 15
+               DISPLAY "Write error Recovery file - Status " AT 2212 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+               DISPLAY WS-STATUS                             AT 2247 WITH FOREGROUND-COLOR Grey HIGHLIGHT
                STOP RUN.
+             CLOSE RECOVER.
+             OPEN I-O RECOVER.
        AY59.
              EXIT.
       *
       *    ****    Start processing transaction
       *
        AY60.
-            MOVE 1   TO WS-COUNT.
-            MOVE 5   TO WS-SHARED.
-            PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-      *      MOVE SHR-STOCK  TO WS-STOCK.
+             MOVE 1                  TO WS-COUNT.
+             MOVE 5                  TO WS-SHARED.
+             PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
+      *      MOVE SHR-STOCK          TO WS-STOCK.
       *
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
       *
-            MOVE 4   TO WS-PARKEY.
+             MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
            IF PAR-USERS < 24
-               MOVE 1            TO WS-SUB
-        MOVE ZERO  TO WS-WAIT
+               MOVE 1                TO WS-SUB
+               MOVE ZERO             TO WS-WAIT
                GO TO AY62.
       *
-      *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
+      *    ****   Q   F U L L  -  W A I T   F O R   4   S E C O N D S
       *
-            DISPLAY "WAITING" AT 5051
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
-            COMMIT.
-      ACCEPT WS-STIME FROM TIME.
-      MOVE 400   TO WS-WAIT.
-            PERFORM LOCK-REC-LOOP.
-            DISPLAY SPACE AT 5051
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+             DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
+             COMMIT.
+             ACCEPT WS-STIME FROM TIME.
+             MOVE 400                TO WS-WAIT.
+             PERFORM LOCK-REC-LOOP.
+             DISPLAY SPACE AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
              GO TO AY60.
 
        AY61.
-            MOVE "CR"   TO PAR-PROG(WS-USUB).
-            MOVE LS-USER  TO PAR-USR(WS-USUB).
+      *
+      *    ****    Updating Creditor Files
+      *
+             MOVE "CR"               TO PAR-PROG(WS-USUB).
+             MOVE LS-USER            TO PAR-USR(WS-USUB).
              PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
       *
       *    ****    Read the CREDITOR control record in the NETWORK file
       *            and lock it. Log details to the RECOVERY file.
       *
-             MOVE 2              TO WS-NETKEY.
-            PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
+             MOVE 2                  TO WS-NETKEY.
+             PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
              PERFORM AY39 THRU AY59.
-            GO TO AY999.
+             GO TO AY999.
       *
-      *    ****   A R E   A N Y   U P D A T E S   I N P R O G R E S S
+      *    ****   A R E   A N Y   U P D A T E S   I N   P R O G R E S S
       *
        AY62.
-    IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-     PAR-USR(WS-SUB) = SPACES)
+           IF NOT(PAR-PROG(WS-SUB) = SPACES OR PAR-USR(WS-SUB) = SPACES)
       *
-      *    ****   A R E   D E B T O R O R   S T O C K   F I L E S
-      *    B E I N G   U P D A T E D
+      *    ****   A R E   C R E D I T O R   F I L E S   B E I N G   U P D A T E D
       *
-        IF NOT (PAR-PROG(WS-SUB) = SPACES)
-           IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
+               IF NOT(PAR-PROG(WS-SUB) = SPACES)
+                   IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
       *
-      *    ****   Y E S   -   S E T   W A I T P E R I O D
+      *    ****   Y E S   -   S E T   W A I T   P E R I O D
       *
-         GO TO AY62-WAIT
-     ELSE
-         ADD 1  TO WS-SUB
-         GO TO AY62
-     END-IF
-        ELSE
+                       GO TO AY62-WAIT
+                   ELSE
+                       ADD 1         TO WS-SUB
+                       GO TO AY62
+                   END-IF
+               ELSE
       *
-      *    ****   I S T H I S   P R O G R A M   I N T H E  Q
+      *    ****   I S   T H I S   P R O G R A M   I N   T H E   Q
       *
-        IF PAR-USR(WS-SUB) = LS-USER
+               IF PAR-USR(WS-SUB) = LS-USER
       *
-      *    ****   I S I T   N E X T I N   L I N E T O   P R O C E S S
+      *    ****   I S   I T   N E X T   I N   L I N E   T O   P R O C E S S
       *
-     IF WS-WAIT = ZERO
-         GO TO AY63
-     ELSE
-         GO TO AY62-WAIT
-     END-IF
-        ELSE
-     GO TO AY62-WAIT
-        END-IF
-    END-IF.
-      MOVE LS-USER  TO PAR-USR(WS-SUB).
-      MOVE WS-SUB  TO PAR-USERS.
-      PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-      GO TO AY62-CHECK.
+                   IF WS-WAIT = ZERO
+                       GO TO AY63
+                   ELSE
+                       GO TO AY62-WAIT
+                   END-IF
+               ELSE
+                   GO TO AY62-WAIT
+               END-IF
+           END-IF.
+             MOVE LS-USER            TO PAR-USR(WS-SUB).
+             MOVE WS-SUB             TO PAR-USERS.
+             PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+             GO TO AY62-CHECK.
       *
       *    ****   S E T   W A I T   P E R I O D
       *
        AY62-WAIT.
-      MOVE 300   TO WS-WAIT.
-    IF NOT (PAR-USR(WS-SUB) = LS-USER)
-        IF WS-SUB < 24
-     ADD 1  TO WS-SUB
-     GO TO AY62.
+             MOVE 300                TO WS-WAIT.
+           IF NOT(PAR-USR(WS-SUB) = LS-USER)
+               IF WS-SUB < 24
+                   ADD 1             TO WS-SUB
+                   GO TO AY62.
 
        AY62-CHECK.
-    IF WS-WAIT > ZERO
-        COMMIT
-        DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 14 BLINK
-        ACCEPT WS-STIME FROM TIME
-        PERFORM LOCK-REC-LOOP
-        DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 14 BLINK
-        GO TO AY60.
-            DISPLAY SPACE AT 5072
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+           IF WS-WAIT > ZERO
+               COMMIT
+               DISPLAY "Waiting" AT 5072 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT BLINK
+               ACCEPT WS-STIME FROM TIME
+               PERFORM LOCK-REC-LOOP
+               DISPLAY "Waiting" AT 5072 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT BLINK
+               GO TO AY60.
+             DISPLAY SPACE AT 5072 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 
        AY63.
-            MOVE WS-SUB  TO WS-USUB.
-            GO TO AY61.
-
+             MOVE WS-SUB             TO WS-USUB.
+             GO TO AY61.
+      *
+      *    ****    End transaction
+      *
        AY70.
-            MOVE 4   TO WS-PARKEY.
+             MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
       *
       *    ****    Write links back and unlock PARAM record 4 and
-      *     NETWORK record 2.
+      *            NETWORK record 2.
       *
-            PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
-            PERFORM AY49 THRU AY59.
-      MOVE 1   TO WS-USUB.
+             PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
+             PERFORM AY40 THRU AY59.
+             MOVE 1                  TO WS-USUB.
 
        AY72.
-    IF NOT (PAR-USR(WS-USUB) = LS-USER)
-        ADD 1   TO WS-USUB
-        GO TO AY72.
+           IF NOT(PAR-USR(WS-USUB) = LS-USER)
+               ADD 1                 TO WS-USUB
+               GO TO AY72.
 
        AY75.
-            MOVE SPACES  TO PAR-PROG(WS-USUB)
-              PAR-USR(WS-USUB).
-    IF WS-USUB < 24
-        ADD 1 WS-USUB  GIVING WS-SUB
-    ELSE
-        GO TO AY80.
-    IF NOT (PAR-PROG(WS-SUB) = SPACES)
-        MOVE PAR-PROG(WS-SUB)
-     TO PAR-PROG(WS-USUB)
-        MOVE PAR-USR(WS-SUB)
-     TO PAR-USR(WS-USUB)
-        ADD 1   TO WS-USUB
-        GO TO AY75.
+             MOVE SPACES             TO PAR-PROG(WS-USUB) PAR-USR(WS-USUB).
+           IF WS-USUB < 24
+               ADD 1 WS-USUB         GIVING WS-SUB
+           ELSE
+               GO TO AY80.
+           IF NOT(PAR-PROG(WS-SUB) = SPACES)
+               MOVE PAR-PROG(WS-SUB) TO PAR-PROG(WS-USUB)
+               MOVE PAR-USR(WS-SUB)  TO PAR-USR(WS-USUB)
+               ADD 1                 TO WS-USUB
+               GO TO AY75.
 
        AY80.
-            SUBTRACT 1 FROM WS-USUB
-     GIVING PAR-USERS.
+            SUBTRACT 1 FROM WS-USUB  GIVING PAR-USERS.
             PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
             COMMIT.
 
        AY999.
              EXIT.
-      /
-       CA155-GET-CREDITOR      SECTION.
-       CA155-ACCOUNT.
-             MOVE W15-ACNO       TO P-NUMBER.
-             PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
-           IF WS-F-ERROR = 3
-               MOVE 1 TO WS-ERROR
-           ELSE
-           IF P-NUMBER NOT = W15-ACNO
-               MOVE 2 TO WS-ERROR
-           ELSE
-               MOVE 0 TO WS-ERROR.
-       CA160-EXIT.
-             EXIT.
+      *
+      *    ****    Read/Write Creditor record
+      *
+      *    This routine is performed and the following are the variables
+      *    that are required to have been set up.
+      *
+      *          VARIABLES USED FOR CRPRDWR as instructions and data
+      *
+      *    03  W15-INSTR             PIC  X(01).
+      *
+      *        88  ADD-ACCOUNT                     VALUE "A".
+      *
+      *            W15-CREDREC needs to contain details for the account 
+      *                        that must be added
+      *
+      *        88  DELETE-ACT                      VALUE "D".
+      *
+      *            W15-CREDREC needs to contain the details for the 
+      *                        account to be deleted
+      *
+      *        88  GET-ACCOUNT                     VALUE "G".
+      *
+      *            W15-LINCOL must have the screen location of where the
+      *                       User will key in the account number. 
+      *                            eg. 0617 = Line 6 Column 17.
+      *
+      *            W15-BGRND  The Background colour that must be used.
+      *            W15-FGRND  The Foreground colour that must be used.
+      *                       The folloeing values are available in the
+      *                       COPY file "WS.WS" that is included in the
+      *                       WORKING-STORAGE SECTION.
+      *
+      *                           78  Black     value 0.
+      *                           78  Blue      value 1.
+      *                           78  Green     value 2.
+      *                           78  Cyan      value 3.
+      *                           78  Red       value 4.
+      *                           78  Magenta   value 5.
+      *                           78  Brown     value 6.
+      *                           78  Grey      value 7.
+      *
+      *                       If the screen colours for the calling 
+      *                       program are Black on White(Grey) then
+      *                       that would be setup as follows:
+      *
+      *                           MOVE Grey  TO W15-BGRND.
+      *                           MOVE Black TO W15-FGRND.
+      *
+      *        88  READ-LOCK                       VALUE "L".
+      *
+      *            W15-ACNO must contain the Account Number of the 
+      *                     account record to be read and locked.
+      *
+      *        88  READ-RECORD                     VALUE "R".
+      *
+      *            W15-ACNO must contain the Account Number of the 
+      *                     account record to be read.
+      *
+      *        88  UPDATE-ACT                      VALUE "U".
+      *
+      *            W15-CREDREC needs to contain the details for the 
+      *                        account record to be updated.
+      *
+      *        88  UPDATE-UNL                      VALUE "X".
+      *
+      *            W15-CREDREC must contain the the details for the  
+      *                        account record to be updated and unlocked.
+      *
+      *    This variable informs the called program to write details of
+      *    the recoosd to the RECOVERY file.
+      * 
+      *    03  W15-RECOVER.
+      *        05  W15-RECV        PIC  X(01)      VALUE "N".
+      *            88  ADD-TO-RECV                 VALUE "Y".
+      * 
+      *    If the record must be written to the RECOVERY file; the 
+      *    calling program must MOVE "Y" TO W15-RECV before calling 
+      *    CRPRDWR. CRPRDWR will always change it back to "N" before 
+      *    returning control to the calling program.
+      *
+      *    When a read CREDITOR account has been requested WITH W15-RECV
+      *    havinge a value of "N" then the program will exit with the
+      *    account record in W15-CREDREC. If W15_RECV = "Y" then 
+      *    W15-CREDREC remains unchanged.
+      *
+      *    On exiting W15-ERROR will be 0 if successful or contain and 
+      *    error code for unsuccessful requests:
+      *               0 = successful
+      *               1 = No Record
+      *               2 = account number on File not the same as requested
+      *               9 = CRPRDWR called with incorrect instruction
+      *
+              
+       COPY "CA155.CRP".
 
        CA600      SECTION.
        CA601.
@@ -1167,19 +1276,19 @@
     IF WS-INT = "Y"
                PERFORM ERASE-SCREEN
         DISPLAY "CHEQUES/PAYMENTS" AT 0232
-   WITH FOREGROUND-COLOR 15
+   WITH FOREGROUND-COLOR Grey HIGHLIGHT
                DISPLAY "As the system is integrated with the General Led
       -         "ger, Payments must be" AT 0605
-                        WITH FOREGROUND-COLOR 14
+                        WITH FOREGROUND-COLOR Brown HIGHLIGHT
         DISPLAY "processed using 'Cheques Issued' in the 'CREDITO
       -         "RS TRANSACTIONS (GL)" AT 0705
-                        WITH FOREGROUND-COLOR 14
+                        WITH FOREGROUND-COLOR Brown HIGHLIGHT
         DISPLAY "MENU'" AT 0805
-                        WITH FOREGROUND-COLOR 14
+                        WITH FOREGROUND-COLOR Brown HIGHLIGHT
         DISPLAY "Press 'I'gnore any other key to continue"
-   AT 1005 WITH FOREGROUND-COLOR 14
+   AT 1005 WITH FOREGROUND-COLOR Brown HIGHLIGHT
         ACCEPT WS-OPTION AT 1046
-        WITH FOREGROUND-COLOR 15 BACKGROUND-COLOR 5 AUTO
+        WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta AUTO
         CALL "CBL_TOUPPER" USING WS-OPTION
       BY VALUE WS-LENGTH
       RETURNING WS-STATUS
@@ -1194,23 +1303,23 @@
       MOVE 23   TO SHADE-WIDTH.
       MOVE 2   TO SHADE-LINES.
       DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1127
-        WITH FOREGROUND-COLOR 7 HIGHLIGHT
-      BACKGROUND-COLOR 7
-       "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-            DISPLAY "³ " AT 1227 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-           BACKGROUND-COLOR 7
+        WITH FOREGROUND-COLOR Grey HIGHLIGHT
+      BACKGROUND-COLOR Grey
+       "¿" WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
+            DISPLAY "³ " AT 1227 WITH FOREGROUND-COLOR Grey HIGHLIGHT
+           BACKGROUND-COLOR Grey
        "Enter Password        "
-        WITH FOREGROUND-COLOR 7 HIGHLIGHT
-      BACKGROUND-COLOR 7
-       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-      DISPLAY "À" AT 1327 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-          BACKGROUND-COLOR 7
+        WITH FOREGROUND-COLOR Grey HIGHLIGHT
+      BACKGROUND-COLOR Grey
+       "³" WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
+      DISPLAY "À" AT 1327 WITH FOREGROUND-COLOR Grey HIGHLIGHT
+          BACKGROUND-COLOR Grey
        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+        WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
       PERFORM SCREEN-SHADOW.
             ACCEPT WS-PASSWORD AT 1244
-      WITH BACKGROUND-COLOR 5
-    FOREGROUND-COLOR 3 HIGHLIGHT AUTO NO-ECHO.
+      WITH BACKGROUND-COLOR Magenta
+    FOREGROUND-COLOR Cyan HIGHLIGHT AUTO NO-ECHO.
             MOVE 6   TO WS-LENGTH.
       CALL "CBL_TOUPPER" USING WS-PASSWORD
     BY VALUE WS-LENGTH
@@ -1245,16 +1354,7 @@
                                     W15-SETT W15-TCOST.
              MOVE SPACES         TO W15-ACNO.
        FA05.
-      DISPLAY "F1" AT 5002
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-       "=Help,"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-       "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-       " to do Creditor Lookup "
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-       "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-       " to exit"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+      DISPLAY S55.
             ACCEPT S19 AT 0412.
     IF USER-FUNC
         EVALUATE KEY-CODE-1
@@ -1264,9 +1364,9 @@
    WHEN F1-KEY
        PERFORM HELP-ROUTINE
    WHEN F2-KEY
-             PERFORM AA50
+             PERFORM AA50-LOOKUP
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO FA05
         END-EVALUATE
               DISPLAY S19 AT 0412
@@ -1290,8 +1390,8 @@
                GO TO FA05.
              MOVE P-NAME         TO W15-NAME.
             DISPLAY P-NAME AT 0418
-       WITH FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5.
+       WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta.
              DISPLAY S-CRED.
             PERFORM CHECK-CORRECT.
           IF WS-OPTION = "N"
@@ -1308,16 +1408,16 @@
              MOVE W15-YY         TO W20-YY.
        FA15.
       DISPLAY "Press " AT 5002
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-       "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+       "Esc" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
        " to exit"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
              ACCEPT S27 AT 0823.
     IF USER-FUNC
         EVALUATE KEY-CODE-1
    WHEN ESC-KEY  GO TO FA00
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO FA15
         END-EVALUATE.
            IF W15-GRNN = ZERO
@@ -1328,7 +1428,7 @@
         EVALUATE KEY-CODE-1
    WHEN ESC-KEY  GO TO FA00
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO FA20
         END-EVALUATE.
              MULTIPLY -1 BY W15-TCOST
@@ -1338,23 +1438,23 @@
                GO TO FA20.
        FA25.
             ACCEPT W15-30 AT 0849
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
             ACCEPT W15-60 AT 0853
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
             ACCEPT W15-90 AT 0857
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
             ACCEPT W15-120 AT 0861
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
             ACCEPT W15-150 AT 0865
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
             ACCEPT W15-180 AT 0869
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
             PERFORM CHECK-CORRECT.
           IF WS-OPTION = "N"
                GO TO FA10.
@@ -1524,17 +1624,18 @@
        FA999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -1542,87 +1643,51 @@
 
              COPY "FUNCTION.PRO".
 
-            OPEN OUTPUT RECOVER.
+             OPEN OUTPUT RECOVER.
              CLOSE RECOVER.
              OPEN I-O RECOVER.
-            MOVE 1   TO WS-PARKEY.
+             MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-            MOVE PAR-COMPANY  TO W60-COMPANY.
-             MOVE PAR-DMY        TO W05-DATE.
-             MOVE PAR-YMD        TO W05-DATE-YMD.
-             MOVE 5              TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-      MOVE PAR-ROUND  TO W05-ROUND.
-             MOVE PAR-ROUND-VAL  TO W05-ROUND-VAL.
+             MOVE PAR-ROUND          TO W05-ROUND.
+             MOVE PAR-ROUND-VAL      TO W05-ROUND-VAL.
            IF W05-ROUND-VAL > 0.01
                COMPUTE W05-HLF-VAL = W05-ROUND-VAL / 2
            ELSE
-               MOVE ZERO         TO W05-HLF-VAL.
+               MOVE ZERO             TO W05-HLF-VAL.
            IF W05-HLF-VAL > 0.01
                COMPUTE W05-TQTR-VAL = W05-HLF-VAL * 1.5
            ELSE
-               MOVE ZERO         TO W05-TQTR-VAL.
-      MOVE 1   TO W05-V-RATE.
+               MOVE ZERO             TO W05-TQTR-VAL.
+             MOVE 1                  TO W05-V-RATE.
 
        ZA05-VAT.
-      MOVE W05-VAT-CODE  TO DPT-CODE.
-      PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-      MOVE DPT-R-DATE  TO WS-VAT-DATE(W05-V-RATE).
-      MOVE DPT-RATE  TO W05-VAT(W05-V-RATE).
-      ADD 6 W05-V-RATE  GIVING WS-S1.
-      MOVE DPT-P-RATE  TO W05-VAT(WS-S1).
-    IF W05-V-RATE < 6
-        ADD 1   TO W05-V-RATE
-        GO TO ZA05-VAT.
-            MOVE 6   TO WS-PARKEY.
+             MOVE W05-VAT-CODE       TO DPT-CODE.
+             PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+             MOVE DPT-R-DATE         TO WS-VAT-DATE(W05-V-RATE).
+             MOVE DPT-RATE           TO W05-VAT(W05-V-RATE).
+             ADD 6 W05-V-RATE        GIVING WS-S1.
+             MOVE DPT-P-RATE         TO W05-VAT(WS-S1).
+           IF W05-V-RATE < 6
+               ADD 1                 TO W05-V-RATE
+               GO TO ZA05-VAT.
+             MOVE 6                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
            IF PAR-INTEGRATE NOT = "Y"
-        MOVE "N"   TO WS-INT
+               MOVE "N"              TO WS-INT
            ELSE
-        MOVE "Y"   TO WS-INT.
+               MOVE "Y"              TO WS-INT.
             PERFORM ERASE-SCREEN.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
-
+      *COPY "ZA49.PRO".
       *
-      *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
+      *ZA200.
       *
-       ZA55.
-             MOVE 1              TO WS-S1.
-            MOVE SPACES  TO WS-MD-LNE WS-MID-LNE.
-       ZA60.
-             MOVE WS-G1          TO WS-TCR  (WS-S1) WS-BCR  (WS-S1).
-             MOVE WS-G8          TO WS-TCHR (WS-S1) WS-BCHR (WS-S1)
-                                    WS-TCH  (WS-S1) WS-BCH  (WS-S1).
-           IF WS-S1 < 80
-               ADD 1             TO WS-S1
-               GO TO ZA60.
-             MOVE WS-G2          TO WS-TCR  (8)  WS-TCR (50)
-                                    WS-TCR  (66).
-             MOVE WS-G3          TO WS-MCR  (8)  WS-MCR (50)
-                                    WS-MCR  (66) WS-MCR (1)
-        WS-MCR  (80).
-             MOVE WS-G4          TO WS-BCR  (8)  WS-BCR (50)
-                                    WS-BCR  (66).
-             MOVE WS-G9          TO WS-TCH  (1).
-             MOVE WS-G10         TO WS-TCH  (80).
-             MOVE WS-G11         TO WS-BCH  (1).
-             MOVE WS-G12         TO WS-BCH  (80).
-             MOVE WS-G14         TO WS-TCR  (1)  WS-BCR (1).
-             MOVE WS-G13         TO WS-TCR (80)  WS-BCR (80).
-      MOVE LS-COMPANY  TO WS-TOP-COMP.
-    IF LS-USER = LS-SYS-ID
-        MOVE "SupervisorÄ"  TO WS-WRKHD
-    ELSE
-        MOVE "Workstation"  TO WS-WRKHD
-        MOVE LS-USER    TO WS-WRKST.
-       ZA200.
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       /

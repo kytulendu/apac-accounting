@@ -1,4 +1,4 @@
-      $set LINKCOUNT"384"
+      $set LINKCOUNT"384" GNT"GLP065.GNT"
       ******************************************************************
       *                                                                *
       *    ******   **       *******   ****    ******   ********   *
@@ -13,7 +13,7 @@
       *                                                                *
       *     G / L E D G E R   P R O C E S S   B A T C H         *
       *                                                                *
-      *       Version 9.00.70 - August 2014                            *
+      *       Version 9.04.02 - June 2017                              *
       *               *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
        AUTHOR.                 J.W. LEMMON (APAC).
        DATE-WRITTEN.        OCTOBER 1992.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -171,44 +171,44 @@
        77  WS-ER7          PIC  X(13) VALUE "Group Heading".
        77  TODAY-DDMMYY    PIC 9(08) COMP-5.
        77  WS-USUB    PIC 9(04) COMP-5.
-      /
-       01  WS-DB-LINE.
-           03  WS-TOP-LNE.
-               05  WS-TCHR PIC X(01) OCCURS 80.
-           03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-TOP-LNE2.
-               05  WS-TCH  PIC X(01) OCCURS 80.
-           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-              05  FILLER      PIC  X(23).
-        05  WS-WRKHD    PIC  X(11).
-              05  FILLER      PIC  X(01).
-        05  WS-WRKST    PIC  X(03).
-              05  FILLER      PIC  X(01).
-          03  WS-MID-LNE.
-               05  WS-MCHR PIC X(01) OCCURS 80.
-    03  WS-MDGL-LNE REDEFINES WS-MID-LNE.
-        05  WS-MGL1     PIC X(01).
-        05  WS-MGL78    PIC X(78).
-        05  WS-MGL80    PIC X(01).
-          03  WS-MID-LNE2.
-        05  FILLER      PIC  X(01) VALUE "³".
-        05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-        05  FILLER      PIC  X(01) VALUE "³".
-          03  WS-BOT-LNE.
-               05  WS-BCHR PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-BOT-LNE2.
-               05  WS-BCH  PIC X(01) OCCURS 80.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *         C =  Clear comment line (50)
+      *         E =  Clear lines (any line or lines between 5 and 46)
+      *         H =  Change heading
+      *         S =  Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "GLP065".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "GENERAL LEDGER -PROCESS JOURNAL BATCH".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD       PIC  X(11).
+               05  CRT-WRKST       PIC  X(03).
 
        COPY "WS.WS".
 
@@ -552,13 +552,30 @@
        01  W90-COMP.
            03  W90-CNAME   PIC  X(40).
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
        COPY "FILE-GENL.IDS".
 
-      /
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
 
        01  S06.
@@ -632,9 +649,16 @@
     03  COLUMN 34 FOREGROUND-COLOR 1 BACKGROUND-COLOR 7
     PIC X(40) FROM GBH-DESC.
 
-      /
-       PROCEDURE DIVISION
-   USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
+       PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000        SECTION.
        AA00.
           IF LS0-GLLEV < 1
@@ -650,6 +674,8 @@
        AA35.
              EXIT PROGRAM.
 
+       COPY "AA900.ALM".
+
        COPY "FUNCTION.CRT".
 
        COPY "LOCKED.REC".
@@ -658,6 +684,9 @@
 
        COPY "PRINTUTL.AS6".
 
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB000        SECTION.
 
        COPY "CONTROL.RD".
@@ -674,7 +703,9 @@
 
        COPY "SHARED.RD".
 
-      /
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AC000           SECTION.
 
        COPY "CONTROL.WR".
@@ -1027,7 +1058,7 @@
              PERFORM BATCH-LOOKUP
        GO TO FA0A
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO FA0A
         END-EVALUATE.
       CALL "CBL_TOUPPER" USING WS-BATCH-ID
@@ -1575,7 +1606,7 @@
                DISPLAY "Please make a note of these details" AT 1812.
              STOP RUN.
 
-       BATCH-LOOKUP  SECTION 92.
+       BATCH-LOOKUP  SECTION 9.
        BATCH-LUP-SCREEN.
             PERFORM SAVE-SCREEN.
       DISPLAY S-BCH.
@@ -1660,7 +1691,7 @@
    WHEN ENTER-KEY
    WHEN CR-KEY
        GO TO BATCH-RESTORE-SCREEN
-   WHEN OTHER  CALL X"E5"
+   WHEN OTHER  PERFORM AA900-ALARM
         END-EVALUATE
         GO TO BATCH-GET-USER-OPT
     ELSE
@@ -1672,10 +1703,10 @@
              GO TO BATCH-GET-NEXT-PAGE
    WHEN PAGE-UP
              GO TO BATCH-GET-PREV-PAGE
-   WHEN OTHER  CALL X"E5"
+   WHEN OTHER  PERFORM AA900-ALARM
         END-EVALUATE
         GO TO BATCH-GET-USER-OPT.
-      CALL X"E5".
+      PERFORM AA900-ALARM.
             GO TO BATCH-GET-USER-OPT.
 
        BATCH-GET-NEXT-PAGE.

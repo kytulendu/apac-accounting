@@ -13,7 +13,7 @@
       *                                                                *
       *     D A Y - E N D   R E P O R T S   P R O G R A M              *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
        AUTHOR.         James William Lemmon.
        DATE-WRITTEN.   AUGUST 1982.
 
-               COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+               COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                  by James William Lemmon.
                                    (Id No. 4412165050082).
                
@@ -67,8 +67,6 @@
 
        COPY "PARAM.SLE".
 
-      *COPY "SLIP.SLE".
-
        COPY "STOCK.SLE".
 
        DATA DIVISION.
@@ -92,8 +90,6 @@
        COPY "DEPART.FD".
 
        COPY "PARAM.FD".
-
-      *COPY "SLIP.FD".
 
        COPY "STOCK.FD".
 
@@ -978,10 +974,13 @@
        AA00M    SECTION.
        AA00.
            IF LS0-PALEV < 3 AND LS0-SALEV < 9
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AY005.
-             PERFORM ZA00-INIT.
+             PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -1409,25 +1408,6 @@
 
        READ-STOCK-EXIT.
              EXIT.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-       AO00-WRITE        SECTION.
-
-       COPY "AUDIT.WR".
-
-       COPY "CONTROL.WR".
-
-       COPY "DEPART.WR".
-
-       COPY "DEBTOR.WR".
-
-       COPY "PARAM.WR".
-
-       COPY "STOCK.WR".
-
-       COPY "TXTRAN.WR".
-
       *
       *
       *
@@ -3145,7 +3125,7 @@
       *    *************************************************************
       *                 I N I T I A L I S E   P R O G R A M
       *    *************************************************************
-       ZA00-INIT       SECTION 8.
+       ZA000-INIT       SECTION 8.
        ZA00-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -3347,15 +3327,15 @@
 
        ZA50.
              EVALUATE WS-F-ERROR
-               WHEN 3    MOVE "CREDITOR file"  TO WS-FILE
-               WHEN 6    MOVE "DEBTOR file"    TO WS-FILE
-               WHEN 20   MOVE "SALES ORDER"    TO WS-FILE
-               WHEN 22   MOVE "STOCK FILE"     TO WS-FILE
+               WHEN 3     MOVE "CREDITOR file"  TO WS-FILE
+               WHEN 6     MOVE "DEBTOR file"    TO WS-FILE
+               WHEN 20    MOVE "SALES ORDER"    TO WS-FILE
+               WHEN 22    MOVE "STOCK FILE"     TO WS-FILE
+               WHEN OTHER MOVE "INVALID FILE REF" TO WS-FILE
              END-EVALUATE.
-             DISPLAY "Rebuild " AT 1212
-                              WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
-             DISPLAY "Press any key to continue" AT 1412.
-             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             MOVE SPACES             TO WS-ERR-MES.
+             STRING "Rebuild " DELIMITED SIZE WS-FILE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
              
        ZA51.
              EXIT PROGRAM.
@@ -3399,8 +3379,6 @@
                            MOVE DPT-CODE     TO WS-KEYX
                WHEN 15     MOVE WS-PARID     TO WS-FILE
                            MOVE WS-PARKEY    TO WS-KEY
-               WHEN 20     MOVE W02-SORDER   TO WS-FILE
-                           MOVE SOR-KEY      TO WS-KEYX
                WHEN 22     MOVE W02-STOCKF   TO WS-FILE
                            MOVE STK-CODE     TO WS-KEYX
                WHEN OTHER  MOVE "ERROR"      TO WS-FILE
@@ -3408,8 +3386,3 @@
              END EVALUATE.
 
        COPY "DISPERR.PRO".
-
-       DISPLAY-FILE-NAME.
-           IF WS-F-ERROR = 1
-              MOVE W02-AUDITF  TO WS-FILE
-              MOVE WS-AUDKEY  TO WS-KEY

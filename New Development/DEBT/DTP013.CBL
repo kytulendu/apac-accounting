@@ -41,7 +41,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -634,6 +634,9 @@
       *          THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *    *************************************************************
        AY000           SECTION.
+      *    *************************************************************
+      *    ****             P A R A M E T E R   F I L E             ****
+      *    *************************************************************
        AY01.
              MOVE 01                 TO REC-FILE.
              MOVE WS-PARKEY          TO REC-KEY.
@@ -682,7 +685,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
-
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё         W R I T E   R E C O V E R Y   R E C O R D         Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -1068,7 +1073,8 @@
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -1087,8 +1093,8 @@
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
 
        ZA999-EXIT.
              EXIT.

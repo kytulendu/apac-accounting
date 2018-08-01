@@ -13,15 +13,22 @@
       *                                                                *
       *       C R E D I T O R ' S   L I S T I N G   P R O G R A M      *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.      CRP021.
-       AUTHOR.               J.W. LEMMON (APAC).
-       DATE-WRITTEN.         AUGUST, 1983.
+       AUTHOR.          J.W. LEMMON (APAC).
+       DATE-WRITTEN.    AUGUST, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -90,35 +97,35 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)            VALUE "aeWlimemnomLalismJ".
-       77  WS-NETKEY               PIC  9(04)     COMP-5 VALUE 1.
-       77  WS-PARKEY               PIC  9(04)     COMP-5 VALUE 1.
-       77  WS-ERROR                PIC  9(01)            VALUE 0.
-       77  WS-S                    PIC  9(04)     COMP-5.
-       77  WS-S1                   PIC  9(04)     COMP-5.
-       77  WS-S2                   PIC  9(04)     COMP-5.
-       77  WS-S3                   PIC  9(04)     COMP-5.
-       77  WS-S4                   PIC  9(04)     COMP-5.
-       77  WS-S6                   PIC  9(04)     COMP-5.
-       77  WS-IXS1                 PIC  9(04)     COMP-5.
-       77  WS-IXS2                 PIC  9(04)     COMP-5.
-       77  WS-IXS3                 PIC  9(04)     COMP-5.
-       77  WS-IXS4                 PIC  9(04)     COMP-5.
-       77  WS-KEY1                 PIC  9(04)     COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-NETKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PARKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-ERROR                PIC  9(01)           VALUE 0.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-KEY1                 PIC  9(04)    COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-ITM1                 PIC  X(12).
        77  WS-ORD                  PIC  X(01).
        77  WS-SEQ                  PIC  X(01).
        77  WS-OPTION               PIC  X(01).
-       77  WS-LINES                PIC  9(04)     COMP-5 VALUE 0.
-       77  WS-PAGE                 PIC  9(04)     COMP-5 VALUE 0.
+       77  WS-LINES                PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-PAGE                 PIC  9(04)    COMP-5 VALUE 0.
        77  WS-IND                  PIC  9(01).
-       77  WS-PGE-LENGTH           PIC  9(02)            VALUE 66.
-       77  WS-PRN-LENGTH           PIC  9(02)            VALUE 62.
-       77  WS-H1                   PIC  X(05)            VALUE "DATE:".
-       77  WS-H3                   PIC  X(05)            VALUE "PAGE:".
-       77  TODAY-DDMMYY            PIC  9(08)     COMP-5.
-       77  WS-USUB                 PIC  9(04)     COMP-5.
+       77  WS-PGE-LENGTH           PIC  9(02)           VALUE 66.
+       77  WS-PRN-LENGTH           PIC  9(02)           VALUE 62.
+       77  WS-H1                   PIC  X(05)           VALUE "DATE:".
+       77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -158,11 +165,10 @@
                05  CRT-WRKHD       PIC  X(11).
                05  CRT-WRKST       PIC  X(03).
 
-
        COPY "WS.WS".
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
            03  W02-PRINTER         PIC  X(12).
@@ -381,10 +387,13 @@
        AA000-START-UP  SECTION.
        AA000.
           IF LS0-CRLEV < 1
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA105.
-            PERFORM ZA000-INIT.
+             PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -490,6 +499,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -558,11 +570,9 @@
 
        COPY "PRINTUTL.AP4".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB00-READ SECTION.
 
        COPY "CONTROL.RD".
@@ -587,8 +597,7 @@
        BB000        SECTION 5.
        BB00.
              PERFORM ERASE-SCREEN.
-             DISPLAY "Busy printing creditor list" AT 0420
-                      WITH FOREGROUND-COLOR Grey HIGHLIGHT.
+             DISPLAY "Busy printing creditor list" AT 0620 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 
        BB10.
              MOVE "'A'ccount or 'N'ame sequence  [N]"  TO WS-OPT-MES.
@@ -601,7 +610,7 @@
              DISPLAY "Account :" AT 0804.
              MOVE ZERO               TO WS-PAGE.
       *
-      *    ****   1 7 C P I ( C O N D E N S E D   P R I N T )
+      *    ****   1 7   C P I ( C O N D E N S E D   P R I N T )
       *
              MOVE 0                  TO WS-ADVANCE.
              MOVE 3                  TO W02-PRN-TYPE.
@@ -679,13 +688,15 @@
        BB999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
              MOVE LS-PARID           TO WS-PARID.
              MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
              MOVE LS-USUB            TO WS-USUB.
-             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -694,21 +705,21 @@
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
              COPY "FUNCTION.PRO".
+
        ZA05.
-             MOVE LS-COMPANY    TO W60-COMPANY.
              MOVE 2              TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-            PERFORM ERASE-SCREEN.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       *

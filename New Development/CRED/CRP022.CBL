@@ -13,15 +13,22 @@
       *                                                                *
       *     C R E D I T O R ' S   C A S H   F L O W   P R O G R A M    *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.      CRP022.
-       AUTHOR.               J.W. LEMMON (APAC).
-       DATE-WRITTEN.         AUGUST, 1983.
+       AUTHOR.          J.W. LEMMON (APAC).
+       DATE-WRITTEN.    AUGUST, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -94,35 +101,35 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)            VALUE "aeWlimemnomLalismJ".
-       77  WS-NETKEY               PIC  9(04)     COMP-5 VALUE 1.
-       77  WS-PARKEY               PIC  9(04)     COMP-5 VALUE 1.
-       77  WS-ERROR                PIC  9(01)            VALUE 0.
-       77  WS-S                    PIC  9(04)     COMP-5.
-       77  WS-S1                   PIC  9(04)     COMP-5.
-       77  WS-S2                   PIC  9(04)     COMP-5.
-       77  WS-S3                   PIC  9(04)     COMP-5.
-       77  WS-S4                   PIC  9(04)     COMP-5.
-       77  WS-S6                   PIC  9(04)     COMP-5.
-       77  WS-IXS1                 PIC  9(04)     COMP-5.
-       77  WS-IXS2                 PIC  9(04)     COMP-5.
-       77  WS-IXS3                 PIC  9(04)     COMP-5.
-       77  WS-IXS4                 PIC  9(04)     COMP-5.
-       77  WS-KEY1                 PIC  9(04)     COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-NETKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PARKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-ERROR                PIC  9(01)           VALUE 0.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-KEY1                 PIC  9(04)    COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-ITM1                 PIC  X(12).
        77  WS-ORD                  PIC  X(01).
        77  WS-SEQ                  PIC  X(01).
        77  WS-OPTION               PIC  X(01).
-       77  WS-LINES                PIC  9(04)     COMP-5 VALUE 0.
-       77  WS-PAGE                 PIC  9(04)     COMP-5 VALUE 0.
+       77  WS-LINES                PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-PAGE                 PIC  9(04)    COMP-5 VALUE 0.
        77  WS-IND                  PIC  9(01).
-       77  WS-PGE-LENGTH           PIC  9(02)            VALUE 66.
-       77  WS-PRN-LENGTH           PIC  9(02)            VALUE 62.
-       77  WS-H1                   PIC  X(05)            VALUE "DATE:".
-       77  WS-H3                   PIC  X(05)            VALUE "PAGE:".
-       77  TODAY-DDMMYY            PIC  9(08)     COMP-5.
-       77  WS-USUB                 PIC  9(04)     COMP-5.
+       77  WS-PGE-LENGTH           PIC  9(02)           VALUE 66.
+       77  WS-PRN-LENGTH           PIC  9(02)           VALUE 62.
+       77  WS-H1                   PIC  X(05)           VALUE "DATE:".
+       77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -165,7 +172,7 @@
        COPY "WS.WS".
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
            03  W02-PRINTER         PIC  X(12).
@@ -414,10 +421,13 @@
        AA000-START-UP  SECTION.
        AA000.
           IF LS0-CRLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA105.
-            PERFORM ZA000-INIT.
+             PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -523,6 +533,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -591,11 +604,9 @@
 
        COPY "PRINTUTL.AP4".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB00-READ SECTION.
 
        COPY "CONTROL.RD".
@@ -606,100 +617,97 @@
 
        COPY "PDCHEQ.RD".
 
-      /
+      *
+      *       *** ****  **** ****  *** *****  ***  **** 
+      *      *    *   * *    *   *  *    *   *   * *   *
+      *      *    ****  ***  *   *  *    *   *   * **** 
+      *      *    *   * *    *   *  *    *   *   * *   *
+      *       *** *   * **** ****  ***   *    ***  *   *
+      * 
+      *                 ***  ***   ***  *   *
+      *                *    *   * *     *   *
+      *                *    *****  ***  *****
+      *                *    *   *     * *   *
+      *                 *** *   *  ***  *   *
+      * 
+      *               **** *      ***  *     *
+      *               *    *     *   * *     *
+      *               ***  *     *   * *  *  *
+      *               *    *     *   * * * * *
+      *               *    *****  ***   *   * 
+      * 
        CA000      SECTION 5.
        CA00.
              PERFORM ERASE-SCREEN.
-             DISPLAY "CREDITORS CASH FLOW" AT 0231
+             DISPLAY "Busy printing creditor Cash Flow" AT 0620
                       WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 
        CA02.
-             DISPLAY "A" AT 0604 WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-                     "ccount or " WITH FOREGROUND-COLOR Cyan
-                     "N" WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-                     "ame sequence" WITH FOREGROUND-COLOR Cyan.
-             MOVE "N"            TO WS-SEQ.
+             MOVE "'A'ccount or 'N'ame sequence  [N]"  TO WS-OPT-MES.
+             MOVE "N"                TO WS-OPTION.
+             MOVE "R"                TO WS-INSTR.
+             PERFORM OPT-MESSAGE.
+             MOVE WS-OPTION          TO WS-SEQ.
 
        CA03.
-      ACCEPT WS-SEQ AT 0629
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT
-    BACKGROUND-COLOR Magenta UPDATE AUTO.
-      CALL "CBL_TOUPPER" USING WS-SEQ
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-    IF NOT(WS-SEQ = "A" OR "N")
-               GO TO CA03.
              DISPLAY "Account :" AT 0804.
-             DISPLAY "Print accounts with zero balances " AT 1004
-                     "Y" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-                     "/" "N" WITH FOREGROUND-COLOR Brown HIGHLIGHT.
-             MOVE "N"            TO WS-OPTION.
-
-       CA04.
-             ACCEPT WS-OPTION AT 1042
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT
-    BACKGROUND-COLOR Magenta UPDATE AUTO.
-      CALL "CBL_TOUPPER" USING WS-OPTION
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-    IF NOT(WS-OPTION = "Y" OR "N")
-               GO TO CA04.
-             MOVE WS-OPTION      TO WS-ORD.
-            MOVE ZERO   TO WS-PAGE.
+             MOVE "Print accounts with zero balances Y/N?  [N]" TO WS-OPT-MES.
+             MOVE "N"                TO WS-OPTION.
+             MOVE "1"                TO WS-INSTR.
+             PERFORM OPT-MESSAGE.
+             MOVE WS-OPTION          TO WS-ORD.
+             MOVE ZERO               TO WS-PAGE.
       *
       *    ****   1 7 C P I ( C O N D E N S E D   P R I N T )
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE 3   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE "CREDITORS CASH FLOW" TO W60-DESC.
-             MOVE ZERO TO W70-BAL W70-60D  W70-30D  W70-AREAR
-                          W70-90D W70-120D W70-150D W70-180D.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE 3                  TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE "CREDITORS CASH FLOW" TO W60-DESC.
+             MOVE ZERO               TO W70-BAL W70-60D W70-30D W70-AREAR01 W70-90D W70-120D W70-150D W70-180D.
 
        CA05.
              PERFORM AA050.
-            MOVE "SUPP"  TO R-H4.
-            MOVE "CURRENT"  TO R-H6.
-            MOVE "PMT-DUE"  TO R-H7.
-            MOVE "30 DAYS"  TO R-H8.
-            MOVE "60 DAYS"  TO R-H9.
-            MOVE "90 DAYS"  TO R-H10.
-            MOVE "120 DAYS"  TO R-H11.
-            MOVE "150 DAYS"  TO R-H12.
-            MOVE "180 DAYS"  TO R-H13.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES TO R-DET.
-             MOVE "AC-NO"        TO R-H4.
-            MOVE "SUPPLIER NAME"
-     TO R-H5.
-            MOVE "BALANCE"  TO R-H6.
-            MOVE W12-MONTH  TO WS-S2.
+             MOVE "SUPP"             TO R-H4.
+             MOVE "CURRENT"          TO R-H6.
+             MOVE "PMT-DUE"          TO R-H7.
+             MOVE "30 DAYS"          TO R-H8.
+             MOVE "60 DAYS"          TO R-H9.
+             MOVE "90 DAYS"          TO R-H10.
+             MOVE "120 DAYS"         TO R-H11.
+             MOVE "150 DAYS"         TO R-H12.
+             MOVE "180 DAYS"         TO R-H13.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE "AC-NO"            TO R-H4.
+             MOVE "SUPPLIER NAME"    TO R-H5.
+             MOVE "BALANCE"          TO R-H6.
+             MOVE W12-MONTH          TO WS-S2.
 
        CA10.
-            ADD 1   TO WS-S2.
+             ADD 1                   TO WS-S2.
            IF WS-S2 > 12
-              SUBTRACT 12  FROM WS-S2.
-            MOVE W10-MONTH (WS-S2)
-     TO W50-MONTH.
+               SUBTRACT 12           FROM WS-S2.
+             MOVE W10-MONTH(WS-S2)   TO W50-MONTH.
 
        CA15.
-            MOVE W50-H   TO R-H14.
+             MOVE W50-H              TO R-H14.
              PERFORM CA10.
-            MOVE W50-H   TO R-H15.
+             MOVE W50-H              TO R-H15.
              PERFORM CA10.
-            MOVE W50-H   TO R-H16.
+             MOVE W50-H              TO R-H16.
              PERFORM CA10.
-            MOVE W50-H   TO R-H17.
+             MOVE W50-H              TO R-H17.
              PERFORM CA10.
-            MOVE W50-H   TO R-H18.
+             MOVE W50-H              TO R-H18.
              PERFORM CA10.
-            MOVE W50-H   TO R-H19.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-      MOVE "D"   TO W02-PRN-TYPE.
+             MOVE W50-H              TO R-H19.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE "D"                TO W02-PRN-TYPE.
 
        CA20.
              MOVE "    !"        TO P-NAME P-NUMBER.
@@ -714,113 +722,111 @@
              PERFORM READ-CREDIT-NEXT THRU READ-CREDIT-EXIT.
            IF NOT(WS-F-ERROR = ZERO)
                GO TO CA30.
-    IF NOT(WS-PRINTER = "S")
-        DISPLAY P-NUMBER AT 0814
-         WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-       BACKGROUND-COLOR Magenta "°"
-         P-NAME WITH FOREGROUND-COLOR Grey HIGHLIGHT
-       BACKGROUND-COLOR Magenta.
-    IF WS-ORD = "N"
+           IF NOT(WS-PRINTER = "S")
+               DISPLAY P-NUMBER AT 0814 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta
+                              "°"
+                                P-NAME  WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta.
+           IF WS-ORD = "N"
                IF P-BAL = ZERO
                    GO TO CA25.
-            MOVE P-NUMBER  TO CF-SNO.
-            MOVE P-NAME  TO CF-SUPP.
-            MOVE P-BAL   TO CF-BAL.
-            ADD P-BAL   TO W70-BAL.
+             MOVE P-NUMBER           TO CF-SNO.
+             MOVE P-NAME             TO CF-SUPP.
+             MOVE P-BAL              TO CF-BAL.
+             ADD P-BAL               TO W70-BAL.
            IF P-OUT < ZERO
-               ADD P-OUT         TO P-30D
-               MOVE ZERO         TO P-OUT.
+               ADD P-OUT             TO P-30D
+               MOVE ZERO             TO P-OUT.
            IF P-30D < ZERO
-               ADD P-30D         TO P-60D
-               MOVE ZERO         TO P-30D.
+               ADD P-30D             TO P-60D
+               MOVE ZERO             TO P-30D.
            IF P-60D < ZERO
-               ADD P-60D         TO P-90D
-               MOVE ZERO         TO P-60D.
+               ADD P-60D             TO P-90D
+               MOVE ZERO             TO P-60D.
            IF P-90D < ZERO
-               ADD P-90D         TO P-120D
-               MOVE ZERO         TO P-90D.
+               ADD P-90D             TO P-120D
+               MOVE ZERO             TO P-90D.
            IF P-120D < ZERO
-               ADD P-120D        TO P-150D
-               MOVE ZERO         TO P-120D.
+               ADD P-120D            TO P-150D
+               MOVE ZERO             TO P-120D.
            IF P-150D < ZERO
-               ADD P-150D        TO P-180D
-               MOVE ZERO         TO P-150D.
+               ADD P-150D            TO P-180D
+               MOVE ZERO             TO P-150D.
            IF P-180D < ZERO
-               ADD P-180D        TO P-OUT
-               MOVE ZERO         TO P-180D.
-            MOVE P-OUT   TO CF-AREAR.
-            ADD P-OUT   TO W70-AREAR.
-            MOVE P-30D   TO CF-30D.
-            ADD P-30D   TO W70-30D.
-            MOVE P-60D   TO CF-60D.
-            ADD P-60D   TO W70-60D.
-            MOVE P-90D   TO CF-90D.
-            ADD P-90D   TO W70-90D.
-            MOVE P-120D  TO CF-120D.
-            ADD P-120D   TO W70-120D.
-            MOVE P-150D  TO CF-150D.
-            ADD P-150D   TO W70-150D.
-            MOVE P-180D  TO CF-180D.
-            ADD P-180D   TO W70-180D.
-    IF W02-LINAGE < W02-PRN-LENGTH
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+               ADD P-180D            TO P-OUT
+               MOVE ZERO             TO P-180D.
+             MOVE P-OUT              TO CF-AREAR.
+             ADD P-OUT               TO W70-AREAR.
+             MOVE P-30D              TO CF-30D.
+             ADD P-30D               TO W70-30D.
+             MOVE P-60D              TO CF-60D.
+             ADD P-60D               TO W70-60D.
+             MOVE P-90D              TO CF-90D.
+             ADD P-90D               TO W70-90D.
+             MOVE P-120D             TO CF-120D.
+             ADD P-120D              TO W70-120D.
+             MOVE P-150D             TO CF-150D.
+             ADD P-150D              TO W70-150D.
+             MOVE P-180D             TO CF-180D.
+             ADD P-180D              TO W70-180D.
+           IF W02-LINAGE < W02-PRN-LENGTH
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-              PERFORM CA05 THRU CA15.
-            MOVE SPACES  TO R-DET.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               PERFORM CA05 THRU CA15.
+             MOVE SPACES             TO R-DET.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
                GO TO CA40.
-            GO TO CA25.
+             GO TO CA25.
 
        CA30.
-          IF W02-LINAGE > (W02-PRN-LENGTH - 2)
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+           IF W02-LINAGE > (W02-PRN-LENGTH - 2)
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
            ELSE
-        IF WS-PRINTER = "S"
-     MOVE 2  TO WS-ADVANCE
-        ELSE
-     MOVE 99  TO WS-ADVANCE
-        END-IF
-        PERFORM CALL-PRINTUTL
-              PERFORM CA05 THRU CA15.
-            MOVE "CREDITOR TOTALS"
-     TO CF-SUPP.
-            MOVE W70-BAL  TO CF-BAL.
-            MOVE W70-AREAR  TO CF-AREAR.
-            MOVE W70-30D  TO CF-30D.
-            MOVE W70-60D  TO CF-60D.
-            MOVE W70-90D  TO CF-90D.
-            MOVE W70-120D  TO CF-120D.
-            MOVE W70-150D  TO CF-150D.
-            MOVE W70-180D  TO CF-180D.
+               IF WS-PRINTER = "S"
+                   MOVE 2            TO WS-ADVANCE
+               ELSE
+                   MOVE 99           TO WS-ADVANCE
+               END-IF
+               PERFORM CALL-PRINTUTL
+               PERFORM CA05 THRU CA15.
+             MOVE "CREDITOR TOTALS"  TO CF-SUPP.
+             MOVE W70-BAL            TO CF-BAL.
+             MOVE W70-AREAR          TO CF-AREAR.
+             MOVE W70-30D            TO CF-30D.
+             MOVE W70-60D            TO CF-60D.
+             MOVE W70-90D            TO CF-90D.
+             MOVE W70-120D           TO CF-120D.
+             MOVE W70-150D           TO CF-150D.
+             MOVE W70-180D           TO CF-180D.
 
        CA35.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE "******  END  REPORT  ******" TO  R-DET.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL. 
+             MOVE "******  END  REPORT  ******" TO  R-DET.
 
        CA40.
-      MOVE 99   TO WS-ADVANCE.
-      MOVE "E"   TO WS-COMMAND.
-      PERFORM CALL-PRINTUTL.
-      MOVE "P"   TO WS-COMMAND.
+             MOVE 99                 TO WS-ADVANCE.
+             MOVE "E"                TO WS-COMMAND.
+             PERFORM CALL-PRINTUTL.
+             MOVE "P"                TO WS-COMMAND.
 
        CA999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
              MOVE LS-PARID           TO WS-PARID.
              MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
              MOVE LS-USUB            TO WS-USUB.
-             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -831,20 +837,20 @@
              COPY "FUNCTION.PRO".
 
        ZA05.
-             MOVE LS-COMPANY     TO W60-COMPANY.
-             MOVE 2              TO WS-NETKEY.
+             MOVE 2                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-            PERFORM ERASE-SCREEN.
+      *      PERFORM ERASE-SCREEN.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       *

@@ -13,7 +13,7 @@
       *                                                                *
       *     ( A P A C )   S T A R T   &   I N I T    P R O G R A M     *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -96,10 +96,10 @@
       *
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     BUP000.
-       AUTHOR.         J W LEMMON  (APAC).
+       AUTHOR.         J.W.LEMMON.
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -486,7 +486,7 @@
            03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Blue. 
                05  LINE  8 COLUMN  6 VALUE "                                                                    ".
                05  LINE  9 COLUMN  6 VALUE " APAC - Business System (Version 2016).                             " FOREGROUND-COLOR Red  HIGHLIGHT.
-               05  LINE 10 COLUMN  6 VALUE " Copyright (C) 1982 - 2016  JW Lemmon.                              " FOREGROUND-COLOR Black.
+               05  LINE 10 COLUMN  6 VALUE " Copyright (C) 1982 - 2018  JW Lemmon.                              " FOREGROUND-COLOR Black.
                05  LINE 11 COLUMN  6 VALUE " This SOFTWARE is used under licence to JW Lemmon.                  " HIGHLIGHT.
                05  LINE 12 COLUMN  6 VALUE " It is a contravention of the copyright law to:                     " FOREGROUND-COLOR Black.
                05  LINE 13 COLUMN  6 VALUE "   USE this SOFTWARE without registering it.                        " HIGHLIGHT.
@@ -1168,6 +1168,12 @@
       *    ³ The system will display the message box with the top line ³
       *    ³ as the value of WS-MES-LINE. If WS-MES-LINE is zero the   ³
       *    ³ default will be 20.                                       ³
+      *    ³                                                           ³
+      *    ³ If character 48 of the message contains a value of X"FA"  ³
+      *    ³ then do not display the message in a window, only get the ³
+      *    ³ User reponse at the position specified by WS-MES-LINE and ³
+      *    ³ WS-MES-COL.                                               ³
+      *    ³                                                           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "OPTION.CRT".
@@ -1612,12 +1618,12 @@
            IF RUNTIME-ERROR
                IF RECORD-LOCKED
                    GO TO AI02.
-             MOVE PAR-CUR-YR         TO WS-CUR-YR.
-             MOVE PAR-CUR-CEN        TO WS-CUR-CEN.
-             MOVE PAR-PRV-CEN        TO WS-PRV-CEN.
-             MOVE PAR-NXT-CEN        TO WS-NXT-CEN.
+      *      MOVE PAR-CUR-YR         TO WS-CUR-YR.
+      *      MOVE PAR-CUR-CEN        TO WS-CUR-CEN.
+      *      MOVE PAR-PRV-CEN        TO WS-PRV-CEN.
+      *      MOVE PAR-NXT-CEN        TO WS-NXT-CEN.
              MOVE 1                  TO WS-PARKEY.
-
+      
        AI05.
              READ PARAM.
            IF RUNTIME-ERROR
@@ -1663,12 +1669,23 @@
 
        AI30.
              MOVE 2254               TO DATEPOS.
-             MOVE SPACE              TO W22-INSTR.
+             MOVE "A"                TO W22-INSTR.
              CALL "UTP\DateCheck" USING W-DATES.
+      *
+      *    If the Escape key is pressed, the program exits with the 
+      *    value X"EC" in W22-INSTR.
+      *
+      *                            OR
+      *
+      *    On exiting, the valid date will be in W20-DATE [9(08)] and
+      *    W22-DATE-YMD [9999/99/99] in CCYYMMDD format, while W21-DATE
+      *    [9(08)] and W22-DATE-DMY [99/99/9999] will have the date in
+      *    DDMMCCYY format.
+      *
            IF (W22-INSTR = X"EC")
                GO TO AI999.
-             MOVE W22-DATE-DMY       TO W12-TODAY TODAY-DDMMYY SEC-DATE.
-             MOVE W22-DATE-YMD       TO W12-T-YMD.
+             MOVE W22-DTE            TO W12-TODAY TODAY-DDMMYY SEC-DATE.
+             MOVE W20-DTE            TO W12-T-YMD TODAY-YYMMDD.
              MOVE 23                 TO CRT-START.
              MOVE 25                 TO CRT-END.
              PERFORM ERASE-SCREEN.
@@ -1753,7 +1770,7 @@
        AI999.
              EXIT.
       *    *************************************************************
-      *    *****      A P A C   MARKETING SCREEN      ****
+      *    *****            A P A C   MARKETING   SCREEN            ****
       *    *************************************************************
        AL000      SECTION 5.
        AL00.
@@ -1987,10 +2004,21 @@
              DISPLAY "Key in date (DDMMCCYY)" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
        AN05.
              MOVE 0835               TO DATEPOS.
+             MOVE "A"                TO W22-INSTR.
              CALL "UTP\DateCheck" USING W-DATES.
+      *
+      *    If the Escape key is pressed, the program exits with the 
+      *    value X"EC" in W22-INSTR.
+      *
+      *                            OR
+      *
+      *    On exiting, the valid date will be in W20-DATE [9(08)] and
+      *    W22-DATE-YMD [9999/99/99] in CCYYMMDD format, while W21-DATE
+      *    [9(08)] and W22-DATE-DMY [99/99/9999] will have the date in
+      *    DDMMCCYY format.
+      *
            IF (W22-INSTR = X"EC")
                GO TO AN05.
-             MOVE W22-DATE-YMD       TO W20-DTE.
              PERFORM SAVE-SCREEN-3.
              MOVE 11                 TO SHADE-ROW.
              MOVE 24                 TO SHADE-COL.
@@ -2110,9 +2138,19 @@
        AO05.
              MOVE 0835               TO DATEPOS.
              CALL "UTP\DateCheck" USING W-DATES.
+      *
+      *    If the Escape key is pressed, the program exits with the 
+      *    value X"EC" in W22-INSTR.
+      *
+      *                            OR
+      *
+      *    On exiting, the valid date will be in W20-DATE [9(08)] and
+      *    W22-DATE-YMD [9999/99/99] in CCYYMMDD format, while W21-DATE
+      *    [9(08)] and W22-DATE-DMY [99/99/9999] will have the date in
+      *    DDMMCCYY format.
+      *
            IF (W22-INSTR = X"EC")
                GO TO AO05.
-             MOVE W22-DATE-YMD       TO W20-DTE.
              EVALUATE WS0-LEV
                WHEN 0      MOVE "JUNIOR"   TO WS-PACK
 

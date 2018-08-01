@@ -20,11 +20,11 @@
                  WHEN ESC-KEY
                            MOVE SPACES TO W80-ACNO
                            GO TO DEBTOR-LOOKUP-EXIT
-                 WHEN OTHER         CALL X"E5"
+                 WHEN OTHER         PERFORM AA900-ALARM
                END-EVALUATE
                GO TO DEBT-LUP-NAME.
-             DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR 3.
-                   DISPLAY SPACE AT 2501 WITH BACKGROUND-COLOR 3.
+             DISPLAY WS-BLNK78 AT 2302 WITH FOREGROUND-COLOR Cyan.
+                   DISPLAY SPACE AT 2501 WITH BACKGROUND-COLOR Cyan.
              MOVE 6              TO CLIN.
              MOVE 1              TO W75-S W75-S1.
       
@@ -73,18 +73,18 @@
                INSPECT W40-NAME REPLACING ALL "*" BY " "
                      INSPECT W40-NAME REPLACING FIRST "!" BY " ".
                    DISPLAY DEB-ACNO AT LINE CLIN COLUMN 2
-                     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+                     WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
                    DISPLAY W40-NAME AT LINE CLIN COLUMN 9
-                     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+                     WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
              MOVE DEB-BAL        TO W100-LBAL.
                    DISPLAY W100-LBAL AT LINE CLIN COLUMN 50
-                     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+                     WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
              COMPUTE W100-LARR = DEB-30 + DEB-60 + DEB-90 + DEB-120.
                    DISPLAY W100-LARR AT LINE CLIN COLUMN 62
-                     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+                     WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
              MOVE DEB-CRL        TO W100-CRL.
                    DISPLAY W100-CRL AT LINE CLIN COLUMN 73
-                     WITH FOREGROUND-COLOR 3 HIGHLIGHT.
+                     WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
            IF CLIN < 21
                ADD 1             TO CLIN W75-S
                GO TO DEBT-GET-DEBTOR-REC.
@@ -92,19 +92,19 @@
       *    ****   U S E R   O P T I O N S
       *
        DEBT-FULL-SCREEN.
-                   DISPLAY " " AT 2303 WITH FOREGROUND-COLOR 14
-                           " highlight - " WITH FOREGROUND-COLOR 7
-                     "PgUp" WITH FOREGROUND-COLOR 14
-                     "/" WITH FOREGROUND-COLOR 7
-                     "PgDn" WITH FOREGROUND-COLOR 14
-                     " - " WITH FOREGROUND-COLOR 7
-                           "ENTER" WITH FOREGROUND-COLOR 14
-                           " select - " WITH FOREGROUND-COLOR 7
-                           "Esc" WITH FOREGROUND-COLOR 14
-                     "ape - " WITH FOREGROUND-COLOR 7
-                     "F9" WITH FOREGROUND-COLOR 14
+                   DISPLAY " " AT 2303 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                           " highlight - " WITH FOREGROUND-COLOR Grey
+                     "PgUp" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "/" WITH FOREGROUND-COLOR Grey
+                     "PgDn" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     " - " WITH FOREGROUND-COLOR Grey
+                           "ENTER" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                           " select - " WITH FOREGROUND-COLOR Grey
+                           "Esc" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "ape - " WITH FOREGROUND-COLOR Grey
+                     "F9" WITH FOREGROUND-COLOR Brown HIGHLIGHT
                      " memo/remarks"
-                      WITH FOREGROUND-COLOR 7.
+                      WITH FOREGROUND-COLOR Grey.
 
        DEBT-SAVE-FULL-SCREEN.
              PERFORM SAVE-SCREEN-2.
@@ -133,7 +133,7 @@
                  WHEN ENTER-KEY
                  WHEN CR-KEY
                      GO TO DEBT-CHK-SELECT
-                 WHEN OTHER         CALL X"E5"
+                 WHEN OTHER         PERFORM AA900-ALARM
                END-EVALUATE
                GO TO DEBT-GET-USER-OPT
            ELSE
@@ -150,10 +150,10 @@
                      PERFORM DEBT-ADD-SPECS THRU DEBT-ADD-EXIT
                      PERFORM DEBT-FULL-SCREEN
                            GO TO DEBT-GET-USER-OPT
-                 WHEN OTHER         CALL X"E5"
+                 WHEN OTHER         PERFORM AA900-ALARM
                END-EVALUATE
                GO TO DEBT-GET-USER-OPT.
-             CALL X"E5".
+             PERFORM AA900-ALARM.
                    GO TO DEBT-GET-USER-OPT.
       
        DEBT-GET-NEXT-PAGE.
@@ -188,17 +188,17 @@
       
        DEBT-NO-RECORD.
                    DISPLAY "No record - " AT 2512
-                      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-                           "N" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+                      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                           "N" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
                            "ext or "
-                      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-                           "Q" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+                      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                           "Q" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
                            "uit > <"
-                      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+                      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
       
        DEBT-GET-USER-OPT-2.
                    ACCEPT WS-OPTION AT 2538
-                    WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+                    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
              CALL "CBL_TOUPPER" USING WS-OPTION
                                 BY VALUE WS-LENGTH
                                 RETURNING WS-STATUS.
@@ -246,7 +246,7 @@
              PERFORM READ-DEBMEM THRU READ-DEBMEM-EXIT.
            IF WS-F-ERROR NOT = ZERO
                DISPLAY "No Memo or remarks" AT 2502
-                        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
+                        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
                CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS
                GO TO DEBT-ADD-EXIT.
              INITIALIZE W200-MEM-FLDS.
@@ -278,7 +278,7 @@
              DISPLAY S-DEB-MEM.
              DISPLAY SA-MEM.
                    DISPLAY " ENTER to continue or ESCape " AT 2502
-                      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+                      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT.
              CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
@@ -295,11 +295,11 @@
              EXIT.
       
        DEBT-CRT-EDGE.
-                   DISPLAY WS-MDT1 AT CPOS WITH BACKGROUND-COLOR 0
-                                          FOREGROUND-COLOR 3
-                     WS-MDT78 WITH FOREGROUND-COLOR 3
-                     WS-MDT80 WITH BACKGROUND-COLOR 0
-                                   FOREGROUND-COLOR 3.
+                   DISPLAY WS-MDT1 AT CPOS WITH BACKGROUND-COLOR Black
+                                          FOREGROUND-COLOR Cyan
+                     WS-MDT78 WITH FOREGROUND-COLOR Cyan
+                     WS-MDT80 WITH BACKGROUND-COLOR Black
+                                   FOREGROUND-COLOR Cyan.
                    ADD 1                 TO CLIN.
       
        DEBTOR-LOOKUP-EXIT.

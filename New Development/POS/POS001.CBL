@@ -1,74 +1,74 @@
       $set LINKCOUNT"1024"
       ******************************************************************
       *                                                                *
-      *  *******     ******	******	    ****       ****	 **    *
+      *  *******     ****** ******     ****       ****  **    *
       *  **    **   **    **   **    **    **  **     **  **    ***    *
-      *  **    **   **	  **   **	  **	**   **	   **	 **    *
-      *  *******    **	  **	******	  **	**   **    **	 **    *
-      *  **	    **	  **	     **   **	**   **    **	 **    *
-      *  **	    **	  **   **    **    **  **     **  **	 **    *
-      *  **	     ******	******	    ****       ****	****   *
+      *  **    **   **   **   **   ** **   **    **  **    *
+      *  *******    **   ** ******   ** **   **    **  **    *
+      *  **     **   **      **   ** **   **    **  **    *
+      *  **     **   **   **    **    **  **     **  **  **    *
+      *  **      ****** ******     ****       **** ****   *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
-      *     ( A P A C )   C A S H   S A L E S	P R O G R A M	       *
+      *     ( A P A C )   C A S H   S A L E S P R O G R A M        *
       *                                                                *
       *     P O S  -   U S I N G   P R O G R A M M A B L E   K E Y S   *
       *                                                                *
-      *     VERSION 8.15.00 - November 2010			       *
-      * 							       *
+      *   Version 9.00.40 - June 2013                                  *
+      *               *
       ******************************************************************
-      * 							       *
+      *               *
       *  June 2005 - Include routine to record cancelled transactions  *
-      * 							       *
+      *               *
       * August 2008    - New file (STKALT) - Stock alternate index     *
-      * 		 included for lookups, using any word con-     *
-      * 		 tained in the Stock description.	       *
-      * 							       *
+      *    included for lookups, using any word con-     *
+      *    tained in the Stock description.        *
+      *               *
       ******************************************************************
-000010 IDENTIFICATION DIVISION.
-000020 PROGRAM-ID.     POS001.
-000030 AUTHOR.	       James William Lemmon.
-000040 DATE-WRITTEN.   JUNE 1990.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID.     POS001.
+       AUTHOR.        James William Lemmon.
+       DATE-WRITTEN.   JUNE 1990.
 
-		   COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
-				     by James William Lemmon.
-				       (Id No. 4412165050082).
+     COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2011
+         by James William Lemmon.
+           (Id No. 4412165050082).
 
-		   All rights reserved.
+     All rights reserved.
 
-		   e-mail jwlemmon@gmail.com.
+     e-mail jwlemmon@gmail.com.
 
-000050 SECURITY.
-		   This program is free software; you can redistribute
-		   it and/or modify it under the terms of the GNU General
-		   Public License as published by the Free Software
-		   Foundation; either version 2 of the License, or (at
-		   your option) any later version.
+       SECURITY.
+     This program is free software; you can redistribute
+     it and/or modify it under the terms of the GNU General
+     Public License as published by the Free Software
+     Foundation; either version 3 of the License, or (at
+     your option) any later version.
 
-		   This program is distributed in the hope that it will
-		   be useful, but WITHOUT ANY WARRANTY; without even the
-		   implied warranty of MERCHANTABILITY or FITNESS FOR A
-		   PARTICULAR PURPOSE.	See the GNU General Public License
-		   for more details.
+     This program is distributed in the hope that it will
+     be useful, but WITHOUT ANY WARRANTY; without even the
+     implied warranty of MERCHANTABILITY or FITNESS FOR A
+     PARTICULAR PURPOSE. See the GNU General Public License
+     for more details.
 
-		   You should have received a copy of the GNU General
-		   Public License along with this program; if not, write
-		   to the Free Software Foundation, Inc., 59 Temple Place
-		   - Suite 330, Boston, MA 02111-1307, USA.
+     You should have received a copy of the GNU General
+     Public License along with this program. If not, see
+               <http://www.gnu.org/licenses/>.
 
-000050 ENVIRONMENT DIVISION.
-000060 CONFIGURATION SECTION.
-000070 SPECIAL-NAMES.
-000080		       CURSOR IS CSTART
-000090		       CONSOLE IS CRT
-		       CRT STATUS IS KEY-STATUS.
-000090 INPUT-OUTPUT SECTION.
-000100 FILE-CONTROL.
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+               CURSOR IS CSTART
+               CONSOLE IS CRT
+         CRT STATUS IS KEY-STATUS.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
 
        COPY APACFIDS.SL.
 
-000220 COPY AUDIT.SL.
+       COPY AUDIT.SL.
 
        COPY CARDEX.SL.
 
@@ -76,55 +76,55 @@
 
        COPY CONTROL.SL.
 
-000140 COPY DEPART.SL.
+       COPY DEPART.SL.
 
        COPY LEDTRF.SL.
 
-000120 COPY PARAM.SL.
+       COPY PARAM.SL.
 
        COPY POSPLU.SL.
 
        COPY PSLIP.SL.
 
-000240 COPY RECOVER.SL.
+       COPY RECOVER.SL.
 
-000200 COPY SALE.SL.
+       COPY SALE.SL.
 
        COPY SHARED.SL.
 
-       COPY SLIP.SL.
+       COPY "SLIP.SL".
 
-000290 COPY SPARTS.SL.
+       COPY SPARTS.SL.
 
-000180 COPY STOCK.SL.
+       COPY STOCK.SL.
 
-000140 COPY STKMEM.SL.
+       COPY STKMEM.SL.
 
-000180 COPY TXTRAN.SL.
+       COPY TXTRAN.SL.
 
-000280     SELECT CSHDRW  ASSIGN W02-CSHDRW
-000290                    ORGANIZATION SEQUENTIAL
-000300                    ACCESS SEQUENTIAL.
+           SELECT CSHDRW  ASSIGN W02-CSHDRW
+                          ORGANIZATION SEQUENTIAL
+                          ACCESS SEQUENTIAL.
 
-000290     SELECT CSHSLE  ASSIGN DISK
-000300                    ORGANIZATION LINE SEQUENTIAL
-000310                    ACCESS SEQUENTIAL.
+           SELECT CSHSLE  ASSIGN DISK
+                          ORGANIZATION LINE SEQUENTIAL
+                          ACCESS SEQUENTIAL.
 
-000280	   SELECT CUSDSP  ASSIGN W02-CUSDSP
-000290                    ORGANIZATION SEQUENTIAL
-000300                    ACCESS SEQUENTIAL.
+          SELECT CUSDSP  ASSIGN W02-CUSDSP
+                          ORGANIZATION SEQUENTIAL
+                          ACCESS SEQUENTIAL.
 
-000290	   SELECT KCHPRN  ASSIGN DISK
-000300                    ORGANIZATION LINE SEQUENTIAL
-000310                    ACCESS SEQUENTIAL.
+          SELECT KCHPRN  ASSIGN DISK
+                          ORGANIZATION LINE SEQUENTIAL
+                          ACCESS SEQUENTIAL.
 
       /
-000320 DATA DIVISION.
-000330 FILE SECTION.
+       DATA DIVISION.
+       FILE SECTION.
 
        COPY APACFIDS.FDE.
 
-000450 COPY AUDIT.FDE.
+       COPY AUDIT.FDE.
 
        COPY CARDEX.FDE.
 
@@ -132,162 +132,162 @@
 
        COPY CONTROL.FDE.
 
-000370 COPY DEPART.FDE.
+       COPY DEPART.FDE.
 
        COPY LEDTRF.FDE.
 
-000350 COPY PARAM.FDE.
+       COPY PARAM.FDE.
 
        COPY POSPLU.FDE.
 
        COPY PSLIP.FDE.
 
-000470 COPY RECOVER.GFD.
+       COPY RECOVER.FD.
 
-000410 COPY SALE.IFD.
+       COPY SALE.FD.
 
        COPY SHARED.FDE.
 
        COPY SLIP.FDE.
 
-000520 COPY SPARTS.FDE.
+       COPY SPARTS.FDE.
 
-000390 COPY STOCK.FDE.
+       COPY STOCK.FDE.
 
-000140 COPY STKMEM.FDE.
+       COPY STKMEM.FDE.
 
-000180 COPY TXTRAN.FDE.
+       COPY TXTRAN.FDE.
 
-000530 FD  CSHDRW    LABEL RECORD OMITTED.
-000550 01  CSH-REC.
-000560     03  CSH-OPEN        PIC  X(06).
+       FD  CSHDRW    LABEL RECORD OMITTED.
+       01  CSH-REC.
+           03  CSH-OPEN        PIC  X(06).
 
-000530 FD  CSHSLE    LABEL RECORD STANDARD
-000540               VALUE OF FILE-ID W02-PRINTER.
-000550 01  CSH-L.
-000560     03  CSH-DATA.
-	       05  CSH-LINE PIC  X(40).
-	       05  FILLER   PIC  X(40).
+       FD  CSHSLE    LABEL RECORD STANDARD
+                     VALUE OF FILE-ID W02-PRINTER.
+       01  CSH-L.
+           03  CSH-DATA.
+        05  CSH-LINE PIC  X(40).
+        05  FILLER   PIC  X(40).
 
-000530 FD  CUSDSP    LABEL RECORD OMITTED.
-000550 01  CUS-REC.
-000560*	   03  CUS-CON	       PIC  X(01).
-      *	   03  CUS-INST        PIC  X(02).
-	   03  CUS-LINE        PIC  X(40).
+       FD  CUSDSP    LABEL RECORD OMITTED.
+       01  CUS-REC.
+      *    03  CUS-CON        PIC  X(01).
+      *    03  CUS-INST        PIC  X(02).
+    03  CUS-LINE        PIC  X(40).
 
-000530 FD  KCHPRN    LABEL RECORD STANDARD
-000540		     VALUE OF FILE-ID W02-KCHPRN.
-000550 01  KCH-L.
-000560	   03  KCH-DATA.
-	       05  KCH-LINE PIC  X(40).
-	       05  FILLER   PIC  X(40).
+       FD  KCHPRN    LABEL RECORD STANDARD
+             VALUE OF FILE-ID W02-KCHPRN.
+       01  KCH-L.
+          03  KCH-DATA.
+        05  KCH-LINE PIC  X(40).
+        05  FILLER   PIC  X(40).
       /
-000570 WORKING-STORAGE SECTION.
-       77  WS-CHECK	   PIC	X(18)	 VALUE
-			   "aeWlimemnomLalismJ".
-000580 77  WS-DISC	   PIC	9(02)V99 COMP-3.
-000590 77  WS-TDISC	   PIC	9(02)V99 COMP-3.
-000600 77  WS-SUB	   PIC	9(04)	 COMP-5.
-000600 77  WS-SUPER	   PIC	9(02)	 COMP-5.
-002180 77  WS-P1	   PIC	9(04)	 COMP-5.
-000600 77  WS-S1	   PIC	9(04)	 COMP-5.
-000610 77  WS-S2	   PIC	9(04)	 COMP-5.
-000620 77  WS-S3	   PIC	9(04)	 COMP-5.
-000630 77  WS-S4	   PIC	9(04)	 COMP-5.
-000640 77  WS-S5	   PIC	9(04)	 COMP-5.
-000650 77  WS-S6	   PIC	9(04)	 COMP-5.
-000660 77  WS-S7	   PIC	9(04)	 COMP-5.
-000670 77  WS-S8	   PIC	9(04)	 COMP-5.
-000680 77  WS-S9	   PIC	9(04)	 COMP-5.
-001790 77  WS-IXS	   PIC	9(04)	 COMP-5.
-001800 77  WS-IXS1	   PIC	9(04)	 COMP-5.
-001810 77  WS-IXS2	   PIC	9(04)	 COMP-5.
-001820 77  WS-IXS3	   PIC	9(04)	 COMP-5.
-001830 77  WS-IXS4	   PIC	9(04)	 COMP-5.
-       77  WS-SM	   PIC	9(02)	 COMP-0.
-002280 77  WS-PASS	   PIC	X(08).
-000700 77  WS-PARKEY	   PIC	9(04)	 COMP-5.
-000720 77  WS-NETKEY	   PIC	9(04)	 COMP-5.
-000730 77  WS-AUDKEY	   PIC	9(04)	 COMP-5.
-000740 77  WS-SALSTR	   PIC	9(04)	 COMP-5.
-000750 77  WS-SALKEY	   PIC	9(04)	 COMP-5.
-000760 77  WS-RECKEY	   PIC	9(04)	 COMP-5.
-000770 77  WS-RECOVER	   PIC	9(04)	 COMP-5.
-000820 77  WS-SHARED	   PIC	9(04)	 COMP-5 VALUE 1.
-002440 77  WS-TRANS        PIC  9(06)    COMP-5 VALUE 1.
-000820 77  WS-STOCK	   PIC	X(01).
-000850 77  WS-START	   PIC	9(08).
-000860 77  WS-END	   PIC	9(08).
-000860 77  WS-TME2	   PIC	9(08).
-002520 77  WS-PORT	   PIC	9(05) VALUE 259.
+       WORKING-STORAGE SECTION.
+       77  WS-CHECK    PIC X(18)  VALUE
+      "aeWlimemnomLalismJ".
+       77  WS-DISC    PIC 9(02)V99 COMP-3.
+       77  WS-TDISC    PIC 9(02)V99 COMP-3.
+       77  WS-SUB    PIC 9(04)  COMP-5.
+       77  WS-SUPER    PIC 9(02)  COMP-5.
+       77  WS-P1    PIC 9(04)  COMP-5.
+       77  WS-S1    PIC 9(04)  COMP-5.
+       77  WS-S2    PIC 9(04)  COMP-5.
+       77  WS-S3    PIC 9(04)  COMP-5.
+       77  WS-S4    PIC 9(04)  COMP-5.
+       77  WS-S5    PIC 9(04)  COMP-5.
+       77  WS-S6    PIC 9(04)  COMP-5.
+       77  WS-S7    PIC 9(04)  COMP-5.
+       77  WS-S8    PIC 9(04)  COMP-5.
+       77  WS-S9    PIC 9(04)  COMP-5.
+       77  WS-IXS    PIC 9(04)  COMP-5.
+       77  WS-IXS1    PIC 9(04)  COMP-5.
+       77  WS-IXS2    PIC 9(04)  COMP-5.
+       77  WS-IXS3    PIC 9(04)  COMP-5.
+       77  WS-IXS4    PIC 9(04)  COMP-5.
+       77  WS-SM    PIC 9(02)  COMP-0.
+       77  WS-PASS    PIC X(08).
+       77  WS-PARKEY    PIC 9(04)  COMP-5.
+       77  WS-NETKEY    PIC 9(04)  COMP-5.
+       77  WS-AUDKEY    PIC 9(04)  COMP-5.
+       77  WS-SALSTR    PIC 9(04)  COMP-5.
+       77  WS-SALKEY    PIC 9(04)  COMP-5.
+       77  WS-RECKEY    PIC 9(04)  COMP-5.
+       77  WS-RECOVER    PIC 9(04)  COMP-5.
+       77  WS-SHARED    PIC 9(04)  COMP-5 VALUE 1.
+       77  WS-TRANS        PIC  9(06)    COMP-5 VALUE 1.
+       77  WS-STOCK    PIC X(01).
+       77  WS-START    PIC 9(08).
+       77  WS-END    PIC 9(08).
+       77  WS-TME2    PIC 9(08).
+       77  WS-PORT    PIC 9(05) VALUE 259.
       * 1004.
-       77  WS-DRAW1	   PIC	9(05) VALUE 260.
-000600 77  WS-OPEN	   PIC	X(01) VALUE X"01".
-000600 77  WS-CLOSE	   PIC	X(01) VALUE X"00".
-000870 77  WS-PAR	   PIC	9(01) VALUE 0.
-000880 77  WS-INO	   PIC	9(02) VALUE 0.
-000890 77  WS-LINES	   PIC	9(02) VALUE 0.
-000900 77  WS-FIRST	   PIC	9(03) VALUE 0.
-       77  WS-SALPOS	   PIC	9(03) VALUE 0.
-000910 77  WS-LAST	   PIC	9(03) VALUE 0.
-000920 77  WS-PAGE	   PIC	9(04)	 COMP-5.
-000930 77  WS-OPTION	   PIC	X(01).
-       77  WS-CARDEX	   PIC	X(01).
-       77  WS-SCALE	   PIC	X(01).
-       77  WS-PRC-IND	   PIC	X(01).
-       77  WS-BNK-IND	   PIC	X(01).
-       77  WS-SLIP-P	   PIC	X(01).
-000930 77  WS-PRNINV	   PIC	X(01).
-002610 77  WS-SKIP	   PIC	X(01) VALUE " ".
-002610 77  WS-LOOK         PIC  X(01) VALUE "S".
-       77  WS-PROMPT	   PIC	X(01).
+       77  WS-DRAW1    PIC 9(05) VALUE 260.
+       77  WS-OPEN    PIC X(01) VALUE X"01".
+       77  WS-CLOSE    PIC X(01) VALUE X"00".
+       77  WS-PAR    PIC 9(01) VALUE 0.
+       77  WS-INO    PIC 9(02) VALUE 0.
+       77  WS-LINES    PIC 9(02) VALUE 0.
+       77  WS-FIRST    PIC 9(03) VALUE 0.
+       77  WS-SALPOS    PIC 9(03) VALUE 0.
+       77  WS-LAST    PIC 9(03) VALUE 0.
+       77  WS-PAGE    PIC 9(04)  COMP-5.
+       77  WS-OPTION    PIC X(01).
+       77  WS-CARDEX    PIC X(01).
+       77  WS-SCALE    PIC X(01).
+       77  WS-PRC-IND    PIC X(01).
+       77  WS-BNK-IND    PIC X(01).
+       77  WS-SLIP-P    PIC X(01).
+       77  WS-PRNINV    PIC X(01).
+       77  WS-SKIP    PIC X(01) VALUE " ".
+       77  WS-LOOK         PIC  X(01) VALUE "S".
+       77  WS-PROMPT    PIC X(01).
       *
-      *	   PLU DEFAULT: P = PLU'S ARE FUNCTIONAL BY DEFAULT
-      *			S = STOCK CODES ARE FUNCTIONAL BY
-      *			    DEFAULT.
+      *    PLU DEFAULT: P = PLU'S ARE FUNCTIONAL BY DEFAULT
+      *   S = STOCK CODES ARE FUNCTIONAL BY
+      *       DEFAULT.
       *
-       77  WS-PLU-D	   PIC	X(01).
-002040 77  WS-WS	   PIC	X(01).
-       77  WS-POSMODE	   PIC	X(01).
-       77  WS-NOSELL	   PIC	X(01) VALUE "N".
-000950 77  WS-NUM	   PIC	Z9.
-000960 77  WS-ERROR	   PIC	9(01).
-       77  PRG-NAME2	   PIC	X(12) VALUE SPACES.
-002180 77  WS-USE-CASES    PIC	X(01).
-002190 77  WS-USE-PACKS    PIC	X(01).
-       77  WS-USE-ITM	   PIC	X(01).
-       77  WS-EXT-STK	   PIC	X(01).
-001000 77  WS-COMP	   PIC	9(01).
-001010 77  WS-INDI	   PIC	9(01) VALUE ZERO.
-001020 77  WS-UPDATE	   PIC	9(01) VALUE ZERO.
-001030 77  WS-CONREC	   PIC	9(01) VALUE ZERO.
-001040 77  WS-HEAD	   PIC	X(01).
-       77  WS-RT-HD	   PIC	X(10) VALUE "-Retail   ".
-       77  WS-WS-HD	   PIC	X(10) VALUE "-Wholesale".
-       77  WS-CS-HD	   PIC	X(10) VALUE "-Cash sale".
-001050 77  WS-TYPE	   PIC	X(01).
-001060 77  WS-CLNT-VAT	   PIC	X(01).
-001060 77  WS-PRC	   PIC	X(01).
-       77  WS-MEASURE	   PIC	X(01) VALUE "N".
-       77  WS-PARCELS	   PIC	X(01).
-       77  WS-SPLIT-BC	   PIC	X(01).
-001160 77  WS-CR	   PIC	X(01).
-       77  PRG-NAME	   PIC	X(12) VALUE "STP\STPLOOK".
-       77  TODAY-DDMMYY	   PIC	9(08) COMP-5.
-       77  WS-USUB	   PIC	9(04) COMP-5.
-000070 77  WS-DRAW	   PIC	9(02).
-       77  WS-CSHCODE	   PIC	X(10).
-       77  WS-CSH-ADD	   PIC	X(01).
-       77  WS-CSH-TEL	   PIC	X(01).
-       77  WS-CSH-VAT	   PIC	X(01).
-       77  WS-CSH-TIME	   PIC	X(01).
-       77  WS-CSH-ASSIST   PIC	X(01).
-       77  WS-CSH-DETAIL   PIC	X(01).
-       77  WS-CSH-VAT-DET  PIC	X(01).
-       77  WS-CSH-ITM	   PIC	X(01).
-       77  WS-SLIP-NAME    PIC	X(34).
+       77  WS-PLU-D    PIC X(01).
+       77  WS-WS    PIC X(01).
+       77  WS-POSMODE    PIC X(01).
+       77  WS-NOSELL    PIC X(01) VALUE "N".
+       77  WS-NUM    PIC Z9.
+       77  WS-ERROR    PIC 9(01).
+       77  PRG-NAME2    PIC X(12) VALUE SPACES.
+       77  WS-USE-CASES    PIC X(01).
+       77  WS-USE-PACKS    PIC X(01).
+       77  WS-USE-ITM    PIC X(01).
+       77  WS-EXT-STK    PIC X(01).
+       77  WS-COMP    PIC 9(01).
+       77  WS-INDI    PIC 9(01) VALUE ZERO.
+       77  WS-UPDATE    PIC 9(01) VALUE ZERO.
+       77  WS-CONREC    PIC 9(01) VALUE ZERO.
+       77  WS-HEAD    PIC X(01).
+       77  WS-RT-HD    PIC X(10) VALUE "-Retail   ".
+       77  WS-WS-HD    PIC X(10) VALUE "-Wholesale".
+       77  WS-CS-HD    PIC X(10) VALUE "-Cash sale".
+       77  WS-TYPE    PIC X(01).
+       77  WS-CLNT-VAT    PIC X(01).
+       77  WS-PRC    PIC X(01).
+       77  WS-MEASURE    PIC X(01) VALUE "N".
+       77  WS-PARCELS    PIC X(01).
+       77  WS-SPLIT-BC    PIC X(01).
+       77  WS-CR    PIC X(01).
+       77  PRG-NAME    PIC X(12) VALUE "STP\STPLOOK".
+       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
+       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-DRAW    PIC 9(02).
+       77  WS-CSHCODE    PIC X(10).
+       77  WS-CSH-ADD    PIC X(01).
+       77  WS-CSH-TEL    PIC X(01).
+       77  WS-CSH-VAT    PIC X(01).
+       77  WS-CSH-TIME    PIC X(01).
+       77  WS-CSH-ASSIST   PIC X(01).
+       77  WS-CSH-DETAIL   PIC X(01).
+       77  WS-CSH-VAT-DET  PIC X(01).
+       77  WS-CSH-ITM    PIC X(01).
+       77  WS-SLIP-NAME    PIC X(34).
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Value Added Tax (VAT) is calculated per item and because  ³
@@ -295,107 +295,107 @@
       *    ³ two decimals, results must be rounded per tax percentage. ³
       *    ³ Some Users require more detailed analysis of their sales  ³
       *    ³ and split their Inventory accross more than one category. ³
-      *    ³							       ³
+      *    ³              ³
       *    ³ As the integration of sales into the General Ledger from  ³
       *    ³ the sales modules is processed per Sales Ledger, which    ³
       *    ³ requires the tax to be rounded per integration entry and  ³
       *    ³ rounding per sales integration entry which on occasion    ³
       *    ³ will result in the entries for the transaction to be out  ³
-      *    ³ of balance.					       ³
-      *    ³							       ³
+      *    ³ of balance.            ³
+      *    ³              ³
       *    ³ To minimise this problem the system stores the exclusive  ³
       *    ³ price with three decimals. This only serves to minimise   ³
       *    ³ the amount by which the calculation may vary, which when  ³
       *    ³ incorrect is normally 0.01 too much or too little.        ³
-      *    ³							       ³
-      *    ³ EXAMPLE:						       ³
-      *    ³   VAT rate = 14%.					       ³
-      *    ³   Item one has an exclusive price of:		14.25  ³
-      *    ³		       sales category	 :		0001   ³
+      *    ³              ³
+      *    ³ EXAMPLE:             ³
+      *    ³   VAT rate = 14%.            ³
+      *    ³   Item one has an exclusive price of:  14.25  ³
+      *    ³         sales category  :  0001   ³
       *    ³   This would result in the inclusive price being calcula- ³
-      *    ³   ed as:	       14.25 + VAT 1.995 =		16.245 ³
+      *    ³   ed as:        14.25 + VAT 1.995 =  16.245 ³
       *    ³   As inclusive prices may only have two decimals the      ³
       *    ³   system will round this price to 16.25, when the item is ³
       *    ³   first loaded or if this was the last price, resulting   ³
-      *    ³   in an exclusive price of 			14.254 ³
-      *    ³   Item two has an inclusive price of:	       151.90  ³
-      *    ³		       sales category	 :		0002   ³
+      *    ³   in an exclusive price of    14.254 ³
+      *    ³   Item two has an inclusive price of:        151.90  ³
+      *    ³         sales category  :  0002   ³
       *    ³   This item will have an exclusive price recorded as      ³
-      *    ³   133.246 after being rounded to three decimals.	       ³
-      *    ³							       ³
-      *    ³   1. Cash sale for 1 of item one.			       ³
-      *    ³	  Using the inclusive price, calculate the VAT and     ³
-      *    ³	  the other values as follows:			       ³
-      *    ³	  Inclusive price ö (100 + VAT Rate) x VAT rate        ³
-      *    ³		    16.25 ö (100 + 14) x 14  =	1.9956	       ³
-      *    ³	  Round VAT to 2 decimals	     =	2.00	       ³
-      *    ³	  Subtract VAT from inclusive price  = 14.25 (excl)    ³
-      *    ³						  Dt	 Cr    ³
-      *    ³	  Integration entries are:  Cash Sales	 16.25	       ³
-      *    ³				    Income		14.25- ³
-      *    ³				    VAT			 2.00- ³
-      *    ³						______________ ³
-      *    ³				    Totals	 16.25	16.25- ³
-      *    ³							       ³
+      *    ³   133.246 after being rounded to three decimals.        ³
+      *    ³              ³
+      *    ³   1. Cash sale for 1 of item one.          ³
+      *    ³   Using the inclusive price, calculate the VAT and     ³
+      *    ³   the other values as follows:          ³
+      *    ³   Inclusive price ö (100 + VAT Rate) x VAT rate        ³
+      *    ³      16.25 ö (100 + 14) x 14  = 1.9956        ³
+      *    ³   Round VAT to 2 decimals      = 2.00        ³
+      *    ³   Subtract VAT from inclusive price  = 14.25 (excl)    ³
+      *    ³        Dt  Cr    ³
+      *    ³   Integration entries are:  Cash Sales  16.25        ³
+      *    ³        Income  14.25- ³
+      *    ³        VAT    2.00- ³
+      *    ³      ______________ ³
+      *    ³        Totals  16.25 16.25- ³
+      *    ³              ³
       *    ³   2. Cash Sale for 1 of item one and 1 of item two.       ³
-      *    ³	  VAT is calculated as the total on both items and     ³
-      *    ³	  rounded to two decimals: This can be done, by using  ³
-      *    ³	  the total inclusive or excluse value. 	       ³
-      *    ³	  Exclusive: 14.254 + 133.246 = 147.50 x 14% = 20.65   ³
-      *    ³	  Inclusive: 16.25 + 151.90 = 168.15 ö (100 + 14)      ³
-      *    ³		     x 14 = 20.65.			       ³
-      *    ³	  As the two items are from different catergories, two ³
-      *    ³	  integration entries are required.		       ³
-      *    ³	  These entries must be rounded to two decimals.       ³
-      *    ³		     14.254 rounded =  14.25		       ³
-      *    ³		    133.246 rounded = 133.25		       ³
-      *    ³						  Dt	 Cr    ³
-      *    ³	  Integration entries are:  Cash Sales	168.15	       ³
-      *    ³				    Income 1		14.25- ³
-      *    ³				    Income 2	       133.25- ³
-      *    ³				    VAT			20.65- ³
-      *    ³						______________ ³
-      *    ³				    Totals	168.15 168.15- ³
-      *    ³							       ³
-      *    ³	  From these examples, it is clear that the procedure  ³
-      *    ³	  being used is correct. However, if both items had    ³
-      *    ³	  either the first or second price the result would be ³
-      *    ³	  as follows:					       ³
-      *    ³	  1 - price 16.25 inclusive - VAT calculated as 3.99   ³
-      *    ³	  Both items would have their integration entries      ³
-      *    ³	  rounded to 14.25.				       ³
-      *    ³						  Dt	 Cr    ³
-      *    ³	  Integration entries are:  Cash Sales	 32.50	       ³
-      *    ³				    Income 1		14.25- ³
-      *    ³				    Income 2		14.25- ³
-      *    ³				    VAT			 3.99- ³
-      *    ³						______________ ³
-      *    ³				    Totals	 32.50	32.49- ³
-      *    ³							       ³
-      *    ³	  2 - price 151.90 inclusive - VAT calculated as 37.31 ³
-      *    ³	  Both items would have their integration entries      ³
-      *    ³	  rounded to 133.25.				       ³
-      *    ³						  Dt	 Cr    ³
-      *    ³	  Integration entries are:  Cash Sales	303.80	       ³
-      *    ³				    Income 1	       133.25- ³
-      *    ³				    Income 2	       133.25- ³
-      *    ³				    VAT			37.31- ³
-      *    ³						______________ ³
-      *    ³				    Totals	303.80 303.81- ³
-      *    ³							       ³
+      *    ³   VAT is calculated as the total on both items and     ³
+      *    ³   rounded to two decimals: This can be done, by using  ³
+      *    ³   the total inclusive or excluse value.         ³
+      *    ³   Exclusive: 14.254 + 133.246 = 147.50 x 14% = 20.65   ³
+      *    ³   Inclusive: 16.25 + 151.90 = 168.15 ö (100 + 14)      ³
+      *    ³       x 14 = 20.65.          ³
+      *    ³   As the two items are from different catergories, two ³
+      *    ³   integration entries are required.         ³
+      *    ³   These entries must be rounded to two decimals.       ³
+      *    ³       14.254 rounded =  14.25         ³
+      *    ³      133.246 rounded = 133.25         ³
+      *    ³        Dt  Cr    ³
+      *    ³   Integration entries are:  Cash Sales 168.15        ³
+      *    ³        Income 1  14.25- ³
+      *    ³        Income 2        133.25- ³
+      *    ³        VAT   20.65- ³
+      *    ³      ______________ ³
+      *    ³        Totals 168.15 168.15- ³
+      *    ³              ³
+      *    ³   From these examples, it is clear that the procedure  ³
+      *    ³   being used is correct. However, if both items had    ³
+      *    ³   either the first or second price the result would be ³
+      *    ³   as follows:            ³
+      *    ³   1 - price 16.25 inclusive - VAT calculated as 3.99   ³
+      *    ³   Both items would have their integration entries      ³
+      *    ³   rounded to 14.25.           ³
+      *    ³        Dt  Cr    ³
+      *    ³   Integration entries are:  Cash Sales  32.50        ³
+      *    ³        Income 1  14.25- ³
+      *    ³        Income 2  14.25- ³
+      *    ³        VAT    3.99- ³
+      *    ³      ______________ ³
+      *    ³        Totals  32.50 32.49- ³
+      *    ³              ³
+      *    ³   2 - price 151.90 inclusive - VAT calculated as 37.31 ³
+      *    ³   Both items would have their integration entries      ³
+      *    ³   rounded to 133.25.           ³
+      *    ³        Dt  Cr    ³
+      *    ³   Integration entries are:  Cash Sales 303.80        ³
+      *    ³        Income 1        133.25- ³
+      *    ³        Income 2        133.25- ³
+      *    ³        VAT   37.31- ³
+      *    ³      ______________ ³
+      *    ³        Totals 303.80 303.81- ³
+      *    ³              ³
       *    ³ The system can either, if required, process a balancing   ³
       *    ³ entry to a suspense account at the end of each day or     ³
       *    ³ balance each set of integration entries. The suspense     ³
       *    ³ account would need to have manual adjustment entries pro- ³
       *    ³ cessed and as the system already processes balancing      ³
       *    ³ entries if there has been a problem, it would not be a    ³
-      *    ³ straight-forward procedure.			       ³
-      *    ³							       ³
+      *    ³ straight-forward procedure.          ³
+      *    ³              ³
       *    ³ From the above examples, it would seem that when the cre- ³
       *    ³ dit side is more, then the income should be reduced and   ³
-      *    ³ when the debit side is more, the income should be	       ³
-      *    ³ increased. 					       ³
-      *    ³							       ³
+      *    ³ when the debit side is more, the income should be        ³
+      *    ³ increased.             ³
+      *    ³              ³
       *    ³ The system will have to choose one of the income entries  ³
       *    ³ randomly when income needs to be adjusted. This will need ³
       *    ³ the details of the first sales (income) integration entry ³
@@ -403,126 +403,126 @@
       *    ³ sales entries and VAT (tax) values to this value and on   ³
       *    ³ completing the transaction this balancing value will be   ³
       *    ³ checked and if not zero it will be used as the balancing  ³
-      *    ³ entry by changing the sign.			       ³
+      *    ³ entry by changing the sign.          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-       77  WS-BAL-ENTRY		PIC  X(01) VALUE "N".
-	   88  BALANCING-ENTRY-STORED	   VALUE "Y".
+       77  WS-BAL-ENTRY  PIC  X(01) VALUE "N".
+    88  BALANCING-ENTRY-STORED    VALUE "Y".
 
        01  WXT-LEDTRF.
-	   03  WXT-DATE	      PIC  9(08)    COMP-3.
-	   03  WXT-TYPE       PIC  9(02)    COMP-5.
-	   03  WXT-LEDG.
-	       05  WXT-TRN    PIC  9(02).
-	       05  FILLER     PIC  X(02).
-	   03  WXT-AC	      PIC  9(06)    COMP-3.
-	   03  WXT-NAR.
-	       05  WXT-DESC   PIC  X(13).
-	       05  WXT-BOOK   PIC  X(27).
-	   03  WXT-VALUE      PIC S9(09)V99 COMP-3.
+    03  WXT-DATE       PIC  9(08)    COMP-3.
+    03  WXT-TYPE       PIC  9(02)    COMP-5.
+    03  WXT-LEDG.
+        05  WXT-TRN    PIC  9(02).
+        05  FILLER     PIC  X(02).
+    03  WXT-AC       PIC  9(06)    COMP-3.
+    03  WXT-NAR.
+        05  WXT-DESC   PIC  X(13).
+        05  WXT-BOOK   PIC  X(27).
+    03  WXT-VALUE      PIC S9(09)V99 COMP-3.
       /
-002910 01  WS-DB-LINE.
-003060	   03  WS-TOP-LINE.
-003070	       05  WS-TCHAR PIC  X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÑÍÍÍÍÍÍ
+       01  WS-DB-LINE.
+          03  WS-TOP-LINE.
+              05  WS-TCHAR PIC  X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÑÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍµ".
-003080	   03  WS-TOP-LNE2.
-001390	       05  WS-TCR   PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+          03  WS-TOP-LNE2.
+              05  WS-TCR   PIC  X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
       -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-003100	   03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-003110         05  FILLER      PIC  X(01).
-003120         05  WS-TOP-COMP PIC  X(40).
-001430	       05  FILLER      PIC  X(23).
-	       05  WS-WRKHD    PIC  X(11).
-001430	       05  FILLER      PIC  X(01).
-	       05  WS-WRKST    PIC  X(03).
-001430	       05  FILLER      PIC  X(01).
-003140	   03  WS-MID-LINE.
-001450	       05  WS-MCHAR PIC  X(80) VALUE "³              ³   ³
+          03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
+               05  FILLER      PIC  X(01).
+               05  WS-TOP-COMP PIC  X(40).
+              05  FILLER      PIC  X(23).
+        05  WS-WRKHD    PIC  X(11).
+              05  FILLER      PIC  X(01).
+        05  WS-WRKST    PIC  X(03).
+              05  FILLER      PIC  X(01).
+          03  WS-MID-LINE.
+              05  WS-MCHAR PIC  X(80) VALUE "³              ³   ³
       -        "                       ³        ³         ³          ³".
-	   03  WS-MINE-LINE REDEFINES WS-MID-LINE.
-	       05  FILLER      PIC  X(15).
-	       05  WS-ML-EXT-S PIC  X(01).
-	       05  FILLER      PIC  X(64).
-	   03  WS-MINV-LINE REDEFINES WS-MID-LINE.
-	       05  WS-MIV1     PIC  X(01).
-	       05  WS-MIV78    PIC  X(78).
-	       05  WS-MIV80    PIC  X(01).
-003160	   03  WS-MID-LNE2.
-	       05  FILLER      PIC  X(01) VALUE "³".
-	       05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-	       05  FILLER      PIC  X(01) VALUE "³".
-003180	   03  WS-BOT-LINE.
-003190	       05  WS-BCHAR PIC  X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÏÍÍÍÍÍÍ
+    03  WS-MINE-LINE REDEFINES WS-MID-LINE.
+        05  FILLER      PIC  X(15).
+        05  WS-ML-EXT-S PIC  X(01).
+        05  FILLER      PIC  X(64).
+    03  WS-MINV-LINE REDEFINES WS-MID-LINE.
+        05  WS-MIV1     PIC  X(01).
+        05  WS-MIV78    PIC  X(78).
+        05  WS-MIV80    PIC  X(01).
+          03  WS-MID-LNE2.
+        05  FILLER      PIC  X(01) VALUE "³".
+        05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
+        05  FILLER      PIC  X(01) VALUE "³".
+          03  WS-BOT-LINE.
+              05  WS-BCHAR PIC  X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÏÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍµ".
-003200     03  WS-BOT-LNE2.
-001510	       05  WS-BCR   PIC  X(80) VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+           03  WS-BOT-LNE2.
+              05  WS-BCR   PIC  X(80) VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
       -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
-003240	   03  WS-B-LINE REDEFINES WS-BOT-LNE2.
-003250         05  FILLER  PIC X(01).
+          03  WS-B-LINE REDEFINES WS-BOT-LNE2.
+               05  FILLER  PIC X(01).
                05  WS-MEM-LINE.
-003260            07  WS-SRT-LINE
-003270                     PIC X(50).
+                  07  WS-SRT-LINE
+                           PIC X(50).
                   07  FILLER
                            PIC X(10).
-003280         05  FILLER  PIC X(19).
-003220     03  WS-TOP-LNE.
-003230	       05  WS-TCHR  PIC	 X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍ
+               05  FILLER  PIC X(19).
+           03  WS-TOP-LNE.
+              05  WS-TCHR  PIC  X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍµ".
-003240     03  WS-T-LINE REDEFINES WS-TOP-LNE.
-003250         05  FILLER  PIC X(01).
-003260         05  WS-H-LINE
-003270                     PIC X(78).
-003280         05  FILLER  PIC X(01).
-003290     03  WS-MID-LNE.
-003300	       05  WS-MCHR  PIC  X(80) VALUE "³                ³
+           03  WS-T-LINE REDEFINES WS-TOP-LNE.
+               05  FILLER  PIC X(01).
+               05  WS-H-LINE
+                           PIC X(78).
+               05  FILLER  PIC X(01).
+           03  WS-MID-LNE.
+              05  WS-MCHR  PIC  X(80) VALUE "³                ³
       -        "                      ³          ³         ³         ³".
-	   03  WS-MST-LNE REDEFINES WS-MID-LNE.
-	       05  WS-MST1     PIC  X(01).
-	       05  WS-MST78    PIC  X(78).
-	       05  WS-MST80    PIC  X(01).
-003310	   03  WS-BOT-LNE.
-003320	       05  WS-BCHR  PIC	 X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍ
+    03  WS-MST-LNE REDEFINES WS-MID-LNE.
+        05  WS-MST1     PIC  X(01).
+        05  WS-MST78    PIC  X(78).
+        05  WS-MST80    PIC  X(01).
+          03  WS-BOT-LNE.
+              05  WS-BCHR  PIC  X(80) VALUE "ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍµ".
-003330	   03  WS-TP-LNE.
-003340	       05  WS-TCH   PIC  X(80) VALUE "ÆÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+          03  WS-TP-LNE.
+              05  WS-TCH   PIC  X(80) VALUE "ÆÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍµ".
-003350     03  WS-MD-LNE.
-003360	       05  WS-MCH   PIC  X(80) VALUE "³      ³
+           03  WS-MD-LNE.
+              05  WS-MCH   PIC  X(80) VALUE "³      ³
       -        "                      ³           ³          ³       ³".
-	   03  WS-MDDT-LNE REDEFINES WS-MD-LNE.
-	       05  WS-MDT1     PIC  X(01).
-	       05  WS-MDT78    PIC  X(78).
-	       05  WS-MDT80    PIC  X(01).
-003370	   03  WS-BT-LNE.
-003380	       05  WS-BCH   PIC  X(80) VALUE "ÆÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+    03  WS-MDDT-LNE REDEFINES WS-MD-LNE.
+        05  WS-MDT1     PIC  X(01).
+        05  WS-MDT78    PIC  X(78).
+        05  WS-MDT80    PIC  X(01).
+          03  WS-BT-LNE.
+              05  WS-BCH   PIC  X(80) VALUE "ÆÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍµ".
-	       03  WS-MM-LINE.
-	       05  FILLER      PIC  X(01) VALUE "³".
-	       05  WS-SPACE    PIC  X(60) VALUE SPACES.
-	       05  FILLER      PIC  X(01) VALUE "³".
-	   03  WS-HME-LINE PIC	X(60) VALUE ALL "Í".
+        03  WS-MM-LINE.
+        05  FILLER      PIC  X(01) VALUE "³".
+        05  WS-SPACE    PIC  X(60) VALUE SPACES.
+        05  FILLER      PIC  X(01) VALUE "³".
+    03  WS-HME-LINE PIC X(60) VALUE ALL "Í".
 
-001260 COPY WS.WS.
+       COPY WS.WS.
 
        01  WS-HELP.
-	   03  WS-MODULE       PIC  X(03) VALUE "POS".
-	   03  WS-PROG	       PIC  X(03) VALUE "001".
+    03  WS-MODULE       PIC  X(03) VALUE "POS".
+    03  WS-PROG        PIC  X(03) VALUE "001".
 
        01  WS-ROUNDING.
-001170	   03  WS-FACTOR   PIC	9(01)V99.
-	   03  WS-RC REDEFINES WS-FACTOR.
-	       05  WS-R    PIC	9(01).
-	       05  WS-C    PIC	9(02).
+          03  WS-FACTOR   PIC 9(01)V99.
+    03  WS-RC REDEFINES WS-FACTOR.
+        05  WS-R    PIC 9(01).
+        05  WS-C    PIC 9(02).
 
        COPY LEDTRF.WS.
 
-000290 01  WS-PARID.
-000020	   03  WS-SYS-ID       PIC  X(03).
+       01  WS-PARID.
+          03  WS-SYS-ID       PIC  X(03).
 
-001280 01  W02-FID.
+       01  W02-FID.
 
        COPY APACFIDS.ID.
 
-000450 COPY AUDIT.ID.
+       COPY AUDIT.ID.
 
        COPY CARDEX.ID.
 
@@ -530,7 +530,7 @@
 
        COPY CONTROL.ID.
 
-000370 COPY DEPART.ID.
+       COPY DEPART.ID.
 
        COPY LEDTRF.ID.
 
@@ -540,195 +540,195 @@
 
        COPY PSLIP.ID.
 
-000470 COPY RECOVER.ID.
+       COPY RECOVER.ID.
 
-000410 COPY SALE.ID.
+       COPY SALE.ID.
 
        COPY SHARED.ID.
 
-000410 COPY SLIP.ID.
+       COPY SLIP.ID.
 
-002200 COPY SPARTS.ID.
+       COPY SPARTS.ID.
 
-000390 COPY STOCK.ID.
+       COPY STOCK.ID.
 
-000140 COPY STKMEM.ID.
+       COPY STKMEM.ID.
 
-000180 COPY TXTRAN.ID.
+       COPY TXTRAN.ID.
 
        01  W02-FILE-IDS.
-	   03  W02-PRINTER     PIC X(12) VALUE "LPT1".
-	   03  W02-WS REDEFINES W02-PRINTER.
-	       05  W02-PROG    PIC  X(07).
-	       05  W02-PUSER   PIC  X(05).
+    03  W02-PRINTER     PIC X(12) VALUE "LPT1".
+    03  W02-WS REDEFINES W02-PRINTER.
+        05  W02-PROG    PIC  X(07).
+        05  W02-PUSER   PIC  X(05).
 
-	   03  W02-KCHPRN      PIC X(12) VALUE "LPT1".
-	   03  W02-KCH REDEFINES W02-KCHPRN.
-	       05  W02-KPROG   PIC  X(07).
-	       05  W02-KPUSER  PIC  X(05).
+    03  W02-KCHPRN      PIC X(12) VALUE "LPT1".
+    03  W02-KCH REDEFINES W02-KCHPRN.
+        05  W02-KPROG   PIC  X(07).
+        05  W02-KPUSER  PIC  X(05).
 
-	   03  W02-CSHDRW      PIC X(04) VALUE "COM1".
+    03  W02-CSHDRW      PIC X(04) VALUE "COM1".
 
-	   03  W02-CUSDSP      PIC X(04) VALUE "COM1".
+    03  W02-CUSDSP      PIC X(04) VALUE "COM1".
 
        COPY W05.VAT.
 
        COPY W10.SAL.
 
        01  W10-CLIENT.
-	   03  W10-NAME       PIC  X(24).
+    03  W10-NAME       PIC  X(24).
            03  W10-TEL        PIC  X(14).
-	   03  W10-PARCELS    PIC  9(03).
+    03  W10-PARCELS    PIC  9(03).
 
        COPY W12.WS.
 
        01  W15-PRICE-NAMES.
-	   03  W15-PNAME.
-	       05  W15-CHECK   PIC  X(01).
-	       05  W15-REST    PIC  X(09).
+    03  W15-PNAME.
+        05  W15-CHECK   PIC  X(01).
+        05  W15-REST    PIC  X(09).
 
-001820 01  W15-CASH-SLIP.
-001830     03  W15-L1.
-001860	       05  W15-EXPP1   PIC  X(01).
-	       05  FILLER      PIC  X(04) VALUE SPACES.
-001870         05  W15-COMP    PIC  X(32) VALUE SPACES.
-001880         05  W15-ECAN1   PIC  X(01).
-001890     03  W15-L1A.
-001920	       05  W15-EXPP4   PIC  X(01).
-	       05  FILLER      PIC  X(01) VALUE SPACES.
-001930         05  W15-DOCTYP  PIC  X(18) VALUE SPACES.
-001940         05  W15-ECAN4   PIC  X(01).
-001950     03  W15-L2.
-	       05  FILLER      PIC  X(04) VALUE SPACES.
-001980         05  W15-ADD     PIC  X(32) VALUE SPACES.
-001990     03  W15-L3.
-002000	       05  FILLER      PIC  X(19) VALUE "Telephone No.    :".
-002010	       05  W15-TEL     PIC  X(18) VALUE SPACES.
+       01  W15-CASH-SLIP.
+           03  W15-L1.
+              05  W15-EXPP1   PIC  X(01).
+        05  FILLER      PIC  X(04) VALUE SPACES.
+               05  W15-COMP    PIC  X(32) VALUE SPACES.
+               05  W15-ECAN1   PIC  X(01).
+           03  W15-L1A.
+              05  W15-EXPP4   PIC  X(01).
+        05  FILLER      PIC  X(01) VALUE SPACES.
+               05  W15-DOCTYP  PIC  X(18) VALUE SPACES.
+               05  W15-ECAN4   PIC  X(01).
+           03  W15-L2.
+        05  FILLER      PIC  X(04) VALUE SPACES.
+               05  W15-ADD     PIC  X(32) VALUE SPACES.
+           03  W15-L3.
+              05  FILLER      PIC  X(19) VALUE "Telephone No.    :".
+              05  W15-TEL     PIC  X(18) VALUE SPACES.
            03  W15-L3A.
-	       05  FILLER      PIC  X(19) VALUE "VAT Reg. No.     :".
+        05  FILLER      PIC  X(19) VALUE "VAT Reg. No.     :".
                05  W15-GNO     PIC  X(14) VALUE SPACES.
-002020	   03  W15-L4.
-002030	       05  FILLER      PIC  X(19) VALUE "Transaction Date :".
-002040	       05  W15-DATE    PIC  Z9/99/9999.
-002020	   03  W15-L4A.
-002030	       05  FILLER      PIC  X(19) VALUE "Transaction Time :".
-002040	       05  W15-TIME    PIC  X(08).
-002050     03  W15-L5.
-002060	       05  FILLER      PIC  X(19) VALUE "Assist by        :".
-002070	       05  W15-SMAN    PIC  X(21).
-002080     03  W15-L6.
-002090	       05  FILLER      PIC  X(19) VALUE "Receipt No.      :".
-002100         05  W15-RECNO   PIC  X(08).
-002110     03  W15-L7.
-002120	       05  FILLER      PIC  X(19) VALUE "Invoice No.      :".
-002130         05  W15-INVNO   PIC  X(08).
-	   03  W15-L8.
-	       05  FILLER      PIC  X(06) VALUE "Name:".
-	       05  W15-C-NAME  PIC  X(34).
-002200     03  W15-L9.
-002230	       05  W15-EXPP2   PIC  X(01).
-002240	       05  FILLER      PIC  X(18) VALUE " T H A N K   Y O U".
-002250         05  W15-ECAN2   PIC  X(01).
-002280	   03  W15-L11.
-	       05  W15-DETAIL.
-002340		   07  W15-DESC	 PIC  X(28).
-002350		   07  FILLER	 PIC  X(01) VALUE SPACE.
-002360		   07  W15-PRICE PIC  Z(06)9.99-.
-002280	   03  W15-L11A REDEFINES W15-L11.
-	       05  W15-EXT-ITEM.
-002300		   07  W15-ITM PIC  X(14).
-		   07  W15-SL  PIC  X(01).
-		   07  W15-EXT PIC  X(03).
-002330	       05  FILLER      PIC  X(01).
-002320	       05  W15-QUANT   PIC  ZZZ9.999-.
-	       05  FILLER      PIC  X(06).
+          03  W15-L4.
+              05  FILLER      PIC  X(19) VALUE "Transaction Date :".
+              05  W15-DATE    PIC  Z9/99/9999.
+          03  W15-L4A.
+              05  FILLER      PIC  X(19) VALUE "Transaction Time :".
+              05  W15-TIME    PIC  X(08).
+           03  W15-L5.
+              05  FILLER      PIC  X(19) VALUE "Assist by        :".
+              05  W15-SMAN    PIC  X(21).
+           03  W15-L6.
+              05  FILLER      PIC  X(19) VALUE "Receipt No.      :".
+               05  W15-RECNO   PIC  X(08).
+           03  W15-L7.
+              05  FILLER      PIC  X(19) VALUE "Invoice No.      :".
+               05  W15-INVNO   PIC  X(08).
+    03  W15-L8.
+        05  FILLER      PIC  X(06) VALUE "Name:".
+        05  W15-C-NAME  PIC  X(34).
+           03  W15-L9.
+              05  W15-EXPP2   PIC  X(01).
+              05  FILLER      PIC  X(18) VALUE " T H A N K   Y O U".
+               05  W15-ECAN2   PIC  X(01).
+          03  W15-L11.
+        05  W15-DETAIL.
+           07  W15-DESC  PIC  X(28).
+           07  FILLER  PIC  X(01) VALUE SPACE.
+           07  W15-PRICE PIC  Z(06)9.99-.
+          03  W15-L11A REDEFINES W15-L11.
+        05  W15-EXT-ITEM.
+           07  W15-ITM PIC  X(14).
+     07  W15-SL  PIC  X(01).
+     07  W15-EXT PIC  X(03).
+              05  FILLER      PIC  X(01).
+              05  W15-QUANT   PIC  ZZZ9.999-.
+        05  FILLER      PIC  X(06).
                05  W15-BIN     PIC  X(06).
-	   03  W15-L11B REDEFINES W15-L11.
-	       05  FILLER      PIC  X(17).
-	       05  W15-SPACE   PIC  X(01).
-	       05  W15-QNT     PIC  ZZ9-.
-	       05  W15-PRC     PIC  Z(04)9.99-.
-	       05  W15-EXTND   PIC  Z(04)9.99-.
-002380	   03  W15-L12 REDEFINES W15-L11.
-002400         05  W15-DISCOUNT.
-002420             07  W15-DISC
-002430			       PIC  X(23).
-002440             07  W15-DSC PIC  Z9.99.
-		   07  W15-BLK PIC  X(01).
-002450	       05  FILLER      PIC  X(11).
-	   03  W15-L12A REDEFINES W15-L11.
-	       05  FILLER      PIC  X(15).
-	       05  W15-CSHCODE PIC  X(10).
-	       05  FILLER      PIC  X(15).
-	   03  W15-CUSDSP REDEFINES W15-L11.
-	       05  W15-CUSDESC.
-		   07  W15-HD1 PIC  X(10).
-		   07  W15-DUE PIC  Z(06)9.99.
-	       05  W15-CUS2.
-		   07  W15-HD2 PIC  X(10).
-		   07  W15-NO-CHARGE.
-		       09  W15-CHG PIC	Z(06)9.99.
-	   03  W15-CARTONS REDEFINES W15-L11.
-	       05  FILLER      PIC  X(10).
-	       05  W15-HD3     PIC  X(16).
-	       05  W15-CRTNS   PIC  ZZ9.
-	       05  FILLER      PIC  X(11).
-002460     03  W15-L13.
-002470	       05  W15-REMK    PIC X(29).
-002480         05  W15-VAL     PIC Z(06)9.99-.
-	   03  W15-L14 REDEFINES W15-L13.
-	       05  W15-KQ      PIC  ZZZZZZZ9-.
-	       05  FILLER      PIC  X(01).
-	       05  W15-KD      PIC  X(30).
+    03  W15-L11B REDEFINES W15-L11.
+        05  FILLER      PIC  X(17).
+        05  W15-SPACE   PIC  X(01).
+        05  W15-QNT     PIC  ZZ9-.
+        05  W15-PRC     PIC  Z(04)9.99-.
+        05  W15-EXTND   PIC  Z(04)9.99-.
+          03  W15-L12 REDEFINES W15-L11.
+               05  W15-DISCOUNT.
+                   07  W15-DISC
+                PIC  X(23).
+                   07  W15-DSC PIC  Z9.99.
+     07  W15-BLK PIC  X(01).
+              05  FILLER      PIC  X(11).
+    03  W15-L12A REDEFINES W15-L11.
+        05  FILLER      PIC  X(15).
+        05  W15-CSHCODE PIC  X(10).
+        05  FILLER      PIC  X(15).
+    03  W15-CUSDSP REDEFINES W15-L11.
+        05  W15-CUSDESC.
+     07  W15-HD1 PIC  X(10).
+     07  W15-DUE PIC  Z(06)9.99.
+        05  W15-CUS2.
+     07  W15-HD2 PIC  X(10).
+     07  W15-NO-CHARGE.
+         09  W15-CHG PIC Z(06)9.99.
+    03  W15-CARTONS REDEFINES W15-L11.
+        05  FILLER      PIC  X(10).
+        05  W15-HD3     PIC  X(16).
+        05  W15-CRTNS   PIC  ZZ9.
+        05  FILLER      PIC  X(11).
+           03  W15-L13.
+              05  W15-REMK    PIC X(29).
+               05  W15-VAL     PIC Z(06)9.99-.
+    03  W15-L14 REDEFINES W15-L13.
+        05  W15-KQ      PIC  ZZZZZZZ9-.
+        05  FILLER      PIC  X(01).
+        05  W15-KD      PIC  X(30).
 
        COPY W20.WS.
 
-002580 01  W25-CALCS.
-002590     03  W25-RESULT      PIC  9(02)V99.
-002600     03  W25-RESULT1 REDEFINES W25-RESULT.
-002610         05  W25-WHOLE   PIC  9(02).
-002620         05  W25-DECIMAL PIC  9(02).
-002630     03  W25-TOTAL       PIC  9(07)V99 COMP-3.
-002640     03  W25-VALUE       PIC S9(07)V99 COMP-3.
-002650     03  W25-INSTAL      PIC S9(07)V99 COMP-3.
-002660     03  W25-CREDIT      PIC S9(07)V99 COMP-3.
-002670     03  W25-CUR         PIC S9(07)V99 COMP-3.
-002680     03  W25-INSTL.
-002690         05  W25-MTHS OCCURS 6
-002700                         PIC S9(07)V99 COMP-3.
-002710     03  W25-INSTALS REDEFINES W25-INSTL.
-002720         05  W25-MTH1    PIC S9(07)V99 COMP-3.
-002730         05  W25-MTH2    PIC S9(07)V99 COMP-3.
-002740         05  W25-MTH3    PIC S9(07)V99 COMP-3.
-002750         05  W25-MTH4    PIC S9(07)V99 COMP-3.
-002760         05  W25-MTH5    PIC S9(07)V99 COMP-3.
-002770         05  W25-MTH6    PIC S9(07)V99 COMP-3.
-001660	   03  W25-TIME        PIC 9(08).
-001670     03  W25-TRED REDEFINES  W25-TIME.
-001690         05  W25-HH      PIC 9(02).
-001690         05  W25-MM      PIC 9(02).
-001690         05  W25-SS      PIC 9(02).
-001680         05  FILLER      PIC 9(02).
+       01  W25-CALCS.
+           03  W25-RESULT      PIC  9(02)V99.
+           03  W25-RESULT1 REDEFINES W25-RESULT.
+               05  W25-WHOLE   PIC  9(02).
+               05  W25-DECIMAL PIC  9(02).
+           03  W25-TOTAL       PIC  9(07)V99 COMP-3.
+           03  W25-VALUE       PIC S9(07)V99 COMP-3.
+           03  W25-INSTAL      PIC S9(07)V99 COMP-3.
+           03  W25-CREDIT      PIC S9(07)V99 COMP-3.
+           03  W25-CUR         PIC S9(07)V99 COMP-3.
+           03  W25-INSTL.
+               05  W25-MTHS OCCURS 6
+                               PIC S9(07)V99 COMP-3.
+           03  W25-INSTALS REDEFINES W25-INSTL.
+               05  W25-MTH1    PIC S9(07)V99 COMP-3.
+               05  W25-MTH2    PIC S9(07)V99 COMP-3.
+               05  W25-MTH3    PIC S9(07)V99 COMP-3.
+               05  W25-MTH4    PIC S9(07)V99 COMP-3.
+               05  W25-MTH5    PIC S9(07)V99 COMP-3.
+               05  W25-MTH6    PIC S9(07)V99 COMP-3.
+          03  W25-TIME        PIC 9(08).
+           03  W25-TRED REDEFINES  W25-TIME.
+               05  W25-HH      PIC 9(02).
+               05  W25-MM      PIC 9(02).
+               05  W25-SS      PIC 9(02).
+               05  FILLER      PIC 9(02).
 
        01  W30-PIC-SL.
-	   03  W30-PIC-SLG.
-	       05  W30-WS      PIC  X(03).
-	       05  W30-PIC-REF PIC  9(05).
-	   03  W30-PIC-SLIP    REDEFINES W30-PIC-SLG
-			       PIC  X(08).
+    03  W30-PIC-SLG.
+        05  W30-WS      PIC  X(03).
+        05  W30-PIC-REF PIC  9(05).
+    03  W30-PIC-SLIP    REDEFINES W30-PIC-SLG
+          PIC  X(08).
 
        01  W35-PIC-SLIP.
-	   03  W35-CODE        PIC  X(08).
+    03  W35-CODE        PIC  X(08).
 
        01  W40-COMPANY.
-004900	   03  W40-NAME.
-004910	       05  W40-NCH     PIC  X(01) OCCURS 32.
+          03  W40-NAME.
+              05  W40-NCH     PIC  X(01) OCCURS 32.
 
        COPY W40.WS.
 
        COPY FUNCTION.WS.
 
-002870 COPY W50.WS.
+       COPY W50.WS.
 
        COPY W70DEBT.IWS.
 
@@ -737,110 +737,110 @@
            03  W75-S1         PIC 9(02) COMP-5.
            03  W75-S2         PIC 9(02) COMP-5.
            03  W75-SKEY       PIC 9(06) COMP-5 OCCURS 18.
-	   03  W75-GROUP.
-	       05  W75-ITEMS OCCURS 18.
-		   07  W75-EXT-CODE.
-		     09  W75-CODE PIC  X(14).
-		     09  W75-ITM  PIC  X(03).
-		     09  FILLER	  PIC  X(01).
-		   07  W75-SELL   PIC 9(07)V99 COMP-3.
-		   07  W75-VSELL  PIC 9(07)V99 COMP-3.
-		   07  W75-CASH   PIC 9(07)V99 COMP-3.
-		   07  W75-VCASH  PIC 9(07)V99 COMP-3.
-		   07  W75-WSALE  PIC 9(07)V99 COMP-3.
-		   07  W75-VWSALE PIC 9(07)V99 COMP-3.
-	   03  W75-GROUP2 REDEFINES W75-GROUP.
-	       05  W75-PIC-SLIPS OCCURS 8.
-		   07  W75-PSCODE PIC  X(08).
-		   07  W75-PSSEQ  PIC  9(03).
-		   07  W75-PSNAME PIC  X(34).
-	       05  FILLER	  PIC  X(432).
+    03  W75-GROUP.
+        05  W75-ITEMS OCCURS 18.
+     07  W75-EXT-CODE.
+       09  W75-CODE PIC  X(14).
+       09  W75-ITM  PIC  X(03).
+       09  FILLER   PIC  X(01).
+     07  W75-SELL   PIC 9(07)V99 COMP-3.
+     07  W75-VSELL  PIC 9(07)V99 COMP-3.
+     07  W75-CASH   PIC 9(07)V99 COMP-3.
+     07  W75-VCASH  PIC 9(07)V99 COMP-3.
+     07  W75-WSALE  PIC 9(07)V99 COMP-3.
+     07  W75-VWSALE PIC 9(07)V99 COMP-3.
+    03  W75-GROUP2 REDEFINES W75-GROUP.
+        05  W75-PIC-SLIPS OCCURS 8.
+     07  W75-PSCODE PIC  X(08).
+     07  W75-PSSEQ  PIC  9(03).
+     07  W75-PSNAME PIC  X(34).
+        05  FILLER   PIC  X(432).
 
        COPY W85.WS.
 
-003160 01  W85-PASS.
-003180     03  W85-SUPER OCCURS 9
-003190                         PIC  X(06).
-003200     03  W85-ENTRY       PIC  9(02)    COMP-3.
-003210     03  W85-MARG        PIC S9(02)V99.
+       01  W85-PASS.
+           03  W85-SUPER OCCURS 9
+                               PIC  X(06).
+           03  W85-ENTRY       PIC  9(02)    COMP-3.
+           03  W85-MARG        PIC S9(02)V99.
 
        01  W90-MENUS.
-	   03  W90-MENU        PIC  X(14) OCCURS 10.
+    03  W90-MENU        PIC  X(14) OCCURS 10.
 
-003230 01  W90-TRAN.
-003990	   03  W90-DATE        PIC  9(08)    COMP-3.
-004000	   03  W90-DTE	       PIC  99/99/9999.
-003270	   03  W90-CODE        PIC  9(02).
-003280     03  W90-ORD         PIC  X(12).
-003290	   03  W90-REF.
-	       05  W90-REF-NO  PIC  9(08).
-003300     03  W90-REG         PIC  X(09).
-003310	   03  W90-DB	       PIC  9(09)V99 COMP-3.
-003320	   03  W90-CR	       PIC  9(09)V99 COMP-3.
-003330	   03  W90-BDT	       PIC S9(09)V99 COMP-3.
-003340	   03  W90-BCR	       PIC S9(09)V99 COMP-3.
-003350     03  W90-DESC        PIC  X(12).
-003400	   03  W90-DUE	       PIC S9(09)V99 COMP-3.
-003410	   03  W90-CASH        PIC S9(09)V99 COMP-3.
-003420	   03  W90-CHQ	       PIC S9(09)V99 COMP-3.
-003420	   03  W90-EFT	       PIC S9(09)V99 COMP-3.
-003430	   03  W90-CARD        PIC S9(09)V99 COMP-3.
-003430	   03  W90-SPEED       PIC S9(09)V99 COMP-3.
-003430	   03  W90-VOUCH       PIC S9(09)V99 COMP-3.
-003430	   03  W90-CRNOTE      PIC S9(09)V99 COMP-3.
-003440	   03  W90-CHANGE      PIC S9(09)V99 COMP-3.
-003450	   03  W90-PMT	       PIC S9(09)V99 COMP-3.
-003470	   03  W90-BAL	       PIC S9(08)V99 COMP-3.
-003480     03  W90-TAX         PIC  X(14).
-003490	   03  W90-DVAL        PIC  9(09)V99.
-003500	   03  W90-SALES       PIC S9(09)V99  COMP-3.
-003510	   03  W90-TDISC       PIC S9(09)V99  COMP-3.
-003520	   03  W90-ATAX        PIC S9(09)V99  COMP-3.
-003520	   03  W90-TTAX        PIC S9(09)V99  COMP-3.
-003530	   03  W90-TCOST       PIC S9(09)V99  COMP-3.
-003540	   03  W90-TSELL       PIC S9(09)V99  COMP-3.
-003550	   03  W90-DISC        PIC S9(09)V99  COMP-3.
-003560	   03  W90-CRD	       PIC S9(09)V99  COMP-3.
-003570	   03  W90-CDISC       PIC S9(09)V99  COMP-3.
-003580	   03  W90-LDISC       PIC S9(09)V99  COMP-3.
-	   03  W90-TAXABLE     OCCURS 12.
-006790	       05  W90-TAXVAL  PIC S9(09)V99  COMP-3.
-	       05  W90-VAT     PIC S9(09)V99  COMP-3.
-006550	   03  W90-EXCDIS      PIC S9(09)V99  COMP-3.
-006550	   03  W90-EXCVAL      PIC S9(09)V99  COMP-3.
-006550	   03  W90-EXCTOT      PIC S9(09)V99  COMP-3.
-003600	   03  W90-NONTAX      PIC S9(09)V99  COMP-3.
-003610	   03  W90-VALUE       PIC S9(09)V99  COMP-3.
-006570	   03  W90-STOTAL      PIC S9(09)V99  COMP-3.
-003620	   03  W90-TOTAL       PIC S9(09)V9(06) COMP-3.
-	   03  W90-SLIP-TOT    PIC  9(09)V9(02).
-	   03  W90-SLIP-RND REDEFINES W90-SLIP-TOT.
-	       05  FILLER      PIC  X(08).
-	       05  W90-RR      PIC  9(01).
-	       05  W90-RC      PIC  9(02).
-	   03  W90-ROUND       PIC  9(01)V99.
-	   03  W90-ROUNDING REDEFINES W90-ROUND.
-	       05  W90-R       PIC  9(01).
-	       05  W90-C       PIC  9(02).
-	   03  W90-RTVAL       PIC  9(01)V99 COMP-3.
-	   03  W90-RTTAX       PIC  9(01)V99 COMP-3.
-	   03  W90-CLNT-VAT    PIC  X(14).
+       01  W90-TRAN.
+          03  W90-DATE        PIC  9(08)    COMP-3.
+          03  W90-DTE        PIC  99/99/9999.
+          03  W90-CODE        PIC  9(02).
+           03  W90-ORD         PIC  X(12).
+          03  W90-REF.
+        05  W90-REF-NO  PIC  9(08).
+           03  W90-REG         PIC  X(09).
+          03  W90-DB        PIC  9(09)V99 COMP-3.
+          03  W90-CR        PIC  9(09)V99 COMP-3.
+          03  W90-BDT        PIC S9(09)V99 COMP-3.
+          03  W90-BCR        PIC S9(09)V99 COMP-3.
+           03  W90-DESC        PIC  X(12).
+          03  W90-DUE        PIC S9(09)V99 COMP-3.
+          03  W90-CASH        PIC S9(09)V99 COMP-3.
+          03  W90-CHQ        PIC S9(09)V99 COMP-3.
+          03  W90-EFT        PIC S9(09)V99 COMP-3.
+          03  W90-CARD        PIC S9(09)V99 COMP-3.
+          03  W90-SPEED       PIC S9(09)V99 COMP-3.
+          03  W90-VOUCH       PIC S9(09)V99 COMP-3.
+          03  W90-CRNOTE      PIC S9(09)V99 COMP-3.
+          03  W90-CHANGE      PIC S9(09)V99 COMP-3.
+          03  W90-PMT        PIC S9(09)V99 COMP-3.
+          03  W90-BAL        PIC S9(08)V99 COMP-3.
+           03  W90-TAX         PIC  X(14).
+          03  W90-DVAL        PIC  9(09)V99.
+          03  W90-SALES       PIC S9(09)V99  COMP-3.
+          03  W90-TDISC       PIC S9(09)V99  COMP-3.
+          03  W90-ATAX        PIC S9(09)V99  COMP-3.
+          03  W90-TTAX        PIC S9(09)V99  COMP-3.
+          03  W90-TCOST       PIC S9(09)V99  COMP-3.
+          03  W90-TSELL       PIC S9(09)V99  COMP-3.
+          03  W90-DISC        PIC S9(09)V99  COMP-3.
+          03  W90-CRD        PIC S9(09)V99  COMP-3.
+          03  W90-CDISC       PIC S9(09)V99  COMP-3.
+          03  W90-LDISC       PIC S9(09)V99  COMP-3.
+    03  W90-TAXABLE     OCCURS 12.
+              05  W90-TAXVAL  PIC S9(09)V99  COMP-3.
+        05  W90-VAT     PIC S9(09)V99  COMP-3.
+          03  W90-EXCDIS      PIC S9(09)V99  COMP-3.
+          03  W90-EXCVAL      PIC S9(09)V99  COMP-3.
+          03  W90-EXCTOT      PIC S9(09)V99  COMP-3.
+          03  W90-NONTAX      PIC S9(09)V99  COMP-3.
+          03  W90-VALUE       PIC S9(09)V99  COMP-3.
+          03  W90-STOTAL      PIC S9(09)V99  COMP-3.
+          03  W90-TOTAL       PIC S9(09)V9(06) COMP-3.
+    03  W90-SLIP-TOT    PIC  9(09)V9(02).
+    03  W90-SLIP-RND REDEFINES W90-SLIP-TOT.
+        05  FILLER      PIC  X(08).
+        05  W90-RR      PIC  9(01).
+        05  W90-RC      PIC  9(02).
+    03  W90-ROUND       PIC  9(01)V99.
+    03  W90-ROUNDING REDEFINES W90-ROUND.
+        05  W90-R       PIC  9(01).
+        05  W90-C       PIC  9(02).
+    03  W90-RTVAL       PIC  9(01)V99 COMP-3.
+    03  W90-RTTAX       PIC  9(01)V99 COMP-3.
+    03  W90-CLNT-VAT    PIC  X(14).
 
-003630 01  W95-STM.
-003640	   03  W95-COMP.
-	       05  W95-DSP-L1  PIC  X(20).
-	       05  W95-DSP-L2  PIC  X(20).
-	   03  W95-TIME.
+       01  W95-STM.
+          03  W95-COMP.
+        05  W95-DSP-L1  PIC  X(20).
+        05  W95-DSP-L2  PIC  X(20).
+    03  W95-TIME.
                05  W95-HH      PIC 99.
                05  FILLER      PIC X(01) VALUE ":".
                05  W95-MM      PIC 99.
                05  FILLER      PIC X(01) VALUE ":".
                05  W95-SS      PIC 99.
 
-003710 01  W100-EDIT.
-003720     03  W100-BAL        PIC  Z(06)9.99-.
-003970	   03  W100-V2.
-003980         05  W100-S6V2   PIC Z(05)9.99-.
+       01  W100-EDIT.
+           03  W100-BAL        PIC  Z(06)9.99-.
+          03  W100-V2.
+               05  W100-S6V2   PIC Z(05)9.99-.
            03  W100-V3 REDEFINES W100-V2.
                05  W100-PRICE  PIC X(09).
                05  FILLER      PIC X(01).
@@ -848,380 +848,378 @@
                05  W100-EXT    PIC Z(06)9.99.
            03  W100-V5 REDEFINES W100-V2.
                05  W100-QNT    PIC Z(05)9.99-.
-	   03  W100-Q5 REDEFINES W100-V2.
-	       05  W100-QNT5   PIC  Z(05)9-.
-	       05  FILLER      PIC  X(03).
-	   03  W100-MEASURE.
-	       05  W100-LENGTH PIC  ZZZ9.9999.
-	       05  W100-BREADTH PIC ZZZ9.9999.
-	       05  W100-NUMBER PIC  ZZZ9.
+    03  W100-Q5 REDEFINES W100-V2.
+        05  W100-QNT5   PIC  Z(05)9-.
+        05  FILLER      PIC  X(03).
+    03  W100-MEASURE.
+        05  W100-LENGTH PIC  ZZZ9.9999.
+        05  W100-BREADTH PIC ZZZ9.9999.
+        05  W100-NUMBER PIC  ZZZ9.
 
        01  NUMB-DISP.
-	   03  NUMB-WHOLE	     PIC  Z(03).
-	   03  NUMB-DISP-WHOLE REDEFINES NUMB-WHOLE
-				     PIC  X(01) OCCURS 3.
-	   03  NUMB-DISPLAY	     PIC  9(03).
-	   03  NUMB-CHAR REDEFINES NUMB-DISPLAY
-				     PIC  9(01)	OCCURS 3.
-	   03  NUMB-DW		     PIC  9(03)    COMP-3.
-	   03  NUMB-SUB 	     PIC  9(02)    COMP-5.
-	   03  NUMB-CSUB	     PIC  9(02)    COMP-5.
-	   03  NUMB-LENGTH	     PIC  9(02)    COMP-5.
+    03  NUMB-WHOLE      PIC  Z(03).
+    03  NUMB-DISP-WHOLE REDEFINES NUMB-WHOLE
+         PIC  X(01) OCCURS 3.
+    03  NUMB-DISPLAY      PIC  9(03).
+    03  NUMB-CHAR REDEFINES NUMB-DISPLAY
+         PIC  9(01) OCCURS 3.
+    03  NUMB-DW       PIC  9(03)    COMP-3.
+    03  NUMB-SUB       PIC  9(02)    COMP-5.
+    03  NUMB-CSUB      PIC  9(02)    COMP-5.
+    03  NUMB-LENGTH      PIC  9(02)    COMP-5.
 
        01  SCALE-QUANTITY.
-	   03  SCALE-PORT.
-	       05  SCALE-NO	 PIC  X(04).
+    03  SCALE-PORT.
+        05  SCALE-NO  PIC  X(04).
 
-	   03  SCALE-QUANT.
-	       05  SCALE-WEIGHT.
-		   07  SCALE-QNT PIC  9(09)V999.
-	       05  SCALE-WEIGHT2 REDEFINES SCALE-WEIGHT.
-		   07  SCALE-KG	 PIC  9(09).
-		   07  SCALE-GR	 PIC  9(03).
+    03  SCALE-QUANT.
+        05  SCALE-WEIGHT.
+     07  SCALE-QNT PIC  9(09)V999.
+        05  SCALE-WEIGHT2 REDEFINES SCALE-WEIGHT.
+     07  SCALE-KG  PIC  9(09).
+     07  SCALE-GR  PIC  9(03).
 
        LINKAGE SECTION.
 
        COPY CHAIN.LS.
 
       /
-003780 SCREEN SECTION.
+       SCREEN SECTION.
 
-	COPY BLANK.CRT.
+ COPY BLANK.CRT.
 
-003880 01  S05.
-003890	   03  LINE 12 COLUMN 12 VALUE "Enter Password".
+       01  S05.
+          03  LINE 12 COLUMN 12 VALUE "Enter Password".
 
-003900 01  S06.
-003910	   03  LINE 12 COLUMN 28 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5 PIC  X(06)
-				 USING W40-CSHPASS AUTO SECURE.
+       01  S06.
+          03  LINE 12 COLUMN 28 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 5 PIC  X(06)
+     USING W40-CSHPASS AUTO SECURE.
 
-003930 01  S07.
-	   03  LINE  1 COLUMN 64 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-				 VALUE "Cash Drawer: ".
-	   03	       COLUMN 77 FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-				 PIC  ZZ9 FROM WS-DRAW.
-003940	   03  LINE  2 COLUMN 35 FOREGROUND-COLOR 7 HIGHLIGHT
-				 VALUE "CASH SALE".
-003950	   03  LINE  3 COLUMN  2 VALUE "Salesperson".
-	   03	       COLUMN 14 BACKGROUND-COLOR 5
-				 PIC  X(02) FROM WS-SPACE.
-003960	   03  LINE  4 COLUMN  2 VALUE "Ref. No".
-	   03	       COLUMN 10 BACKGROUND-COLOR 0
-				 PIC  X(08) FROM WS-SPACE.
-009370	   03  LINE  5 COLUMN  2 REVERSE-VIDEO VALUE "Item Code      I".
-009380	   03	       COLUMN 18 REVERSE-VIDEO VALUE "TM Description  ".
-009390     03          COLUMN 33 REVERSE-VIDEO VALUE "                ".
-009400     03          COLUMN 49 REVERSE-VIDEO VALUE "  Quantity ".
-009410     03          COLUMN 60 REVERSE-VIDEO VALUE "Unit Price  ".
-009420     03          COLUMN 72 REVERSE-VIDEO VALUE "Extended".
-009160	   03  LINE  6 COLUMN  1 BACKGROUND-COLOR 0 VALUE "Æ".
-009160	   03	       COLUMN  2 VALUE "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ
+       01  S07.
+    03  LINE  1 COLUMN 64 FOREGROUND-COLOR 6 HIGHLIGHT
+     BACKGROUND-COLOR 0
+     VALUE "Cash Drawer: ".
+    03        COLUMN 77 FOREGROUND-COLOR 6 HIGHLIGHT
+     BACKGROUND-COLOR 0
+     PIC  ZZ9 FROM WS-DRAW.
+          03  LINE  2 COLUMN 35 FOREGROUND-COLOR 7 HIGHLIGHT
+     VALUE "CASH SALE".
+          03  LINE  3 COLUMN  2 VALUE "Salesperson".
+    03        COLUMN 14 BACKGROUND-COLOR 5
+     PIC  X(02) FROM WS-SPACE.
+          03  LINE  4 COLUMN  2 VALUE "Ref. No".
+    03        COLUMN 10 BACKGROUND-COLOR 0
+     PIC  X(08) FROM WS-SPACE.
+          03  LINE  5 COLUMN  2 REVERSE-VIDEO VALUE "Item Code      I".
+          03        COLUMN 18 REVERSE-VIDEO VALUE "TM Description  ".
+           03          COLUMN 33 REVERSE-VIDEO VALUE "                ".
+           03          COLUMN 49 REVERSE-VIDEO VALUE "  Quantity ".
+           03          COLUMN 60 REVERSE-VIDEO VALUE "Unit Price  ".
+           03          COLUMN 72 REVERSE-VIDEO VALUE "Extended".
+          03  LINE  6 COLUMN  1 BACKGROUND-COLOR 0 VALUE "Æ".
+          03        COLUMN  2 VALUE "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍ".
-	   03	       COLUMN 80 BACKGROUND-COLOR 0 VALUE "µ".
-009160	   03  LINE 19 COLUMN  1 BACKGROUND-COLOR 0 VALUE "Æ".
-009170	   03	       COLUMN  2 VALUE "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ
+    03        COLUMN 80 BACKGROUND-COLOR 0 VALUE "µ".
+          03  LINE 19 COLUMN  1 BACKGROUND-COLOR 0 VALUE "Æ".
+          03        COLUMN  2 VALUE "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍ
       -        "ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍ".
-	   03	       COLUMN 80 BACKGROUND-COLOR 0 VALUE "µ".
-004060	   03  LINE 20 COLUMN 3  VALUE "Sub Total ".
-004110	   03  LINE 21 COLUMN 3  VALUE "Discount  ".
-004150	   03  LINE 22 COLUMN 3  VALUE "T A X -VAT".
-004190     03  LINE 23 COLUMN 3  VALUE "AMOUNT DUE".
+    03        COLUMN 80 BACKGROUND-COLOR 0 VALUE "µ".
+          03  LINE 20 COLUMN 3  VALUE "Sub Total ".
+          03  LINE 21 COLUMN 3  VALUE "Discount  ".
+          03  LINE 22 COLUMN 3  VALUE "T A X -VAT".
+           03  LINE 23 COLUMN 3  VALUE "AMOUNT DUE".
 
        01  S08.
-	   03  LINE 20 COLUMN 30 FOREGROUND-COLOR 3
-				 PIC X(45) FROM WS-BACKGROUND.
-	   03  LINE 21 COLUMN 30 FOREGROUND-COLOR 3
-				 PIC X(45) FROM WS-BACKGROUND.
-	   03  LINE 22 COLUMN 30 FOREGROUND-COLOR 3
-				 PIC X(45) FROM WS-BACKGROUND.
-	   03  LINE 23 COLUMN 30 FOREGROUND-COLOR 3
-				 PIC X(45) FROM WS-BACKGROUND.
+    03  LINE 20 COLUMN 30 FOREGROUND-COLOR 3
+     PIC X(45) FROM WS-BACKGROUND.
+    03  LINE 21 COLUMN 30 FOREGROUND-COLOR 3
+     PIC X(45) FROM WS-BACKGROUND.
+    03  LINE 22 COLUMN 30 FOREGROUND-COLOR 3
+     PIC X(45) FROM WS-BACKGROUND.
+    03  LINE 23 COLUMN 30 FOREGROUND-COLOR 3
+     PIC X(45) FROM WS-BACKGROUND.
 
-004300 01  S09.
-004310     03  LINE  1 COLUMN 50 VALUE "(".
-004320     03          COLUMN 51 BLINK VALUE "REVERSAL".
-004330     03          COLUMN 59 VALUE ")".
+       01  S09.
+           03  LINE  1 COLUMN 50 VALUE "(".
+           03          COLUMN 51 BLINK VALUE "REVERSAL".
+           03          COLUMN 59 VALUE ")".
 
        01  S10.
            03  LINE 10 COLUMN 48 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+     FOREGROUND-COLOR 6 HIGHLIGHT
                                  PIC  X(24) USING W10-NAME AUTO.
            03  LINE 11 COLUMN 48 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+     FOREGROUND-COLOR 6 HIGHLIGHT
                                  PIC  X(14) USING W10-TEL AUTO.
            03  LINE 12 COLUMN 48 BACKGROUND-COLOR 7
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 PIC  99/99/9999 USING W22-DTE1 AUTO.
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     PIC  99/99/9999 USING W22-DTE1 AUTO.
 
-007910 01  S12.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-				 PIC X(14) USING W10-ITEM AUTO.
+       01  S12.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+     PIC X(14) USING W10-ITEM AUTO.
 
        01  S12-ITM.
-005540	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC X(14) USING W10-ITEM AUTO.
-	   03	       COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC X(03) USING W10-ITM AUTO.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC X(14) USING W10-ITEM AUTO.
+    03        COLUMN 17 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC X(03) USING W10-ITM AUTO.
 
-005530 01  S12-EXT.
-005540	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC X(18) USING W10-EXT-ITEM AUTO.
+       01  S12-EXT.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC X(18) USING W10-EXT-ITEM AUTO.
 
-005530 01  S12-3.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(03) USING W10-I4 AUTO.
+       01  S12-3.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(03) USING W10-I4 AUTO.
 
-005530 01  S12-4.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(04) USING W10-I4 AUTO.
+       01  S12-4.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(04) USING W10-I4 AUTO.
 
-005530 01  S12-5.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(05) USING W10-I5 AUTO.
+       01  S12-5.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(05) USING W10-I5 AUTO.
 
-005530 01  S12-6.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(06) USING W10-I6 AUTO.
+       01  S12-6.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(06) USING W10-I6 AUTO.
 
-005530 01  S12-7.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(07) USING W10-I7 AUTO.
+       01  S12-7.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(07) USING W10-I7 AUTO.
 
-005530 01  S12-8.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(08) USING W10-I8 AUTO.
+       01  S12-8.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(08) USING W10-I8 AUTO.
 
-005530 01  S12-9.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(09) USING W10-I9 AUTO.
+       01  S12-9.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(09) USING W10-I9 AUTO.
 
-005530 01  S12-10.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(10) USING W10-I10 AUTO.
+       01  S12-10.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(10) USING W10-I10 AUTO.
 
-005530 01  S12-11.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(11) USING W10-I11 AUTO.
+       01  S12-11.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(11) USING W10-I11 AUTO.
 
-005530 01  S12-12.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(12) USING W10-I12 AUTO.
+       01  S12-12.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(12) USING W10-I12 AUTO.
 
-005530 01  S12-13.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(13) USING W10-I13 AUTO.
+       01  S12-13.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(13) USING W10-I13 AUTO.
 
-005530 01  S12-14.
-007920	   03	       COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-005550				 PIC Z(14) USING W10-I14 AUTO.
+       01  S12-14.
+          03        COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(14) USING W10-I14 AUTO.
 
        01  S15-REF.
-	   03  LINE 11 COLUMN 43 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
-				 PIC Z(07)9 USING W90-REF-NO AUTO.
+    03  LINE 11 COLUMN 43 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 5
+     PIC Z(07)9 USING W90-REF-NO AUTO.
 
-004340 01  S26-QNT.
-004350	   03	       COLUMN 51 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-004360				 PIC Z(04)9.9- USING W10-QUANT AUTO.
+       01  S26-QNT.
+          03        COLUMN 51 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(04)9.9- USING W10-QUANT AUTO.
 
-004340 01  S26-WEIGHT.
-004350	   03	       COLUMN 51 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-004360				 PIC Z(02)9.999- USING W10-QUANT AUTO.
+       01  S26-WEIGHT.
+          03        COLUMN 51 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+           PIC Z(02)9.999- USING W10-QUANT AUTO.
 
-004370 01  S26-PRC.
-004380	   03	       COLUMN 60 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-004390                           PIC Z(05)9.99 USING W10-SELL AUTO.
+       01  S26-PRC.
+          03        COLUMN 60 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+                                 PIC Z(05)9.99 USING W10-SELL AUTO.
 
-004400 01  S26-DSC.
-004410	   03	       COLUMN 30 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
-004420                           PIC Z9.99 USING WS-DISC AUTO.
+       01  S26-DSC.
+          03        COLUMN 30 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 5
+                                 PIC Z9.99 USING WS-DISC AUTO.
 
-004430 01  S26-TDSC.
-004440	   03	       COLUMN 15 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 0
-004450                           PIC Z9.99 USING WS-TDISC AUTO.
+       01  S26-TDSC.
+          03        COLUMN 15 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0
+                                 PIC Z9.99 USING WS-TDISC AUTO.
 
-004460 01  S26-AVGE.
-004470	   03	       COLUMN 28 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 5
-004480				 PIC Z(04)9.999 USING STK-AVGE AUTO.
+       01  S26-AVGE.
+          03        COLUMN 28 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 5
+           PIC Z(04)9.999 USING STK-AVGE AUTO.
 
-004490 01  S26-CASH.
-004500	   03  LINE 16 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7
-004510				 PIC Z(06)9.99- USING W90-CASH AUTO.
+       01  S26-CASH.
+          03  LINE 16 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 7
+           PIC Z(06)9.99- USING W90-CASH AUTO.
 
-004520 01  S26-CHQ.
-004530	   03  LINE 17 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7
-004540				 PIC Z(06)9.99- USING W90-CHQ AUTO.
+       01  S26-CHQ.
+          03  LINE 17 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 7
+           PIC Z(06)9.99- USING W90-CHQ AUTO.
 
-004550 01  S26-CARD.
-004560	   03  LINE 18 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7
-004570				 PIC Z(06)9.99- USING W90-CARD AUTO.
+       01  S26-CARD.
+          03  LINE 18 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 7
+           PIC Z(06)9.99- USING W90-CARD AUTO.
 
-004550 01  S26-SPEED.
-004560	   03  LINE 19 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7
-004570				 PIC Z(06)9.99- USING W90-SPEED AUTO.
+       01  S26-SPEED.
+          03  LINE 19 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 7
+           PIC Z(06)9.99- USING W90-SPEED AUTO.
 
-004550 01  S26-VOUCH.
-004560	   03  LINE 20 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7
-004570				 PIC Z(06)9.99- USING W90-VOUCH AUTO.
+       01  S26-VOUCH.
+          03  LINE 20 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 7
+           PIC Z(06)9.99- USING W90-VOUCH AUTO.
 
-004550 01  S26-CRNOTE.
-004560	   03  LINE 21 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7
-004570				 PIC Z(06)9.99- USING W90-CRNOTE AUTO.
+       01  S26-CRNOTE.
+          03  LINE 21 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 7
+           PIC Z(06)9.99- USING W90-CRNOTE AUTO.
 
-004550 01  S26-EFT.
-004560	   03  LINE 22 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
-				 BACKGROUND-COLOR 7
-004570				 PIC Z(06)9.99- USING W90-EFT AUTO.
+       01  S26-EFT.
+          03  LINE 22 COLUMN 63 FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 7
+           PIC Z(06)9.99- USING W90-EFT AUTO.
 
-009930 01  S37.
-009940	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 0
-				  PIC ZZ9 USING W10-PARCELS AUTO.
+       01  S37.
+          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 0
+      PIC ZZ9 USING W10-PARCELS AUTO.
 
-009930 01  S38.
-009940	   03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 0
-				  PIC ZZZZ9 USING W10-CASES AUTO.
+       01  S38.
+          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 0
+      PIC ZZZZ9 USING W10-CASES AUTO.
 
        COPY S99.CRT.
 
        01  S-MEASURE.
-	   03  LINE  4 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "Ú".
-	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 PIC X(19) USING WS-SRT-LINE.
-	   03	       COLUMN 35 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "¿".
-007450	   03  LINE  5 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "³".
-	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 PIC  X(04) FROM WS-SPACE.
-	   03	       COLUMN 20 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "MEASUREMENTS".
-	   03	       COLUMN 32 BACKGROUND-COLOR 2
-				 PIC  X(03) FROM WS-SPACE.
-007460	   03	       COLUMN 35 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "³".
-007450	   03  LINE  6 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "³".
-	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "Length  >".
-	   03	       COLUMN 34 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+    03  LINE  4 COLUMN 15 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "Ú".
+    03        COLUMN 16 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     PIC X(19) USING WS-SRT-LINE.
+    03        COLUMN 35 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "¿".
+          03  LINE  5 COLUMN 15 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "³".
+    03        COLUMN 16 BACKGROUND-COLOR 2
+     PIC  X(04) FROM WS-SPACE.
+    03        COLUMN 20 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "MEASUREMENTS".
+    03        COLUMN 32 BACKGROUND-COLOR 2
+     PIC  X(03) FROM WS-SPACE.
+          03        COLUMN 35 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "³".
+          03  LINE  6 COLUMN 15 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "³".
+    03        COLUMN 16 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "Length  >".
+    03        COLUMN 34 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
                                  VALUE "<".
-007460	   03	       COLUMN 35 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "³".
-007450	   03  LINE  7 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "³".
-	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "Breadth >".
-	   03	       COLUMN 34 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
+          03        COLUMN 35 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "³".
+          03  LINE  7 COLUMN 15 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "³".
+    03        COLUMN 16 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "Breadth >".
+    03        COLUMN 34 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
                                  VALUE "<".
-007460	   03	       COLUMN 35 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "³".
-007450	   03  LINE  8 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "³".
-	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "Pieces  >    <".
-007460	   03	       COLUMN 30 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "     ³".
-	   03  LINE  9 COLUMN 15 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "À".
-	   03	       COLUMN 16 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 PIC X(19) USING WS-SRT-LINE.
-	   03	       COLUMN 35 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-				 VALUE "Ù".
+          03        COLUMN 35 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "³".
+          03  LINE  8 COLUMN 15 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "³".
+    03        COLUMN 16 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "Pieces  >    <".
+          03        COLUMN 30 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "     ³".
+    03  LINE  9 COLUMN 15 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "À".
+    03        COLUMN 16 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     PIC X(19) USING WS-SRT-LINE.
+    03        COLUMN 35 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 6 HIGHLIGHT
+     VALUE "Ù".
 
        01  SA-MEASURE.
-	   03  LINE  6 COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
-				 PIC ZZZ9.9999 USING W10-LENGTH AUTO.
-	   03  LINE  7 COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
-				 PIC ZZZ9.9999 USING W10-BREADTH AUTO.
-	   03  LINE  8 COLUMN 25 BACKGROUND-COLOR 2
-				 FOREGROUND-COLOR 7 HIGHLIGHT
-				 PIC ZZZ9 USING W10-NUMBER AUTO.
+    03  LINE  6 COLUMN 25 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 7 HIGHLIGHT
+     PIC ZZZ9.9999 USING W10-LENGTH AUTO.
+    03  LINE  7 COLUMN 25 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 7 HIGHLIGHT
+     PIC ZZZ9.9999 USING W10-BREADTH AUTO.
+    03  LINE  8 COLUMN 25 BACKGROUND-COLOR 2
+     FOREGROUND-COLOR 7 HIGHLIGHT
+     PIC ZZZ9 USING W10-NUMBER AUTO.
 
        COPY ERROR.CRT.
 
        COPY OPT.CRT.
 
-       COPY UPDATE.CRT.
-
       /
-001230 PROCEDURE DIVISION
-		 USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
-004790 AA000		  SECTION.
-004800 AA000-INIT.
-003240	   IF LS0-SALEV < 1
-	       MOVE "Not Authorised"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       MOVE "E" 	 TO LS-INSTR
-	       GO TO AA49.
-004810	     PERFORM ZA000-INIT.
-	     MOVE ZERO		 TO W90-REF-NO.
-	     PERFORM DA000.
-	   IF W85-CUSDISP = "Y"
-	       CLOSE CUSDSP.
-	     CLOSE CSHSLE
-		   CHEQUE
-		   POSPLU
+       PROCEDURE DIVISION
+   USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+       AA000    SECTION.
+       AA000-INIT.
+          IF LS0-SALEV < 1
+        MOVE "Not Authorised"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+        MOVE "E"   TO LS-INSTR
+        GO TO AA49.
+            PERFORM ZA000-INIT.
+      MOVE ZERO   TO W90-REF-NO.
+      PERFORM DA000.
+    IF W85-CUSDISP = "Y"
+        CLOSE CUSDSP.
+      CLOSE CSHSLE
+     CHEQUE
+     POSPLU
                    PSLIP
-		   RECOVER
-		   SALE
-		   SLIP.
-	   IF W85-KTCHPRN = "Y"
-	       CLOSE KCHPRN.
+     RECOVER
+     SALE
+     SLIP.
+    IF W85-KTCHPRN = "Y"
+        CLOSE KCHPRN.
 
        AA49.
              EXIT PROGRAM.
@@ -1230,81 +1228,81 @@
 
       /    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
-      * 	   S C R E E N ,   K E Y B O A R D   &	 M O U S E
+      *     S C R E E N ,   K E Y B O A R D   &  M O U S E
       *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3      ³
+      *    ³    SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3      ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ³			  SCREEN-SHADOW 		       ³
+      *    ³     SCREEN-SHADOW          ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
       *    ³ To routine is used to display a shadow down the right and ³
       *    ³ along the bottom of a pop-up box. The parameters that are ³
-      *    ³ required:						       ³
-      *	   ³	       SHADE-ROW   - Top line of the box + 1.	       ³
-      *	   ³	       SHADE-COL   - Left line of box + 2.	       ³
-      *	   ³	       SHADE-WIDTH - Width of the box - 2.	       ³
-      *	   ³	       SHADE-LINES - Hight of box - 1.		       ³
+      *    ³ required:             ³
+      *    ³        SHADE-ROW   - Top line of the box + 1.        ³
+      *    ³        SHADE-COL   - Left line of box + 2.        ³
+      *    ³        SHADE-WIDTH - Width of the box - 2.        ³
+      *    ³        SHADE-LINES - Hight of box - 1.         ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ³			  CHECK-CORRECT 		       ³
+      *    ³     CHECK-CORRECT          ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
       *    ³ This routine displays a pop-up window with the message    ³
-      *    ³	      "Correct ENTER - N if incorrect"		       ³
-      *    ³							       ³
+      *    ³       "Correct ENTER - N if incorrect"         ³
+      *    ³              ³
       *    ³ The response is returned in WS-OPTION (in upper case).    ³
-      *    ³							       ³
+      *    ³              ³
       *    ³ To start with the pop-up window higher or lower than row  ³
       *    ³ 13 (default); move another value to SLIN and PERFORM      ³
-      *    ³ CHECK-SETUP THRU CHECK-EXIT.			       ³
+      *    ³ CHECK-SETUP THRU CHECK-EXIT.          ³
       *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
-      *    ³			  ERROR-MESSAGE 		       ³
+      *    ³     ERROR-MESSAGE          ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
       *    ³ To display an error message with " - Press ANY key" at    ³
-      *    ³ the end; use PERFORM ERROR-MESSAGE.		       ³
-      *    ³							       ³
-      *    ³ To display just the error message; use PERFORM	       ³
-      *    ³ ERROR-LENGTH THRU ERROR-EXIT.			       ³
-      *    ³							       ³
+      *    ³ the end; use PERFORM ERROR-MESSAGE.         ³
+      *    ³              ³
+      *    ³ To display just the error message; use PERFORM        ³
+      *    ³ ERROR-LENGTH THRU ERROR-EXIT.          ³
+      *    ³              ³
       *    ³ To display the error message higher or lower (default is  ³
       *    ³ line 13) firstly use PERFORM ERROR-SETUP THRU ERROR-POS   ³
       *    ³ or PERFORM ERROR-LENGTH THRU ERROR-POS. Move the line     ³
       *    ³ number to be used to SLIN and then PERFORM ERROR-DISPLAY  ³
-      *    ³ THRU ERROR-EXIT.					       ³
+      *    ³ THRU ERROR-EXIT.            ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY FUNCTION.CRT.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³			  OPT-MESSAGE			       ³
+      *    ³     OPT-MESSAGE          ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
       *    ³ This routine is used to allow the OPERATOR to respond to  ³
       *    ³ a request for an option, so that the correct action can   ³
       *    ³ be performed by the program. The routine will display the ³
       *    ³ message in a pop-up window and allow the OPERATOR to      ³
-      *    ³ respond to the 'question'. 			       ³
-      *    ³							       ³
+      *    ³ respond to the 'question'.           ³
+      *    ³              ³
       *    ³ The option request must be placed in WS-ERR-MES and may   ³
       *    ³ not exceed 48 characters. The message will be centred in  ³
       *    ³ the window. An example of a message request follows:      ³
-      *    ³							       ³
+      *    ³              ³
       *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
       *    ³   PERFORM OPT-MESSAGE (Use this format if function or any ³
-      *    ³	       other keys are to be tested on exit)	       ³
-      *    ³			     OR 			       ³
+      *    ³        other keys are to be tested on exit)        ³
+      *    ³        OR           ³
       *    ³   PERFORM OPT-MESSAGE UNTIL WS-OPTION = "N" OR "Y".       ³
       *    ³   (Use TEST AFTER if WS-OPTION is preloaded with a        ³
-      *    ³   default option)					       ³
-      *    ³							       ³
-      *    ³ This would be displayed as:			       ³
-      *    ³	ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
-      *    ³	³	   Print transactions (Y/N) [ ] 	 ³°°   ³
-      *    ³	ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°   ³
-      *    ³	  °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°   ³
-      *    ³							       ³
+      *    ³   default option)            ³
+      *    ³              ³
+      *    ³ This would be displayed as:          ³
+      *    ³ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿     ³
+      *    ³ ³    Print transactions (Y/N) [ ]   ³°°   ³
+      *    ³ ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°   ³
+      *    ³   °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°   ³
+      *    ³              ³
       *    ³ The response is returned in WS-OPTION (in upper case).    ³
-      *    ³							       ³
+      *    ³              ³
       *    ³ To display the request message higher or lower (default   ³
       *    ³ is line 13) move the line number to be used to SLIN and   ³
-      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.		       ³
+      *    ³ then PERFORM OPT-SETUP THRU OPT-EXIT.         ³
       *    ³ (The UNTIL and TEST AFTER options also apply here)        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
@@ -1313,195 +1311,195 @@
        COPY LOCKED.RC3.
 
       *    *************************************************************
-      *    ****        D A T E	 C H E C K   R O U T I N E
+      *    ****        D A T E  C H E C K   R O U T I N E
       *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Perform this routine with the date in W10-DATE (PIC      ³
-      *    ³  99/99/9999) with the format as DD/MM/CCYY 	       ³
-      *    ³							       ³
+      *    ³  99/99/9999) with the format as DD/MM/CCYY         ³
+      *    ³              ³
       *    ³  On exiting - WS-ERROR will be zero (0) if the date is    ³
-      *    ³  correct or one (1) if the date is incorrect.	       ³
+      *    ³  correct or one (1) if the date is incorrect.        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY DATE.CHK.
 
       *    *************************************************************
-      *    ****   D I S P L A Y   L O O K U P	O P T I O N S
+      *    ****   D I S P L A Y   L O O K U P O P T I O N S
       *    *************************************************************
-011010 AA300		  SECTION.
-011020 AA301.
-011010	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Help,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F2" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Itm/"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011030		     "F3" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Alt/"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011050		     "F4" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Dsc/"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011050		     "F5" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Dsc2/"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011070		     "F6" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=X/Rf,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011030		     "F7" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=W/Sl,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011030		     "F8" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Prompt,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011070		     "F9" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-011080		     "=Word,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011070		     "Esc" WITH BACKGROUND-COLOR 3
-				FOREGROUND-COLOR 6 HIGHLIGHT
-		     "ape"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
-011110 AA305.
-011120       EXIT.
+       AA300    SECTION.
+       AA301.
+            DISPLAY "F1" AT 2502
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Help,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+       "F2" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Itm/"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F3" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Alt/"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F4" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Dsc/"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F5" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Dsc2/"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F6" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=X/Rf,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F7" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=W/Sl,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F8" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Prompt,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F9" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+             "=Word,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "Esc" WITH BACKGROUND-COLOR 3
+    FOREGROUND-COLOR 6 HIGHLIGHT
+       "ape"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+       AA305.
+             EXIT.
 
       /    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       R E A D	 F I L E S   R O U T I N E S	       ³
+      *    ³        R E A D  F I L E S   R O U T I N E S        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-004930 AC000-READ	       SECTION.
+       AC000-READ        SECTION.
 
-011150 COPY AUDIT.RD.
+       COPY AUDIT.RD.
 
        COPY CHEQUE.RD.
 
-011170 COPY CONTROL.RD.
+       COPY CONTROL.RD.
 
-011230 COPY DEPART.RD.
+       COPY DEPART.RD.
 
        COPY LEDTRF.RD.
 
-011290 COPY PARAM.RD.
+       COPY PARAM.RD.
 
        COPY POSPLU.RD.
 
        COPY PSLIP.RD.
 
-011310 COPY SALE.RD.
+       COPY SALE.RD.
 
        COPY SHARED.RD.
 
-011310 COPY SLIP.RD.
+       COPY SLIP.RD.
 
-011810 COPY SPARTS.RD.
+       COPY SPARTS.RD.
 
-011330 COPY STOCK.RD.
+       COPY STOCK.RD.
 
-000140 COPY STKMEM.RD.
+       COPY STKMEM.RD.
 
-011350 COPY TXTRAN.RD.
+       COPY TXTRAN.RD.
 
       /    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³R E W R I T E   &	W R I T E   F I L E S	R O U T I N E S³
+      *    ³R E W R I T E   & W R I T E   F I L E S R O U T I N E S³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-006420 AD000-WRITE	       SECTION.
+       AD000-WRITE        SECTION.
 
-011150 COPY AUDIT.WR.
+       COPY AUDIT.WR.
 
        COPY CARDEX.WR.
 
        COPY CHEQUE.WR.
 
-011170 COPY CONTROL.WR.
+       COPY CONTROL.WR.
 
-011230 COPY DEPART.WR.
+       COPY DEPART.WR.
 
        COPY LEDTRF.WR.
 
-011290 COPY PARAM.WR.
+       COPY PARAM.WR.
 
        COPY PSLIP.WR.
 
-011310 COPY SALE.WR.
+       COPY SALE.WR.
 
        COPY SHARED.WR.
 
-011310 COPY SLIP.WR.
+       COPY SLIP.WR.
 
-011330 COPY STOCK.WR.
+       COPY STOCK.WR.
 
-011350 COPY TXTRAN.WR.
+       COPY TXTRAN.WR.
 
        COPY CASHDRAW.OPN.
 
        COPY APAC.HLP.
 
       /
-      *       ****   *****   ***    ***   *   *  *****	****   *   *
-      *       *   *  *	    *	*  *   *  *   *  *	*   *  *   *
-      *       ****   ***    *	   *   *  *   *  ***	****	* *
-      *       *   *  *	    *	*  *   *   * *	 *	*   *	 *
-      *       *   *  *****   ***    ***     *	 *****	*   *	 *
+      *       ****   *****   ***    ***   *   *  ***** ****   *   *
+      *       *   *  *     * *  *   *  *   *  * *   *  *   *
+      *       ****   ***    *    *   *  *   *  *** **** * *
+      *       *   *  *     * *  *   *   * *  * *   *  *
+      *       *   *  *****   ***    ***     *  ***** *   *  *
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
-      * 	 THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
+      *   THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       *        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *        ³ ORIGINAL ACTION (REC-TYPE)  ÄÄ  RECOVERY PROCESS ³
-      *        ³ 0 = RECORD CHANGED	     ÄÄ     (REWRITE)	   ³
-      *        ³ 1 = RECORD WAS ADDED	     ÄÄ     (DELETE)	   ³
-      *        ³ 2 = RECORD WAS DELETED      ÄÄ     (WRITE)	   ³
+      *        ³ 0 = RECORD CHANGED      ÄÄ     (REWRITE)    ³
+      *        ³ 1 = RECORD WAS ADDED      ÄÄ     (DELETE)    ³
+      *        ³ 2 = RECORD WAS DELETED      ÄÄ     (WRITE)    ³
       *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-011670 AY000	       SECTION.
-011680 AY01.
-011690       MOVE 01             TO REC-FILE.
-011700       MOVE WS-PARKEY      TO REC-KEY.
+       AY000        SECTION.
+       AY01.
+             MOVE 01             TO REC-FILE.
+             MOVE WS-PARKEY      TO REC-KEY.
              MOVE ZERO           TO REC-TYPE
-011710	     PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-011720       MOVE PAR-RECORD1    TO REC-PARAM.
-011730       GO TO AY50.
+            PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             MOVE PAR-RECORD1    TO REC-PARAM.
+             GO TO AY50.
 
-011850 AY05.
-011860       MOVE 05             TO REC-FILE.
-011870       MOVE ZERO           TO REC-KEY.
-011880       MOVE ZERO           TO REC-TYPE.
-011890	     PERFORM READ-STOCK-LOCK THRU READ-STOCK-EXIT.
-011900       MOVE STK-RECORD1    TO REC-STOCKF.
-011910       GO TO AY50.
+       AY05.
+             MOVE 05             TO REC-FILE.
+             MOVE ZERO           TO REC-KEY.
+             MOVE ZERO           TO REC-TYPE.
+            PERFORM READ-STOCK-LOCK THRU READ-STOCK-EXIT.
+             MOVE STK-RECORD1    TO REC-STOCKF.
+             GO TO AY50.
 
-011920 AY16.
-011930       MOVE 16             TO REC-FILE.
-011940       MOVE WS-AUDKEY      TO REC-KEY.
-	     MOVE WS-ACTION	 TO REC-TYPE.
-011950       MOVE AUD-REC1       TO REC-AUDITF.
-011960       GO TO AY50.
+       AY16.
+             MOVE 16             TO REC-FILE.
+             MOVE WS-AUDKEY      TO REC-KEY.
+      MOVE WS-ACTION  TO REC-TYPE.
+             MOVE AUD-REC1       TO REC-AUDITF.
+             GO TO AY50.
 
-011970 AY19.
-011980       MOVE 19             TO REC-FILE.
-011990       MOVE ZERO           TO REC-KEY.
-012000       MOVE WS-ACTION      TO REC-TYPE.
-012010       MOVE TAX-RECORD1    TO REC-TXTRAN.
-012020       GO TO AY50.
-
-       AY34.
-	     MOVE 34		 TO REC-FILE.
+       AY19.
+             MOVE 19             TO REC-FILE.
              MOVE ZERO           TO REC-KEY.
              MOVE WS-ACTION      TO REC-TYPE.
-	     MOVE PIC-RECORD1	 TO REC-PSLIP.
+             MOVE TAX-RECORD1    TO REC-TXTRAN.
+             GO TO AY50.
+
+       AY34.
+      MOVE 34   TO REC-FILE.
+             MOVE ZERO           TO REC-KEY.
+             MOVE WS-ACTION      TO REC-TYPE.
+      MOVE PIC-RECORD1  TO REC-PSLIP.
              GO TO AY50.
 
        AY35.
-	     MOVE 35		 TO REC-FILE.
+      MOVE 35   TO REC-FILE.
              MOVE ZERO           TO REC-KEY.
              MOVE WS-ACTION      TO REC-TYPE.
-	     MOVE SLP-RECORD1	 TO REC-SLIP.
+      MOVE SLP-RECORD1  TO REC-SLIP.
              GO TO AY50.
 
        AY36.
@@ -1511,302 +1509,302 @@
              MOVE CHQ-RECORD1    TO REC-CHEQUE.
              GO TO AY50.
 
-012150 AY37.
-012160	     MOVE 37		 TO REC-FILE.
-012170	     MOVE WS-SHARED	 TO REC-KEY.
-011880       MOVE ZERO           TO REC-TYPE.
-012180	     MOVE SHR-RECORD	 TO REC-NETWORK.
-012190       GO TO AY50.
+       AY37.
+            MOVE 37   TO REC-FILE.
+            MOVE WS-SHARED  TO REC-KEY.
+             MOVE ZERO           TO REC-TYPE.
+            MOVE SHR-RECORD  TO REC-NETWORK.
+             GO TO AY50.
 
-012090 AY38.
-	     MOVE 38		 TO REC-FILE.
-008020	     MOVE ZERO		 TO REC-KEY.
+       AY38.
+      MOVE 38   TO REC-FILE.
+            MOVE ZERO   TO REC-KEY.
              MOVE WS-ACTION      TO REC-TYPE
-012120	     PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-	   IF WS-F-ERROR = 7
-	       MOVE "XXXX"	 TO DPT-CODE
-	       GO TO AY38.
-012130       MOVE DPT-RECORD     TO REC-DEPART.
-012140       GO TO AY50.
+            PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+    IF WS-F-ERROR = 7
+        MOVE "XXXX"  TO DPT-CODE
+        GO TO AY38.
+             MOVE DPT-RECORD     TO REC-DEPART.
+             GO TO AY50.
 
-012150 AY39.
-012160       MOVE 39             TO REC-FILE.
-012170       MOVE WS-NETKEY      TO REC-KEY.
-	     MOVE ZERO		 TO REC-TYPE.
-012180       MOVE NET-RECORD     TO REC-NETWORK.
-012190       GO TO AY50.
+       AY39.
+             MOVE 39             TO REC-FILE.
+             MOVE WS-NETKEY      TO REC-KEY.
+      MOVE ZERO   TO REC-TYPE.
+             MOVE NET-RECORD     TO REC-NETWORK.
+             GO TO AY50.
 
-012200 AY40.
-011080       MOVE 40             TO REC-FILE.
-008020       MOVE ZERO           TO REC-KEY.
+       AY40.
+             MOVE 40             TO REC-FILE.
+             MOVE ZERO           TO REC-KEY.
              MOVE WS-ACTION      TO REC-TYPE
-011100       MOVE XFR-REC        TO REC-LEDTRF.
-011110       GO TO AY50.
+             MOVE XFR-REC        TO REC-LEDTRF.
+             GO TO AY50.
 
-011070 AY43.
-011080	     MOVE 43		 TO REC-FILE.
-008020       MOVE ZERO           TO REC-KEY.
+       AY43.
+            MOVE 43   TO REC-FILE.
+             MOVE ZERO           TO REC-KEY.
              MOVE WS-ACTION      TO REC-TYPE
-011100	     MOVE CRD-REC1	 TO REC-CARDEX.
-011110       GO TO AY50.
+            MOVE CRD-REC1  TO REC-CARDEX.
+             GO TO AY50.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		  End transaction in recovery log	       ³
+      *    ³    End transaction in recovery log        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY49.
-012210       MOVE 99             TO REC-FILE.
-012220       MOVE ZERO           TO REC-KEY.
-012230       MOVE SPACES         TO REC-DETAIL.
-012240       PERFORM AY50.
-012250       ADD 1               TO WS-TRANS.
+             MOVE 99             TO REC-FILE.
+             MOVE ZERO           TO REC-KEY.
+             MOVE SPACES         TO REC-DETAIL.
+             PERFORM AY50.
+             ADD 1               TO WS-TRANS.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ If recovery records exceed 195 - Clear (Close and Open    ³
       *    ³ new). This allows for quicker recoveries when required.   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012260	   IF WS-RECOVER > 195
-012270         CLOSE RECOVER
-012280         OPEN OUTPUT RECOVER
-012290         CLOSE RECOVER
-012300         OPEN I-O RECOVER
-012310         MOVE ZERO         TO WS-RECOVER.
-012320       GO TO AY59.
+          IF WS-RECOVER > 195
+               CLOSE RECOVER
+               OPEN OUTPUT RECOVER
+               CLOSE RECOVER
+               OPEN I-O RECOVER
+               MOVE ZERO         TO WS-RECOVER.
+             GO TO AY59.
 
-012330 AY50.
-012340       ADD 1               TO WS-RECOVER.
-012350       MOVE WS-RECOVER     TO WS-RECKEY.
-012360       MOVE WS-TRANS       TO REC-TRAN.
-012370       WRITE REC-RECORD.
-012380     IF WS-STATUS NOT = "00"
-012390         DISPLAY "Write error Recovery file - Status " AT 2212
-012400			WITH FOREGROUND-COLOR 6 HIGHLIGHT
-012410                  WS-STATUS WITH FOREGROUND-COLOR 15
-012420         STOP RUN.
-012430       CLOSE RECOVER.
-012440       OPEN I-O RECOVER.
+       AY50.
+             ADD 1               TO WS-RECOVER.
+             MOVE WS-RECOVER     TO WS-RECKEY.
+             MOVE WS-TRANS       TO REC-TRAN.
+             WRITE REC-RECORD.
+           IF WS-STATUS NOT = "00"
+               DISPLAY "Write error Recovery file - Status " AT 2212
+         WITH FOREGROUND-COLOR 6 HIGHLIGHT
+                        WS-STATUS WITH FOREGROUND-COLOR 15
+               STOP RUN.
+             CLOSE RECOVER.
+             OPEN I-O RECOVER.
 
-012450 AY59.
-012460       EXIT.
+       AY59.
+             EXIT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   Start processing transaction 	       ³
+      *    ³     Start processing transaction         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012470 AY60.
-012690	     MOVE 1		 TO WS-COUNT.
-012690	     MOVE 5		 TO WS-SHARED.
-012700	     PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-	     MOVE SHR-STOCK	 TO WS-STOCK.
+       AY60.
+            MOVE 1   TO WS-COUNT.
+            MOVE 5   TO WS-SHARED.
+            PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
+      MOVE SHR-STOCK  TO WS-STOCK.
       *
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
       *
-012500	     MOVE 4		 TO WS-PARKEY.
-012510       PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
-012520     IF PAR-USERS < 24
-012530         MOVE 1            TO WS-SUB
-	       MOVE ZERO	 TO WS-WAIT
-012540         GO TO AY62.
+            MOVE 4   TO WS-PARKEY.
+             PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+           IF PAR-USERS < 24
+               MOVE 1            TO WS-SUB
+        MOVE ZERO  TO WS-WAIT
+               GO TO AY62.
       *
-      *    ****   Q   F U L L  -  W A I T   F O R   4	S E C O N D S
+      *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
       *
-012550	     DISPLAY "WAITING" AT 2551
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
-012560	     COMMIT.
-	     ACCEPT WS-STIME FROM TIME.
-	     MOVE 400		 TO WS-WAIT.
-012580	     PERFORM LOCK-REC-LOOP.
-012590	     DISPLAY SPACE AT 2551
-		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
-012600       GO TO AY60.
+            DISPLAY "WAITING" AT 2551
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+            COMMIT.
+      ACCEPT WS-STIME FROM TIME.
+      MOVE 400   TO WS-WAIT.
+            PERFORM LOCK-REC-LOOP.
+            DISPLAY SPACE AT 2551
+       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+             GO TO AY60.
 
-012610 AY61.
-012620	     MOVE "DS"		 TO PAR-PROG(WS-USUB).
-012630	     MOVE LS-USER	 TO PAR-USR(WS-USUB).
-012640       PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
+       AY61.
+            MOVE "DS"   TO PAR-PROG(WS-USUB).
+            MOVE LS-USER  TO PAR-USR(WS-USUB).
+             PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Read the DEBTOR control record in the NETWORK file and    ³
-      *    ³ lock it. Log details to the RECOVERY file. 	       ³
+      *    ³ lock it. Log details to the RECOVERY file.         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012670	     MOVE 1		 TO WS-NETKEY.
-012680       PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
-012690       PERFORM AY39 THRU AY59.
-012700       MOVE NET-DEBTOR     TO W70-DEBT.
-	   IF WS-STOCK = "Y"
-012710	       MOVE 3		 TO WS-SHARED
-012720	       PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT
-	       PERFORM AY37 THRU AY59
-	       MOVE SHR-RECORD	 TO NET-RECORD
-	   ELSE
-012710	       MOVE 3		 TO WS-NETKEY
-012720	       PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT
-012730	       PERFORM AY39 THRU AY59.
-	     DISPLAY "Locked system to update"
-012740       GO TO AY999.
+            MOVE 1   TO WS-NETKEY.
+             PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
+             PERFORM AY39 THRU AY59.
+             MOVE NET-DEBTOR     TO W70-DEBT.
+    IF WS-STOCK = "Y"
+              MOVE 3   TO WS-SHARED
+              PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT
+        PERFORM AY37 THRU AY59
+        MOVE SHR-RECORD  TO NET-RECORD
+    ELSE
+              MOVE 3   TO WS-NETKEY
+              PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT
+              PERFORM AY39 THRU AY59.
+      DISPLAY "Locked system to update"
+             GO TO AY999.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		Are there any updates in progress?	       ³
+      *    ³  Are there any updates in progress?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012750 AY62.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES OR
-		   PAR-USR(WS-SUB) = SPACES)
+       AY62.
+    IF NOT (PAR-PROG(WS-SUB) = SPACES OR
+     PAR-USR(WS-SUB) = SPACES)
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Are Debtor/Accounts Receivable or Stock/Inventory files   ³
-      *    ³ being updated at present?				       ³
+      *    ³ being updated at present?           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF NOT (PAR-PROG(WS-SUB) = SPACES)
-012760		   IF PAR-PROG(WS-SUB) = "DB" OR "DS" OR "CS" OR "ST"
+        IF NOT (PAR-PROG(WS-SUB) = SPACES)
+           IF PAR-PROG(WS-SUB) = "DB" OR "DS" OR "CS" OR "ST"
       *
-      *    ****   Y E S !   -	S E T	W A I T	  P E R I O D
+      *    ****   Y E S !   - S E T W A I T   P E R I O D
       *
-		       GO TO AY62-WAIT
-		   ELSE
-		       ADD 1	 TO WS-SUB
-		       GO TO AY62
-		   END-IF
-	       ELSE
+         GO TO AY62-WAIT
+     ELSE
+         ADD 1  TO WS-SUB
+         GO TO AY62
+     END-IF
+        ELSE
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    Is this program in the Q?		       ³
+      *    ³      Is this program in the Q?         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF PAR-USR(WS-SUB) = LS-USER
+        IF PAR-USR(WS-SUB) = LS-USER
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   Yes! - Is it the next in line to be processed?      ³
+      *    ³    Yes! - Is it the next in line to be processed?      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   IF WS-WAIT = ZERO
-		       GO TO AY63
-		   ELSE
-		       GO TO AY62-WAIT
-		   END-IF
-	       ELSE
-		   GO TO AY62-WAIT
-	       END-IF
-	   END-IF.
-	     MOVE LS-USER	 TO PAR-USR(WS-SUB).
-	     MOVE WS-SUB	 TO PAR-USERS.
-	     PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-	     GO TO AY62-CHECK.
+     IF WS-WAIT = ZERO
+         GO TO AY63
+     ELSE
+         GO TO AY62-WAIT
+     END-IF
+        ELSE
+     GO TO AY62-WAIT
+        END-IF
+    END-IF.
+      MOVE LS-USER  TO PAR-USR(WS-SUB).
+      MOVE WS-SUB  TO PAR-USERS.
+      PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+      GO TO AY62-CHECK.
       *
       *    ****   S E T   W A I T   P E R I O D
       *
        AY62-WAIT.
-	     MOVE 300		 TO WS-WAIT.
-	   IF NOT (PAR-USR(WS-SUB) = LS-USER)
-	       IF WS-SUB < 24
-		   ADD 1	 TO WS-SUB
-		   GO TO AY62.
+      MOVE 300   TO WS-WAIT.
+    IF NOT (PAR-USR(WS-SUB) = LS-USER)
+        IF WS-SUB < 24
+     ADD 1  TO WS-SUB
+     GO TO AY62.
 
        AY62-CHECK.
-	   IF WS-WAIT > ZERO
-	       COMMIT
-	       DISPLAY "Waiting" AT 2572
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
-	       ACCEPT WS-STIME FROM TIME
-	       PERFORM LOCK-REC-LOOP
-	       DISPLAY "Waiting" AT 2572
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT BLINK
-	       GO TO AY60.
-012880	     DISPLAY SPACE AT 2572
-		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+    IF WS-WAIT > ZERO
+        COMMIT
+        DISPLAY "Waiting" AT 2572
+   WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT BLINK
+        ACCEPT WS-STIME FROM TIME
+        PERFORM LOCK-REC-LOOP
+        DISPLAY "Waiting" AT 2572
+   WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT BLINK
+        GO TO AY60.
+            DISPLAY SPACE AT 2572
+       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
 
-012900 AY63.
-012920	     MOVE WS-SUB	 TO WS-USUB.
-012940	     GO TO AY61.
+       AY63.
+            MOVE WS-SUB  TO WS-USUB.
+            GO TO AY61.
 
-012970 AY70.
-013030	     MOVE 4		 TO WS-PARKEY.
-013040       PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
+       AY70.
+            MOVE 4   TO WS-PARKEY.
+             PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
       *
       *    ****    Write links back and unlock PARAM record 4 and
       *            NETWORK record 1.
       *
-	   IF WS-STOCK = "Y"
-	       MOVE NET-RECORD	 TO SHR-RECORD
-012980	       PERFORM REWRITE-SHARED THRU WRITE-SHARED-EXIT
-	   ELSE
-012980	       PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
-012990       MOVE 1              TO WS-NETKEY.
-013000       MOVE W70-DEBT       TO NET-DEBTOR.
-013010	     PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
-013020       PERFORM AY49 THRU AY59.
-	     MOVE 1		 TO WS-USUB.
+    IF WS-STOCK = "Y"
+        MOVE NET-RECORD  TO SHR-RECORD
+              PERFORM REWRITE-SHARED THRU WRITE-SHARED-EXIT
+    ELSE
+              PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
+             MOVE 1              TO WS-NETKEY.
+             MOVE W70-DEBT       TO NET-DEBTOR.
+            PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
+             PERFORM AY49 THRU AY59.
+      MOVE 1   TO WS-USUB.
 
        AY72.
-	   IF NOT (PAR-USR(WS-USUB) = LS-USER)
-	       ADD 1		 TO WS-USUB
-	       GO TO AY72.
+    IF NOT (PAR-USR(WS-USUB) = LS-USER)
+        ADD 1   TO WS-USUB
+        GO TO AY72.
 
        AY75.
-013050	     MOVE SPACES	 TO PAR-PROG(WS-USUB)
-013060				    PAR-USR(WS-USUB).
-	   IF WS-USUB < 24
-	       ADD 1 WS-USUB	 GIVING WS-SUB
-	   ELSE
-	       GO TO AY80.
-	   IF NOT (PAR-PROG(WS-SUB) = SPACES)
-	       MOVE PAR-PROG(WS-SUB)
-				 TO PAR-PROG(WS-USUB)
-	       MOVE PAR-USR(WS-SUB)
-				 TO PAR-USR(WS-USUB)
-	       ADD 1		 TO WS-USUB
-	       GO TO AY75.
+            MOVE SPACES  TO PAR-PROG(WS-USUB)
+              PAR-USR(WS-USUB).
+    IF WS-USUB < 24
+        ADD 1 WS-USUB  GIVING WS-SUB
+    ELSE
+        GO TO AY80.
+    IF NOT (PAR-PROG(WS-SUB) = SPACES)
+        MOVE PAR-PROG(WS-SUB)
+     TO PAR-PROG(WS-USUB)
+        MOVE PAR-USR(WS-SUB)
+     TO PAR-USR(WS-USUB)
+        ADD 1   TO WS-USUB
+        GO TO AY75.
 
        AY80.
-013070	     SUBTRACT 1 FROM WS-USUB
-				 GIVING PAR-USERS.
-013080	     PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-	   IF LS0-POS NOT = 2
-012430         CLOSE RECOVER
-012440         OPEN I-O RECOVER.
-013090       COMMIT.
+            SUBTRACT 1 FROM WS-USUB
+     GIVING PAR-USERS.
+            PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+    IF LS0-POS NOT = 2
+               CLOSE RECOVER
+               OPEN I-O RECOVER.
+             COMMIT.
 
-013080 AY999.
-013090       EXIT.
+       AY999.
+             EXIT.
       /
       *    ****    G E T   M E A S U R E M E N T S   (LENGTH/BREADTH)
-      * 	   A N D   N U M B E R	 O F   P I E C E S
+      *     A N D   N U M B E R  O F   P I E C E S
       *
-       BB050	       SECTION.
+       BB050        SECTION.
        BB50.
-	     PERFORM SAVE-SCREEN-2.
-	     MOVE 5		 TO SHADE-ROW.
-	     MOVE 17		 TO SHADE-COL.
-	     MOVE 19		 TO SHADE-WIDTH.
-	     MOVE 5		 TO SHADE-LINES.
-019090	     DISPLAY S-MEASURE.
-	     PERFORM SCREEN-SHADOW.
+      PERFORM SAVE-SCREEN-2.
+      MOVE 5   TO SHADE-ROW.
+      MOVE 17   TO SHADE-COL.
+      MOVE 19   TO SHADE-WIDTH.
+      MOVE 5   TO SHADE-LINES.
+            DISPLAY S-MEASURE.
+      PERFORM SCREEN-SHADOW.
        BB55.
-	     ACCEPT SA-MEASURE.
-	     PERFORM CHECK-CORRECT.
-020250	   IF WS-OPTION = "N"
-	       GO TO BB55.
-	     COMPUTE W10-QUANT ROUNDED = W10-LENGTH * W10-BREADTH
-				       * W10-NUMBER.
-	     MOVE 1		 TO WS-P1.
-	     MOVE "Y"		 TO WS-MEASURE.
+      ACCEPT SA-MEASURE.
+      PERFORM CHECK-CORRECT.
+          IF WS-OPTION = "N"
+        GO TO BB55.
+      COMPUTE W10-QUANT ROUNDED = W10-LENGTH * W10-BREADTH
+           * W10-NUMBER.
+      MOVE 1   TO WS-P1.
+      MOVE "Y"   TO WS-MEASURE.
 
        BB60.
-	     PERFORM RESTORE-SCREEN-2.
+      PERFORM RESTORE-SCREEN-2.
 
        BB69.
              EXIT.
 
       /
-007970 BG00-TRAN               SECTION.
-008600 BG80.
-008610       MOVE W70-AUDIT      TO WS-AUDKEY.
-008620       MOVE LOW-VALUES     TO AUD-REC1.
-015400	     MOVE 1		 TO WS-ACTION.
-008630       PERFORM AY16 THRU AY59.
-008640	     MOVE STK-CODE	 TO AUD-EXT-CODE.
-008650       MOVE 2              TO AUD-TYPE.
-008660       MOVE WS-DRAW        TO AUD-SUB.
-008680       PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT.
-008690       ADD 1               TO W70-AUDIT.
-008700       MOVE 1              TO WS-AUDKEY.
-015400	     MOVE 0		 TO WS-ACTION.
-008710       PERFORM READ-AUDIT THRU READ-AUDIT-EXIT.
-008720       PERFORM AY16 THRU AY59.
-008730       MOVE 1              TO AUD-REP2.
-008740       PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
-008750 BG85.
-008760       EXIT.
+       BG00-TRAN               SECTION.
+       BG80.
+             MOVE W70-AUDIT      TO WS-AUDKEY.
+             MOVE LOW-VALUES     TO AUD-REC1.
+            MOVE 1   TO WS-ACTION.
+             PERFORM AY16 THRU AY59.
+            MOVE STK-CODE  TO AUD-EXT-CODE.
+             MOVE 2              TO AUD-TYPE.
+             MOVE WS-DRAW        TO AUD-SUB.
+             PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT.
+             ADD 1               TO W70-AUDIT.
+             MOVE 1              TO WS-AUDKEY.
+            MOVE 0   TO WS-ACTION.
+             PERFORM READ-AUDIT THRU READ-AUDIT-EXIT.
+             PERFORM AY16 THRU AY59.
+             MOVE 1              TO AUD-REP2.
+             PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
+       BG85.
+             EXIT.
 
        COPY CA000.STK.
 
@@ -1817,2002 +1815,2002 @@
        COPY CA500.STK.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³			 GL-TRF-UPDATE			       ³
-      *	   ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
-      *    ³ GENERAL LEDGER:					       ³
+      *    ³    GL-TRF-UPDATE          ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ GENERAL LEDGER:            ³
       *    ³ This routine is used to UPDATE the INTEGRATION RECORDS    ³
-      *    ³ for posting to the G/L ACCOUNTS.			       ³
-      *    ³							       ³
-      *    ³ THE KEY FOR EACH OF THE RECORDS IS:		       ³
-      *    ³							       ³
-      *    ³	RUN DATE (CCYYMMDD)  -	WX-YMD			       ³
-      *    ³							       ³
-      *    ³	TYPE -	WX-TYPE 				       ³
-      *    ³		01 : DEBTORS				       ³
-      *    ³		02 : CREDITORS				       ³
-      *    ³		03 : BAD DEBTS				       ³
-      *    ³		04 : SALES				       ³
-      *    ³		05 : SALES (RETURNS)			       ³
-      *    ³		06 : PURCHASES				       ³
-      *    ³		07 : PURCHASES (RETURNS)		       ³
-      *    ³		08 : COST-OF-SALES			       ³
-      *    ³		09 : COST-OF-SALES (RETURNS)		       ³
-      *    ³		10 : OUTPUT VAT (DEBTORS)		       ³
-      *    ³		11 : INPUT VAT (DEBTORS)		       ³
-      *    ³		12 : OUTPUT VAT (CREDITORS)		       ³
-      *    ³		13 : INPUT VAT (CREDITORS)		       ³
-      *    ³		14 : DEBTOR TRANSACTIONS		       ³
-      *    ³							       ³
-      *    ³	TRANSACTION CODE / SALES LEDGER NO - WX-LEDG	       ³
-      *    ³							       ³
-      *    ³ OTHER DETAILS ARE: 				       ³
-      *    ³							       ³
-      *    ³	ACCOUNT NUMBER -  WX-AC				       ³
-      *    ³							       ³
-      *    ³	NARRATIVE - WX-NAR				       ³
-      *    ³							       ³
-      *    ³	TRANSACTION VALUE - WX-VAL			       ³
-      *    ³							       ³
+      *    ³ for posting to the G/L ACCOUNTS.          ³
+      *    ³              ³
+      *    ³ THE KEY FOR EACH OF THE RECORDS IS:         ³
+      *    ³              ³
+      *    ³ RUN DATE (CCYYMMDD)  - WX-YMD          ³
+      *    ³              ³
+      *    ³ TYPE - WX-TYPE            ³
+      *    ³  01 : DEBTORS           ³
+      *    ³  02 : CREDITORS           ³
+      *    ³  03 : BAD DEBTS           ³
+      *    ³  04 : SALES           ³
+      *    ³  05 : SALES (RETURNS)          ³
+      *    ³  06 : PURCHASES           ³
+      *    ³  07 : PURCHASES (RETURNS)         ³
+      *    ³  08 : COST-OF-SALES          ³
+      *    ³  09 : COST-OF-SALES (RETURNS)         ³
+      *    ³  10 : OUTPUT VAT (DEBTORS)         ³
+      *    ³  11 : INPUT VAT (DEBTORS)         ³
+      *    ³  12 : OUTPUT VAT (CREDITORS)         ³
+      *    ³  13 : INPUT VAT (CREDITORS)         ³
+      *    ³  14 : DEBTOR TRANSACTIONS         ³
+      *    ³              ³
+      *    ³ TRANSACTION CODE / SALES LEDGER NO - WX-LEDG        ³
+      *    ³              ³
+      *    ³ OTHER DETAILS ARE:            ³
+      *    ³              ³
+      *    ³ ACCOUNT NUMBER -  WX-AC           ³
+      *    ³              ³
+      *    ³ NARRATIVE - WX-NAR           ³
+      *    ³              ³
+      *    ³ TRANSACTION VALUE - WX-VAL          ³
+      *    ³              ³
       *    ³ The routine will first read the file using the DETAILS    ³
       *    ³ ABOVE as the KEY. If the record exists the routine WILL   ³
       *    ³ UPDATE the record. If no record exists a NEW record WILL  ³
-      *    ³ be CREATED.					       ³
+      *    ³ be CREATED.            ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY LEDTRF.UPD.
 
       /
-009550 DA000		       SECTION 50.
-009560 DA00.
+       DA000         SECTION 50.
+       DA00.
       *
       *    ****    S U P E R V I S O R   P A S S W O R D S
       *
-018520       MOVE 5              TO WS-PARKEY.
-018530       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-018540       MOVE PAR-PW         TO W85-PASS.
-009600	     ADD 150 WS-DRAW	 GIVING WS-PARKEY.
-009610       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-009620	     MOVE PAR-RECORD151  TO W85-RECORD151.
-	     MOVE LS0-SP	 TO  W10-SMAN.
+             MOVE 5              TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             MOVE PAR-PW         TO W85-PASS.
+            ADD 150 WS-DRAW  GIVING WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+            MOVE PAR-RECORD151  TO W85-RECORD151.
+      MOVE LS0-SP  TO  W10-SMAN.
 
-009630 DA05.
-	   IF W85-CUSDISP = "Y"
-	       MOVE W95-COMP	 TO CUS-LINE
-	       WRITE CUS-REC.
-009640	     DISPLAY CLR-SCREEN.
-009650       DISPLAY S07.
-	   IF LS-INSTR = "S"
-	       DISPLAY "PICKING SLIP" AT 0234
-			WITH FOREGROUND-COLOR 7 HIGHLIGHT.
-009660	     MOVE 7		 TO LIN.
-009670       PERFORM DA48 UNTIL LIN > 18.
+       DA05.
+    IF W85-CUSDISP = "Y"
+        MOVE W95-COMP  TO CUS-LINE
+        WRITE CUS-REC.
+            PERFORM ERASE-SCREEN.
+             DISPLAY S07.
+    IF LS-INSTR = "S"
+        DISPLAY "PICKING SLIP" AT 0234
+   WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+            MOVE 7   TO LIN.
+             PERFORM DA48 UNTIL LIN > 18.
       *    *************************************************************
-      *    ****   I N I T I A L I Z E	W O R K   V A R I A B L E S
+      *    ****   I N I T I A L I Z E W O R K   V A R I A B L E S
       *    *************************************************************
-009700	     MOVE ZERO		 TO W90-LDISC W90-BDT
-				    W90-RTVAL W90-BAL
-				    W90-SALES W90-EXCTOT
-				    W90-RTTAX W90-NONTAX
-				    W90-EXCVAL.
-009720	     MOVE 1		 TO WS-FIRST WS-SALPOS WS-LAST.
-009730	     MOVE SPACES	 TO W90-TAX W90-CLNT-VAT.
-009740       MOVE SPACES         TO CSH-DATA.
-	     MOVE "N"		 TO WS-NOSELL.
-	     MOVE 1		 TO WS-S9.
+            MOVE ZERO   TO W90-LDISC W90-BDT
+        W90-RTVAL W90-BAL
+        W90-SALES W90-EXCTOT
+        W90-RTTAX W90-NONTAX
+        W90-EXCVAL.
+            MOVE 1   TO WS-FIRST WS-SALPOS WS-LAST.
+            MOVE SPACES  TO W90-TAX W90-CLNT-VAT.
+             MOVE SPACES         TO CSH-DATA.
+      MOVE "N"   TO WS-NOSELL.
+      MOVE 1   TO WS-S9.
 
        DA05A.
-018660	     MOVE ZERO		 TO W90-VAT(WS-S9) W90-TAXVAL(WS-S9).
-	   IF WS-S9 < 12
-	       ADD 1		 TO WS-S9
-	       GO TO DA05A.
-	   IF NOT (W10-SMAN = ZERO)
-009760	       DISPLAY W10-SMAN AT 0314
-009770		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			    BACKGROUND-COLOR 5
-	       GO TO DA08.
+            MOVE ZERO   TO W90-VAT(WS-S9) W90-TAXVAL(WS-S9).
+    IF WS-S9 < 12
+        ADD 1   TO WS-S9
+        GO TO DA05A.
+    IF NOT (W10-SMAN = ZERO)
+              DISPLAY W10-SMAN AT 0314
+               WITH FOREGROUND-COLOR 7 HIGHLIGHT
+       BACKGROUND-COLOR 5
+        GO TO DA08.
 
-009750 DA06.
-	   IF NOT (LS-INSTR = "S")
-	     DISPLAY "F1" AT 2502
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Help,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F5" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=P/S,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F6" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-011020		     "=Prompt,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F7" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-011020		     "=Print,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "F8" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-011020		     "=Refund,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-011030		     "F9" WITH BACKGROUND-COLOR 3
-			       FOREGROUND-COLOR 6 HIGHLIGHT
-011040		     "=Petty Cash,"
-		     "F10" WITH BACKGROUND-COLOR 3
-				FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Acnt,"
-		      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		     "Esc" WITH BACKGROUND-COLOR 3
-				FOREGROUND-COLOR 6 HIGHLIGHT
-		     "ape" WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
-	   ELSE
-	       DISPLAY "F1" AT 2502
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-		       "=Help,"
-			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		       "F6" WITH BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-011020		       "=Prompt,"
-			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-		       "Esc" WITH BACKGROUND-COLOR 3
-				  FOREGROUND-COLOR 6 HIGHLIGHT
-		       "ape" WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3.
-009760	     ACCEPT W10-SMAN AT 0314
-009770		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "E"	 TO LS-INSTR
-		     GO TO DA150
-		 WHEN F1-KEY
-		     PERFORM HELP-ROUTINE
-		     GO TO DA06
-		 WHEN F5-KEY
-		     PERFORM DE000
-		     IF WS-ERROR = 9
-			 GO TO DA00
-		     ELSE
-			 PERFORM DA200A
-			 GO TO DA50
-		     END-IF
-		 WHEN F6-KEY
-		     PERFORM DA300P
-		     GO TO DA06
-		 WHEN F7-KEY
-		     PERFORM EA000
-		     GO TO DA06
-		 WHEN F8-KEY
-		     IF NOT (LS-INSTR = "S")
-			 MOVE "R"
-				 TO LS-INSTR
-			 GO TO DA150
-		     END-IF
-		 WHEN F9-KEY
-		     IF NOT (LS-INSTR = "S")
-			 MOVE "P"
-				 TO LS-INSTR
-			 GO TO DA150
-		     END-IF
-		 WHEN F10-KEY
-		     IF NOT (LS-INSTR = "S")
-			 MOVE "A"
-				 TO LS-INSTR
-			 GO TO DA150
-		     END-IF
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DA06
-	       END-EVALUATE.
-	   IF W10-SMAN = 99
-	       MOVE "E" 	 TO LS-INSTR
-	       GO TO DA150.
-009780     IF W10-SMAN > 50
-009790         GO TO DA06.
-	     PERFORM CLEAR-L50.
-009800     IF W10-SMAN = ZERO
-009810	       GO TO DA10.
+       DA06.
+    IF NOT (LS-INSTR = "S")
+      DISPLAY "F1" AT 2502
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Help,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+       "F5" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+       "=P/S,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+       "F6" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+             "=Prompt,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+       "F7" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+             "=Print,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+       "F8" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+             "=Refund,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+             "F9" WITH BACKGROUND-COLOR 3
+          FOREGROUND-COLOR 6 HIGHLIGHT
+             "=Petty Cash,"
+       "F10" WITH BACKGROUND-COLOR 3
+    FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Acnt,"
+        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+       "Esc" WITH BACKGROUND-COLOR 3
+    FOREGROUND-COLOR 6 HIGHLIGHT
+       "ape" WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
+    ELSE
+        DISPLAY "F1" AT 2502
+   WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT
+         "=Help,"
+   WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+         "F6" WITH BACKGROUND-COLOR 3
+     FOREGROUND-COLOR 6 HIGHLIGHT
+               "=Prompt,"
+   WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+         "Esc" WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+         "ape" WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3.
+            ACCEPT W10-SMAN AT 0314
+            WITH FOREGROUND-COLOR 7 HIGHLIGHT
+    BACKGROUND-COLOR 5 UPDATE AUTO.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       MOVE "E"  TO LS-INSTR
+       GO TO DA150
+   WHEN F1-KEY
+       PERFORM HELP-ROUTINE
+       GO TO DA06
+   WHEN F5-KEY
+       PERFORM DE000
+       IF WS-ERROR = 9
+    GO TO DA00
+       ELSE
+    PERFORM DA200A
+    GO TO DA50
+       END-IF
+   WHEN F6-KEY
+       PERFORM DA300P
+       GO TO DA06
+   WHEN F7-KEY
+       PERFORM EA000
+       GO TO DA06
+   WHEN F8-KEY
+       IF NOT (LS-INSTR = "S")
+    MOVE "R"
+     TO LS-INSTR
+    GO TO DA150
+       END-IF
+   WHEN F9-KEY
+       IF NOT (LS-INSTR = "S")
+    MOVE "P"
+     TO LS-INSTR
+    GO TO DA150
+       END-IF
+   WHEN F10-KEY
+       IF NOT (LS-INSTR = "S")
+    MOVE "A"
+     TO LS-INSTR
+    GO TO DA150
+       END-IF
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DA06
+        END-EVALUATE.
+    IF W10-SMAN = 99
+        MOVE "E"   TO LS-INSTR
+        GO TO DA150.
+           IF W10-SMAN > 50
+               GO TO DA06.
+      PERFORM CLEAR-L50.
+           IF W10-SMAN = ZERO
+              GO TO DA10.
 
        DA08.
-009820	     ADD 100 W10-SMAN	 GIVING WS-PARKEY.
-009830       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-009840     IF PAR-SALESMAN = SPACES
-009850         GO TO DA06.
-009860	     DISPLAY PAR-SALESMAN AT 0317
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+            ADD 100 W10-SMAN  GIVING WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+           IF PAR-SALESMAN = SPACES
+               GO TO DA06.
+            DISPLAY PAR-SALESMAN AT 0317
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
 
-009870 DA10.
-009970	     MOVE PAR-SALESMAN	 TO W15-SMAN.
-009980	     PERFORM CLEAR-L50.
+       DA10.
+            MOVE PAR-SALESMAN  TO W15-SMAN.
+            PERFORM CLEAR-L50.
 
        DA10A.
-	     MOVE "1"		 TO WS-OPTION.
-	   IF WS-PLU-D = "S"
-	   IF WS-PROMPT = "Y"
-	       MOVE SPACES	 TO WS-ERR-MES
-	       STRING "'1'=" DELIMITED SIZE
-		      WS-RT-HD DELIMITED "  "
-		      "," DELIMITED SIZE
-		      "'2'=" DELIMITED SIZE
-		      WS-CS-HD DELIMITED "  "
-		      "," DELIMITED SIZE
-		      "'3'=" DELIMITED SIZE
-		      WS-WS-HD DELIMITED "  "
-		      " [1]" DELIMITED SIZE
-		      INTO WS-ERR-MES
-	       PERFORM OPT-MESSAGE TEST AFTER
-		       UNTIL WS-OPTION = "1" OR "2" OR "3".
-	     MOVE WS-OPTION	 TO WS-PRC.
-	   IF WS-PRC = "3"
-018260	       DISPLAY "Enter password" AT 2551
-018270			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-	       MOVE SPACES	 TO W40-CSHPASS
-018280	       ACCEPT W40-CSHPASS AT 2567
-		      WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
-018290			   AUTO NO-ECHO
-018300	       MOVE 6		 TO WS-LENGTH
-	       CALL "CBL_TOUPPER" USING W40-CSHPASS
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
-018360	       MOVE 1		 TO WS-LENGTH
-	       IF NOT (W40-CSHPASS = W85-SUPER (1) OR
-		       W85-SUPER (9) OR "SELOHW")
-		   GO TO DA10A.
-009980	     PERFORM CLEAR-L50.
-010280	     MOVE 7		 TO LIN.
-010290	     MOVE ZERO		 TO W90-DB.
+      MOVE "1"   TO WS-OPTION.
+    IF WS-PLU-D = "S"
+    IF WS-PROMPT = "Y"
+        MOVE SPACES  TO WS-ERR-MES
+        STRING "'1'=" DELIMITED SIZE
+        WS-RT-HD DELIMITED "  "
+        "," DELIMITED SIZE
+        "'2'=" DELIMITED SIZE
+        WS-CS-HD DELIMITED "  "
+        "," DELIMITED SIZE
+        "'3'=" DELIMITED SIZE
+        WS-WS-HD DELIMITED "  "
+        " [1]" DELIMITED SIZE
+        INTO WS-ERR-MES
+        PERFORM OPT-MESSAGE TEST AFTER
+         UNTIL WS-OPTION = "1" OR "2" OR "3".
+      MOVE WS-OPTION  TO WS-PRC.
+    IF WS-PRC = "3"
+              DISPLAY "Enter password" AT 2551
+         WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT
+        MOVE SPACES  TO W40-CSHPASS
+              ACCEPT W40-CSHPASS AT 2567
+        WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
+            AUTO NO-ECHO
+              MOVE 6   TO WS-LENGTH
+        CALL "CBL_TOUPPER" USING W40-CSHPASS
+      BY VALUE WS-LENGTH
+      RETURNING WS-STATUS
+              MOVE 1   TO WS-LENGTH
+        IF NOT (W40-CSHPASS = W85-SUPER (1) OR
+         W85-SUPER (9) OR "SELOHW")
+     GO TO DA10A.
+            PERFORM CLEAR-L50.
+            MOVE 7   TO LIN.
+            MOVE ZERO   TO W90-DB.
 
        DA12.
-	     MOVE ZERO		 TO PLU-SUB0 PLU-SUB1 PLU-SUB2
-				    PLU-SUB3 PLU-SUB4 PLU-SUB5
-				    PLU-SUB6 PLU-SUB7 PLU-SUB8
-				    PLU-SUB9.
-	     MOVE SPACES	 TO PLU-TYPE PLU-VALUE.
-	     MOVE 0		 TO WS-SM.
+      MOVE ZERO   TO PLU-SUB0 PLU-SUB1 PLU-SUB2
+        PLU-SUB3 PLU-SUB4 PLU-SUB5
+        PLU-SUB6 PLU-SUB7 PLU-SUB8
+        PLU-SUB9.
+      MOVE SPACES  TO PLU-TYPE PLU-VALUE.
+      MOVE 0   TO WS-SM.
       *    *************************************************************
-      *    ****   I N I T I A L I Z E	W O R K   V A R I A B L E S
+      *    ****   I N I T I A L I Z E W O R K   V A R I A B L E S
       *    *************************************************************
-010300 DA15.
-010310	     MOVE SPACES	 TO W10-DESC W10-EXT-ITEM W10-ACODE.
-	     MOVE ZERO		 TO NUMB-LENGTH
-				    NUMB-DISPLAY
-				    NUMB-WHOLE
-				    W10-ACDEN.
-	   IF W10-STCK = "N"
-	       MOVE ZERO	 TO W10-I14.
-010320	     MOVE ZERO		 TO W10-SELL WS-SUPER.
-	     MOVE 1		 TO W10-QUANT WS-P1 W10-QNT.
+       DA15.
+            MOVE SPACES  TO W10-DESC W10-EXT-ITEM W10-ACODE.
+      MOVE ZERO   TO NUMB-LENGTH
+        NUMB-DISPLAY
+        NUMB-WHOLE
+        W10-ACDEN.
+    IF W10-STCK = "N"
+        MOVE ZERO  TO W10-I14.
+            MOVE ZERO   TO W10-SELL WS-SUPER.
+      MOVE 1   TO W10-QUANT WS-P1 W10-QNT.
 
        DA15A.
-	     DISPLAY S08.
-	   IF WS-SM = 0
-	       GO TO DA16
-	   ELSE
-	       MOVE 1		 TO WS-S1.
-	     MOVE 2030		 TO CPOS.
+      DISPLAY S08.
+    IF WS-SM = 0
+        GO TO DA16
+    ELSE
+        MOVE 1   TO WS-S1.
+      MOVE 2030   TO CPOS.
 
        DA15B.
-	   IF WS-S1 = WS-SM
-	       DISPLAY W90-MENU (WS-S1) AT CPOS
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			    BACKGROUND-COLOR 0
-	   ELSE
-	       DISPLAY W90-MENU (WS-S1) AT CPOS
-		       WITH BACKGROUND-COLOR 0.
-	    IF WS-S1 < WS-SM
-		ADD 1		 TO WS-S1
-		IF CCOL < 50
-		    ADD 15	 TO CCOL
-		ELSE
-		    ADD 1	 TO CLIN
-		    MOVE 30	 TO CCOL
-		END-IF
-		GO TO DA15B.
+    IF WS-S1 = WS-SM
+        DISPLAY W90-MENU (WS-S1) AT CPOS
+         WITH FOREGROUND-COLOR 7 HIGHLIGHT
+       BACKGROUND-COLOR 0
+    ELSE
+        DISPLAY W90-MENU (WS-S1) AT CPOS
+         WITH BACKGROUND-COLOR 0.
+     IF WS-S1 < WS-SM
+  ADD 1   TO WS-S1
+  IF CCOL < 50
+      ADD 15  TO CCOL
+  ELSE
+      ADD 1  TO CLIN
+      MOVE 30  TO CCOL
+  END-IF
+  GO TO DA15B.
 
        DA16.
-	   IF WS-PLU-D = "S"
-	       GO TO DA30.
-	     DISPLAY "Press " AT 2503
-		      WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
-		     "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				BACKGROUND-COLOR 3
-		     "ape key for Previous KB Menu,"
-		      WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
-		     "Home" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 3
-		     " to start at first KB Menu"
-		      WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3.
+    IF WS-PLU-D = "S"
+        GO TO DA30.
+      DISPLAY "Press " AT 2503
+        WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
+       "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+    BACKGROUND-COLOR 3
+       "ape key for Previous KB Menu,"
+        WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
+       "Home" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+     BACKGROUND-COLOR 3
+       " to start at first KB Menu"
+        WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3.
 
        DA18.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     IF WS-LAST = 1
-			 MOVE ZERO
-				 TO W10-SMAN
-			 GO TO DA28
-		     ELSE
-021050			 SUBTRACT 1
-				 FROM WS-LAST
-021060			 GO TO DA50B
-		 WHEN F1-KEY
-		 WHEN F2-KEY
-		 WHEN F3-KEY
-		 WHEN F4-KEY
-		 WHEN F5-KEY
-		 WHEN F6-KEY
-		 WHEN F7-KEY
-		 WHEN F8-KEY
-		 WHEN F9-KEY
-		 WHEN F10-KEY
-		 WHEN F11-KEY
-		 WHEN F12-KEY
-		 WHEN SF1-KEY
-		 WHEN SF2-KEY
-		 WHEN SF3-KEY
-		 WHEN SF4-KEY
-		 WHEN SF5-KEY
-		 WHEN SF6-KEY
-		 WHEN SF7-KEY
-		 WHEN SF8-KEY
-		 WHEN SF9-KEY
-		 WHEN SF10-KEY
-		 WHEN SF11-KEY
-		 WHEN SF12-KEY
-		 WHEN CF1-KEY
-		 WHEN CF2-KEY
-		 WHEN CF3-KEY
-		 WHEN CF4-KEY
-		 WHEN CF5-KEY
-		 WHEN CF6-KEY
-		 WHEN CF7-KEY
-		 WHEN CF8-KEY
-		 WHEN CF9-KEY
-		 WHEN CF10-KEY
-		 WHEN CF11-KEY
-		 WHEN CF12-KEY
-		 WHEN AF1-KEY
-		 WHEN AF2-KEY
-		 WHEN AF3-KEY
-		 WHEN AF4-KEY
-		 WHEN AF5-KEY
-		 WHEN AF6-KEY
-		 WHEN AF7-KEY
-		 WHEN AF8-KEY
-		 WHEN AF9-KEY
-		 WHEN AF10-KEY
-		 WHEN AF11-KEY
-		 WHEN AF12-KEY
-		 WHEN ALT-1
-		 WHEN ALT-2
-		 WHEN ALT-3
-		 WHEN ALT-4
-		 WHEN ALT-5
-		 WHEN ALT-6
-		 WHEN ALT-7
-		 WHEN ALT-8
-		 WHEN ALT-9
-		 WHEN ALT-0
-		 WHEN ALT-HYPH
-		 WHEN ALT-EQUAL
-		 WHEN ALT-A
-		 WHEN ALT-B
-		 WHEN ALT-C
-		 WHEN ALT-D
-		 WHEN ALT-E
-		 WHEN ALT-F
-		 WHEN ALT-G
-		 WHEN ALT-H
-		 WHEN ALT-I
-		 WHEN ALT-J
-		 WHEN ALT-K
-		 WHEN ALT-L
-		 WHEN ALT-M
-		 WHEN ALT-N
-		 WHEN ALT-O
-		 WHEN ALT-P
-		 WHEN ALT-Q
-		 WHEN ALT-R
-		 WHEN ALT-S
-		 WHEN ALT-T
-		 WHEN ALT-U
-		 WHEN ALT-V
-		 WHEN ALT-W
-		 WHEN ALT-X
-		 WHEN ALT-Y
-		 WHEN ALT-Z
-		     GO TO DA19
-		 WHEN OTHER
-		     GO TO DA29
-	       END-EVALUATE
-	   ELSE
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN HOME-KEY
-		     GO TO DA12
-		 WHEN LEFT-KEY
-		 WHEN RIGHT-KEY
-		 WHEN UP-KEY
-		 WHEN DOWN-KEY
-		 WHEN HOME-KEY
-		 WHEN END-KEY
-		 WHEN DEL-KEY
-		 WHEN INS-KEY
-		     GO TO DA19
-		 WHEN BACK-SPACE
-		     PERFORM DC100
-		     GO TO DA18
-		 WHEN ENTER-KEY
-		 WHEN CR-KEY
-		     IF W10-ACDEN = ZERO
-			 GO TO DA18
-		     END-IF
-021010		     DISPLAY W10-ITEM AT LINE LIN COLUMN 2
-			     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				  BACKGROUND-COLOR 0
-		     GO TO DA31
-		 WHEN OTHER
-		     GO TO DA29
-	       END-EVALUATE
-	   ELSE
-	   IF DATA-8BIT
-	       CALL "CBL_TOUPPER" USING KEY-CODE-1X
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       IF WS-OPTION NUMERIC
-		   PERFORM DC000
-		   GO TO DA18
-	       END-IF
-	   ELSE
-	       GO TO DA29.
+      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       IF WS-LAST = 1
+    MOVE ZERO
+     TO W10-SMAN
+    GO TO DA28
+       ELSE
+          SUBTRACT 1
+     FROM WS-LAST
+          GO TO DA50B
+   WHEN F1-KEY
+   WHEN F2-KEY
+   WHEN F3-KEY
+   WHEN F4-KEY
+   WHEN F5-KEY
+   WHEN F6-KEY
+   WHEN F7-KEY
+   WHEN F8-KEY
+   WHEN F9-KEY
+   WHEN F10-KEY
+   WHEN F11-KEY
+   WHEN F12-KEY
+   WHEN SF1-KEY
+   WHEN SF2-KEY
+   WHEN SF3-KEY
+   WHEN SF4-KEY
+   WHEN SF5-KEY
+   WHEN SF6-KEY
+   WHEN SF7-KEY
+   WHEN SF8-KEY
+   WHEN SF9-KEY
+   WHEN SF10-KEY
+   WHEN SF11-KEY
+   WHEN SF12-KEY
+   WHEN CF1-KEY
+   WHEN CF2-KEY
+   WHEN CF3-KEY
+   WHEN CF4-KEY
+   WHEN CF5-KEY
+   WHEN CF6-KEY
+   WHEN CF7-KEY
+   WHEN CF8-KEY
+   WHEN CF9-KEY
+   WHEN CF10-KEY
+   WHEN CF11-KEY
+   WHEN CF12-KEY
+   WHEN AF1-KEY
+   WHEN AF2-KEY
+   WHEN AF3-KEY
+   WHEN AF4-KEY
+   WHEN AF5-KEY
+   WHEN AF6-KEY
+   WHEN AF7-KEY
+   WHEN AF8-KEY
+   WHEN AF9-KEY
+   WHEN AF10-KEY
+   WHEN AF11-KEY
+   WHEN AF12-KEY
+   WHEN ALT-1
+   WHEN ALT-2
+   WHEN ALT-3
+   WHEN ALT-4
+   WHEN ALT-5
+   WHEN ALT-6
+   WHEN ALT-7
+   WHEN ALT-8
+   WHEN ALT-9
+   WHEN ALT-0
+   WHEN ALT-HYPH
+   WHEN ALT-EQUAL
+   WHEN ALT-A
+   WHEN ALT-B
+   WHEN ALT-C
+   WHEN ALT-D
+   WHEN ALT-E
+   WHEN ALT-F
+   WHEN ALT-G
+   WHEN ALT-H
+   WHEN ALT-I
+   WHEN ALT-J
+   WHEN ALT-K
+   WHEN ALT-L
+   WHEN ALT-M
+   WHEN ALT-N
+   WHEN ALT-O
+   WHEN ALT-P
+   WHEN ALT-Q
+   WHEN ALT-R
+   WHEN ALT-S
+   WHEN ALT-T
+   WHEN ALT-U
+   WHEN ALT-V
+   WHEN ALT-W
+   WHEN ALT-X
+   WHEN ALT-Y
+   WHEN ALT-Z
+       GO TO DA19
+   WHEN OTHER
+       GO TO DA29
+        END-EVALUATE
+    ELSE
+    IF ADIS-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN HOME-KEY
+       GO TO DA12
+   WHEN LEFT-KEY
+   WHEN RIGHT-KEY
+   WHEN UP-KEY
+   WHEN DOWN-KEY
+   WHEN HOME-KEY
+   WHEN END-KEY
+   WHEN DEL-KEY
+   WHEN INS-KEY
+       GO TO DA19
+   WHEN BACK-SPACE
+       PERFORM DC100
+       GO TO DA18
+   WHEN ENTER-KEY
+   WHEN CR-KEY
+       IF W10-ACDEN = ZERO
+    GO TO DA18
+       END-IF
+             DISPLAY W10-ITEM AT LINE LIN COLUMN 2
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 0
+       GO TO DA31
+   WHEN OTHER
+       GO TO DA29
+        END-EVALUATE
+    ELSE
+    IF DATA-8BIT
+        CALL "CBL_TOUPPER" USING KEY-CODE-1X
+      BY VALUE WS-LENGTH
+      RETURNING WS-STATUS
+        MOVE KEY-CODE-1X  TO WS-OPTION
+        IF WS-OPTION NUMERIC
+     PERFORM DC000
+     GO TO DA18
+        END-IF
+    ELSE
+        GO TO DA29.
 
        DA19.
-	     MOVE KEY-TYPE	 TO PLU-ACT.
-	     MOVE KEY-CODE-1X	 TO PLU-CODE.
-	     MOVE SPACES	 TO PLU-TYPE PLU-VALUE.
-	     PERFORM READ-POSPLU THRU READ-POSPLU-EXIT.
-	   IF WS-F-ERROR = 49
-	       MOVE "Not programmed"
-				 TO WS-ERR-STRING
-025040	       PERFORM ERROR-MESSAGE
-	       GO TO DA18.
-	   IF PLU-TYPE = "M"
-	       ADD 1		 TO WS-SM
-	       MOVE PLU-HEX	 TO PLU-MENU-LEVEL (WS-SM)
-	       MOVE PLU-VALUE	 TO W90-MENU (WS-SM)
-	       GO TO DA15.
-	   IF PLU-TYPE = "I"
-	       MOVE PLU-VALUE	 TO W10-EXT-ITEM
-021010	       DISPLAY W10-ITEM AT LINE LIN COLUMN 2
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			    BACKGROUND-COLOR 0
-	       GO TO DA31.
-	   IF PLU-TYPE = "P"
-	       CALL X"E5"
-	       GO TO DA18.
+      MOVE KEY-TYPE  TO PLU-ACT.
+      MOVE KEY-CODE-1X  TO PLU-CODE.
+      MOVE SPACES  TO PLU-TYPE PLU-VALUE.
+      PERFORM READ-POSPLU THRU READ-POSPLU-EXIT.
+    IF WS-F-ERROR = 49
+        MOVE "Not programmed"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+        GO TO DA18.
+    IF PLU-TYPE = "M"
+        ADD 1   TO WS-SM
+        MOVE PLU-HEX  TO PLU-MENU-LEVEL (WS-SM)
+        MOVE PLU-VALUE  TO W90-MENU (WS-SM)
+        GO TO DA15.
+    IF PLU-TYPE = "I"
+        MOVE PLU-VALUE  TO W10-EXT-ITEM
+              DISPLAY W10-ITEM AT LINE LIN COLUMN 2
+         WITH FOREGROUND-COLOR 7 HIGHLIGHT
+       BACKGROUND-COLOR 0
+        GO TO DA31.
+    IF PLU-TYPE = "P"
+        CALL X"E5"
+        GO TO DA18.
 
       *      I N S E R T   F U N C T I O N   C O D E
 
-	   IF PLU-VALUE = "TOTAL"
-	       SUBTRACT 1	 FROM WS-LAST
-	       GO TO DA50B.
-	   IF PLU-VALUE = "SCAN/KEY"
-	       GO TO DA30.
-	   IF PLU-VALUE = "LOOKUP"
-	       GO TO DA30.
-	   IF PLU-VALUE = "CANCEL"
-	       GO TO DA05.
-	   IF PLU-VALUE = "VOID"
-	       IF WS-LAST > 1
-		   PERFORM DA20
-017730		   DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-			   WITH FOREGROUND-COLOR 3
-	       END-IF
-	       GO TO DA15.
-	   IF PLU-VALUE = "X" OR "QUANTITY"
-	       IF WS-LAST > 1
-		   PERFORM DA20
-		   IF W85-USE-3 = "Y"
-021370		       ACCEPT S26-WEIGHT AT LINE LIN
-		   ELSE
-021370		       ACCEPT S26-QNT AT LINE LIN
-		   END-IF
-		   IF (W10-QUANT = ZERO)
-		       MOVE 1	 TO W10-QUANT W10-QNT WS-P1
-		   ELSE
-		       MOVE 1	 TO WS-P1
-		       MOVE W10-QUANT
-				 TO W10-QNT
-		   END-IF
-		   GO TO DA40
-	       END-IF
-	       GO TO DA15.
-	   IF PLU-VALUE = "PRICE"
-	       IF WS-LAST > 1
-		   PERFORM DA20
-		   GO TO DA35-AB
-	       END-IF
-	       GO TO DA15.
-	   IF PLU-VALUE = "REFUND"
-	       IF WS-LAST = 1
-		   MOVE "R"	 TO LS-INSTR
-		   GO TO DA150.
-	   IF PLU-VALUE = "STAFF"
-	       IF WS-LAST = 1
-		   MOVE "S"	 TO LS-INSTR
-		   GO TO DA150.
-	   IF PLU-VALUE = "CASHUP"
-	       IF WS-LAST = 1
-		   MOVE "C"	 TO LS-INSTR
-		   GO TO DA150.
-	   IF PLU-VALUE = "PRINT"
-	       IF WS-LAST = 1
-		   PERFORM EA000.
-	   IF PLU-VALUE = "ACCOUNT"
-	       IF WS-LAST = 1
-		   MOVE "A"	 TO LS-INSTR
-		   GO TO DA150.
-	   IF PLU-VALUE = "PETTY"
-	       IF WS-LAST = 1
-		   MOVE "P"	 TO LS-INSTR
-		   GO TO DA150.
-	     GO TO DA15.
+    IF PLU-VALUE = "TOTAL"
+        SUBTRACT 1  FROM WS-LAST
+        GO TO DA50B.
+    IF PLU-VALUE = "SCAN/KEY"
+        GO TO DA30.
+    IF PLU-VALUE = "LOOKUP"
+        GO TO DA30.
+    IF PLU-VALUE = "CANCEL"
+        GO TO DA05.
+    IF PLU-VALUE = "VOID"
+        IF WS-LAST > 1
+     PERFORM DA20
+           DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+      WITH FOREGROUND-COLOR 3
+        END-IF
+        GO TO DA15.
+    IF PLU-VALUE = "X" OR "QUANTITY"
+        IF WS-LAST > 1
+     PERFORM DA20
+     IF W85-USE-3 = "Y"
+               ACCEPT S26-WEIGHT AT LINE LIN
+     ELSE
+               ACCEPT S26-QNT AT LINE LIN
+     END-IF
+     IF (W10-QUANT = ZERO)
+         MOVE 1  TO W10-QUANT W10-QNT WS-P1
+     ELSE
+         MOVE 1  TO WS-P1
+         MOVE W10-QUANT
+     TO W10-QNT
+     END-IF
+     GO TO DA40
+        END-IF
+        GO TO DA15.
+    IF PLU-VALUE = "PRICE"
+        IF WS-LAST > 1
+     PERFORM DA20
+     GO TO DA35-AB
+        END-IF
+        GO TO DA15.
+    IF PLU-VALUE = "REFUND"
+        IF WS-LAST = 1
+     MOVE "R"  TO LS-INSTR
+     GO TO DA150.
+    IF PLU-VALUE = "STAFF"
+        IF WS-LAST = 1
+     MOVE "S"  TO LS-INSTR
+     GO TO DA150.
+    IF PLU-VALUE = "CASHUP"
+        IF WS-LAST = 1
+     MOVE "C"  TO LS-INSTR
+     GO TO DA150.
+    IF PLU-VALUE = "PRINT"
+        IF WS-LAST = 1
+     PERFORM EA000.
+    IF PLU-VALUE = "ACCOUNT"
+        IF WS-LAST = 1
+     MOVE "A"  TO LS-INSTR
+     GO TO DA150.
+    IF PLU-VALUE = "PETTY"
+        IF WS-LAST = 1
+     MOVE "P"  TO LS-INSTR
+     GO TO DA150.
+      GO TO DA15.
 
        DA20.
-	     SUBTRACT 1		 FROM WS-LAST LIN.
-031220	     MOVE WS-LAST	 TO WS-SALKEY.
-031230	     PERFORM READ-SALE THRU READ-SALE-EXIT.
-031260	     MOVE SAL-EXT-ITEM	 TO W10-EXT-ITEM STK-CODE.
-031270	     PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y")
-031280	       MOVE SAL-WEIGHT	 TO W10-QUANT
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QUANT.
-	     MOVE SAL-PACK	 TO WS-P1.
-	     MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
-				 GIVING W10-QNT.
-031290	     MOVE SAL-COST	 TO W10-COST.
-031300	     MOVE SAL-SELL	 TO W10-SELL.
-031310	     MOVE SAL-DISC	 TO W90-CDISC.
-031320	     MOVE SAL-DSC	 TO WS-DISC.
-031330	     MOVE SAL-VAL	 TO W25-VALUE.
+      SUBTRACT 1   FROM WS-LAST LIN.
+            MOVE WS-LAST  TO WS-SALKEY.
+            PERFORM READ-SALE THRU READ-SALE-EXIT.
+            MOVE SAL-EXT-ITEM  TO W10-EXT-ITEM STK-CODE.
+            PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y")
+              MOVE SAL-WEIGHT  TO W10-QUANT
+    ELSE
+              MOVE SAL-QNT  TO W10-QUANT.
+      MOVE SAL-PACK  TO WS-P1.
+      MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
+     GIVING W10-QNT.
+            MOVE SAL-COST  TO W10-COST.
+            MOVE SAL-SELL  TO W10-SELL.
+            MOVE SAL-DISC  TO W90-CDISC.
+            MOVE SAL-DSC  TO WS-DISC.
+            MOVE SAL-VAL  TO W25-VALUE.
       *
       *    ****    R E D U C E   T O T A L S
       *
-031340	     SUBTRACT W25-VALUE  FROM W90-DB.
-031350	     SUBTRACT W90-CDISC  FROM W90-LDISC.
-031360	     SUBTRACT SAL-NONTAX FROM W90-NONTAX.
-	   IF SAL-VAT-SUB > ZERO
-036780	       SUBTRACT SAL-TAXVAL FROM W90-TAXVAL(SAL-VAT-SUB).
-019830	   IF (STK-IND < 2) OR (STK-IND = 3)
-031390	       COMPUTE W90-BAL = W90-BAL - (W10-COST * W10-QNT)
-	   END-IF.
-031440	     PERFORM DA45B THRU DA45-AA.
+            SUBTRACT W25-VALUE  FROM W90-DB.
+            SUBTRACT W90-CDISC  FROM W90-LDISC.
+            SUBTRACT SAL-NONTAX FROM W90-NONTAX.
+    IF SAL-VAT-SUB > ZERO
+              SUBTRACT SAL-TAXVAL FROM W90-TAXVAL(SAL-VAT-SUB).
+          IF (STK-IND < 2) OR (STK-IND = 3)
+              COMPUTE W90-BAL = W90-BAL - (W10-COST * W10-QNT)
+    END-IF.
+            PERFORM DA45B THRU DA45-AA.
 
        DA28.
-	   IF WS-SM = ZERO
-017730	       DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-		       WITH FOREGROUND-COLOR 3
-	       MOVE SPACES	 TO W10-EXT-ITEM
-	       SUBTRACT 1	 FROM WS-LAST
-	       MOVE ZERO	 TO W10-SMAN
-	       GO TO DA49.
-	     MOVE SPACES	 TO W90-MENU (WS-SM).
-	     MOVE ZERO		 TO PLU-MENU-LEVEL (WS-SM).
-	     SUBTRACT 1 	 FROM WS-SM.
-	     GO TO DA15.
+    IF WS-SM = ZERO
+              DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+         WITH FOREGROUND-COLOR 3
+        MOVE SPACES  TO W10-EXT-ITEM
+        SUBTRACT 1  FROM WS-LAST
+        MOVE ZERO  TO W10-SMAN
+        GO TO DA49.
+      MOVE SPACES  TO W90-MENU (WS-SM).
+      MOVE ZERO   TO PLU-MENU-LEVEL (WS-SM).
+      SUBTRACT 1   FROM WS-SM.
+      GO TO DA15.
 
        DA29.
-	     MOVE "Not a programmable key"
-				 TO WS-ERR-STRING.
-003260	     PERFORM ERROR-MESSAGE.
-	     GO TO DA15.
+      MOVE "Not a programmable key"
+     TO WS-ERR-STRING.
+            PERFORM ERROR-MESSAGE.
+      GO TO DA15.
 
-010330 DA30.
-	     DISPLAY "ÑÍÍÍÍÍÍÍÍÑ" AT 0650
-		     WITH BACKGROUND-COLOR 1 FOREGROUND-COLOR 3.
+       DA30.
+      DISPLAY "ÑÍÍÍÍÍÍÍÍÑ" AT 0650
+       WITH BACKGROUND-COLOR 1 FOREGROUND-COLOR 3.
       *    *************************************************************
-      *    ****   D I S P L A Y   L O O K U P	O P T I O N S
+      *    ****   D I S P L A Y   L O O K U P O P T I O N S
       *    *************************************************************
-020730	     PERFORM AA300.
+            PERFORM AA300.
       *    *************************************************************
       *    ****    G E T   S T O C K   C O D E
       *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is an 18 character stock/inventory item code being used?  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF WS-EXT-STK = "Y"
-	       ACCEPT S12-EXT AT LINE LIN
-	   ELSE
+    IF WS-EXT-STK = "Y"
+        ACCEPT S12-EXT AT LINE LIN
+    ELSE
       *    *************************************************************
       *        *****   A L P H A - N U M E R I C   C O D E   *****
       *    *************************************************************
-	   IF W10-STCK = "A"
+    IF W10-STCK = "A"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   ACCEPT S12-ITM AT LINE LIN
-	       ELSE
-021070		   ACCEPT S12 AT LINE LIN
-	       END-IF
-	   ELSE
+        IF WS-USE-ITM = "Y"
+     ACCEPT S12-ITM AT LINE LIN
+        ELSE
+           ACCEPT S12 AT LINE LIN
+        END-IF
+    ELSE
       *    *************************************************************
-      *    ****       N U M E R I C   C O D E S	  A P P L Y	    ****
+      *    ****       N U M E R I C   C O D E S   A P P L Y     ****
       *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Check the length of the numeric Stock/Inventory item code ³
-      *    ³ being used and allow the User to key in the code.	       ³
+      *    ³ being used and allow the User to key in the code.        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF W10-SLNGTH = 3
+    IF W10-SLNGTH = 3
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   3 Digit numeric Stock/Inventory item code	       ³
+      *    ³    3 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-3 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 4
+        ACCEPT S12-3 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 4
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   4 Digit numeric Stock/Inventory item code	       ³
+      *    ³    4 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-4 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 5
+        ACCEPT S12-4 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 5
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   5 Digit numeric Stock/Inventory item code	       ³
+      *    ³    5 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-5 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 6
+        ACCEPT S12-5 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 6
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   6 Digit numeric Stock/Inventory item code	       ³
+      *    ³    6 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-6 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 7
+        ACCEPT S12-6 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 7
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   7 Digit numeric Stock/Inventory item code	       ³
+      *    ³    7 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-7 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 8
+        ACCEPT S12-7 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 8
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   8 Digit numeric Stock/Inventory item code	       ³
+      *    ³    8 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-8 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 9
+        ACCEPT S12-8 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 9
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   9 Digit numeric Stock/Inventory item code	       ³
+      *    ³    9 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-9 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 10
+        ACCEPT S12-9 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 10
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   10 Digit numeric Stock/Inventory item code	       ³
+      *    ³    10 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-10 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 11
+        ACCEPT S12-10 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 11
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   11 Digit numeric Stock/Inventory item code	       ³
+      *    ³    11 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-11 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 12
+        ACCEPT S12-11 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 12
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   12 Digit numeric Stock/Inventory item code	       ³
+      *    ³    12 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-12 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 13
+        ACCEPT S12-12 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 13
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   13 Digit numeric Stock/Inventory item code	       ³
+      *    ³    13 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-13 AT LINE LIN
-	   ELSE
-	   IF W10-SLNGTH = 14
+        ACCEPT S12-13 AT LINE LIN
+    ELSE
+    IF W10-SLNGTH = 14
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   14 Digit numeric Stock/Inventory item code	       ³
+      *    ³    14 Digit numeric Stock/Inventory item code        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       ACCEPT S12-14 AT LINE LIN.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-017730		     DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-			     WITH FOREGROUND-COLOR 3
-				  BACKGROUND-COLOR 1
-		     MOVE SPACES TO W10-EXT-ITEM
-		     SUBTRACT 1  FROM WS-LAST
-		     GO TO DA49
-		 WHEN F1-KEY
+        ACCEPT S12-14 AT LINE LIN.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+             DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+        WITH FOREGROUND-COLOR 3
+      BACKGROUND-COLOR 1
+       MOVE SPACES TO W10-EXT-ITEM
+       SUBTRACT 1  FROM WS-LAST
+       GO TO DA49
+   WHEN F1-KEY
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   Apac Help Routine				       ³
+      *    ³    Apac Help Routine           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		     PERFORM HELP-ROUTINE
-		 WHEN F2-KEY
+       PERFORM HELP-ROUTINE
+   WHEN F2-KEY
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   Lookup using 1 or more characters of Item Code      ³
+      *    ³    Lookup using 1 or more characters of Item Code      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		     MOVE "I"	 TO W10-ETYPE
-		 WHEN F3-KEY
+       MOVE "I"  TO W10-ETYPE
+   WHEN F3-KEY
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *	   ³   Lookup using 1 or more characters of Alternate Code     ³
+      *    ³   Lookup using 1 or more characters of Alternate Code     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		     MOVE "A"	 TO W10-ETYPE
-		 WHEN F4-KEY
+       MOVE "A"  TO W10-ETYPE
+   WHEN F4-KEY
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³   Lookup using 1 or more characters of Item Description   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		     MOVE "D"	 TO W10-ETYPE
-		 WHEN F5-KEY
+       MOVE "D"  TO W10-ETYPE
+   WHEN F5-KEY
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   Lookup using 1 or more chars of Item Description 2  ³
+      *    ³    Lookup using 1 or more chars of Item Description 2  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		     MOVE "2"	 TO W10-ETYPE
-		 WHEN F6-KEY
+       MOVE "2"  TO W10-ETYPE
+   WHEN F6-KEY
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *	   ³	   Lookup using 1 or more characters of X-Ref Code     ³
+      *    ³    Lookup using 1 or more characters of X-Ref Code     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		     MOVE "X"	 TO W10-ETYPE
-		 WHEN F7-KEY
-		     PERFORM DA46-W-SALE THRU DA46-WSALE-EXIT
-		     GO TO DA30
-		 WHEN F8-KEY
-		     PERFORM DA300 THRU DA305
-		     GO TO DA30
+       MOVE "X"  TO W10-ETYPE
+   WHEN F7-KEY
+       PERFORM DA46-W-SALE THRU DA46-WSALE-EXIT
+       GO TO DA30
+   WHEN F8-KEY
+       PERFORM DA300 THRU DA305
+       GO TO DA30
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *	   ³  Lookup using any word or part in the Stock Description.  ³
+      *    ³  Lookup using any word or part in the Stock Description.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		 WHEN F9-KEY
-		     MOVE "W"	 TO W10-ETYPE
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DA30
-	       END-EVALUATE
-016560	       PERFORM AA50-LOOKUP
+   WHEN F9-KEY
+       MOVE "W"  TO W10-ETYPE
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DA30
+        END-EVALUATE
+              PERFORM AA50-LOOKUP
       *
       *        ****    L O O K U P   A M E N D S   W 1 0 - Q U A N T
-      * 	       A N D   M U S T	 B E   R E S E T
+      *         A N D   M U S T  B E   R E S E T
       *
-	       MOVE 1		 TO W10-QUANT WS-P1 W10-QNT
+        MOVE 1   TO W10-QUANT WS-P1 W10-QNT
       *    *************************************************************
-      *        *****	      E X T E N D E D	C O D E	       *****
+      *        *****       E X T E N D E D C O D E        *****
       *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is an 18 character stock/inventory item code being used?  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-EXT-STK = "Y"
-		   DISPLAY S12-EXT AT LINE LIN
-	       ELSE
+        IF WS-EXT-STK = "Y"
+     DISPLAY S12-EXT AT LINE LIN
+        ELSE
       *    *************************************************************
       *        *****   A L P H A - N U M E R I C   C O D E   *****
       *    *************************************************************
-	       IF W10-STCK = "A"
+        IF W10-STCK = "A"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   IF WS-USE-ITM = "Y"
-		       DISPLAY S12-ITM AT LINE LIN
-		   ELSE
-021070		       DISPLAY S12 AT LINE LIN
-		   END-IF
-	       END-IF
-021020	       IF W10-EXT-ITEM = SPACES
-021030		   GO TO DA30.
-021040	   IF W10-EXT-ITEM = SPACES
-021050         SUBTRACT 1        FROM WS-LAST
-021060	       GO TO DA49.
+     IF WS-USE-ITM = "Y"
+         DISPLAY S12-ITM AT LINE LIN
+     ELSE
+               DISPLAY S12 AT LINE LIN
+     END-IF
+        END-IF
+              IF W10-EXT-ITEM = SPACES
+           GO TO DA30.
+          IF W10-EXT-ITEM = SPACES
+               SUBTRACT 1        FROM WS-LAST
+              GO TO DA49.
 
        DA31.
-021040	   IF W10-EXT-ITEM = SPACES
-	       GO TO DA49.
-	   IF WS-LAST = 1
-012150	       ACCEPT W10-TIME FROM TIME.
-	     PERFORM CA000.
+          IF W10-EXT-ITEM = SPACES
+        GO TO DA49.
+    IF WS-LAST = 1
+              ACCEPT W10-TIME FROM TIME.
+      PERFORM CA000.
       *    *************************************************************
-      *        *****   E X T E N D E D	 C O D E   *****
+      *        *****   E X T E N D E D  C O D E   *****
       *    *************************************************************
-	   IF WS-EXT-STK = "Y"
-	       DISPLAY S12-EXT AT LINE LIN
-	   ELSE
+    IF WS-EXT-STK = "Y"
+        DISPLAY S12-EXT AT LINE LIN
+    ELSE
       *    *************************************************************
       *        *****   A L P H A - N U M E R I C   C O D E   *****
       *    *************************************************************
-	   IF W10-STCK = "A"
+    IF W10-STCK = "A"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   DISPLAY S12-ITM AT LINE LIN
-	       ELSE
-021070		   DISPLAY S12 AT LINE LIN.
+        IF WS-USE-ITM = "Y"
+     DISPLAY S12-ITM AT LINE LIN
+        ELSE
+           DISPLAY S12 AT LINE LIN.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ If no record available for the code entered, check if the ³
       *    ³ the system is using split bar codes. If not a split bar   ³
       *    ³ code or system does not use split bar codes then call the ³
       *    ³ stock lookup program using the code entered as the start- ³
-      *    ³ ing point for the lookup.				       ³
+      *    ³ ing point for the lookup.           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF WS-F-ERROR = 22
-	       IF WS-SPLIT-BC = "Y"
-		   MOVE W10-EXT-ITEM
-				 TO W10-EXT-CODE2
-		   MOVE W10-IQ	 TO W10-QUANT W10-QNT
-		   MOVE 1	 TO WS-P1
-		   MOVE W10-I6	 TO W10-ENTRY
-		   MOVE W10-ENTRY
-				 TO W10-EXT-ITEM
-		   PERFORM CA000
-		   IF NOT (WS-F-ERROR = 22)
-		       DISPLAY W10-ITEM AT LINE LIN COLUMN 2
-			       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				    BACKGROUND-COLOR 0
-		       GO TO DA32
-		   ELSE
-		       MOVE W10-EXT-CODE2
-				 TO W10-EXT-ITEM
-		   END-IF
-	       END-IF
-	       MOVE "Z" 	 TO W10-ETYPE
-018620	       PERFORM AA50-LOOKUP
+    IF WS-F-ERROR = 22
+        IF WS-SPLIT-BC = "Y"
+     MOVE W10-EXT-ITEM
+     TO W10-EXT-CODE2
+     MOVE W10-IQ  TO W10-QUANT W10-QNT
+     MOVE 1  TO WS-P1
+     MOVE W10-I6  TO W10-ENTRY
+     MOVE W10-ENTRY
+     TO W10-EXT-ITEM
+     PERFORM CA000
+     IF NOT (WS-F-ERROR = 22)
+         DISPLAY W10-ITEM AT LINE LIN COLUMN 2
+          WITH FOREGROUND-COLOR 7 HIGHLIGHT
+        BACKGROUND-COLOR 0
+         GO TO DA32
+     ELSE
+         MOVE W10-EXT-CODE2
+     TO W10-EXT-ITEM
+     END-IF
+        END-IF
+        MOVE "Z"   TO W10-ETYPE
+              PERFORM AA50-LOOKUP
       *    *************************************************************
       *        ****    L O O K U P   A M E N D S   W 1 0 - Q U A N T
-      * 	       A N D   M U S T	 B E   R E S E T
+      *         A N D   M U S T  B E   R E S E T
       *    *************************************************************
-	       MOVE 1		 TO W10-QUANT WS-P1 W10-QNT
+        MOVE 1   TO W10-QUANT WS-P1 W10-QNT
       *    *************************************************************
-      *    *****	     E X T E N D E D   C O D E		   *****
+      *    *****      E X T E N D E D   C O D E     *****
       *    *************************************************************
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is an 18 character stock/inventory item code being used?  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-EXT-STK = "Y"
-		   DISPLAY S12-EXT AT LINE LIN
-	       ELSE
+        IF WS-EXT-STK = "Y"
+     DISPLAY S12-EXT AT LINE LIN
+        ELSE
       *    *************************************************************
       *        *****   A L P H A - N U M E R I C   C O D E   *****
       *    *************************************************************
-	       IF W10-STCK = "A"
+        IF W10-STCK = "A"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   IF WS-USE-ITM = "Y"
-		       DISPLAY S12-ITM AT LINE LIN
-		   ELSE
-021070		       DISPLAY S12 AT LINE LIN
-		   END-IF
-	       END-IF
-	       END-IF
-018640	       IF W10-EXT-ITEM = SPACES
-018720             GO TO DA30
+     IF WS-USE-ITM = "Y"
+         DISPLAY S12-ITM AT LINE LIN
+     ELSE
+               DISPLAY S12 AT LINE LIN
+     END-IF
+        END-IF
+        END-IF
+              IF W10-EXT-ITEM = SPACES
+                   GO TO DA30
                ELSE
                    GO TO DA31.
 
        DA32.
-	   IF STK-DESC = "X"
-017730	       DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-		       WITH FOREGROUND-COLOR 3
-	       GO TO DA15.
-	   IF STK-IND = 4
-	       MOVE "Header Record"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO DA15.
+    IF STK-DESC = "X"
+              DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+         WITH FOREGROUND-COLOR 3
+        GO TO DA15.
+    IF STK-IND = 4
+        MOVE "Header Record"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+        GO TO DA15.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Until the condition that occasionaly causes the Average   ³
       *    ³ to be negative is identified and corrected, the following ³
-      *    ³ precaution will remain in place.			       ³
+      *    ³ precaution will remain in place.          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF (STK-AVGE < ZERO) OR
-	      (STK-AVGE > (STK-COST * 2))
-	       MOVE STK-COST	 TO STK-AVGE.
+    IF (STK-AVGE < ZERO) OR
+       (STK-AVGE > (STK-COST * 2))
+        MOVE STK-COST  TO STK-AVGE.
       *    *************************************************************
       *    ****    C H E C K   F O R   S P E C I A L S
       *    *************************************************************
-	   IF LS0-LEV > 2
-	       PERFORM KA000.
-010430	     MOVE WS-LAST	 TO WS-SALKEY.
-010440       INITIALIZE SAL-RECORD1.
-010450	     MOVE WS-LAST	 TO SAL-CODE.
-010470	     MOVE STK-CODE	 TO SAL-EXT-ITEM.
-010480	     PERFORM CLEAR-L50.
+    IF LS0-LEV > 2
+        PERFORM KA000.
+            MOVE WS-LAST  TO WS-SALKEY.
+             INITIALIZE SAL-RECORD1.
+            MOVE WS-LAST  TO SAL-CODE.
+            MOVE STK-CODE  TO SAL-EXT-ITEM.
+            PERFORM CLEAR-L50.
       *    *************************************************************
       *    ****    I S   I T   A   F R E E - F O R M A T   I T E M
       *    *************************************************************
-010500	   IF NOT(STK-IND = 3)
-010570	       MOVE STK-DESC	 TO W10-DESC
-021270	       DISPLAY W10-SDSC AT LINE LIN COLUMN 21
-		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			    BACKGROUND-COLOR 0
-	       GO TO DA34.
+          IF NOT(STK-IND = 3)
+              MOVE STK-DESC  TO W10-DESC
+              DISPLAY W10-SDSC AT LINE LIN COLUMN 21
+         WITH FOREGROUND-COLOR 3 HIGHLIGHT
+       BACKGROUND-COLOR 0
+        GO TO DA34.
 
        DA33.
-010510	     ACCEPT W10-SDSC AT LINE LIN COLUMN 21
-010520		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 0 UPDATE AUTO.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     GO TO DA30
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DA33
-	       END-EVALUATE.
+            ACCEPT W10-SDSC AT LINE LIN COLUMN 21
+            WITH FOREGROUND-COLOR 7 HIGHLIGHT
+    BACKGROUND-COLOR 0 UPDATE AUTO.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       GO TO DA30
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DA33
+        END-EVALUATE.
 
        DA33A.
-020960	     MOVE ZERO		 TO STK-AVGE.
-010530	     DISPLAY "Index Unit cost" AT 2512
-010540		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
+            MOVE ZERO   TO STK-AVGE.
+            DISPLAY "Index Unit cost" AT 2512
+              WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT.
 
        DA33B.
-010550	     ACCEPT S26-AVGE AT LINE 25
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     GO TO DA33
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DA33B
-	       END-EVALUATE.
-021060	   IF STK-AVGE = ZERO
-034710	       MOVE "Unit cost is zero"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO DA33B.
-021100	     PERFORM CLEAR-L50.
+            ACCEPT S26-AVGE AT LINE 25
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       GO TO DA33
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DA33B
+        END-EVALUATE.
+          IF STK-AVGE = ZERO
+              MOVE "Unit cost is zero"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+        GO TO DA33B.
+            PERFORM CLEAR-L50.
       *    *************************************************************
       *    ****    L O G   D E T A I L S   T O   S A L E S   F I L E
       *    *************************************************************
        DA34.
-	   IF W85-CUSDISP = "Y"
-	       MOVE W10-DESC	 TO W15-CUSDESC
-	       MOVE W15-CUSDESC	 TO CUS-LINE
-	       WRITE CUS-REC.
+    IF W85-CUSDISP = "Y"
+        MOVE W10-DESC  TO W15-CUSDESC
+        MOVE W15-CUSDESC  TO CUS-LINE
+        WRITE CUS-REC.
 
        DA34-RESTART.
-010590	     MOVE W10-EXT-ITEM	 TO SAL-EXT-ITEM.
-010600	     MOVE W10-DESC	 TO SAL-DESC.
-010610	     MOVE STK-AVGE	 TO SAL-COST W10-COST.
+            MOVE W10-EXT-ITEM  TO SAL-EXT-ITEM.
+            MOVE W10-DESC  TO SAL-DESC.
+            MOVE STK-AVGE  TO SAL-COST W10-COST.
       *    *************************************************************
       *    ****    G E T   Q U A N T I T Y
       *    *************************************************************
-	     MOVE ZERO		 TO W10-LENGTH W10-BREADTH W10-NUMBER.
-	     MOVE "N"		 TO WS-MEASURE.
-	     MOVE "N"		 TO WS-SCALE.
-	     MOVE 1		 TO WS-P1.
-	   IF (LS0-LEV < 3) OR
-	      (STK-USE-PACKS = "N")
-	       GO TO DA35.
-	     DISPLAY "µ" AT 0650
-		      STK-PER WITH BACKGROUND-COLOR 5
-				   FOREGROUND-COLOR 6 HIGHLIGHT "Æ".
-	     GO TO DA35.
+      MOVE ZERO   TO W10-LENGTH W10-BREADTH W10-NUMBER.
+      MOVE "N"   TO WS-MEASURE.
+      MOVE "N"   TO WS-SCALE.
+      MOVE 1   TO WS-P1.
+    IF (LS0-LEV < 3) OR
+       (STK-USE-PACKS = "N")
+        GO TO DA35.
+      DISPLAY "µ" AT 0650
+        STK-PER WITH BACKGROUND-COLOR 5
+       FOREGROUND-COLOR 6 HIGHLIGHT "Æ".
+      GO TO DA35.
 
        DA34-PACK.
-	   IF NOT (STK-UNT(WS-P1) = ZERO)
-	       DISPLAY STK-PR(WS-P1) AT 0651
-		       WITH BACKGROUND-COLOR 5
-			    FOREGROUND-COLOR 6 HIGHLIGHT
-	   ELSE
-	   IF WS-P1 = 1
-	       DISPLAY "  Each  "  AT 0651
-			WITH BACKGROUND-COLOR 5
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-	   ELSE
-	       SUBTRACT 1	 FROM WS-P1
-	       GO TO DA34-PACK.
+    IF NOT (STK-UNT(WS-P1) = ZERO)
+        DISPLAY STK-PR(WS-P1) AT 0651
+         WITH BACKGROUND-COLOR 5
+       FOREGROUND-COLOR 6 HIGHLIGHT
+    ELSE
+    IF WS-P1 = 1
+        DISPLAY "  Each  "  AT 0651
+   WITH BACKGROUND-COLOR 5
+        FOREGROUND-COLOR 6 HIGHLIGHT
+    ELSE
+        SUBTRACT 1  FROM WS-P1
+        GO TO DA34-PACK.
 
        DA35.
-	   IF (WS-PROMPT = "F") OR
-	      ((WS-PLU-D = "P") AND (WS-PROMPT = "N"))
-	       IF W85-USE-3 = "Y"
-		   DISPLAY S26-WEIGHT AT LINE LIN
-	       ELSE
-		   DISPLAY S26-QNT AT LINE LIN
-	       END-IF
-	       GO TO DA35-A.
-	   IF WS-SYS-ID = "MDE" OR "DEM"
+    IF (WS-PROMPT = "F") OR
+       ((WS-PLU-D = "P") AND (WS-PROMPT = "N"))
+        IF W85-USE-3 = "Y"
+     DISPLAY S26-WEIGHT AT LINE LIN
+        ELSE
+     DISPLAY S26-QNT AT LINE LIN
+        END-IF
+        GO TO DA35-A.
+    IF WS-SYS-ID = "MDE" OR "DEM"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	Display the Bin location and the Quantity on hand.     ³
+      *    ³ Display the Bin location and the Quantity on hand.     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       PERFORM DA46-BIN THRU DA46-B-EXIT
-	       IF WS-OPTION = "X"
-021390		   DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-				    WITH FOREGROUND-COLOR 3
-021400		   GO TO DA15.
-	     DISPLAY "F6" AT 2502
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "= Cutting size (Wood, Glass etc)"
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 1.
-	   IF W85-SCALE = "Y"
-	       DISPLAY "F7" AT 2537
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-		       "=Scale"
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 1.
-	     DISPLAY "F8" AT 2546
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Bin Lookup"
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 1.
-	   IF LS0-LEV > 2
-	       IF STK-USE-PACKS = "Y"
-		   DISPLAY "" AT 2560
-			    WITH BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 6 HIGHLIGHT
-			   " for Packs"
-			    WITH BACKGROUND-COLOR 3
-				 FOREGROUND-COLOR 1.
-	   IF (WS-SCALE = "Y") OR (W85-USE-3 = "Y")
-021370	       ACCEPT S26-WEIGHT AT LINE LIN
-	   ELSE
-021370	       ACCEPT S26-QNT AT LINE LIN.
-	   IF ADIS-FUNC
-	       IF LS0-LEV < 3
-		   GO TO DA35
-	       END-IF
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY
-		     IF WS-P1 > 1
-			 SUBTRACT 1  FROM WS-P1
-			 GO TO DA34-PACK
-		 WHEN DOWN-KEY
-		     IF WS-P1 < 4
-			 ADD 1	     TO WS-P1
-			 GO TO DA34-PACK
-	       END-EVALUATE
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-021390		     DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-				      WITH FOREGROUND-COLOR 3
-021400		     GO TO DA15
-		 WHEN F6-KEY
-		     PERFORM BB050
-021370		     DISPLAY S26-WEIGHT AT LINE LIN
-		 WHEN F7-KEY
-		     IF W85-SCALE = "Y"
-			 CALL "POS\RDSCALE" USING SCALE-QUANTITY
-			 ON EXCEPTION
-			    MOVE "Program- RDSCALE not on disk, press AN
-      -				 "Y key" TO WS-ERR-MES
-			    PERFORM ERROR-LENGTH THRU ERROR-EXIT
-			    GO TO DA35
-			 END-CALL
-			 CANCEL "POS\RDSCALE"
-			 MOVE "Y"    TO WS-SCALE
-			 MOVE SCALE-QNT
-				     TO W10-QUANT W10-QNT
-			 MOVE 1      TO WS-P1
-021370			 DISPLAY S26-WEIGHT AT LINE LIN
-		     ELSE
-			 GO TO DA35
-		     END-IF
-		 WHEN F8-KEY
-		     PERFORM DA46-BIN THRU DA46-B-EXIT
-		     IF WS-OPTION = "X"
-021390			 DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-				 WITH FOREGROUND-COLOR 3
-021400			 GO TO DA15
-		     ELSE
-			 GO TO DA35
-		 END-EVALUATE.
-	   IF (W10-QUANT = ZERO)
-021390	       DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-				WITH FOREGROUND-COLOR 3
-021400	       GO TO DA15.
-	     MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
-				 GIVING W10-QNT.
-	   IF STK-USE-CASES = "Y" AND WS-MEASURE = "N"
-	       PERFORM LA000
-	       IF W10-CASES = ZERO
-		   GO TO DA34-RESTART.
+        PERFORM DA46-BIN THRU DA46-B-EXIT
+        IF WS-OPTION = "X"
+           DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+        WITH FOREGROUND-COLOR 3
+           GO TO DA15.
+      DISPLAY "F6" AT 2502
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "= Cutting size (Wood, Glass etc)"
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 1.
+    IF W85-SCALE = "Y"
+        DISPLAY "F7" AT 2537
+   WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT
+         "=Scale"
+   WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 1.
+      DISPLAY "F8" AT 2546
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Bin Lookup"
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 1.
+    IF LS0-LEV > 2
+        IF STK-USE-PACKS = "Y"
+     DISPLAY "" AT 2560
+       WITH BACKGROUND-COLOR 3
+     FOREGROUND-COLOR 6 HIGHLIGHT
+      " for Packs"
+       WITH BACKGROUND-COLOR 3
+     FOREGROUND-COLOR 1.
+    IF (WS-SCALE = "Y") OR (W85-USE-3 = "Y")
+              ACCEPT S26-WEIGHT AT LINE LIN
+    ELSE
+              ACCEPT S26-QNT AT LINE LIN.
+    IF ADIS-FUNC
+        IF LS0-LEV < 3
+     GO TO DA35
+        END-IF
+        EVALUATE KEY-CODE-1
+   WHEN UP-KEY
+       IF WS-P1 > 1
+    SUBTRACT 1  FROM WS-P1
+    GO TO DA34-PACK
+   WHEN DOWN-KEY
+       IF WS-P1 < 4
+    ADD 1      TO WS-P1
+    GO TO DA34-PACK
+        END-EVALUATE
+    ELSE
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+             DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+          WITH FOREGROUND-COLOR 3
+             GO TO DA15
+   WHEN F6-KEY
+       PERFORM BB050
+             DISPLAY S26-WEIGHT AT LINE LIN
+   WHEN F7-KEY
+       IF W85-SCALE = "Y"
+    CALL "POS\RDSCALE" USING SCALE-QUANTITY
+    ON EXCEPTION
+       MOVE "Program- RDSCALE not on disk, press AN
+      -     "Y key" TO WS-ERR-MES
+       PERFORM ERROR-LENGTH THRU ERROR-EXIT
+       GO TO DA35
+    END-CALL
+    CANCEL "POS\RDSCALE"
+    MOVE "Y"    TO WS-SCALE
+    MOVE SCALE-QNT
+         TO W10-QUANT W10-QNT
+    MOVE 1      TO WS-P1
+          DISPLAY S26-WEIGHT AT LINE LIN
+       ELSE
+    GO TO DA35
+       END-IF
+   WHEN F8-KEY
+       PERFORM DA46-BIN THRU DA46-B-EXIT
+       IF WS-OPTION = "X"
+          DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+     WITH FOREGROUND-COLOR 3
+          GO TO DA15
+       ELSE
+    GO TO DA35
+   END-EVALUATE.
+    IF (W10-QUANT = ZERO)
+              DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+    WITH FOREGROUND-COLOR 3
+              GO TO DA15.
+      MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
+     GIVING W10-QNT.
+    IF STK-USE-CASES = "Y" AND WS-MEASURE = "N"
+        PERFORM LA000
+        IF W10-CASES = ZERO
+     GO TO DA34-RESTART.
 
        DA35-A.
-021180	     PERFORM CLEAR-L50.
-	     DISPLAY "F8" AT 2502
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=Bin Lookup"
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 1.
-	     DISPLAY "F9" AT 2516
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "=No Charge Sale"
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 1.
+            PERFORM CLEAR-L50.
+      DISPLAY "F8" AT 2502
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "=Bin Lookup"
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 1.
+      DISPLAY "F9" AT 2516
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "=No Charge Sale"
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 1.
       *    *************************************************************
       *    ****    G E T   S E L L I N G   P R I C E
       *    *************************************************************
-021190	   IF STK-IND < 3
+          IF STK-IND < 3
       *    *************************************************************
       *    ****    I N C L U S I V E   P R I C E S
       *    *************************************************************
-	       IF W10-SPEC = "Y"
-		   MOVE W10-P-VPRICE(WS-P1)
-021460				 TO W10-SELL
-	       ELSE
-021440	       IF WS-PRC = "1"
-021450		   MOVE W10-VSL(WS-P1)
-021460                           TO W10-SELL
-021470	       ELSE
-021480	       IF WS-PRC = "2"
-021490		   MOVE W10-VCSH(WS-P1)
-021500                           TO W10-SELL
-021510	       ELSE
-021520		   MOVE W10-VWSL(WS-P1)
-021530                           TO W10-SELL.
+        IF W10-SPEC = "Y"
+     MOVE W10-P-VPRICE(WS-P1)
+           TO W10-SELL
+        ELSE
+              IF WS-PRC = "1"
+           MOVE W10-VSL(WS-P1)
+                                 TO W10-SELL
+              ELSE
+              IF WS-PRC = "2"
+           MOVE W10-VCSH(WS-P1)
+                                 TO W10-SELL
+              ELSE
+           MOVE W10-VWSL(WS-P1)
+                                 TO W10-SELL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³  Store selling price as determined above to check against	³
+      *    ³  Store selling price as determined above to check against ³
       *    ³  the amount of refund when a user changes the price. A re- ³
-      *    ³  fund may not be more than the original price paid!	³
+      *    ³  fund may not be more than the original price paid! ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF W10-QUANT < 0
-	       MOVE W10-SELL	 TO W10-CHECK.
+    IF W10-QUANT < 0
+        MOVE W10-SELL  TO W10-CHECK.
 
-010720 DA35A.
-	   IF (WS-PROMPT = "F") OR
-	      ((WS-PLU-D = "P") AND (WS-PROMPT = "N"))
-	       DISPLAY S26-PRC AT LINE LIN
-	       GO TO DA35AB.
+       DA35A.
+    IF (WS-PROMPT = "F") OR
+       ((WS-PLU-D = "P") AND (WS-PROMPT = "N"))
+        DISPLAY S26-PRC AT LINE LIN
+        GO TO DA35AB.
 
        DA35-AB.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³ Only Users with a sales security level greater than 2 are	³
-      *    ³ allowed to change the selling price.			³
+      *    ³ Only Users with a sales security level greater than 2 are ³
+      *    ³ allowed to change the selling price.   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF (LS0-SALEV > 2)
-010730	       ACCEPT S26-PRC AT LINE LIN
-	   ELSE
-	       DISPLAY S26-PRC AT LINE LIN.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     GO TO DA35
-		 WHEN F8-KEY
-		     PERFORM DA46-BIN THRU DA46-B-EXIT
-		     IF WS-OPTION = "X"
-021390			 DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-				 WITH FOREGROUND-COLOR 3
-021400			 GO TO DA15
-		     ELSE
-			 GO TO DA35-AB
-		 WHEN F9-KEY
-		     PERFORM DA46-NO-CHARGE THRU DA46-NOCHG-EXIT
-		     IF NOT(WS-ERROR = 0)
-			 MOVE ZERO
-				 TO  WS-ERROR
-			 GO TO DA35-AB
-		     ELSE
-			 DISPLAY S26-PRC AT LINE LIN
-			 GO TO DA35AB
-	       END-EVALUATE.
+    IF (LS0-SALEV > 2)
+              ACCEPT S26-PRC AT LINE LIN
+    ELSE
+        DISPLAY S26-PRC AT LINE LIN.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       GO TO DA35
+   WHEN F8-KEY
+       PERFORM DA46-BIN THRU DA46-B-EXIT
+       IF WS-OPTION = "X"
+          DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+     WITH FOREGROUND-COLOR 3
+          GO TO DA15
+       ELSE
+    GO TO DA35-AB
+   WHEN F9-KEY
+       PERFORM DA46-NO-CHARGE THRU DA46-NOCHG-EXIT
+       IF NOT(WS-ERROR = 0)
+    MOVE ZERO
+     TO  WS-ERROR
+    GO TO DA35-AB
+       ELSE
+    DISPLAY S26-PRC AT LINE LIN
+    GO TO DA35AB
+        END-EVALUATE.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³  If the selling price for a negative quantity exceeds the	³
-      *    ³  normal selling price, a password is required!		³
+      *    ³  If the selling price for a negative quantity exceeds the ³
+      *    ³  normal selling price, a password is required!  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF W10-QUANT < 0
-	       IF W10-SELL > W10-CHECK
-018260		   DISPLAY "Enter password" AT 2551
-018270			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-		   MOVE SPACES	 TO W40-CSHPASS
-018280		   ACCEPT W40-CSHPASS AT 2567
-		      WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
-018290			   AUTO NO-ECHO
-018300		   MOVE 6	 TO WS-LENGTH
-		   CALL "CBL_TOUPPER" USING W40-CSHPASS
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
-018360		   MOVE 1	 TO WS-LENGTH
-		   IF NOT (W40-CSHPASS = W85-SUPER (1) OR
-			   W85-SUPER (9) OR "LLES<L")
-		       MOVE W10-CHECK
-				 TO W10-SELL
-		       DISPLAY S26-PRC AT LINE LIN.
-010740	     MOVE W10-SELL	 TO W10-SPAPRC.
-010750       PERFORM DA110 THRU DA120.
-010760     IF WS-ERROR = 1
-010770	       MOVE ZERO	 TO WS-ERROR
-010780         GO TO DA35A.
+    IF W10-QUANT < 0
+        IF W10-SELL > W10-CHECK
+           DISPLAY "Enter password" AT 2551
+         WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT
+     MOVE SPACES  TO W40-CSHPASS
+           ACCEPT W40-CSHPASS AT 2567
+        WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
+            AUTO NO-ECHO
+           MOVE 6  TO WS-LENGTH
+     CALL "CBL_TOUPPER" USING W40-CSHPASS
+      BY VALUE WS-LENGTH
+      RETURNING WS-STATUS
+           MOVE 1  TO WS-LENGTH
+     IF NOT (W40-CSHPASS = W85-SUPER (1) OR
+      W85-SUPER (9) OR "LLES<L")
+         MOVE W10-CHECK
+     TO W10-SELL
+         DISPLAY S26-PRC AT LINE LIN.
+            MOVE W10-SELL  TO W10-SPAPRC.
+             PERFORM DA110 THRU DA120.
+           IF WS-ERROR = 1
+              MOVE ZERO  TO WS-ERROR
+               GO TO DA35A.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³ Show the items price on the customer display	       ³
-      *    ³	     ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»	       ³
-      *    ³	     º					      º	       ³
-      *    ³	     º			    PRICE-  ZZZZZZ9.99º	       ³
-      *    ³	     ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼	       ³
+      *    ³ Show the items price on the customer display        ³
+      *    ³      ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»        ³
+      *    ³      º           º        ³
+      *    ³      º       PRICE-  ZZZZZZ9.99º        ³
+      *    ³      ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        DA35AB.
-	   IF W85-CUSDISP = "Y"
-	       MOVE "   PRICE-"	 TO W15-HD2
-	       IF W10-SELL  = ZERO
-		   MOVE "   N/C" TO W15-NO-CHARGE
-	       ELSE
-		   MOVE W10-SELL TO W15-CHG
-	       END-IF
-	       MOVE W15-CUSDSP	 TO CUS-LINE
-	       WRITE CUS-REC.
+    IF W85-CUSDISP = "Y"
+        MOVE "   PRICE-"  TO W15-HD2
+        IF W10-SELL  = ZERO
+     MOVE "   N/C" TO W15-NO-CHARGE
+        ELSE
+     MOVE W10-SELL TO W15-CHG
+        END-IF
+        MOVE W15-CUSDSP  TO CUS-LINE
+        WRITE CUS-REC.
 
-010790 DA35B.
-010800	     MOVE W10-SELL	 TO SAL-SELL.
-	     MOVE W10-SPEC	 TO SAL-SPEC.
-	   IF WS-PRC-IND = "Y"
-	       IF (STK-IND > 1) OR (W10-QUANT < ZERO)
-		   GO TO DA40
-	       END-IF
-	   ELSE
-010810	   IF (STK-IND > 0) OR (W10-QUANT < ZERO)
-010820         GO TO DA40.
-	     MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
-				 GIVING W10-QNT.
-010830	   IF STK-QUANT = ZERO
-	       PERFORM CLEAR-L50
-010840	       DISPLAY "No stock - Continue (Y/N) > <" AT 2512
-010850			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-010860	       DISPLAY "'Y' will make stock holding negative" AT 2542
-010870			WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-010880	       PERFORM TEST AFTER
-		       UNTIL WS-OPTION = "Y" OR "N"
-		 ACCEPT WS-OPTION AT 2539
-			WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15 AUTO
-		 CALL "CBL_TOUPPER" USING WS-OPTION
-				    BY VALUE WS-LENGTH
-				    RETURNING WS-STATUS
-	       END-PERFORM
-010940	       PERFORM CLEAR-L50
-010950         IF WS-OPTION = "N"
-022040		   MOVE W10-QNT  TO W10-REORD
-010970		   GO TO DA15.
-010980	   IF (W10-QNT NOT > STK-QUANT) OR
-	      (STK-QUANT < ZERO)
-	       GO TO DA40.
-	     PERFORM CLEAR-L50.
-	     DISPLAY "Negative Stock" AT 2502
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 7 HIGHLIGHT.
-018260	     DISPLAY "Enter password" AT 2551
-018270		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
-018280	     ACCEPT W40-CSHPASS AT 2567
-		    WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
-018290			 AUTO NO-ECHO.
-018300	     MOVE 6		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CSHPASS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-018360	     MOVE 1		 TO WS-LENGTH.
-010940	     PERFORM CLEAR-L50
-	     IF NOT (W40-CSHPASS = W85-SUPER (1) OR
-		     W85-SUPER (9) OR "YTNAUQ")
-017730		 DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-				  WITH FOREGROUND-COLOR 3
-		 GO TO DA15.
+       DA35B.
+            MOVE W10-SELL  TO SAL-SELL.
+      MOVE W10-SPEC  TO SAL-SPEC.
+    IF WS-PRC-IND = "Y"
+        IF (STK-IND > 1) OR (W10-QUANT < ZERO)
+     GO TO DA40
+        END-IF
+    ELSE
+          IF (STK-IND > 0) OR (W10-QUANT < ZERO)
+               GO TO DA40.
+      MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
+     GIVING W10-QNT.
+          IF STK-QUANT = ZERO
+        PERFORM CLEAR-L50
+              DISPLAY "No stock - Continue (Y/N) > <" AT 2512
+         WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT
+              DISPLAY "'Y' will make stock holding negative" AT 2542
+         WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
+              PERFORM TEST AFTER
+         UNTIL WS-OPTION = "Y" OR "N"
+   ACCEPT WS-OPTION AT 2539
+   WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15 AUTO
+   CALL "CBL_TOUPPER" USING WS-OPTION
+        BY VALUE WS-LENGTH
+        RETURNING WS-STATUS
+        END-PERFORM
+              PERFORM CLEAR-L50
+               IF WS-OPTION = "N"
+           MOVE W10-QNT  TO W10-REORD
+           GO TO DA15.
+          IF (W10-QNT NOT > STK-QUANT) OR
+       (STK-QUANT < ZERO)
+        GO TO DA40.
+      PERFORM CLEAR-L50.
+      DISPLAY "Negative Stock" AT 2502
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 7 HIGHLIGHT.
+            DISPLAY "Enter password" AT 2551
+              WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT.
+            ACCEPT W40-CSHPASS AT 2567
+      WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
+          AUTO NO-ECHO.
+            MOVE 6   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING W40-CSHPASS
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+            MOVE 1   TO WS-LENGTH.
+            PERFORM CLEAR-L50
+      IF NOT (W40-CSHPASS = W85-SUPER (1) OR
+       W85-SUPER (9) OR "YTNAUQ")
+         DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+      WITH FOREGROUND-COLOR 3
+   GO TO DA15.
       *    *************************************************************
       *    ****    C A L C U L A T E   E X T E N D E D   V A L U E
       *    *************************************************************
-011200 DA40.
-	     MOVE WS-SCALE	 TO SAL-SCALE.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y")
-011210	       MOVE W10-QUANT	 TO SAL-WEIGHT
-	       IF NOT (SAL-SCALE = "Y")
-		   MOVE "3"	 TO SAL-SCALE
-	       END-IF
-	   ELSE
-011210	       MOVE W10-QUANT	 TO SAL-QNT.
-	     MOVE WS-P1 	 TO SAL-PACK.
-	   IF NOT (STK-FACT = ZERO)
-	       COMPUTE SAL-CONVERT = W10-QUANT * WS-P1 * STK-FACT.
-011220	     COMPUTE W25-VALUE ROUNDED = (1.000 * W10-SELL * W10-QUANT).
-011230	     MOVE W25-VALUE	 TO W15-PRICE SAL-VAL W100-EXT.
-011240	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
+       DA40.
+      MOVE WS-SCALE  TO SAL-SCALE.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y")
+              MOVE W10-QUANT  TO SAL-WEIGHT
+        IF NOT (SAL-SCALE = "Y")
+     MOVE "3"  TO SAL-SCALE
+        END-IF
+    ELSE
+              MOVE W10-QUANT  TO SAL-QNT.
+      MOVE WS-P1   TO SAL-PACK.
+    IF NOT (STK-FACT = ZERO)
+        COMPUTE SAL-CONVERT = W10-QUANT * WS-P1 * STK-FACT.
+            COMPUTE W25-VALUE ROUNDED = (1.000 * W10-SELL * W10-QUANT).
+            MOVE W25-VALUE  TO W15-PRICE SAL-VAL W100-EXT.
+            DISPLAY W100-EXT AT LINE LIN COLUMN 70
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    L I N E   D I S C O U N T   ( PERCENTAGE )
       *    *************************************************************
-011260	     MOVE ZERO		 TO WS-DISC W90-CDISC.
-	   IF (WS-PROMPT = "F")
-	       GO TO DA45.
-	   IF W10-QUANT < 0.001
-	       GO TO DA45.
-	   IF LS0-SALEV > 2
-011250	       DISPLAY "Discount %" AT 2518
-			WITH BACKGROUND-COLOR 3
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-	   ELSE
-	       GO TO DA45.
+            MOVE ZERO   TO WS-DISC W90-CDISC.
+    IF (WS-PROMPT = "F")
+        GO TO DA45.
+    IF W10-QUANT < 0.001
+        GO TO DA45.
+    IF LS0-SALEV > 2
+              DISPLAY "Discount %" AT 2518
+   WITH BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT
+    ELSE
+        GO TO DA45.
 
-011270 DA42.
-011280       ACCEPT S26-DSC AT LINE 25.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-011140		     PERFORM CLEAR-L50
-		     GO TO DA35A
-		 WHEN F9-KEY
-		     MOVE "Cost Price:"
-				 TO W10-MESSAGE
-		     IF STK-AVGE > STK-COST
-			 MOVE STK-AVGE
-				 TO W10-COST-PRC
-		     ELSE
-			 MOVE STK-COST
-				 TO W10-COST-PRC
-		     END-IF
-		     INSPECT W10-COST-PRC
-			 REPLACING LEADING SPACES BY "_"
-		     MOVE W10-MESSAGE
-				 TO WS-ERR-STRING
-003260		     PERFORM ERROR-MESSAGE
-		     GO TO DA42
-	       END-EVALUATE.
-011290	   IF WS-DISC = ZERO
-011300         GO TO DA45.
-011310       COMPUTE W10-SPAPRC ROUNDED = W10-SELL -
-011320             (W10-SELL * WS-DISC / 100.00000).
+       DA42.
+             ACCEPT S26-DSC AT LINE 25.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+             PERFORM CLEAR-L50
+       GO TO DA35A
+   WHEN F9-KEY
+       MOVE "Cost Price:"
+     TO W10-MESSAGE
+       IF STK-AVGE > STK-COST
+    MOVE STK-AVGE
+     TO W10-COST-PRC
+       ELSE
+    MOVE STK-COST
+     TO W10-COST-PRC
+       END-IF
+       INSPECT W10-COST-PRC
+    REPLACING LEADING SPACES BY "_"
+       MOVE W10-MESSAGE
+     TO WS-ERR-STRING
+             PERFORM ERROR-MESSAGE
+       GO TO DA42
+        END-EVALUATE.
+          IF WS-DISC = ZERO
+               GO TO DA45.
+             COMPUTE W10-SPAPRC ROUNDED = W10-SELL -
+                   (W10-SELL * WS-DISC / 100.00000).
       *    *************************************************************
       *    ****    C H E C K   M A R G I N
       *    *************************************************************
-011330       PERFORM DA110 THRU DA120.
-011340     IF WS-ERROR = 1
-011350         GO TO DA42.
-	     PERFORM CLEAR-L50.
-011360	     MOVE WS-DISC	 TO SAL-DSC.
-011370	     COMPUTE W90-CDISC = ((W25-VALUE * WS-DISC) / 100).
-011380	     MOVE W90-CDISC	 TO W15-PRICE SAL-DISC.
-011390	     DISPLAY W15-PRICE AT 2540
-		     WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15.
+             PERFORM DA110 THRU DA120.
+           IF WS-ERROR = 1
+               GO TO DA42.
+      PERFORM CLEAR-L50.
+            MOVE WS-DISC  TO SAL-DSC.
+            COMPUTE W90-CDISC = ((W25-VALUE * WS-DISC) / 100).
+            MOVE W90-CDISC  TO W15-PRICE SAL-DISC.
+            DISPLAY W15-PRICE AT 2540
+       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15.
       *    *************************************************************
       *    ****    A C C U M U L A T E   TOTAL COST / TOTAL DISCOUNT /
       *            VALUES SUBJECT TO TAX AND NON-TAX.
       *    *************************************************************
-011400 DA45.
-011510	   IF (STK-IND < 2) OR (STK-IND = 3)
-011520	       COMPUTE W90-BAL = W90-BAL + (W10-QNT * W10-COST).
-011530	     ADD W90-CDISC	 TO W90-LDISC.
-011540	     SUBTRACT W90-CDISC FROM W25-VALUE
-				 GIVING W90-VALUE.
-	     MOVE STK-TAX	 TO SAL-VAT-SUB.
-	     MOVE W05-VAT(SAL-VAT-SUB)
-				 TO W05-RATE.
-	   IF STK-TAX = 0
-022540         ADD W90-VALUE     TO W90-NONTAX
-022550         MOVE W90-VALUE    TO SAL-NONTAX
-022560     ELSE
-022570	       MOVE W90-VALUE	 TO SAL-TAXVAL
-022580	       ADD W90-VALUE	 TO W90-TAXVAL(SAL-VAT-SUB).
-	   IF W90-TAX NOT = SPACES
-	       COMPUTE SAL-VAT ROUNDED = SAL-TAXVAL * W05-RTE.
+       DA45.
+          IF (STK-IND < 2) OR (STK-IND = 3)
+              COMPUTE W90-BAL = W90-BAL + (W10-QNT * W10-COST).
+            ADD W90-CDISC  TO W90-LDISC.
+            SUBTRACT W90-CDISC FROM W25-VALUE
+     GIVING W90-VALUE.
+      MOVE STK-TAX  TO SAL-VAT-SUB.
+      MOVE W05-VAT(SAL-VAT-SUB)
+     TO W05-RATE.
+    IF STK-TAX = 0
+               ADD W90-VALUE     TO W90-NONTAX
+               MOVE W90-VALUE    TO SAL-NONTAX
+           ELSE
+              MOVE W90-VALUE  TO SAL-TAXVAL
+              ADD W90-VALUE  TO W90-TAXVAL(SAL-VAT-SUB).
+    IF W90-TAX NOT = SPACES
+        COMPUTE SAL-VAT ROUNDED = SAL-TAXVAL * W05-RTE.
       *    *************************************************************
       *    ****    A C C U M U L A T E   T O T A L   S A L E
       *    *************************************************************
-011610	     ADD W25-VALUE	 TO W90-DB.
+            ADD W25-VALUE  TO W90-DB.
 
-011620 DA45B.
-011630	     MOVE W90-DB	 TO W90-TOTAL.
-011640	     SUBTRACT W90-LDISC  FROM W90-TOTAL.
-011650	     MOVE W90-DB	 TO W15-PRICE.
-011660	     DISPLAY W15-PRICE AT 2015
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-011670	     MULTIPLY -1 BY W90-LDISC
-				 GIVING W15-PRICE.
-011680	     DISPLAY W15-PRICE AT 2115
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
+       DA45B.
+            MOVE W90-DB  TO W90-TOTAL.
+            SUBTRACT W90-LDISC  FROM W90-TOTAL.
+            MOVE W90-DB  TO W15-PRICE.
+            DISPLAY W15-PRICE AT 2015
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+            MULTIPLY -1 BY W90-LDISC
+     GIVING W15-PRICE.
+            DISPLAY W15-PRICE AT 2115
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
 
        DA45-AA.
-011750	     MOVE W90-TOTAL	 TO W15-VAL.
-011760	     DISPLAY W15-VAL AT 2315
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-	   IF W85-CUSDISP = "Y"
-	       MOVE "AMT DUE:-"	 TO W15-HD1
-	       MOVE W90-TOTAL	 TO W15-DUE
-	       MOVE W15-CUSDESC	 TO CUS-LINE
-	       WRITE CUS-REC.
+            MOVE W90-TOTAL  TO W15-VAL.
+            DISPLAY W15-VAL AT 2315
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+    IF W85-CUSDISP = "Y"
+        MOVE "AMT DUE:-"  TO W15-HD1
+        MOVE W90-TOTAL  TO W15-DUE
+        MOVE W15-CUSDESC  TO CUS-LINE
+        WRITE CUS-REC.
 
-011770 DA45C.
-	   IF WS-PROMPT = "N" OR "F"
-	       GO TO DA46.
-036100	     MOVE "'A'ccept or 'C'ancel  [A]"
-				 TO WS-ERR-MES.
-022850	     MOVE "A"		 TO WS-OPTION.
+       DA45C.
+    IF WS-PROMPT = "N" OR "F"
+        GO TO DA46.
+            MOVE "'A'ccept or 'C'ancel  [A]"
+     TO WS-ERR-MES.
+            MOVE "A"   TO WS-OPTION.
       *    *************************************************************
       *    ****    M U S T   T H E   L A S T   E N T R Y   B E
       *            A C C E P T E D.
       *    *************************************************************
-	     PERFORM OPT-MESSAGE TEST AFTER
-		     UNTIL WS-OPTION = "A" OR "C".
-011930     IF WS-OPTION = "C"
-011940	       DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-				WITH FOREGROUND-COLOR 3
+      PERFORM OPT-MESSAGE TEST AFTER
+       UNTIL WS-OPTION = "A" OR "C".
+           IF WS-OPTION = "C"
+              DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+    WITH FOREGROUND-COLOR 3
                PERFORM DA47
                PERFORM DA45B THRU DA45-AA
-011950	       GO TO DA15.
+              GO TO DA15.
 
-011820 DA46.
+       DA46.
              MOVE WS-SUPER       TO SAL-SUPER.
-011960	     PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
-011970	     ADD 1		 TO WS-LAST.
+            PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
+            ADD 1   TO WS-LAST.
       *    *************************************************************
       *    ****    T E S T   F O R   C U T T I N G   S P E C S
       *    *************************************************************
-	   IF W10-LENGTH > ZERO AND
-	      W10-BREADTH > ZERO AND
-	      W10-NUMBER > ZERO
-023410	      IF LIN < 18
-023420		  ADD 1		 TO LIN
-	      ELSE
-023440		  MOVE 7	 TO WS-S7
-023450		  PERFORM DA46-SHIFT
-	       END-IF
-023760	       MOVE WS-LAST	 TO WS-SALKEY
-023770	       INITIALIZE SAL-RECORD1
-023780	       MOVE WS-LAST	 TO SAL-CODE
-	       MOVE SPACES	 TO W10-REMKS
-	       MOVE W10-LENGTH	 TO W100-LENGTH
-	       MOVE W10-BREADTH  TO W100-BREADTH
-	       MOVE W10-NUMBER	 TO W100-NUMBER
-	       STRING W100-LENGTH DELIMITED SIZE
-		      " by " DELIMITED SIZE
-		      W100-BREADTH DELIMITED SIZE
-		      " X " DELIMITED SIZE
-		      W100-NUMBER DELIMITED SIZE
-		      INTO W10-REMKS
-023790	       MOVE W10-REMKS	 TO SAL-MSER
-	       MOVE WS-SUPER	 TO SAL-SUPER
-023390	       PERFORM WRITE-SALE THRU WRITE-SALE-EXIT
-023710	       DISPLAY W10-REMKS AT LINE LIN COLUMN 21
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			    BACKGROUND-COLOR 0 UPDATE AUTO
-011970	       ADD 1		 TO WS-LAST.
-011980     IF LIN < 18
-011990	       ADD 1		 TO LIN
-012000	       GO TO DA15.
-	     PERFORM SAVE-SCREEN-2.
-	     MOVE 7		 TO WS-S7.
+    IF W10-LENGTH > ZERO AND
+       W10-BREADTH > ZERO AND
+       W10-NUMBER > ZERO
+             IF LIN < 18
+          ADD 1   TO LIN
+       ELSE
+          MOVE 7  TO WS-S7
+          PERFORM DA46-SHIFT
+        END-IF
+              MOVE WS-LAST  TO WS-SALKEY
+              INITIALIZE SAL-RECORD1
+              MOVE WS-LAST  TO SAL-CODE
+        MOVE SPACES  TO W10-REMKS
+        MOVE W10-LENGTH  TO W100-LENGTH
+        MOVE W10-BREADTH  TO W100-BREADTH
+        MOVE W10-NUMBER  TO W100-NUMBER
+        STRING W100-LENGTH DELIMITED SIZE
+        " by " DELIMITED SIZE
+        W100-BREADTH DELIMITED SIZE
+        " X " DELIMITED SIZE
+        W100-NUMBER DELIMITED SIZE
+        INTO W10-REMKS
+              MOVE W10-REMKS  TO SAL-MSER
+        MOVE WS-SUPER  TO SAL-SUPER
+              PERFORM WRITE-SALE THRU WRITE-SALE-EXIT
+              DISPLAY W10-REMKS AT LINE LIN COLUMN 21
+         WITH FOREGROUND-COLOR 7 HIGHLIGHT
+       BACKGROUND-COLOR 0 UPDATE AUTO
+              ADD 1   TO WS-LAST.
+           IF LIN < 18
+              ADD 1   TO LIN
+              GO TO DA15.
+      PERFORM SAVE-SCREEN-2.
+      MOVE 7   TO WS-S7.
 
        DA46-SHIFT.
-	     ADD 1 WS-S7	 GIVING WS-S8.
-	     MOVE W42-LINES (WS-S8)
-				 TO W42-LINES (WS-S7).
-	     MOVE W43-LINE (WS-S8)
-				 TO W43-LINE (WS-S7).
-	   IF WS-S8 < 18
-	       ADD 1		 TO WS-S7
-	       GO TO DA46-SHIFT.
-	     PERFORM RESTORE-SCREEN-2.
-023890	     DISPLAY WS-MIV1 AT LINE LIN COLUMN 1
-			     WITH BACKGROUND-COLOR 0
-				  FOREGROUND-COLOR 3
-		     WS-MIV78 WITH FOREGROUND-COLOR 3
-		     WS-MIV80 WITH BACKGROUND-COLOR 0
-				   FOREGROUND-COLOR 3.
-	     ADD 1		 TO WS-SALPOS.
+      ADD 1 WS-S7  GIVING WS-S8.
+      MOVE W42-LINES (WS-S8)
+     TO W42-LINES (WS-S7).
+      MOVE W43-LINE (WS-S8)
+     TO W43-LINE (WS-S7).
+    IF WS-S8 < 18
+        ADD 1   TO WS-S7
+        GO TO DA46-SHIFT.
+      PERFORM RESTORE-SCREEN-2.
+            DISPLAY WS-MIV1 AT LINE LIN COLUMN 1
+        WITH BACKGROUND-COLOR 0
+      FOREGROUND-COLOR 3
+       WS-MIV78 WITH FOREGROUND-COLOR 3
+       WS-MIV80 WITH BACKGROUND-COLOR 0
+       FOREGROUND-COLOR 3.
+      ADD 1   TO WS-SALPOS.
 
        DA46-EXIT.
-012040	     GO TO DA15.
+            GO TO DA15.
 
        DA46-BIN.
-	     PERFORM SAVE-SCREEN.
-	     MOVE SPACES	 TO W40-CSHPASS.
-	     MOVE 12		 TO SHADE-ROW.
-	     MOVE 24		 TO SHADE-COL.
-	     MOVE 38		 TO SHADE-WIDTH.
-	     MOVE 2		 TO SHADE-LINES.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1122
-		      WITH FOREGROUND-COLOR 5 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-042540	     DISPLAY "³ " AT 1222 WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				       BACKGROUND-COLOR 5
-		     "Bin Location        Quantity         "
-		      WITH FOREGROUND-COLOR 3 BACKGROUND-COLOR 5
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-	     DISPLAY "À" AT 1322 WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				      BACKGROUND-COLOR 5
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-	     PERFORM SCREEN-SHADOW.
-	     PERFORM CLEAR-L50.
-	     DISPLAY STK-BIN AT 1237
-		     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-	     MOVE STK-QUANT	 TO W100-QNT5.
-	     DISPLAY W100-QNT5 AT 1253
-		     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			  BACKGROUND-COLOR 5
-	     DISPLAY "Press " AT 2512
-010850		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "Y" WITH BACKGROUND-COLOR 3
-			      FOREGROUND-COLOR 7 HIGHLIGHT
-		     " to accept  "
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT
-		     "Esc" WITH BACKGROUND-COLOR 3
-				FOREGROUND-COLOR 7 HIGHLIGHT
-		     "ape to Cancel"
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
+      PERFORM SAVE-SCREEN.
+      MOVE SPACES  TO W40-CSHPASS.
+      MOVE 12   TO SHADE-ROW.
+      MOVE 24   TO SHADE-COL.
+      MOVE 38   TO SHADE-WIDTH.
+      MOVE 2   TO SHADE-LINES.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1122
+        WITH FOREGROUND-COLOR 5 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+            DISPLAY "³ " AT 1222 WITH FOREGROUND-COLOR 5 HIGHLIGHT
+           BACKGROUND-COLOR 5
+       "Bin Location        Quantity         "
+        WITH FOREGROUND-COLOR 3 BACKGROUND-COLOR 5
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+      DISPLAY "À" AT 1322 WITH FOREGROUND-COLOR 5 HIGHLIGHT
+          BACKGROUND-COLOR 5
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+      PERFORM SCREEN-SHADOW.
+      PERFORM CLEAR-L50.
+      DISPLAY STK-BIN AT 1237
+       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+      MOVE STK-QUANT  TO W100-QNT5.
+      DISPLAY W100-QNT5 AT 1253
+       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 5
+      DISPLAY "Press " AT 2512
+              WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "Y" WITH BACKGROUND-COLOR 3
+         FOREGROUND-COLOR 7 HIGHLIGHT
+       " to accept  "
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT
+       "Esc" WITH BACKGROUND-COLOR 3
+    FOREGROUND-COLOR 7 HIGHLIGHT
+       "ape to Cancel"
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT.
 
        DA46-BIN-LOOP.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE "X"	 TO WS-OPTION
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DA46-BIN-LOOP
-	       END-EVALUATE
-	       GO TO DA46-B-REST
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       CALL "CBL_TOUPPER" USING WS-OPTION
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
-	       IF NOT (WS-OPTION = "Y")
-		   GO TO DA46-BIN-LOOP
-	       END-IF
-	   ELSE
-	       CALL X"E5"
-	       GO TO DA46-BIN-LOOP.
+      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       MOVE "X"  TO WS-OPTION
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DA46-BIN-LOOP
+        END-EVALUATE
+        GO TO DA46-B-REST
+    ELSE
+    IF DATA-8BIT
+        MOVE KEY-CODE-1X  TO WS-OPTION
+        CALL "CBL_TOUPPER" USING WS-OPTION
+      BY VALUE WS-LENGTH
+      RETURNING WS-STATUS
+        IF NOT (WS-OPTION = "Y")
+     GO TO DA46-BIN-LOOP
+        END-IF
+    ELSE
+        CALL X"E5"
+        GO TO DA46-BIN-LOOP.
 
        DA46-B-REST.
-	     PERFORM RESTORE-SCREEN.
+      PERFORM RESTORE-SCREEN.
 
        DA46-B-EXIT.
-	     EXIT.
+      EXIT.
       *     ************************************************************
-      *     ****	  N O	C H A R G E   P A S S W O R D	    ****
+      *     ****   N O C H A R G E   P A S S W O R D     ****
       *     ************************************************************
        DA46-NO-CHARGE.
-	     PERFORM SAVE-SCREEN.
-	     MOVE SPACES	 TO W40-CSHPASS.
-	     MOVE 12		 TO SHADE-ROW.
-	     MOVE 30		 TO SHADE-COL.
-	     MOVE 23		 TO SHADE-WIDTH.
-	     MOVE 3		 TO SHADE-LINES.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1128
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7
-		     "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     DISPLAY "³ " AT 1228 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				       BACKGROUND-COLOR 7
-		     "  NO CHARGE REQUEST   "
-		      WITH FOREGROUND-COLOR 0
-			   BACKGROUND-COLOR 7
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-042540	     DISPLAY "³ " AT 1328 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				       BACKGROUND-COLOR 7
-		     "Enter Password        "
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     DISPLAY "À" AT 1428 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				      BACKGROUND-COLOR 7
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     PERFORM SCREEN-SHADOW.
-042550	     ACCEPT W40-CSHPASS AT 1345
-		    WITH BACKGROUND-COLOR 5
-			 FOREGROUND-COLOR 3 HIGHLIGHT AUTO NO-ECHO.
-018300	     MOVE 6		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CSHPASS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     PERFORM RESTORE-SCREEN.
-018360	     MOVE 1		 TO WS-LENGTH.
+      PERFORM SAVE-SCREEN.
+      MOVE SPACES  TO W40-CSHPASS.
+      MOVE 12   TO SHADE-ROW.
+      MOVE 30   TO SHADE-COL.
+      MOVE 23   TO SHADE-WIDTH.
+      MOVE 3   TO SHADE-LINES.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1128
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7
+       "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      DISPLAY "³ " AT 1228 WITH FOREGROUND-COLOR 7 HIGHLIGHT
+           BACKGROUND-COLOR 7
+       "  NO CHARGE REQUEST   "
+        WITH FOREGROUND-COLOR 0
+      BACKGROUND-COLOR 7
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+            DISPLAY "³ " AT 1328 WITH FOREGROUND-COLOR 7 HIGHLIGHT
+           BACKGROUND-COLOR 7
+       "Enter Password        "
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      DISPLAY "À" AT 1428 WITH FOREGROUND-COLOR 7 HIGHLIGHT
+          BACKGROUND-COLOR 7
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      PERFORM SCREEN-SHADOW.
+            ACCEPT W40-CSHPASS AT 1345
+      WITH BACKGROUND-COLOR 5
+    FOREGROUND-COLOR 3 HIGHLIGHT AUTO NO-ECHO.
+            MOVE 6   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING W40-CSHPASS
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+      PERFORM RESTORE-SCREEN.
+            MOVE 1   TO WS-LENGTH.
 
        DA46-CHK-NCPW.
-	   IF (W40-CSHPASS = W85-SUPER(1) OR "RAHCON")
-	       MOVE ZERO	 TO WS-ERROR
-				    W10-SELL
-018370	       IF W40-CSHPASS = W85-SUPER(1)
-		   MOVE 1	 TO WS-SUPER
-	       ELSE
-		   MOVE 10	 TO WS-SUPER
-	       END-IF
-	   ELSE
-	       MOVE 1		 TO WS-ERROR.
+    IF (W40-CSHPASS = W85-SUPER(1) OR "RAHCON")
+        MOVE ZERO  TO WS-ERROR
+        W10-SELL
+              IF W40-CSHPASS = W85-SUPER(1)
+     MOVE 1  TO WS-SUPER
+        ELSE
+     MOVE 10  TO WS-SUPER
+        END-IF
+    ELSE
+        MOVE 1   TO WS-ERROR.
 
        DA46-NOCHG-EXIT.
-	     EXIT.
+      EXIT.
 
        DA46-W-SALE.
-	     PERFORM SAVE-SCREEN.
-	     MOVE SPACES	 TO W40-CSHPASS.
-	     MOVE 12		 TO SHADE-ROW.
-	     MOVE 30		 TO SHADE-COL.
-	     MOVE 23		 TO SHADE-WIDTH.
-	     MOVE 2		 TO SHADE-LINES.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1128
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7
-		     "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-042540	     DISPLAY "³ " AT 1228 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				       BACKGROUND-COLOR 7
-		     "Enter Password        "
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     DISPLAY "À" AT 1328 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				      BACKGROUND-COLOR 7
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     PERFORM SCREEN-SHADOW.
-042550	     ACCEPT W40-CSHPASS AT 1245
-		    WITH BACKGROUND-COLOR 5
-			 FOREGROUND-COLOR 3 HIGHLIGHT AUTO NO-ECHO.
-018300	     MOVE 6		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CSHPASS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     PERFORM RESTORE-SCREEN.
-018360	     MOVE 1		 TO WS-LENGTH.
+      PERFORM SAVE-SCREEN.
+      MOVE SPACES  TO W40-CSHPASS.
+      MOVE 12   TO SHADE-ROW.
+      MOVE 30   TO SHADE-COL.
+      MOVE 23   TO SHADE-WIDTH.
+      MOVE 2   TO SHADE-LINES.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1128
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7
+       "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+            DISPLAY "³ " AT 1228 WITH FOREGROUND-COLOR 7 HIGHLIGHT
+           BACKGROUND-COLOR 7
+       "Enter Password        "
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      DISPLAY "À" AT 1328 WITH FOREGROUND-COLOR 7 HIGHLIGHT
+          BACKGROUND-COLOR 7
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      PERFORM SCREEN-SHADOW.
+            ACCEPT W40-CSHPASS AT 1245
+      WITH BACKGROUND-COLOR 5
+    FOREGROUND-COLOR 3 HIGHLIGHT AUTO NO-ECHO.
+            MOVE 6   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING W40-CSHPASS
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+      PERFORM RESTORE-SCREEN.
+            MOVE 1   TO WS-LENGTH.
 
        DA46-CHK-PW.
-	   IF (W40-CSHPASS = W85-SUPER(1) OR
-	       W85-SUPER(9) OR "SELOHW")
-	       MOVE 3		 TO WS-PRC.
+    IF (W40-CSHPASS = W85-SUPER(1) OR
+        W85-SUPER(9) OR "SELOHW")
+        MOVE 3   TO WS-PRC.
 
        DA46-WSALE-EXIT.
-	     EXIT.
+      EXIT.
 
        DA47.
-025340	     SUBTRACT W25-VALUE  FROM W90-DB.
-025350	     SUBTRACT W90-CDISC  FROM W90-LDISC.
-025360       SUBTRACT SAL-NONTAX FROM W90-NONTAX.
-	   IF SAL-VAT-SUB > ZERO
-036780	       SUBTRACT SAL-TAXVAL FROM W90-TAXVAL(SAL-VAT-SUB).
-025380	   IF (STK-IND < 2) OR (STK-IND = 3)
-025390	       COMPUTE W90-BAL = W90-BAL - (W10-COST * W10-QNT).
+            SUBTRACT W25-VALUE  FROM W90-DB.
+            SUBTRACT W90-CDISC  FROM W90-LDISC.
+             SUBTRACT SAL-NONTAX FROM W90-NONTAX.
+    IF SAL-VAT-SUB > ZERO
+              SUBTRACT SAL-TAXVAL FROM W90-TAXVAL(SAL-VAT-SUB).
+          IF (STK-IND < 2) OR (STK-IND = 3)
+              COMPUTE W90-BAL = W90-BAL - (W10-COST * W10-QNT).
 
-012050 DA48.
-012060	     DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-			      WITH FOREGROUND-COLOR 3.
-012070	     ADD 1		 TO LIN.
+       DA48.
+            DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+         WITH FOREGROUND-COLOR 3.
+            ADD 1   TO LIN.
 
-012080 DA49.
-012090	   IF WS-LAST = ZERO
-	       IF WS-PLU-D = "S"
-		   MOVE ZERO	 TO W10-SMAN
-	       END-IF
-012100	       GO TO DA05.
+       DA49.
+          IF WS-LAST = ZERO
+        IF WS-PLU-D = "S"
+     MOVE ZERO  TO W10-SMAN
+        END-IF
+              GO TO DA05.
       *    *************************************************************
       *    ****    P R O C E S S   T H E   P A Y M E N T
       *    *************************************************************
-012110 DA50.
-	   IF WS-PLU-D = "P"
-	       IF WS-PROMPT = "N" OR "F"
-023790		   ADD 1	 TO WS-LAST
-023800		   GO TO DA15
-	       END-IF
-	   ELSE
-	   IF WS-PROMPT = "N" OR "F"
-	       GO TO DA50B.
+       DA50.
+    IF WS-PLU-D = "P"
+        IF WS-PROMPT = "N" OR "F"
+           ADD 1  TO WS-LAST
+           GO TO DA15
+        END-IF
+    ELSE
+    IF WS-PROMPT = "N" OR "F"
+        GO TO DA50B.
 
        DA50A.
-036900	     MOVE "'P'rocess, 'A'mend, 'C'ancel or 'M'ore items"
-				 TO WS-ERR-MES.
-	     MOVE SPACE 	 TO WS-OPTION.
+            MOVE "'P'rocess, 'A'mend, 'C'ancel or 'M'ore items"
+     TO WS-ERR-MES.
+      MOVE SPACE   TO WS-OPTION.
 
-012150 DA51.
-	     PERFORM OPT-MESSAGE
-		     UNTIL WS-OPTION = "P" OR "A" OR "C" OR "M" OR "*".
-023780     IF WS-OPTION = "M"
-023790         ADD 1             TO WS-LAST
-023800	       GO TO DA15.
-012240     IF WS-OPTION = "A"
-012250	       PERFORM DA200A
-012260         GO TO DA50.
+       DA51.
+      PERFORM OPT-MESSAGE
+       UNTIL WS-OPTION = "P" OR "A" OR "C" OR "M" OR "*".
+           IF WS-OPTION = "M"
+               ADD 1             TO WS-LAST
+              GO TO DA15.
+           IF WS-OPTION = "A"
+              PERFORM DA200A
+               GO TO DA50.
            IF WS-OPTION = "C"
       *
       *    June 2005 - Include routine to record cancelled transaction
       *
-	       PERFORM MA000
-	       GO TO DA05.
-	   IF WS-OPTION = "*"
-	       PERFORM NA000.
+        PERFORM MA000
+        GO TO DA05.
+    IF WS-OPTION = "*"
+        PERFORM NA000.
 
        DA50B.
-012270	     MOVE ZERO		 TO WS-TDISC W90-TDISC.
-012280     IF W90-LDISC NOT = ZERO
-012290	       MOVE W90-LDISC	 TO W90-TDISC
-012300         GO TO DA60.
-012310	     MOVE W90-DB	 TO W90-DVAL.
+            MOVE ZERO   TO WS-TDISC W90-TDISC.
+           IF W90-LDISC NOT = ZERO
+              MOVE W90-LDISC  TO W90-TDISC
+               GO TO DA60.
+            MOVE W90-DB  TO W90-DVAL.
 
-012520 DA60.
-012530       SUBTRACT W90-TDISC FROM W90-DB GIVING W90-TSELL W90-TOTAL.
-012540       MULTIPLY -1 BY W90-TDISC GIVING W15-VAL.
-012550	     DISPLAY W15-VAL AT 2115
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-012560	     MOVE ZERO		 TO W90-TTAX W90-ATAX.
+       DA60.
+             SUBTRACT W90-TDISC FROM W90-DB GIVING W90-TSELL W90-TOTAL.
+             MULTIPLY -1 BY W90-TDISC GIVING W15-VAL.
+            DISPLAY W15-VAL AT 2115
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+            MOVE ZERO   TO W90-TTAX W90-ATAX.
       *    *************************************************************
       *    ****    C H E C K   I F   P I C K I N G   S L I P
       *    *************************************************************
-	   IF LS-INSTR = "S"
-	       PERFORM DD000
-	       GO TO DA05.
+    IF LS-INSTR = "S"
+        PERFORM DD000
+        GO TO DA05.
       *    *************************************************************
       *    ****    USE WINDOW FOR PAYMENT
       *    *************************************************************
-	     PERFORM SAVE-SCREEN-2.
+      PERFORM SAVE-SCREEN-2.
 
        DA62.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1143
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     "¿"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1243
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " P A Y M E N T   D E T A I L S ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1343
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " AMOUNT DUE                    ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1443
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " Balance                       ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1543
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     "                               ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1643
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " Cash Received                 ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1743
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " Cheque Received               ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1843
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " Credit Card Slip              ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 1943
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " Speed Point Slip              ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 2043
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " Voucher (Gift)                ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 2143
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " Credit Note                   ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "³" AT 2243
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     " E.F.T.                        ³"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     DISPLAY "À" AT 2343
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     MOVE 13		 TO SHADE-ROW.
-	     MOVE 45		 TO SHADE-COL.
-	     MOVE 31		 TO SHADE-WIDTH.
-	     MOVE 11		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1143
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       "¿"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1243
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " P A Y M E N T   D E T A I L S ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1343
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " AMOUNT DUE                    ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1443
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " Balance                       ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1543
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       "                               ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1643
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " Cash Received                 ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1743
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " Cheque Received               ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1843
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " Credit Card Slip              ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 1943
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " Speed Point Slip              ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 2043
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " Voucher (Gift)                ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 2143
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " Credit Note                   ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "³" AT 2243
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       " E.F.T.                        ³"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      DISPLAY "À" AT 2343
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      MOVE 13   TO SHADE-ROW.
+      MOVE 45   TO SHADE-COL.
+      MOVE 31   TO SHADE-WIDTH.
+      MOVE 11   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
 
-012660 DA65.
-012670	     MOVE ZERO		 TO W90-DUE W90-CASH  W90-VOUCH
-012680				    W90-PMT W90-CARD  W90-CHANGE
-				    W90-CHQ W90-SPEED W90-CRNOTE
-				    W90-EFT.
-012690	     MOVE W90-TOTAL	 TO W15-VAL W90-DUE.
-	     MOVE W90-TOTAL	 TO W90-SLIP-TOT.
-	     MOVE ZERO		 TO W90-ROUND.
-	   IF NOT WS-FACTOR = ZERO
-	       PERFORM JA000.
-	   IF NOT (W90-ROUND = ZERO)
-	       DISPLAY "Rounding  " AT 2203
-	       MULTIPLY -1 BY W90-ROUND
-				 GIVING W15-VAL
-	       DISPLAY W15-VAL AT 2215
-		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			    BACKGROUND-COLOR 5
-	       MOVE W90-SLIP-TOT TO W15-VAL W90-DUE.
-012700	     DISPLAY W15-VAL AT 2315
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-012700	     DISPLAY W15-VAL AT 1463
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 7.
+       DA65.
+            MOVE ZERO   TO W90-DUE W90-CASH  W90-VOUCH
+              W90-PMT W90-CARD  W90-CHANGE
+        W90-CHQ W90-SPEED W90-CRNOTE
+        W90-EFT.
+            MOVE W90-TOTAL  TO W15-VAL W90-DUE.
+      MOVE W90-TOTAL  TO W90-SLIP-TOT.
+      MOVE ZERO   TO W90-ROUND.
+    IF NOT WS-FACTOR = ZERO
+        PERFORM JA000.
+    IF NOT (W90-ROUND = ZERO)
+        DISPLAY "Rounding  " AT 2203
+        MULTIPLY -1 BY W90-ROUND
+     GIVING W15-VAL
+        DISPLAY W15-VAL AT 2215
+         WITH FOREGROUND-COLOR 3 HIGHLIGHT
+       BACKGROUND-COLOR 5
+        MOVE W90-SLIP-TOT TO W15-VAL W90-DUE.
+            DISPLAY W15-VAL AT 2315
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+            DISPLAY W15-VAL AT 1463
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 7.
 
-012710 DA71.
-012720       COMPUTE W90-CRD = W90-DUE - W90-PMT.
-012730	     MOVE W90-CRD	 TO W100-BAL.
-012740	     DISPLAY W100-BAL AT 1563
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 7.
+       DA71.
+             COMPUTE W90-CRD = W90-DUE - W90-PMT.
+            MOVE W90-CRD  TO W100-BAL.
+            DISPLAY W100-BAL AT 1563
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 7.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³			C A S H   V A L U E		       ³
+      *    ³   C A S H   V A L U E         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012750 DA72.
-012760	     ACCEPT S26-CASH.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM RESTORE-SCREEN-2
-		     GO TO DA50A
-	       END-EVALUATE.
-012770	     MOVE W90-CASH	 TO W90-PMT.
-012800       PERFORM DA71.
-012780     IF W90-PMT NOT < W90-DUE
-012790         GO TO DA74.
+       DA72.
+            ACCEPT S26-CASH.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM RESTORE-SCREEN-2
+       GO TO DA50A
+        END-EVALUATE.
+            MOVE W90-CASH  TO W90-PMT.
+             PERFORM DA71.
+           IF W90-PMT NOT < W90-DUE
+               GO TO DA74.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		      C H E Q U E   V A L U E		       ³
+      *    ³        C H E Q U E   V A L U E         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012810 DA73.
-012820	     ACCEPT S26-CHQ.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM RESTORE-SCREEN-2
-		     GO TO DA50A
-	       END-EVALUATE.
-012830	     ADD W90-CHQ	 TO W90-PMT.
-012860       PERFORM DA71.
-012840     IF W90-PMT NOT < W90-DUE
-012850         GO TO DA74.
+       DA73.
+            ACCEPT S26-CHQ.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM RESTORE-SCREEN-2
+       GO TO DA50A
+        END-EVALUATE.
+            ADD W90-CHQ  TO W90-PMT.
+             PERFORM DA71.
+           IF W90-PMT NOT < W90-DUE
+               GO TO DA74.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		 C R E D I T   C A R D	 V A L U E	       ³
+      *    ³   C R E D I T   C A R D  V A L U E        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012870       ACCEPT S26-CARD.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM RESTORE-SCREEN-2
-		     GO TO DA50A
-	       END-EVALUATE.
-012880	     ADD W90-CARD	 TO W90-PMT.
-012860       PERFORM DA71.
-012840	   IF W90-PMT NOT < W90-DUE
-012850         GO TO DA74.
+             ACCEPT S26-CARD.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM RESTORE-SCREEN-2
+       GO TO DA50A
+        END-EVALUATE.
+            ADD W90-CARD  TO W90-PMT.
+             PERFORM DA71.
+          IF W90-PMT NOT < W90-DUE
+               GO TO DA74.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		 S P E E D   P O I N T	 V A L U E	       ³
+      *    ³   S P E E D   P O I N T  V A L U E        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012870	     ACCEPT S26-SPEED.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM RESTORE-SCREEN-2
-		     GO TO DA50A
-	       END-EVALUATE.
-012880	     ADD W90-SPEED	 TO W90-PMT.
-012860       PERFORM DA71.
-012840	   IF W90-PMT NOT < W90-DUE
-012850         GO TO DA74.
+            ACCEPT S26-SPEED.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM RESTORE-SCREEN-2
+       GO TO DA50A
+        END-EVALUATE.
+            ADD W90-SPEED  TO W90-PMT.
+             PERFORM DA71.
+          IF W90-PMT NOT < W90-DUE
+               GO TO DA74.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		     V O U C H E R   V A L U E		       ³
+      *    ³       V O U C H E R   V A L U E         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012870	     ACCEPT S26-VOUCH.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM RESTORE-SCREEN-2
-		     GO TO DA50A
-	       END-EVALUATE.
-012880	     ADD W90-VOUCH	 TO W90-PMT.
-012860       PERFORM DA71.
-012840	   IF W90-PMT NOT < W90-DUE
-012850         GO TO DA74.
+            ACCEPT S26-VOUCH.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM RESTORE-SCREEN-2
+       GO TO DA50A
+        END-EVALUATE.
+            ADD W90-VOUCH  TO W90-PMT.
+             PERFORM DA71.
+          IF W90-PMT NOT < W90-DUE
+               GO TO DA74.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		 C R E D I T   N O T E	 V A L U E	       ³
+      *    ³   C R E D I T   N O T E  V A L U E        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012870	     ACCEPT S26-CRNOTE.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM RESTORE-SCREEN-2
-		     GO TO DA50A
-	       END-EVALUATE.
-012880	     ADD W90-CRNOTE	 TO W90-PMT.
-012860       PERFORM DA71.
+            ACCEPT S26-CRNOTE.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM RESTORE-SCREEN-2
+       GO TO DA50A
+        END-EVALUATE.
+            ADD W90-CRNOTE  TO W90-PMT.
+             PERFORM DA71.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		      E . F . T .   V A L U E		       ³
+      *    ³        E . F . T .   V A L U E         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-012820	     ACCEPT S26-EFT.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM RESTORE-SCREEN-2
-		     GO TO DA50A
-	       END-EVALUATE.
-012830	     ADD W90-EFT	 TO W90-PMT.
-012860       PERFORM DA71.
-012840     IF W90-PMT NOT < W90-DUE
-012850         GO TO DA74.
+            ACCEPT S26-EFT.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM RESTORE-SCREEN-2
+       GO TO DA50A
+        END-EVALUATE.
+            ADD W90-EFT  TO W90-PMT.
+             PERFORM DA71.
+           IF W90-PMT NOT < W90-DUE
+               GO TO DA74.
       *    *************************************************************
       *    ****    C H E C K   F O R   S H O R T   P A Y M E N T
       *    *************************************************************
-012890     IF W90-PMT < W90-DUE
-012900         GO TO DA76.
+           IF W90-PMT < W90-DUE
+               GO TO DA76.
       *    *************************************************************
       *    ****    A R E   P A Y M E N T   D E T A I L S   C O R R E C T
       *    *************************************************************
-012910 DA74.
-	     MOVE "C"		 TO WS-OPTION.
-	   IF WS-PROMPT = "N" OR "F"
-	       GO TO DA75AA.
-024810	     MOVE "'C'orrect or 'R'ekey payment  [C]"
-				 TO WS-ERR-MES.
-012950 DA75.
-	     PERFORM OPT-MESSAGE TEST AFTER
-		     UNTIL WS-OPTION = "C" OR "R".
-013050     IF WS-OPTION = "R"
-013060         GO TO DA65.
+       DA74.
+      MOVE "C"   TO WS-OPTION.
+    IF WS-PROMPT = "N" OR "F"
+        GO TO DA75AA.
+            MOVE "'C'orrect or 'R'ekey payment  [C]"
+     TO WS-ERR-MES.
+       DA75.
+      PERFORM OPT-MESSAGE TEST AFTER
+       UNTIL WS-OPTION = "C" OR "R".
+           IF WS-OPTION = "R"
+               GO TO DA65.
 
        DA75AA.
-	   IF NOT (WS-BNK-IND = "Y")
-	       GO TO DA75B.
+    IF NOT (WS-BNK-IND = "Y")
+        GO TO DA75B.
            IF W90-CHQ = ZERO
                GO TO DA75B.
-	     PERFORM SAVE-SCREEN-3.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"
-		      AT 0933 WITH REVERSE-VIDEO.
-	     DISPLAY "³Name                                  ³"
+      PERFORM SAVE-SCREEN-3.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"
+        AT 0933 WITH REVERSE-VIDEO.
+      DISPLAY "³Name                                  ³"
                       AT 1033 WITH REVERSE-VIDEO.
-	     DISPLAY "³Telephone No.                         ³"
+      DISPLAY "³Telephone No.                         ³"
                       AT 1133 WITH REVERSE-VIDEO.
-	     DISPLAY "³Cheque Date                           ³"
+      DISPLAY "³Cheque Date                           ³"
                       AT 1233 WITH REVERSE-VIDEO.
-	     DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      AT 1333 WITH REVERSE-VIDEO.
-	     MOVE 10		 TO SHADE-ROW.
-	     MOVE 35		 TO SHADE-COL.
-	     MOVE 38		 TO SHADE-WIDTH.
-	     MOVE 4		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE SPACES	 TO W10-NAME W10-TEL.
+      DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        AT 1333 WITH REVERSE-VIDEO.
+      MOVE 10   TO SHADE-ROW.
+      MOVE 35   TO SHADE-COL.
+      MOVE 38   TO SHADE-WIDTH.
+      MOVE 4   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
+      MOVE SPACES  TO W10-NAME W10-TEL.
              MOVE W12-TODAY      TO W22-DTE1.
 
        DA75A.
              ACCEPT S10.
-	     PERFORM CLEAR-L50.
+      PERFORM CLEAR-L50.
            IF W10-NAME = SPACES OR
               W10-TEL = SPACES OR
               W22-DTE1 = ZERO
-	       MOVE "Require name, telephone and date"
-				 TO WS-ERR-STRING
-025040	       PERFORM ERROR-MESSAGE
+        MOVE "Require name, telephone and date"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
                GO TO DA75A.
              MOVE W22-DTE1       TO W22-DTE3
                                     W10-EDTE.
@@ -3820,72 +3818,72 @@
              MOVE W20-DTE        TO W22-DTE1.
              MOVE W22-DTE3       TO W20-DTE.
            IF WS-ERROR = 1
-	       MOVE "Invalid date"
-				 TO WS-ERR-STRING
-025040	       PERFORM ERROR-MESSAGE
+        MOVE "Invalid date"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
                GO TO DA75A.
-	     PERFORM RESTORE-SCREEN-3.
+      PERFORM RESTORE-SCREEN-3.
 
        DA75B.
-013070       COMPUTE W90-CHANGE = W90-PMT - W90-DUE.
-013080	     MOVE W90-CHANGE	 TO W15-VAL.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 0426
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 4
-		     "¿"
-		      WITH FOREGROUND-COLOR 4 HIGHLIGHT
-			   BACKGROUND-COLOR 4.
-	     DISPLAY "³" AT 0526
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 4
-		     " C H A N G E  - ZZZZZZ9.99- "
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 4
-		     "³" WITH FOREGROUND-COLOR 4 HIGHLIGHT
-			      BACKGROUND-COLOR 4.
-	     DISPLAY "À" AT 0626
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 4
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 4 HIGHLIGHT
-			   BACKGROUND-COLOR 4.
-013090	     DISPLAY W15-VAL AT 0543
-		     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			  BACKGROUND-COLOR 4.
-	     MOVE 05		 TO SHADE-ROW.
-	     MOVE 28		 TO SHADE-COL.
-	     MOVE 28		 TO SHADE-WIDTH.
-	     MOVE 02		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
-	   IF W85-CUSDISP = "Y"
-	       MOVE " CHANGE:-"	 TO W15-HD2
-	       MOVE W90-CHANGE	 TO W15-CHG
-	       MOVE W15-CUSDSP	 TO CUS-LINE
-	       WRITE CUS-REC.
-013100	     GO TO DA79.
+             COMPUTE W90-CHANGE = W90-PMT - W90-DUE.
+            MOVE W90-CHANGE  TO W15-VAL.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 0426
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 4
+       "¿"
+        WITH FOREGROUND-COLOR 4 HIGHLIGHT
+      BACKGROUND-COLOR 4.
+      DISPLAY "³" AT 0526
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 4
+       " C H A N G E  - ZZZZZZ9.99- "
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 4
+       "³" WITH FOREGROUND-COLOR 4 HIGHLIGHT
+         BACKGROUND-COLOR 4.
+      DISPLAY "À" AT 0626
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 4
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 4 HIGHLIGHT
+      BACKGROUND-COLOR 4.
+            DISPLAY W15-VAL AT 0543
+       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 4.
+      MOVE 05   TO SHADE-ROW.
+      MOVE 28   TO SHADE-COL.
+      MOVE 28   TO SHADE-WIDTH.
+      MOVE 02   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
+    IF W85-CUSDISP = "Y"
+        MOVE " CHANGE:-"  TO W15-HD2
+        MOVE W90-CHANGE  TO W15-CHG
+        MOVE W15-CUSDSP  TO CUS-LINE
+        WRITE CUS-REC.
+            GO TO DA79.
 
-013110 DA76.
-025020	     MOVE "Short - REKEY Payment"
-				 TO WS-ERR-STRING.
-025040	     PERFORM ERROR-MESSAGE.
-013150	     MOVE 20		 TO LIN.
+       DA76.
+            MOVE "Short - REKEY Payment"
+     TO WS-ERR-STRING.
+            PERFORM ERROR-MESSAGE.
+            MOVE 20   TO LIN.
 
-013160 DA78.
-013220	     GO TO DA62.
+       DA78.
+            GO TO DA62.
 
-013230 DA79.
-	     MOVE WS-SLIP-P	 TO WS-PRNINV.
-	   IF WS-PROMPT = "F"
-	       GO TO DA79-FAST.
+       DA79.
+      MOVE WS-SLIP-P  TO WS-PRNINV.
+    IF WS-PROMPT = "F"
+        GO TO DA79-FAST.
 
        DA79-LOOP.
-	     MOVE WS-PRNINV	 TO WS-OPTION.
-	     MOVE SPACES	 TO WS-ERR-MES.
-	     STRING "Print Invoice Y/N  ["
-		    DELIMITED SIZE
-		    WS-OPTION DELIMITED SIZE
-		    "]" DELIMITED SIZE
-			     INTO WS-ERR-MES.
-	     PERFORM OPT-MESSAGE TEST AFTER
-		     UNTIL WS-OPTION = "Y" OR "N".
-	     MOVE WS-OPTION	 TO WS-PRNINV.
+      MOVE WS-PRNINV  TO WS-OPTION.
+      MOVE SPACES  TO WS-ERR-MES.
+      STRING "Print Invoice Y/N  ["
+      DELIMITED SIZE
+      WS-OPTION DELIMITED SIZE
+      "]" DELIMITED SIZE
+        INTO WS-ERR-MES.
+      PERFORM OPT-MESSAGE TEST AFTER
+       UNTIL WS-OPTION = "Y" OR "N".
+      MOVE WS-OPTION  TO WS-PRNINV.
       *    *************************************************************
       *    ****    P R O C E S S   T H E   S A L E
       *    *************************************************************
@@ -3894,373 +3892,373 @@
       *    ³ If the purchaser requires a cash slip to be printed then  ³
       *    ³ check if total sale exceeds R2999.99 and if VAT is to be  ³
       *    ³ reclaimed as input VAT then the Purchaser's name and VAT  ³
-      *    ³ number must be reflected on the cash slip. 	       ³
+      *    ³ number must be reflected on the cash slip.         ³
       *    ³ NB. If this is not a requirement for you, then change the ³
-      *    ³	 next three lines to remarks.			       ³
+      *    ³  next three lines to remarks.          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF WS-PRNINV = "Y"
-	       IF W90-TOTAL > 2999.99
-		   PERFORM DA400V.
-	     MOVE ZERO		 TO W90-EXCVAL.
-	   IF WS-PARCELS = "Y"
-	       PERFORM IA000.
-	     PERFORM CLEAR-L50.
-013250       DISPLAY "Processing Sale" AT 2520 WITH
-013260		      BACKGROUND-COLOR 3
-		      FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
-013270       MOVE 1              TO WS-SALKEY.
-013280	     PERFORM AY60 THRU AY999.
-	     INITIALIZE SLP-RECORD1.
-	     MOVE ZERO		 TO SLP-SEQ.
-013330	     MOVE W70-INVOICE	 TO W90-REF-NO W15-RECNO SLP-REF.
-	   IF WS-NOSELL = "N"
-013290	       IF W70-INVOICE = 99999999
-013300		   MOVE 1	 TO W70-INVOICE
-013310	       ELSE
-013320		   ADD 1	 TO W70-INVOICE.
-	     MOVE W10-SMAN	 TO SLP-SMAN.
-	     MOVE W15-SMAN	 TO SLP-SNAME.
-	     MOVE "H"		 TO SLP-TYPE.
-	     MOVE WS-DRAW	 TO SLP-DRAW.
-	     MOVE W12-TODAY	 TO SLP-DATE.
-012150	     ACCEPT W25-TIME FROM TIME.
+    IF WS-PRNINV = "Y"
+        IF W90-TOTAL > 2999.99
+     PERFORM DA400V.
+      MOVE ZERO   TO W90-EXCVAL.
+    IF WS-PARCELS = "Y"
+        PERFORM IA000.
+      PERFORM CLEAR-L50.
+             DISPLAY "Processing Sale" AT 2520 WITH
+              BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
+             MOVE 1              TO WS-SALKEY.
+            PERFORM AY60 THRU AY999.
+      INITIALIZE SLP-RECORD1.
+      MOVE ZERO   TO SLP-SEQ.
+            MOVE W70-INVOICE  TO W90-REF-NO W15-RECNO SLP-REF.
+    IF WS-NOSELL = "N"
+              IF W70-INVOICE = 99999999
+           MOVE 1  TO W70-INVOICE
+              ELSE
+           ADD 1  TO W70-INVOICE.
+      MOVE W10-SMAN  TO SLP-SMAN.
+      MOVE W15-SMAN  TO SLP-SNAME.
+      MOVE "H"   TO SLP-TYPE.
+      MOVE WS-DRAW  TO SLP-DRAW.
+      MOVE W12-TODAY  TO SLP-DATE.
+            ACCEPT W25-TIME FROM TIME.
              MOVE W25-HH         TO W95-HH.
              MOVE W25-MM         TO W95-MM.
              MOVE W25-SS         TO W95-SS.
-	     MOVE W95-TIME	 TO SLP-TIME.
-	     MOVE W05-VATNO	 TO SLP-VATNO.
-	     MOVE W90-TAX	 TO SLP-TAX.
-	   IF WS-NOSELL = "N"
-	       PERFORM WRITE-SLIP THRU WRITE-SLIP-EXIT.
-015400	     MOVE 1		 TO WS-ACTION.
-008720	     PERFORM AY35 THRU AY59.
-013340	     DISPLAY W90-REF AT 0410
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
-014800       PERFORM OPEN-CASH-DRAWER THRU OPEN-CASH-DRAWER-EXIT.
+      MOVE W95-TIME  TO SLP-TIME.
+      MOVE W05-VATNO  TO SLP-VATNO.
+      MOVE W90-TAX  TO SLP-TAX.
+    IF WS-NOSELL = "N"
+        PERFORM WRITE-SLIP THRU WRITE-SLIP-EXIT.
+            MOVE 1   TO WS-ACTION.
+            PERFORM AY35 THRU AY59.
+            DISPLAY W90-REF AT 0410
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 0.
+             PERFORM OPEN-CASH-DRAWER THRU OPEN-CASH-DRAWER-EXIT.
 
        DA79A.
-	   IF WS-PRNINV = "Y"
-	       MOVE W85-SI	 TO CSH-DATA
-	       WRITE CSH-L.
-013350	     MOVE "CASH SALE/KONTANT"
-				 TO W15-DOCTYP.
+    IF WS-PRNINV = "Y"
+        MOVE W85-SI  TO CSH-DATA
+        WRITE CSH-L.
+            MOVE "CASH SALE/KONTANT"
+     TO W15-DOCTYP.
       *    *************************************************************
-      *	   **** IF OPTION TO PRINT HAS NOT BEEN REQUESTED - SKIP PRINT.
+      *    **** IF OPTION TO PRINT HAS NOT BEEN REQUESTED - SKIP PRINT.
       *    *************************************************************
-	   IF WS-PRNINV = "N"
-	       GO TO DA79B.
-013360       MOVE W15-L1A        TO CSH-DATA.
-013370       WRITE CSH-L.
-013380       MOVE W15-L1         TO CSH-DATA.
-013390       WRITE CSH-L.
-	   IF WS-CSH-ADD = "Y"
-013400	       MOVE W15-L2	 TO CSH-DATA
-013410	       WRITE CSH-L.
-	   IF WS-CSH-TEL = "Y"
-013420	       MOVE W15-L3	 TO CSH-DATA
-013430	       WRITE CSH-L.
-	   IF WS-CSH-VAT = "Y"
-	   IF NOT (W05-VATNO = SPACES)
+    IF WS-PRNINV = "N"
+        GO TO DA79B.
+             MOVE W15-L1A        TO CSH-DATA.
+             WRITE CSH-L.
+             MOVE W15-L1         TO CSH-DATA.
+             WRITE CSH-L.
+    IF WS-CSH-ADD = "Y"
+              MOVE W15-L2  TO CSH-DATA
+              WRITE CSH-L.
+    IF WS-CSH-TEL = "Y"
+              MOVE W15-L3  TO CSH-DATA
+              WRITE CSH-L.
+    IF WS-CSH-VAT = "Y"
+    IF NOT (W05-VATNO = SPACES)
                MOVE W05-VATNO    TO W15-GNO
                MOVE W15-L3A      TO CSH-DATA
                WRITE CSH-L.
-013440	     MOVE W15-L4	 TO CSH-DATA.
-013450	     WRITE CSH-L.
-	   IF WS-CSH-TIME = "Y"
-	       MOVE W95-TIME	 TO W15-TIME
-013440	       MOVE W15-L4A	 TO CSH-DATA
-013450	       WRITE CSH-L.
-	   IF WS-CSH-ASSIST = "Y"
-013460	       IF NOT (W10-SMAN	= ZERO)
-013470		   MOVE W15-L5	  TO CSH-DATA
-013480		   WRITE CSH-L.
-013490	     MOVE W15-L6	 TO CSH-DATA.
-013500	     WRITE CSH-L.
-013510	     MOVE ALL "-"	 TO CSH-LINE.
-013520       WRITE CSH-L.
+            MOVE W15-L4  TO CSH-DATA.
+            WRITE CSH-L.
+    IF WS-CSH-TIME = "Y"
+        MOVE W95-TIME  TO W15-TIME
+              MOVE W15-L4A  TO CSH-DATA
+              WRITE CSH-L.
+    IF WS-CSH-ASSIST = "Y"
+              IF NOT (W10-SMAN = ZERO)
+           MOVE W15-L5   TO CSH-DATA
+           WRITE CSH-L.
+            MOVE W15-L6  TO CSH-DATA.
+            WRITE CSH-L.
+            MOVE ALL "-"  TO CSH-LINE.
+             WRITE CSH-L.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		 K I T C H E N	 P R I N T E R		       ³
+      *    ³   K I T C H E N  P R I N T E R         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        DA79B.
-	   IF W85-KTCHPRN = "N"
-	       GO TO DA80.
-013440	     MOVE W15-L4	 TO KCH-DATA.
-013480	     WRITE KCH-L.
-	     MOVE W95-TIME	 TO W15-TIME.
-013440	     MOVE W15-L4A	 TO KCH-DATA.
-013480	     WRITE KCH-L.
-013460	   IF W10-SMAN NOT = ZERO
-013470	       MOVE W15-L5	 TO KCH-DATA
-013480	       WRITE KCH-L.
-013440	     MOVE W15-L6	 TO KCH-DATA.
-013480	     WRITE KCH-L.
-013440	     MOVE ALL "-"	 TO KCH-LINE.
-013480	     WRITE KCH-L.
+    IF W85-KTCHPRN = "N"
+        GO TO DA80.
+            MOVE W15-L4  TO KCH-DATA.
+            WRITE KCH-L.
+      MOVE W95-TIME  TO W15-TIME.
+            MOVE W15-L4A  TO KCH-DATA.
+            WRITE KCH-L.
+          IF W10-SMAN NOT = ZERO
+              MOVE W15-L5  TO KCH-DATA
+              WRITE KCH-L.
+            MOVE W15-L6  TO KCH-DATA.
+            WRITE KCH-L.
+            MOVE ALL "-"  TO KCH-LINE.
+            WRITE KCH-L.
       *    *************************************************************
       *    ****    R E A D   T H E   S A L E   F I L E   A N D
       *            P R I N T   T H E   C A S H   S L I P
       *    *************************************************************
-013530 DA80.
-013540	   IF WS-SALKEY > WS-LAST
-013550         GO TO DA95.
-013560	     PERFORM READ-SALE THRU READ-SALE-EXIT.
-	     MOVE SAL-CODE	 TO SLP-CODE.
-	     MOVE SAL-EXT-ITEM	 TO SLP-EXT-ITEM.
-	     MOVE SAL-MSER	 TO SLP-MSER.
-	     MOVE SAL-SERNO	 TO SLP-SERNO.
-	     MOVE SAL-QNT	 TO SLP-QNT.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y")
-031280	       MOVE SAL-WEIGHT	 TO W10-QNT
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QNT.
-	     MOVE SAL-COST	 TO SLP-COST.
-	     MOVE SAL-SELL	 TO SLP-SELL.
-	     MOVE SAL-VAT	 TO SLP-VAT.
-	     MOVE SAL-VAL	 TO SLP-VAL.
-	     MOVE SAL-INCTAX	 TO SLP-INCTAX.
-	     MOVE SAL-NONTAX	 TO SLP-NONTAX.
-	     MOVE SAL-TAXVAL	 TO SLP-TAXVAL.
-	     MOVE SAL-DSC	 TO SLP-DSC.
-	     MOVE SAL-DISC	 TO SLP-DISC.
-	     MOVE SAL-SUPER	 TO SLP-SUPER.
-	     MOVE SAL-VAT-SUB	 TO SLP-VAT-SUB.
-	     MOVE SAL-PACK	 TO SLP-PACK.
-	     MOVE SAL-SPEC	 TO SLP-SPEC.
-	     MOVE SAL-SCALE	 TO SLP-3DEC.
-	   IF WS-POSMODE = "N"
-	       MOVE "J" 	 TO SLP-TYPE
-	   ELSE
-	       MOVE "I"		 TO SLP-TYPE
-	       MOVE "Y" 	 TO W70-POSMODE.
-	     ADD 1		 TO SLP-SEQ.
-	   IF WS-NOSELL = "N"
-	       PERFORM WRITE-SLIP THRU WRITE-SLIP-EXIT.
-015400	     MOVE 1		 TO WS-ACTION.
-008720	     PERFORM AY35 THRU AY59.
-026910	   IF SAL-EXT-ITEM = SPACES
-	       MOVE SPACES	 TO W15-L13
-013600	       MOVE SAL-DESC	 TO W15-REMK
-	       IF WS-PRNINV = "Y"
-013680		   MOVE W15-L13	 TO CSH-DATA
-013690		   WRITE CSH-L
-	       END-IF
-	       IF W85-KTCHPRN = "Y"
-		   MOVE SPACES	 TO W15-L14
-		   MOVE SAL-DESC TO W15-REMK
-013440		   MOVE W15-L14  TO KCH-DATA
-013480		   WRITE KCH-L
-	       END-IF
-	       GO TO DA90.
-013570	     MOVE SAL-EXT-ITEM	 TO STK-CODE.
-	     MOVE SPACES	 TO W15-DETAIL.
+       DA80.
+          IF WS-SALKEY > WS-LAST
+               GO TO DA95.
+            PERFORM READ-SALE THRU READ-SALE-EXIT.
+      MOVE SAL-CODE  TO SLP-CODE.
+      MOVE SAL-EXT-ITEM  TO SLP-EXT-ITEM.
+      MOVE SAL-MSER  TO SLP-MSER.
+      MOVE SAL-SERNO  TO SLP-SERNO.
+      MOVE SAL-QNT  TO SLP-QNT.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y")
+              MOVE SAL-WEIGHT  TO W10-QNT
+    ELSE
+              MOVE SAL-QNT  TO W10-QNT.
+      MOVE SAL-COST  TO SLP-COST.
+      MOVE SAL-SELL  TO SLP-SELL.
+      MOVE SAL-VAT  TO SLP-VAT.
+      MOVE SAL-VAL  TO SLP-VAL.
+      MOVE SAL-INCTAX  TO SLP-INCTAX.
+      MOVE SAL-NONTAX  TO SLP-NONTAX.
+      MOVE SAL-TAXVAL  TO SLP-TAXVAL.
+      MOVE SAL-DSC  TO SLP-DSC.
+      MOVE SAL-DISC  TO SLP-DISC.
+      MOVE SAL-SUPER  TO SLP-SUPER.
+      MOVE SAL-VAT-SUB  TO SLP-VAT-SUB.
+      MOVE SAL-PACK  TO SLP-PACK.
+      MOVE SAL-SPEC  TO SLP-SPEC.
+      MOVE SAL-SCALE  TO SLP-3DEC.
+    IF WS-POSMODE = "N"
+        MOVE "J"   TO SLP-TYPE
+    ELSE
+        MOVE "I"   TO SLP-TYPE
+        MOVE "Y"   TO W70-POSMODE.
+      ADD 1   TO SLP-SEQ.
+    IF WS-NOSELL = "N"
+        PERFORM WRITE-SLIP THRU WRITE-SLIP-EXIT.
+            MOVE 1   TO WS-ACTION.
+            PERFORM AY35 THRU AY59.
+          IF SAL-EXT-ITEM = SPACES
+        MOVE SPACES  TO W15-L13
+              MOVE SAL-DESC  TO W15-REMK
+        IF WS-PRNINV = "Y"
+           MOVE W15-L13  TO CSH-DATA
+           WRITE CSH-L
+        END-IF
+        IF W85-KTCHPRN = "Y"
+     MOVE SPACES  TO W15-L14
+     MOVE SAL-DESC TO W15-REMK
+           MOVE W15-L14  TO KCH-DATA
+           WRITE KCH-L
+        END-IF
+        GO TO DA90.
+            MOVE SAL-EXT-ITEM  TO STK-CODE.
+      MOVE SPACES  TO W15-DETAIL.
       *    *************************************************************
-      *    ****    I F	 N O T	 B A T C H   M O D E   -   U P D A T E
-      * 	   C A R D E X	 F I L E
+      *    ****    I F  N O T  B A T C H   M O D E   -   U P D A T E
+      *     C A R D E X  F I L E
       *    *************************************************************
-	   IF WS-POSMODE = "N"
-	       PERFORM AY05 THRU AY59
-	       MOVE "CASH"	 TO CRD-AC
-	       MOVE ZERO	 TO CRD-SEQ
-017540	       MOVE W10-SMAN	 TO CRD-SMAN
-017550	       MOVE W90-REF	 TO CRD-REF
-	       MOVE STK-SUPP	 TO CRD-SUPP
-	       MOVE W12-T-YMD	 TO CRD-DTE
-	       MOVE "CASH SALE"	 TO CRD-NAME
-	       MOVE SPACES	 TO CRD-WHS
-013610	       MOVE W10-QNT	 TO CRD-QNT
-013590	       MOVE SAL-EXT-ITEM TO CRD-EXT-CODE
-013630	       MOVE SAL-COST	 TO CRD-COST
-	       MOVE STK-LDG	 TO CRD-DEPT
-	       IF CRD-QNT < ZERO
-		   MOVE "CASH REFUND"
-				 TO CRD-NAME.
-	   IF WS-CSH-DETAIL = "2"
+    IF WS-POSMODE = "N"
+        PERFORM AY05 THRU AY59
+        MOVE "CASH"  TO CRD-AC
+        MOVE ZERO  TO CRD-SEQ
+              MOVE W10-SMAN  TO CRD-SMAN
+              MOVE W90-REF  TO CRD-REF
+        MOVE STK-SUPP  TO CRD-SUPP
+        MOVE W12-T-YMD  TO CRD-DTE
+        MOVE "CASH SALE"  TO CRD-NAME
+        MOVE SPACES  TO CRD-WHS
+              MOVE W10-QNT  TO CRD-QNT
+              MOVE SAL-EXT-ITEM TO CRD-EXT-CODE
+              MOVE SAL-COST  TO CRD-COST
+        MOVE STK-LDG  TO CRD-DEPT
+        IF CRD-QNT < ZERO
+     MOVE "CASH REFUND"
+     TO CRD-NAME.
+    IF WS-CSH-DETAIL = "2"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   MOVE STK-ITEM TO W15-ITM
-		   MOVE "/"	 TO W15-SL
-		   MOVE STK-ITM	 TO W15-EXT
-	       ELSE
-		   MOVE STK-CODE TO W15-EXT-ITEM.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280	       MOVE SAL-WEIGHT	 TO W10-QUANT
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QUANT.
-	     MOVE SAL-PACK	 TO WS-P1.
-	   IF WS-CSH-DETAIL = "2"
-013610	       MOVE W10-QUANT	 TO W15-QUANT
+        IF WS-USE-ITM = "Y"
+     MOVE STK-ITEM TO W15-ITM
+     MOVE "/"  TO W15-SL
+     MOVE STK-ITM  TO W15-EXT
+        ELSE
+     MOVE STK-CODE TO W15-EXT-ITEM.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              MOVE SAL-WEIGHT  TO W10-QUANT
+    ELSE
+              MOVE SAL-QNT  TO W10-QUANT.
+      MOVE SAL-PACK  TO WS-P1.
+    IF WS-CSH-DETAIL = "2"
+              MOVE W10-QUANT  TO W15-QUANT
       *    *************************************************************
-      *	   **** IF OPTION TO PRINT HAS BEEN REQUESTED - PRINT A LINE
+      *    **** IF OPTION TO PRINT HAS BEEN REQUESTED - PRINT A LINE
       *    *************************************************************
-	       IF WS-PRNINV = "Y"
-013680		   MOVE W15-L11A TO CSH-DATA
-013690		   WRITE CSH-L.
-	     MOVE SPACES	 TO W15-DETAIL.
-	   IF WS-CSH-DETAIL = "2" OR WS-CSH-ITM = "D"
-013600	       MOVE SAL-DESC	 TO W15-DESC.
-	   IF WS-CSH-DETAIL = "1" AND WS-CSH-ITM = "D"
-	       MOVE W10-QUANT	 TO W15-QUANT.
-	   IF (WS-CSH-DETAIL = "1" AND WS-CSH-ITM = "I")
+        IF WS-PRNINV = "Y"
+           MOVE W15-L11A TO CSH-DATA
+           WRITE CSH-L.
+      MOVE SPACES  TO W15-DETAIL.
+    IF WS-CSH-DETAIL = "2" OR WS-CSH-ITM = "D"
+              MOVE SAL-DESC  TO W15-DESC.
+    IF WS-CSH-DETAIL = "1" AND WS-CSH-ITM = "D"
+        MOVE W10-QUANT  TO W15-QUANT.
+    IF (WS-CSH-DETAIL = "1" AND WS-CSH-ITM = "I")
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   MOVE STK-ITEM TO W15-ITM
-		   MOVE "/"	 TO W15-SL
-		   MOVE STK-ITM	 TO W15-EXT
-	       ELSE
-		   MOVE STK-CODE TO W15-EXT-ITEM
-	       END-IF
-	       MOVE W10-QUANT	 TO W15-QNT
-	       MOVE SAL-SELL	 TO W15-PRC.
-	   IF (WS-CSH-DETAIL = "1" AND WS-CSH-ITM = "I")
-	       MOVE SAL-VAL	 TO W15-EXTND
-	   ELSE
-013620	       MOVE SAL-VAL	 TO W15-PRICE.
-	     MOVE SAL-VAL	 TO W25-VALUE.
-013630	     MOVE SAL-COST	 TO W10-COST.
-013640	     MOVE SAL-SELL	 TO W10-SELL.
-013650       MOVE SAL-DISC       TO W90-CDISC.
-013660       MOVE SAL-DSC        TO WS-DISC.
-013670	     SUBTRACT W90-CDISC FROM W25-VALUE
-				 GIVING W90-VALUE.
+        IF WS-USE-ITM = "Y"
+     MOVE STK-ITEM TO W15-ITM
+     MOVE "/"  TO W15-SL
+     MOVE STK-ITM  TO W15-EXT
+        ELSE
+     MOVE STK-CODE TO W15-EXT-ITEM
+        END-IF
+        MOVE W10-QUANT  TO W15-QNT
+        MOVE SAL-SELL  TO W15-PRC.
+    IF (WS-CSH-DETAIL = "1" AND WS-CSH-ITM = "I")
+        MOVE SAL-VAL  TO W15-EXTND
+    ELSE
+              MOVE SAL-VAL  TO W15-PRICE.
+      MOVE SAL-VAL  TO W25-VALUE.
+            MOVE SAL-COST  TO W10-COST.
+            MOVE SAL-SELL  TO W10-SELL.
+             MOVE SAL-DISC       TO W90-CDISC.
+             MOVE SAL-DSC        TO WS-DISC.
+            SUBTRACT W90-CDISC FROM W25-VALUE
+     GIVING W90-VALUE.
              MOVE SAL-SUPER      TO WS-SUPER.
       *    *************************************************************
-      *    ****   I F	V A T	A P P L I C A B L E ? -
-      * 	  CALCULATE THE VAT AND THE EXCLUSIVE AMOUNT.
+      *    ****   I F V A T A P P L I C A B L E ? -
+      *    CALCULATE THE VAT AND THE EXCLUSIVE AMOUNT.
       *    *************************************************************
-	   IF SAL-VAT-SUB NOT = ZERO
-	       MOVE W05-VAT(SAL-VAT-SUB)
+    IF SAL-VAT-SUB NOT = ZERO
+        MOVE W05-VAT(SAL-VAT-SUB)
                                  TO W05-RATE
-	       COMPUTE W90-VALUE ROUNDED = (W90-VALUE -
-		     ((W90-VALUE / (W05-RATE + 100.00000)) *
-		       W05-RATE))
-	       COMPUTE W90-VAT(SAL-VAT-SUB) ROUNDED =
-		       W90-VAT(SAL-VAT-SUB) +
-		     ((W25-VALUE - W90-CDISC) - W90-VALUE)
-	       COMPUTE W90-EXCDIS ROUNDED = (W90-CDISC -
-		     ((W90-CDISC / (W05-RATE + 100.00000)) *
-		       W05-RATE))
+        COMPUTE W90-VALUE ROUNDED = (W90-VALUE -
+       ((W90-VALUE / (W05-RATE + 100.00000)) *
+         W05-RATE))
+        COMPUTE W90-VAT(SAL-VAT-SUB) ROUNDED =
+         W90-VAT(SAL-VAT-SUB) +
+       ((W25-VALUE - W90-CDISC) - W90-VALUE)
+        COMPUTE W90-EXCDIS ROUNDED = (W90-CDISC -
+       ((W90-CDISC / (W05-RATE + 100.00000)) *
+         W05-RATE))
       *    *************************************************************
-      *    ****    A C C U M U L A T E	 T H E	 T O T A L
-      * 	   E X C L U S I V E   V A L U E
+      *    ****    A C C U M U L A T E  T H E  T O T A L
+      *     E X C L U S I V E   V A L U E
       *    *************************************************************
-	       ADD W90-VALUE	 TO W90-EXCVAL.
+        ADD W90-VALUE  TO W90-EXCVAL.
       *    *************************************************************
-      *    ****    A C C U M U L A T E	 T O T A L   A M O U N T
-      * 	   E X C L U D I N G   V A T
+      *    ****    A C C U M U L A T E  T O T A L   A M O U N T
+      *     E X C L U D I N G   V A T
       *    *************************************************************
-	     ADD W90-VALUE	 TO W90-EXCTOT.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-	       COMPUTE CRD-SELL ROUNDED = W90-VALUE / SAL-WEIGHT
-	   ELSE
-	       COMPUTE CRD-SELL ROUNDED = W90-VALUE / SAL-QNT.
+      ADD W90-VALUE  TO W90-EXCTOT.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+        COMPUTE CRD-SELL ROUNDED = W90-VALUE / SAL-WEIGHT
+    ELSE
+        COMPUTE CRD-SELL ROUNDED = W90-VALUE / SAL-QNT.
       *    *************************************************************
-      *    ****    B A T C H   M O D E	 ?
+      *    ****    B A T C H   M O D E  ?
       *    *************************************************************
-	   IF WS-POSMODE = "N"
-	       IF (WS-CARDEX = "Y" AND WS-NOSELL = "N")
-		   PERFORM WRITE-CARDEX THRU WRITE-CARDEX-EXIT
-015400		   MOVE 1	 TO WS-ACTION
-		   PERFORM AY43 THRU AY59.
-	   IF WS-PRNINV = "Y"
-013680	       MOVE W15-L11	 TO CSH-DATA
-013690         WRITE CSH-L.
+    IF WS-POSMODE = "N"
+        IF (WS-CARDEX = "Y" AND WS-NOSELL = "N")
+     PERFORM WRITE-CARDEX THRU WRITE-CARDEX-EXIT
+           MOVE 1  TO WS-ACTION
+     PERFORM AY43 THRU AY59.
+    IF WS-PRNINV = "Y"
+              MOVE W15-L11  TO CSH-DATA
+               WRITE CSH-L.
       *    *************************************************************
       *    ****    K I T C H E N   P R I N T E R   A T T A C H E D  ?
       *    *************************************************************
-	   IF W85-KTCHPRN = "Y"
-	       MOVE SPACES	 TO W15-L14
-	       MOVE W10-QUANT	 TO W15-KQ
-	       MOVE SAL-DESC	 TO W15-KD
-013440	       MOVE W15-L14	 TO KCH-DATA
-013480	       WRITE KCH-L.
+    IF W85-KTCHPRN = "Y"
+        MOVE SPACES  TO W15-L14
+        MOVE W10-QUANT  TO W15-KQ
+        MOVE SAL-DESC  TO W15-KD
+              MOVE W15-L14  TO KCH-DATA
+              WRITE KCH-L.
       *    *************************************************************
-      *    ****    I F	 B A T C H   M O D E   -   S K I P   U P D A T E
+      *    ****    I F  B A T C H   M O D E   -   S K I P   U P D A T E
       *    *************************************************************
-	   IF WS-POSMODE = "Y"
-	       GO TO DA88.
+    IF WS-POSMODE = "Y"
+        GO TO DA88.
       *    *************************************************************
       *    ****    R E A D   D E P A R T M E N T   R E C O R D
       *    *************************************************************
-026950	     MOVE STK-LDG	 TO DPT-CODE.
-	     MOVE ZERO		 TO WS-ACTION.
-026960       PERFORM AY38 THRU AY59.
+            MOVE STK-LDG  TO DPT-CODE.
+      MOVE ZERO   TO WS-ACTION.
+             PERFORM AY38 THRU AY59.
       *    *************************************************************
       *    ****    U P D A T E   S A L E S   A N A L Y S I S
       *    *************************************************************
-	   IF WS-NOSELL = "N"
-026970	       ADD W90-VALUE	 TO DPT-SALES-DAY
-026980                              DPT-SALES-MTD
-026990                              DPT-SALES-YTD.
+    IF WS-NOSELL = "N"
+              ADD W90-VALUE  TO DPT-SALES-DAY
+                                    DPT-SALES-MTD
+                                    DPT-SALES-YTD.
       *    *************************************************************
-      *    ****    U P D A T E	 G / L	 I N T E G R A T I O N
-      * 	   B A T C H   -   S A L E S
+      *    ****    U P D A T E  G / L  I N T E G R A T I O N
+      *     B A T C H   -   S A L E S
       *    *************************************************************
-	   IF WX-INT = "Y"
+    IF WX-INT = "Y"
                MOVE W12-T-YMD    TO WX-DATE
-	       MOVE STK-LDG	 TO WX-LEDG
-	       MOVE "CASH SALES" TO WX-NAR
-	       IF WS-NOSELL = "N"
-		   COMPUTE WX-VALUE = W90-VALUE * -1
-		   MOVE DPT-SALE-GL
-				 TO WX-AC
-		   MOVE 04	 TO WX-TYPE
+        MOVE STK-LDG  TO WX-LEDG
+        MOVE "CASH SALES" TO WX-NAR
+        IF WS-NOSELL = "N"
+     COMPUTE WX-VALUE = W90-VALUE * -1
+     MOVE DPT-SALE-GL
+     TO WX-AC
+     MOVE 04  TO WX-TYPE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *
       *    ****    Balancing the Integration entries
-      * 	   SALES LEDGER/CATERGORY
+      *     SALES LEDGER/CATERGORY
       *
-		   IF BALANCING-ENTRY-STORED
-		       ADD WX-VALUE
-				 TO WXT-VALUE
-		   ELSE
+     IF BALANCING-ENTRY-STORED
+         ADD WX-VALUE
+     TO WXT-VALUE
+     ELSE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *    *************************************************************
-      *    *		Store first Income Integration entry	       *
+      *    *  Store first Income Integration entry        *
       *    *  As items are selected randomly, storing the first income *
       *    *  entry each time will mean that INCOME ACCOUNTS are also  *
-      *    *  randomly adjusted.				       *
+      *    *  randomly adjusted.           *
       *    *************************************************************
-		       MOVE WX-LEDTRF
-				 TO WXT-LEDTRF
-		       MOVE "Y"  TO WS-BAL-ENTRY
-		   END-IF
-		   PERFORM GL-TRF-UPDATE.
+         MOVE WX-LEDTRF
+     TO WXT-LEDTRF
+         MOVE "Y"  TO WS-BAL-ENTRY
+     END-IF
+     PERFORM GL-TRF-UPDATE.
       *    *************************************************************
       *    ****    U P D A T E   C O S T - O F - S A L E S
       *    *************************************************************
-027160	     COMPUTE W90-BCR ROUNDED = (1.000 * W10-QNT * W10-COST).
-027000       ADD W90-BCR         TO DPT-COST-DAY
+            COMPUTE W90-BCR ROUNDED = (1.000 * W10-QNT * W10-COST).
+             ADD W90-BCR         TO DPT-COST-DAY
                                     DPT-COST-MTD
-027010                              DPT-COST-YTD.
+                                    DPT-COST-YTD.
       *    *************************************************************
-      *    ****    U P D A T E	 G / L	 I N T E G R A T I O N
-      * 	   B A T C H   -   C O S T   O F   S A L E S
+      *    ****    U P D A T E  G / L  I N T E G R A T I O N
+      *     B A T C H   -   C O S T   O F   S A L E S
       *    *************************************************************
-	   IF WX-INT = "Y"
+    IF WX-INT = "Y"
                IF W90-BCR NOT = ZERO
                    MOVE W90-BCR  TO WX-VALUE
                    MOVE DPT-COST-GL
                                  TO WX-AC
                    MOVE 08       TO WX-TYPE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ As this entry is double sided - it will not be used to    ³
-      *    ³ check the balancing of the itegration entries.	       ³
-      *	   ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		   PERFORM GL-TRF-UPDATE
+      *    ³ check the balancing of the itegration entries.        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+     PERFORM GL-TRF-UPDATE
                    COMPUTE WX-VALUE = W90-BCR * -1
                    MOVE DPT-PUR-GL
                                  TO WX-AC
@@ -4269,722 +4267,722 @@
       *    *************************************************************
       *    ****    U P D A T E   D I S C O U N T   G I V E N
       *    *************************************************************
-	   IF WS-NOSELL = "N"
-027020	       ADD W90-EXCDIS	 TO DPT-DISC-DAY
-027030				    DPT-DISC-MTD
-027040                              DPT-DISC-YTD
+    IF WS-NOSELL = "N"
+              ADD W90-EXCDIS  TO DPT-DISC-DAY
+              DPT-DISC-MTD
+                                    DPT-DISC-YTD
                                     DPT-SALES-DAY
                                     DPT-SALES-MTD
                                     DPT-SALES-YTD.
-	   IF WS-NOSELL = "N"
-027050	       PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
-013750       MOVE W12-T-YMD      TO STK-ACT.
+    IF WS-NOSELL = "N"
+              PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
+             MOVE W12-T-YMD      TO STK-ACT.
       *    *************************************************************
       *    ****    C H E C K   I F   S T O C K   C O N T R O L L E D
       *    *************************************************************
-	   IF WS-PRC-IND = "Y"
-027590	       IF STK-IND > 1
-027600		   GO TO DA85
-	       END-IF
-	   ELSE
-	   IF STK-IND > ZERO
-	       IF (WS-POSMODE = "N" AND STK-IND = 1)
-		   PERFORM DA85
-		   PERFORM DB000
-013770		   GO TO DA88
-	       END-IF
-	       GO TO DA85.
+    IF WS-PRC-IND = "Y"
+              IF STK-IND > 1
+           GO TO DA85
+        END-IF
+    ELSE
+    IF STK-IND > ZERO
+        IF (WS-POSMODE = "N" AND STK-IND = 1)
+     PERFORM DA85
+     PERFORM DB000
+           GO TO DA88
+        END-IF
+        GO TO DA85.
       *    *************************************************************
       *    ****    P A C K S
       *    *************************************************************
-	     MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
-				 GIVING W10-QNT.
-013780	     SUBTRACT W10-QNT	 FROM STK-QUANT.
-013790	   IF STK-DISC > ZERO
-013800         GO TO DA85.
+      MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
+     GIVING W10-QNT.
+            SUBTRACT W10-QNT  FROM STK-QUANT.
+          IF STK-DISC > ZERO
+               GO TO DA85.
       *    *************************************************************
       *    ****    C H E C K   R E - O R D E R   L E V E L   A N D
       *            R E P O R T   L O W - L E V E L S
       *    *************************************************************
-013810     IF STK-QUANT NOT > STK-LEVEL
-013820         MOVE 1            TO STK-DISC
-013830         PERFORM BG80.
+           IF STK-QUANT NOT > STK-LEVEL
+               MOVE 1            TO STK-DISC
+               PERFORM BG80.
       *    *************************************************************
-      *    ****    U P D A T E	 S T O C K   S T A T S
+      *    ****    U P D A T E  S T O C K   S T A T S
       *    *************************************************************
-013840 DA85.
-013860       ADD W90-BCR         TO W90-BDT STK-MTDC STK-YTDC.
-013870	     ADD W10-QNT	 TO STK-MTD STK-YTD.
-	   IF WS-NOSELL = "N"
-013880	       ADD W90-VALUE	 TO STK-MTDV W90-SALES STK-YTDV.
-013950	     PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
+       DA85.
+             ADD W90-BCR         TO W90-BDT STK-MTDC STK-YTDC.
+            ADD W10-QNT  TO STK-MTD STK-YTD.
+    IF WS-NOSELL = "N"
+              ADD W90-VALUE  TO STK-MTDV W90-SALES STK-YTDV.
+            PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
       *    *************************************************************
-      *    ****    L O G   T R A N S A C T I O N   T O	 T H E
-      * 	   A U D I T   F I L E
+      *    ****    L O G   T R A N S A C T I O N   T O  T H E
+      *     A U D I T   F I L E
       *    *************************************************************
-013960	     MOVE W70-AUDIT	 TO WS-AUDKEY.
-013970       MOVE LOW-VALUES     TO AUD-REC1.
-015400	     MOVE 1		 TO WS-ACTION.
-013980       PERFORM AY16 THRU AY59.
-	   IF WS-NOSELL = "N"
-013990	       MOVE 6		 TO AUD-TYPE
-014000	       MOVE WS-DRAW	 TO AUD-SUB
-014010	       MOVE W90-REF	 TO AUD-CSH
-014020	       MOVE W10-SMAN	 TO AUD-SMAN
-014030	       MOVE W90-VALUE	 TO AUD-SEL
-014040	       MOVE W90-BCR	 TO AUD-CST
-014050	       MOVE STK-CODE	 TO AUD-EXT-STOCK
-	       MOVE WS-SUPER	 TO AUD-SUPER
-014060	       PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT
-014070	       ADD 1		 TO W70-AUDIT
-014080	       MOVE 1		 TO WS-AUDKEY
-015400	       MOVE 0		 TO WS-ACTION
-014090	       PERFORM READ-AUDIT THRU READ-AUDIT-EXIT
-014100	       PERFORM AY16 THRU AY59
-014110	       MOVE 1		 TO AUD-REP6
-014120	       PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
+            MOVE W70-AUDIT  TO WS-AUDKEY.
+             MOVE LOW-VALUES     TO AUD-REC1.
+            MOVE 1   TO WS-ACTION.
+             PERFORM AY16 THRU AY59.
+    IF WS-NOSELL = "N"
+              MOVE 6   TO AUD-TYPE
+              MOVE WS-DRAW  TO AUD-SUB
+              MOVE W90-REF  TO AUD-CSH
+              MOVE W10-SMAN  TO AUD-SMAN
+              MOVE W90-VALUE  TO AUD-SEL
+              MOVE W90-BCR  TO AUD-CST
+              MOVE STK-CODE  TO AUD-EXT-STOCK
+        MOVE WS-SUPER  TO AUD-SUPER
+              PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT
+              ADD 1   TO W70-AUDIT
+              MOVE 1   TO WS-AUDKEY
+              MOVE 0   TO WS-ACTION
+              PERFORM READ-AUDIT THRU READ-AUDIT-EXIT
+              PERFORM AY16 THRU AY59
+              MOVE 1   TO AUD-REP6
+              PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
 
        DA88.
-014130     IF W90-CDISC = ZERO
-014140         GO TO DA90.
-	     MOVE SPACES	 TO W15-DETAIL.
-014150       MOVE "DISCOUNT/AFSLAG %"
+           IF W90-CDISC = ZERO
+               GO TO DA90.
+      MOVE SPACES  TO W15-DETAIL.
+             MOVE "DISCOUNT/AFSLAG %"
                                  TO W15-DISC.
-014160       MOVE WS-DISC        TO W15-DSC.
-014170       MULTIPLY -1 BY W90-CDISC
-				 GIVING W15-PRICE.
+             MOVE WS-DISC        TO W15-DSC.
+             MULTIPLY -1 BY W90-CDISC
+     GIVING W15-PRICE.
            IF WS-PRNINV = "Y"
-014180         MOVE W15-L11      TO CSH-DATA
-014190         WRITE CSH-L.
+               MOVE W15-L11      TO CSH-DATA
+               WRITE CSH-L.
 
-014200 DA90.
-014210       MOVE SPACES         TO CSH-DATA.
-014220       ADD 1               TO WS-SALKEY.
-014230       GO TO DA80.
+       DA90.
+             MOVE SPACES         TO CSH-DATA.
+             ADD 1               TO WS-SALKEY.
+             GO TO DA80.
 
-014240 DA95.
+       DA95.
            IF WS-PRNINV = "Y"
-013510	       MOVE ALL "-"	 TO CSH-LINE
-014250         WRITE CSH-L.
-	   IF W85-KTCHPRN = "Y"
-013440	       MOVE ALL "="	 TO KCH-LINE
-013480	       WRITE KCH-L.
-014260	     MOVE "Sub TOTAL/TOTAAL :"
+              MOVE ALL "-"  TO CSH-LINE
+               WRITE CSH-L.
+    IF W85-KTCHPRN = "Y"
+              MOVE ALL "="  TO KCH-LINE
+              WRITE KCH-L.
+            MOVE "Sub TOTAL/TOTAAL :"
                                  TO W15-REMK.
-	     ADD 1		 TO SLP-SEQ.
-014270	     MOVE W90-DB	 TO W15-VAL W90-TOTAL SLP-TOTAL.
+      ADD 1   TO SLP-SEQ.
+            MOVE W90-DB  TO W15-VAL W90-TOTAL SLP-TOTAL.
            IF WS-PRNINV = "Y"
-014280         MOVE W15-L13      TO CSH-DATA
-014290         WRITE CSH-L.
-014300	   IF (WS-POSMODE = "N") AND (W90-TDISC NOT = ZERO)
-014310         IF W90-LDISC = ZERO
-027690		   MOVE "YYYY"	 TO DPT-CODE
-		   MOVE ZERO	 TO WS-ACTION
-027700             PERFORM AY38 THRU AY59
-027710		   ADD W90-TDISC TO DPT-DISC-DAY
-027720				    DPT-DISC-MTD
-027730				    DPT-DISC-YTD
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF (WS-POSMODE = "N") AND (W90-TDISC NOT = ZERO)
+               IF W90-LDISC = ZERO
+           MOVE "YYYY"  TO DPT-CODE
+     MOVE ZERO  TO WS-ACTION
+                   PERFORM AY38 THRU AY59
+           ADD W90-TDISC TO DPT-DISC-DAY
+              DPT-DISC-MTD
+              DPT-DISC-YTD
                    IF WX-INT = "Y"
                        MOVE W90-EXCDIS
                                  TO WX-VALUE
                        MOVE DPT-DISC-GL
                                  TO WX-AC
-		       MOVE DPT-CODE
-				 TO WX-LEDG
+         MOVE DPT-CODE
+     TO WX-LEDG
                        MOVE 15   TO WX-TYPE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *
       *    ****    Balancing the Integration entries
-      * 	   DISCOUNT
+      *     DISCOUNT
       *
-		       ADD WX-VALUE
-				 TO WXT-VALUE
-		       PERFORM GL-TRF-UPDATE
+         ADD WX-VALUE
+     TO WXT-VALUE
+         PERFORM GL-TRF-UPDATE
                    END-IF
-027740             PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
-	     MOVE ZERO		 TO SLP-DISCOUNT.
-014370     IF W90-TDISC NOT = ZERO
-014380         MOVE "DISCOUNT/AFSLAG  :"
+                   PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
+      MOVE ZERO   TO SLP-DISCOUNT.
+           IF W90-TDISC NOT = ZERO
+               MOVE "DISCOUNT/AFSLAG  :"
                                  TO W15-REMK
-	       COMPUTE SLP-DISCOUNT = W90-TDISC * -1
-	       MOVE SLP-DISCOUNT TO W15-VAL
+        COMPUTE SLP-DISCOUNT = W90-TDISC * -1
+        MOVE SLP-DISCOUNT TO W15-VAL
                IF WS-PRNINV = "Y"
-014400             MOVE W15-L13  TO CSH-DATA
-014410             WRITE CSH-L.
+                   MOVE W15-L13  TO CSH-DATA
+                   WRITE CSH-L.
       *    *************************************************************
       *    ****    C H E C K   I F   R O U N D I N G   W A S   D O N E
       *    *************************************************************
-	   IF W90-ROUND = ZERO
-	       GO TO DA95-END-ROUND.
-	     MOVE 1		 TO WS-P1.
+    IF W90-ROUND = ZERO
+        GO TO DA95-END-ROUND.
+      MOVE 1   TO WS-P1.
       *    *************************************************************
-      *    ****   H A S   V A T   T O	B E   C A L C U L A T E D
-      * 	  R O U N D I N G   A M O U N T
+      *    ****   H A S   V A T   T O B E   C A L C U L A T E D
+      *    R O U N D I N G   A M O U N T
       *    *************************************************************
        DA95-ROUNDING.
-	   IF (W90-TAXVAL(WS-P1) < W90-ROUND)
-	       IF WS-VAT-SUB < 6
-		   ADD 1	 TO WS-P1
-		   GO TO DA95-ROUNDING
-	       ELSE
+    IF (W90-TAXVAL(WS-P1) < W90-ROUND)
+        IF WS-VAT-SUB < 6
+     ADD 1  TO WS-P1
+     GO TO DA95-ROUNDING
+        ELSE
       *    *************************************************************
-      *    ****    A P P L Y   R O U N D I N G	 T O   N O N -
-      * 	   T A X A B L E   A M O U N T
+      *    ****    A P P L Y   R O U N D I N G  T O   N O N -
+      *     T A X A B L E   A M O U N T
       *    *************************************************************
-		   MOVE ZERO	 TO WS-P1
-		   SUBTRACT W90-ROUND
-				 FROM W90-NONTAX
-	       END-IF
-	   ELSE
+     MOVE ZERO  TO WS-P1
+     SUBTRACT W90-ROUND
+     FROM W90-NONTAX
+        END-IF
+    ELSE
       *    *************************************************************
       *    ****    C A L C U L A T E   V A T   O N   R O U N D I N G
-      * 	   A M O U N T
+      *     A M O U N T
       *    *************************************************************
-	       MOVE W05-VAT(WS-P1)
-				 TO W05-RATE
-      *	       SUBTRACT W90-ROUND
-      *			     FROM W90-TAXVAL(WS-P1)
-	       COMPUTE W90-RTTAX ROUNDED = (W90-ROUND /
-		  (100.00000 + W05-RATE)) * W05-RATE
-	       COMPUTE W90-RTVAL = W90-ROUND - W90-RTTAX.
+        MOVE W05-VAT(WS-P1)
+     TO W05-RATE
+      *        SUBTRACT W90-ROUND
+      *        FROM W90-TAXVAL(WS-P1)
+        COMPUTE W90-RTTAX ROUNDED = (W90-ROUND /
+    (100.00000 + W05-RATE)) * W05-RATE
+        COMPUTE W90-RTVAL = W90-ROUND - W90-RTTAX.
 
        DA95-END-ROUND.
-	     MOVE 1		 TO WS-VAT-SUB.
+      MOVE 1   TO WS-VAT-SUB.
       *    *************************************************************
       *    ****    C A L C U L A T E   V A T   O N   T O T A L S
-      * 	   F O R   E A C H   V A T   R A T E
+      *     F O R   E A C H   V A T   R A T E
       *    *************************************************************
        DA95-VAT-LOOP.
-	     MOVE ZERO		 TO SLP-TAXABLE(WS-VAT-SUB)
-				    SLP-VATVAL(WS-VAT-SUB).
-	   IF NOT (W90-TAXVAL(WS-VAT-SUB) = ZERO)
-014710	       MOVE W05-VAT(WS-VAT-SUB)
-014720				 TO W05-RATE
-	       COMPUTE W90-VAT(WS-VAT-SUB) ROUNDED =
-		      (W90-TAXVAL(WS-VAT-SUB) /
-		      (100.00000 + W05-RATE)) * W05-RATE
-	       COMPUTE W90-TAXVAL(WS-VAT-SUB) =
-		       W90-TAXVAL(WS-VAT-SUB) - W90-VAT(WS-VAT-SUB)
-	       ADD W90-VAT(WS-VAT-SUB)
-				 TO W90-TTAX
-	       MOVE W90-VAT(WS-VAT-SUB)
-				 TO SLP-VATVAL(WS-VAT-SUB)
-	       MOVE W90-TAXVAL(WS-VAT-SUB)
-				 TO SLP-TAXABLE(WS-VAT-SUB).
-	   IF WS-VAT-SUB < 6
-	       ADD 1		 TO WS-VAT-SUB
-	       GO TO DA95-VAT-LOOP.
-	     MOVE W90-RTTAX	 TO SLP-RTTAX.
-	     MOVE W90-RTVAL	 TO SLP-RTVAL.
-	     MOVE W90-TAX	 TO SLP-TAX.
-	     MOVE W90-EXCTOT	 TO SLP-EXCTAX.
+      MOVE ZERO   TO SLP-TAXABLE(WS-VAT-SUB)
+        SLP-VATVAL(WS-VAT-SUB).
+    IF NOT (W90-TAXVAL(WS-VAT-SUB) = ZERO)
+              MOVE W05-VAT(WS-VAT-SUB)
+           TO W05-RATE
+        COMPUTE W90-VAT(WS-VAT-SUB) ROUNDED =
+        (W90-TAXVAL(WS-VAT-SUB) /
+        (100.00000 + W05-RATE)) * W05-RATE
+        COMPUTE W90-TAXVAL(WS-VAT-SUB) =
+         W90-TAXVAL(WS-VAT-SUB) - W90-VAT(WS-VAT-SUB)
+        ADD W90-VAT(WS-VAT-SUB)
+     TO W90-TTAX
+        MOVE W90-VAT(WS-VAT-SUB)
+     TO SLP-VATVAL(WS-VAT-SUB)
+        MOVE W90-TAXVAL(WS-VAT-SUB)
+     TO SLP-TAXABLE(WS-VAT-SUB).
+    IF WS-VAT-SUB < 6
+        ADD 1   TO WS-VAT-SUB
+        GO TO DA95-VAT-LOOP.
+      MOVE W90-RTTAX  TO SLP-RTTAX.
+      MOVE W90-RTVAL  TO SLP-RTVAL.
+      MOVE W90-TAX  TO SLP-TAX.
+      MOVE W90-EXCTOT  TO SLP-EXCTAX.
       *    *************************************************************
-      *    ****    I F	 B A T C H   M O D E   -   S K I P   U P D A T E
+      *    ****    I F  B A T C H   M O D E   -   S K I P   U P D A T E
       *    *************************************************************
-	   IF WS-POSMODE = "Y"
-	       GO TO DA100.
-014480       MOVE 9              TO WS-PARKEY.
-014500       PERFORM AY01 THRU AY59.
-	     MOVE 1		 TO W05-V-RATE.
+    IF WS-POSMODE = "Y"
+        GO TO DA100.
+             MOVE 9              TO WS-PARKEY.
+             PERFORM AY01 THRU AY59.
+      MOVE 1   TO W05-V-RATE.
 
        DA95-VAT.
-	   IF W90-VAT(W05-V-RATE) = ZERO
-	       GO TO DA95-CHECK-END.
-	     MOVE W05-VAT-CODE	 TO DPT-CODE.
-027840	     PERFORM AY38 THRU AY59.
+    IF W90-VAT(W05-V-RATE) = ZERO
+        GO TO DA95-CHECK-END.
+      MOVE W05-VAT-CODE  TO DPT-CODE.
+            PERFORM AY38 THRU AY59.
       *    *************************************************************
       *    ****    V A T   S T A T I S T I C S
       *    *************************************************************
-	   IF WS-NOSELL = "N"
-027850	       ADD W90-VAT(W05-V-RATE)
-				 TO DPT-O-VAT-DAY
-027860				    DPT-O-VAT-MTD
-027870				    DPT-O-VAT-YTD
-	       ADD W90-TAXVAL(W05-V-RATE)
-				 TO DPT-V-SALES-DAY
-				    DPT-V-SALES-MTD
-				    DPT-V-SALES-YTD.
-	   IF (WX-INT = "Y") AND (W90-VAT(W05-V-RATE) NOT = ZERO)
-		COMPUTE WX-VALUE = W90-VAT(W05-V-RATE) * -1
-		MOVE DPT-O-VAT-GL
-				 TO WX-AC
-		MOVE DPT-CODE	 TO WX-LEDG
+    IF WS-NOSELL = "N"
+              ADD W90-VAT(W05-V-RATE)
+     TO DPT-O-VAT-DAY
+              DPT-O-VAT-MTD
+              DPT-O-VAT-YTD
+        ADD W90-TAXVAL(W05-V-RATE)
+     TO DPT-V-SALES-DAY
+        DPT-V-SALES-MTD
+        DPT-V-SALES-YTD.
+    IF (WX-INT = "Y") AND (W90-VAT(W05-V-RATE) NOT = ZERO)
+  COMPUTE WX-VALUE = W90-VAT(W05-V-RATE) * -1
+  MOVE DPT-O-VAT-GL
+     TO WX-AC
+  MOVE DPT-CODE  TO WX-LEDG
                 MOVE 10          TO WX-TYPE
-		IF WS-NOSELL = "N"
+  IF WS-NOSELL = "N"
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *
       *    ****    Balancing the Integration entries
-      * 	   OUTPUT VAT
+      *     OUTPUT VAT
       *
-		    ADD WX-VALUE TO WXT-VALUE
-		    PERFORM GL-TRF-UPDATE.
-	   IF WS-NOSELL = "N"
-027880	       PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
-	     ADD W90-TAXVAL(W05-V-RATE)
-				 TO PAR-DVAT-DAY
+      ADD WX-VALUE TO WXT-VALUE
+      PERFORM GL-TRF-UPDATE.
+    IF WS-NOSELL = "N"
+              PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
+      ADD W90-TAXVAL(W05-V-RATE)
+     TO PAR-DVAT-DAY
                                     PAR-DVAT-MTD
                                     PAR-DVAT-YTD.
 
        DA95-CHECK-END.
-	   IF W05-V-RATE < 6
-	       ADD 1		 TO W05-V-RATE
-	       GO TO DA95-VAT.
+    IF W05-V-RATE < 6
+        ADD 1   TO W05-V-RATE
+        GO TO DA95-VAT.
              ADD W90-NONTAX      TO PAR-DNGS-DAY
                                     PAR-DNGS-MTD
                                     PAR-DNGS-YTD.
-	   IF WS-NOSELL = "N"
-	       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+    IF WS-NOSELL = "N"
+        PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
       *    *************************************************************
       *    ****    C H E C K   I F   R O U N D I N G   D O N E
       *    *************************************************************
-014540 DA100.
-	   IF NOT (W90-ROUND = ZERO)
-	       MOVE "R O U N D I N G  :"
-				 TO W15-REMK
-	       MULTIPLY -1 BY W90-ROUND
-				 GIVING W15-VAL SLP-ROUND
-	       IF WS-PRNINV = "Y"
-014460		   MOVE W15-L13	 TO CSH-DATA
-014470		   WRITE CSH-L.
+       DA100.
+    IF NOT (W90-ROUND = ZERO)
+        MOVE "R O U N D I N G  :"
+     TO W15-REMK
+        MULTIPLY -1 BY W90-ROUND
+     GIVING W15-VAL SLP-ROUND
+        IF WS-PRNINV = "Y"
+           MOVE W15-L13  TO CSH-DATA
+           WRITE CSH-L.
       *    *************************************************************
-      *    ****    I F	 B A T C H   M O D E   -   S K I P   U P D A T E
+      *    ****    I F  B A T C H   M O D E   -   S K I P   U P D A T E
       *    *************************************************************
-	   IF WS-POSMODE = "Y"
-	       GO TO DA100A.
-014550	     MOVE W90-BDT	 TO W90-TCOST.
+    IF WS-POSMODE = "Y"
+        GO TO DA100A.
+            MOVE W90-BDT  TO W90-TCOST.
              MOVE 2              TO TAX-TYPE.
              MOVE 2              TO TAX-ACTYPE.
              MOVE 01             TO TAX-CODE.
              MOVE W12-T-YMD      TO TAX-DATE.
              MOVE W90-REF        TO TAX-REF.
              MOVE W90-NONTAX     TO TAX-TAXFREE.
-	     COMPUTE TAX-VALUE = (W90-TOTAL - (W90-TDISC + W90-ROUND)).
-	     MOVE ZERO		 TO TAX-SEQ
+      COMPUTE TAX-VALUE = (W90-TOTAL - (W90-TDISC + W90-ROUND)).
+      MOVE ZERO   TO TAX-SEQ
                                     TAX-AC.
-	     MOVE 1		 TO WS-S9.
+      MOVE 1   TO WS-S9.
 
        DA100-VAT.
-	     MOVE W90-VAT(WS-S9) TO TAX-VAT(WS-S9)
-	     MOVE W90-TAXVAL(WS-S9)
-				 TO TAX-VAL(WS-S9).
-	   IF WS-S9 < 12
-	       ADD 1		 TO WS-S9
-	       GO TO DA100-VAT.
-	   IF WS-NOSELL = "N"
-	       PERFORM WRITE-TXTRAN THRU WRITE-TXTRAN-EXIT
-	       MOVE 1		 TO WS-ACTION
-	       PERFORM AY19 THRU AY59.
+      MOVE W90-VAT(WS-S9) TO TAX-VAT(WS-S9)
+      MOVE W90-TAXVAL(WS-S9)
+     TO TAX-VAL(WS-S9).
+    IF WS-S9 < 12
+        ADD 1   TO WS-S9
+        GO TO DA100-VAT.
+    IF WS-NOSELL = "N"
+        PERFORM WRITE-TXTRAN THRU WRITE-TXTRAN-EXIT
+        MOVE 1   TO WS-ACTION
+        PERFORM AY19 THRU AY59.
 
        DA100A.
-014560	     MOVE "DUE / VERSKULDIG :"
+            MOVE "DUE / VERSKULDIG :"
                                  TO W15-REMK.
-	     COMPUTE SLP-DUE = W90-TOTAL - (W90-TDISC + W90-ROUND)
-014570	     MOVE SLP-DUE	 TO W15-VAL.
-	     MOVE W90-CASH	 TO SLP-CASH.
-	     MOVE W90-CHQ	 TO SLP-CHQ.
-	     MOVE W90-EFT	 TO SLP-EFT.
-	     MOVE W90-CARD	 TO SLP-CARD.
-	     MOVE W90-SPEED	 TO SLP-SPEED.
-	     MOVE W90-VOUCH	 TO SLP-VOUCH.
-	     MOVE W90-CHANGE	 TO SLP-CHANGE.
-	     MOVE W90-CRNOTE	 TO SLP-CRNOTE.
-	     MOVE "T"		 TO SLP-TYPE.
-	     MOVE W95-TIME	 TO SLP-TIME2.
-	   IF WS-NOSELL = "N"
-	       PERFORM WRITE-SLIP THRU WRITE-SLIP-EXIT
-015400	       MOVE 1		 TO WS-ACTION
-008720	       PERFORM AY35 THRU AY59.
-	   IF WS-PRNINV = "N"
+      COMPUTE SLP-DUE = W90-TOTAL - (W90-TDISC + W90-ROUND)
+            MOVE SLP-DUE  TO W15-VAL.
+      MOVE W90-CASH  TO SLP-CASH.
+      MOVE W90-CHQ  TO SLP-CHQ.
+      MOVE W90-EFT  TO SLP-EFT.
+      MOVE W90-CARD  TO SLP-CARD.
+      MOVE W90-SPEED  TO SLP-SPEED.
+      MOVE W90-VOUCH  TO SLP-VOUCH.
+      MOVE W90-CHANGE  TO SLP-CHANGE.
+      MOVE W90-CRNOTE  TO SLP-CRNOTE.
+      MOVE "T"   TO SLP-TYPE.
+      MOVE W95-TIME  TO SLP-TIME2.
+    IF WS-NOSELL = "N"
+        PERFORM WRITE-SLIP THRU WRITE-SLIP-EXIT
+              MOVE 1   TO WS-ACTION
+              PERFORM AY35 THRU AY59.
+    IF WS-PRNINV = "N"
                GO TO DA101.
-014580       MOVE W15-L13        TO CSH-DATA
-014590       WRITE CSH-L.
-014600     IF W90-CASH > ZERO
-014610	       MOVE "CASH REC/KONTANT :"
+             MOVE W15-L13        TO CSH-DATA
+             WRITE CSH-L.
+           IF W90-CASH > ZERO
+              MOVE "CASH REC/KONTANT :"
                                  TO W15-REMK
-014620         MOVE W90-CASH     TO W15-VAL
-014630         MOVE W15-L13      TO CSH-DATA
-014640         WRITE CSH-L.
-014650     IF W90-CHQ > ZERO
-014660	       MOVE "CHEQUE REC/TJEK  :"
+               MOVE W90-CASH     TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+           IF W90-CHQ > ZERO
+              MOVE "CHEQUE REC/TJEK  :"
                                  TO W15-REMK
-014670         MOVE W90-CHQ      TO W15-VAL
-014680         MOVE W15-L13      TO CSH-DATA
-014690         WRITE CSH-L.
-014700	   IF W90-CARD > ZERO
-014710         MOVE "CR-CARD/KT-KAART :"
-				 TO W15-REMK
-014720         MOVE W90-CARD     TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF W90-SPEED > ZERO
-014710         MOVE "CR-CARD/KT-KAART :"
+               MOVE W90-CHQ      TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF W90-CARD > ZERO
+               MOVE "CR-CARD/KT-KAART :"
+     TO W15-REMK
+               MOVE W90-CARD     TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF W90-SPEED > ZERO
+               MOVE "CR-CARD/KT-KAART :"
                                  TO W15-REMK
-014720	       MOVE W90-SPEED	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF W90-VOUCH > ZERO
-014710	       MOVE "VOUCHER/KT-KAART :"
+              MOVE W90-SPEED  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF W90-VOUCH > ZERO
+              MOVE "VOUCHER/KT-KAART :"
                                  TO W15-REMK
-014720	       MOVE W90-VOUCH	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF W90-CRNOTE > ZERO
-014710	       MOVE "CR NOTE/KT NOTA  :"
+              MOVE W90-VOUCH  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF W90-CRNOTE > ZERO
+              MOVE "CR NOTE/KT NOTA  :"
                                  TO W15-REMK
-014720	       MOVE W90-CRNOTE	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF W90-EFT > ZERO
-014710	       MOVE "EFT/E OORBTLNG   :"
+              MOVE W90-CRNOTE  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF W90-EFT > ZERO
+              MOVE "EFT/E OORBTLNG   :"
                                  TO W15-REMK
-014720	       MOVE W90-EFT	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014750	   IF W90-CHANGE > ZERO
-014760         MOVE "CHANGE/KLEINGELD :"
+              MOVE W90-EFT  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF W90-CHANGE > ZERO
+               MOVE "CHANGE/KLEINGELD :"
                                  TO W15-REMK
-014770         MOVE W90-CHANGE   TO W15-VAL
-014780         MOVE W15-L13      TO CSH-DATA
-014790         WRITE CSH-L.
+               MOVE W90-CHANGE   TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
 
        DA101.
            IF WS-PRNINV = "N"
                GO TO DA106.
-014810       MOVE SPACES         TO CSH-DATA.
-014820       WRITE CSH-L.
-	   IF WS-PARCELS = "Y" AND
-	      W10-PARCELS > ZERO
-	       MOVE SPACES	 TO W15-DETAIL
-	       MOVE "CARTONS/PARCELS"
-				 TO W15-HD3
-	       MOVE W10-PARCELS  TO W15-CRTNS
-014730	       MOVE W15-L11	 TO CSH-DATA
-014740	       WRITE CSH-L
-	       MOVE SPACES	 TO CSH-DATA
-	       WRITE CSH-L.
-	   IF W05-VATNO NOT = SPACES
-	       MOVE "VAT Inclusive / BTW Ingesluit"
-				 TO CSH-DATA
-	       WRITE CSH-L
-	       MOVE SPACES	 TO CSH-DATA.
-	   IF WS-CSH-VAT-DET = "Y"
-	   IF W05-VATNO NOT = SPACES
+             MOVE SPACES         TO CSH-DATA.
+             WRITE CSH-L.
+    IF WS-PARCELS = "Y" AND
+       W10-PARCELS > ZERO
+        MOVE SPACES  TO W15-DETAIL
+        MOVE "CARTONS/PARCELS"
+     TO W15-HD3
+        MOVE W10-PARCELS  TO W15-CRTNS
+              MOVE W15-L11  TO CSH-DATA
+              WRITE CSH-L
+        MOVE SPACES  TO CSH-DATA
+        WRITE CSH-L.
+    IF W05-VATNO NOT = SPACES
+        MOVE "VAT Inclusive / BTW Ingesluit"
+     TO CSH-DATA
+        WRITE CSH-L
+        MOVE SPACES  TO CSH-DATA.
+    IF WS-CSH-VAT-DET = "Y"
+    IF W05-VATNO NOT = SPACES
                MOVE ALL "="      TO CSH-LINE
-	       WRITE CSH-L
+        WRITE CSH-L
                MOVE SPACES       TO CSH-DATA
-	       MOVE "   TAX INVOICE"
+        MOVE "   TAX INVOICE"
                                  TO W15-DOCTYP
-013360         MOVE W15-L1A      TO CSH-DATA
+               MOVE W15-L1A      TO CSH-DATA
                WRITE CSH-L
-	       MOVE SPACES	 TO CSH-DATA
-	       IF WS-CLNT-VAT = "Y"
-		   MOVE W50-CPY  TO W15-C-NAME
-		   MOVE W15-L8	 TO CSH-DATA
-		   WRITE CSH-L
-		   MOVE W90-CLNT-VAT
-				 TO W15-GNO
-		   MOVE W15-L3A  TO CSH-DATA
-		   WRITE CSH-L
-		   MOVE SPACES	 TO CSH-DATA
-	       END-IF
-	       MOVE "TAXABLE/BELASBARE :"
+        MOVE SPACES  TO CSH-DATA
+        IF WS-CLNT-VAT = "Y"
+     MOVE W50-CPY  TO W15-C-NAME
+     MOVE W15-L8  TO CSH-DATA
+     WRITE CSH-L
+     MOVE W90-CLNT-VAT
+     TO W15-GNO
+     MOVE W15-L3A  TO CSH-DATA
+     WRITE CSH-L
+     MOVE SPACES  TO CSH-DATA
+        END-IF
+        MOVE "TAXABLE/BELASBARE :"
                                  TO W15-REMK
-	       MOVE W90-EXCVAL	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L
+        MOVE W90-EXCVAL  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L
                MOVE "V A T / B T W     :"
                                  TO W15-REMK
                MOVE W90-TTAX     TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L
                MOVE ALL "="      TO CSH-LINE
                WRITE CSH-L
                MOVE SPACES       TO CSH-DATA
-014790         WRITE CSH-L.
-014830       MOVE W15-L9         TO CSH-DATA.
-014840       WRITE CSH-L.
+               WRITE CSH-L.
+             MOVE W15-L9         TO CSH-DATA.
+             WRITE CSH-L.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Advertisement for Devloper or Service Agent        ³
+      *    ³     Advertisement for Devloper or Service Agent        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-014850	     MOVE "APAC Point-of-Sale. 082-566-3095"
-				 TO CSH-DATA.
-014880	     WRITE CSH-L.
-014850	     MOVE SPACES	 TO CSH-DATA W15-DETAIL.
-	     MOVE WS-CSHCODE	 TO W15-CSHCODE.
-	     MOVE W15-L12A	 TO CSH-DATA.
-014860	     MOVE 1		 TO WS-S9.
+            MOVE "APAC Point-of-Sale. 082-566-3095"
+     TO CSH-DATA.
+            WRITE CSH-L.
+            MOVE SPACES  TO CSH-DATA W15-DETAIL.
+      MOVE WS-CSHCODE  TO W15-CSHCODE.
+      MOVE W15-L12A  TO CSH-DATA.
+            MOVE 1   TO WS-S9.
 
-014870 DA105.
-014880       WRITE CSH-L.
-014850	     MOVE SPACES	 TO CSH-DATA.
-014890     IF WS-S9 < W85-ADVANCE
-014900         ADD 1             TO WS-S9
-014910         GO TO DA105.
-	     MOVE W85-CSI	 TO CSH-DATA.
-014880       WRITE CSH-L.
-014850       MOVE SPACES         TO CSH-DATA.
-	   IF NOT (W85-CPRN = 9)
-	       CLOSE CSHSLE
-	       OPEN OUTPUT CSHSLE
-	       CALL X"91" USING X91-RES X91-FUN CSHSLE.
+       DA105.
+             WRITE CSH-L.
+            MOVE SPACES  TO CSH-DATA.
+           IF WS-S9 < W85-ADVANCE
+               ADD 1             TO WS-S9
+               GO TO DA105.
+      MOVE W85-CSI  TO CSH-DATA.
+             WRITE CSH-L.
+             MOVE SPACES         TO CSH-DATA.
+    IF NOT (W85-CPRN = 9)
+        CLOSE CSHSLE
+        OPEN OUTPUT CSHSLE
+        CALL X"91" USING X91-RES X91-FUN CSHSLE.
 
        DA106.
-	   IF W85-KTCHPRN = "N"
-	       GO TO DA106B.
-014860	     MOVE 1		 TO WS-S9.
-014850	     MOVE SPACES	 TO KCH-DATA.
+    IF W85-KTCHPRN = "N"
+        GO TO DA106B.
+            MOVE 1   TO WS-S9.
+            MOVE SPACES  TO KCH-DATA.
 
-014870 DA106A.
-014880	     WRITE KCH-L.
-014890     IF WS-S9 < W85-ADVANCE
-014900         ADD 1             TO WS-S9
-014910	       GO TO DA106A.
-	     CLOSE KCHPRN.
-	     OPEN OUTPUT KCHPRN.
-	     CALL X"91" USING X91-RES X91-FUN KCHPRN.
+       DA106A.
+            WRITE KCH-L.
+           IF WS-S9 < W85-ADVANCE
+               ADD 1             TO WS-S9
+              GO TO DA106A.
+      CLOSE KCHPRN.
+      OPEN OUTPUT KCHPRN.
+      CALL X"91" USING X91-RES X91-FUN KCHPRN.
       *    *************************************************************
-      *    ****    I F	 B A T C H   M O D E   -   S K I P   U P D A T E
+      *    ****    I F  B A T C H   M O D E   -   S K I P   U P D A T E
       *    *************************************************************
        DA106B.
-	   IF (WS-POSMODE = "Y") OR (WS-NOSELL NOT = "N")
-	       GO TO DA108.
-014920	     MOVE W70-AUDIT	 TO WS-AUDKEY.
-014930       MOVE LOW-VALUES     TO AUD-REC1.
-015400	     MOVE 1		 TO WS-ACTION.
-014940       PERFORM AY16 THRU AY59.
-014950       MOVE 5              TO AUD-TYPE.
-014960	     MOVE WS-DRAW	 TO AUD-SUB.
-014970	     MOVE W90-REF	 TO AUD-CSH.
+    IF (WS-POSMODE = "Y") OR (WS-NOSELL NOT = "N")
+        GO TO DA108.
+            MOVE W70-AUDIT  TO WS-AUDKEY.
+             MOVE LOW-VALUES     TO AUD-REC1.
+            MOVE 1   TO WS-ACTION.
+             PERFORM AY16 THRU AY59.
+             MOVE 5              TO AUD-TYPE.
+            MOVE WS-DRAW  TO AUD-SUB.
+            MOVE W90-REF  TO AUD-CSH.
              COMPUTE AUD-SELL = W90-TSELL - W90-TTAX.
-014990	     MOVE W90-TCOST	 TO AUD-COST.
-015000	     MOVE W10-SMAN	 TO AUD-SMAN.
-015010       PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT.
-015020	     ADD 1		 TO W70-AUDIT.
-015030	     MOVE 1		 TO WS-AUDKEY.
-015400	     MOVE 0		 TO WS-ACTION.
-015040       PERFORM READ-AUDIT THRU READ-AUDIT-EXIT.
-015050       PERFORM AY16 THRU AY59.
-015060	     MOVE 1		 TO AUD-REP5.
-015070       PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
-015080	     MOVE W70-AUDIT	 TO WS-AUDKEY.
-015090	     MOVE LOW-VALUES	 TO AUD-REC1.
-015400	     MOVE 1		 TO WS-ACTION.
-015100       PERFORM AY16 THRU AY59.
-015110	     MOVE 4		 TO AUD-TYPE.
-015120	     MOVE WS-DRAW	 TO AUD-SUB.
-015130	     MOVE W10-SMAN	 TO AUD-AC.
-015140	     MOVE W90-REF	 TO AUD-REF.
-015150       COMPUTE AUD-VAL = (W90-TOTAL - W90-TDISC).
-029880	   IF NOT (W90-CASH = ZERO)
-	       MOVE "C" 	 TO AUD-PAYMENT
-	   ELSE
-029890	   IF NOT (W90-CHQ = ZERO)
-	       MOVE "Q" 	 TO AUD-PAYMENT
-	   ELSE
-029900	   IF NOT (W90-CARD = ZERO)
-	       MOVE "D" 	 TO AUD-PAYMENT
-	   ELSE
-015410	   IF NOT (W90-SPEED = ZERO)
-	       MOVE "S" 	 TO AUD-PAYMENT
-	   ELSE
-015410	   IF NOT (W90-VOUCH = ZERO)
-	       MOVE "V" 	 TO AUD-PAYMENT
-	   ELSE
-015410	   IF NOT (W90-CRNOTE = ZERO)
-	       MOVE "N" 	 TO AUD-PAYMENT.
-	     MOVE W90-CASH	 TO AUD-R-CSH.
-	     MOVE W90-CHQ	 TO AUD-R-CHQ.
-	     MOVE W90-CARD	 TO AUD-R-TRF.
-015160	     PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT.
-015170	     ADD 1		 TO W70-AUDIT.
-015180	     MOVE 1		 TO WS-AUDKEY.
-015400	     MOVE 0		 TO WS-ACTION.
-015190       PERFORM READ-AUDIT THRU READ-AUDIT-EXIT.
-015200       PERFORM AY16 THRU AY59.
-015210	     MOVE 1		 TO AUD-REP4.
-015220       PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
-015230     IF W10-SMAN NOT = ZERO
-015240	       ADD 100 W10-SMAN  GIVING WS-PARKEY
-015260         PERFORM AY01 THRU AY59
-015270         ADD W90-TCOST     TO PAR-CT-MTD PAR-CT-YTD
-015280         ADD W90-EXCTOT    TO PAR-SL-MTD PAR-SL-YTD
-015290         PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-015330       SUBTRACT W90-BAL FROM STK-TOTAL.
-015340	     ADD W90-SALES	 TO STK-SMTD STK-SYTD.
+            MOVE W90-TCOST  TO AUD-COST.
+            MOVE W10-SMAN  TO AUD-SMAN.
+             PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT.
+            ADD 1   TO W70-AUDIT.
+            MOVE 1   TO WS-AUDKEY.
+            MOVE 0   TO WS-ACTION.
+             PERFORM READ-AUDIT THRU READ-AUDIT-EXIT.
+             PERFORM AY16 THRU AY59.
+            MOVE 1   TO AUD-REP5.
+             PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
+            MOVE W70-AUDIT  TO WS-AUDKEY.
+            MOVE LOW-VALUES  TO AUD-REC1.
+            MOVE 1   TO WS-ACTION.
+             PERFORM AY16 THRU AY59.
+            MOVE 4   TO AUD-TYPE.
+            MOVE WS-DRAW  TO AUD-SUB.
+            MOVE W10-SMAN  TO AUD-AC.
+            MOVE W90-REF  TO AUD-REF.
+             COMPUTE AUD-VAL = (W90-TOTAL - W90-TDISC).
+          IF NOT (W90-CASH = ZERO)
+        MOVE "C"   TO AUD-PAYMENT
+    ELSE
+          IF NOT (W90-CHQ = ZERO)
+        MOVE "Q"   TO AUD-PAYMENT
+    ELSE
+          IF NOT (W90-CARD = ZERO)
+        MOVE "D"   TO AUD-PAYMENT
+    ELSE
+          IF NOT (W90-SPEED = ZERO)
+        MOVE "S"   TO AUD-PAYMENT
+    ELSE
+          IF NOT (W90-VOUCH = ZERO)
+        MOVE "V"   TO AUD-PAYMENT
+    ELSE
+          IF NOT (W90-CRNOTE = ZERO)
+        MOVE "N"   TO AUD-PAYMENT.
+      MOVE W90-CASH  TO AUD-R-CSH.
+      MOVE W90-CHQ  TO AUD-R-CHQ.
+      MOVE W90-CARD  TO AUD-R-TRF.
+            PERFORM WRITE-AUDIT THRU WRITE-AUDIT-EXIT.
+            ADD 1   TO W70-AUDIT.
+            MOVE 1   TO WS-AUDKEY.
+            MOVE 0   TO WS-ACTION.
+             PERFORM READ-AUDIT THRU READ-AUDIT-EXIT.
+             PERFORM AY16 THRU AY59.
+            MOVE 1   TO AUD-REP4.
+             PERFORM REWRITE-AUDIT THRU WRITE-AUDIT-EXIT.
+           IF W10-SMAN NOT = ZERO
+              ADD 100 W10-SMAN  GIVING WS-PARKEY
+               PERFORM AY01 THRU AY59
+               ADD W90-TCOST     TO PAR-CT-MTD PAR-CT-YTD
+               ADD W90-EXCTOT    TO PAR-SL-MTD PAR-SL-YTD
+               PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+             SUBTRACT W90-BAL FROM STK-TOTAL.
+            ADD W90-SALES  TO STK-SMTD STK-SYTD.
 
        DA108.
-	   IF WS-NOSELL = "X"
-	       GO TO DA108A.
+    IF WS-NOSELL = "X"
+        GO TO DA108A.
       *    *************************************************************
-      *    ****    U P D A T E	 C A S H   D R A W E R
+      *    ****    U P D A T E  C A S H   D R A W E R
       *    *************************************************************
-015360	     ADD 150 WS-DRAW	 GIVING WS-PARKEY.
-015380       PERFORM AY01 THRU AY59.
-	     ADD 1		 TO PAR-CUST.
-015390       ADD W90-CASH        TO PAR-CASH.
-015400       ADD W90-CHQ         TO PAR-CHEQUES.
-015410       ADD W90-CARD        TO PAR-CARDS.
-015410	     ADD W90-SPEED	 TO PAR-SPEED.
-015410	     ADD W90-VOUCH	 TO PAR-VOUCHERS.
-	     ADD W90-CRNOTE	 TO PAR-VOUCHERS.
-015410	     ADD W90-EFT	 TO PAR-BANKTRF.
-015420       SUBTRACT W90-CHANGE FROM PAR-CASH.
+            ADD 150 WS-DRAW  GIVING WS-PARKEY.
+             PERFORM AY01 THRU AY59.
+      ADD 1   TO PAR-CUST.
+             ADD W90-CASH        TO PAR-CASH.
+             ADD W90-CHQ         TO PAR-CHEQUES.
+             ADD W90-CARD        TO PAR-CARDS.
+            ADD W90-SPEED  TO PAR-SPEED.
+            ADD W90-VOUCH  TO PAR-VOUCHERS.
+      ADD W90-CRNOTE  TO PAR-VOUCHERS.
+            ADD W90-EFT  TO PAR-BANKTRF.
+             SUBTRACT W90-CHANGE FROM PAR-CASH.
              ADD W90-TTAX        TO PAR-VATVAL.
-029070	     ADD W90-EXCVAL	 TO PAR-TAXVAL.
-015440	     COMPUTE PAR-CSH = PAR-CSH + W90-EXCVAL + W90-NONTAX.
-015450	     COMPUTE PAR-CSHMTD = PAR-CSHMTD + W90-EXCVAL + W90-NONTAX.
-015460	     COMPUTE PAR-CSHYTD = PAR-CSHYTD + W90-EXCVAL + W90-NONTAX.
-015470       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-015370       MOVE PAR-RECORD151  TO W85-RECORD151.
+            ADD W90-EXCVAL  TO PAR-TAXVAL.
+            COMPUTE PAR-CSH = PAR-CSH + W90-EXCVAL + W90-NONTAX.
+            COMPUTE PAR-CSHMTD = PAR-CSHMTD + W90-EXCVAL + W90-NONTAX.
+            COMPUTE PAR-CSHYTD = PAR-CSHYTD + W90-EXCVAL + W90-NONTAX.
+             PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+             MOVE PAR-RECORD151  TO W85-RECORD151.
       *    *************************************************************
-      *    ****    I F	 B A T C H   M O D E   -   S K I P   U P D A T E
+      *    ****    I F  B A T C H   M O D E   -   S K I P   U P D A T E
       *    *************************************************************
        DA108A.
-	   IF WS-POSMODE = "Y"
-	       GO TO DA109.
+    IF WS-POSMODE = "Y"
+        GO TO DA109.
       *    *************************************************************
-      *    ****    U P D A T E	 C A S H   S A L E   S T A T I S T I C S
+      *    ****    U P D A T E  C A S H   S A L E   S T A T I S T I C S
       *    *************************************************************
-015480	     MOVE 7		 TO WS-PARKEY.
-015500       PERFORM AY01 THRU AY59.
+            MOVE 7   TO WS-PARKEY.
+             PERFORM AY01 THRU AY59.
              COMPUTE PAR-CASH-DAY  = PAR-CASH-DAY + (W90-CASH
                                      - W90-CHANGE) + W90-CHQ
-				     + W90-CARD + W90-VOUCH
-				     + W90-SPEED.
+         + W90-CARD + W90-VOUCH
+         + W90-SPEED.
              COMPUTE PAR-CASH-MTH  = PAR-CASH-MTH + (W90-CASH
                                      - W90-CHANGE) + W90-CHQ
-				     + W90-CARD + W90-VOUCH
-				     + W90-SPEED.
+         + W90-CARD + W90-VOUCH
+         + W90-SPEED.
              COMPUTE PAR-CASH-YEAR = PAR-CASH-YEAR + (W90-CASH
                                      - W90-CHANGE) + W90-CHQ
-				     + W90-CARD + W90-VOUCH
-				     + W90-SPEED.
-	   IF (WX-INT = "Y") AND (WS-NOSELL = "N")
-	       MOVE W12-T-YMD	 TO WX-DATE
-	       MOVE "01PS"	 TO WX-LEDG
+         + W90-CARD + W90-VOUCH
+         + W90-SPEED.
+    IF (WX-INT = "Y") AND (WS-NOSELL = "N")
+        MOVE W12-T-YMD  TO WX-DATE
+        MOVE "01PS"  TO WX-LEDG
                MOVE "CASH SLIPS" TO WX-NAR
-	       COMPUTE WX-VALUE = (W90-TOTAL - W90-TDISC)
+        COMPUTE WX-VALUE = (W90-TOTAL - W90-TDISC)
                MOVE PAR-CASH-GL  TO WX-AC
                MOVE 26           TO WX-TYPE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *
       *    ****    Balancing the Integration entries
-      * 	   CASH SALES
+      *     CASH SALES
       *
-	       ADD WX-VALUE	 TO WXT-VALUE
-	       PERFORM GL-TRF-UPDATE.
-	   IF WS-NOSELL = "N"
-	       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+        ADD WX-VALUE  TO WXT-VALUE
+        PERFORM GL-TRF-UPDATE.
+    IF WS-NOSELL = "N"
+        PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
       *    *************************************************************
-      *    ****    R E D U C E	 C A S H   S A L E S   (ROUNDING)
+      *    ****    R E D U C E  C A S H   S A L E S   (ROUNDING)
       *    *************************************************************
-	   IF WS-NOSELL = "N"
-	   IF NOT (W90-ROUND = ZERO)
-	       IF WX-INT = "Y"
-		   MOVE W12-T-YMD
-				 TO WX-DATE
-		   MOVE "RSLP"	 TO WX-LEDG
-		   MOVE "ROUNDING"
-				 TO WX-NAR
-		   COMPUTE WX-VALUE = (W90-ROUND * -1)
-		   MOVE PAR-CASH-GL  TO WX-AC
-		   MOVE 26	 TO WX-TYPE
+    IF WS-NOSELL = "N"
+    IF NOT (W90-ROUND = ZERO)
+        IF WX-INT = "Y"
+     MOVE W12-T-YMD
+     TO WX-DATE
+     MOVE "RSLP"  TO WX-LEDG
+     MOVE "ROUNDING"
+     TO WX-NAR
+     COMPUTE WX-VALUE = (W90-ROUND * -1)
+     MOVE PAR-CASH-GL  TO WX-AC
+     MOVE 26  TO WX-TYPE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *
       *    ****    Balancing the Integration entries
-      * 	   CASH SALES
+      *     CASH SALES
       *
-		   ADD WX-VALUE	 TO WXT-VALUE
-		   PERFORM GL-TRF-UPDATE
-	       END-IF
-	       MOVE "YYYY"	 TO DPT-CODE
-	       MOVE ZERO	 TO WS-ACTION
-027700	       PERFORM AY38 THRU AY59
-027710	       ADD W90-RTVAL	 TO DPT-RET-DAY
-027720				    DPT-RET-MTD
-027730				    DPT-RET-YTD
-	       IF WX-INT = "Y"
-		   MOVE W90-RTVAL
-				 TO WX-VALUE
-		   MOVE DPT-DISC-GL
+     ADD WX-VALUE  TO WXT-VALUE
+     PERFORM GL-TRF-UPDATE
+        END-IF
+        MOVE "YYYY"  TO DPT-CODE
+        MOVE ZERO  TO WS-ACTION
+              PERFORM AY38 THRU AY59
+              ADD W90-RTVAL  TO DPT-RET-DAY
+              DPT-RET-MTD
+              DPT-RET-YTD
+        IF WX-INT = "Y"
+     MOVE W90-RTVAL
+     TO WX-VALUE
+     MOVE DPT-DISC-GL
                                  TO WX-AC
-		   MOVE DPT-CODE TO WX-LEDG
-		   MOVE 15	 TO WX-TYPE
+     MOVE DPT-CODE TO WX-LEDG
+     MOVE 15  TO WX-TYPE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *
       *    ****    Balancing the Integration entries
-      * 	   DISCOUNT
+      *     DISCOUNT
       *
-		   ADD WX-VALUE	 TO WXT-VALUE
-		   PERFORM GL-TRF-UPDATE
-	       END-IF
-027740	       PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT
-	       IF NOT (W90-RTTAX = ZERO)
-		   MOVE WS-P1	TO W05-V-RATE
-		   MOVE W05-VAT-CODE
-				TO DPT-CODE
-		   MOVE ZERO	TO WS-ACTION
-027840		   PERFORM AY38 THRU AY59
-027850		   SUBTRACT W90-RTTAX
-				FROM DPT-SALES-DAY
-027860				     DPT-SALES-MTD
-027870				     DPT-SALES-YTD
-		   IF WX-INT = "Y"
-		       MOVE W90-RTTAX
-				 TO WX-VALUE
-		       MOVE DPT-SALE-GL
-				 TO WX-AC
-		       MOVE DPT-CODE
-				 TO WX-LEDG
-		       MOVE 10	 TO WX-TYPE
+     ADD WX-VALUE  TO WXT-VALUE
+     PERFORM GL-TRF-UPDATE
+        END-IF
+              PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT
+        IF NOT (W90-RTTAX = ZERO)
+     MOVE WS-P1 TO W05-V-RATE
+     MOVE W05-VAT-CODE
+    TO DPT-CODE
+     MOVE ZERO TO WS-ACTION
+           PERFORM AY38 THRU AY59
+           SUBTRACT W90-RTTAX
+    FROM DPT-SALES-DAY
+               DPT-SALES-MTD
+               DPT-SALES-YTD
+     IF WX-INT = "Y"
+         MOVE W90-RTTAX
+     TO WX-VALUE
+         MOVE DPT-SALE-GL
+     TO WX-AC
+         MOVE DPT-CODE
+     TO WX-LEDG
+         MOVE 10  TO WX-TYPE
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *
       *    ****    Balancing the Integration entries
-      * 	   OUTPUT VAT
+      *     OUTPUT VAT
       *
-		       ADD WX-VALUE
-				 TO WXT-VALUE
-		       PERFORM GL-TRF-UPDATE
-		   END-IF
-027880		   PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
+         ADD WX-VALUE
+     TO WXT-VALUE
+         PERFORM GL-TRF-UPDATE
+     END-IF
+           PERFORM REWRITE-DEPART THRU WRITE-DEPART-EXIT.
       *    ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-      *    º	   V A T   C A L C U L A T I O N   P R O B L E M       º
+      *    º    V A T   C A L C U L A T I O N   P R O B L E M       º
       *    ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Check if the Integration entries are in balance. If they  ³
-      *    ³ are out of balance, process a balancing entry.	       ³
+      *    ³ are out of balance, process a balancing entry.        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF WX-INT = "Y"
-	       IF NOT(WXT-VALUE = ZERO)
-		   MOVE WXT-LEDTRF
-				 TO WX-LEDTRF
+    IF WX-INT = "Y"
+        IF NOT(WXT-VALUE = ZERO)
+     MOVE WXT-LEDTRF
+     TO WX-LEDTRF
       *
       *    ****  Change the sign of the amount that the entries are
-      * 	 out of balance and process.
+      *   out of balance and process.
       *
-		   COMPUTE WX-VALUE = WX-VALUE * -1
-		   PERFORM GL-TRF-UPDATE
-		   MOVE "N"	 TO WS-BAL-ENTRY.
-015480	     MOVE 8		 TO WS-PARKEY.
-015500       PERFORM AY01 THRU AY59.
-015510	     ADD W90-BDT	 TO PAR-CSHT PAR-CMTD PAR-CYTD.
-015520       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+     COMPUTE WX-VALUE = WX-VALUE * -1
+     PERFORM GL-TRF-UPDATE
+     MOVE "N"  TO WS-BAL-ENTRY.
+            MOVE 8   TO WS-PARKEY.
+             PERFORM AY01 THRU AY59.
+            ADD W90-BDT  TO PAR-CSHT PAR-CMTD PAR-CYTD.
+             PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
 
        DA109.
-	   IF WS-BNK-IND = "Y" AND
-	      W90-CHQ NOT = ZERO
+    IF WS-BNK-IND = "Y" AND
+       W90-CHQ NOT = ZERO
                INITIALIZE CHQ-RECORD2
                MOVE W90-REF      TO CHQ-TR-NUMBER
                MOVE W22-DTE1     TO CHQ-YMD
@@ -4995,2376 +4993,2376 @@
                PERFORM WRITE-CHEQUE THRU WRITE-CHEQUE-EXIT
                MOVE 1            TO WS-ACTION
                PERFORM AY36 THRU AY59.
-015530       PERFORM AY70 THRU AY999.
-	   IF WS-POSMODE = "N"
-	       CLOSE AUDIT STOCK NETWORK DEPART.
-015540	     CLOSE PARAM SALE.
-028820       OPEN OUTPUT SALE.
-028830       CLOSE SALE.
-015550	     OPEN I-O SALE PARAM.
-	   IF WS-POSMODE = "N"
-	       OPEN I-O AUDIT STOCK NETWORK DEPART.
-	     MOVE 8		 TO SLIN
-029700	     MOVE "ENTER to continue - E to exit"
-				 TO WS-ERR-MES.
-	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-015660	   IF WS-OPTION = "E"
-	       MOVE "E" 	 TO LS-INSTR
-015670	       GO TO DA150.
-015680       GO TO DA05.
+             PERFORM AY70 THRU AY999.
+    IF WS-POSMODE = "N"
+        CLOSE AUDIT STOCK NETWORK DEPART.
+            CLOSE PARAM SALE.
+             OPEN OUTPUT SALE.
+             CLOSE SALE.
+            OPEN I-O SALE PARAM.
+    IF WS-POSMODE = "N"
+        OPEN I-O AUDIT STOCK NETWORK DEPART.
+      MOVE 8   TO SLIN
+            MOVE "ENTER to continue - E to exit"
+     TO WS-ERR-MES.
+      MOVE SPACE   TO WS-OPTION.
+      PERFORM OPT-SETUP THRU OPT-EXIT.
+          IF WS-OPTION = "E"
+        MOVE "E"   TO LS-INSTR
+              GO TO DA150.
+             GO TO DA05.
 
-015690 DA110.
-015700	     MOVE ZERO		 TO WS-ERROR.
-	     MOVE W10-SPAPRC	 TO W10-SPAEXC.
-018020	   IF STK-TAX NOT = ZERO
-018030	       COMPUTE W10-SPAEXC ROUNDED = (W10-SPAPRC /
-018040		  (100.0000 + W05-RATE)) * 100.
-	   IF (W10-SPEC = "Y") AND (STK-P-PRC(WS-P1) NOT > W10-SPAEXC)
-015720         GO TO DA120
-	   ELSE
-	   IF (WS-PRC = "1") AND (STK-SL(WS-P1) NOT > W10-SPAEXC)
-015720         GO TO DA120
+       DA110.
+            MOVE ZERO   TO WS-ERROR.
+      MOVE W10-SPAPRC  TO W10-SPAEXC.
+          IF STK-TAX NOT = ZERO
+              COMPUTE W10-SPAEXC ROUNDED = (W10-SPAPRC /
+          (100.0000 + W05-RATE)) * 100.
+    IF (W10-SPEC = "Y") AND (STK-P-PRC(WS-P1) NOT > W10-SPAEXC)
+               GO TO DA120
+    ELSE
+    IF (WS-PRC = "1") AND (STK-SL(WS-P1) NOT > W10-SPAEXC)
+               GO TO DA120
            ELSE
-	   IF (WS-PRC = "2") AND (STK-CSH(WS-P1) NOT > W10-SPAEXC)
-015720	       GO TO DA120
-	   ELSE
-015710	   IF STK-WSL(WS-P1) NOT > W10-SPAEXC
-015720         GO TO DA120.
-015730	     COMPUTE W10-MARG = ((W10-SPAEXC - W10-COST) / W10-SPAEXC)
-015740				 * 100.00.
-015750	   IF W10-MARG NOT < W85-MARG
-015760		GO TO DA120.
+    IF (WS-PRC = "2") AND (STK-CSH(WS-P1) NOT > W10-SPAEXC)
+              GO TO DA120
+    ELSE
+          IF STK-WSL(WS-P1) NOT > W10-SPAEXC
+               GO TO DA120.
+            COMPUTE W10-MARG = ((W10-SPAEXC - W10-COST) / W10-SPAEXC)
+           * 100.00.
+          IF W10-MARG NOT < W85-MARG
+        GO TO DA120.
 
-015790 DA115.
-018110	     MOVE "Margin less than allowed - Override Y/N?"
-				 TO WS-ERR-MES.
-	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE TEST AFTER
-		     UNTIL WS-OPTION = "N" OR "Y".
-015880     IF WS-OPTION = "N"
-015890	       MOVE 1		 TO WS-ERROR
-015900         GO TO DA120.
+       DA115.
+            MOVE "Margin less than allowed - Override Y/N?"
+     TO WS-ERR-MES.
+      MOVE "N"   TO WS-OPTION.
+      PERFORM OPT-MESSAGE TEST AFTER
+       UNTIL WS-OPTION = "N" OR "Y".
+           IF WS-OPTION = "N"
+              MOVE 1   TO WS-ERROR
+               GO TO DA120.
 
        DA116.
-018260	     DISPLAY "Enter password" AT 2524
-018270		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
-018280	     ACCEPT W40-CSHPASS AT 2539
-		    WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
-018290			 AUTO NO-ECHO.
-018300	     MOVE 6		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CSHPASS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-018360	     MOVE 1		 TO WS-LENGTH.
+            DISPLAY "Enter password" AT 2524
+              WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT.
+            ACCEPT W40-CSHPASS AT 2539
+      WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
+          AUTO NO-ECHO.
+            MOVE 6   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING W40-CSHPASS
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+            MOVE 1   TO WS-LENGTH.
              MOVE 1              TO WS-SUPER.
 
        DA117.
-018370	   IF W40-CSHPASS = W85-SUPER (1)
-	       MOVE 1		 TO WS-SUPER
-	       GO TO DA118.
-	   IF W40-CSHPASS = "NIGRAM"
+          IF W40-CSHPASS = W85-SUPER (1)
+        MOVE 1   TO WS-SUPER
+        GO TO DA118.
+    IF W40-CSHPASS = "NIGRAM"
                MOVE 10           TO WS-SUPER
            ELSE
-	   IF W40-CSHPASS = W85-SUPER (9)
-018470	       MOVE 9		 TO WS-SUPER
+    IF W40-CSHPASS = W85-SUPER (9)
+              MOVE 9   TO WS-SUPER
            ELSE
-016050	       MOVE 1		 TO WS-ERROR
-	       MOVE ZERO	 TO WS-SUPER.
-	   IF W10-SPAPRC < W10-COST
-018470		MOVE 1		 TO WS-ERROR
-		MOVE ZERO	 TO WS-SUPER.
+              MOVE 1   TO WS-ERROR
+        MOVE ZERO  TO WS-SUPER.
+    IF W10-SPAPRC < W10-COST
+        MOVE 1   TO WS-ERROR
+  MOVE ZERO  TO WS-SUPER.
 
        DA118.
-	     PERFORM CLEAR-L50.
+      PERFORM CLEAR-L50.
 
-016060 DA120.
-016070       EXIT.
+       DA120.
+             EXIT.
 
        DA150.
-	     EXIT.
+      EXIT.
       *    *************************************************************
       *    ****    A M E N D   S A L E S   D E T A I L S
       *    *************************************************************
-       DA200A	       SECTION 51.
-016080 DA200.
-016090	     MOVE 7		 TO LIN.
-016100       PERFORM DA48 UNTIL LIN > 18.
-016090	     MOVE 7		 TO LIN.
-016120	     MOVE 1		 TO WS-LINES WS-FIRST.
+       DA200A        SECTION 51.
+       DA200.
+            MOVE 7   TO LIN.
+             PERFORM DA48 UNTIL LIN > 18.
+            MOVE 7   TO LIN.
+            MOVE 1   TO WS-LINES WS-FIRST.
 
-016130 DA202.
-016140	     MOVE WS-FIRST	 TO WS-SALKEY WS-SALPOS.
+       DA202.
+            MOVE WS-FIRST  TO WS-SALKEY WS-SALPOS.
       *    *************************************************************
       *    ****    H A V E   A L L   T H E   E N T R I E S   B E E N
       *            D I S P L A Y E D
       *    *************************************************************
-016150 DA205.
-016160     IF WS-SALKEY > WS-LAST
-016170	       GO TO DA208.
-016180       PERFORM READ-SALE THRU READ-SALE-EXIT.
-	     MOVE SAL-EXT-ITEM	 TO W10-EXT-ITEM.
+       DA205.
+           IF WS-SALKEY > WS-LAST
+              GO TO DA208.
+             PERFORM READ-SALE THRU READ-SALE-EXIT.
+      MOVE SAL-EXT-ITEM  TO W10-EXT-ITEM.
       *    *************************************************************
-      *        *****   E X T E N D E D	 C O D E   *****
+      *        *****   E X T E N D E D  C O D E   *****
       *    *************************************************************
-	   IF WS-EXT-STK = "Y"
-	       DISPLAY S12-EXT AT LINE LIN
-	   ELSE
+    IF WS-EXT-STK = "Y"
+        DISPLAY S12-EXT AT LINE LIN
+    ELSE
       *    *************************************************************
       *        *****   A L P H A - N U M E R I C   C O D E   *****
       *    *************************************************************
-	   IF W10-STCK = "A"
+    IF W10-STCK = "A"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   DISPLAY S12-ITM AT LINE LIN
-	       ELSE
-021070		   DISPLAY S12 AT LINE LIN.
+        IF WS-USE-ITM = "Y"
+     DISPLAY S12-ITM AT LINE LIN
+        ELSE
+           DISPLAY S12 AT LINE LIN.
       *    *************************************************************
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
-016210	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280	       MOVE SAL-WEIGHT	 TO W10-QUANT
-016230	       DISPLAY S26-WEIGHT AT LINE LIN
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QUANT
-016230	       DISPLAY S26-QNT AT LINE LIN.
-016240	     MOVE SAL-SELL	 TO W10-SELL.
-016250       DISPLAY S26-PRC AT LINE LIN.
-016260	     MOVE SAL-VAL	 TO W15-PRICE W100-EXT.
-016270	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
+            DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              MOVE SAL-WEIGHT  TO W10-QUANT
+              DISPLAY S26-WEIGHT AT LINE LIN
+    ELSE
+              MOVE SAL-QNT  TO W10-QUANT
+              DISPLAY S26-QNT AT LINE LIN.
+            MOVE SAL-SELL  TO W10-SELL.
+             DISPLAY S26-PRC AT LINE LIN.
+            MOVE SAL-VAL  TO W15-PRICE W100-EXT.
+            DISPLAY W100-EXT AT LINE LIN COLUMN 70
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    I S   T H E   S C R E E N   F U L L
       *    *************************************************************
-016280	   IF LIN < 18
-016290	       ADD 1		 TO LIN WS-SALKEY WS-LINES
-016300         GO TO DA205.
+          IF LIN < 18
+              ADD 1   TO LIN WS-SALKEY WS-LINES
+               GO TO DA205.
 
        DA208.
-	     MOVE 6		 TO LIN.
-	     PERFORM CLEAR-L50.
+      MOVE 6   TO LIN.
+      PERFORM CLEAR-L50.
 
-016310 DA210.
+       DA210.
       *    *************************************************************
       *    ****    D I S P L A Y   O P T I O N S
       *    *************************************************************
-001020	     DISPLAY " " AT 2503 WITH FOREGROUND-COLOR 6 HIGHLIGHT
-					BACKGROUND-COLOR 3
-001030		     " highlight," WITH FOREGROUND-COLOR 1
-					  BACKGROUND-COLOR 3
-		     "PgUp" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 3
-		     "/" WITH FOREGROUND-COLOR 1
-			      BACKGROUND-COLOR 3
-		     "PgDn" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				 BACKGROUND-COLOR 3
-		     "," WITH FOREGROUND-COLOR 1
-				BACKGROUND-COLOR 3
-001040		     "A" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				  BACKGROUND-COLOR 3
-001050		     "mend," WITH FOREGROUND-COLOR 1
-				       BACKGROUND-COLOR 3
-001040		     "D" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				  BACKGROUND-COLOR 3
-001050		     "elete or " WITH FOREGROUND-COLOR 1
-				       BACKGROUND-COLOR 3
-001170		     "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-				BACKGROUND-COLOR 3
-		     "ape" WITH FOREGROUND-COLOR 1
-				BACKGROUND-COLOR 3.
+            DISPLAY " " AT 2503 WITH FOREGROUND-COLOR 6 HIGHLIGHT
+     BACKGROUND-COLOR 3
+             " highlight," WITH FOREGROUND-COLOR 1
+       BACKGROUND-COLOR 3
+       "PgUp" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+     BACKGROUND-COLOR 3
+       "/" WITH FOREGROUND-COLOR 1
+         BACKGROUND-COLOR 3
+       "PgDn" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+     BACKGROUND-COLOR 3
+       "," WITH FOREGROUND-COLOR 1
+    BACKGROUND-COLOR 3
+             "A" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 3
+             "mend," WITH FOREGROUND-COLOR 1
+           BACKGROUND-COLOR 3
+             "D" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 3
+             "elete or " WITH FOREGROUND-COLOR 1
+           BACKGROUND-COLOR 3
+             "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+    BACKGROUND-COLOR 3
+       "ape" WITH FOREGROUND-COLOR 1
+    BACKGROUND-COLOR 3.
       *    *************************************************************
       *    ****    S A V E   C U R R E N T   P A G E
       *    *************************************************************
-	     PERFORM SAVE-SCREEN-2.
+      PERFORM SAVE-SCREEN-2.
       *    *************************************************************
-      *    ****    S C R E E N	 A T T R I B U T E S
+      *    ****    S C R E E N  A T T R I B U T E S
       *    *************************************************************
        DA214.
-             MOVE 1920           TO W41-LENGTH.
-	     CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS
-					      W42-ATTRIB2
-					      W41-LENGTH
-					RETURNING WS-STATUS.
-	     MOVE 2000		 TO W41-LENGTH.
+             MOVE 3920           TO W41-LENGTH.
+      CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS
+           W42-ATTRIB2
+           W41-LENGTH
+     RETURNING WS-STATUS.
+      MOVE 4000   TO W41-LENGTH.
       *    *************************************************************
       *    ****    G E T   U S E R   O P T I O N
       *    *************************************************************
-016580 DA215.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY
-		     GO TO DA216
-		 WHEN DOWN-KEY
-001340		     GO TO DA217
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO DA215
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     PERFORM CLEAR-L50
-		     GO TO DA265
+       DA215.
+      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+    IF ADIS-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN UP-KEY
+       GO TO DA216
+   WHEN DOWN-KEY
+             GO TO DA217
+   WHEN OTHER  CALL X"E5"
+        END-EVALUATE
+        GO TO DA215
+    ELSE
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       PERFORM CLEAR-L50
+       GO TO DA265
       *    *************************************************************
       *    ****    I S   N E X T   S C R E E N   R E Q U I R E D
       *    *************************************************************
-		 WHEN PAGE-DOWN
-001340		     GO TO DA222
+   WHEN PAGE-DOWN
+             GO TO DA222
       *    *************************************************************
       *    ****    I S   P R E V I O U S   S C R E E N   R E Q U I R E D
       *    *************************************************************
-		 WHEN PAGE-UP
-001340		     GO TO DA220
-		 WHEN OTHER	 CALL X"E5"
-	       END-EVALUATE
-	       GO TO DA215
-	   ELSE
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	       CALL "CBL_TOUPPER" USING WS-OPTION
-				  BY VALUE WS-LENGTH
-				  RETURNING WS-STATUS
-	       IF (WS-OPTION = "A" OR "D") AND
-		  (LIN > 6)
-		   PERFORM CLEAR-L50
-		   GO TO DA224.
-	     CALL X"E5".
-001280	     GO TO DA215.
+   WHEN PAGE-UP
+             GO TO DA220
+   WHEN OTHER  CALL X"E5"
+        END-EVALUATE
+        GO TO DA215
+    ELSE
+    IF DATA-8BIT
+        MOVE KEY-CODE-1X  TO WS-OPTION
+        CALL "CBL_TOUPPER" USING WS-OPTION
+      BY VALUE WS-LENGTH
+      RETURNING WS-STATUS
+        IF (WS-OPTION = "A" OR "D") AND
+    (LIN > 6)
+     PERFORM CLEAR-L50
+     GO TO DA224.
+      CALL X"E5".
+            GO TO DA215.
       *    *************************************************************
-      *    ****    U P	 K E Y	 ( M O V E   H I G H L I G H T	 U P )
+      *    ****    U P  K E Y  ( M O V E   H I G H L I G H T  U P )
       *    *************************************************************
        DA216.
-	   IF (WS-SALPOS = 1) OR (LIN < 7)
-	       GO TO DA218.
-	     SUBTRACT 1 	 FROM WS-SALPOS.
-	   IF LIN > 7
-	       SUBTRACT 1	 FROM LIN
-	       GO TO DA218.
-	     MOVE 18		 TO WS-S7.
+    IF (WS-SALPOS = 1) OR (LIN < 7)
+        GO TO DA218.
+      SUBTRACT 1   FROM WS-SALPOS.
+    IF LIN > 7
+        SUBTRACT 1  FROM LIN
+        GO TO DA218.
+      MOVE 18   TO WS-S7.
       *    *************************************************************
       *    ****     M O V E   T H E   D E T A I L S   D O W N
-      * 	    O N E   L I N E
+      *      O N E   L I N E
       *    *************************************************************
        DA216-LOOP.
-	     SUBTRACT 1 FROM WS-S7
-				 GIVING WS-S8.
-	     MOVE W42-LINES (WS-S8)
-				 TO W42-LINES (WS-S7).
-	     MOVE W43-LINE (WS-S8)
-				 TO W43-LINE (WS-S7).
-	   IF WS-S7 > 8
-	       SUBTRACT 1	 FROM WS-S7
-	       GO TO DA216-LOOP.
-	     MOVE WS-SALPOS	 TO WS-SALKEY WS-FIRST.
+      SUBTRACT 1 FROM WS-S7
+     GIVING WS-S8.
+      MOVE W42-LINES (WS-S8)
+     TO W42-LINES (WS-S7).
+      MOVE W43-LINE (WS-S8)
+     TO W43-LINE (WS-S7).
+    IF WS-S7 > 8
+        SUBTRACT 1  FROM WS-S7
+        GO TO DA216-LOOP.
+      MOVE WS-SALPOS  TO WS-SALKEY WS-FIRST.
       *    *************************************************************
-      *    ****    C L E A R   F I R S T   O R	 L A S T
-      * 	   D E T A I L	 L I N E.
+      *    ****    C L E A R   F I R S T   O R  L A S T
+      *     D E T A I L  L I N E.
       *    *************************************************************
        DA216-DISPLAY.
-	     PERFORM RESTORE-SCREEN-2.
-023890	     DISPLAY WS-MIV1  AT LINE LIN COLUMN 1
-			      WITH BACKGROUND-COLOR 0
-				   FOREGROUND-COLOR 3
-		     WS-MIV78 WITH FOREGROUND-COLOR 3
-		     WS-MIV80 WITH BACKGROUND-COLOR 0
-				   FOREGROUND-COLOR 3.
+      PERFORM RESTORE-SCREEN-2.
+            DISPLAY WS-MIV1  AT LINE LIN COLUMN 1
+         WITH BACKGROUND-COLOR 0
+       FOREGROUND-COLOR 3
+       WS-MIV78 WITH FOREGROUND-COLOR 3
+       WS-MIV80 WITH BACKGROUND-COLOR 0
+       FOREGROUND-COLOR 3.
       *    *************************************************************
       *    ****    G E T   N E X T   O R   P R E V I O U S
-      * 	   D E T A I L	 L I N E.
+      *     D E T A I L  L I N E.
       *    *************************************************************
-030080	     PERFORM READ-SALE THRU READ-SALE-EXIT.
-	     MOVE SAL-EXT-ITEM	 TO W10-EXT-ITEM.
+            PERFORM READ-SALE THRU READ-SALE-EXIT.
+      MOVE SAL-EXT-ITEM  TO W10-EXT-ITEM.
       *    *************************************************************
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
-030100	   IF SAL-EXT-ITEM = SPACES
-030110	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			    BACKGROUND-COLOR 0
-030120	       GO TO DA216-END-DISP.
+          IF SAL-EXT-ITEM = SPACES
+              DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+         WITH FOREGROUND-COLOR 7 HIGHLIGHT
+       BACKGROUND-COLOR 0
+              GO TO DA216-END-DISP.
       *    *************************************************************
-      *        *****   E X T E N D E D	 C O D E   *****
+      *        *****   E X T E N D E D  C O D E   *****
       *    *************************************************************
-	   IF WS-EXT-STK = "Y"
-	       DISPLAY S12-EXT AT LINE LIN
-	   ELSE
+    IF WS-EXT-STK = "Y"
+        DISPLAY S12-EXT AT LINE LIN
+    ELSE
       *    *************************************************************
       *        *****   A L P H A - N U M E R I C   C O D E   *****
       *    *************************************************************
-	   IF W10-STCK = "A"
+    IF W10-STCK = "A"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   DISPLAY S12-ITM AT LINE LIN
-	       ELSE
-021070		   DISPLAY S12 AT LINE LIN.
-030140	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280	       MOVE SAL-WEIGHT	 TO W10-QUANT
-	       DISPLAY S26-WEIGHT AT LINE LIN
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QUANT
-030160	       DISPLAY S26-QNT AT LINE LIN.
-030170       MOVE SAL-SELL       TO W10-SELL.
-030180       DISPLAY S26-PRC AT LINE LIN.
-030190       MOVE SAL-VAL        TO W100-EXT.
-030200	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
+        IF WS-USE-ITM = "Y"
+     DISPLAY S12-ITM AT LINE LIN
+        ELSE
+           DISPLAY S12 AT LINE LIN.
+            DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              MOVE SAL-WEIGHT  TO W10-QUANT
+        DISPLAY S26-WEIGHT AT LINE LIN
+    ELSE
+              MOVE SAL-QNT  TO W10-QUANT
+              DISPLAY S26-QNT AT LINE LIN.
+             MOVE SAL-SELL       TO W10-SELL.
+             DISPLAY S26-PRC AT LINE LIN.
+             MOVE SAL-VAL        TO W100-EXT.
+            DISPLAY W100-EXT AT LINE LIN COLUMN 70
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
 
        DA216-END-DISP.
-	     PERFORM SAVE-SCREEN-2.
-	     GO TO DA218.
+      PERFORM SAVE-SCREEN-2.
+      GO TO DA218.
       *    *************************************************************
-      *    ****    D O W N   K E Y   ( M O V E	 H I G H L I G H T
-      * 			       D O W N )
+      *    ****    D O W N   K E Y   ( M O V E  H I G H L I G H T
+      *           D O W N )
       *    *************************************************************
        DA217.
-	   IF (WS-SALPOS = WS-LAST) AND (LIN > 7)
-	       GO TO DA218.
+    IF (WS-SALPOS = WS-LAST) AND (LIN > 7)
+        GO TO DA218.
       *    *************************************************************
       *    ****    WS-SALPOS CONTAINS KEY OF HIGHLIGHTED ITEM
       *    *************************************************************
-	   IF LIN > 6
-	       ADD 1		 TO WS-SALPOS.
-	   IF LIN < 18
-	       ADD 1		 TO LIN
-	       GO TO DA218.
-	     MOVE 7		 TO WS-S7.
+    IF LIN > 6
+        ADD 1   TO WS-SALPOS.
+    IF LIN < 18
+        ADD 1   TO LIN
+        GO TO DA218.
+      MOVE 7   TO WS-S7.
       *    *************************************************************
       *    ****     M O V E   T H E   D E T A I L S   U P   O N E
-      * 	    L I N E
+      *      L I N E
       *    *************************************************************
        DA217-LOOP.
-	     ADD 1 WS-S7	 GIVING WS-S8.
-	     MOVE W42-LINES(WS-S8)
-				 TO W42-LINES(WS-S7).
-	     MOVE W43-LINE(WS-S8)
-				 TO W43-LINE(WS-S7).
-	   IF WS-S8 < 18
-	       ADD 1		 TO WS-S7
-	       GO TO DA217-LOOP.
-	     ADD 1		 TO WS-FIRST.
-	     MOVE WS-SALPOS	 TO WS-SALKEY.
-	     GO TO DA216-DISPLAY.
+      ADD 1 WS-S7  GIVING WS-S8.
+      MOVE W42-LINES(WS-S8)
+     TO W42-LINES(WS-S7).
+      MOVE W43-LINE(WS-S8)
+     TO W43-LINE(WS-S7).
+    IF WS-S8 < 18
+        ADD 1   TO WS-S7
+        GO TO DA217-LOOP.
+      ADD 1   TO WS-FIRST.
+      MOVE WS-SALPOS  TO WS-SALKEY.
+      GO TO DA216-DISPLAY.
       *    *************************************************************
       *    ****    H I G H L I G H T   C U R R E N T   L I N E
       *    *************************************************************
-001980 DA218.
-001990	     PERFORM DA214.
-	   IF LIN > 6
-002000	       DISPLAY W43-DET(LIN) AT LINE LIN COLUMN 1
-		       WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-002010	     GO TO DA215.
+       DA218.
+            PERFORM DA214.
+    IF LIN > 6
+              DISPLAY W43-DET(LIN) AT LINE LIN COLUMN 1
+         WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+            GO TO DA215.
       *    *************************************************************
       *    ****    C L E A R   S C R E E N
       *    *************************************************************
-030780 DA219.
-030790	     MOVE 7		 TO LIN.
-030800	     PERFORM DA48 UNTIL LIN > 18.
-030810	     MOVE 7		 TO LIN.
-030820       MOVE 1              TO WS-LINES.
+       DA219.
+            MOVE 7   TO LIN.
+            PERFORM DA48 UNTIL LIN > 18.
+            MOVE 7   TO LIN.
+             MOVE 1              TO WS-LINES.
       *
-      *    ****   P R E V I O U S   S C R E E N	  R E Q U I R E D
+      *    ****   P R E V I O U S   S C R E E N   R E Q U I R E D
       *
        DA220.
-	   IF WS-FIRST = 1
-	       GO TO DA215.
-	   IF WS-FIRST > 12
-	       SUBTRACT 12	 FROM WS-FIRST
-	   ELSE
-	       MOVE 1		 TO WS-FIRST.
-	     PERFORM DA219.
-	     GO TO DA202.
+    IF WS-FIRST = 1
+        GO TO DA215.
+    IF WS-FIRST > 12
+        SUBTRACT 12  FROM WS-FIRST
+    ELSE
+        MOVE 1   TO WS-FIRST.
+      PERFORM DA219.
+      GO TO DA202.
       *    *************************************************************
       *    ****    N E X T   S C R E E N   R E Q U I R E D
       *    *************************************************************
        DA222.
-	   IF (WS-FIRST + 12) > WS-LAST
-	       GO TO DA215.
-	     ADD 12		 TO WS-FIRST.
-	     PERFORM DA219.
-	     GO TO DA202.
+    IF (WS-FIRST + 12) > WS-LAST
+        GO TO DA215.
+      ADD 12   TO WS-FIRST.
+      PERFORM DA219.
+      GO TO DA202.
       *    *************************************************************
       *    ****    M U S T   A N   I T E M   B E   A M E N D E D
       *    *************************************************************
        DA224.
-030630	   IF WS-OPTION = "A"
-030640	       GO TO DA228.
+          IF WS-OPTION = "A"
+              GO TO DA228.
       *    *************************************************************
       *    ****    M A K E   S U R E   T H A T   A N   I T E M
       *            M U S T   B E   D E L E T E D
       *    *************************************************************
        DA225.
-043780	     MOVE "Are you sure Y/N?"
-				 TO WS-ERR-MES.
-030880	     MOVE "N"		 TO WS-OPTION.
-	     PERFORM OPT-MESSAGE TEST AFTER
-		     UNTIL WS-OPTION = "N" OR "Y".
-031000     IF WS-OPTION = "N"
-	       PERFORM RESTORE-SCREEN-2
-031010	       GO TO DA210.
-031020       MOVE "D"            TO WS-OPTION.
+            MOVE "Are you sure Y/N?"
+     TO WS-ERR-MES.
+            MOVE "N"   TO WS-OPTION.
+      PERFORM OPT-MESSAGE TEST AFTER
+       UNTIL WS-OPTION = "N" OR "Y".
+           IF WS-OPTION = "N"
+        PERFORM RESTORE-SCREEN-2
+              GO TO DA210.
+             MOVE "D"            TO WS-OPTION.
       *    *************************************************************
       *    ****    R E A D   T H E   D E T A I L S   F R O M   T H E
       *            S A L E   F I L E
       *    *************************************************************
        DA228.
-031220	     MOVE WS-SALPOS	 TO WS-SALKEY.
-031230       PERFORM READ-SALE THRU READ-SALE-EXIT.
-017290	     MOVE SAL-EXT-ITEM	 TO W10-EXT-ITEM STK-CODE.
-017310       PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280	       MOVE SAL-WEIGHT	 TO W10-QUANT
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QUANT.
-017330	     MOVE SAL-COST	 TO W10-COST.
-017340	     MOVE SAL-SELL	 TO W10-SELL.
-017350	     MOVE SAL-DISC	 TO W90-CDISC.
-017360	     MOVE SAL-DSC	 TO WS-DISC.
-017370	     MOVE SAL-VAL	 TO W25-VALUE.
-	     MOVE SAL-PACK	 TO WS-P1.
-	     MOVE SAL-SPEC	 TO W10-SPEC.
+            MOVE WS-SALPOS  TO WS-SALKEY.
+             PERFORM READ-SALE THRU READ-SALE-EXIT.
+            MOVE SAL-EXT-ITEM  TO W10-EXT-ITEM STK-CODE.
+             PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              MOVE SAL-WEIGHT  TO W10-QUANT
+    ELSE
+              MOVE SAL-QNT  TO W10-QUANT.
+            MOVE SAL-COST  TO W10-COST.
+            MOVE SAL-SELL  TO W10-SELL.
+            MOVE SAL-DISC  TO W90-CDISC.
+            MOVE SAL-DSC  TO WS-DISC.
+            MOVE SAL-VAL  TO W25-VALUE.
+      MOVE SAL-PACK  TO WS-P1.
+      MOVE SAL-SPEC  TO W10-SPEC.
       *    *************************************************************
       *    ****    R E D U C E   T O T A L S
       *    *************************************************************
-017380	     SUBTRACT W25-VALUE  FROM W90-DB.
-017390	     SUBTRACT W90-CDISC  FROM W90-LDISC.
-017400       SUBTRACT SAL-NONTAX FROM W90-NONTAX.
-	   IF SAL-VAT-SUB > ZERO
-036780	       SUBTRACT SAL-TAXVAL FROM W90-TAXVAL(SAL-VAT-SUB).
-017420	   IF (STK-IND < 2) OR (STK-IND = 3)
-017430         COMPUTE W90-BAL = W90-BAL - (W10-COST * W10-QUANT).
-	     PERFORM DA214.
+            SUBTRACT W25-VALUE  FROM W90-DB.
+            SUBTRACT W90-CDISC  FROM W90-LDISC.
+             SUBTRACT SAL-NONTAX FROM W90-NONTAX.
+    IF SAL-VAT-SUB > ZERO
+              SUBTRACT SAL-TAXVAL FROM W90-TAXVAL(SAL-VAT-SUB).
+          IF (STK-IND < 2) OR (STK-IND = 3)
+               COMPUTE W90-BAL = W90-BAL - (W10-COST * W10-QUANT).
+      PERFORM DA214.
       *    *************************************************************
       *    ****    I S   I T   A N   A M E N D M E N T
       *    *************************************************************
-017440	   IF WS-OPTION = "A"
-017450         GO TO DA250.
+          IF WS-OPTION = "A"
+               GO TO DA250.
       *    *************************************************************
       *    ****    R E - D I S P L A Y   T O T A L S
       *    *************************************************************
-017460	     PERFORM DA45B THRU DA45-AA.
+            PERFORM DA45B THRU DA45-AA.
       *    *************************************************************
       *    ****    D E L E T E   I T E M   F R O M   S A L E   F I L E
       *    *************************************************************
-017470 DA245.
-017480	     MOVE WS-SALKEY	 TO WS-SALSTR.
-017490	     ADD 1		 TO WS-SALKEY.
-017500     IF WS-SALKEY > WS-LAST
-017510	       SUBTRACT 1	 FROM WS-LAST
-017520         GO TO DA200.
-017530       PERFORM READ-SALE THRU READ-SALE-EXIT.
-017540	     MOVE WS-SALSTR	 TO WS-SALKEY.
-030650       SUBTRACT 1          FROM SAL-CODE.
-017550       PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
-017560	     ADD 1		 TO WS-SALKEY.
-017570       GO TO DA245.
+       DA245.
+            MOVE WS-SALKEY  TO WS-SALSTR.
+            ADD 1   TO WS-SALKEY.
+           IF WS-SALKEY > WS-LAST
+              SUBTRACT 1  FROM WS-LAST
+               GO TO DA200.
+             PERFORM READ-SALE THRU READ-SALE-EXIT.
+            MOVE WS-SALSTR  TO WS-SALKEY.
+             SUBTRACT 1          FROM SAL-CODE.
+             PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
+            ADD 1   TO WS-SALKEY.
+             GO TO DA245.
       *    *************************************************************
       *    ****    A R E   P A C K S   U S E D
       *    *************************************************************
-017580 DA250.
-	   IF (LS0-LEV > 2) AND
-	      (STK-USE-PACKS = "Y")
-	       DISPLAY "µ" AT 0650
-			STK-PR(WS-P1)
-			WITH BACKGROUND-COLOR 5
-			     FOREGROUND-COLOR 6 HIGHLIGHT
-		       "Æ".
+       DA250.
+    IF (LS0-LEV > 2) AND
+       (STK-USE-PACKS = "Y")
+        DISPLAY "µ" AT 0650
+   STK-PR(WS-P1)
+   WITH BACKGROUND-COLOR 5
+        FOREGROUND-COLOR 6 HIGHLIGHT
+         "Æ".
       *    *************************************************************
       *    ****    A M E N D   Q U A N T I T Y
       *    *************************************************************
        DA250A.
-	   IF (SAL-SCALE = "Y" OR "3") OR (W85-USE-3 = "Y")
-	       ACCEPT S26-WEIGHT AT LINE LIN
-	   ELSE
-017590	       ACCEPT S26-QNT AT LINE LIN.
-017600	     PERFORM CLEAR-L50.
-017610     IF W10-QUANT = ZERO
-044520	       MOVE "Quantity MAY NOT be zero"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280		   MOVE SAL-WEIGHT
-				 TO W10-QUANT
-	       ELSE
-031280		   MOVE SAL-QNT	 TO W10-QUANT
-	       END-IF
-017640	       GO TO DA250.
-	     MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
-				 GIVING W10-QNT.
+    IF (SAL-SCALE = "Y" OR "3") OR (W85-USE-3 = "Y")
+        ACCEPT S26-WEIGHT AT LINE LIN
+    ELSE
+              ACCEPT S26-QNT AT LINE LIN.
+            PERFORM CLEAR-L50.
+           IF W10-QUANT = ZERO
+              MOVE "Quantity MAY NOT be zero"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+        IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+           MOVE SAL-WEIGHT
+     TO W10-QUANT
+        ELSE
+           MOVE SAL-QNT  TO W10-QUANT
+        END-IF
+              GO TO DA250.
+      MULTIPLY STK-UNT(WS-P1) BY W10-QUANT
+     GIVING W10-QNT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	      Check if the quantity has been amended.	       ³
+      *    ³       Check if the quantity has been amended.        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280	       IF NOT (W10-QUANT > SAL-WEIGHT)
-		   GO TO DA250B
-	       END-IF
-	   ELSE
-031280	       IF NOT (W10-QUANT > SAL-QNT)
-		   GO TO DA250B.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              IF NOT (W10-QUANT > SAL-WEIGHT)
+     GO TO DA250B
+        END-IF
+    ELSE
+              IF NOT (W10-QUANT > SAL-QNT)
+     GO TO DA250B.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		    Check if stock is available		       ³
+      *    ³      Check if stock is available         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-010980	   IF (W10-QNT NOT > STK-QUANT) OR
-	      (STK-QUANT < ZERO)
-	       GO TO DA250B.
-	     PERFORM CLEAR-L50.
-	     DISPLAY "Negative Stock" AT 2502
-		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 7 HIGHLIGHT.
-018260	     DISPLAY "Enter password" AT 2551
-018270		      WITH BACKGROUND-COLOR 3
-			   FOREGROUND-COLOR 6 HIGHLIGHT.
-018280	     ACCEPT W40-CSHPASS AT 2567
-		    WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
-018290			 AUTO NO-ECHO.
-018300	     MOVE 6		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W40-CSHPASS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-018360	     MOVE 1		 TO WS-LENGTH.
-010940	     PERFORM CLEAR-L50
-	     IF NOT (W40-CSHPASS = W85-SUPER (1) OR
-		     W85-SUPER (9) OR "YTNAUQ")
-017730		 DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
-			 WITH FOREGROUND-COLOR 3
+          IF (W10-QNT NOT > STK-QUANT) OR
+       (STK-QUANT < ZERO)
+        GO TO DA250B.
+      PERFORM CLEAR-L50.
+      DISPLAY "Negative Stock" AT 2502
+        WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 7 HIGHLIGHT.
+            DISPLAY "Enter password" AT 2551
+              WITH BACKGROUND-COLOR 3
+      FOREGROUND-COLOR 6 HIGHLIGHT.
+            ACCEPT W40-CSHPASS AT 2567
+      WITH BACKGROUND-COLOR 5 FOREGROUND-COLOR 15
+          AUTO NO-ECHO.
+            MOVE 6   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING W40-CSHPASS
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+            MOVE 1   TO WS-LENGTH.
+            PERFORM CLEAR-L50
+      IF NOT (W40-CSHPASS = W85-SUPER (1) OR
+       W85-SUPER (9) OR "YTNAUQ")
+         DISPLAY WS-MIV78 AT LINE LIN COLUMN 2
+    WITH FOREGROUND-COLOR 3
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  If stock is not available and the override password is   ³
       *    ³  not valid, then change quantity back to the value prior  ³
-      *    ³  to the amendment.					       ³
+      *    ³  to the amendment.            ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-		 IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280		     MOVE SAL-WEIGHT
-				 TO W10-QUANT
-		 ELSE
-031280		     MOVE SAL-QNT
-				 TO W10-QUANT
-		 END-IF
-017640		 GO TO DA250.
+   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+             MOVE SAL-WEIGHT
+     TO W10-QUANT
+   ELSE
+             MOVE SAL-QNT
+     TO W10-QUANT
+   END-IF
+         GO TO DA250.
       *    *************************************************************
       *    ****    A M E N D   P R I C E
       *    *************************************************************
        DA250B.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³ Only Users with a sales security level greater than 2 are	³
-      *    ³ allowed to change the selling price.			³
+      *    ³ Only Users with a sales security level greater than 2 are ³
+      *    ³ allowed to change the selling price.   ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF (LS0-SALEV > 2)
-010730	       ACCEPT S26-PRC AT LINE LIN
-	   ELSE
-	       DISPLAY S26-PRC AT LINE LIN.
-010740	     MOVE W10-SELL	 TO W10-SPAPRC.
-010750       PERFORM DA110 THRU DA120.
-010760     IF WS-ERROR = 1
-010770	       MOVE ZERO	 TO WS-ERROR
-010780	       GO TO DA250B.
+    IF (LS0-SALEV > 2)
+              ACCEPT S26-PRC AT LINE LIN
+    ELSE
+        DISPLAY S26-PRC AT LINE LIN.
+            MOVE W10-SELL  TO W10-SPAPRC.
+             PERFORM DA110 THRU DA120.
+           IF WS-ERROR = 1
+              MOVE ZERO  TO WS-ERROR
+              GO TO DA250B.
       *    *************************************************************
       *    ****    R E C A L C U L A T E   V A L U E S
       *    *************************************************************
-017650	     MULTIPLY W10-SELL BY W10-QUANT GIVING W25-VALUE.
-017660	     MOVE W25-VALUE	 TO W15-PRICE W100-EXT.
-017670	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
+            MULTIPLY W10-SELL BY W10-QUANT GIVING W25-VALUE.
+            MOVE W25-VALUE  TO W15-PRICE W100-EXT.
+            DISPLAY W100-EXT AT LINE LIN COLUMN 70
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    U P D A T E   S A L E   F I L E   R E C O R D
       *    *************************************************************
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-011210	       MOVE W10-QUANT	 TO SAL-WEIGHT
-	   ELSE
-011210	       MOVE W10-QUANT	 TO SAL-QNT.
-	   IF NOT (W10-SELL = SAL-SELL)
-	       MOVE W10-SELL	 TO SAL-SELL.
-017790	     MOVE W25-VALUE	 TO SAL-VAL.
-	   IF NOT (STK-FACT = ZERO)
-	       COMPUTE SAL-CONVERT = W10-QUANT * WS-P1 * STK-FACT.
-017800	   IF WS-DISC = ZERO
-017810         GO TO DA255.
-017820	     COMPUTE W90-CDISC = (W25-VALUE * WS-DISC) / 100.
-017830	     MOVE W90-CDISC	 TO W15-PRICE SAL-DISC.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              MOVE W10-QUANT  TO SAL-WEIGHT
+    ELSE
+              MOVE W10-QUANT  TO SAL-QNT.
+    IF NOT (W10-SELL = SAL-SELL)
+        MOVE W10-SELL  TO SAL-SELL.
+            MOVE W25-VALUE  TO SAL-VAL.
+    IF NOT (STK-FACT = ZERO)
+        COMPUTE SAL-CONVERT = W10-QUANT * WS-P1 * STK-FACT.
+          IF WS-DISC = ZERO
+               GO TO DA255.
+            COMPUTE W90-CDISC = (W25-VALUE * WS-DISC) / 100.
+            MOVE W90-CDISC  TO W15-PRICE SAL-DISC.
       *    *************************************************************
       *    ****    R E - C A L C U L A T E   &   D I S P L A Y
       *            T O T A L S
       *    *************************************************************
-017840 DA255.
-017850	     PERFORM DA45 THRU DA45-AA.
+       DA255.
+            PERFORM DA45 THRU DA45-AA.
 
        DA260.
-017860	     PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
-017870       GO TO DA200.
+            PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
+             GO TO DA200.
       *    *************************************************************
       *    ****    C L E A R   D E T A I L   L I N E S
       *    *************************************************************
-031940 DA265.
-	     PERFORM DA219.
+       DA265.
+      PERFORM DA219.
       *    *************************************************************
       *    ****    D I S P L A Y   L A S T   P A G E
       *    *************************************************************
-	   IF WS-LAST > 10
-	       SUBTRACT 9 FROM WS-LAST
-				 GIVING WS-SALKEY
-	   ELSE
-	       MOVE 1		 TO WS-SALKEY.
+    IF WS-LAST > 10
+        SUBTRACT 9 FROM WS-LAST
+     GIVING WS-SALKEY
+    ELSE
+        MOVE 1   TO WS-SALKEY.
 
-030050 DA270.
-030080	     PERFORM READ-SALE THRU READ-SALE-EXIT.
-	     MOVE SAL-EXT-ITEM	 TO W10-EXT-ITEM.
+       DA270.
+            PERFORM READ-SALE THRU READ-SALE-EXIT.
+      MOVE SAL-EXT-ITEM  TO W10-EXT-ITEM.
       *    *************************************************************
       *    ****    D I S P L A Y   E N T R Y   D E T A I L S
       *    *************************************************************
-030100	   IF SAL-EXT-ITEM = SPACES
-030110	       DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
-		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			    BACKGROUND-COLOR 0
-030120	       GO TO DA275.
+          IF SAL-EXT-ITEM = SPACES
+              DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+         WITH FOREGROUND-COLOR 7 HIGHLIGHT
+       BACKGROUND-COLOR 0
+              GO TO DA275.
       *    *************************************************************
-      *        *****   E X T E N D E D	 C O D E   *****
+      *        *****   E X T E N D E D  C O D E   *****
       *    *************************************************************
-	   IF WS-EXT-STK = "Y"
-	       DISPLAY S12-EXT AT LINE LIN
-	   ELSE
+    IF WS-EXT-STK = "Y"
+        DISPLAY S12-EXT AT LINE LIN
+    ELSE
       *    *************************************************************
       *        *****   A L P H A - N U M E R I C   C O D E   *****
       *    *************************************************************
-	   IF W10-STCK = "A"
+    IF W10-STCK = "A"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   DISPLAY S12-ITM AT LINE LIN
-	       ELSE
-021070		   DISPLAY S12 AT LINE LIN.
-030140	     DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280	       MOVE SAL-WEIGHT	 TO W10-QUANT
-	       DISPLAY S26-WEIGHT AT LINE LIN
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QUANT
-030160	       DISPLAY S26-QNT AT LINE LIN.
-030170       MOVE SAL-SELL       TO W10-SELL.
-030180       DISPLAY S26-PRC AT LINE LIN.
-030190       MOVE SAL-VAL        TO W100-EXT.
-030200	     DISPLAY W100-EXT AT LINE LIN COLUMN 70
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
+        IF WS-USE-ITM = "Y"
+     DISPLAY S12-ITM AT LINE LIN
+        ELSE
+           DISPLAY S12 AT LINE LIN.
+            DISPLAY SAL-SDSC AT LINE LIN COLUMN 21
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              MOVE SAL-WEIGHT  TO W10-QUANT
+        DISPLAY S26-WEIGHT AT LINE LIN
+    ELSE
+              MOVE SAL-QNT  TO W10-QUANT
+              DISPLAY S26-QNT AT LINE LIN.
+             MOVE SAL-SELL       TO W10-SELL.
+             DISPLAY S26-PRC AT LINE LIN.
+             MOVE SAL-VAL        TO W100-EXT.
+            DISPLAY W100-EXT AT LINE LIN COLUMN 70
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
 
        DA275.
-	     ADD 1		 TO LIN.
-030060	   IF WS-SALKEY < WS-LAST
-	       ADD 1		 TO WS-SALKEY
-030070	       GO TO DA270.
+      ADD 1   TO LIN.
+          IF WS-SALKEY < WS-LAST
+        ADD 1   TO WS-SALKEY
+              GO TO DA270.
 
 
-017880 DA299.
-017890	     EXIT.
+       DA299.
+            EXIT.
 
-       DA300P	       SECTION 52.
+       DA300P        SECTION 52.
        DA300.
-	     PERFORM SAVE-SCREEN.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0843
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³  P R O M P T S  ³" AT 0943
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´" AT 1043
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³ " AT 1143
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6
-		     "P" WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 6
-		     "rompts (Slow)  ³"
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³ " AT 1243
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6
-		     "M" WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 6
-		     "inimum Prompts ³"
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³ " AT 1343
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6
-		     "F" WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 6
-		     "ast Capture    ³"
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1443
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     MOVE 09		 TO SHADE-ROW.
-	     MOVE 45		 TO SHADE-COL.
-	     MOVE 17		 TO SHADE-WIDTH.
-	     MOVE 6		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
-	     PERFORM HIDE-THE-CURSOR.
+      PERFORM SAVE-SCREEN.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0843
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³  P R O M P T S  ³" AT 0943
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´" AT 1043
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³ " AT 1143
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6
+       "P" WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 6
+       "rompts (Slow)  ³"
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³ " AT 1243
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6
+       "M" WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 6
+       "inimum Prompts ³"
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³ " AT 1343
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6
+       "F" WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 6
+       "ast Capture    ³"
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1443
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      MOVE 09   TO SHADE-ROW.
+      MOVE 45   TO SHADE-COL.
+      MOVE 17   TO SHADE-WIDTH.
+      MOVE 6   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
+      PERFORM HIDE-THE-CURSOR.
 
        DA305.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-	   IF DATA-8BIT
-	       MOVE KEY-CODE-1X  TO WS-OPTION
-	   ELSE
-	       CALL X"E5" CALL X"E5" CALL X"E5"
-	       GO TO DA305.
-	     CALL "CBL_TOUPPER" USING WS-OPTION
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	   IF NOT (WS-OPTION = "P" OR "M" OR "F")
-	       CALL X"E5" CALL X"E5" CALL X"E5"
-	       GO TO DA305.
-	   IF WS-OPTION = "M"
-	       MOVE "N" 	 TO WS-OPTION.
-	   IF WS-OPTION = "P"
-	       MOVE "Y" 	 TO WS-OPTION.
-	     PERFORM DISPLAY-THE-CURSOR.
-	     PERFORM RESTORE-SCREEN.
-	     MOVE WS-OPTION	 TO WS-PROMPT.
+      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+    IF DATA-8BIT
+        MOVE KEY-CODE-1X  TO WS-OPTION
+    ELSE
+        CALL X"E5" CALL X"E5" CALL X"E5"
+        GO TO DA305.
+      CALL "CBL_TOUPPER" USING WS-OPTION
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+    IF NOT (WS-OPTION = "P" OR "M" OR "F")
+        CALL X"E5" CALL X"E5" CALL X"E5"
+        GO TO DA305.
+    IF WS-OPTION = "M"
+        MOVE "N"   TO WS-OPTION.
+    IF WS-OPTION = "P"
+        MOVE "Y"   TO WS-OPTION.
+      PERFORM DISPLAY-THE-CURSOR.
+      PERFORM RESTORE-SCREEN.
+      MOVE WS-OPTION  TO WS-PROMPT.
 
        DA399.
-	     EXIT.
+      EXIT.
       *    *************************************************************
-      *    ***	G E T	P U R C H A S E R   N A M E   A N D   V A T  ***
-      *    ***	N U M B E R .					     ***
+      *    *** G E T P U R C H A S E R   N A M E   A N D   V A T  ***
+      *    *** N U M B E R .          ***
       *    *************************************************************
-       DA400V		       SECTION 53.
+       DA400V         SECTION 53.
        DA400.
-	     MOVE "N"		 TO WS-CLNT-VAT.
-	     MOVE SPACES	 TO W90-CLNT-VAT W50-CPY.
+      MOVE "N"   TO WS-CLNT-VAT.
+      MOVE SPACES  TO W90-CLNT-VAT W50-CPY.
 
        DA405-LOOP.
-	     MOVE WS-CLNT-VAT	 TO WS-OPTION.
-	     MOVE SPACES	 TO WS-ERR-MES.
-	     STRING "Will VAT be reclaimed Y/N  ["
-		    DELIMITED SIZE
-		    WS-OPTION DELIMITED SIZE
-		    "]" DELIMITED SIZE
-			     INTO WS-ERR-MES.
-022850	     MOVE "N"		 TO WS-OPTION.
+      MOVE WS-CLNT-VAT  TO WS-OPTION.
+      MOVE SPACES  TO WS-ERR-MES.
+      STRING "Will VAT be reclaimed Y/N  ["
+      DELIMITED SIZE
+      WS-OPTION DELIMITED SIZE
+      "]" DELIMITED SIZE
+        INTO WS-ERR-MES.
+            MOVE "N"   TO WS-OPTION.
       *    *************************************************************
       *    ****    Must the Name and VAT number of the purchaser be
-      * 	   data captured and printed on the cash slip.
+      *     data captured and printed on the cash slip.
       *    *************************************************************
-	     PERFORM OPT-MESSAGE TEST AFTER
-		     UNTIL WS-OPTION = "Y" OR "N".
-	     MOVE WS-OPTION	 TO WS-CLNT-VAT.
-	   IF WS-CLNT-VAT = "N"
-	       GO TO DA999.
-	     PERFORM SAVE-SCREEN-3.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"
-		      AT 0933 WITH REVERSE-VIDEO.
-	     DISPLAY "³Name                                   ³"
+      PERFORM OPT-MESSAGE TEST AFTER
+       UNTIL WS-OPTION = "Y" OR "N".
+      MOVE WS-OPTION  TO WS-CLNT-VAT.
+    IF WS-CLNT-VAT = "N"
+        GO TO DA999.
+      PERFORM SAVE-SCREEN-3.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿"
+        AT 0933 WITH REVERSE-VIDEO.
+      DISPLAY "³Name                                   ³"
                       AT 1033 WITH REVERSE-VIDEO.
-	     DISPLAY "³VAT No.                                ³"
+      DISPLAY "³VAT No.                                ³"
                       AT 1133 WITH REVERSE-VIDEO.
-	     DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      AT 1233 WITH REVERSE-VIDEO.
-	     MOVE 10		 TO SHADE-ROW.
-	     MOVE 35		 TO SHADE-COL.
-	     MOVE 39		 TO SHADE-WIDTH.
-	     MOVE 3		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
+      DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        AT 1233 WITH REVERSE-VIDEO.
+      MOVE 10   TO SHADE-ROW.
+      MOVE 35   TO SHADE-COL.
+      MOVE 39   TO SHADE-WIDTH.
+      MOVE 3   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
 
        DA410.
-	     ACCEPT W50-CPY AT 1042
-		    WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			 BACKGROUND-COLOR 7 AUTO.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		      MOVE "N"	 TO WS-CLNT-VAT
-		      GO TO DA420
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DA410
-	       END-EVALUATE.
-	   IF W50-CPY = SPACES
-	       GO TO DA410.
+      ACCEPT W50-CPY AT 1042
+      WITH FOREGROUND-COLOR 6 HIGHLIGHT
+    BACKGROUND-COLOR 7 AUTO.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+        MOVE "N"  TO WS-CLNT-VAT
+        GO TO DA420
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DA410
+        END-EVALUATE.
+    IF W50-CPY = SPACES
+        GO TO DA410.
 
        DA415.
-	     ACCEPT W90-CLNT-VAT AT 1142
-		    WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			 BACKGROUND-COLOR 7 AUTO.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		      GO TO DA410
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DA415
-	       END-EVALUATE.
-	   IF W90-CLNT-VAT = SPACES
-	       GO TO DA415.
-	     MOVE 14		 TO SLIN.
-	     PERFORM CHECK-SETUP THRU CHECK-EXIT.
-	   IF WS-OPTION = "N"
-	       GO TO DA410.
+      ACCEPT W90-CLNT-VAT AT 1142
+      WITH FOREGROUND-COLOR 6 HIGHLIGHT
+    BACKGROUND-COLOR 7 AUTO.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+        GO TO DA410
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DA415
+        END-EVALUATE.
+    IF W90-CLNT-VAT = SPACES
+        GO TO DA415.
+      MOVE 14   TO SLIN.
+      PERFORM CHECK-SETUP THRU CHECK-EXIT.
+    IF WS-OPTION = "N"
+        GO TO DA410.
 
        DA420.
-	     PERFORM RESTORE-SCREEN-3.
+      PERFORM RESTORE-SCREEN-3.
 
-017900 DA999.
-017910       EXIT.
+       DA999.
+             EXIT.
       /
-009550 DB000		       SECTION 54.
-009560 DB00.
-	     MOVE SAL-EXT-ITEM	 TO PRT-ITEM.
-020530	     PERFORM READ-SPARTS THRU READ-SPARTS-EXIT.
-020510	   IF WS-F-ERROR = 21
-	      GO TO DB999.
+       DB000         SECTION 54.
+       DB00.
+      MOVE SAL-EXT-ITEM  TO PRT-ITEM.
+            PERFORM READ-SPARTS THRU READ-SPARTS-EXIT.
+          IF WS-F-ERROR = 21
+       GO TO DB999.
       *    *************************************************************
       *    ****  P R O D U C T I O N   D E T A I L S
       *    *************************************************************
-021370	     MOVE 1		 TO WS-S6.
-021420 DB05.
-021430	   IF PRT-CODE (WS-S6) = SPACES
-021440	       ADD 1		 TO WS-S6
-021450	       GO TO DB15.
-021470	     MOVE PRT-CODE (WS-S6)
-				 TO STK-CODE.
-013470	     PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-021500	   IF WS-F-ERROR = 22
-021510	       ADD 1		 TO WS-S6
-021520	       GO TO DB15.
-	     PERFORM AY05 THRU AY59.
-	     MULTIPLY W10-QUANT BY PRT-QUANT (WS-S6)
-			 GIVING W10-PQUANT.
-013780	     SUBTRACT W10-PQUANT FROM STK-QUANT.
-013870	     ADD W10-PQUANT	 TO STK-MTD STK-YTD.
-013790	   IF STK-DISC > ZERO
-013800	       GO TO DB10.
+            MOVE 1   TO WS-S6.
+       DB05.
+          IF PRT-CODE (WS-S6) = SPACES
+              ADD 1   TO WS-S6
+              GO TO DB15.
+            MOVE PRT-CODE (WS-S6)
+     TO STK-CODE.
+            PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+          IF WS-F-ERROR = 22
+              ADD 1   TO WS-S6
+              GO TO DB15.
+      PERFORM AY05 THRU AY59.
+      MULTIPLY W10-QUANT BY PRT-QUANT (WS-S6)
+    GIVING W10-PQUANT.
+            SUBTRACT W10-PQUANT FROM STK-QUANT.
+            ADD W10-PQUANT  TO STK-MTD STK-YTD.
+          IF STK-DISC > ZERO
+              GO TO DB10.
       *    *************************************************************
       *    ****    C H E C K   R E - O R D E R   L E V E L   A N D
       *            R E P O R T   L O W - L E V E L S
       *    *************************************************************
-013810	   IF STK-QUANT NOT > STK-LEVEL
-013820	       MOVE 1		 TO STK-DISC
-013830	       PERFORM BG80.
+          IF STK-QUANT NOT > STK-LEVEL
+              MOVE 1   TO STK-DISC
+              PERFORM BG80.
 
-021660 DB10.
-013950	     PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
-	     ADD 1		 TO WS-S6.
+       DB10.
+            PERFORM REWRITE-STOCK-UNLOCK THRU WRITE-STOCK-EXIT.
+      ADD 1   TO WS-S6.
 
-021660 DB15.
-021670	   IF WS-S6 < 31
-021680	      GO TO DB05.
+       DB15.
+          IF WS-S6 < 31
+             GO TO DB05.
 
        DB999.
-	    EXIT.
+     EXIT.
       /
-       DC000	       SECTION 55.
+       DC000        SECTION 55.
        DC00.
-	     SUBTRACT NUMB-LENGTH FROM 3
-				 GIVING NUMB-SUB.
-	   IF NUMB-LENGTH < 3
-	       MULTIPLY 10	 BY NUMB-DISPLAY.
-	     MOVE WS-OPTION	 TO NUMB-CHAR (3).
+      SUBTRACT NUMB-LENGTH FROM 3
+     GIVING NUMB-SUB.
+    IF NUMB-LENGTH < 3
+        MULTIPLY 10  BY NUMB-DISPLAY.
+      MOVE WS-OPTION  TO NUMB-CHAR (3).
 
        DC02.
-	     MOVE NUMB-DISPLAY	 TO NUMB-WHOLE W10-ACDEN.
-	   IF NUMB-DISP = ZERO
-	       GO TO DC99.
-	     DISPLAY NUMB-WHOLE AT LINE LIN COLUMN 2
-		     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
-	   IF NUMB-LENGTH < 3
-	       ADD 1		 TO NUMB-LENGTH.
-	     MOVE W10-ACODE	 TO STK-ACODE.
-	     PERFORM START-AT-ALT-CODE THRU READ-STOCK-EXIT.
-	   IF WS-F-ERROR = 22
-	       PERFORM DC10
-	       GO TO DC05.
-	     PERFORM READ-STOCK-NEXT THRU READ-STOCK-EXIT.
-	   IF NOT (W10-ACODE =	STK-ACODE)
-	       PERFORM DC10
-	       GO TO DC05.
-	     MOVE STK-CODE	 TO W10-EXT-ITEM.
-	     MOVE W05-VAT (1)	 TO W05-RATE.
-	     COMPUTE W10-VSELL ROUNDED = STK-SELL +
-					(STK-SELL * W05-RTE).
+      MOVE NUMB-DISPLAY  TO NUMB-WHOLE W10-ACDEN.
+    IF NUMB-DISP = ZERO
+        GO TO DC99.
+      DISPLAY NUMB-WHOLE AT LINE LIN COLUMN 2
+       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 0.
+    IF NUMB-LENGTH < 3
+        ADD 1   TO NUMB-LENGTH.
+      MOVE W10-ACODE  TO STK-ACODE.
+      PERFORM START-AT-ALT-CODE THRU READ-STOCK-EXIT.
+    IF WS-F-ERROR = 22
+        PERFORM DC10
+        GO TO DC05.
+      PERFORM READ-STOCK-NEXT THRU READ-STOCK-EXIT.
+    IF NOT (W10-ACODE = STK-ACODE)
+        PERFORM DC10
+        GO TO DC05.
+      MOVE STK-CODE  TO W10-EXT-ITEM.
+      MOVE W05-VAT (1)  TO W05-RATE.
+      COMPUTE W10-VSELL ROUNDED = STK-SELL +
+     (STK-SELL * W05-RTE).
        DC05.
-	     MOVE STK-DESC	 TO W10-DESC.
-	     DISPLAY W10-SDSC AT LINE LIN COLUMN 21
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
-	     MOVE W10-VSELL	 TO W100-S6V2.
-	     DISPLAY W100-PRICE AT LINE LIN COLUMN 60
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 0.
-	     GO TO DC99.
+      MOVE STK-DESC  TO W10-DESC.
+      DISPLAY W10-SDSC AT LINE LIN COLUMN 21
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
+      MOVE W10-VSELL  TO W100-S6V2.
+      DISPLAY W100-PRICE AT LINE LIN COLUMN 60
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 0.
+      GO TO DC99.
 
        DC10.
-	     MOVE "Not a valid code"
-				 TO STK-DESC.
-	     MOVE ZERO		 TO W10-VSELL.
+      MOVE "Not a valid code"
+     TO STK-DESC.
+      MOVE ZERO   TO W10-VSELL.
 
        DC99.
-	     EXIT.
+      EXIT.
       /
-       DC100	       SECTION 56.
+       DC100        SECTION 56.
        DC101.
-	   IF NUMB-DISP = ZERO
-	       GO TO DC199.
-	     DIVIDE 10		 INTO NUMB-DISPLAY.
-	   IF NUMB-DISPLAY = ZERO
-	       MOVE SPACES	 TO W10-EXT-ITEM.
-	     PERFORM DC02 THRU DC99.
+    IF NUMB-DISP = ZERO
+        GO TO DC199.
+      DIVIDE 10   INTO NUMB-DISPLAY.
+    IF NUMB-DISPLAY = ZERO
+        MOVE SPACES  TO W10-EXT-ITEM.
+      PERFORM DC02 THRU DC99.
 
        DC199.
-	     EXIT.
+      EXIT.
       /
-       DD000	       SECTION 57.
+       DD000        SECTION 57.
        DD00.
-012670	     MOVE ZERO		 TO W90-DUE W90-CASH  W90-VOUCH
-012680				    W90-PMT W90-CARD  W90-CHANGE
-				    W90-CHQ W90-SPEED W90-CRNOTE.
-012690	     MOVE W90-TOTAL	 TO W15-VAL W90-DUE.
-	     MOVE W90-TOTAL	 TO W90-SLIP-TOT.
-	     MOVE ZERO		 TO W90-ROUND.
-	   IF NOT WS-FACTOR = ZERO
-	       PERFORM JA000.
-	   IF NOT (W90-ROUND = ZERO)
-	       DISPLAY "Rounding  " AT 2203
-	       MULTIPLY -1 BY W90-ROUND
-				 GIVING W15-VAL
-	       DISPLAY W15-VAL AT 2215
-		       WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			    BACKGROUND-COLOR 5
-	       MOVE W90-SLIP-TOT TO W15-VAL W90-DUE.
-012700	     DISPLAY  W15-VAL AT 2315
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5.
+            MOVE ZERO   TO W90-DUE W90-CASH  W90-VOUCH
+              W90-PMT W90-CARD  W90-CHANGE
+        W90-CHQ W90-SPEED W90-CRNOTE.
+            MOVE W90-TOTAL  TO W15-VAL W90-DUE.
+      MOVE W90-TOTAL  TO W90-SLIP-TOT.
+      MOVE ZERO   TO W90-ROUND.
+    IF NOT WS-FACTOR = ZERO
+        PERFORM JA000.
+    IF NOT (W90-ROUND = ZERO)
+        DISPLAY "Rounding  " AT 2203
+        MULTIPLY -1 BY W90-ROUND
+     GIVING W15-VAL
+        DISPLAY W15-VAL AT 2215
+         WITH FOREGROUND-COLOR 3 HIGHLIGHT
+       BACKGROUND-COLOR 5
+        MOVE W90-SLIP-TOT TO W15-VAL W90-DUE.
+            DISPLAY  W15-VAL AT 2315
+        WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5.
       *    *************************************************************
       *    ****    P R O C E S S   T H E   S L I P
       *    *************************************************************
        DD05.
-	     PERFORM CLEAR-L50.
-013250	     DISPLAY "Processing Picking Slip" AT 2520 WITH
-013260		      BACKGROUND-COLOR 3
-		      FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
-	     PERFORM SAVE-SCREEN-3.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
-		      AT 1118 WITH FOREGROUND-COLOR 0
-				   BACKGROUND-COLOR 7
-		     "¿" WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			      BACKGROUND-COLOR 7.
-	     DISPLAY "³ Name:                                    "
-		      AT 1218 WITH FOREGROUND-COLOR 0
-				   BACKGROUND-COLOR 7
-		     "³" WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			      BACKGROUND-COLOR 7.
-	     DISPLAY "À" AT 1318 WITH FOREGROUND-COLOR 0
-				      BACKGROUND-COLOR 7
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7.
-	     MOVE 12		 TO SHADE-ROW.
-	     MOVE 20		 TO SHADE-COL.
-	     MOVE 42		 TO SHADE-WIDTH.
-	     MOVE 2		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE SPACES	 TO WS-SLIP-NAME.
+      PERFORM CLEAR-L50.
+            DISPLAY "Processing Picking Slip" AT 2520 WITH
+              BACKGROUND-COLOR 3
+        FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
+      PERFORM SAVE-SCREEN-3.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+        AT 1118 WITH FOREGROUND-COLOR 0
+       BACKGROUND-COLOR 7
+       "¿" WITH FOREGROUND-COLOR 7 HIGHLIGHT
+         BACKGROUND-COLOR 7.
+      DISPLAY "³ Name:                                    "
+        AT 1218 WITH FOREGROUND-COLOR 0
+       BACKGROUND-COLOR 7
+       "³" WITH FOREGROUND-COLOR 7 HIGHLIGHT
+         BACKGROUND-COLOR 7.
+      DISPLAY "À" AT 1318 WITH FOREGROUND-COLOR 0
+          BACKGROUND-COLOR 7
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7.
+      MOVE 12   TO SHADE-ROW.
+      MOVE 20   TO SHADE-COL.
+      MOVE 42   TO SHADE-WIDTH.
+      MOVE 2   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
+      MOVE SPACES  TO WS-SLIP-NAME.
 
        DD08.
-	     ACCEPT WS-SLIP-NAME AT 1226
-		    WITH FOREGROUND-COLOR 5
-			 BACKGROUND-COLOR 7 UPDATE AUTO.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     GO TO DD999
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DD08
-	       END-EVALUATE.
-	     MOVE 15		 TO SLIN.
-	     PERFORM CHECK-SETUP THRU CHECK-EXIT.
-	   IF WS-OPTION = "N"
-	       GO TO DD08.
-	     PERFORM RESTORE-SCREEN-3.
-013270	     MOVE 1		 TO WS-SALKEY.
-013280	     PERFORM AY60 THRU AY999.
-	     INITIALIZE PIC-RECORD1.
-	     MOVE ZERO		 TO PIC-SEQ.
-	     MOVE 7		 TO WS-PARKEY.
-021500	     PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
-	     MOVE PAR-PIC-REF	 TO W30-PIC-REF.
-	     MOVE LS-USER	 TO W30-WS.
-013330	     MOVE W30-PIC-SLIP	 TO W90-REF W15-RECNO PIC-REF.
-013290	   IF W30-PIC-REF = 99999
-013300	       MOVE 1		 TO PAR-PIC-REF
-013310	   ELSE
-013320	       ADD 1		 TO PAR-PIC-REF.
-012640       PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
-	     MOVE W10-SMAN	 TO PIC-SMAN.
-	     MOVE W15-SMAN	 TO PIC-SNAME.
-	     MOVE "H"		 TO PIC-TYPE.
-	     MOVE WS-DRAW	 TO PIC-DRAW.
-	     MOVE W12-TODAY	 TO PIC-DATE.
-012150	     ACCEPT W25-TIME FROM TIME.
+      ACCEPT WS-SLIP-NAME AT 1226
+      WITH FOREGROUND-COLOR 5
+    BACKGROUND-COLOR 7 UPDATE AUTO.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       GO TO DD999
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DD08
+        END-EVALUATE.
+      MOVE 15   TO SLIN.
+      PERFORM CHECK-SETUP THRU CHECK-EXIT.
+    IF WS-OPTION = "N"
+        GO TO DD08.
+      PERFORM RESTORE-SCREEN-3.
+            MOVE 1   TO WS-SALKEY.
+            PERFORM AY60 THRU AY999.
+      INITIALIZE PIC-RECORD1.
+      MOVE ZERO   TO PIC-SEQ.
+      MOVE 7   TO WS-PARKEY.
+            PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+      MOVE PAR-PIC-REF  TO W30-PIC-REF.
+      MOVE LS-USER  TO W30-WS.
+            MOVE W30-PIC-SLIP  TO W90-REF W15-RECNO PIC-REF.
+          IF W30-PIC-REF = 99999
+              MOVE 1   TO PAR-PIC-REF
+          ELSE
+              ADD 1   TO PAR-PIC-REF.
+             PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
+      MOVE W10-SMAN  TO PIC-SMAN.
+      MOVE W15-SMAN  TO PIC-SNAME.
+      MOVE "H"   TO PIC-TYPE.
+      MOVE WS-DRAW  TO PIC-DRAW.
+      MOVE W12-TODAY  TO PIC-DATE.
+            ACCEPT W25-TIME FROM TIME.
              MOVE W25-HH         TO W95-HH.
              MOVE W25-MM         TO W95-MM.
              MOVE W25-SS         TO W95-SS.
-	     MOVE W95-TIME	 TO PIC-TIME.
-	     MOVE W05-VATNO	 TO PIC-VATNO.
-	     MOVE W90-TAX	 TO PIC-TAX.
-	     MOVE WS-PRC	 TO PIC-SPEC.
-	     MOVE WS-SLIP-NAME	 TO PIC-CLIENT.
-	     PERFORM WRITE-PSLIP THRU WRITE-PSLIP-EXIT.
-015400	     MOVE 1		 TO WS-ACTION.
-008720	     PERFORM AY34 THRU AY59.
-013340	     DISPLAY W90-REF AT 0410
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 0.
+      MOVE W95-TIME  TO PIC-TIME.
+      MOVE W05-VATNO  TO PIC-VATNO.
+      MOVE W90-TAX  TO PIC-TAX.
+      MOVE WS-PRC  TO PIC-SPEC.
+      MOVE WS-SLIP-NAME  TO PIC-CLIENT.
+      PERFORM WRITE-PSLIP THRU WRITE-PSLIP-EXIT.
+            MOVE 1   TO WS-ACTION.
+            PERFORM AY34 THRU AY59.
+            DISPLAY W90-REF AT 0410
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 0.
       *    *************************************************************
       *    ****    P R I N T   T H E   P I C K I N G   S L I P
       *    *************************************************************
        DD10.
-	     MOVE W85-SI	 TO CSH-DATA.
-	     WRITE CSH-L.
-013440	     MOVE W15-L4	 TO CSH-DATA.
-013480	     WRITE CSH-L.
-	     MOVE W95-TIME	 TO W15-TIME.
-013440	     MOVE W15-L4A	 TO CSH-DATA.
-013480	     WRITE CSH-L.
-013460	   IF W10-SMAN NOT = ZERO
-013470	       MOVE W15-L5	 TO CSH-DATA
-013480	       WRITE CSH-L.
-013440	     MOVE W15-L6	 TO CSH-DATA.
-013480	     WRITE CSH-L.
-	   IF NOT (WS-SLIP-NAME = SPACES)
-	       MOVE WS-SLIP-NAME TO W15-C-NAME
-	       MOVE W15-L8	 TO CSH-DATA
-	       WRITE CSH-L.
-013440	     MOVE ALL "-"	 TO CSH-LINE.
-013480	     WRITE CSH-L.
+      MOVE W85-SI  TO CSH-DATA.
+      WRITE CSH-L.
+            MOVE W15-L4  TO CSH-DATA.
+            WRITE CSH-L.
+      MOVE W95-TIME  TO W15-TIME.
+            MOVE W15-L4A  TO CSH-DATA.
+            WRITE CSH-L.
+          IF W10-SMAN NOT = ZERO
+              MOVE W15-L5  TO CSH-DATA
+              WRITE CSH-L.
+            MOVE W15-L6  TO CSH-DATA.
+            WRITE CSH-L.
+    IF NOT (WS-SLIP-NAME = SPACES)
+        MOVE WS-SLIP-NAME TO W15-C-NAME
+        MOVE W15-L8  TO CSH-DATA
+        WRITE CSH-L.
+            MOVE ALL "-"  TO CSH-LINE.
+            WRITE CSH-L.
       *    *************************************************************
       *    ****    R E A D   T H E   S A L E   F I L E   A N D
-      * 	   P R I N T   T H E   P I C K I N G   S L I P
+      *     P R I N T   T H E   P I C K I N G   S L I P
       *    *************************************************************
-013530 DD15.
-013540	   IF WS-SALKEY > WS-LAST
-013550	       GO TO DD30.
-013560	     PERFORM READ-SALE THRU READ-SALE-EXIT.
-	     MOVE SAL-CODE	 TO PIC-CODE.
-	     MOVE SAL-EXT-ITEM	 TO PIC-EXT-ITEM STK-CODE.
-031270	     PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-	     MOVE SAL-MSER	 TO PIC-MSER.
-	     MOVE SAL-SERNO	 TO PIC-SERNO.
-	     MOVE SAL-QNT	 TO PIC-QNT.
-	     MOVE SAL-COST	 TO PIC-COST.
-	     MOVE SAL-SELL	 TO PIC-SELL.
-	     MOVE SAL-VAT	 TO PIC-VAT.
-	     MOVE SAL-VAL	 TO PIC-VAL.
-	     MOVE SAL-INCTAX	 TO PIC-INCTAX.
-	     MOVE SAL-NONTAX	 TO PIC-NONTAX.
-	     MOVE SAL-TAXVAL	 TO PIC-TAXVAL.
-	     MOVE SAL-DSC	 TO PIC-DSC.
-	     MOVE SAL-DISC	 TO PIC-DISC.
-	     MOVE SAL-SUPER	 TO PIC-SUPER.
-	     MOVE SAL-VAT-SUB	 TO PIC-VAT-SUB.
-	     MOVE SAL-PACK	 TO PIC-PACK.
-	     MOVE SAL-SPEC	 TO PIC-SPEC.
-	     MOVE SAL-SCALE	 TO PIC-3DEC.
-	     MOVE "I"		 TO PIC-TYPE.
-	     ADD 1		 TO PIC-SEQ.
-	     PERFORM WRITE-PSLIP THRU WRITE-PSLIP-EXIT.
-015400	     MOVE 1		 TO WS-ACTION.
-008720	     PERFORM AY34 THRU AY59.
-026910	   IF SAL-EXT-ITEM = SPACES
-	       MOVE SPACES	 TO W15-L14
-	       MOVE SAL-DESC	 TO W15-REMK
-013440	       MOVE W15-L14	 TO CSH-DATA
-013480	       WRITE CSH-L
-	       GO TO DD25.
-013570	     MOVE SAL-EXT-ITEM	 TO STK-CODE.
-	     MOVE SPACES	 TO W15-DETAIL.
-	   IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
-031280	       MOVE SAL-WEIGHT	 TO W10-QUANT
-	   ELSE
-031280	       MOVE SAL-QNT	 TO W10-QUANT.
+       DD15.
+          IF WS-SALKEY > WS-LAST
+              GO TO DD30.
+            PERFORM READ-SALE THRU READ-SALE-EXIT.
+      MOVE SAL-CODE  TO PIC-CODE.
+      MOVE SAL-EXT-ITEM  TO PIC-EXT-ITEM STK-CODE.
+            PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+      MOVE SAL-MSER  TO PIC-MSER.
+      MOVE SAL-SERNO  TO PIC-SERNO.
+      MOVE SAL-QNT  TO PIC-QNT.
+      MOVE SAL-COST  TO PIC-COST.
+      MOVE SAL-SELL  TO PIC-SELL.
+      MOVE SAL-VAT  TO PIC-VAT.
+      MOVE SAL-VAL  TO PIC-VAL.
+      MOVE SAL-INCTAX  TO PIC-INCTAX.
+      MOVE SAL-NONTAX  TO PIC-NONTAX.
+      MOVE SAL-TAXVAL  TO PIC-TAXVAL.
+      MOVE SAL-DSC  TO PIC-DSC.
+      MOVE SAL-DISC  TO PIC-DISC.
+      MOVE SAL-SUPER  TO PIC-SUPER.
+      MOVE SAL-VAT-SUB  TO PIC-VAT-SUB.
+      MOVE SAL-PACK  TO PIC-PACK.
+      MOVE SAL-SPEC  TO PIC-SPEC.
+      MOVE SAL-SCALE  TO PIC-3DEC.
+      MOVE "I"   TO PIC-TYPE.
+      ADD 1   TO PIC-SEQ.
+      PERFORM WRITE-PSLIP THRU WRITE-PSLIP-EXIT.
+            MOVE 1   TO WS-ACTION.
+            PERFORM AY34 THRU AY59.
+          IF SAL-EXT-ITEM = SPACES
+        MOVE SPACES  TO W15-L14
+        MOVE SAL-DESC  TO W15-REMK
+              MOVE W15-L14  TO CSH-DATA
+              WRITE CSH-L
+        GO TO DD25.
+            MOVE SAL-EXT-ITEM  TO STK-CODE.
+      MOVE SPACES  TO W15-DETAIL.
+    IF (W85-USE-3 = "Y") OR (SAL-SCALE = "Y" OR "3")
+              MOVE SAL-WEIGHT  TO W10-QUANT
+    ELSE
+              MOVE SAL-QNT  TO W10-QUANT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF WS-USE-ITM = "Y"
-	       MOVE STK-ITEM	 TO W15-ITM
-	       MOVE "/" 	 TO W15-SL
-	       MOVE STK-ITM	 TO W15-EXT
-	   ELSE
-	       MOVE STK-CODE	 TO W15-EXT-ITEM
-	   END-IF.
-	     MOVE W10-QUANT	 TO W15-QNT.
-	     MOVE SAL-SELL	 TO W15-PRC.
-	     MOVE STK-BIN	 TO W15-BIN.
-013630	     MOVE SAL-COST	 TO W10-COST.
-013640	     MOVE SAL-SELL	 TO W10-SELL.
-013650       MOVE SAL-DISC       TO W90-CDISC.
-013660       MOVE SAL-DSC        TO WS-DISC.
-013670	     SUBTRACT W90-CDISC FROM W25-VALUE
-				 GIVING W90-VALUE.
+    IF WS-USE-ITM = "Y"
+        MOVE STK-ITEM  TO W15-ITM
+        MOVE "/"   TO W15-SL
+        MOVE STK-ITM  TO W15-EXT
+    ELSE
+        MOVE STK-CODE  TO W15-EXT-ITEM
+    END-IF.
+      MOVE W10-QUANT  TO W15-QNT.
+      MOVE SAL-SELL  TO W15-PRC.
+      MOVE STK-BIN  TO W15-BIN.
+            MOVE SAL-COST  TO W10-COST.
+            MOVE SAL-SELL  TO W10-SELL.
+             MOVE SAL-DISC       TO W90-CDISC.
+             MOVE SAL-DSC        TO WS-DISC.
+            SUBTRACT W90-CDISC FROM W25-VALUE
+     GIVING W90-VALUE.
              MOVE SAL-SUPER      TO WS-SUPER.
-013440	     MOVE W15-L11      TO CSH-DATA
-013480	     WRITE CSH-L.
+            MOVE W15-L11      TO CSH-DATA
+            WRITE CSH-L.
 
        DD25.
-014220       ADD 1               TO WS-SALKEY.
-014230	     GO TO DD15.
+             ADD 1               TO WS-SALKEY.
+            GO TO DD15.
 
        DD30.
-	     PERFORM AY70 THRU AY999.
-	     MOVE 8		 TO SLIN
-029700	     MOVE "Press ANY key to continue"
-				 TO WS-ERR-MES.
-	     MOVE SPACE 	 TO WS-OPTION.
-	     PERFORM OPT-SETUP THRU OPT-EXIT.
-	     MOVE W85-CSI	 TO CSH-DATA.
-014880	     WRITE CSH-L.
-014850	     MOVE SPACES	 TO CSH-DATA.
-014860	     MOVE 1		 TO WS-S9.
+      PERFORM AY70 THRU AY999.
+      MOVE 8   TO SLIN
+            MOVE "Press ANY key to continue"
+     TO WS-ERR-MES.
+      MOVE SPACE   TO WS-OPTION.
+      PERFORM OPT-SETUP THRU OPT-EXIT.
+      MOVE W85-CSI  TO CSH-DATA.
+            WRITE CSH-L.
+            MOVE SPACES  TO CSH-DATA.
+            MOVE 1   TO WS-S9.
 
        DD35.
-014880	     WRITE CSH-L.
-014850	     MOVE SPACES	 TO CSH-DATA.
-014890	   IF WS-S9 < W85-ADVANCE
-014900         ADD 1             TO WS-S9
-014910	       GO TO DD35.
-	     CLOSE CSHSLE.
-	     OPEN OUTPUT CSHSLE.
-	     CALL X"91" USING X91-RES X91-FUN CSHSLE.
+            WRITE CSH-L.
+            MOVE SPACES  TO CSH-DATA.
+          IF WS-S9 < W85-ADVANCE
+               ADD 1             TO WS-S9
+              GO TO DD35.
+      CLOSE CSHSLE.
+      OPEN OUTPUT CSHSLE.
+      CALL X"91" USING X91-RES X91-FUN CSHSLE.
 
        DD999.
-	     EXIT.
+      EXIT.
       /
-       DE000	       SECTION 58.
+       DE000        SECTION 58.
        DE00.
-	     PERFORM SAVE-SCREEN.
-	     MOVE ZERO		 TO WS-ERROR.
-	     MOVE 12		 TO SHADE-ROW.
-	     MOVE 27		 TO SHADE-COL.
-	     MOVE 30		 TO SHADE-WIDTH.
-	     MOVE 3		 TO SHADE-LINES.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1125
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
-		     "¿" WITH FOREGROUND-COLOR 5 HIGHLIGHT
-			      BACKGROUND-COLOR 5.
-	     DISPLAY "³" AT 1225
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
-		     " Picking Slip Number          "
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "³" WITH FOREGROUND-COLOR 5 HIGHLIGHT
-			      BACKGROUND-COLOR 5.
-	     DISPLAY "³" AT 1325
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
-		     " F2" WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				BACKGROUND-COLOR 5
-		     " to view outstanding slips "
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "³" WITH FOREGROUND-COLOR 5 HIGHLIGHT
-			      BACKGROUND-COLOR 5.
-	     DISPLAY "À" AT 1425
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		       WITH FOREGROUND-COLOR 5 HIGHLIGHT
-			    BACKGROUND-COLOR 5.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE SPACES	 TO W30-PIC-SLIP.
+      PERFORM SAVE-SCREEN.
+      MOVE ZERO   TO WS-ERROR.
+      MOVE 12   TO SHADE-ROW.
+      MOVE 27   TO SHADE-COL.
+      MOVE 30   TO SHADE-WIDTH.
+      MOVE 3   TO SHADE-LINES.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1125
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
+       "¿" WITH FOREGROUND-COLOR 5 HIGHLIGHT
+         BACKGROUND-COLOR 5.
+      DISPLAY "³" AT 1225
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
+       " Picking Slip Number          "
+        WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "³" WITH FOREGROUND-COLOR 5 HIGHLIGHT
+         BACKGROUND-COLOR 5.
+      DISPLAY "³" AT 1325
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
+       " F2" WITH FOREGROUND-COLOR 7 HIGHLIGHT
+    BACKGROUND-COLOR 5
+       " to view outstanding slips "
+        WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "³" WITH FOREGROUND-COLOR 5 HIGHLIGHT
+         BACKGROUND-COLOR 5.
+      DISPLAY "À" AT 1425
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+         WITH FOREGROUND-COLOR 5 HIGHLIGHT
+       BACKGROUND-COLOR 5.
+      PERFORM SCREEN-SHADOW.
+      MOVE SPACES  TO W30-PIC-SLIP.
 
        DE05.
-	     ACCEPT W30-PIC-SLIP AT 1247
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE 9	 TO WS-ERROR
-		     GO TO DE99
-		 WHEN F2-KEY
-		     PERFORM DE100
-		     IF W30-PIC-SLIP = SPACES
-			 GO TO DE05
-		 WHEN OTHER
-		     CALL X"E5"
-		     GO TO DE05
-	       END-EVALUATE.
-	     MOVE ZERO		 TO WS-ERROR.
-018300	     MOVE 6		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W30-PIC-SLIP
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-018360	     MOVE 1		 TO WS-LENGTH.
-	     MOVE W30-PIC-SLIP	 TO PIC-REF.
-	     MOVE ZERO		 TO PIC-SEQ.
-	     PERFORM START-AT-PSLIP-KEY THRU READ-PSLIP-EXIT.
+      ACCEPT W30-PIC-SLIP AT 1247
+      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+    BACKGROUND-COLOR 5 UPDATE AUTO.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       MOVE 9  TO WS-ERROR
+       GO TO DE99
+   WHEN F2-KEY
+       PERFORM DE100
+       IF W30-PIC-SLIP = SPACES
+    GO TO DE05
+   WHEN OTHER
+       CALL X"E5"
+       GO TO DE05
+        END-EVALUATE.
+      MOVE ZERO   TO WS-ERROR.
+            MOVE 6   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING W30-PIC-SLIP
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+            MOVE 1   TO WS-LENGTH.
+      MOVE W30-PIC-SLIP  TO PIC-REF.
+      MOVE ZERO   TO PIC-SEQ.
+      PERFORM START-AT-PSLIP-KEY THRU READ-PSLIP-EXIT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Check if there were any details for the picking slip ref  ³
       *    ³ and if not display error message and return to DE05 and   ³
-      *    ³ allow the User to rekey the number 		       ³
+      *    ³ allow the User to rekey the number          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF WS-F-ERROR = 34
-	       MOVE "No record for P/S selected"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO DE05.
-	     PERFORM RESTORE-SCREEN.
-009700	     MOVE ZERO		 TO W90-LDISC W90-BDT
-				    W90-RTVAL W90-BAL
-				    W90-SALES W90-EXCTOT
-				    W90-RTTAX W90-NONTAX
-				    W90-EXCVAL W90-DB.
-009720	     MOVE 1		 TO WS-FIRST WS-SALPOS WS-LAST.
+    IF WS-F-ERROR = 34
+        MOVE "No record for P/S selected"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+        GO TO DE05.
+      PERFORM RESTORE-SCREEN.
+            MOVE ZERO   TO W90-LDISC W90-BDT
+        W90-RTVAL W90-BAL
+        W90-SALES W90-EXCTOT
+        W90-RTTAX W90-NONTAX
+        W90-EXCVAL W90-DB.
+            MOVE 1   TO WS-FIRST WS-SALPOS WS-LAST.
 
        DE10.
-	    PERFORM READ-PSLIP-NEXT THRU READ-PSLIP-EXIT.
-	   IF WS-F-ERROR = 34
-	       GO TO DE15.
-	   IF NOT (PIC-REF = W30-PIC-SLIP)
-	       GO TO DE15.
-	   IF PIC-TYPE = "H"
-	       MOVE PIC-SMAN	 TO W10-SMAN
-	       MOVE PIC-SNAME	 TO W15-SMAN
-      *	       MOVE PIC-DRAW	 TO WS-DRAW
-	       MOVE PIC-DATE	 TO W12-TODAY
-	       MOVE PIC-TIME	 TO W95-TIME
-	       MOVE PIC-VATNO	 TO W05-VATNO
-	       MOVE PIC-TAX	 TO W90-TAX
-	       MOVE PIC-SPEC	 TO WS-PRC
-	       MOVE PIC-CLIENT	 TO WS-SLIP-NAME
-009760	       DISPLAY W10-SMAN AT 0314
-009770		       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			    BACKGROUND-COLOR 5
-	       IF NOT (W15-SMAN = SPACES)
-009860		   DISPLAY W15-SMAN AT 0317
-			   WITH FOREGROUND-COLOR 3 HIGHLIGHT
-				BACKGROUND-COLOR 5
-	      END-IF
-	      PERFORM CLEAR-L50
-	      GO TO DE10.
-	     MOVE PIC-CODE	 TO SAL-CODE.
-	     MOVE PIC-EXT-ITEM	 TO SAL-EXT-ITEM.
-	     MOVE PIC-MSER	 TO SAL-MSER.
-	     MOVE PIC-SERNO	 TO SAL-SERNO.
-	     MOVE PIC-QNT	 TO SAL-QNT.
-	     MOVE PIC-COST	 TO SAL-COST.
-	     MOVE PIC-SELL	 TO SAL-SELL.
-	     MOVE PIC-VAT	 TO SAL-VAT.
-	     MOVE PIC-VAL	 TO SAL-VAL.
-	     MOVE PIC-INCTAX	 TO SAL-INCTAX.
-	     MOVE PIC-NONTAX	 TO SAL-NONTAX.
-	     MOVE PIC-TAXVAL	 TO SAL-TAXVAL.
-	     MOVE PIC-DSC	 TO SAL-DSC.
-	     MOVE PIC-DISC	 TO SAL-DISC.
-	     MOVE PIC-SUPER	 TO SAL-SUPER.
-	     MOVE PIC-VAT-SUB	 TO SAL-VAT-SUB.
-	     MOVE PIC-PACK	 TO SAL-PACK.
-	     MOVE PIC-SPEC	 TO SAL-SPEC.
-	     MOVE PIC-3DEC	 TO SAL-SCALE.
-	   IF NOT (SAL-EXT-ITEM = SPACES)
-	       IF SAL-SCALE = "Y" OR "3"
-031280		   MOVE SAL-WEIGHT
-				 TO W10-QUANT
-	       ELSE
-031280		   MOVE SAL-QNT	 TO W10-QUANT
-	       END-IF
-	       MOVE W10-QUANT	 TO W10-QNT
-	       MOVE SAL-EXT-ITEM TO W10-EXT-ITEM
-	       MOVE SAL-COST	 TO W10-COST
-	       MOVE SAL-SPEC	 TO W10-SPEC
-	       MOVE SAL-PACK	 TO WS-P1
-	       MOVE SAL-DESC	 TO W10-DESC
-	       MOVE SAL-SELL	 TO W10-SELL
-	       MOVE SAL-SCALE	 TO WS-SCALE
-	       MOVE SAL-VAL	 TO W15-PRICE W25-VALUE
-	       MOVE SAL-DSC	 TO WS-DISC
-	       MOVE SAL-DISC	 TO W90-CDISC.
-	     MOVE W10-EXT-ITEM	 TO STK-CODE.
-	     PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-011220	     COMPUTE W25-VALUE ROUNDED = (1.000 * W10-SELL * W10-QUANT).
-011510	   IF (STK-IND < 2) OR (STK-IND = 3)
-011520	       COMPUTE W90-BAL = W90-BAL + (W10-QNT * W10-COST).
-	   IF STK-TAX = 0
-022540	       ADD SAL-NONTAX	 TO W90-NONTAX
-022560     ELSE
-022580	       ADD SAL-TAXVAL	 TO W90-TAXVAL(SAL-VAT-SUB).
-011610	     ADD W25-VALUE	 TO W90-DB.
-	     MOVE SAL-SUPER	 TO WS-SUPER.
-031220	     MOVE WS-LAST	 TO WS-SALKEY.
-011960	     PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
-011970	     ADD 1		 TO WS-LAST.
-	     GO TO DE10.
+     PERFORM READ-PSLIP-NEXT THRU READ-PSLIP-EXIT.
+    IF WS-F-ERROR = 34
+        GO TO DE15.
+    IF NOT (PIC-REF = W30-PIC-SLIP)
+        GO TO DE15.
+    IF PIC-TYPE = "H"
+        MOVE PIC-SMAN  TO W10-SMAN
+        MOVE PIC-SNAME  TO W15-SMAN
+      *        MOVE PIC-DRAW  TO WS-DRAW
+        MOVE PIC-DATE  TO W12-TODAY
+        MOVE PIC-TIME  TO W95-TIME
+        MOVE PIC-VATNO  TO W05-VATNO
+        MOVE PIC-TAX  TO W90-TAX
+        MOVE PIC-SPEC  TO WS-PRC
+        MOVE PIC-CLIENT  TO WS-SLIP-NAME
+              DISPLAY W10-SMAN AT 0314
+               WITH FOREGROUND-COLOR 7 HIGHLIGHT
+       BACKGROUND-COLOR 5
+        IF NOT (W15-SMAN = SPACES)
+           DISPLAY W15-SMAN AT 0317
+      WITH FOREGROUND-COLOR 3 HIGHLIGHT
+    BACKGROUND-COLOR 5
+       END-IF
+       PERFORM CLEAR-L50
+       GO TO DE10.
+      MOVE PIC-CODE  TO SAL-CODE.
+      MOVE PIC-EXT-ITEM  TO SAL-EXT-ITEM.
+      MOVE PIC-MSER  TO SAL-MSER.
+      MOVE PIC-SERNO  TO SAL-SERNO.
+      MOVE PIC-QNT  TO SAL-QNT.
+      MOVE PIC-COST  TO SAL-COST.
+      MOVE PIC-SELL  TO SAL-SELL.
+      MOVE PIC-VAT  TO SAL-VAT.
+      MOVE PIC-VAL  TO SAL-VAL.
+      MOVE PIC-INCTAX  TO SAL-INCTAX.
+      MOVE PIC-NONTAX  TO SAL-NONTAX.
+      MOVE PIC-TAXVAL  TO SAL-TAXVAL.
+      MOVE PIC-DSC  TO SAL-DSC.
+      MOVE PIC-DISC  TO SAL-DISC.
+      MOVE PIC-SUPER  TO SAL-SUPER.
+      MOVE PIC-VAT-SUB  TO SAL-VAT-SUB.
+      MOVE PIC-PACK  TO SAL-PACK.
+      MOVE PIC-SPEC  TO SAL-SPEC.
+      MOVE PIC-3DEC  TO SAL-SCALE.
+    IF NOT (SAL-EXT-ITEM = SPACES)
+        IF SAL-SCALE = "Y" OR "3"
+           MOVE SAL-WEIGHT
+     TO W10-QUANT
+        ELSE
+           MOVE SAL-QNT  TO W10-QUANT
+        END-IF
+        MOVE W10-QUANT  TO W10-QNT
+        MOVE SAL-EXT-ITEM TO W10-EXT-ITEM
+        MOVE SAL-COST  TO W10-COST
+        MOVE SAL-SPEC  TO W10-SPEC
+        MOVE SAL-PACK  TO WS-P1
+        MOVE SAL-DESC  TO W10-DESC
+        MOVE SAL-SELL  TO W10-SELL
+        MOVE SAL-SCALE  TO WS-SCALE
+        MOVE SAL-VAL  TO W15-PRICE W25-VALUE
+        MOVE SAL-DSC  TO WS-DISC
+        MOVE SAL-DISC  TO W90-CDISC.
+      MOVE W10-EXT-ITEM  TO STK-CODE.
+      PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+            COMPUTE W25-VALUE ROUNDED = (1.000 * W10-SELL * W10-QUANT).
+          IF (STK-IND < 2) OR (STK-IND = 3)
+              COMPUTE W90-BAL = W90-BAL + (W10-QNT * W10-COST).
+    IF STK-TAX = 0
+              ADD SAL-NONTAX  TO W90-NONTAX
+           ELSE
+              ADD SAL-TAXVAL  TO W90-TAXVAL(SAL-VAT-SUB).
+            ADD W25-VALUE  TO W90-DB.
+      MOVE SAL-SUPER  TO WS-SUPER.
+            MOVE WS-LAST  TO WS-SALKEY.
+            PERFORM WRITE-SALE THRU WRITE-SALE-EXIT.
+            ADD 1   TO WS-LAST.
+      GO TO DE10.
 
        DE15.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Check if there were any details for the picking slip ref  ³
       *    ³ and if not display error message and return to DE05 and   ³
-      *    ³ allow the User to rekey the number 		       ³
+      *    ³ allow the User to rekey the number          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	   IF WS-LAST = 1
-	       MOVE "No record for P/S selected"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-	       GO TO DE05.
-011630	     MOVE W90-DB	 TO W90-TOTAL.
-011640	     SUBTRACT W90-LDISC  FROM W90-TOTAL.
-011650	     MOVE W90-DB	 TO W15-PRICE.
-011660	     DISPLAY W15-PRICE AT 2015
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-011670	     MULTIPLY -1 BY W90-LDISC
-				 GIVING W15-PRICE.
-011680	     DISPLAY W15-PRICE AT 2115
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5.
-011750	     MOVE W90-TOTAL	 TO W15-VAL.
-011760	     DISPLAY W15-VAL AT 2315
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5.
-	     SUBTRACT 1 	 FROM WS-LAST.
-	     MOVE W30-PIC-SLIP	 TO PIC-REF.
-	     MOVE ZERO		 TO PIC-SEQ.
-	     PERFORM START-AT-PSLIP-KEY THRU READ-PSLIP-EXIT.
+    IF WS-LAST = 1
+        MOVE "No record for P/S selected"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+        GO TO DE05.
+            MOVE W90-DB  TO W90-TOTAL.
+            SUBTRACT W90-LDISC  FROM W90-TOTAL.
+            MOVE W90-DB  TO W15-PRICE.
+            DISPLAY W15-PRICE AT 2015
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+            MULTIPLY -1 BY W90-LDISC
+     GIVING W15-PRICE.
+            DISPLAY W15-PRICE AT 2115
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5.
+            MOVE W90-TOTAL  TO W15-VAL.
+            DISPLAY W15-VAL AT 2315
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5.
+      SUBTRACT 1   FROM WS-LAST.
+      MOVE W30-PIC-SLIP  TO PIC-REF.
+      MOVE ZERO   TO PIC-SEQ.
+      PERFORM START-AT-PSLIP-KEY THRU READ-PSLIP-EXIT.
 
        DE20.
-	    PERFORM READ-PSLIP-NEXT THRU READ-PSLIP-EXIT.
-	   IF WS-F-ERROR = 34
-	       GO TO DE99.
-	   IF PIC-REF = W30-PIC-SLIP
-	       PERFORM DELETE-PSLIP-REC THRU WRITE-PSLIP-EXIT
-	       GO TO DE20.
+     PERFORM READ-PSLIP-NEXT THRU READ-PSLIP-EXIT.
+    IF WS-F-ERROR = 34
+        GO TO DE99.
+    IF PIC-REF = W30-PIC-SLIP
+        PERFORM DELETE-PSLIP-REC THRU WRITE-PSLIP-EXIT
+        GO TO DE20.
 
        DE99.
-	     EXIT.
+      EXIT.
       *    *************************************************************
-      *    ****       P I C K I N G   S L I P	L O O K U P
+      *    ****       P I C K I N G   S L I P L O O K U P
       *    *************************************************************
-       DE100	       SECTION 58.
+       DE100        SECTION 58.
        DE105.
-	     MOVE SPACES	 TO W35-CODE.
-	     PERFORM SAVE-SCREEN-3.
+      MOVE SPACES  TO W35-CODE.
+      PERFORM SAVE-SCREEN-3.
       *
-      * 	      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *		      ³ 	   Picking Slip Lookup		  ³°°
-      *		      ³Start Number				  ³°°
-      *		      ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´°°
-      *		      ³Number	Name				  ³°°
-      *		      ³ 					  ³°°
-      *		      ³ 					  ³°°
-      *		      ³ 					  ³°°
-      *		      ³ 					  ³°°
-      *		      ³ 					  ³°°
-      *		      ³ 					  ³°°
-      *		      ³ 					  ³°°
-      *		      ³ 					  ³°°
-      *		      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°
-      *			°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+      *        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *        ³     Picking Slip Lookup    ³°°
+      *        ³Start Number      ³°°
+      *        ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´°°
+      *        ³Number Name      ³°°
+      *        ³        ³°°
+      *        ³        ³°°
+      *        ³        ³°°
+      *        ³        ³°°
+      *        ³        ³°°
+      *        ³        ³°°
+      *        ³        ³°°
+      *        ³        ³°°
+      *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°°
+      *   °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
        DE108.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
-		      AT 0617 WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				   BACKGROUND-COLOR 5
-		     "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-	     DISPLAY "³            " AT 0717
-		      WITH FOREGROUND-COLOR 5 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "Picking Slip Lookup            "
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-	     DISPLAY "³" AT 0817 WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				      BACKGROUND-COLOR 5
-		     "Start Number                               "
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-	     DISPLAY "Ã" AT 0917 WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				      BACKGROUND-COLOR 5
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "´" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-	     DISPLAY "³" AT 1017 WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				      BACKGROUND-COLOR 5
-		     "Number   Name                              "
-		      WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			   BACKGROUND-COLOR 5
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-	     MOVE 1117		 TO CPOS.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+        AT 0617 WITH FOREGROUND-COLOR 5 HIGHLIGHT
+       BACKGROUND-COLOR 5
+       "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+      DISPLAY "³            " AT 0717
+        WITH FOREGROUND-COLOR 5 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "Picking Slip Lookup            "
+        WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+      DISPLAY "³" AT 0817 WITH FOREGROUND-COLOR 5 HIGHLIGHT
+          BACKGROUND-COLOR 5
+       "Start Number                               "
+        WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+      DISPLAY "Ã" AT 0917 WITH FOREGROUND-COLOR 5 HIGHLIGHT
+          BACKGROUND-COLOR 5
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+        WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "´" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+      DISPLAY "³" AT 1017 WITH FOREGROUND-COLOR 5 HIGHLIGHT
+          BACKGROUND-COLOR 5
+       "Number   Name                              "
+        WITH FOREGROUND-COLOR 3 HIGHLIGHT
+      BACKGROUND-COLOR 5
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+      MOVE 1117   TO CPOS.
 
        DE110.
-012060	     DISPLAY "³                                           "
-		      AT CPOS WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				   BACKGROUND-COLOR 5
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
-012070	   IF CLIN < 18
-	       ADD 1		 TO CLIN
-	       GO TO DE110.
-	     DISPLAY "À" AT 1917 WITH FOREGROUND-COLOR 5 HIGHLIGHT
-				      BACKGROUND-COLOR 5
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+            DISPLAY "³                                           "
+        AT CPOS WITH FOREGROUND-COLOR 5 HIGHLIGHT
+       BACKGROUND-COLOR 5
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
+          IF CLIN < 18
+        ADD 1   TO CLIN
+        GO TO DE110.
+      DISPLAY "À" AT 1917 WITH FOREGROUND-COLOR 5 HIGHLIGHT
+          BACKGROUND-COLOR 5
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 5.
 
        DE115.
-	     EXIT.
+      EXIT.
 
        DE120.
-	     MOVE 7		 TO SHADE-ROW.
-	     MOVE 19		 TO SHADE-COL.
-	     MOVE 43		 TO SHADE-WIDTH.
-	     MOVE 13		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
+      MOVE 7   TO SHADE-ROW.
+      MOVE 19   TO SHADE-COL.
+      MOVE 43   TO SHADE-WIDTH.
+      MOVE 13   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
 
        DE125.
-	     ACCEPT W35-CODE AT 0831
-		    WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			 BACKGROUND-COLOR 5 UPDATE AUTO.
-	     MOVE 8		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING W35-CODE
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-018360	     MOVE 1		 TO WS-LENGTH.
-	     MOVE W35-CODE	 TO PIC-REF.
-	     MOVE ZERO		 TO PIC-SEQ.
-	     PERFORM START-AT-PSLIP-KEY THRU READ-PSLIP-EXIT.
-	   IF WS-F-ERROR = 34
-	       MOVE SPACES	 TO W30-PIC-SLIP
-	       GO TO DE205.
+      ACCEPT W35-CODE AT 0831
+      WITH FOREGROUND-COLOR 7 HIGHLIGHT
+    BACKGROUND-COLOR 5 UPDATE AUTO.
+      MOVE 8   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING W35-CODE
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+            MOVE 1   TO WS-LENGTH.
+      MOVE W35-CODE  TO PIC-REF.
+      MOVE ZERO   TO PIC-SEQ.
+      PERFORM START-AT-PSLIP-KEY THRU READ-PSLIP-EXIT.
+    IF WS-F-ERROR = 34
+        MOVE SPACES  TO W30-PIC-SLIP
+        GO TO DE205.
 
        DE130.
-	     MOVE 1118		 TO CPOS.
-	     MOVE 1		 TO W75-S W75-S1.
-000340	     PERFORM CLEAR-L50.
+      MOVE 1118   TO CPOS.
+      MOVE 1   TO W75-S W75-S1.
+            PERFORM CLEAR-L50.
 
        DE135.
-000390	     MOVE SPACES	 TO W75-PSCODE(W75-S1)
-				    W75-PSNAME(W75-S1).
-	     MOVE ZERO		 TO W75-PSSEQ(W75-S1).
-000400	   IF W75-S1 < 8
-000410	       ADD 1		 TO W75-S1
-000420	       GO TO DE135.
-000430	     MOVE ZERO		 TO W75-S1.
+            MOVE SPACES  TO W75-PSCODE(W75-S1)
+        W75-PSNAME(W75-S1).
+      MOVE ZERO   TO W75-PSSEQ(W75-S1).
+          IF W75-S1 < 8
+              ADD 1   TO W75-S1
+              GO TO DE135.
+            MOVE ZERO   TO W75-S1.
 
        DE140.
-	   IF WS-OPTION = "J"
+    IF WS-OPTION = "J"
                MOVE SPACE        TO WS-OPTION
-	       GO TO DE142.
-	     PERFORM READ-PSLIP-NEXT THRU READ-PSLIP-EXIT.
-	   IF WS-F-ERROR = 34
-000940	       SUBTRACT 1	 FROM W75-S
-	       GO TO DE145.
+        GO TO DE142.
+      PERFORM READ-PSLIP-NEXT THRU READ-PSLIP-EXIT.
+    IF WS-F-ERROR = 34
+              SUBTRACT 1  FROM W75-S
+        GO TO DE145.
 
        DE142.
-	   IF NOT (PIC-TYPE = "H")
-	       GO TO DE140.
-000960	     MOVE PIC-REF	 TO W75-PSCODE(W75-S).
-	     MOVE PIC-SEQ	 TO W75-PSSEQ(W75-S).
-	     MOVE PIC-CLIENT	 TO W75-PSNAME(W75-S).
-	     DISPLAY PIC-REF AT CPOS
-		     WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-	     MOVE 27		 TO CCOL.
-	     DISPLAY PIC-CLIENT AT CPOS
-		     WITH FOREGROUND-COLOR 3 HIGHLIGHT
-			  BACKGROUND-COLOR 5.
-	     MOVE 18		 TO CCOL.
-	   IF CLIN < 18
-	       ADD 1		 TO CLIN W75-S
-	       GO TO DE140.
+    IF NOT (PIC-TYPE = "H")
+        GO TO DE140.
+            MOVE PIC-REF  TO W75-PSCODE(W75-S).
+      MOVE PIC-SEQ  TO W75-PSSEQ(W75-S).
+      MOVE PIC-CLIENT  TO W75-PSNAME(W75-S).
+      DISPLAY PIC-REF AT CPOS
+       WITH FOREGROUND-COLOR 7 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+      MOVE 27   TO CCOL.
+      DISPLAY PIC-CLIENT AT CPOS
+       WITH FOREGROUND-COLOR 3 HIGHLIGHT
+     BACKGROUND-COLOR 5.
+      MOVE 18   TO CCOL.
+    IF CLIN < 18
+        ADD 1   TO CLIN W75-S
+        GO TO DE140.
 
        DE145.
-001020	     DISPLAY "" AT 2502 WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     "," WITH FOREGROUND-COLOR 7
-		     "PgUp" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     "," WITH FOREGROUND-COLOR 7
-		     "PgDn" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     "," WITH FOREGROUND-COLOR 7
-001040		     "ENTER" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-001050		     "," WITH FOREGROUND-COLOR 7
-001170		     "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-		     "ape" WITH FOREGROUND-COLOR 7.
+001020      DISPLAY "" AT 2502 WITH FOREGROUND-COLOR 6 HIGHLIGHT
+       "," WITH FOREGROUND-COLOR 7
+       "PgUp" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+       "," WITH FOREGROUND-COLOR 7
+       "PgDn" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+       "," WITH FOREGROUND-COLOR 7
+             "ENTER" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+             "," WITH FOREGROUND-COLOR 7
+             "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
+       "ape" WITH FOREGROUND-COLOR 7.
 
        DE150.
-	     PERFORM SAVE-SCREEN-2.
-001220	     MOVE 0		 TO W75-S1.
-001230	     MOVE 1118		 TO CPOS.
+      PERFORM SAVE-SCREEN-2.
+            MOVE 0   TO W75-S1.
+            MOVE 1118   TO CPOS.
 
-001250 DE155.
-	     MOVE 1920		 TO W41-LENGTH.
-	     CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS
-					      W42-ATTRIB2
-					      W41-LENGTH
-					RETURNING WS-STATUS.
-001290	     MOVE 2000		 TO W41-LENGTH.
+       DE155.
+      MOVE 3920   TO W41-LENGTH.
+      CALL "CBL_WRITE_SCR_ATTRS" USING SAVE-POS
+           W42-ATTRIB2
+           W41-LENGTH
+     RETURNING WS-STATUS.
+            MOVE 4000   TO W41-LENGTH.
 
-001310 DE160.
-	     CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-	   IF ADIS-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN UP-KEY
-001320		     GO TO DE185
-		 WHEN DOWN-KEY
-001340		     GO TO DE190
-		 WHEN ENTER-KEY
-		 WHEN CR-KEY
-		     GO TO DE200
-		 WHEN OTHER
-		     CALL X"E5"
-		     CALL X"E5"
-		     CALL X"E5"
-		     CALL X"E5"
-	       END-EVALUATE
-	       GO TO DE160
-	   ELSE
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE SPACES TO W35-CODE
-		     GO TO DE205
-		 WHEN PAGE-DOWN
-001340		     GO TO DE165
-		 WHEN PAGE-UP
-001340		     GO TO DE175
-		 WHEN OTHER
-		     CALL X"E5"
-		     CALL X"E5"
-		     CALL X"E5"
-		     CALL X"E5"
-	       END-EVALUATE
-	       GO TO DE160.
-	     CALL X"E5".
-	     CALL X"E5".
-	     CALL X"E5".
-	     CALL X"E5".
-001280	     GO TO DE160.
+       DE160.
+      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+    IF ADIS-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN UP-KEY
+             GO TO DE185
+   WHEN DOWN-KEY
+             GO TO DE190
+   WHEN ENTER-KEY
+   WHEN CR-KEY
+       GO TO DE200
+   WHEN OTHER
+       CALL X"E5"
+       CALL X"E5"
+       CALL X"E5"
+       CALL X"E5"
+        END-EVALUATE
+        GO TO DE160
+    ELSE
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       MOVE SPACES TO W35-CODE
+       GO TO DE205
+   WHEN PAGE-DOWN
+             GO TO DE165
+   WHEN PAGE-UP
+             GO TO DE175
+   WHEN OTHER
+       CALL X"E5"
+       CALL X"E5"
+       CALL X"E5"
+       CALL X"E5"
+        END-EVALUATE
+        GO TO DE160.
+      CALL X"E5".
+      CALL X"E5".
+      CALL X"E5".
+      CALL X"E5".
+            GO TO DE160.
 
        DE165.
-001550	   IF W75-S < 8
-001560	       GO TO DE160.
+          IF W75-S < 8
+              GO TO DE160.
 
        DE170.
-	     MOVE 1117		 TO CPOS.
-	     PERFORM DE110 THRU DE115.
-001630	     GO TO DE130.
+      MOVE 1117   TO CPOS.
+      PERFORM DE110 THRU DE115.
+            GO TO DE130.
 
        DE175.
              MOVE 1              TO WS-IXS1.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		SET OPTION TO BYPASS THE READ NEXT	       ³
+      *    ³  SET OPTION TO BYPASS THE READ NEXT        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
              MOVE "J"            TO WS-OPTION.
 
        DE180.
-	     PERFORM READ-PSLIP-PREV THRU READ-PSLIP-EXIT.
-	   IF WS-F-ERROR = 34
-	       MOVE SPACE	 TO WS-OPTION
-	       PERFORM DE108 THRU DE115
-	       GO TO DE130.
-	   IF NOT (PIC-TYPE = "H")
-	       GO TO DE180.
-	   IF WS-IXS1 < 16
+      PERFORM READ-PSLIP-PREV THRU READ-PSLIP-EXIT.
+    IF WS-F-ERROR = 34
+        MOVE SPACE  TO WS-OPTION
+        PERFORM DE108 THRU DE115
+        GO TO DE130.
+    IF NOT (PIC-TYPE = "H")
+        GO TO DE180.
+    IF WS-IXS1 < 16
                ADD 1             TO WS-IXS1
-	       GO TO DE180.
-	     GO TO DE170.
+        GO TO DE180.
+      GO TO DE170.
 
        DE185.
-001870     IF W75-S1 > 1
-001880         SUBTRACT 1        FROM W75-S1 CLIN.
-001890	     GO TO DE195.
+           IF W75-S1 > 1
+               SUBTRACT 1        FROM W75-S1 CLIN.
+            GO TO DE195.
 
        DE190.
-001920     IF W75-S1 = ZERO
-001930         MOVE 1            TO W75-S1
-001940	       GO TO DE195.
-001950     IF W75-S1 < W75-S
-001960         ADD 1             TO W75-S1 CLIN.
+           IF W75-S1 = ZERO
+               MOVE 1            TO W75-S1
+              GO TO DE195.
+           IF W75-S1 < W75-S
+               ADD 1             TO W75-S1 CLIN.
 
        DE195.
-001990	     PERFORM DE155.
-	     MOVE 18		 TO CCOL.
-002000	     DISPLAY W43-DET7(CLIN) AT CPOS WITH REVERSE-VIDEO.
-	     MOVE 17		 TO CCOL.
-002010	     GO TO DE160.
+            PERFORM DE155.
+      MOVE 18   TO CCOL.
+            DISPLAY W43-DET7(CLIN) AT CPOS WITH REVERSE-VIDEO.
+      MOVE 17   TO CCOL.
+            GO TO DE160.
 
        DE200.
-002040     IF W75-S1 = ZERO
-002050	       GO TO DE160.
-002060	     MOVE CSTART	 TO WS1-CURSOR.
-002070	     MOVE W75-PSCODE(W75-S1)
-				 TO PIC-REF
-				    W30-PIC-SLIP.
-	     MOVE W75-PSSEQ(W75-S1)
-				 TO PIC-SEQ.
-002080	     PERFORM READ-PSLIP THRU READ-PSLIP-EXIT.
-002090	     MOVE ZERO		 TO COL-AND-LINE.
+           IF W75-S1 = ZERO
+              GO TO DE160.
+            MOVE CSTART  TO WS1-CURSOR.
+            MOVE W75-PSCODE(W75-S1)
+     TO PIC-REF
+        W30-PIC-SLIP.
+      MOVE W75-PSSEQ(W75-S1)
+     TO PIC-SEQ.
+            PERFORM READ-PSLIP THRU READ-PSLIP-EXIT.
+            MOVE ZERO   TO COL-AND-LINE.
 
        DE205.
-	     PERFORM RESTORE-SCREEN-3.
+      PERFORM RESTORE-SCREEN-3.
 
        DE299.
-	     EXIT.
+      EXIT.
       /
-       EA000	       SECTION 59.
+       EA000        SECTION 59.
        EA00.
-	   IF LS-INSTR = "S"
-	       GO TO EA999.
-	     PERFORM SAVE-SCREEN.
-	     MOVE 10		 TO SHADE-ROW.
-	     MOVE 28		 TO SHADE-COL.
-	     MOVE 25		 TO SHADE-WIDTH.
-	     MOVE 3		 TO SHADE-LINES.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0926
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     DISPLAY "³   REPRINT A CASH SLIP   ³" AT 1026
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     DISPLAY "³ Reference No.           ³" AT 1126
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1226
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     PERFORM SCREEN-SHADOW.
+    IF LS-INSTR = "S"
+        GO TO EA999.
+      PERFORM SAVE-SCREEN.
+      MOVE 10   TO SHADE-ROW.
+      MOVE 28   TO SHADE-COL.
+      MOVE 25   TO SHADE-WIDTH.
+      MOVE 3   TO SHADE-LINES.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0926
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      DISPLAY "³   REPRINT A CASH SLIP   ³" AT 1026
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      DISPLAY "³ Reference No.           ³" AT 1126
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1226
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      PERFORM SCREEN-SHADOW.
 
        EA02.
-	     ACCEPT S15-REF.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     GO TO EA990
-		 WHEN OTHER	 CALL X"E5"
-				 CALL X"E5"
-	       END-EVALUATE
-	       GO TO EA02.
-	   IF W90-REF-NO = ZERO
-	       GO TO EA990.
-	     INITIALIZE SLP-RECORD1.
-	     MOVE ZERO		 TO SLP-SEQ.
-013330	     MOVE W90-REF-NO	 TO  W15-RECNO SLP-REF.
-	     PERFORM START-AT-SLIP-KEY THRU READ-SLIP-EXIT.
-	   IF WS-F-ERROR = 38
-	       GO TO EA990.
+      ACCEPT S15-REF.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       GO TO EA990
+   WHEN OTHER  CALL X"E5"
+     CALL X"E5"
+        END-EVALUATE
+        GO TO EA02.
+    IF W90-REF-NO = ZERO
+        GO TO EA990.
+      INITIALIZE SLP-RECORD1.
+      MOVE ZERO   TO SLP-SEQ.
+            MOVE W90-REF-NO  TO  W15-RECNO SLP-REF.
+      PERFORM START-AT-SLIP-KEY THRU READ-SLIP-EXIT.
+    IF WS-F-ERROR = 38
+        GO TO EA990.
 
        EA05.
-	     PERFORM READ-SLIP-NEXT THRU READ-SLIP-EXIT.
-	   IF WS-F-ERROR = 38
-	       GO TO EA990.
-	   IF NOT (SLP-REF = W90-REF)
-	       GO TO EA990.
-	   IF SLP-TYPE = "H"
-	       MOVE SLP-SMAN	 TO W10-SMAN
-	       MOVE SLP-SNAME	 TO W15-SMAN
-	       MOVE SLP-TIME	 TO W95-TIME
-	       MOVE SLP-DATE	 TO W15-DATE
-	       MOVE "Y" 	 TO WS-PRNINV
-	       PERFORM DA79A
-	       GO TO EA05.
-	   IF SLP-TYPE = "T"
-	       GO TO EA10.
-026910	   IF SLP-EXT-ITEM = SPACES
-	       MOVE SPACES	 TO W15-L13
-013600	       MOVE SLP-DESC	 TO W15-REMK
-013680	       MOVE W15-L13	 TO CSH-DATA
-013690	       WRITE CSH-L
-	       GO TO EA05.
-	     MOVE SPACES	 TO W15-DETAIL.
-013590	     MOVE SLP-EXT-ITEM	 TO W10-EXT-ITEM.
-	   IF WS-CSH-DETAIL = "2"
+      PERFORM READ-SLIP-NEXT THRU READ-SLIP-EXIT.
+    IF WS-F-ERROR = 38
+        GO TO EA990.
+    IF NOT (SLP-REF = W90-REF)
+        GO TO EA990.
+    IF SLP-TYPE = "H"
+        MOVE SLP-SMAN  TO W10-SMAN
+        MOVE SLP-SNAME  TO W15-SMAN
+        MOVE SLP-TIME  TO W95-TIME
+        MOVE SLP-DATE  TO W15-DATE
+        MOVE "Y"   TO WS-PRNINV
+        PERFORM DA79A
+        GO TO EA05.
+    IF SLP-TYPE = "T"
+        GO TO EA10.
+          IF SLP-EXT-ITEM = SPACES
+        MOVE SPACES  TO W15-L13
+              MOVE SLP-DESC  TO W15-REMK
+              MOVE W15-L13  TO CSH-DATA
+              WRITE CSH-L
+        GO TO EA05.
+      MOVE SPACES  TO W15-DETAIL.
+            MOVE SLP-EXT-ITEM  TO W10-EXT-ITEM.
+    IF WS-CSH-DETAIL = "2"
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Is a 3 character extension code being used in addition to ³
-      *    ³ the 14 character stock/inventory item code?	       ³
+      *    ³ the 14 character stock/inventory item code?        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	       IF WS-USE-ITM = "Y"
-		   MOVE W10-ITEM TO W15-ITM
-		   MOVE "/"	 TO W15-SL
-		   MOVE W10-ITM	 TO W15-EXT
-	       ELSE
-		   MOVE W10-EXT-ITEM
-				 TO W15-EXT-ITEM.
-	   IF WS-CSH-DETAIL = "2"
-	       IF SLP-SCALE = "Y" OR "3"
-013610		   MOVE SLP-WEIGHT
-				 TO W15-QUANT
-	       ELSE
-013610		   MOVE SLP-QNT	 TO W15-QUANT.
-013680	     MOVE W15-L11A	 TO CSH-DATA.
-013690	     WRITE CSH-L.
-	     MOVE SPACES	 TO W15-DETAIL.
-013600	     MOVE SLP-DESC	 TO W15-DESC.
-	   IF WS-CSH-DETAIL = "1"
-	       IF SLP-SCALE = "Y" OR "3"
-013610		   MOVE SLP-WEIGHT
-				 TO W15-QUANT
-	       ELSE
-013610		   MOVE SLP-QNT	 TO W15-QUANT.
-013620	     MOVE SLP-VAL	 TO W15-PRICE.
-013680	     MOVE W15-L11	 TO CSH-DATA.
-013690	     WRITE CSH-L.
-014130	   IF NOT (SLP-DISC = ZERO)
-	       MOVE SPACES	 TO W15-DETAIL
-014150	       MOVE "DISCOUNT/AFSLAG %"
-				 TO W15-DISC
-014160	       MOVE SLP-DSC	 TO W15-DSC
-014170	       MOVE SLP-DISC	 TO W15-PRICE
-014180         MOVE W15-L11      TO CSH-DATA
-014190         WRITE CSH-L.
-	     GO TO EA05.
+        IF WS-USE-ITM = "Y"
+     MOVE W10-ITEM TO W15-ITM
+     MOVE "/"  TO W15-SL
+     MOVE W10-ITM  TO W15-EXT
+        ELSE
+     MOVE W10-EXT-ITEM
+     TO W15-EXT-ITEM.
+    IF WS-CSH-DETAIL = "2"
+        IF SLP-SCALE = "Y" OR "3"
+           MOVE SLP-WEIGHT
+     TO W15-QUANT
+        ELSE
+           MOVE SLP-QNT  TO W15-QUANT.
+            MOVE W15-L11A  TO CSH-DATA.
+            WRITE CSH-L.
+      MOVE SPACES  TO W15-DETAIL.
+            MOVE SLP-DESC  TO W15-DESC.
+    IF WS-CSH-DETAIL = "1"
+        IF SLP-SCALE = "Y" OR "3"
+           MOVE SLP-WEIGHT
+     TO W15-QUANT
+        ELSE
+           MOVE SLP-QNT  TO W15-QUANT.
+            MOVE SLP-VAL  TO W15-PRICE.
+            MOVE W15-L11  TO CSH-DATA.
+            WRITE CSH-L.
+          IF NOT (SLP-DISC = ZERO)
+        MOVE SPACES  TO W15-DETAIL
+              MOVE "DISCOUNT/AFSLAG %"
+     TO W15-DISC
+              MOVE SLP-DSC  TO W15-DSC
+              MOVE SLP-DISC  TO W15-PRICE
+               MOVE W15-L11      TO CSH-DATA
+               WRITE CSH-L.
+      GO TO EA05.
       *    *************************************************************
       *    ****    S L I P   T O T A L S
       *    *************************************************************
        EA10.
-	     MOVE 1		 TO WS-VAT-SUB.
-	     MOVE ZERO		 TO W90-TTAX W90-EXCVAL.
+      MOVE 1   TO WS-VAT-SUB.
+      MOVE ZERO   TO W90-TTAX W90-EXCVAL.
 
        EA12.
-	     ADD SLP-TAXABLE(WS-VAT-SUB)
-				 TO W90-EXCVAL.
-	     ADD SLP-VATVAL(WS-VAT-SUB)
-				 TO W90-TTAX.
-	   IF WS-VAT-SUB < 6
-	       ADD 1		 TO WS-VAT-SUB
-	       GO TO EA12.
-013510	     MOVE ALL "-"	 TO CSH-LINE.
-014250	     WRITE CSH-L.
-014260       MOVE "Sub TOTAL/TOTAAL :"
+      ADD SLP-TAXABLE(WS-VAT-SUB)
+     TO W90-EXCVAL.
+      ADD SLP-VATVAL(WS-VAT-SUB)
+     TO W90-TTAX.
+    IF WS-VAT-SUB < 6
+        ADD 1   TO WS-VAT-SUB
+        GO TO EA12.
+            MOVE ALL "-"  TO CSH-LINE.
+            WRITE CSH-L.
+             MOVE "Sub TOTAL/TOTAAL :"
                                  TO W15-REMK.
-	     ADD 1		 TO SLP-SEQ.
-014270	     MOVE SLP-TOTAL	 TO W15-VAL.
-014280	     MOVE W15-L13	 TO CSH-DATA.
-014290	     WRITE CSH-L.
-014370	   IF NOT (SLP-DISCOUNT = ZERO)
-014380         MOVE "DISCOUNT/AFSLAG  :"
+      ADD 1   TO SLP-SEQ.
+            MOVE SLP-TOTAL  TO W15-VAL.
+            MOVE W15-L13  TO CSH-DATA.
+            WRITE CSH-L.
+          IF NOT (SLP-DISCOUNT = ZERO)
+               MOVE "DISCOUNT/AFSLAG  :"
                                  TO W15-REMK
-	       MOVE SLP-DISCOUNT TO W15-VAL
-014400	       MOVE W15-L13	 TO CSH-DATA
-014410	       WRITE CSH-L.
-	   IF NOT (W90-TTAX = ZERO)
-014440         MOVE "TAX / BELASTING  :"
-				 TO W15-REMK
-014450	       MOVE W90-TTAX	 TO W15-VAL
-014460         MOVE W15-L13      TO CSH-DATA
-014470	       WRITE CSH-L.
-	   IF NOT (SLP-ROUND = ZERO)
-	       MOVE "R O U N D I N G  :"
-				 TO W15-REMK
-	       MOVE SLP-ROUND	 TO W15-VAL
-014460	       MOVE W15-L13	 TO CSH-DATA
-014470	       WRITE CSH-L.
-014560	     MOVE "DUE / VERSKULDIG :"
+        MOVE SLP-DISCOUNT TO W15-VAL
+              MOVE W15-L13  TO CSH-DATA
+              WRITE CSH-L.
+    IF NOT (W90-TTAX = ZERO)
+               MOVE "TAX / BELASTING  :"
+     TO W15-REMK
+              MOVE W90-TTAX  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+              WRITE CSH-L.
+    IF NOT (SLP-ROUND = ZERO)
+        MOVE "R O U N D I N G  :"
+     TO W15-REMK
+        MOVE SLP-ROUND  TO W15-VAL
+              MOVE W15-L13  TO CSH-DATA
+              WRITE CSH-L.
+            MOVE "DUE / VERSKULDIG :"
                                  TO W15-REMK.
-014570	     MOVE SLP-DUE	 TO W15-VAL.
-014580	     MOVE W15-L13	 TO CSH-DATA
-014590       WRITE CSH-L.
-014600	   IF SLP-CASH > ZERO
-014610	       MOVE "CASH REC/KONTANT :"
+            MOVE SLP-DUE  TO W15-VAL.
+            MOVE W15-L13  TO CSH-DATA
+             WRITE CSH-L.
+          IF SLP-CASH > ZERO
+              MOVE "CASH REC/KONTANT :"
                                  TO W15-REMK
-014620	       MOVE SLP-CASH	 TO W15-VAL
-014630         MOVE W15-L13      TO CSH-DATA
-014640         WRITE CSH-L.
-014650	   IF SLP-CHQ > ZERO
-014660	       MOVE "CHEQUE REC/TJEK  :"
+              MOVE SLP-CASH  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF SLP-CHQ > ZERO
+              MOVE "CHEQUE REC/TJEK  :"
                                  TO W15-REMK
-014670	       MOVE SLP-CHQ	 TO W15-VAL
-014680         MOVE W15-L13      TO CSH-DATA
-014690         WRITE CSH-L.
-014700	   IF SLP-CARD > ZERO
-014710         MOVE "CR-CARD/KT-KAART :"
+              MOVE SLP-CHQ  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF SLP-CARD > ZERO
+               MOVE "CR-CARD/KT-KAART :"
                                  TO W15-REMK
-014720	       MOVE SLP-CARD	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF SLP-SPEED > ZERO
-014710         MOVE "CR-CARD/KT-KAART :"
+              MOVE SLP-CARD  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF SLP-SPEED > ZERO
+               MOVE "CR-CARD/KT-KAART :"
                                  TO W15-REMK
-014720	       MOVE SLP-SPEED	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF SLP-VOUCH > ZERO
-014710	       MOVE "VOUCHER/KT-KAART :"
+              MOVE SLP-SPEED  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF SLP-VOUCH > ZERO
+              MOVE "VOUCHER/KT-KAART :"
                                  TO W15-REMK
-014720	       MOVE SLP-VOUCH	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF SLP-CRNOTE > ZERO
-014710	       MOVE "CR NOTE/KT-NOTA  :"
+              MOVE SLP-VOUCH  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF SLP-CRNOTE > ZERO
+              MOVE "CR NOTE/KT-NOTA  :"
                                  TO W15-REMK
-014720	       MOVE SLP-CRNOTE	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014700	   IF SLP-EFT > ZERO
-014710	       MOVE "EFT/E OORBTLNG   :"
+              MOVE SLP-CRNOTE  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF SLP-EFT > ZERO
+              MOVE "EFT/E OORBTLNG   :"
                                  TO W15-REMK
-014720	       MOVE W90-EFT	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L.
-014750	   IF SLP-CHANGE > ZERO
-014760         MOVE "CHANGE/KLEINGELD :"
+              MOVE W90-EFT  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+          IF SLP-CHANGE > ZERO
+               MOVE "CHANGE/KLEINGELD :"
                                  TO W15-REMK
-014770	       MOVE SLP-CHANGE	 TO W15-VAL
-014780         MOVE W15-L13      TO CSH-DATA
-014790         WRITE CSH-L.
-014810       MOVE SPACES         TO CSH-DATA.
-014820       WRITE CSH-L.
-	   IF SLP-TAX = SPACES
+              MOVE SLP-CHANGE  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L.
+             MOVE SPACES         TO CSH-DATA.
+             WRITE CSH-L.
+    IF SLP-TAX = SPACES
                IF W05-VATNO NOT = SPACES
                    MOVE "VAT Inclusive / BTW Ingesluit"
                                  TO CSH-DATA
                    WRITE CSH-L
                    MOVE SPACES   TO CSH-DATA.
-	   IF WS-CSH-VAT-DET = "Y"
+    IF WS-CSH-VAT-DET = "Y"
            IF W05-VATNO NOT = SPACES
                MOVE ALL "="      TO CSH-LINE
                WRITE CSH-L
                MOVE SPACES       TO CSH-DATA
-	       MOVE "   TAX INVOICE"
+        MOVE "   TAX INVOICE"
                                  TO W15-DOCTYP
-013360         MOVE W15-L1A      TO CSH-DATA
+               MOVE W15-L1A      TO CSH-DATA
                WRITE CSH-L
                MOVE SPACES       TO CSH-DATA
                MOVE "TAXABLE/BELASBARE :"
                                  TO W15-REMK
-	       MOVE W90-EXCVAL	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L
+        MOVE W90-EXCVAL  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L
                MOVE "V A T / B T W     :"
                                  TO W15-REMK
-	       MOVE W90-TTAX	 TO W15-VAL
-014730         MOVE W15-L13      TO CSH-DATA
-014740         WRITE CSH-L
+        MOVE W90-TTAX  TO W15-VAL
+               MOVE W15-L13      TO CSH-DATA
+               WRITE CSH-L
                MOVE ALL "="      TO CSH-LINE
                WRITE CSH-L
                MOVE SPACES       TO CSH-DATA
-014790         WRITE CSH-L.
-014830       MOVE W15-L9         TO CSH-DATA.
-014840       WRITE CSH-L.
-014850	     MOVE "APAC Point-of-Sale. 082-566-3095"
-				 TO CSH-DATA.
-014880       WRITE CSH-L.
-014850	     MOVE SPACES	 TO CSH-DATA W15-DETAIL.
-	     MOVE WS-CSHCODE	 TO W15-CSHCODE.
-	     MOVE W15-L12A	 TO CSH-DATA.
-014860	     MOVE 1		 TO WS-S9.
+               WRITE CSH-L.
+             MOVE W15-L9         TO CSH-DATA.
+             WRITE CSH-L.
+            MOVE "APAC Point-of-Sale. 082-566-3095"
+     TO CSH-DATA.
+             WRITE CSH-L.
+            MOVE SPACES  TO CSH-DATA W15-DETAIL.
+      MOVE WS-CSHCODE  TO W15-CSHCODE.
+      MOVE W15-L12A  TO CSH-DATA.
+            MOVE 1   TO WS-S9.
 
-014870 EA15.
-014880       WRITE CSH-L.
-014850	     MOVE SPACES	 TO CSH-DATA.
-014890     IF WS-S9 < W85-ADVANCE
-014900         ADD 1             TO WS-S9
-014910	       GO TO EA15.
-	     MOVE W85-CSI	 TO CSH-DATA.
-014880       WRITE CSH-L.
-014850       MOVE SPACES         TO CSH-DATA.
-	   IF NOT (W85-CPRN = 9)
-	       CLOSE CSHSLE
-	       OPEN OUTPUT CSHSLE
-	       CALL X"91" USING X91-RES X91-FUN CSHSLE.
-	     GO TO EA990.
+       EA15.
+             WRITE CSH-L.
+            MOVE SPACES  TO CSH-DATA.
+           IF WS-S9 < W85-ADVANCE
+               ADD 1             TO WS-S9
+              GO TO EA15.
+      MOVE W85-CSI  TO CSH-DATA.
+             WRITE CSH-L.
+             MOVE SPACES         TO CSH-DATA.
+    IF NOT (W85-CPRN = 9)
+        CLOSE CSHSLE
+        OPEN OUTPUT CSHSLE
+        CALL X"91" USING X91-RES X91-FUN CSHSLE.
+      GO TO EA990.
 
       * EA20.
-      *	     MOVE 1		 TO
+      *      MOVE 1   TO
 
        EA990.
-	     PERFORM RESTORE-SCREEN.
+      PERFORM RESTORE-SCREEN.
 
        EA999.
-	     EXIT.
+      EXIT.
       /    *************************************************************
       *    ****    P A R C E L S   ( I F   P A R C E L S   O P T . )
       *    *************************************************************
-       IA000	       SECTION 60.
+       IA000        SECTION 60.
        IA00.
-	     PERFORM SAVE-SCREEN.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0843
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³ NO OF CARTONS ³" AT 0943
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´" AT 1043
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³               ³" AT 1143
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1243
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     MOVE 09		 TO SHADE-ROW.
-	     MOVE 45		 TO SHADE-COL.
-	     MOVE 15		 TO SHADE-WIDTH.
-	     MOVE 4		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
+      PERFORM SAVE-SCREEN.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0843
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³ NO OF CARTONS ³" AT 0943
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´" AT 1043
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³               ³" AT 1143
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1243
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      MOVE 09   TO SHADE-ROW.
+      MOVE 45   TO SHADE-COL.
+      MOVE 15   TO SHADE-WIDTH.
+      MOVE 4   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
 
        IA05.
-	     ACCEPT S37 AT 1150.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE ZERO	 TO W10-PARCELS
-		     GO TO IA10
-	       END-EVALUATE.
+      ACCEPT S37 AT 1150.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       MOVE ZERO  TO W10-PARCELS
+       GO TO IA10
+        END-EVALUATE.
 
        IA10.
-	     PERFORM RESTORE-SCREEN.
+      PERFORM RESTORE-SCREEN.
 
        IA999.
-	     EXIT.
+      EXIT.
       *    *************************************************************
-      *    ****    R O U N D   C A S H	 S L I P   T O T A L
+      *    ****    R O U N D   C A S H  S L I P   T O T A L
       *    *************************************************************
-       JA000	       SECTION 61.
+       JA000        SECTION 61.
        JA00.
-	     MOVE W90-TOTAL	 TO W90-SLIP-TOT.
-	     MOVE ZERO		 TO W90-ROUND.
-	   IF WS-FACTOR > W90-TOTAL
-	       GO TO JA999.
-	   IF WS-FACTOR > .50
-	       MOVE W90-RC	 TO W90-C
-	       MOVE ZERO	 TO W90-RC
-	       GO TO JA05.
-	     DIVIDE W90-RC BY WS-C
-				 GIVING W25-RESULT.
-	     MULTIPLY W25-WHOLE BY WS-C
-				 GIVING W25-DECIMAL.
-	     SUBTRACT W25-DECIMAL FROM W90-RC
-				 GIVING W90-C.
-	     MOVE W25-DECIMAL	 TO W90-RC.
-	     GO TO JA999.
+      MOVE W90-TOTAL  TO W90-SLIP-TOT.
+      MOVE ZERO   TO W90-ROUND.
+    IF WS-FACTOR > W90-TOTAL
+        GO TO JA999.
+    IF WS-FACTOR > .50
+        MOVE W90-RC  TO W90-C
+        MOVE ZERO  TO W90-RC
+        GO TO JA05.
+      DIVIDE W90-RC BY WS-C
+     GIVING W25-RESULT.
+      MULTIPLY W25-WHOLE BY WS-C
+     GIVING W25-DECIMAL.
+      SUBTRACT W25-DECIMAL FROM W90-RC
+     GIVING W90-C.
+      MOVE W25-DECIMAL  TO W90-RC.
+      GO TO JA999.
 
        JA05.
-	     DIVIDE W90-RR BY WS-FACTOR
-				 GIVING W25-RESULT.
-	     MULTIPLY W25-WHOLE BY WS-FACTOR
-				 GIVING W25-DECIMAL.
-	     SUBTRACT W25-DECIMAL FROM W90-RR
-				 GIVING W90-R.
-	     MOVE W25-DECIMAL	 TO W90-RR.
+      DIVIDE W90-RR BY WS-FACTOR
+     GIVING W25-RESULT.
+      MULTIPLY W25-WHOLE BY WS-FACTOR
+     GIVING W25-DECIMAL.
+      SUBTRACT W25-DECIMAL FROM W90-RR
+     GIVING W90-R.
+      MOVE W25-DECIMAL  TO W90-RR.
 
        JA999.
-	     EXIT.
+      EXIT.
       /    *************************************************************
-      *    ****    P R O M O T I O N S	 &   S P E C I A L S
+      *    ****    P R O M O T I O N S  &   S P E C I A L S
       *    *************************************************************
-       KA000	       SECTION 62.
+       KA000        SECTION 62.
        KA00.
-	   IF NOT (STK-IND < 2)
-	       GO TO KA05.
-	   IF STK-PRO-START > W12-T-YMD
-	       GO TO KA05.
-	   IF (STK-PRO-START = W12-T-YMD) AND
-	      (STK-PRO-START-T > W10-HHMM)
-	       GO TO KA05.
-	   IF STK-PRO-END < W12-T-YMD
-	       GO TO KA05.
-	   IF (STK-PRO-END = W12-T-YMD) AND
-	      (STK-PRO-END-T < W10-HHMM)
-	       GO TO KA05.
-	   IF (STK-PRO-PRICE = ZERO) AND
-	      (STK-PRO-PRICE-2 = ZERO) AND
-	      (STK-PRO-PRICE-3 = ZERO) AND
-	      (STK-PRO-PRICE-4 = ZERO)
-	       GO TO KA05.
-	     MOVE "Y"		 TO W10-SPEC.
-	     MOVE STK-PRO-PRICE  TO W10-PRO-PRICE.
-	     MOVE STK-PRO-PRICE-2
-				 TO W10-PRO-PRICE-2.
-	     MOVE STK-PRO-PRICE-3
-				 TO W10-PRO-PRICE-3.
-	     MOVE STK-PRO-PRICE-4
-				 TO W10-PRO-PRICE-4.
-	   IF STK-TAX > 0
-	       MOVE W05-VAT(STK-TAX)
-				 TO W05-RATE.
-	   IF NOT(W10-PRO-PRICE = ZERO)
-	       COMPUTE W10-PRO-VPRICE ROUNDED
-		     = W10-PRO-PRICE + (W10-PRO-PRICE * W05-RTE).
-	   IF NOT (W10-PRO-PRICE-2 = ZERO)
-	       COMPUTE W10-PRO-VPRICE-2 ROUNDED
-		     = W10-PRO-PRICE-2 + (W10-PRO-PRICE-2 * W05-RTE).
-	   IF NOT (W10-PRO-PRICE-3 = ZERO)
-	       COMPUTE W10-PRO-VPRICE-3 ROUNDED
-		     = W10-PRO-PRICE-3 + (W10-PRO-PRICE-3 * W05-RTE).
-	   IF NOT (W10-PRO-PRICE-4 = ZERO)
-	       COMPUTE W10-PRO-VPRICE-4 ROUNDED
-		     = W10-PRO-PRICE-4 + (W10-PRO-PRICE-4 * W05-RTE).
-	     GO TO KA999.
+    IF NOT (STK-IND < 2)
+        GO TO KA05.
+    IF STK-PRO-START > W12-T-YMD
+        GO TO KA05.
+    IF (STK-PRO-START = W12-T-YMD) AND
+       (STK-PRO-START-T > W10-HHMM)
+        GO TO KA05.
+    IF STK-PRO-END < W12-T-YMD
+        GO TO KA05.
+    IF (STK-PRO-END = W12-T-YMD) AND
+       (STK-PRO-END-T < W10-HHMM)
+        GO TO KA05.
+    IF (STK-PRO-PRICE = ZERO) AND
+       (STK-PRO-PRICE-2 = ZERO) AND
+       (STK-PRO-PRICE-3 = ZERO) AND
+       (STK-PRO-PRICE-4 = ZERO)
+        GO TO KA05.
+      MOVE "Y"   TO W10-SPEC.
+      MOVE STK-PRO-PRICE  TO W10-PRO-PRICE.
+      MOVE STK-PRO-PRICE-2
+     TO W10-PRO-PRICE-2.
+      MOVE STK-PRO-PRICE-3
+     TO W10-PRO-PRICE-3.
+      MOVE STK-PRO-PRICE-4
+     TO W10-PRO-PRICE-4.
+    IF STK-TAX > 0
+        MOVE W05-VAT(STK-TAX)
+     TO W05-RATE.
+    IF NOT(W10-PRO-PRICE = ZERO)
+        COMPUTE W10-PRO-VPRICE ROUNDED
+       = W10-PRO-PRICE + (W10-PRO-PRICE * W05-RTE).
+    IF NOT (W10-PRO-PRICE-2 = ZERO)
+        COMPUTE W10-PRO-VPRICE-2 ROUNDED
+       = W10-PRO-PRICE-2 + (W10-PRO-PRICE-2 * W05-RTE).
+    IF NOT (W10-PRO-PRICE-3 = ZERO)
+        COMPUTE W10-PRO-VPRICE-3 ROUNDED
+       = W10-PRO-PRICE-3 + (W10-PRO-PRICE-3 * W05-RTE).
+    IF NOT (W10-PRO-PRICE-4 = ZERO)
+        COMPUTE W10-PRO-VPRICE-4 ROUNDED
+       = W10-PRO-PRICE-4 + (W10-PRO-PRICE-4 * W05-RTE).
+      GO TO KA999.
 
        KA05.
-	     MOVE "N"		 TO W10-SPEC.
+      MOVE "N"   TO W10-SPEC.
 
        KA999.
-	     EXIT.
+      EXIT.
       /    *************************************************************
       *    ****    C A S E S
       *    *************************************************************
-       LA000	       SECTION 66.
+       LA000        SECTION 66.
        LA00.
-	     PERFORM SAVE-SCREEN.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0833
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³ NO OF CASES ³" AT 0933
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄ´" AT 1033
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "³             ³" AT 1133
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1233
-		      WITH FOREGROUND-COLOR 6 HIGHLIGHT
-			   BACKGROUND-COLOR 6.
-	     MOVE 09		 TO SHADE-ROW.
-	     MOVE 35		 TO SHADE-COL.
-	     MOVE 13		 TO SHADE-WIDTH.
-	     MOVE 4		 TO SHADE-LINES.
-	     PERFORM SCREEN-SHADOW.
-	     MOVE 1		 TO W10-CASES.
+      PERFORM SAVE-SCREEN.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 0833
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³ NO OF CASES ³" AT 0933
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄ´" AT 1033
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "³             ³" AT 1133
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1233
+        WITH FOREGROUND-COLOR 6 HIGHLIGHT
+      BACKGROUND-COLOR 6.
+      MOVE 09   TO SHADE-ROW.
+      MOVE 35   TO SHADE-COL.
+      MOVE 13   TO SHADE-WIDTH.
+      MOVE 4   TO SHADE-LINES.
+      PERFORM SCREEN-SHADOW.
+      MOVE 1   TO W10-CASES.
 
        LA05.
-	     ACCEPT S38 AT 1138.
-	   IF USER-FUNC
-	       EVALUATE KEY-CODE-1
-		 WHEN ESC-KEY
-		     MOVE ZERO	 TO W10-CASES
-		     GO TO LA10
-	       END-EVALUATE.
+      ACCEPT S38 AT 1138.
+    IF USER-FUNC
+        EVALUATE KEY-CODE-1
+   WHEN ESC-KEY
+       MOVE ZERO  TO W10-CASES
+       GO TO LA10
+        END-EVALUATE.
 
        LA10.
-	     PERFORM RESTORE-SCREEN.
+      PERFORM RESTORE-SCREEN.
 
        LA999.
-	     EXIT.
+      EXIT.
       /
-       MA000	       SECTION 67.
+       MA000        SECTION 67.
        MA00.
 
        MA99.
-	     EXIT.
+      EXIT.
       /
-       NA000	       SECTION 68.
+       NA000        SECTION 68.
        NA00.
-	     PERFORM SAVE-SCREEN.
-	     MOVE SPACES	 TO WS-PASS.
-	     MOVE 12		 TO SHADE-ROW.
-	     MOVE 29		 TO SHADE-COL.
-	     MOVE 25		 TO SHADE-WIDTH.
-	     MOVE 2		 TO SHADE-LINES.
-	     DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1127
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7
-		     "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-042540	     DISPLAY "³ " AT 1227 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				       BACKGROUND-COLOR 7
-		     "Enter Password          "
-		      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-			   BACKGROUND-COLOR 7
-		     "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     DISPLAY "À" AT 1327 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-				      BACKGROUND-COLOR 7
-		     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-		      WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
-	     PERFORM SCREEN-SHADOW.
-042550	     ACCEPT WS-PASS AT 1244
-		    WITH BACKGROUND-COLOR 5
-			 FOREGROUND-COLOR 3 HIGHLIGHT AUTO NO-ECHO.
-	     MOVE 8		 TO WS-LENGTH.
-	     CALL "CBL_TOUPPER" USING WS-PASS
-				BY VALUE WS-LENGTH
-				RETURNING WS-STATUS.
-	     MOVE 1		 TO WS-LENGTH.
-	     PERFORM RESTORE-SCREEN.
-	   IF WS-PASS = "AVOIDING"
-	       MOVE "Y" 	 TO WS-NOSELL.
-	   IF WS-PASS = "AVOIDALL"
-	       MOVE "X" 	 TO WS-NOSELL.
+      PERFORM SAVE-SCREEN.
+      MOVE SPACES  TO WS-PASS.
+      MOVE 12   TO SHADE-ROW.
+      MOVE 29   TO SHADE-COL.
+      MOVE 25   TO SHADE-WIDTH.
+      MOVE 2   TO SHADE-LINES.
+      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1127
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7
+       "¿" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+            DISPLAY "³ " AT 1227 WITH FOREGROUND-COLOR 7 HIGHLIGHT
+           BACKGROUND-COLOR 7
+       "Enter Password          "
+        WITH FOREGROUND-COLOR 7 HIGHLIGHT
+      BACKGROUND-COLOR 7
+       "³" WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      DISPLAY "À" AT 1327 WITH FOREGROUND-COLOR 7 HIGHLIGHT
+          BACKGROUND-COLOR 7
+       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
+        WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 7.
+      PERFORM SCREEN-SHADOW.
+            ACCEPT WS-PASS AT 1244
+      WITH BACKGROUND-COLOR 5
+    FOREGROUND-COLOR 3 HIGHLIGHT AUTO NO-ECHO.
+      MOVE 8   TO WS-LENGTH.
+      CALL "CBL_TOUPPER" USING WS-PASS
+    BY VALUE WS-LENGTH
+    RETURNING WS-STATUS.
+      MOVE 1   TO WS-LENGTH.
+      PERFORM RESTORE-SCREEN.
+    IF WS-PASS = "AVOIDING"
+        MOVE "Y"   TO WS-NOSELL.
+    IF WS-PASS = "AVOIDALL"
+        MOVE "X"   TO WS-NOSELL.
 
        NA99.
-	    EXIT.
+     EXIT.
       /
-020720 ZA000-INIT	       SECTION 91.
-020730 ZA000-OPEN.
-	     MOVE LS-COMPANY	 TO WS-TOP-COMP.
-	   IF LS-USER = LS-SYS-ID
-	       MOVE "SupervisorÄ"  TO WS-WRKHD
-	   ELSE
-	       MOVE "Workstation"  TO WS-WRKHD
-	       MOVE LS-USER	   TO WS-WRKST.
-	     MOVE LS-PARID	 TO WS-PARID.
-	     MOVE LS-L-OR-N	 TO W02-L-OR-N.
-	     MOVE WS-SYS-ID	 TO W02-SYSID.
-	     MOVE LS-TODAY-DDMMYY
-				 TO TODAY-DDMMYY W12-TODAY.
-	     MOVE LS-USUB	 TO WS-USUB.
-	     MOVE LS-DRAW	 TO WS-DRAW.
-049200	     DISPLAY CLR-SCREEN.
-020750	     DISPLAY "CASH DRAWER PROGRAM" AT 0231
-020760                WITH FOREGROUND-COLOR 15.
+       ZA000-INIT        SECTION 91.
+       ZA000-OPEN.
+      MOVE LS-COMPANY  TO WS-TOP-COMP.
+    IF LS-USER = LS-SYS-ID
+        MOVE "SupervisorÄ"  TO WS-WRKHD
+    ELSE
+        MOVE "Workstation"  TO WS-WRKHD
+        MOVE LS-USER    TO WS-WRKST.
+      MOVE LS-PARID  TO WS-PARID.
+      MOVE LS-L-OR-N  TO W02-L-OR-N.
+      MOVE WS-SYS-ID  TO W02-SYSID.
+      MOVE LS-TODAY-DDMMYY
+     TO TODAY-DDMMYY W12-TODAY.
+      MOVE LS-USUB  TO WS-USUB.
+      MOVE LS-DRAW  TO WS-DRAW.
+            PERFORM ERASE-SCREEN.
+            DISPLAY "CASH DRAWER PROGRAM" AT 0231
+                      WITH FOREGROUND-COLOR 15.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	   S e t   u p	 t h e	 F U N C T I O N   k e y s     ³
+      *    ³    S e t   u p  t h e  F U N C T I O N   k e y s     ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 1		 TO USER-ACTION
-				    USER-SETTING.
+      MOVE 1   TO USER-ACTION
+        USER-SETTING.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³   ESC, F1 to F10, Shift + F1 to F10, Ctrl + F1 to F10,    ³
-      *    ³   Alt + F1 to F10, Alt + 1 to 0, Alt + - & =,	       ³
-      *    ³   PAGE-UP AND PAGE-DOWN KEYS			       ³
+      *    ³   Alt + F1 to F10, Alt + 1 to 0, Alt + - & =,        ³
+      *    ³   PAGE-UP AND PAGE-DOWN KEYS          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE ZERO		 TO USER-NUMBER.
-	     MOVE 55		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE ZERO   TO USER-NUMBER.
+      MOVE 55   TO USER-KEYS.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		      UP and DOWN ARROW keys		       ³
+      *    ³        UP and DOWN ARROW keys         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 2		 TO USER-ACTION.
-	     MOVE 3		 TO USER-SETTING.
-	     MOVE 5		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE 2   TO USER-ACTION.
+      MOVE 3   TO USER-SETTING.
+      MOVE 5   TO USER-NUMBER.
+      MOVE 2   TO USER-KEYS.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³   Alt + A to Z KEYS				       ³
-      *    ³   F11 & F10, Shift + F11 & F12, Ctrl + F11 & F12,	       ³
-      *    ³   Alt + F11 & F12 keys				       ³
+      *    ³   Alt + A to Z KEYS           ³
+      *    ³   F11 & F10, Shift + F11 & F12, Ctrl + F11 & F12,        ³
+      *    ³   Alt + F11 & F12 keys           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 65		 TO USER-NUMBER.
-	     MOVE 34		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE 65   TO USER-NUMBER.
+      MOVE 34   TO USER-KEYS.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³		   A C T I V A T E   M O U S E		       ³
+      *    ³     A C T I V A T E   M O U S E         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 64		 TO MOUSE-FUNC.
-	     MOVE 1		 TO MOUSE-PARAM.
-	     CALL X"AF" USING MOUSE-FUNC
-			      MOUSE-PARAM.
-	   IF MOUSE-FUNC NOT = 255
-	       MOVE "Y"		 TO MOUSE-ATTACHED
-	       MOVE 66		 TO MOUSE-FUNC
-	       MOVE 0		 TO MOUSE-PARAM
-	       CALL X"AF" USING MOUSE-FUNC
-				MOUSE-PARAM
-	   ELSE
-	       GO TO ZA00A.
+      MOVE 64   TO MOUSE-FUNC.
+      MOVE 1   TO MOUSE-PARAM.
+      CALL X"AF" USING MOUSE-FUNC
+         MOUSE-PARAM.
+    IF MOUSE-FUNC NOT = 255
+        MOVE "Y"   TO MOUSE-ATTACHED
+        MOVE 66   TO MOUSE-FUNC
+        MOVE 0   TO MOUSE-PARAM
+        CALL X"AF" USING MOUSE-FUNC
+    MOUSE-PARAM
+    ELSE
+        GO TO ZA00A.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	       Set MOUSE key to act as FUNCTION key	       ³
+      *    ³        Set MOUSE key to act as FUNCTION key        ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-	     MOVE 3		 TO USER-ACTION.
-	     MOVE 27		 TO USER-NUMBER.
-	     MOVE 2		 TO USER-KEYS.
-	     CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
+      MOVE 3   TO USER-ACTION.
+      MOVE 27   TO USER-NUMBER.
+      MOVE 2   TO USER-KEYS.
+      CALL X"AF" USING SET-BIT-PAIRS, USER-KEY-CONTROL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³	    Setup the file ID's including path names           ³
+      *    ³     Setup the file ID's including path names           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
       *    *************************************************************
-      *    **** 	  P A R A M E T E R   F I L E		    ****
+      *    ****    P A R A M E T E R   F I L E      ****
       *    *************************************************************
        ZA00A.
-	     MOVE "PARAM"	 TO AFID-KEY.
+      MOVE "PARAM"  TO AFID-KEY.
 
        ZA00-READ-APACFIDS.
-000030	     READ APACFIDS WITH IGNORE LOCK
-	       KEY IS AFID-KEY.
-	   IF WS-STATUS = "00"
-	       GO TO ZA00-READ-APACFIDS-EXIT.
-006260	     STRING "Missing " DELIMITED SIZE
-		     AFID-KEY DELIMITED BY " "
-		     " file ID - Status " DELIMITED SIZE
-		     WS-STATUS DELIMITED SIZE
-		     INTO WS-ERR-MES.
-	     PERFORM ERROR-LENGTH THRU ERROR-EXIT.
-006370	     STOP RUN.
+            READ APACFIDS WITH IGNORE LOCK
+        KEY IS AFID-KEY.
+    IF WS-STATUS = "00"
+        GO TO ZA00-READ-APACFIDS-EXIT.
+            STRING "Missing " DELIMITED SIZE
+       AFID-KEY DELIMITED BY " "
+       " file ID - Status " DELIMITED SIZE
+       WS-STATUS DELIMITED SIZE
+       INTO WS-ERR-MES.
+      PERFORM ERROR-LENGTH THRU ERROR-EXIT.
+            STOP RUN.
 
        ZA00-READ-APACFIDS-EXIT.
-	     EXIT.
+      EXIT.
 
        ZA00A-CONTINUE.
-	     MOVE AFID-PATH	 TO W02-PARAM.
+      MOVE AFID-PATH  TO W02-PARAM.
       *    *************************************************************
-      *    **** 	D A I L Y   -	A U D I T   F I L E	    ****
+      *    ****  D A I L Y   - A U D I T   F I L E     ****
       *    *************************************************************
-	     MOVE "AUDITF"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-AUDITF.
+      MOVE "AUDITF"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-AUDITF.
       *    *************************************************************
-      *    ****       S A L E S	  -   C A R D E X   F I L E	    ****
+      *    ****       S A L E S   -   C A R D E X   F I L E     ****
       *    *************************************************************
-	     MOVE "CARDEX"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-CARDEX.
+      MOVE "CARDEX"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-CARDEX.
       *    *************************************************************
-      *    ****      C H E Q U E S   R E C E I V E D   F I L E	    ****
+      *    ****      C H E Q U E S   R E C E I V E D   F I L E     ****
       *    *************************************************************
-	     MOVE "CHEQUE"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-CHEQUE.
+      MOVE "CHEQUE"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-CHEQUE.
       *    *************************************************************
-      *    **** 	   D E P A R T M E N T	 F I L E	    ****
+      *    ****     D E P A R T M E N T  F I L E     ****
       *    *************************************************************
-	     MOVE "DEPART"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-DEPART.
+      MOVE "DEPART"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-DEPART.
       *    *************************************************************
-      *    **** 	  I N T E G R A T I O N	  F I L E	    ****
+      *    ****    I N T E G R A T I O N   F I L E     ****
       *    *************************************************************
-	     MOVE "LEDTRF"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-LEDTRF.
+      MOVE "LEDTRF"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-LEDTRF.
       *    *************************************************************
-      *    **** 	    C O N T R O L   F I L E		    ****
+      *    ****      C O N T R O L   F I L E      ****
       *    *************************************************************
-	     MOVE "NETWORK"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-NETWORK.
+      MOVE "NETWORK"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-NETWORK.
       *    *************************************************************
-      *    **** 	   P L U   C O D E S   F I L E		    ****
+      *    ****     P L U   C O D E S   F I L E      ****
       *    *************************************************************
-	     MOVE "POSPLU"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-POSPLU.
+      MOVE "POSPLU"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-POSPLU.
       *    *************************************************************
-      *    **** 	P I C K I N G	S L I P   F I L E	    ****
+      *    ****  P I C K I N G S L I P   F I L E     ****
       *    *************************************************************
-	     MOVE "PICSLIP"	 TO AFID-KEY.
+      MOVE "PICSLIP"  TO AFID-KEY.
              PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-PSLIP.
+      MOVE AFID-PATH  TO W02-PSLIP.
       *    *************************************************************
-      *    **** 	     P O S   S L I P S	 F I L E	    ****
+      *    ****       P O S   S L I P S  F I L E     ****
       *    *************************************************************
-	     MOVE "PSLIPS"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-SLIP.
+      MOVE "PSLIPS"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-SLIP.
       *    *************************************************************
-      *    **** 	    R E C O V E R Y   F I L E		    ****
+      *    ****      R E C O V E R Y   F I L E      ****
       *    *************************************************************
-	     MOVE "RECOVER"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     INSPECT AFID-PATH REPLACING FIRST "XXX"
-			       BY LS-USER.
-	     MOVE AFID-PATH	 TO W02-RECOVER.
+      MOVE "RECOVER"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      INSPECT AFID-PATH REPLACING FIRST "XXX"
+          BY LS-USER.
+      MOVE AFID-PATH  TO W02-RECOVER.
       *    *************************************************************
-      *    **** 		S A L E S   F I L E		    ****
+      *    ****   S A L E S   F I L E      ****
       *    *************************************************************
-	     MOVE "SALE"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     INSPECT AFID-PATH REPLACING FIRST "XXX"
-			       BY LS-USER.
-	     MOVE AFID-PATH	 TO W02-SALE.
+      MOVE "SALE"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      INSPECT AFID-PATH REPLACING FIRST "XXX"
+          BY LS-USER.
+      MOVE AFID-PATH  TO W02-SALE.
       *    *************************************************************
-      *    ****      N E T W O R K   (S H A R E D)   F I L E	    ****
+      *    ****      N E T W O R K   (S H A R E D)   F I L E     ****
       *    *************************************************************
-	     MOVE "SHARED"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-SHARED.
-      *	   *************************************************************
-      *    **** 	  S T O C K   P A R T S   F I L E	    ****
+      MOVE "SHARED"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-SHARED.
       *    *************************************************************
-	     MOVE "SPARTS"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-SPARTS.
+      *    ****    S T O C K   P A R T S   F I L E     ****
       *    *************************************************************
-      *    **** 	   S T O C K   M E M O	 F I L E	    ****
+      MOVE "SPARTS"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-SPARTS.
       *    *************************************************************
-	     MOVE "STKMEM"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-STKMEM.
+      *    ****     S T O C K   M E M O  F I L E     ****
       *    *************************************************************
-      *    **** 	       S T O C K   F I L E		    ****
+      MOVE "STKMEM"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-STKMEM.
       *    *************************************************************
-	     MOVE "STOCKF"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-STOCKF.
+      *    ****         S T O C K   F I L E      ****
       *    *************************************************************
-      *    ****       V A L U E	  A D D E D   T A X   F I L E	    ****
+      MOVE "STOCKF"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-STOCKF.
       *    *************************************************************
-	     MOVE "TXTRAN"	 TO AFID-KEY.
-	     PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
-	     MOVE AFID-PATH	 TO W02-TXTRAN.
-020770	     MOVE ZERO		 TO WS-LINES.
+      *    ****       V A L U E   A D D E D   T A X   F I L E     ****
+      *    *************************************************************
+      MOVE "TXTRAN"  TO AFID-KEY.
+      PERFORM ZA00-READ-APACFIDS THRU ZA00-READ-APACFIDS-EXIT.
+      MOVE AFID-PATH  TO W02-TXTRAN.
+            MOVE ZERO   TO WS-LINES.
            IF WS-DRAW = ZERO
-	       MOVE 40		 TO WS-DRAW.
-020890	     MOVE 3		 TO WS-PARKEY.
-020900       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-STOCK = "A" OR "N")
-	       MOVE "A" 	 TO PAR-STOCK.
-	     MOVE PAR-STOCK	 TO W10-STCK.
-	     MOVE PAR-PACKS	 TO WS-USE-PACKS.
-	     MOVE PAR-CASES	 TO WS-USE-CASES.
-	     MOVE PAR-USE-ITM	 TO WS-USE-ITM.
-	     MOVE PAR-EXT-STK	 TO WS-EXT-STK.
-	   IF PAR-STOCK = "N"
-	       MOVE PAR-SLNGTH	 TO W10-SLNGTH
-	   ELSE
-	       MOVE 14		 TO W10-SLNGTH.
-	   IF W10-SLNGTH < 3
-	       MOVE 3		 TO W10-SLNGTH
-	   ELSE
-	   IF W10-SLNGTH > 14
-	       MOVE 14		 TO W10-SLNGTH.
-	     MOVE PAR-VAT-REG	 TO W05-VATNO.
-	     MOVE PAR-PROMPT	 TO WS-PROMPT.
-	   IF PAR-PLU-D = "P"
-	       MOVE "P" 	 TO WS-PLU-D
-	   ELSE
-	       MOVE "S" 	 TO WS-PLU-D.
-	     MOVE PAR-CRDX	 TO WS-CARDEX.
-	     MOVE PAR-PRICED-IND TO WS-PRC-IND.
-	     MOVE PAR-BANK-IND	 TO WS-BNK-IND.
-	     MOVE PAR-CSHCODE	 TO WS-CSHCODE.
-	     MOVE PAR-SLIP-P	 TO WS-SLIP-P.
-	     MOVE PAR-PARCELS	 TO WS-PARCELS.
-	   IF NOT (WS-PARCELS = "N" OR "Y")
-	       MOVE "N" 	 TO WS-PARCELS.
-	     MOVE PAR-POSMODE	 TO WS-POSMODE.
-	   IF NOT (WS-POSMODE = "N" OR "Y")
-	       MOVE "N" 	 TO WS-POSMODE.
-	     MOVE PAR-SPLIT-BC	 TO WS-SPLIT-BC.
-	   IF NOT (WS-SPLIT-BC = "N" OR "Y")
-	       MOVE "N" 	 TO WS-SPLIT-BC.
-	     MOVE ZERO		 TO WS-FACTOR.
-	   IF PAR-ROUND-TOT = "Y"
-	       IF PAR-SLIP-ROUND = 1
-		   MOVE .05	 TO WS-FACTOR
-	       ELSE
-	       IF PAR-SLIP-ROUND = 2
-		   MOVE .10	 TO WS-FACTOR
-	       ELSE
-	       IF PAR-SLIP-ROUND = 3
-		   MOVE .20	 TO WS-FACTOR
-	       ELSE
-	       IF PAR-SLIP-ROUND = 4
-		   MOVE .50	 TO WS-FACTOR
-	       ELSE
-	       IF PAR-SLIP-ROUND = 5
-		   MOVE 1.00	 TO WS-FACTOR
-	       ELSE
-	       IF PAR-SLIP-ROUND = 6
-		   MOVE 2.00	 TO WS-FACTOR
-	       ELSE
-		   MOVE 5.00	 TO WS-FACTOR.
-021020	     OPEN OUTPUT RECOVER.
-021030       CLOSE RECOVER.
-021040       OPEN I-O RECOVER.
-040400       OPEN I-O CHEQUE.
-040410     IF RUNTIME-ERROR
+        MOVE 40   TO WS-DRAW.
+            MOVE 3   TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+    IF NOT (PAR-STOCK = "A" OR "N")
+        MOVE "A"   TO PAR-STOCK.
+      MOVE PAR-STOCK  TO W10-STCK.
+      MOVE PAR-PACKS  TO WS-USE-PACKS.
+      MOVE PAR-CASES  TO WS-USE-CASES.
+      MOVE PAR-USE-ITM  TO WS-USE-ITM.
+      MOVE PAR-EXT-STK  TO WS-EXT-STK.
+    IF PAR-STOCK = "N"
+        MOVE PAR-SLNGTH  TO W10-SLNGTH
+    ELSE
+        MOVE 14   TO W10-SLNGTH.
+    IF W10-SLNGTH < 3
+        MOVE 3   TO W10-SLNGTH
+    ELSE
+    IF W10-SLNGTH > 14
+        MOVE 14   TO W10-SLNGTH.
+      MOVE PAR-VAT-REG  TO W05-VATNO.
+      MOVE PAR-PROMPT  TO WS-PROMPT.
+    IF PAR-PLU-D = "P"
+        MOVE "P"   TO WS-PLU-D
+    ELSE
+        MOVE "S"   TO WS-PLU-D.
+      MOVE PAR-CRDX  TO WS-CARDEX.
+      MOVE PAR-PRICED-IND TO WS-PRC-IND.
+      MOVE PAR-BANK-IND  TO WS-BNK-IND.
+      MOVE PAR-CSHCODE  TO WS-CSHCODE.
+      MOVE PAR-SLIP-P  TO WS-SLIP-P.
+      MOVE PAR-PARCELS  TO WS-PARCELS.
+    IF NOT (WS-PARCELS = "N" OR "Y")
+        MOVE "N"   TO WS-PARCELS.
+      MOVE PAR-POSMODE  TO WS-POSMODE.
+    IF NOT (WS-POSMODE = "N" OR "Y")
+        MOVE "N"   TO WS-POSMODE.
+      MOVE PAR-SPLIT-BC  TO WS-SPLIT-BC.
+    IF NOT (WS-SPLIT-BC = "N" OR "Y")
+        MOVE "N"   TO WS-SPLIT-BC.
+      MOVE ZERO   TO WS-FACTOR.
+    IF PAR-ROUND-TOT = "Y"
+        IF PAR-SLIP-ROUND = 1
+     MOVE .05  TO WS-FACTOR
+        ELSE
+        IF PAR-SLIP-ROUND = 2
+     MOVE .10  TO WS-FACTOR
+        ELSE
+        IF PAR-SLIP-ROUND = 3
+     MOVE .20  TO WS-FACTOR
+        ELSE
+        IF PAR-SLIP-ROUND = 4
+     MOVE .50  TO WS-FACTOR
+        ELSE
+        IF PAR-SLIP-ROUND = 5
+     MOVE 1.00  TO WS-FACTOR
+        ELSE
+        IF PAR-SLIP-ROUND = 6
+     MOVE 2.00  TO WS-FACTOR
+        ELSE
+     MOVE 5.00  TO WS-FACTOR.
+            OPEN OUTPUT RECOVER.
+             CLOSE RECOVER.
+             OPEN I-O RECOVER.
+             OPEN I-O CHEQUE.
+           IF RUNTIME-ERROR
                IF FLE-LOCKED
-040420             GO TO ZA200
+                   GO TO ZA200
                ELSE
                IF FLE-LIMIT
                    GO TO ZA49
@@ -7372,114 +7370,114 @@
                IF IDX-CORRUPT
                    MOVE 36       TO WS-F-ERROR
                    GO TO ZA50.
-040430     IF WS-STATUS NOT = "00"
-040440         MOVE 36           TO WS-F-ERROR
-040450         PERFORM OPEN-ERROR.
-021290	     OPEN OUTPUT SALE.
-054310     IF RUNTIME-ERROR
-054320         IF FLE-LOCKED
-054330             GO TO ZA200
-054340         ELSE
-054350         IF FLE-LIMIT
-054360             GO TO ZA49.
-021300     IF WS-STATUS NOT = "00"
-021310	       MOVE 19		 TO WS-F-ERROR
-021320         PERFORM OPEN-ERROR.
-021330	     CLOSE SALE.
-021340       OPEN I-O SALE.
-021290	     OPEN I-O PSLIP.
-	   IF NOT (WS-STATUS = "00")
-	       CLOSE PSLIP
-	       OPEN OUTPUT PSLIP
-	       CLOSE PSLIP
-	       OPEN I-O PSLIP.
-054310     IF RUNTIME-ERROR
-054320         IF FLE-LOCKED
-054330             GO TO ZA200
-054340         ELSE
-054350         IF FLE-LIMIT
-054360             GO TO ZA49.
-021300     IF WS-STATUS NOT = "00"
-021310	       MOVE 34		 TO WS-F-ERROR
-021320         PERFORM OPEN-ERROR.
-021290	     OPEN I-O SLIP.
-	   IF NOT (WS-STATUS = "00")
-	       CLOSE SLIP
-	       OPEN OUTPUT SLIP
-	       CLOSE SLIP
-	       OPEN I-O SLIP.
-054310     IF RUNTIME-ERROR
-054320         IF FLE-LOCKED
-054330             GO TO ZA200
-054340         ELSE
-054350         IF FLE-LIMIT
-054360             GO TO ZA49.
-021300     IF WS-STATUS NOT = "00"
-021310	       MOVE 38		 TO WS-F-ERROR
-021320         PERFORM OPEN-ERROR.
-	     OPEN I-O POSPLU.
-054310	   IF RUNTIME-ERROR
-054350         IF FLE-LIMIT
-054360             GO TO ZA49.
-	     MOVE 1		 TO W05-V-RATE.
+           IF WS-STATUS NOT = "00"
+               MOVE 36           TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
+            OPEN OUTPUT SALE.
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED
+                   GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49.
+           IF WS-STATUS NOT = "00"
+              MOVE 19   TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
+            CLOSE SALE.
+             OPEN I-O SALE.
+            OPEN I-O PSLIP.
+    IF NOT (WS-STATUS = "00")
+        CLOSE PSLIP
+        OPEN OUTPUT PSLIP
+        CLOSE PSLIP
+        OPEN I-O PSLIP.
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED
+                   GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49.
+           IF WS-STATUS NOT = "00"
+              MOVE 34   TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
+            OPEN I-O SLIP.
+    IF NOT (WS-STATUS = "00")
+        CLOSE SLIP
+        OPEN OUTPUT SLIP
+        CLOSE SLIP
+        OPEN I-O SLIP.
+           IF RUNTIME-ERROR
+               IF FLE-LOCKED
+                   GO TO ZA200
+               ELSE
+               IF FLE-LIMIT
+                   GO TO ZA49.
+           IF WS-STATUS NOT = "00"
+              MOVE 38   TO WS-F-ERROR
+               PERFORM OPEN-ERROR.
+      OPEN I-O POSPLU.
+          IF RUNTIME-ERROR
+               IF FLE-LIMIT
+                   GO TO ZA49.
+      MOVE 1   TO W05-V-RATE.
 
        ZA05-VAT.
-	     MOVE W05-VAT-CODE	 TO DPT-CODE.
-	     PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-	     MOVE DPT-R-DATE	 TO WS-VAT-DATE(W05-V-RATE).
-	     MOVE DPT-RATE	 TO W05-VAT(W05-V-RATE).
-	     ADD 6 W05-V-RATE	 GIVING WS-S1.
-	     MOVE DPT-P-RATE	 TO W05-VAT(WS-S1).
-	   IF W05-V-RATE < 6
-	       ADD 1		 TO W05-V-RATE
-	       GO TO ZA05-VAT.
-021400	     MOVE 1		 TO WS-PARKEY.
-021410       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-021590     IF PAR-CSHEAD = SPACES
-021600	       MOVE "Setup cash slip headings"
-				 TO WS-ERR-STRING
-003260	       PERFORM ERROR-MESSAGE
-021620         GO TO ZA205.
-021430	     MOVE PAR-DMY	 TO W12-TODAY.
-021440	     MOVE PAR-YMD	 TO W12-T-YMD.
+      MOVE W05-VAT-CODE  TO DPT-CODE.
+      PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+      MOVE DPT-R-DATE  TO WS-VAT-DATE(W05-V-RATE).
+      MOVE DPT-RATE  TO W05-VAT(W05-V-RATE).
+      ADD 6 W05-V-RATE  GIVING WS-S1.
+      MOVE DPT-P-RATE  TO W05-VAT(WS-S1).
+    IF W05-V-RATE < 6
+        ADD 1   TO W05-V-RATE
+        GO TO ZA05-VAT.
+            MOVE 1   TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+           IF PAR-CSHEAD = SPACES
+              MOVE "Setup cash slip headings"
+     TO WS-ERR-STRING
+              PERFORM ERROR-MESSAGE
+               GO TO ZA205.
+            MOVE PAR-DMY  TO W12-TODAY.
+            MOVE PAR-YMD  TO W12-T-YMD.
              MOVE PAR-CSHEAD     TO W15-COMP W40-NAME.
-021660       MOVE PAR-CSHADD     TO W15-ADD.
-021670       MOVE PAR-TELEPHONE  TO W15-TEL.
-042520	     MOVE 8		 TO WS-PARKEY.
-042550       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	   IF NOT (PAR-WS-HD = X"00000000000000000000")
-	       MOVE PAR-WS-HD	 TO WS-WS-HD.
-	   IF NOT (PAR-CS-HD = X"00000000000000000000")
-	       MOVE PAR-CS-HD	 TO WS-CS-HD.
-	   IF NOT (PAR-RT-HD = X"00000000000000000000")
-	       MOVE PAR-RT-HD	 TO WS-RT-HD.
-	     INSPECT WS-CS-HD REPLACING LEADING "-" BY " ".
-	     INSPECT WS-WS-HD REPLACING LEADING "-" BY " ".
-	     INSPECT WS-RT-HD REPLACING LEADING "-" BY " ".
-	   IF WS-CS-HD = SPACES
-	       MOVE "Cash"	 TO WS-CS-HD.
-	   IF WS-WS-HD = SPACES
-	       MOVE "Wholesale"	 TO WS-WS-HD.
-	   IF WS-RT-HD = SPACES
-	       MOVE "Retail"	 TO WS-RT-HD.
-	     MOVE WS-CS-HD	 TO W15-PNAME.
+             MOVE PAR-CSHADD     TO W15-ADD.
+             MOVE PAR-TELEPHONE  TO W15-TEL.
+            MOVE 8   TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+    IF NOT (PAR-WS-HD = X"00000000000000000000")
+        MOVE PAR-WS-HD  TO WS-WS-HD.
+    IF NOT (PAR-CS-HD = X"00000000000000000000")
+        MOVE PAR-CS-HD  TO WS-CS-HD.
+    IF NOT (PAR-RT-HD = X"00000000000000000000")
+        MOVE PAR-RT-HD  TO WS-RT-HD.
+      INSPECT WS-CS-HD REPLACING LEADING "-" BY " ".
+      INSPECT WS-WS-HD REPLACING LEADING "-" BY " ".
+      INSPECT WS-RT-HD REPLACING LEADING "-" BY " ".
+    IF WS-CS-HD = SPACES
+        MOVE "Cash"  TO WS-CS-HD.
+    IF WS-WS-HD = SPACES
+        MOVE "Wholesale"  TO WS-WS-HD.
+    IF WS-RT-HD = SPACES
+        MOVE "Retail"  TO WS-RT-HD.
+      MOVE WS-CS-HD  TO W15-PNAME.
 
        ZA05-NAME-LOOP.
-	   IF W15-CHECK = SPACE
-	       MOVE W15-REST	 TO W15-PNAME
-	       GO TO ZA05-NAME-LOOP.
+    IF W15-CHECK = SPACE
+        MOVE W15-REST  TO W15-PNAME
+        GO TO ZA05-NAME-LOOP.
 
        ZA05-EXIT.
-	     MOVE W15-PNAME	 TO WS-CS-HD.
-	     MOVE WS-WS-HD	 TO W15-PNAME.
-	     PERFORM ZA05-NAME-LOOP.
-	     MOVE W15-PNAME	 TO WS-WS-HD.
-	     MOVE WS-RT-HD	 TO W15-PNAME.
-	     PERFORM ZA05-NAME-LOOP.
-	     MOVE W15-PNAME	 TO WS-RT-HD.
-	     MOVE 6		 TO WS-PARKEY.
+      MOVE W15-PNAME  TO WS-CS-HD.
+      MOVE WS-WS-HD  TO W15-PNAME.
+      PERFORM ZA05-NAME-LOOP.
+      MOVE W15-PNAME  TO WS-WS-HD.
+      MOVE WS-RT-HD  TO W15-PNAME.
+      PERFORM ZA05-NAME-LOOP.
+      MOVE W15-PNAME  TO WS-RT-HD.
+      MOVE 6   TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-	     MOVE PAR-WHOLESALE  TO WS-WS.
+      MOVE PAR-WHOLESALE  TO WS-WS.
            IF PAR-INTEGRATE NOT = "Y"
                MOVE "N"          TO WX-INT
            ELSE
@@ -7493,268 +7491,268 @@
              MOVE PAR-ADJGL      TO WX-ADJGL.
              MOVE PAR-RLGL       TO WX-RLGL.
              MOVE PAR-DSGL       TO WX-DSGL.
-021490       ADD 150 WS-DRAW GIVING WS-PARKEY.
-021500       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-021510	     MOVE W12-TODAY	 TO W15-DATE.
-021520	     MOVE PAR-RECORD151  TO W85-RECORD151.
-021530       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-021540	     MOVE 5		 TO WS-PARKEY.
-021550       PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-021560	     MOVE PAR-PW	 TO W85-PASS.
-021680	     MOVE 32		 TO WS-S1.
-020780       DISPLAY "Waiting for printer response" AT 1431
-020790		      WITH FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
+             ADD 150 WS-DRAW GIVING WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+            MOVE W12-TODAY  TO W15-DATE.
+            MOVE PAR-RECORD151  TO W85-RECORD151.
+             PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+            MOVE 5   TO WS-PARKEY.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+            MOVE PAR-PW  TO W85-PASS.
+            MOVE 32   TO WS-S1.
+             DISPLAY "Waiting for printer response" AT 1431
+              WITH FOREGROUND-COLOR 6 HIGHLIGHT BLINK.
 
-021690 ZA05.
-021700     IF W40-NCH (WS-S1) = SPACE
-021710	       SUBTRACT 1	 FROM WS-S1
-021720         GO TO ZA05.
-021730     IF WS-S1 > 16
-021740	       MOVE W85-NUL	 TO W15-EXPP1 W15-ECAN1
-021750     ELSE
-021760	       MOVE W85-SO	 TO W15-EXPP1
-021770	       MOVE W85-CSO	 TO W15-ECAN1.
-021800	     MOVE W85-SO	 TO W15-EXPP2 W15-EXPP4.
-021810	     MOVE W85-CSO	 TO W15-ECAN2 W15-ECAN4.
-	   IF W85-CPRN = 1
-	       MOVE "LPT1"	 TO W02-PRINTER
+       ZA05.
+           IF W40-NCH (WS-S1) = SPACE
+              SUBTRACT 1  FROM WS-S1
+               GO TO ZA05.
+           IF WS-S1 > 16
+              MOVE W85-NUL  TO W15-EXPP1 W15-ECAN1
+           ELSE
+              MOVE W85-SO  TO W15-EXPP1
+              MOVE W85-CSO  TO W15-ECAN1.
+            MOVE W85-SO  TO W15-EXPP2 W15-EXPP4.
+            MOVE W85-CSO  TO W15-ECAN2 W15-ECAN4.
+    IF W85-CPRN = 1
+        MOVE "LPT1"  TO W02-PRINTER
            ELSE
            IF W85-CPRN = 2
-	       MOVE "LPT2"	 TO W02-PRINTER
+        MOVE "LPT2"  TO W02-PRINTER
            ELSE
            IF W85-CPRN = 3
-	       MOVE "LPT3"	 TO W02-PRINTER
+        MOVE "LPT3"  TO W02-PRINTER
            ELSE
            IF W85-CPRN = 4
-	       MOVE "COM1"	 TO W02-PRINTER
+        MOVE "COM1"  TO W02-PRINTER
            ELSE
            IF W85-CPRN = 5
-	       MOVE "COM2"	 TO W02-PRINTER
+        MOVE "COM2"  TO W02-PRINTER
            ELSE
            IF W85-CPRN = 9
-	       MOVE "POS001."	 TO W02-PRINTER
-	       MOVE LS-USER	 TO W02-PUSER.
-	     OPEN OUTPUT CSHSLE.
-	     CALL X"91" USING X91-RES X91-FUN CSHSLE.
-	   IF W85-KTCHPRN = "Y"
-	       IF W85-KCHPORT = 1
-		   MOVE "LPT1"	 TO W02-KCHPRN
-	       ELSE
-	       IF W85-KCHPORT = 2
-		   MOVE "LPT2"	 TO W02-KCHPRN
-	       ELSE
-	       IF W85-KCHPORT = 3
-		   MOVE "LPT3"	 TO W02-KCHPRN
-	       ELSE
-	       IF W85-KCHPORT = 4
-		   MOVE "COM1"	 TO W02-KCHPRN
-	       ELSE
-	       IF W85-KCHPORT = 5
-		   MOVE "COM2"	 TO W02-KCHPRN
-	       ELSE
-	       IF W85-KCHPORT = 9
-		   MOVE "POSKCH."
-				 TO W02-KCHPRN
-		   MOVE LS-USER	 TO W02-PUSER.
-	   IF W85-KTCHPRN = "Y"
-	       IF NOT (LS-INSTR = "S")
-		   IF W02-PRINTER = W02-KCHPRN
-		       MOVE "POSKCH."
-				 TO W02-KCHPRN
-		       MOVE LS-USER
-				 TO W02-KPUSER
-		   END-IF
-	       END-IF
-	       OPEN OUTPUT KCHPRN
-	       CALL X"91" USING X91-RES X91-FUN KCHPRN.
+        MOVE "POS001."  TO W02-PRINTER
+        MOVE LS-USER  TO W02-PUSER.
+      OPEN OUTPUT CSHSLE.
+      CALL X"91" USING X91-RES X91-FUN CSHSLE.
+    IF W85-KTCHPRN = "Y"
+        IF W85-KCHPORT = 1
+     MOVE "LPT1"  TO W02-KCHPRN
+        ELSE
+        IF W85-KCHPORT = 2
+     MOVE "LPT2"  TO W02-KCHPRN
+        ELSE
+        IF W85-KCHPORT = 3
+     MOVE "LPT3"  TO W02-KCHPRN
+        ELSE
+        IF W85-KCHPORT = 4
+     MOVE "COM1"  TO W02-KCHPRN
+        ELSE
+        IF W85-KCHPORT = 5
+     MOVE "COM2"  TO W02-KCHPRN
+        ELSE
+        IF W85-KCHPORT = 9
+     MOVE "POSKCH."
+     TO W02-KCHPRN
+     MOVE LS-USER  TO W02-PUSER.
+    IF W85-KTCHPRN = "Y"
+        IF NOT (LS-INSTR = "S")
+     IF W02-PRINTER = W02-KCHPRN
+         MOVE "POSKCH."
+     TO W02-KCHPRN
+         MOVE LS-USER
+     TO W02-KPUSER
+     END-IF
+        END-IF
+        OPEN OUTPUT KCHPRN
+        CALL X"91" USING X91-RES X91-FUN KCHPRN.
       *    *************************************************************
-      *    ****	     O L D   S T Y L E	 C A S H   D R A W E R	    ****
+      *    ****      O L D   S T Y L E  C A S H   D R A W E R     ****
       *    *************************************************************
            IF W85-DRAWER  = "F"
-	       IF W85-PORT = 2
+        IF W85-PORT = 2
                    MOVE "COM2"   TO W02-CSHDRW
                ELSE
-	       IF W85-PORT = 3
+        IF W85-PORT = 3
                    MOVE "COM3"   TO W02-CSHDRW
                ELSE
-	       IF W85-PORT = 4
+        IF W85-PORT = 4
                    MOVE "COM4"   TO W02-CSHDRW.
            IF W85-DRAWER = "F"
                OPEN OUTPUT CSHDRW
-	       MOVE ALL "A"	 TO CSH-OPEN.
-	   IF W85-CUSDISP = "Y"
-	       IF W85-CUSPORT = 2
-		   MOVE "COM2"	 TO W02-CUSDSP
+        MOVE ALL "A"  TO CSH-OPEN.
+    IF W85-CUSDISP = "Y"
+        IF W85-CUSPORT = 2
+     MOVE "COM2"  TO W02-CUSDSP
                ELSE
-	       IF W85-CUSPORT = 3
-		   MOVE "COM3"	 TO W02-CUSDSP
+        IF W85-CUSPORT = 3
+     MOVE "COM3"  TO W02-CUSDSP
                ELSE
-	       IF W85-CUSPORT = 4
-		   MOVE "COM4"	 TO W02-CUSDSP.
-	   IF W85-SCALE = "Y"
-	       IF W85-SCALPORT = 1
-		   MOVE "COM1"	 TO SCALE-NO
-	       ELSE
-	       IF W85-SCALPORT = 2
-		   MOVE "COM2"	 TO SCALE-NO
+        IF W85-CUSPORT = 4
+     MOVE "COM4"  TO W02-CUSDSP.
+    IF W85-SCALE = "Y"
+        IF W85-SCALPORT = 1
+     MOVE "COM1"  TO SCALE-NO
+        ELSE
+        IF W85-SCALPORT = 2
+     MOVE "COM2"  TO SCALE-NO
                ELSE
-	       IF W85-SCALPORT = 3
-		   MOVE "COM3"	 TO SCALE-NO
+        IF W85-SCALPORT = 3
+     MOVE "COM3"  TO SCALE-NO
                ELSE
-		   MOVE "COM4"	 TO SCALE-NO.
-	     MOVE 7		 TO WS-PARKEY.
-021500	     PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
-	   IF W85-CUSDISP = "Y"
-	       OPEN OUTPUT CUSDSP
-	       MOVE SPACES	 TO CUS-LINE.
-	   IF W85-CUSDISP = "Y"
-	       MOVE PAR-DSP-HDG  TO W95-COMP.
-	   IF NOT (PAR-CSH-ADD = "Y" OR "N")
-	       MOVE "Y" 	 TO PAR-CSH-ADD
-	       MOVE 3		 TO WS-ERROR.
-	   IF NOT (PAR-CSH-TEL = "Y" OR "N")
-	       MOVE "Y" 	 TO PAR-CSH-TEL
-	       MOVE 3		 TO WS-ERROR.
-	   IF NOT (PAR-CSH-VAT = "Y" OR "N")
-	       MOVE "Y" 	 TO PAR-CSH-VAT
-	       MOVE 3		 TO WS-ERROR.
-	   IF NOT (PAR-CSH-TIME = "Y" OR "N")
-	       MOVE "Y" 	 TO PAR-CSH-TIME
-	       MOVE 3		 TO WS-ERROR.
-	   IF NOT (PAR-CSH-ASSIST = "Y" OR "N")
-	       MOVE "Y" 	 TO PAR-CSH-ASSIST
-	       MOVE 3		 TO WS-ERROR.
-	   IF NOT (PAR-CSH-DETAIL = "1" OR "2")
-	       MOVE "2" 	 TO PAR-CSH-DETAIL
-	       MOVE 3		 TO WS-ERROR.
-	   IF NOT (PAR-CSH-VAT-DET = "Y" OR "N")
-	       MOVE "Y" 	 TO PAR-CSH-VAT-DET
-	       MOVE 3		 TO WS-ERROR.
-	   IF NOT (PAR-CSH-ITM = "I" OR "D")
-	       MOVE "D" 	 TO PAR-CSH-ITM
-	       MOVE 3		 TO WS-ERROR.
-	     MOVE PAR-CSH-ADD	 TO WS-CSH-ADD.
-	     MOVE PAR-CSH-TEL	 TO WS-CSH-TEL.
-	     MOVE PAR-CSH-VAT	 TO WS-CSH-VAT.
-	     MOVE PAR-CSH-TIME	 TO WS-CSH-TIME.
-	     MOVE PAR-CSH-ASSIST TO WS-CSH-ASSIST.
-	     MOVE PAR-CSH-DETAIL TO WS-CSH-DETAIL.
-	     MOVE PAR-CSH-VAT-DET
-				 TO WS-CSH-VAT-DET.
-	     MOVE PAR-CSH-ITM	 TO WS-CSH-ITM.
-	   IF WS-ERROR = 3
-	       MOVE ZERO	 TO WS-ERROR
-	       PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
-	     UNLOCK PARAM.
-	     GO TO ZA999.
+     MOVE "COM4"  TO SCALE-NO.
+      MOVE 7   TO WS-PARKEY.
+            PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
+    IF W85-CUSDISP = "Y"
+        OPEN OUTPUT CUSDSP
+        MOVE SPACES  TO CUS-LINE.
+    IF W85-CUSDISP = "Y"
+        MOVE PAR-DSP-HDG  TO W95-COMP.
+    IF NOT (PAR-CSH-ADD = "Y" OR "N")
+        MOVE "Y"   TO PAR-CSH-ADD
+        MOVE 3   TO WS-ERROR.
+    IF NOT (PAR-CSH-TEL = "Y" OR "N")
+        MOVE "Y"   TO PAR-CSH-TEL
+        MOVE 3   TO WS-ERROR.
+    IF NOT (PAR-CSH-VAT = "Y" OR "N")
+        MOVE "Y"   TO PAR-CSH-VAT
+        MOVE 3   TO WS-ERROR.
+    IF NOT (PAR-CSH-TIME = "Y" OR "N")
+        MOVE "Y"   TO PAR-CSH-TIME
+        MOVE 3   TO WS-ERROR.
+    IF NOT (PAR-CSH-ASSIST = "Y" OR "N")
+        MOVE "Y"   TO PAR-CSH-ASSIST
+        MOVE 3   TO WS-ERROR.
+    IF NOT (PAR-CSH-DETAIL = "1" OR "2")
+        MOVE "2"   TO PAR-CSH-DETAIL
+        MOVE 3   TO WS-ERROR.
+    IF NOT (PAR-CSH-VAT-DET = "Y" OR "N")
+        MOVE "Y"   TO PAR-CSH-VAT-DET
+        MOVE 3   TO WS-ERROR.
+    IF NOT (PAR-CSH-ITM = "I" OR "D")
+        MOVE "D"   TO PAR-CSH-ITM
+        MOVE 3   TO WS-ERROR.
+      MOVE PAR-CSH-ADD  TO WS-CSH-ADD.
+      MOVE PAR-CSH-TEL  TO WS-CSH-TEL.
+      MOVE PAR-CSH-VAT  TO WS-CSH-VAT.
+      MOVE PAR-CSH-TIME  TO WS-CSH-TIME.
+      MOVE PAR-CSH-ASSIST TO WS-CSH-ASSIST.
+      MOVE PAR-CSH-DETAIL TO WS-CSH-DETAIL.
+      MOVE PAR-CSH-VAT-DET
+     TO WS-CSH-VAT-DET.
+      MOVE PAR-CSH-ITM  TO WS-CSH-ITM.
+    IF WS-ERROR = 3
+        MOVE ZERO  TO WS-ERROR
+        PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+      UNLOCK PARAM.
+      GO TO ZA999.
 
        COPY ZA49.PRO.
 
        ZA50.
-041850	   IF WS-F-ERROR = 36
-041860         MOVE "PD CHEQUE file"
-				 TO WS-FILE.
+          IF WS-F-ERROR = 36
+               MOVE "PD CHEQUE file"
+     TO WS-FILE.
              DISPLAY "Rebuild " AT 0812
-		      WS-FILE WITH FOREGROUND-COLOR 6 HIGHLIGHT.
+        WS-FILE WITH FOREGROUND-COLOR 6 HIGHLIGHT.
              DISPLAY "Press any key to continue" AT 1012.
              ACCEPT WS-OPTION AT 1038 WITH FOREGROUND-COLOR 15.
 
        ZA51.
              EXIT PROGRAM.
 
-022010 ZA200.
+       ZA200.
 
        COPY LOCKED.PRO.
 
        ZA205.
              EXIT PROGRAM.
 
-022090 ZA999.
-022100       EXIT.
+       ZA999.
+             EXIT.
       /
-022110 ZB000-ERROR	     SECTION 92.
+       ZB000-ERROR      SECTION 92.
 
        COPY ERRORS.PRO.
 
-051790 DISPLAY-FILE-NAME.
-051800     IF WS-F-ERROR = 1
-051810	       MOVE W02-AUDITF	 TO WS-FILE
-051820	       MOVE WS-AUDKEY	 TO WS-KEY
-051830     ELSE
-051840     IF WS-F-ERROR = 2
-051850	       MOVE W02-NETWORK  TO WS-FILE
-051860	       MOVE WS-NETKEY	 TO WS-KEY
-051950     ELSE
-051960     IF WS-F-ERROR = 7
-041820	       MOVE W02-DEPART	 TO WS-FILE
-041870	       MOVE ZERO	 TO WS-KEY
-041830	       MOVE DPT-CODE	 TO WS-KEYX
-052070	   ELSE
-052080     IF WS-F-ERROR = 15
-052090         MOVE WS-PARID     TO WS-FILE
-052100         MOVE WS-PARKEY    TO WS-KEY
-052110     ELSE
-052120     IF WS-F-ERROR = 18
-052130         MOVE W02-RECOVER  TO WS-FILE
-052140         MOVE WS-RECKEY    TO WS-KEY
-052150     ELSE
-052160     IF WS-F-ERROR = 19
-052170	       MOVE W02-SALE	 TO WS-FILE
-052180	       MOVE WS-SALKEY	 TO WS-KEY
-041840	   ELSE
-041850     IF WS-F-ERROR = 21
-041860         MOVE W02-SPARTS   TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
+       DISPLAY-FILE-NAME.
+           IF WS-F-ERROR = 1
+              MOVE W02-AUDITF  TO WS-FILE
+              MOVE WS-AUDKEY  TO WS-KEY
+           ELSE
+           IF WS-F-ERROR = 2
+              MOVE W02-NETWORK  TO WS-FILE
+              MOVE WS-NETKEY  TO WS-KEY
+           ELSE
+           IF WS-F-ERROR = 7
+              MOVE W02-DEPART  TO WS-FILE
+              MOVE ZERO  TO WS-KEY
+              MOVE DPT-CODE  TO WS-KEYX
+          ELSE
+           IF WS-F-ERROR = 15
+               MOVE WS-PARID     TO WS-FILE
+               MOVE WS-PARKEY    TO WS-KEY
+           ELSE
+           IF WS-F-ERROR = 18
+               MOVE W02-RECOVER  TO WS-FILE
+               MOVE WS-RECKEY    TO WS-KEY
+           ELSE
+           IF WS-F-ERROR = 19
+              MOVE W02-SALE  TO WS-FILE
+              MOVE WS-SALKEY  TO WS-KEY
+          ELSE
+           IF WS-F-ERROR = 21
+               MOVE W02-SPARTS   TO WS-FILE
+               MOVE ZERO         TO WS-KEY
                MOVE PRT-ITEM     TO WS-KEYX
-052190	   ELSE
-052200     IF WS-F-ERROR = 22
-052210         MOVE W02-STOCKF   TO WS-FILE
-052220         MOVE ZERO         TO WS-KEY
+          ELSE
+           IF WS-F-ERROR = 22
+               MOVE W02-STOCKF   TO WS-FILE
+               MOVE ZERO         TO WS-KEY
                MOVE STK-CODE     TO WS-KEYX
-041840     ELSE
-041850     IF WS-F-ERROR = 25
-041860         MOVE W02-STKMEM   TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
+           ELSE
+           IF WS-F-ERROR = 25
+               MOVE W02-STKMEM   TO WS-FILE
+               MOVE ZERO         TO WS-KEY
                MOVE SME-KEY      TO WS-KEYX
-052270     ELSE
-052280     IF WS-F-ERROR = 32
-052290         MOVE W02-TXTRAN   TO WS-FILE
-052300         MOVE ZERO         TO WS-KEY
-	       MOVE TAX-KEY	 TO WS-KEYX
-041840	   ELSE
-041850	   IF WS-F-ERROR = 34
-041860         MOVE W02-PSLIP    TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
+           ELSE
+           IF WS-F-ERROR = 32
+               MOVE W02-TXTRAN   TO WS-FILE
+               MOVE ZERO         TO WS-KEY
+        MOVE TAX-KEY  TO WS-KEYX
+          ELSE
+          IF WS-F-ERROR = 34
+               MOVE W02-PSLIP    TO WS-FILE
+               MOVE ZERO         TO WS-KEY
                MOVE PIC-KEY      TO WS-KEYX
-041840	   ELSE
-041850     IF WS-F-ERROR = 36
-041860         MOVE W02-CHEQUE   TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
+          ELSE
+           IF WS-F-ERROR = 36
+               MOVE W02-CHEQUE   TO WS-FILE
+               MOVE ZERO         TO WS-KEY
                MOVE CHQ-TR-NUMBER
-				 TO WS-KEYX
-041840	   ELSE
-041850	   IF WS-F-ERROR = 37
-041860	       MOVE W02-SHARED	 TO WS-FILE
-041870	       MOVE WS-SHARED	 TO WS-KEY
-041840	   ELSE
-041850	   IF WS-F-ERROR = 38
-041860	       MOVE W02-SLIP	 TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
-	       MOVE SLP-KEY	 TO WS-KEYX
-041840     ELSE
-041850     IF WS-F-ERROR = 40
-041860         MOVE W02-LEDTRF   TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
-	       MOVE XFR-KEY	 TO WS-KEYX
-041840	   ELSE
-041850	   IF WS-F-ERROR = 43
-041860	       MOVE W02-CARDEX	 TO WS-FILE
-041870         MOVE ZERO         TO WS-KEY
-	       MOVE CRD-KEY	 TO WS-KEYX
-041840	   ELSE
-041850	   IF WS-F-ERROR = 49
-041860	       MOVE W02-POSPLU	 TO WS-FILE
-041870	       MOVE ZERO	 TO WS-KEY
-	       MOVE PLU-KEY	 TO WS-KEYX.
+     TO WS-KEYX
+          ELSE
+          IF WS-F-ERROR = 37
+              MOVE W02-SHARED  TO WS-FILE
+              MOVE WS-SHARED  TO WS-KEY
+          ELSE
+          IF WS-F-ERROR = 38
+              MOVE W02-SLIP  TO WS-FILE
+               MOVE ZERO         TO WS-KEY
+        MOVE SLP-KEY  TO WS-KEYX
+           ELSE
+           IF WS-F-ERROR = 40
+               MOVE W02-LEDTRF   TO WS-FILE
+               MOVE ZERO         TO WS-KEY
+        MOVE XFR-KEY  TO WS-KEYX
+          ELSE
+          IF WS-F-ERROR = 43
+              MOVE W02-CARDEX  TO WS-FILE
+               MOVE ZERO         TO WS-KEY
+        MOVE CRD-KEY  TO WS-KEYX
+          ELSE
+          IF WS-F-ERROR = 49
+              MOVE W02-POSPLU  TO WS-FILE
+              MOVE ZERO  TO WS-KEY
+        MOVE PLU-KEY  TO WS-KEYX.
 
        COPY DISPERR.PRO.

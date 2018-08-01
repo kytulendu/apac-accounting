@@ -21,7 +21,7 @@
        AUTHOR.         J.W.LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
                 
@@ -548,11 +548,14 @@
        AA000-MAIN        SECTION.
        AA000-INIT.
           IF LS0-PALEV < 3
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
-        GO TO AA49.
-            PERFORM ZA000-INIT.
-      PERFORM YA000.
+               GO TO AA49.
+             PERFORM ZA000-INIT.
+             PERFORM YA000.
        AA49.
              EXIT PROGRAM.
 
@@ -853,7 +856,9 @@
             GO TO YA310-PRN.
        YA999.
       EXIT.
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.

@@ -13,7 +13,14 @@
       *                                                                *
       *  C R E D I T O R   A D D R E S S   L A B E L S   P R O G R A M *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -21,7 +28,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -90,37 +97,37 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-       77  WS-IXS1         PIC 9(04)     COMP-5.
-       77  WS-IXS2         PIC 9(04)     COMP-5.
-       77  WS-IXS3         PIC 9(04)     COMP-5.
-       77  WS-IXS4         PIC 9(04)     COMP-5.
-       77  WS-PARKEY       PIC 9(04)     COMP-5.
-       77  WS-NETKEY       PIC 9(06)     COMP-5.
-       77  WS-NTP          PIC 9(01).
-       77  WS-LINES        PIC 9(02).
-       77  WS-PAGE         PIC 9(04)     COMP-5.
-       77  WS-OPTION       PIC X(01).
-       77  WS-SEQ          PIC X(01).
-       77  WS-CREDIT       PIC X(01).
-       77  WS-ZERO         PIC X(01).
-       77  WS-NUM          PIC Z9.
-       77  WS-ADDR         PIC X(01).
-       77  WS-ERROR        PIC 9(01).
-       77  WS-ERROR1       PIC 9(01).
-       77  WS-PGE-LENGTH   PIC 9(02)  VALUE 66.
-       77  WS-PRN-LENGTH   PIC 9(02)  VALUE 62.
-       77  WS-COMP    PIC 9(01).
-       77  WS-S1           PIC 9(04)     COMP-5.
-       77  WS-S2           PIC 9(04)     COMP-5.
-       77  WS-S3           PIC 9(04)     COMP-5.
-       77  WS-S4           PIC 9(04)     COMP-5.
-       77  WS-S5           PIC 9(04)     COMP-5.
-       77  WS-S6           PIC 9(04)     COMP-5.
-       77  WS-S7           PIC 9(04)     COMP-5.
-       77  WS-S8           PIC 9(04)     COMP-5.
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-PARKEY               PIC  9(04)    COMP-5.
+       77  WS-NETKEY               PIC  9(06)    COMP-5.
+       77  WS-NTP                  PIC  9(01).
+       77  WS-LINES                PIC  9(02).
+       77  WS-PAGE                 PIC  9(04)    COMP-5.
+       77  WS-OPTION               PIC  X(01).
+       77  WS-SEQ                  PIC  X(01).
+       77  WS-CREDIT               PIC  X(01).
+       77  WS-ZERO                 PIC  X(01).
+       77  WS-NUM                  PIC  Z9.
+       77  WS-ADDR                 PIC  X(01).
+       77  WS-ERROR                PIC  9(01).
+       77  WS-ERROR1               PIC  9(01).
+       77  WS-PGE-LENGTH           PIC  9(02)           VALUE 66.
+       77  WS-PRN-LENGTH           PIC  9(02)           VALUE 62.
+       77  WS-COMP                 PIC  9(01).
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S5                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S7                   PIC  9(04)    COMP-5.
+       77  WS-S8                   PIC  9(04)    COMP-5.
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -144,11 +151,11 @@
       *
       *    Calling Program
       *
-           03  CRT-PROGRAM         PIC  X(15) VALUE "CRP027".
+           03  CRT-PROGRAM         PIC  X(15)           VALUE "CRP027".
       *
       *    Screen Heading
       *
-           03  CRT-HEADING         PIC  X(40) VALUE "CREDITOR - ADDRESS LABELS".
+           03  CRT-HEADING         PIC  X(40)           VALUE "CREDITOR - ADDRESS LABELS".
       *
       *    Company Name
       *
@@ -160,18 +167,17 @@
                05  CRT-WRKHD       PIC  X(11).
                05  CRT-WRKST       PIC  X(03).
 
-
        COPY "WS.WS".
 
        01  W00-TRAN-CODES.
-           03  W00-TRAN-TYPES  OCCURS 100.
-               05  W00-TRAN-CODE PIC 9(02)   COMP-5.
-               05  W00-ACTION  PIC 9(02)     COMP-5.
-               05  W00-E-DESC  PIC X(12).
-               05  W00-A-DESC  PIC X(12).
+           03  W00-TRAN-TYPES                    OCCURS 100.
+               05  W00-TRAN-CODE   PIC  9(02)    COMP-5.
+               05  W00-ACTION      PIC  9(02)    COMP-5.
+               05  W00-E-DESC      PIC  X(12).
+               05  W00-A-DESC      PIC  X(12).
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-FID.
 
@@ -186,7 +192,7 @@
            03  W02-PGE-LENGTH      PIC  9(03).
            03  W02-PRN-LENGTH      PIC  9(03).
            03  W02-LINAGE          PIC  9(03).
-           03  W02-PRN-STATUS      PIC  X(01) VALUE "C".
+           03  W02-PRN-STATUS      PIC  X(01)           VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -381,10 +387,13 @@
        AA00-MAIN       SECTION.
        AA00-INIT.
           IF LS0-CRLEV < 3
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
-            PERFORM ZA00-INIT.
+             PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -486,6 +495,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -554,11 +566,9 @@
 
        COPY "PRINTUTL.AP4".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AC000-READ              SECTION.
 
        COPY "CONTROL.RD".
@@ -768,16 +778,17 @@
        CH999.
              EXIT.
 
-      /
-       ZA00-INIT       SECTION 9.
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
+       ZA000-INIT       SECTION 9.
        ZA00-OPEN.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -786,23 +797,19 @@
              COPY "FUNCTION.PRO".
 
        ZA25.
-            MOVE 1   TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-            MOVE PAR-COMPANY  TO W95-COMP.
-            MOVE PAR-DMY  TO W12-TODAY.
-            MOVE PAR-YMD  TO W12-T-YMD.
-            MOVE 1   TO WS-NETKEY.
+             MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-            GO TO ZA999-EXIT.
+             GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       *

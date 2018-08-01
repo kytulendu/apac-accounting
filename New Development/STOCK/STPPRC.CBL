@@ -1,33 +1,78 @@
       $SET GNT"STPPRC.GNT"
       ******************************************************************
       *                                                                *
-      *    ******   ********  ******* *******   *******    ******    *
-      *   ** **     **     **    ** **    **  ** **  **   **   *
-      *   **        **     **    ** **    **  **   **   **        *
-      *    ******      **     ******* *******   ******    **        *
-      *  **     **     ** **   **  **    **        *
-      *   ** **     **     ** **   **   **   **   **   *
-      *    ******      **     ** **   ** **   ******    *
+      *    ******   ********  *******   *******   *******    ******    *
+      *   **    **     **     **    **  **    **  **    **  **    **   *
+      *   **           **     **    **  **    **  **   **   **         *
+      *    ******      **     *******   *******   ******    **         *
+      *         **     **     **        **        **   **   **         *
+      *   **    **     **     **        **        **    **  **    **   *
+      *    ******      **     **        **        **    **   ******    *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *      S T O C K   U P D A T E   P R I C E S   P R O G R A M     *
       *                                                                *
-      *     VERSION 8.06 - August 2002           *
-      *               *
+      *       Version 9.04.03 - September 2017                         *
+
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * August 2008   - New file (STKALT) - Stock alternate index      *
+      *                 included for lookups, using any word con-      *
+      *                 tained in the Stock description.               *
+      *                                                                *
+      * November 2009 - Include words from Description 2 and from      *
+      *                 the Item code (Some item codes are comprised   *
+      *                 of individual words and these will be          *
+      *                 included in the alternate Index)               *
+      *                                                                *
+      * Jan 2010  - Allow for two discounts for a Debtor on the same   *
+      *             Sales Ledger code. Included two additional Debtor  *
+      *             discount codes (11 and 12) each with a field to    *
+      *             define which debtor discount code uses this as an  *
+      *             alternate discount. The relevant Stock Item will   *
+      *             have an indicator field to instruct the system to  *
+      *             use the alternate discount. The alternate discount *
+      *             is only applicable if the discount code for which  *
+      *             this alternate discount is applicable is the code  *
+      *             on the Debtor account record.                      *
+      *                                                                *
+      * Feb 2017 - Increased the number of Memo entries, of 60 bytes,  *
+      *            allowed from 12 to 34 per stock record.             *
+      *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     STPPRC.
        AUTHOR.         J.W.LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1983.
 
-     COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
-         by James William Lemmon.
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2018
+                                  by James William Lemmon.
+                                    (Id No. 4412165050082).
 
-     All rights reserved.
+                All rights reserved.
 
-       SECURITY.   PROGRAM MATERIAL IS THE SOLE PROPERTY OF
-           James William Lemmon.
+                e-mail jwlemmon@gmail.com.
+
+       SECURITY.
+                This program is free software; you can redistribute
+                it and/or modify it under the terms of the GNU General
+                Public License as published by the Free Software
+                Foundation; either version 3 of the License, or (at
+                your option) any later version.
+
+                This program is distributed in the hope that it will
+                be useful, but WITHOUT ANY WARRANTY; without even the
+                implied warranty of MERCHANTABILITY or FITNESS FOR A
+                PARTICULAR PURPOSE. See the GNU General Public License
+                for more details.
+
+                You should have received a copy of the GNU General
+                Public License along with this program. If not, see
+                <http://www.gnu.org/licenses/>.
+
+       INSTALLATION.          APAC.
 
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -37,34 +82,43 @@
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
 
-       COPY APACFIDS.SL.
+       COPY "APACFIDS.SL".
 
-       COPY CONTROL.SL.
+       COPY "CONTROL.SL".
 
-       COPY DEPART.SL.
+       COPY "DEPART.SL".
 
-       COPY PARAM.SL.
+       COPY "PARAM.SL".
 
-       COPY STOCK.SL.
+       COPY "STOCK.SL".
 
-       COPY STKTRF.SL.
+       COPY "STKTRF.SL".
 
            SELECT PRICES  ASSIGN DISK
                           ACCESS SEQUENTIAL
                           ORGANIZATION LINE SEQUENTIAL.
 
        DATA DIVISION.
+      *
+      *          ********  ********  **        ******** 
+      *          **           **     **        **
+      *          **           **     **        ** 
+      *          *****        **     **        *****
+      *          **           **     **        **  
+      *          **           **     **        **
+      *          **        ********  ********  ********
+      *
        FILE SECTION.
 
-       COPY APACFIDS.FD.
+       COPY "APACFIDS.FD".
 
-       COPY CONTROL.FD.
+       COPY "CONTROL.FD".
 
-       COPY DEPART.FD.
+       COPY "DEPART.FD".
 
-       COPY PARAM.FD.
+       COPY "PARAM.FD".
 
-       COPY STOCK.FD.
+       COPY "STOCK.FD".
 
        FD  PRICES    LABEL RECORD STANDARD
                      VALUE OF FILE-ID W02-PRICES.
@@ -75,11 +129,19 @@
            03  PRC-COST        PIC S9(05)V99 SIGN TRAILING SEPARATE.
     03  PRC-LEDG        PIC  X(04).
 
-       COPY STKTRF.FD.
-      /
+       COPY "STKTRF.FD".
+
+      *
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
+      *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK    PIC X(18)  VALUE
-      "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-SUB     PIC 9(04)   COMP-5.
        77  WS-S1            PIC 9(04)     COMP-5.
        77  WS-S2            PIC 9(04)     COMP-5.
@@ -129,32 +191,46 @@
        77  WS-WS-HD     PIC  X(10) VALUE "-Wholesale".
        77  WS-CS-HD     PIC  X(10) VALUE "-Cash sale".
        77  WS-OK     PIC X(01) VALUE "N".
-      /
-       01  WS-DB-LINE.
-           03  WS-TOP-LNE.
-               05  WS-TCHR PIC X(01) OCCURS 80.
-           03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-TOP-LNE2.
-               05  WS-TCH  PIC X(01) OCCURS 80.
-           03  WS-MID-LNE.
-               05  WS-MCHR PIC X(01) OCCURS 80.
-           03  WS-MID-LNE2.
-               05  WS-MCH  PIC X(01) OCCURS 80.
-           03  WS-BOT-LNE.
-               05  WS-BCHR PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-BOT-LNE2.
-               05  WS-BCH  PIC X(01) OCCURS 80.
 
-       COPY WS.WS.
+      *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커
+      *    � Used by calling program (WORKING-STORAGE) and called program �
+      *    � (LINKAGE SECTION) for Main screen layout and headings.       �
+      *    읕컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴켸
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *       C = Clear comment line (50)
+      *       E = Clear lines (any line or lines between 5 and 46)
+      *       H = Change heading
+      *       S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02) VALUE 5.
+           03  CRT-END             PIC  9(02) VALUE 46.
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "STPPRC".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "STOCK/INVENTORY -UPDATE PRICES".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD       PIC  X(11).
+               05  CRT-WRKST       PIC  X(03).
+
+       COPY "WS.WS".
 
        01  WS-USER-ID.
            03  WS-USER.
@@ -188,15 +264,15 @@
 
        01  W02-FID.
 
-       COPY APACFIDS.ID.
+       COPY "APACFIDS.ID".
 
-       COPY CONTROL.ID.
+       COPY "CONTROL.ID".
 
        COPY DEPART.ID.
 
-       COPY PARAM.ID.
+       COPY "PARAM.ID".
 
-       COPY STOCK.ID.
+       COPY "STOCK.ID".
 
        COPY STKTRF.ID.
 
@@ -204,11 +280,18 @@
         05  W02-DSKP    PIC X(01) VALUE "A".
               05  FILLER      PIC X(11) VALUE ":UPDPRC.DAT".
 
-       COPY W10.STK.
+       COPY "W10.STK".
 
-       COPY W12.WS.
-
-       COPY W20.WS.
+      *
+      *    Date routines for accepting checking and formatting have
+      *    been removed from each program and the DateCheck program
+      *    will be called to handle these routines.
+      *
+      *    The following copy 'DateVariables' now includes the 'W12.WS'
+      *    and 'W20.WS' variables and is passed to DateCheck in the CALL
+      *    statement.
+      *
+       COPY "DateVariables.cpy".
 
        01  W25-CALCS.
            03  W25-RESULT     PIC 9(02)V99.
@@ -248,7 +331,7 @@
                05  W50-CODE.
                    07  W50-DEC PIC 9(04)     COMP-0.
 
-       COPY W50.WS.
+       COPY "W50.WS".
 
        01  W50-BIT-PAIRS       PIC  9(02)    COMP-X VALUE 1.
        01  W50-PARAMETERS.
@@ -289,19 +372,27 @@
        01  W100-EDIT.
            03  W100-V2.
                05  W100-S6V2   PIC Z(05)9.99-.
-      /
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
       *
       *    ****  THIS SCREEN - CLEARS THE DISPLAY AND SETS THE DEFAULT
       *          COLOUR TO 3 (LIGHT BLUE).
       *
        01  CLR-SCREEN.
-           03  BLANK SCREEN FOREGROUND-COLOR 3.
+           03  BLANK SCREEN FOREGROUND-COLOR Cyan.
            03  LINE  1 COLUMN  1 VALUE "旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커".
            03  LINE  2 COLUMN  1 PIC X(01) USING WS-G3.
-           03          COLUMN  2 FOREGROUND-COLOR 12
+           03          COLUMN  2 FOREGROUND-COLOR Red HIGHLIGHT
                                  VALUE "APAC Accounting".
-           03          COLUMN 69 FOREGROUND-COLOR 13
+           03          COLUMN 69 FOREGROUND-COLOR Magenta HIGHLIGHT
            VALUE "Version 7.0".
            03          COLUMN 80 PIC X(01) USING WS-G3.
            03  LINE  3 COLUMN  1 PIC X(01) USING WS-G3.
@@ -349,7 +440,15 @@
            03  LINE 23 COLUMN  1 PIC X(01) USING WS-G3.
            03          COLUMN 80 PIC X(01) USING WS-G3.
            03  LINE 24 COLUMN  1 PIC X(80) USING WS-BOT-LNE2.
-      /
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
        PROCEDURE DIVISION.
        AA000-MAIN              SECTION.
        AA000-INIT.
@@ -381,15 +480,15 @@
        LOCK-REC.
              DISPLAY SPACE AT 2550.
              DISPLAY "Record LOCKED - " AT 2551
-                      WITH FOREGROUND-COLOR 14
-                     "waiting" WITH FOREGROUND-COLOR 14 BLINK.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "waiting" WITH FOREGROUND-COLOR Brown HIGHLIGHT BLINK.
              MOVE ZERO TO WS-WAIT.
              GO TO LOCK-REC-LOOP.
 
        LOCK-USERS-REC.
              DISPLAY SPACE AT 2550.
              DISPLAY "waiting" AT 2551
-                      WITH FOREGROUND-COLOR 14 BLINK.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT BLINK.
              MOVE -3771          TO WS-WAIT.
       
        LOCK-REC-LOOP.
@@ -400,8 +499,8 @@
       
        LOCK-REC-EXIT.
              EXIT.
-      /
-      *    ****    READ FILES ROUTINES
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
       *
        AC000-READ              SECTION.
 
@@ -700,8 +799,8 @@
 
        READ-STKTRF-EXIT.
              EXIT.
-      /
-      *    ****    REWRITE AND WRITE FILES ROUTINES
+      *
+      *   R E W R I T E   &    W R I T E   F I L E S   R O U T I N E S
       *
        AD000-WRITE             SECTION.
 
@@ -839,7 +938,7 @@
        BA00.
              PERFORM ERASE-SCREEN.
       DISPLAY "Updating Stock Prices" AT 0230
-        WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH FOREGROUND-COLOR Grey HIGHLIGHT.
              DISPLAY "UPDPRC Record :" AT 0603.
              DISPLAY "Stock Details :" AT 0803.
       MOVE ZERO   TO WS-PRCKEY WS-RECKEY.
@@ -854,8 +953,8 @@
                GO TO BA05.
       ADD 1   TO WS-PRCKEY WS-RECKEY.
       MOVE WS-PRCKEY  TO W80-REC.
-             DISPLAY W80-NO AT 0619 WITH FOREGROUND-COLOR 11.
-             DISPLAY PRC-RECORD1 AT 0819 WITH FOREGROUND-COLOR 15.
+             DISPLAY W80-NO AT 0619 WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
+             DISPLAY PRC-RECORD1 AT 0819 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
       MOVE PRC-CODE  TO W10-ITEM.
              PERFORM CA500.
            IF WS-F-ERROR = ZERO
@@ -870,9 +969,9 @@
              GO TO BA05.
        BA10.
              DISPLAY "Update complete - Press " AT 2312
-                      WITH FOREGROUND-COLOR 14 "ENTER"
-                      WITH FOREGROUND-COLOR 15.
-             ACCEPT WS-OPTION AT 2342 WITH FOREGROUND-COLOR 15 AUTO.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT "ENTER"
+                      WITH FOREGROUND-COLOR Grey HIGHLIGHT.
+             ACCEPT WS-OPTION AT 2342 WITH FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
        BA999.
              EXIT.
       *
@@ -1105,8 +1204,10 @@
              ADD 1               TO WS-TRFKEY.
        DC999.
              EXIT.
-      /
-       ZA000-INIT              SECTION 80.
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
+       ZA000-INIT              SECTION 8.
        ZA000-OPEN.
              PERFORM ZA55 THRU ZA60.
              PERFORM ERASE-SCREEN.
@@ -1164,7 +1265,7 @@
         W02-PTH33 W02-PTH2.
              DISPLAY "Disk drive for UPDPRC ?" AT 1212.
       MOVE "A"   TO W02-DSKP.
-             ACCEPT W02-DSKP AT 1236 WITH FOREGROUND-COLOR 15
+             ACCEPT W02-DSKP AT 1236 WITH FOREGROUND-COLOR Grey HIGHLIGHT
                                           UPDATE AUTO.
              OPEN I-O NETWORK.
            IF RUNTIME-ERROR
@@ -1212,18 +1313,18 @@
              GO TO ZA999-EXIT.
        ZA49.
              DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
              DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
+             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
              GO TO ZA205.
        ZA50.
            IF WS-F-ERROR = 22
                MOVE "STOCK file" TO WS-FILE.
              DISPLAY "Rebuild " AT 0812
-                      WS-FILE WITH FOREGROUND-COLOR 14.
+                      WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Press any key to continue" AT 1012.
-             ACCEPT WS-OPTION AT 1038 WITH FOREGROUND-COLOR 15.
+             ACCEPT WS-OPTION AT 1038 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
        ZA51.
              EXIT PROGRAM.
        ZA55.
@@ -1235,96 +1336,55 @@
            IF WS-S1 < 80
                ADD 1 TO WS-S1
                GO TO ZA60.
-             MOVE WS-G9  TO WS-TCH  (1).
+             MOVE WS-G9  TO WS-TCH (1) .
              MOVE WS-G10 TO WS-TCH  (80).
-             MOVE WS-G11 TO WS-BCH  (1).
+             MOVE WS-G11 TO WS-BCH (1) .
              MOVE WS-G12 TO WS-BCH  (80).
-             MOVE WS-G14 TO WS-TCHR (1)  WS-BCHR (1).
+             MOVE WS-G14 TO WS-TCHR(1)   WS-BCHR(1) .
              MOVE WS-G13 TO WS-TCHR (80) WS-BCHR (80).
              MOVE WS-G2  TO WS-TCHR (16) WS-TCHR (41)
                             WS-TCHR (64) WS-TCHR (71).
              MOVE WS-G3  TO WS-MCHR (16) WS-MCHR (41)
                             WS-MCHR (64) WS-MCHR (71)
-                            WS-MCHR (1)  WS-MCHR (80)
-                            WS-MCH  (1)  WS-MCH  (80).
+                            WS-MCHR(1)   WS-MCHR (80)
+                            WS-MCH (1)   WS-MCH  (80).
              MOVE WS-G4  TO WS-BCHR (16) WS-BCHR (41)
                             WS-BCHR (64) WS-BCHR (71).
              MOVE 44             TO W50-NUMBER.
              MOVE 1              TO W50-SETTING.
              CALL X"AF" USING W50-BIT-PAIRS W50-PARAMETERS.
+
        ZA200.
-             DISPLAY "Files locked - Try later" AT 2412
-                      WITH FOREGROUND-COLOR 14.
-             DISPLAY "Press any key" AT 2512
-                      WITH FOREGROUND-COLOR 14.
-             ACCEPT WS-OPTION AT 2526 WITH FOREGROUND-COLOR 15 AUTO.
+
+       COPY "LOCKED.PRO".
+
        ZA205.
              EXIT PROGRAM.
+
        ZA999-EXIT.
              EXIT.
-      /
-       ZB000-ERROR             SECTION 81.
+      *
+      *    ****    I / O   E R R O R   M E S S A G E S
+      *
+       ZB000-ERROR      SECTION 8.
 
-       OPEN-ERROR.
-             PERFORM ERASE-SCREEN.
-             DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
-             GO TO DISPLAY-FILE-NAME.
-
-       READ-ERROR.
-             PERFORM ERASE-SCREEN.
-             DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
-             GO TO DISPLAY-FILE-NAME.
-
-       WRITE-ERROR.
-             PERFORM ERASE-SCREEN.
-             DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
-             PERFORM DISPLAY-FILE-NAME.
+       COPY "ERRORS.PRO".
 
        DISPLAY-FILE-NAME.
-           IF WS-F-ERROR = 2
-               MOVE W02-NETWORK  TO WS-FILE
-               MOVE WS-NETKEY    TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 7
-               MOVE W02-DEPART   TO WS-FILE
-               MOVE WS-DEPKEY    TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 15
-               MOVE WS-PARID     TO WS-FILE
-               MOVE WS-PARKEY    TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 22
-               MOVE W02-STOCKF   TO WS-FILE
-               MOVE ZERO         TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 33
-               MOVE W02-STKTRF   TO WS-FILE
-               MOVE WS-TRFKEY    TO WS-KEY.
-           IF WS-STATUS = "10"
-               MOVE "End of FILE" TO WS-STAT-MESSAGE
-           ELSE
-           IF WS-STATUS = "22"
-               MOVE "Duplicate record number" TO WS-STAT-MESSAGE
-           ELSE
-           IF WS-STATUS = "23"
-               MOVE "Invalid record number" TO WS-STAT-MESSAGE
-           ELSE
-           IF WS-STATUS = "24"
-               MOVE "DISK full" TO WS-STAT-MESSAGE
-           ELSE
-           IF WS-STATUS = "30"
-               MOVE "DISK error" TO WS-STAT-MESSAGE
-           ELSE
-           IF WS-STATUS = "94"
-               MOVE "FILE locked" TO WS-STAT-MESSAGE.
-             DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
-             DISPLAY "Status " AT 1212
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
-           IF WS-STATUS NOT = "94"
-               DISPLAY "Key    " AT 1412
-                        WS-KEY WITH FOREGROUND-COLOR 11
-               DISPLAY "Reverse backup or contact program Support"
-                        AT 1612.
-               DISPLAY "Please make a note of these details" AT 1812.
-             STOP RUN.
+             MOVE ZERO               TO WS-KEY.
+             EVALUATE WS-F-ERROR
+               WHEN 2     MOVE W02-NETWORK  TO WS-FILE
+                          MOVE WS-NETKEY    TO WS-KEY
+               WHEN 7     MOVE W02-DEPART   TO WS-FILE
+                          MOVE DPT-CODE     TO WS-KEYX
+               WHEN 15    MOVE WS-PARID     TO WS-FILE
+                          MOVE WS-PARKEY    TO WS-KEY
+               WHEN 22    MOVE W02-STOCKF   TO WS-FILE
+                          MOVE STK-CODE     TO WS-KEYX
+               WHEN 33    MOVE W02-STKTRF   TO WS-FILE
+                          MOVE WS-TRFKEY    TO WS-KEY
+               WHEN OTHER MOVE "ERROR"      TO WS-FILE
+                          MOVE "STPPRC"     TO WS-KEYX
+             END-EVALUATE.
+
+       COPY "DISPERR.PRO".

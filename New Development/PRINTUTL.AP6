@@ -12,7 +12,16 @@
              MOVE "P"              TO WS-PRINTER.
              MOVE ZERO             TO WS-ADVANCE WS-REPORT WS-SCREEN.
              MOVE 6                TO WS-REPORT.
-
+           IF W02-LINAGE = 99
+               MOVE WS-LINAGE      TO WS-STORE-LINAGE
+               MOVE 99             TO WS-LINAGE.
+             CALL "UTP\PRINTNUM" USING WS-PARID LS-USER-ID DATA-FILE-IDS WS-SCREEN-PRINT
+             ON EXCEPTION
+                GO TO OPEN-PRINTER-ERROR
+             END-CALL.
+             CANCEL "UTP\PRINTNUM".
+           IF W02-LINAGE = 99
+               MOVE WS-STORE-LINAGE TO WS-LINAGE.
       *
       *    ****   C A L L   T H E   P R I N T / S P O O L   U T I L I T Y
       *

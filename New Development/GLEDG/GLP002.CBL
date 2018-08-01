@@ -1,27 +1,27 @@
-      $set LINKCOUNT"512"
+      $set LINKCOUNT"512" GNT"GLP002.GNT"
       ******************************************************************
       *                                                                *
-      *    ******   **       *******   ****     ****     ******    *
-      *   ** **  **       **    **  **  **    **  **   **   **   *
-      *   **     **       **    ** **    **  ** **  **    *
-      *   **     **       ******* **    **  ** **     **      *
-      *   **   ***  **       ** **    **  ** **   **        *
-      *   ** **  **       **  **  **    **  **   **        *
-      *    ******   ********  **   ****     ****    ********   *
+      *    ******   **        *******     ****      ****     ******    *
+      *   **    **  **        **    **   **  **    **  **   **    **   *
+      *   **        **        **    **  **    **  **    **       **    *
+      *   **        **        *******   **    **  **    **     **      *
+      *   **   ***  **        **        **    **  **    **   **        *
+      *   **    **  **        **         **  **    **  **   **         *
+      *    ******   ********  **          ****      ****    ********   *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
-      *     G / L E D G E R   D E L E T E   A C C O U N T        *
+      *     G / L E D G E R   D E L E T E   A C C O U N T              *
       *                                                                *
-      *       Version 9.00.70 - August 2014                            *
-      *               *
+      *       Version 9.04.01 - June 2017                              *
+      *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID.        GLP002.
+       PROGRAM-ID.             GLP002.
        AUTHOR.                 J.W. LEMMON (APAC).
        DATE-WRITTEN.           JUNE 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -53,7 +53,7 @@
                          CURSOR IS CSTART
                          CONSOLE IS CRT
                          CRT STATUS IS KEY-STATUS.
-         CRT STATUS IS KEY-STATUS.
+                         CRT STATUS IS KEY-STATUS.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
 
@@ -76,6 +76,15 @@
        COPY "TXTRAN.SL".
 
        DATA DIVISION.
+      *
+      *          ********  ********  **        ******** 
+      *          **           **     **        **
+      *          **           **     **        ** 
+      *          *****        **     **        *****
+      *          **           **     **        **  
+      *          **           **     **        **
+      *          **        ********  ********  ********
+      *
        FILE SECTION.
 
        COPY "CONTROL.FDE".
@@ -96,331 +105,263 @@
 
        COPY "TXTRAN.FDE".
 
-      /
+      *
+      *         **        **    *****    ******    **   **
+      *         **        **   **   **   **   **   **  **
+      *         **        **   **   **   **  **    ** **
+      *         **   **   **   **   **   *****     ****
+      *          ** **** **    **   **   **  **    ** **
+      *           ***  ***     **   **   **   **   **  **
+      *            *    *       *****    **   **   **   **
+      *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK    PIC X(18)  VALUE
-      "aeWlimemnomLalismJ".
-       77  WS-PARKEY    PIC 9(04)  COMP-5 VALUE 1.
-       77  WS-LTRKEY    PIC 9(06)  COMP-5 VALUE 0.
-       77  WS-ENQPOS       PIC  9(06)    COMP-5.
-       77  WS-ENQEND       PIC  9(06)    COMP-5.
-       77  WS-NETKEY       PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-KEYSTR       PIC  9(06)    COMP-5.
-       77  WS-KSTORE       PIC  9(06)    COMP-5.
-       77  WS-SKSTORE      PIC  9(06)    COMP-5.
-       77  WS-INKEY        PIC  9(06)    COMP-5.
-       77  WS-COKEY        PIC  9(06)    COMP-5.
-       77  WS-GLJSTR       PIC  9(04)    COMP-5.
-       77  WS-GLJKEY       PIC  9(06)    COMP-5.
-       77  WS-RECKEY       PIC  9(04)    COMP-5.
-       77  WS-RECOVER      PIC  9(04)    COMP-5.
-       77  WS-SHARED    PIC 9(04)  COMP-5 VALUE 1.
-       77  WS-TRANS        PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-ISUB         PIC  9(04)    COMP-5.
-       77  WS-CHEQUE       PIC  9(04)    COMP-5.
-       77  WS-SUB          PIC  9(04)    COMP-5.
-       77  WS-S            PIC  9(04)    COMP-5.
-       77  WS-S1           PIC  9(04)    COMP-5.
-       77  WS-S2           PIC  9(04)    COMP-5.
-       77  WS-S3           PIC  9(04)    COMP-5.
-       77  WS-S4    PIC 9(04)  COMP-5.
-       77  WS-S6           PIC  9(04)    COMP-5.
-       77  WS-S9    PIC 9(04)  COMP-5.
-       77  WS-IXS    PIC 9(04)  COMP-5.
-       77  WS-IXS1    PIC 9(04)  COMP-5.
-       77  WS-IXS2    PIC 9(04)  COMP-5.
-       77  WS-IXS3    PIC 9(04)  COMP-5.
-       77  WS-IXS4    PIC 9(04)  COMP-5.
-       77  WS-Y-END    PIC 9(02) VALUE ZERO.
-       77  WS-L-END    PIC 9(04) VALUE ZERO.
-       77  WS-OPEN         PIC  9(02) VALUE ZERO.
-       77  WS-MS1          PIC  9(04)    COMP-5.
-       77  WS-MS2          PIC  9(04)    COMP-5.
-       77  WS-EXS    PIC 9(01).
-       77  WS-CONREC       PIC  9(01) VALUE ZERO.
-       77  WS-INDG         PIC  9(01) VALUE ZERO.
-       77  WS-OPTION       PIC  X(01).
-       77  WS-SKIP         PIC  X(01) VALUE "N".
-       77  WS-ERROR        PIC  9(01) VALUE ZERO.
-       77  WS-NUM          PIC  Z9.
-       77  WS-PERIOD       PIC  9(02)    COMP-5 VALUE ZERO.
-       77  WS-ER6          PIC  X(09) VALUE "No Record".
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
-      /
-       01  WS-DB-LINE.
-           03  WS-TOP-LNE.
-               05  WS-TCHR PIC X(01) OCCURS 80.
-           03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-TOP-LNE2.
-               05  WS-TCH  PIC X(01) OCCURS 80.
-           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-              05  FILLER      PIC  X(23).
-        05  WS-WRKHD    PIC  X(11).
-              05  FILLER      PIC  X(01).
-        05  WS-WRKST    PIC  X(03).
-              05  FILLER      PIC  X(01).
-          03  WS-MID-LNE.
-               05  WS-MCHR PIC X(01) OCCURS 80.
-    03  WS-MDGL-LNE REDEFINES WS-MID-LNE.
-        05  WS-MGL1     PIC X(01).
-        05  WS-MGL78    PIC X(78).
-        05  WS-MGL80    PIC X(01).
-          03  WS-MID-LNE2.
-        05  FILLER      PIC  X(01) VALUE "³".
-        05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-        05  FILLER      PIC  X(01) VALUE "³".
-          03  WS-BOT-LNE.
-               05  WS-BCHR PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-BOT-LNE2.
-               05  WS-BCH  PIC X(01) OCCURS 80.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-PARKEY               PIC 9(04)  COMP-5 VALUE 1.
+       77  WS-LTRKEY               PIC 9(06)  COMP-5 VALUE 0.
+       77  WS-ENQPOS               PIC  9(06)    COMP-5.
+       77  WS-ENQEND               PIC  9(06)    COMP-5.
+       77  WS-NETKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-KEYSTR               PIC  9(06)    COMP-5.
+       77  WS-KSTORE               PIC  9(06)    COMP-5.
+       77  WS-SKSTORE              PIC  9(06)    COMP-5.
+       77  WS-INKEY                PIC  9(06)    COMP-5.
+       77  WS-COKEY                PIC  9(06)    COMP-5.
+       77  WS-GLJSTR               PIC  9(04)    COMP-5.
+       77  WS-GLJKEY               PIC  9(06)    COMP-5.
+       77  WS-RECKEY               PIC  9(04)    COMP-5.
+       77  WS-RECOVER              PIC  9(04)    COMP-5.
+       77  WS-SHARED               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-TRANS                PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-ISUB                 PIC  9(04)    COMP-5.
+       77  WS-CHEQUE               PIC  9(04)    COMP-5.
+       77  WS-SUB                  PIC  9(04)    COMP-5.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S9                   PIC  9(04)    COMP-5.
+       77  WS-IXS                  PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-Y-END                PIC  9(02)           VALUE ZERO.
+       77  WS-L-END                PIC  9(04)           VALUE ZERO.
+       77  WS-OPEN                 PIC  9(02)           VALUE ZERO.
+       77  WS-MS1                  PIC  9(04)    COMP-5.
+       77  WS-MS2                  PIC  9(04)    COMP-5.
+       77  WS-EXS                  PIC  9(01).
+       77  WS-CONREC               PIC  9(01)           VALUE ZERO.
+       77  WS-INDG                 PIC  9(01)           VALUE ZERO.
+       77  WS-OPTION               PIC  X(01).
+       77  WS-SKIP                 PIC  X(01)           VALUE "N".
+       77  WS-ERROR                PIC  9(01)           VALUE ZERO.
+       77  WS-NUM                  PIC  Z9.
+       77  WS-PERIOD               PIC  9(02)    COMP-5 VALUE ZERO.
+       77  WS-ER6                  PIC  X(09)           VALUE "No Record".
+       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
+       77  PRG-GLED-LUP            PIC  X(12)           VALUE "GLP\GLPLOOK".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *         C =  Clear comment line (50)
+      *         E =  Clear lines (any line or lines between 5 and 46)
+      *         H =  Change heading
+      *         S =  Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "GLP002".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "GENERAL LEDGER -DELETE ACCOUNT".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD       PIC  X(11).
+               05  CRT-WRKST       PIC  X(03).
 
        COPY "WS.WS".
 
        01  WS-HELP.
-    03  WS-MODULE       PIC  X(03) VALUE "GLP".
-    03  WS-PROG        PIC  X(03) VALUE "002".
+           03  WS-MODULE           PIC  X(03) VALUE "GLP".
+           03  WS-PROG             PIC  X(03) VALUE "002".
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-FILE-IDS.
            03  W02-PRINTER.
-        05  W02-REPORT PIC X(07) VALUE "GLP002.".
-               05  W02-USER   PIC X(05) VALUE SPACES.
+               05  W02-REPORT      PIC  X(07)    VALUE "GLP002.".
+               05  W02-USER        PIC  X(05)    VALUE SPACES.
 
        COPY "W05.GL".
 
        01  W10-H2.
-           03  FILLER      PIC  X(27).
-           03  W10-HEAD    PIC  X(13).
+           03  FILLER              PIC  X(27).
+           03  W10-HEAD            PIC  X(13).
 
        COPY "W15.GL".
 
        01  W20-TOTALS.
-           03  W20-DEBIT   PIC S9(09)V99 COMP-3.
-           03  W20-CREDIT  PIC S9(09)V99 COMP-3.
-           03  W20-RESULT  PIC S9(09)V99.
-           03  W20-RES1    REDEFINES W20-RESULT.
-               05  W20-WHOLE
-                           PIC  9(09).
-               05  W20-DEC PIC S9(02).
-           03  W20-TOTAL   PIC S9(09)V99 COMP-3.
-           03  W20-STOTAL  PIC S9(09)V99 COMP-3.
-           03  W20-BTOTAL  PIC S9(09)    COMP-3.
-           03  W20-INTOT   PIC S9(09)V99 COMP-3.
-           03  W20-COTOT   PIC S9(09)V99 COMP-3.
+           03  W20-DEBIT           PIC S9(09)V99 COMP-3.
+           03  W20-CREDIT          PIC S9(09)V99 COMP-3.
+           03  W20-RESULT          PIC S9(09)V99.
+           03  W20-RES1                          REDEFINES W20-RESULT.
+               05  W20-WHOLE       PIC  9(09).
+               05  W20-DEC         PIC S9(02).
+           03  W20-TOTAL           PIC S9(09)V99 COMP-3.
+           03  W20-STOTAL          PIC S9(09)V99 COMP-3.
+           03  W20-BTOTAL          PIC S9(09)    COMP-3.
+           03  W20-INTOT           PIC S9(09)V99 COMP-3.
+           03  W20-COTOT           PIC S9(09)V99 COMP-3.
            03  W20-GTOT.
-               05  W20-GRPTOT
-                           PIC S9(09)V99 COMP-3 OCCURS 12.
+               05  W20-GRPTOT      PIC S9(09)V99 COMP-3 OCCURS 12.
            03  W20-STOT.
-               05  W20-SUBTOT
-                           PIC S9(09)V99 COMP-3 OCCURS 12.
+               05  W20-SUBTOT      PIC S9(09)V99 COMP-3 OCCURS 12.
        01  W20-INPUT.
-           03  W20-ACCOUNT PIC  9(06).
-           03  W20-ACNO1   REDEFINES W20-ACCOUNT.
-               05  W20-ACNO
-                           PIC 9(04).
-               05  W20-SER PIC  9(02).
-           03  W20-ACNO2   REDEFINES W20-ACCOUNT.
-               05  W20-GR  PIC  9(02).
-               05  W20-SGRP
-                           PIC 9(02).
-               05  W20-ASER
-                           PIC 9(02).
-           03  W20-ACNO3   REDEFINES W20-ACCOUNT.
-               05  W20-GROUP
-                           PIC 9(02).
-               05  W20-REST
-                           PIC 9(04).
+           03  W20-ACCOUNT         PIC  9(06).
+           03  W20-ACNO1                         REDEFINES W20-ACCOUNT.
+               05  W20-ACNO        PIC  9(04).
+               05  W20-SER         PIC  9(02).
+           03  W20-ACNO2                         REDEFINES W20-ACCOUNT.
+               05  W20-GR          PIC  9(02).
+               05  W20-SGRP        PIC  9(02).
+               05  W20-ASER        PIC  9(02).
+           03  W20-ACNO3                         REDEFINES W20-ACCOUNT.
+               05  W20-GROUP       PIC  9(02).
+               05  W20-REST        PIC  9(04).
 
        COPY "W20.WS".
 
        01  W25-CALCS.
-           03  W25-RESULT      PIC 9(05)V99.
-           03  W25-RESULT1 REDEFINES W25-RESULT.
-               05  W25-WHOLE   PIC 9(05).
-               05  W25-DECIMAL PIC 9(02).
-           03  W25-RESULT2 REDEFINES W25-RESULT.
-               05  W25-KEY    PIC 9(04).
-               05  W25-SUB    PIC 9(01).
-               05  FILLER     PIC 9(02).
+           03  W25-RESULT          PIC  9(05)V99.
+           03  W25-RESULT1                       REDEFINES W25-RESULT.
+               05  W25-WHOLE       PIC  9(05).
+               05  W25-DECIMAL     PIC  9(02).
+           03  W25-RESULT2                       REDEFINES W25-RESULT.
+               05  W25-KEY         PIC  9(04).
+               05  W25-SUB         PIC  9(01).
+               05  FILLER          PIC  9(02).
 
        01  W25-EDIT.
            03  W25-7.
-               05  W25-1   PIC  ZZZZZZZZ9-.
+               05  W25-1           PIC  ZZZZZZZZ9-.
            03  W25-S7V2.
-               05  W25-V1  PIC  Z(07)9.99CR.
-          03  W25-S8V2.
-              05  W25-VG1     PIC Z(07)9.99CR.
-          03  W25-DATE.
-              05  W25-DTE PIC Z9/99/9999.
+               05  W25-V1          PIC  Z(07)9.99CR.
+           03  W25-S8V2.
+               05  W25-VG1         PIC  Z(07)9.99CR.
+           03  W25-DATE.
+               05  W25-DTE         PIC  Z9/99/9999.
            03  W25-REF.
-               05  W25-REFER
-                           PIC Z(07).
-           03  W25-RECKEY  PIC  Z(04)9.
+               05  W25-REFER       PIC  Z(07).
+           03  W25-RECKEY          PIC  Z(04)9.
 
-       01  W30-MONTH-NAMES.
-           03  W30-MONTHS.
-               05  FILLER  PIC  X(24) VALUE
-                           "Jan:Feb:Mar:Apr:May:Jun:".
-               05  FILLER  PIC X(24) VALUE
-                           "Jul:Aug:Sep:Oct:Nov:Dec:".
-           03  W30-MNTHS REDEFINES W30-MONTHS.
-               05  W30-MONTH OCCURS 12.
-                   07  W30-MTH PIC X(03).
-                   07  FILLER  PIC X(01).
-       01  W35-MONTH-NAMES.
-           03  W35-MONTHS.
-               05  W35-MONTH OCCURS 12.
-                   07  W35-MTH PIC X(03).
-                   07  FILLER  PIC X(01).
-           03  W35-MTHS REDEFINES W35-MONTHS.
-               05  W35-MTH1.
-                   07  W35-M1  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH2.
-                   07  W35-M2  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH3.
-                   07  W35-M3  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH4.
-                   07  W35-M4  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH5.
-                   07  W35-M5  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH6.
-                   07  W35-M6  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH7.
-                   07  W35-M7  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH8.
-                   07  W35-M8  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH9.
-                   07  W35-M9  PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH10.
-                   07  W35-M10 PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH11.
-                   07  W35-M11 PIC X(03).
-                   07  FILLER  PIC X(01).
-               05  W35-MTH12.
-                   07  W35-M12 PIC X(03).
-                   07  FILLER  PIC X(01).
-
-       01  W40-CUR-YEAR.
-          03  W40-YEAR    PIC 9(04) COMP-5 OCCURS 12.
-
+       COPY "W30.GL".
+       
        COPY "W40.WS".
 
        COPY "FUNCTION.WS".
 
        COPY "W50.WS".
 
-       01  W50-CALC.
-           05  W50-ACNTS   OCCURS 30.
-               07  W50-ANO PIC  9(06)    COMP-3.
-               07  W50-PER PIC S9(03)V99 COMP-3.
-       01  W55-TOTALS.
-           03  W55-VAL     PIC S9(09)    COMP-3 OCCURS 12.
-       01  W55-TOT         REDEFINES W55-TOTALS.
-           03  W55-1       PIC S9(09)    COMP-3.
-           03  W55-2       PIC S9(09)    COMP-3.
-           03  W55-3       PIC S9(09)    COMP-3.
-           03  W55-4       PIC S9(09)    COMP-3.
-           03  W55-5       PIC S9(09)    COMP-3.
-           03  W55-6       PIC S9(09)    COMP-3.
-           03  W55-7       PIC S9(09)    COMP-3.
-           03  W55-8       PIC S9(09)    COMP-3.
-           03  W55-9       PIC S9(09)    COMP-3.
-           03  W55-10      PIC S9(09)    COMP-3.
-           03  W55-11      PIC S9(09)    COMP-3.
-           03  W55-12      PIC S9(09)    COMP-3.
-       01  W55-TOTA        REDEFINES W55-TOTALS.
-          03  W55-1A        PIC S9(07)V99 COMP-3.
-          03  W55-2A        PIC S9(07)V99 COMP-3.
-          03  W55-3A        PIC S9(07)V99 COMP-3.
-          03  W55-4A        PIC S9(07)V99 COMP-3.
-          03  W55-5A        PIC S9(07)V99 COMP-3.
-          03  W55-6A        PIC S9(07)V99 COMP-3.
-          03  W55-7A        PIC S9(07)V99 COMP-3.
-          03  W55-8A        PIC S9(07)V99 COMP-3.
-          03  W55-9A        PIC S9(07)V99 COMP-3.
-          03  W55-10A        PIC S9(07)V99 COMP-3.
-          03  W55-11A        PIC S9(07)V99 COMP-3.
-          03  W55-12A        PIC S9(07)V99 COMP-3.
-       01  W55-TOTB        REDEFINES W55-TOTALS.
-          03  W55-VALA    PIC S9(07)V99 COMP-3 OCCURS 12.
-       01  W60-TOTALS.
-           03  W60-VAL     PIC S9(09)    COMP-3 OCCURS 12.
-       01  W65-TOTALS.
-           03  W65-VAL     PIC S9(09)    COMP-3 OCCURS 12.
-       01  W70-ACTS.
-           03  W70-BRANCH  PIC  9(04)    COMP-5.
+       COPY "W50-70.GL".
 
        COPY "W70.WS".
 
-       01  W75-KEYS.
-           03  W75-S          PIC 9(02) COMP-5.
-           03  W75-S1         PIC 9(02) COMP-5.
-    03  W75-GNO       PIC 9(06) COMP-5
-                              OCCURS 18.
        01  W90-COMP.
-           03  W90-CNAME   PIC  X(40).
+           03  W90-CNAME           PIC  X(40).
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
-       COPY "FILE-GENL.IDS".
+       COPY "FILE.IDS".
 
-      /
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
 
        01  S11.
-          03  LINE  3 COLUMN 30 FOREGROUND-COLOR 7
-     HIGHLIGHT
-                                 VALUE "DELETE  G/L ACCOUNT".
-          03  LINE  5 COLUMN 16 VALUE "Account Number :".
-          03  LINE  6 COLUMN 16 VALUE "Account Name   :".
-    03        COLUMN 33 BACKGROUND-COLOR 5 VALUE
-     "                              ".
-       01  S17.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT BACKGROUND-COLOR 5
-      PIC 9(06) USING W15-ACCOUNT AUTO.
+           03  LINE  6 COLUMN 16 VALUE "Account Number :".
+           03  LINE  7 COLUMN 16 VALUE "Account Name   :".
+           03          COLUMN 33 VALUE                    "                              " BACKGROUND-COLOR Magenta.
 
-      /
-       PROCEDURE DIVISION
-   USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY.
+       01  S17.
+           03  PIC 9(06) USING W15-ACCOUNT AUTO BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT.
+
+       01  S55.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                    FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                            FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Account Lookup - ".
+               05          COLUMN 36 VALUE                                   "Esc" FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 39 VALUE                                      "ape to exit".
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******   ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **  **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **   **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****    *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **   **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **  **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **  ******
+      *
+       PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000        SECTION.
        AA00.
-          IF LS0-GLLEV < 3
-        MOVE "Not Authorised"
-     TO WS-ERR-STRING
-              PERFORM ERROR-MESSAGE
-        GO TO AA49.
-            PERFORM ZA000.
-      PERFORM HA000.
-      CLOSE RECOVER.
+           IF LS0-GLLEV < 3
+      *
+      *      Insufficient security level
+      *
+               MOVE X"FF"            TO WS-OPTION
+               PERFORM ERROR-MESSAGE
+               GO TO AA49.
+             PERFORM ZA000.
+             PERFORM HA000.
+             CLOSE RECOVER.
 
        AA49.
-      EXIT PROGRAM.
+             EXIT PROGRAM.
 
        COPY "FUNCTION.CRT".
 
@@ -428,16 +369,41 @@
 
        COPY "CLEAR.CRT".
 
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ This routine is used to call  the General Ledger Accounts ³
+      *    ³ lookup program and cancel it when control is returned.    ³
+      *    ³ The  relevant  error  message  will be  displayed  if  an ³
+      *    ³ exception occurs. The usual  parameters are passed to the ³
+      *    ³ lookup program as well W15-GLEDGER which will contain the ³
+      *    ³ details of the account that has been selected when control³
+      *    ³ is returned to the calling program.                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AA350-LOOKUP    SECTION.
        AA350.
-            PERFORM SAVE-SCREEN.
-             MOVE 4              TO W44-FUNCTION.
-            PERFORM SCREEN-CONTENTS.
-      PERFORM GACCNT-LOOKUP.
-            PERFORM RESTORE-SCREEN.
+             PERFORM SAVE-SCREEN.
+             PERFORM SCREEN-CONTENTS.
+             CALL PRG-GLED-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W15-GLEDGER
+                  ON EXCEPTION GO TO AA355
+             END-CALL.
+             CANCEL PRG-GLED-LUP.
+             GO TO AA358.
+
+       AA355.
+             MOVE SPACE              TO WS-ERR-MES.
+             STRING "Program- " DELIMITED SIZE PRG-GLED-LUP DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
+
+       AA358.
+             PERFORM RESTORE-SCREEN.
+
        AA399.
              EXIT.
 
+       COPY "AA900.ALM".
+
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB000           SECTION.
 
        COPY "CONTROL.RD".
@@ -456,7 +422,9 @@
 
        COPY "TXTRAN.RD".
 
-      /
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AC000           SECTION.
 
        COPY "CONTROL.WR".
@@ -477,28 +445,32 @@
 
        COPY "APAC.HLP".
 
-      /
-      *       ****   *****   ***    ***   *   *  ***** ****   *   *
-      *       *   *  *     * *  *   *  *   *  * *   *  *   *
-      *       ****   ***    *    *   *  *   *  *** **** * *
-      *       *   *  *     * *  *   *   * *  * *   *  *
-      *       *   *  *****   ***    ***     *  ***** *   *  *
+      *
+      *       ****   *****  ***    ***   *   *  *****  ****   *   *
+      *       *   *  *     *   *  *   *  *   *  *      *   *  *   *
+      *       ****   ***   *      *   *  *   *  ***    ****    * *
+      *       *   *  *     *   *  *   *   * *   *      *   *    *
+      *       *   *  *****  ***    ***     *    *****  *   *    *
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
-      *   THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
+      *          THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
       *        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *        ³ ORIGINAL ACTION (REC-TYPE)  ÄÄ  RECOVERY PROCESS ³
-      *        ³ 0 = RECORD CHANGED      ÄÄ     (REWRITE)    ³
-      *        ³ 1 = RECORD WAS ADDED      ÄÄ     (DELETE)    ³
-      *        ³ 2 = RECORD WAS DELETED      ÄÄ     (WRITE)    ³
+      *        ³ 0 = RECORD CHANGED          ÄÄ      (REWRITE)    ³
+      *        ³ 1 = RECORD WAS ADDED        ÄÄ      (DELETE)     ³
+      *        ³ 2 = RECORD WAS DELETED      ÄÄ      (WRITE)      ³
       *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY000        SECTION.
-       AY01.
-             MOVE 01 TO REC-FILE.
-             MOVE WS-PARKEY TO REC-KEY.
-            PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-RECORD1 TO REC-PARAM.
-             GO TO AY50.
+      *    *************************************************************
+      *    ****             P A R A M E T E R   F I L E             ****
+      *    *************************************************************
+      *AY01.
+      *      MOVE 01                 TO REC-FILE.
+      *      MOVE WS-PARKEY          TO REC-KEY.
+      *      MOVE ZERO               TO REC-TYPE
+      *      PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+      *      MOVE PAR-RECORD1        TO REC-PARAM.
+      *      GO TO AY50.
 
        AY12.
              MOVE 12 TO REC-FILE.
@@ -548,8 +520,8 @@
              WRITE REC-RECORD.
            IF WS-STATUS NOT = "00"
                DISPLAY "Write error Recovery file - Status " AT 2312
-                        WITH FOREGROUND-COLOR 14
-                        WS-STATUS WITH FOREGROUND-COLOR 15
+                        WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                        WS-STATUS WITH FOREGROUND-COLOR Grey HIGHLIGHT
                STOP RUN.
        AY59.
              EXIT.
@@ -577,13 +549,13 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
       *
             DISPLAY "WAITING" AT 5051
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
             COMMIT.
       ACCEPT WS-STIME FROM TIME.
       MOVE 400   TO WS-WAIT.
             PERFORM LOCK-REC-LOOP.
             DISPLAY SPACE AT 5051
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
              GO TO AY60.
 
        AY61.
@@ -653,16 +625,16 @@
     IF WS-WAIT > ZERO
         COMMIT
         DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 14 BLINK
+   WITH BACKGROUND-COLOR Cyan
+        FOREGROUND-COLOR Brown HIGHLIGHT BLINK
         ACCEPT WS-STIME FROM TIME
         PERFORM LOCK-REC-LOOP
         DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 14 BLINK
+   WITH BACKGROUND-COLOR Cyan
+        FOREGROUND-COLOR Brown HIGHLIGHT BLINK
         GO TO AY60.
             DISPLAY SPACE AT 5072
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 
        AY63.
             MOVE WS-SUB  TO WS-USUB.
@@ -713,33 +685,20 @@
        HA00.
              PERFORM ERASE-SCREEN.
              DISPLAY S11.
-            MOVE ZERO   TO W15-ACCOUNT.
+             MOVE ZERO   TO W15-ACCOUNT.
        HA05.
-      DISPLAY "F1" AT 5002
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-       "=Help,"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-       "F2" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-       " to do Account Lookup - "
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1
-       "Esc" WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14
-       "ape to exit"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
-            ACCEPT S17 AT 0533.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY
-       MOVE ZERO  TO W15-ACCOUNT
-       GO TO HA999
-   WHEN F1-KEY
-       PERFORM HELP-ROUTINE
-   WHEN F2-KEY
-       PERFORM AA350
-   WHEN OTHER
-       CALL X"E5"
-       GO TO HA05
-        END-EVALUATE
-        DISPLAY S17 AT 0533
+             DISPLAY S55.
+             ACCEPT S17 AT 0633.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY   MOVE ZERO  TO W15-ACCOUNT
+                                GO TO HA999
+                 WHEN F1-KEY    PERFORM HELP-ROUTINE
+                 WHEN F2-KEY    PERFORM AA350
+                 WHEN OTHER     PERFORM AA900-ALARM
+                                GO TO HA05
+               END-EVALUATE
+               DISPLAY S17 AT 0633
                IF W15-ACCOUNT = ZERO
            GO TO HA05.
       PERFORM CLEAR-L50.
@@ -752,9 +711,9 @@
               MOVE WS-ER6  TO WS-ERR-STRING
         PERFORM ERROR-MESSAGE
                GO TO HA05.
-            DISPLAY G-NAME AT 0633
-       WITH FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5.
+            DISPLAY G-NAME AT 0733
+       WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta.
       PERFORM CHECK-CORRECT.
           IF WS-OPTION = "N"
                GO TO HA00.
@@ -786,45 +745,41 @@
        HA999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000      SECTION 9.
        ZA00.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W05-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W05-TYMD.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W90-CNAME.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-             COPY "FUNCTION.PRO".
+       COPY "FUNCTION.PRO".
 
        ZA02.
-            OPEN OUTPUT RECOVER GLJRN.
+             OPEN OUTPUT RECOVER GLJRN.
              CLOSE RECOVER GLJRN.
              OPEN I-O RECOVER GLJRN.
-            MOVE 1   TO WS-PARKEY.
+             MOVE 6                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-            MOVE PAR-COMPANY  TO W90-CNAME.
-            MOVE PAR-DMY  TO W05-TODAY.
-            MOVE PAR-YMD  TO W05-TYMD.
-      MOVE 6   TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-DEBGL      TO W70-DEBGL.
-             MOVE PAR-CREGL      TO W70-CREGL.
-             MOVE PAR-INTGL      TO W70-INTGL.
-             MOVE PAR-BNKGL      TO W70-BNKGL.
-             MOVE PAR-UNPROF     TO W70-UNPROF.
-             MOVE 4              TO WS-NETKEY.
+             MOVE PAR-DEBGL          TO W70-DEBGL.
+             MOVE PAR-CREGL          TO W70-CREGL.
+             MOVE PAR-INTGL          TO W70-INTGL.
+             MOVE PAR-BNKGL          TO W70-BNKGL.
+             MOVE PAR-UNPROF         TO W70-UNPROF.
+             MOVE 4                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
            IF G-YEAR-END = ZERO
-              MOVE 2   TO G-YEAR-END
-              PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
+               MOVE 2                TO G-YEAR-END
+               PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
       *
       *    ****    S E T   U P   M O N T H S   ( Y E A R   E N D)
       *
@@ -844,8 +799,8 @@
             MOVE ZERO   TO WS-ERROR.
            IF W70-BNKGL = ZERO
               DISPLAY "Parameters not set up - " AT 2020
-         "ENTER" WITH FOREGROUND-COLOR 14
-               ACCEPT WS-OPTION AT 2050 WITH FOREGROUND-COLOR 15 AUTO
+         "ENTER" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+               ACCEPT WS-OPTION AT 2050 WITH FOREGROUND-COLOR Grey HIGHLIGHT AUTO
               MOVE 1   TO WS-ERROR.
             MOVE WS-Y-END  TO WS-S1.
             MOVE W05-CY  TO WS-S2.
@@ -861,92 +816,50 @@
            IF WS-S1 NOT = WS-Y-END
                GO TO ZA20.
       DISPLAY SPACES AT 5025
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
             GO TO ZA999.
 
-       COPY "ZA49.PRO".
-
-       ZA55.
-            MOVE 1   TO WS-S1.
-            MOVE SPACES  TO WS-MID-LNE.
-
-       ZA60.
-            MOVE WS-G1   TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
-      MOVE WS-G8   TO WS-TCH(WS-S1)  WS-BCH(WS-S1).
-           IF WS-S1 < 80
-              ADD 1   TO WS-S1
-               GO TO ZA60.
-      MOVE WS-G9   TO WS-TCH(1).
-      MOVE WS-G10  TO WS-TCH(80).
-      MOVE WS-G11  TO WS-BCH(1).
-      MOVE WS-G12  TO WS-BCH(80).
-      MOVE WS-G14  TO WS-TCHR(1) WS-BCHR(1).
-      MOVE WS-G13  TO WS-TCHR(80) WS-BCHR(80).
-            MOVE WS-G2   TO WS-TCHR(11) WS-TCHR(45)
-              WS-TCHR(63).
-            MOVE WS-G3   TO WS-MCHR(11) WS-MCHR(45)
-              WS-MCHR(63)
-        WS-MCHR(1) WS-MCHR(80).
-            MOVE WS-G4   TO WS-BCHR(11) WS-BCHR(45)
-              WS-BCHR(63).
-      MOVE LS-COMPANY  TO WS-TOP-COMP.
-    IF LS-USER = LS-SYS-ID
-        MOVE "SupervisorÄ"  TO WS-WRKHD
-    ELSE
-        MOVE "Workstation"  TO WS-WRKHD
-        MOVE LS-USER    TO WS-WRKST.
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
        ZA999.
              EXIT.
-      /
+      *
+      *     I / O   E R R O R   M E S S A G E S
+      *
        ZB000      SECTION 9.
 
        COPY "ERRORS.PRO".
 
        DISPLAY-FILE-NAME.
-           IF WS-F-ERROR = 2
-              MOVE W02-NETWORK  TO WS-FILE
-              MOVE WS-NETKEY  TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 8
-              MOVE W02-GACCNT  TO WS-FILE
-               MOVE ZERO         TO WS-KEY
-              MOVE G-AC  TO WS-KEYX
-           ELSE
-           IF WS-F-ERROR = 11
-               MOVE W02-GLTRAN   TO WS-FILE
-               MOVE ZERO         TO WS-KEY
-               MOVE T-KEY        TO WS-KEYX
-           ELSE
-           IF WS-F-ERROR = 15
-              MOVE WS-PARID  TO WS-FILE
-              MOVE WS-PARKEY  TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 18
-              MOVE W02-RECOVER  TO WS-FILE
-              MOVE WS-RECKEY  TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 26
-              MOVE W02-GLJRN  TO WS-FILE
-              MOVE WS-GLJKEY  TO WS-KEY
-          ELSE
-           IF WS-F-ERROR = 32
-               MOVE W02-TXTRAN   TO WS-FILE
-               MOVE ZERO         TO WS-KEY
-        MOVE TAX-KEY  TO WS-KEYX
-          ELSE
-          IF WS-F-ERROR = 37
-              MOVE W02-SHARED  TO WS-FILE
-              MOVE WS-SHARED  TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 39
-               MOVE W02-LEDTRN   TO WS-FILE
-               MOVE WS-LTRKEY    TO WS-KEY.
+             MOVE ZERO               TO WS-KEY.
+             EVALUATE WS-F-ERROR
+               WHEN 2          MOVE W02-NETWORK  TO WS-FILE
+                               MOVE WS-NETKEY    TO WS-KEY
+               WHEN 8          MOVE W02-GACCNT   TO WS-FILE
+                               MOVE G-AC         TO WS-KEYX
+               WHEN 11         MOVE W02-GLTRAN   TO WS-FILE
+                               MOVE T-KEY        TO WS-KEYX
+               WHEN 15         MOVE WS-PARID     TO WS-FILE
+                               MOVE WS-PARKEY    TO WS-KEY
+               WHEN 18         MOVE W02-RECOVER  TO WS-FILE
+                               MOVE WS-RECKEY    TO WS-KEY
+               WHEN 26         MOVE W02-GLJRN    TO WS-FILE
+                               MOVE WS-GLJKEY    TO WS-KEY
+               WHEN 32         MOVE W02-TXTRAN   TO WS-FILE
+                               MOVE TAX-KEY      TO WS-KEYX
+               WHEN 37         MOVE W02-SHARED   TO WS-FILE
+                               MOVE WS-SHARED    TO WS-KEY
+               WHEN 39         MOVE W02-LEDTRN   TO WS-FILE
+                               MOVE WS-LTRKEY    TO WS-KEY
+               WHEN OTHER      MOVE "ERROR"      TO WS-FILE
+                               MOVE "GLP020"     TO WS-KEYX
+             END-EVALUATE.
 
        COPY "DISPERR.PRO".

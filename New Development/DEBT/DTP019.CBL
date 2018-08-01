@@ -39,7 +39,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   June 2002.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2002 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2002 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -391,7 +391,7 @@
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
-             PERFORM ZA00-INIT.
+             PERFORM ZA000-INIT.
              PERFORM DA000.
 
        AA49.
@@ -739,10 +739,11 @@
       *    *************************************************************
       *                I N I T I A L I S E   P R O G R A M
       *    *************************************************************
-       ZA00-INIT       SECTION 9.
+       ZA000-INIT       SECTION 9.
        ZA00-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -761,8 +762,8 @@
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
              GO TO ZA999-EXIT.

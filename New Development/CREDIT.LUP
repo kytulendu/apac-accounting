@@ -22,7 +22,7 @@
                EVALUATE KEY-CODE-1
                  WHEN ESC-KEY    MOVE SPACES TO W15-ACNO
 000150                           GO TO CREDIT-LOOKUP-EXIT
-                 WHEN OTHER      CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER      PERFORM AA900-ALARM
                END-EVALUATE
                GO TO CREDIT-LUP-DATA.
              MOVE SPACES             TO WS-BLNK78.
@@ -99,7 +99,7 @@
                  WHEN DOWN-KEY   GO TO CREDIT-CHK-NO-KEYS
                  WHEN ENTER-KEY
                  WHEN CR-KEY     GO TO CREDIT-CHK-SELECT
-                 WHEN OTHER      CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER      PERFORM AA900-ALARM
                END-EVALUATE
                GO TO CREDIT-GET-USER-OPT
            ELSE
@@ -112,10 +112,10 @@
                  WHEN F9-KEY     PERFORM CREDIT-ADD-SPECS THRU CREDIT-ADD-EXIT
                                  PERFORM CREDIT-FULL-SCREEN
 001510                           GO TO CREDIT-GET-USER-OPT
-                 WHEN OTHER      CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER      PERFORM AA900-ALARM
                END-EVALUATE
                GO TO CREDIT-GET-USER-OPT.
-             CALL X"E5".
+             PERFORM AA900-ALARM.
 001280       GO TO CREDIT-GET-USER-OPT.
 
 001240 CREDIT-GET-NEXT-PAGE.

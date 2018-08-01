@@ -15,7 +15,7 @@
       *                                                                *
       *      D E B T O R   I N V O I C E S   A N A L I S E D           *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -57,7 +57,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                   by James William Lemmon.
                                      (Id No. 4412165050082).
 
@@ -813,6 +813,9 @@
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *
        AY000           SECTION.
+      *    *************************************************************
+      *    ****             P A R A M E T E R   F I L E             ****
+      *    *************************************************************
        AY01.
              MOVE 01                 TO REC-FILE.
              MOVE WS-PARKEY          TO REC-KEY.
@@ -875,7 +878,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
-
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³         W R I T E   R E C O V E R Y   R E C O R D         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -889,27 +894,26 @@
 
        AY59.
              EXIT.
-      *
-      *    ****    Start processing transaction
-      *
+      *    *************************************************************
+      *    ****        Start processing transaction
+      *    *************************************************************
        AY60.
              MOVE 1                  TO WS-COUNT.
              MOVE 5                  TO WS-SHARED.
              PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-      *      MOVE SHR-STOCK          TO WS-STOCK.
-      *
+      *    *************************************************************
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
-      *
+      *    *************************************************************
              MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
            IF PAR-USERS < 24
                MOVE 1                TO WS-SUB
                MOVE ZERO             TO WS-WAIT
                GO TO AY62.
-      *
+      *    *************************************************************
       *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
-      *
+      *    *************************************************************
              DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
              COMMIT.
              ACCEPT WS-STIME FROM TIME.
@@ -1093,7 +1097,7 @@
            IF OPEN-ITEM
                IF TRA-VALUE < ZERO
                    MOVE W75-ALLOCATED TO TRA-ALLOCATED
-           ELSE
+               ELSE
                IF NOT(TRA-DATE > W30-120)
                    MOVE 5            TO TRA-AGE
                ELSE
@@ -1417,10 +1421,14 @@
 
        CK30.
              ACCEPT S51A.
-             MOVE W90-IDTE           TO W10-EDTE.
-             PERFORM CHECK-DATE.
-           IF WS-ERROR = 1
-               MOVE "Date"           TO WS-ERR-MES
+             MOVE W90-IDTE           TO W22-DATE.
+             PERFORM DATE-CHECK THRU CHECK-DATE-EXIT.
+           IF NOT(W22-ERROR = 0)
+               EVALUATE W22-ERROR
+                 WHEN 1  MOVE "Invalid Order DATE"  TO WS-ERR-MES
+                 WHEN 2  MOVE "Invalid Order DAY"   TO WS-ERR-MES
+                 WHEN 3  MOVE "Invalid Order MONTH" TO WS-ERR-MES
+               END-EVALUATE
                PERFORM ERROR-MESSAGE
                GO TO CK30.
            IF W90-REF = SPACES
@@ -1774,7 +1782,8 @@
              MOVE LS-PARID           TO WS-PARID.
       *      MOVE LS-L-OR-N          TO W02-L-OR-N.
       *      MOVE WS-SYS-ID          TO W02-SYSID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -1797,8 +1806,8 @@
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-DISCOUNT       TO W05-DISCOUNT.
@@ -1845,7 +1854,6 @@
              MOVE DEB-60D-DTE        TO W30-60.
              MOVE DEB-90D-DTE        TO W30-90.
              MOVE DEB-120-DTE        TO W30-120.
-             GO TO ZA999-EXIT.
 
        ZA999-EXIT.
              EXIT.

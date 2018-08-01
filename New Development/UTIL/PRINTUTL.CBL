@@ -1,3 +1,4 @@
+      $SET LINKCOUNT"256" GNT "PRINTUTL.GNT"
       ******************************************************************
       *                                                                *
       *        *******    *******    ******   **    **   ********      *
@@ -12,7 +13,7 @@
       *                                                                *
       *    P R I N T   U T I L I T Y   P R O G R A M                   *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -37,7 +38,7 @@
            spool or display the report.
 
       ******************************************************************
-               COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2016
+               COPYRIGHT NOTICE: COPYRIGHT (C) 1997 - 2018
                                  by James William Lemmon.
                                    (Id No. 4412165050082).
 
@@ -78,10 +79,10 @@
        COPY "PARAM.SL".
 
           SELECT PRNREP  ASSIGN W02-PRINTER
-                          ORGANIZATION LINE SEQUENTIAL.
+                         ORGANIZATION LINE SEQUENTIAL.
 
           SELECT PRNSPL  ASSIGN W02-SPOOLER
-                          ORGANIZATION LINE SEQUENTIAL.
+                         ORGANIZATION LINE SEQUENTIAL.
 
        DATA DIVISION.
        FILE SECTION.
@@ -90,7 +91,7 @@
 
       /
        FD  PRNREP    LABEL RECORD OMITTED
-             LINAGE IS WS-PGE-LENGTH.
+                     LINAGE IS WS-PGE-LENGTH.
        01  R-SL1.
            03  R-SLA               PIC  X(78).
            03  FILLER              PIC  X(58).
@@ -777,10 +778,10 @@
                END-IF
            ELSE
                MOVE 110              TO WS-USUB.
-               ADD 2549 WS-USUB      GIVING W25-RESULT.
-               MOVE W25-KEY          TO WS-PARKEY.
-               ADD 1 W25-SUB         GIVING WS-S6.
-               PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+             ADD 2549 WS-USUB        GIVING W25-RESULT.
+             MOVE W25-KEY            TO WS-PARKEY.
+             ADD 1 W25-SUB           GIVING WS-S6.
+             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
            EVALUATE WS-REPORT
              WHEN 1   PERFORM OPEN-REPORT-1
              WHEN 2   PERFORM OPEN-REPORT-2
@@ -910,7 +911,7 @@
            ELSE
            IF TRM-PICP(WS-S6) = 9
                MOVE LS-USER          TO W02-USER.
-               ADD 501 TRM-PRN1(WS-S6) GIVING W25-RESULT.
+             ADD 501 TRM-PRN1(WS-S6) GIVING W25-RESULT.
 
        OPEN-REPORT-2.
            IF TRM-INVP(WS-S6) = 1
@@ -933,7 +934,7 @@
            ELSE
            IF TRM-INVP(WS-S6) = 9
                MOVE LS-USER  TO W02-USER.
-               ADD 501 TRM-PRN2(WS-S6) GIVING W25-RESULT.
+             ADD 501 TRM-PRN2(WS-S6) GIVING W25-RESULT.
 
        OPEN-REPORT-3.
            IF TRM-STDP(WS-S6) = 1 OR 9
@@ -953,7 +954,7 @@
            ELSE
            IF TRM-STDP(WS-S6) = 5
                MOVE "COM2"           TO W02-PRINTER.
-               ADD 501 TRM-PRN3(WS-S6) GIVING W25-RESULT.
+             ADD 501 TRM-PRN3(WS-S6) GIVING W25-RESULT.
 
        OPEN-REPORT-4.
            IF TRM-STMP(WS-S6) = 1
@@ -973,7 +974,7 @@
            ELSE
            IF TRM-STMP(WS-S6) = 9
                MOVE LS-USER          TO W02-USER.
-               ADD 501 TRM-PRN4(WS-S6) GIVING W25-RESULT.
+             ADD 501 TRM-PRN4(WS-S6) GIVING W25-RESULT.
 
        OPEN-REPORT-5.
            IF TRM-CSHP(WS-S6) = 1
@@ -996,7 +997,7 @@
            ELSE
            IF TRM-CSHP(WS-S6) = 9
                MOVE LS-USER          TO W02-USER.
-               ADD 501 TRM-PRN5(WS-S6) GIVING W25-RESULT.
+             ADD 501 TRM-PRN5(WS-S6) GIVING W25-RESULT.
 
        OPEN-REPORT-6.
            IF TRM-POS(WS-S6) = 1
@@ -1016,11 +1017,7 @@
            ELSE
            IF TRM-POS(WS-S6) = 9
                MOVE LS-USER          TO W02-USER.
-               ADD 501 TRM-PRN6(WS-S6) GIVING W25-RESULT.
-
-
-
-
+             ADD 501 TRM-PRN6(WS-S6) GIVING W25-RESULT.
 
        CHECK-PRINTER.
              MOVE ZERO               TO WS-ERROR WS-S1 WS-S2 WS-S3 WS-S4 WS-S5 WS-S6 WS-S7 WS-S8.
@@ -1315,19 +1312,19 @@
                GO TO SCREEN-PRINT-EXIT.
 
        SCREEN-CONTROL.
-      DISPLAY "L"                                   AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-               "eft, "                                      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
-                    "R"                                     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                     "ight, "                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
-                          X"1B201A"                         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                 ","                        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
-                                  "N"                       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                   "ext, "                  WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
-                                        "P"                 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                         "age or "          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
-                                                "Esc"       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                                   "ape"    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
-
+             DISPLAY "L"                                   AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                      "eft, "                                      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
+                           "R"                                     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                            "ight, "                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
+                                 X"1B201A"                         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                                        ","                        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
+                                         "N"                       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                                          "ext, "                  WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
+                                               "P"                 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                                                "age or "          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue           
+                                                       "Esc"       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                                                          "ape"    WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             
        SCREEN-CONTROL-OPT.
              CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
            IF USER-FUNC
@@ -1335,7 +1332,7 @@
                  WHEN ESC-KEY     MOVE "Z"  TO WS-COMMAND
                                   GO TO SCREEN-CONTROL-EXIT
                  WHEN PAGE-DOWN   GO TO SCREEN-CLEAR
-                 WHEN OTHER       CALL X"E5"
+                 WHEN OTHER       PERFORM AA900-ALARM
                                   GO TO SCREEN-CONTROL-OPT
                END-EVALUATE
            ELSE
@@ -1349,7 +1346,7 @@
                  WHEN RIGHT-KEY   PERFORM SCREEN-SHIFT-RIGHT
                                   GO TO SCREEN-CONTROL-OPT
                  WHEN DOWN-KEY    GO TO SCREEN-CONTROL-EXIT
-                 WHEN OTHER       CALL X"E5"
+                 WHEN OTHER       PERFORM AA900-ALARM
                                   GO TO SCREEN-CONTROL-OPT
                END-EVALUATE
            ELSE
@@ -1392,7 +1389,7 @@
 
        SCREEN-PRINT-EXIT.
              EXIT.
-      /
+      *
       *    ****    I / O   E R R O R   M E S S A G E S
       *   
        ZB000-ERROR      SECTION 9.
@@ -1401,7 +1398,7 @@
 
        DISPLAY-FILE-NAME.
           IF WS-F-ERROR = 15
-              MOVE WS-PARID          TO WS-FILE
+              MOVE W02-PARAM         TO WS-FILE
               MOVE WS-PARKEY         TO WS-KEY.
 
        COPY "DISPERR.PRO".

@@ -13,15 +13,22 @@
       *                                                                *
       *     C R E D I T O R   C L E A R   B A L A N C E S              *
       *                                                                *
-      *       Version 9.04.01 - September 2016                         *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID.        CRP091.
-       AUTHOR.         J.W.LEMMON (CSS).
-       DATE-WRITTEN.        JUNE, 1983.
+       PROGRAM-ID.      CRP091.
+       AUTHOR.          J.W.LEMMON (CSS).
+       DATE-WRITTEN.    JUNE, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -94,46 +101,46 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-       77  WS-PARKEY    PIC 9(04)  COMP-5 VALUE 1.
-       77  WS-CREKEY       PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-CTRKEY       PIC  9(06)    COMP-5 VALUE 1.
-       77  WS-NETKEY       PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-ERROR        PIC  9(01) VALUE 0.
-       77  WS-FC           PIC  9(01) VALUE 0.
-       77  WS-SUB          PIC  9(04)    COMP-5.
-       77  WS-S            PIC  9(04)    COMP-5.
-       77  WS-S1           PIC  9(04)    COMP-5.
-       77  WS-S2           PIC  9(04)    COMP-5.
-       77  WS-S3           PIC  9(04)    COMP-5.
-       77  WS-S4           PIC  9(04)    COMP-5.
-       77  WS-S5           PIC  9(04)    COMP-5.
-       77  WS-S6           PIC  9(04)    COMP-5.
-       77  WS-S7           PIC  9(04)    COMP-5.
-       77  WS-IXS1         PIC  9(04)    COMP-5.
-       77  WS-IXS2         PIC  9(04)    COMP-5.
-       77  WS-IXS3         PIC  9(04)    COMP-5.
-       77  WS-IXS4         PIC  9(04)    COMP-5.
-       77  WS-ENT          PIC  X(08).
-       77  WS-ENT1         PIC  X(08).
-       77  WS-KEYSTR       PIC  9(04)    COMP-5.
-       77  WS-OPTION       PIC  X(01).
-       77  WS-NUM          PIC  Z9.
-       77  WS-KEY1         PIC  9(04)    COMP-5.
-       77  WS-CONREC       PIC  9(01) VALUE ZERO.
-       77  WS-INDS         PIC  9(01) VALUE 0.
-       77  WS-INDC         PIC  9(01) VALUE 0.
-       77  WS-INDEX-STOR   PIC  X(08).
-       77  WS-INDEX-NAME   PIC  X(08).
-       77  WS-SKIP         PIC  X(01) VALUE " ".
-       77  WS-CHAR1        PIC  X(01).
-       77  WS-LIN          PIC  9(02) VALUE ZERO.
-       77  WS-LINES        PIC  9(04)    COMP-5 VALUE 66.
-       77  WS-PAGE         PIC  9(04)    COMP-5.
-       77  WS-SEASON       PIC  X(01).
-       77  WS-ER8    PIC X(09) VALUE "No record".
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-PARKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-CREKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-CTRKEY               PIC  9(06)    COMP-5 VALUE 1.
+       77  WS-NETKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-ERROR                PIC  9(01)           VALUE 0.
+       77  WS-FC                   PIC  9(01)           VALUE 0.
+       77  WS-SUB                  PIC  9(04)    COMP-5.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S5                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S7                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-ENT                  PIC  X(08).
+       77  WS-ENT1                 PIC  X(08).
+       77  WS-KEYSTR               PIC  9(04)    COMP-5.
+       77  WS-OPTION               PIC  X(01).
+       77  WS-NUM                  PIC  Z9.
+       77  WS-KEY1                 PIC  9(04)    COMP-5.
+       77  WS-CONREC               PIC  9(01)           VALUE ZERO.
+       77  WS-INDS                 PIC  9(01)           VALUE 0.
+       77  WS-INDC                 PIC  9(01)           VALUE 0.
+       77  WS-INDEX-STOR           PIC  X(08).
+       77  WS-INDEX-NAME           PIC  X(08).
+       77  WS-SKIP                 PIC  X(01)           VALUE " ".
+       77  WS-CHAR1                PIC  X(01).
+       77  WS-LIN                  PIC  9(02)           VALUE ZERO.
+       77  WS-LINES                PIC  9(04)    COMP-5 VALUE 66.
+       77  WS-PAGE                 PIC  9(04)    COMP-5.
+       77  WS-SEASON               PIC  X(01).
+       77  WS-ER8                  PIC  X(09)           VALUE "No record".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
       /
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -157,11 +164,11 @@
       *
       *    Calling Program
       *
-           03  CRT-PROGRAM           PIC  X(15) VALUE "CRP091".
+           03  CRT-PROGRAM           PIC  X(15)         VALUE "CRP091".
       *
       *    Screen Heading
       *
-           03  CRT-HEADING           PIC  X(40) VALUE "CREDITOR - CLEAR BALANCES".
+           03  CRT-HEADING           PIC  X(40)         VALUE "CREDITOR - CLEAR BALANCES".
       *
       *    Company Name
       *
@@ -176,133 +183,77 @@
        COPY "WS.WS".
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        COPY "W05.WS".
 
-       01  W15-INPUT-AREA.
-           03  W15-DATE      PIC  X(08).
-           03  W15-DATE-CHAR REDEFINES W15-DATE
-                             PIC  X(01)     OCCURS 8.
-          03  W15-DTE        PIC 9(06).
-          03  W15-RDATE       REDEFINES W15-DTE.
-               05  W15-DD      PIC 9(02).
-               05  W15-MM      PIC 9(02).
-               05  W15-YY      PIC 9(02).
-          03  W15-ACNO      PIC  X(05).
-           03  W15-SNO       REDEFINES W15-ACNO.
-               05  W15-APREF PIC  X(01).
-               05  W15-SERIAL
-                             PIC  X(04).
-           03  W15-ITEM      PIC  9(05).
-           03  W15-I-CODE    REDEFINES W15-ITEM.
-               05  W15-PREFIX
-                             PIC  9(03).
-               05  W15-TYPE  PIC  9(02).
-           03  W15-NAME.
-               05  W15-NCHAR PIC  X(01) OCCURS 40.
-           03  W15-N         REDEFINES W15-NAME.
-               05  W15-DESC.
-                   07  W15-ENTRY
-                             PIC  X(08).
-                   07  FILLER
-                             PIC  X(16).
-               05  FILLER    PIC  X(16).
-           03  W15-UN        PIC  9(05).
-           03  W15-VALUE     PIC  9(07)V99.
-           03  W15-VAL2      PIC  9(07)V99.
-           03  W15-ORD         PIC 9(10).
-           03  W15-ONO         REDEFINES W15-ORD.
-               05  W15-OPREF   PIC 9(08).
-               05  W15-OSUB    PIC 9(02).
-           03  W15-DEL         PIC 9(06).
-           03  W15-DEL-DMY REDEFINES W15-DEL.
-               05  W15-DEL-DD  PIC 9(02).
-               05  W15-DEL-MM  PIC 9(02).
-               05  W15-DEL-YY  PIC 9(02).
-           03  W15-STYLE     PIC  X(08).
-           03  W15-COST      PIC S9(07)V99 COMP-3.
-           03  W15-SELL      PIC S9(07)V99 COMP-3.
-           03  W15-SETT      PIC  9(06).
-           03  W15-SET       REDEFINES W15-SETT.
-               05  W15-30    PIC  9(01).
-               05  W15-60    PIC  9(01).
-               05  W15-90    PIC  9(01).
-               05  W15-120   PIC  9(01).
-               05  W15-150   PIC  9(01).
-               05  W15-180   PIC  9(01).
-           03  W15-PAY       REDEFINES W15-SETT.
-               05  W15-MONTH PIC  9(01)     OCCURS 6.
-           03  W15-ADDRESS   PIC  X(120).
-           03  W15-ADD  REDEFINES W15-ADDRESS.
-               05  W15-ADDR1 PIC  X(30).
-               05  W15-ADDR2 PIC  X(30).
-               05  W15-ADDR3 PIC  X(30).
-               05  W15-ADDR4 PIC  X(30).
-           03  W15-ADD2 REDEFINES W15-ADDRESS.
-               05  W15-ACHAR PIC  X(01) OCCURS 120.
-           03  W15-PCODE     PIC  9(04).
-           03  W15-CONTACT   PIC  X(30).
-           03  W15-TEL       PIC  X(14).
-           03  W15-FAX       PIC  X(14).
-           03  W15-TAX       PIC  X(01).
-           03  W15-TERMS     PIC  X(01).
-           03  W15-PMNT      PIC  X(12).
+       01  W15-ACCOUNT-VALUES.
+           03  W15-BAL           PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-DT            PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-CR            PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-PBAL          PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-30D           PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-60D           PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-90D           PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-120D          PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-150D          PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-180D          PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-OUT           PIC S9(09)V99  COMP-3 VALUE ZERO.
+           03  W15-PVAT          PIC S9(09)V99  COMP-3 VALUE ZERO.
+
        01  W20-CALCS.
-           03  W20-RESULT    PIC  9(06)V99.
-           03  W20-RESULT-1  REDEFINES W20-RESULT.
-               05  W20-WHOLE PIC  9(06).
-               05  W20-DECIMAL
-                             PIC  9(02).
-           03  W20-ORD       PIC  9(07)    COMP-3.
-    03  W21-DATE.
-        05  W21-YY      PIC 99.
-        05  W21-MM      PIC 99.
-        05  W21-DD      PIC 99.
-    03  W21-DTE REDEFINES W21-DATE
-                               PIC 9(06).
+           03  W20-RESULT          PIC  9(06)V99.
+           03  W20-RESULT-1                      REDEFINES W20-RESULT.
+               05  W20-WHOLE       PIC  9(06).
+               05  W20-DECIMAL     PIC  9(02).
+           03  W20-ORD             PIC  9(07)    COMP-3.
+           03  W21-DATE.
+               05  W21-YY          PIC  99.
+               05  W21-MM          PIC  99.
+               05  W21-DD          PIC  99.
+           03  W21-DTE             PIC  9(06)    REDEFINES W21-DATE.
        01  W25-VALUES.
-    03  W25-OUT      PIC S9(09)V99 COMP-3.
-    03  W25-30D      PIC S9(09)V99 COMP-3.
-    03  W25-60D      PIC S9(09)V99 COMP-3.
-    03  W25-90D      PIC S9(09)V99 COMP-3.
-    03  W25-120D      PIC S9(09)V99 COMP-3.
-    03  W25-150D      PIC S9(09)V99 COMP-3.
-    03  W25-180D      PIC S9(09)V99 COMP-3.
-    03  W25-BAL      PIC S9(09)V99 COMP-3.
-          03  W25-V1      PIC S9(09)V99 COMP-3.
-          03  W25-V2      PIC S9(09)V99 COMP-3.
+           03  W25-OUT             PIC S9(09)V99 COMP-3.
+           03  W25-30D             PIC S9(09)V99 COMP-3.
+           03  W25-60D             PIC S9(09)V99 COMP-3.
+           03  W25-90D             PIC S9(09)V99 COMP-3.
+           03  W25-120D            PIC S9(09)V99 COMP-3.
+           03  W25-150D            PIC S9(09)V99 COMP-3.
+           03  W25-180D            PIC S9(09)V99 COMP-3.
+           03  W25-BAL             PIC S9(09)V99 COMP-3.
+           03  W25-V1              PIC S9(09)V99 COMP-3.
+           03  W25-V2              PIC S9(09)V99 COMP-3.
        01  W25-EDIT.
            03  W25-5.
-               05  W25-1     PIC  ZZZZ9.
+               05  W25-1           PIC  ZZZZ9.
            03  W25-3V2.
-               05  W25-2     PIC  ZZ9.99.
+               05  W25-2           PIC  ZZ9.99.
            03  W25-7V2.
-               05  W25-3     PIC  Z(06)9.99.
+               05  W25-3           PIC  Z(06)9.99.
            03  W25-S7V2.
-               05  W25-VAL   PIC  Z(07)9.99-.
+               05  W25-VAL         PIC  Z(07)9.99-.
            03  W25-3N.
-               05  W25-4     PIC  ZZ9.
+               05  W25-4           PIC  ZZ9.
            03  W25-S5V2.
-               05  W25-CVAL  PIC  Z(06)9.99-.
+               05  W25-CVAL        PIC  Z(06)9.99-.
            03  W25-DTE.
-               05  W25-DATE  PIC  Z9/99/99.
+               05  W25-DATE        PIC  Z9/99/99.
            03  W25-DEL.
-               05  W25-2N    PIC  9(02).
+               05  W25-2N          PIC  9(02).
            03  W25-6.
-               05  W25-NO    PIC  Z(07)9.
+               05  W25-NO          PIC  Z(07)9.
        01  W30-DATE.
-           03  W30-MM        PIC  X(03).
-           03  FILLER        PIC  X(01) VALUE ",".
-           03  W30-YY        PIC  9(02).
+           03  W30-MM              PIC  X(03).
+           03  FILLER              PIC  X(01)    VALUE ",".
+           03  W30-YY              PIC  9(02).
        01  W40-NADD.
            03  W40-ADD.
-               05  W40-ACHAR PIC  X(01) OCCURS 70.
-           03  W40-ADDR REDEFINES W40-ADD.
-               05  W40-ADDRS PIC  X(60).
-               05  FILLER    PIC  X(10).
+               05  W40-ACHAR       PIC  X(01)    OCCURS 70.
+           03  W40-ADDR                          REDEFINES W40-ADD.
+               05  W40-ADDRS       PIC  X(60).
+               05  FILLER          PIC  X(10).
            03  W40-NAME.
-               05  W40-NCHAR PIC  X(01) OCCURS 40.
+               05  W40-NCHAR       PIC  X(01)    OCCURS 40.
 
        COPY "W40.WS".
 
@@ -313,17 +264,17 @@
        COPY "W70CRED.WS".
 
        01  W75-KEYS.
-           03  W75-S         PIC  9(02) COMP-5.
-           03  W75-S1        PIC  9(02) COMP-5.
-           03  W75-CNO       PIC  X(05) OCCURS 18.
+           03  W75-S               PIC  9(02)    COMP-5.
+           03  W75-S1              PIC  9(02)    COMP-5.
+           03  W75-CNO             PIC  X(05)    OCCURS 18.
 
        01  W85-PASS.
-           03  W85-SUPER       PIC  X(06)    OCCURS 9.
-           03  W85-ENTRY       PIC  9(02)    COMP-3.
-           03  W85-MARG        PIC S9(02)V99.
+           03  W85-SUPER           PIC  X(06)    OCCURS 9.
+           03  W85-ENTRY           PIC  9(02)    COMP-3.
+           03  W85-MARG            PIC S9(02)V99.
 
        01  W95-COMPANY.
-           03  W95-COMP      PIC  X(40).
+           03  W95-COMP            PIC  X(40).
 
       *
       *    **       ******  **    **  **   **    ***     *****   ******
@@ -356,24 +307,12 @@
            VALUE "CLEARING ACCOUNT BALANCES".
 
        01  S39.
-          03  LINE  5 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "This routine does not include a
-      -                          "recovery procedure. Security".
-          03  LINE  6 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "copies  of the data files should
-      -                          " be made as a power  failure".
-          03  LINE  7 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "or any other problem during this
-      -                          " procedure would require the".
-          03  LINE  8 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "DATA FILES from the previous bac
-      -                          "kup to be restored !!!      ".
-           03  LINE 10 COLUMN 12 VALUE "Do you wish to continue (Y/N)?".
-
+           03  BACKGROUND-COLOR Red  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE  6 COLUMN 12 VALUE "This routine does not include a recovery procedure. Security".
+               05  LINE  7 COLUMN 12 VALUE "copies  of the data files should be made as a power  failure".
+               05  LINE  8 COLUMN 12 VALUE "or any other problem during this procedure would require the".
+               05  LINE  9 COLUMN 12 VALUE "DATA FILES from the previous backup to be restored !!!      ".
+               05  LINE 11 COLUMN 12 VALUE "Do you wish to continue (Y/N)?".
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
       *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
@@ -386,12 +325,15 @@
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000-START-UP  SECTION.
        AA000.
-          IF LS0-CRLEV < 9
+           IF LS0-CRLEV < 9
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
-        GO TO AA49.
-            PERFORM ZA000-INIT.
-            PERFORM HA000.
+               GO TO AA49.
+             PERFORM ZA000-INIT.
+             PERFORM HA000.
        AA49.
              EXIT PROGRAM.
 
@@ -463,14 +405,17 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
 
-      /
-      *    ****    READ FILES ROUTINES
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
       *
        AB00-READ      SECTION.
 
@@ -480,9 +425,9 @@
 
        COPY "PARAM.RD".
 
-      /
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AC00-WRITE    SECTION.
 
        COPY "CONTROL.WR".
@@ -491,86 +436,68 @@
 
        COPY "PARAM.WR".
 
-      /
-       CA155-GET-CREDITOR      SECTION.
-       CA155-ACCOUNT.
-             MOVE W15-ACNO       TO P-NUMBER.
-            PERFORM READ-CREDIT-LOCK THRU READ-CREDIT-EXIT.
-           IF WS-F-ERROR = 3
-               MOVE 1 TO WS-ERROR
-           ELSE
-           IF P-NUMBER NOT = W15-ACNO
-               MOVE 2 TO WS-ERROR
-           ELSE
-               MOVE 0 TO WS-ERROR.
-       CA160-EXIT.
-             EXIT.
+      *
+      *    ****    Read Creditor record - using account number.
+      *
+      *CA155-GET-CREDITOR      SECTION.
+      *CA155-ACCOUNT.
+      *      MOVE W15-ACNO           TO P-NUMBER.
+      *      PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
+      *    IF WS-F-ERROR = 3
+      *        MOVE 1                TO WS-ERROR
+      *    ELSE
+      *    IF P-NUMBER NOT = W15-ACNO
+      *        MOVE 2                TO WS-ERROR
+      *    ELSE
+      *        MOVE 0                TO WS-ERROR.
+	  *
+      *CA160-EXIT.
+      *       EXIT.
+
       /
        HA000      SECTION 5.
        HA00.
              PERFORM ERASE-SCREEN.
-    IF LS-DEM = 6
-        MOVE 9   TO LS-DEM
-        GO TO HA03.
-             MOVE 5              TO WS-PARKEY.
+           IF LS-DEM = 6
+               MOVE 9                TO LS-DEM
+               GO TO HA03.
+             MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-PW         TO W85-PASS.
-      MOVE 12   TO SHADE-ROW.
-      MOVE 29   TO SHADE-COL.
-      MOVE 23   TO SHADE-WIDTH.
-      MOVE 2   TO SHADE-LINES.
-      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1127
-        WITH FOREGROUND-COLOR Grey HIGHLIGHT
-      BACKGROUND-COLOR Grey
-       "¿" WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
-            DISPLAY "³ " AT 1227 WITH FOREGROUND-COLOR Grey HIGHLIGHT
-           BACKGROUND-COLOR Grey
-       "Enter Password        "
-        WITH FOREGROUND-COLOR Grey HIGHLIGHT
-      BACKGROUND-COLOR Grey
-       "³" WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
-      DISPLAY "À" AT 1327 WITH FOREGROUND-COLOR Grey HIGHLIGHT
-          BACKGROUND-COLOR Grey
-       "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"
-        WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
-      PERFORM SCREEN-SHADOW.
-            ACCEPT W40-CSHPASS AT 1244
-      WITH BACKGROUND-COLOR Magenta
-    FOREGROUND-COLOR Cyan HIGHLIGHT AUTO NO-ECHO.
-            MOVE 6   TO WS-LENGTH.
-      CALL "CBL_TOUPPER" USING W40-CSHPASS
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-            MOVE 1   TO WS-LENGTH.
-           IF NOT(W40-CSHPASS = W85-SUPER (1) OR
-     W85-SUPER (3) OR
-                                 "ZEROCR")
-        GO TO HA999.
-            DISPLAY "                       " AT 5051
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
-            DISPLAY S12.
+             MOVE PAR-PW             TO W85-PASS.
+             MOVE 12                 TO SHADE-ROW.
+             MOVE 29                 TO SHADE-COL.
+             MOVE 23                 TO SHADE-WIDTH.
+             MOVE 2                  TO SHADE-LINES.
+             DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ" AT 1127 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Grey
+                                             "¿"        WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
+             DISPLAY "³ "                       AT 1227 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Grey
+                       "Enter Password        "         WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Grey
+                                             "³"        WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
+             DISPLAY "À"                        AT 1327 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Grey
+                      "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ"        WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Grey.
+             PERFORM SCREEN-SHADOW.
+             ACCEPT W40-CSHPASS AT 1244 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Cyan HIGHLIGHT AUTO NO-ECHO.
+             MOVE 6                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W40-CSHPASS BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+           IF NOT(W40-CSHPASS = W85-SUPER (1) OR W85-SUPER (3) OR "ZEROCR")
+               GO TO HA999.
+             DISPLAY "                       " AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
+             DISPLAY S12.
              DISPLAY S39.
        HA02.
-            ACCEPT WS-OPTION AT 1043
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta AUTO.
-      CALL "CBL_TOUPPER" USING WS-OPTION
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-          IF NOT(WS-OPTION = "N" OR "Y")
+             ACCEPT WS-OPTION AT 1043 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta AUTO.
+             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF NOT(WS-OPTION = "N" OR "Y")
                GO TO HA02.
            IF WS-OPTION = "N"
                GO TO HA999.
 
        HA03.
-             MOVE 2              TO WS-NETKEY.
+             MOVE 2                  TO WS-NETKEY.
              PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
-      MOVE ZERO   TO P-DUE-NOW P-DUE-30
-        P-DUE-150 P-DUE-60
-        P-DUE-180 P-DUE-90
-        P-DUE-120 P-OPEN
-        P-CRED    P-CLOSE
-        P-DEBT.
-             MOVE "  !"          TO P-NUMBER.
+             MOVE ZERO               TO P-DUE-NOW P-DUE-30 P-DUE-150 P-DUE-60 P-DUE-180 P-DUE-90 P-DUE-120 P-OPEN P-CRED P-CLOSE P-DEBT.
+             MOVE "  !"              TO P-NUMBER.
              DISPLAY "Account :" AT 1620.
              PERFORM START-AT-CRED-AC THRU READ-CREDIT-EXIT.
            IF WS-F-ERROR = 3
@@ -580,42 +507,36 @@
              PERFORM READ-CREDIT-NEXT-LOCK THRU READ-CREDIT-EXIT.
            IF WS-F-ERROR = 3
                GO TO HA10.
-            DISPLAY P-NUMBER AT 1630
-       WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-     BACKGROUND-COLOR Magenta.
-      MOVE ZERO   TO P-BAL P-OUT
-              P-30D P-120D
-                                    P-60D P-150D
-        P-90D P-180D
-              P-DT  P-CR
-              P-VAT P-PBAL.
+             DISPLAY P-NUMBER AT 1630 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
+             MOVE W15-ACCOUNT-VALUES TO P-ACCOUNT-VALUES.
              PERFORM REWRITE-CREDIT-UNLOCK THRU WRITE-CREDIT-EXIT.
              GO TO HA05.
 
        HA10.
-             MOVE 1201           TO CPOS.
+             MOVE 1201               TO CPOS.
              PERFORM ERASE-SCREEN-LOOP UNTIL CLIN > 23.
              DISPLAY "Busy clearing transactions" AT 1220.
-            MOVE 1   TO P-CRTRAN.
-      CLOSE CTRANS.
+             MOVE 1                  TO P-CRTRAN.
+             CLOSE CTRANS.
              OPEN OUTPUT CTRANS.
              CLOSE CTRANS.
              OPEN I-O CTRANS.
-            PERFORM REWRITE-CONTROL-UNLOCK THRU WRITE-CONTROL-EXIT.
+             PERFORM REWRITE-CONTROL-UNLOCK THRU WRITE-CONTROL-EXIT.
 
        HA999.
              EXIT.
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W05-DATE.
+             MOVE LS-TODAY-YYMMDD    TO W05-DATE-YMD.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W95-COMP.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -623,23 +544,19 @@
 
              COPY "FUNCTION.PRO".
 
-            MOVE 1   TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-COMPANY    TO W95-COMP.
-             MOVE PAR-DMY        TO W05-DATE.
-             MOVE PAR-YMD        TO W05-DATE-YMD.
-      MOVE 2   TO WS-NETKEY.
+             MOVE 2                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       *

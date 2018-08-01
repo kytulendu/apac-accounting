@@ -13,15 +13,22 @@
       *                                                                *
       *     C R E D I T O R ' S   R E M I T T A N C E   A D V I C E S  *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.      CRP024.
-       AUTHOR.               J.W. LEMMON (APAC).
-       DATE-WRITTEN.         AUGUST, 1983.
+       AUTHOR.          J.W. LEMMON (APAC).
+       DATE-WRITTEN.    AUGUST, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -102,35 +109,37 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)            VALUE "aeWlimemnomLalismJ".
-       77  WS-NETKEY               PIC  9(04)     COMP-5 VALUE 1.
-       77  WS-PARKEY               PIC  9(04)     COMP-5 VALUE 1.
-       77  WS-ERROR                PIC  9(01)            VALUE 0.
-       77  WS-S                    PIC  9(04)     COMP-5.
-       77  WS-S1                   PIC  9(04)     COMP-5.
-       77  WS-S2                   PIC  9(04)     COMP-5.
-       77  WS-S3                   PIC  9(04)     COMP-5.
-       77  WS-S4                   PIC  9(04)     COMP-5.
-       77  WS-S6                   PIC  9(04)     COMP-5.
-       77  WS-IXS1                 PIC  9(04)     COMP-5.
-       77  WS-IXS2                 PIC  9(04)     COMP-5.
-       77  WS-IXS3                 PIC  9(04)     COMP-5.
-       77  WS-IXS4                 PIC  9(04)     COMP-5.
-       77  WS-KEY1                 PIC  9(04)     COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-NETKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PARKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-ERROR                PIC  9(01)           VALUE 0.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-KEY1                 PIC  9(04)    COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-ORD                  PIC  X(01).
        77  WS-SEQ                  PIC  X(01).
        77  WS-OPTION               PIC  X(01).
        77  WS-ZERO                 PIC  X(01).
-       77  WS-LINES                PIC  9(04)     COMP-5 VALUE 0.
-       77  WS-PAGE                 PIC  9(04)     COMP-5 VALUE 0.
+       77  WS-LINES                PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-PAGE                 PIC  9(04)    COMP-5 VALUE 0.
        77  WS-IND                  PIC  9(01).
-       77  WS-PGE-LENGTH           PIC  9(02)            VALUE 66.
-       77  WS-PRN-LENGTH           PIC  9(02)            VALUE 62.
-       77  WS-H1                   PIC  X(05)            VALUE "DATE:".
-       77  WS-H3                   PIC  X(05)            VALUE "PAGE:".
-       77  TODAY-DDMMYY            PIC  9(08)     COMP-5.
-       77  WS-USUB                 PIC  9(04)     COMP-5.
+       77  WS-PGE-LENGTH           PIC  9(02)           VALUE 66.
+       77  WS-PRN-LENGTH           PIC  9(02)           VALUE 62.
+       77  WS-H1                   PIC  X(05)           VALUE "DATE:".
+       77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
+       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
+       77  PRG-CRED-LUP            PIC  X(12)           VALUE "CRP\CRPLOOK".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -173,18 +182,18 @@
        COPY "WS.WS".
 
        01  WS-HELP.
-           03  WS-MODULE       PIC  X(03) VALUE "CRP".
-           03  WS-PROG        PIC  X(03) VALUE "024".
+           03  WS-MODULE           PIC  X(03)           VALUE "CRP".
+           03  WS-PROG             PIC  X(03)           VALUE "024".
 
        01  WS-PARID.
-           03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
            03  W02-PRINTER         PIC  X(12).
            03  W02-PGE-LENGTH      PIC  9(03).
            03  W02-PRN-LENGTH      PIC  9(03).
            03  W02-LINAGE          PIC  9(03).
-           03  W02-PRN-STATUS      PIC  X(01) VALUE "C".
+           03  W02-PRN-STATUS      PIC  X(01)           VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -466,7 +475,16 @@
           03  FOREGROUND-COLOR Cyan HIGHLIGHT
       PIC X(06) USING W15-ACNO AUTO.
 
-       COPY "CRDLUP.CRT".
+       01  S55.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                           FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                   FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Creditor Lookup ".
+               05          COLUMN 35 VALUE                                  "Esc"         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 38 VALUE                                     " to exit".
+
+      *COPY "CRDLUP.CRT".
 
        01  S-MEM.
            03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black
@@ -592,10 +610,13 @@
        AA000-START-UP  SECTION.
        AA000.
           IF LS0-CRLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA105.
-            PERFORM ZA000-INIT.
+             PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -629,15 +650,9 @@
        AA105.
              EXIT PROGRAM.
 
-       AA50-LOOKUP     SECTION.
-       AA50.
-            PERFORM SAVE-SCREEN.
-      *      MOVE 4                  TO W44-FUNCTION.
-            PERFORM SCREEN-CONTENTS.
-            PERFORM CREDITOR-LOOKUP.
-            PERFORM RESTORE-SCREEN.
-       AA99.
-             EXIT.
+       COPY "AA50C.LUP".
+       
+       COPY "AA900.ALM".
 
       *    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
@@ -724,6 +739,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -792,15 +810,13 @@
 
        COPY "PRINTUTL.AP4".
 
-       COPY "CREDIT.LUP".
+      *COPY "CREDIT.LUP".
 
        COPY "APAC.HLP".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB00-READ SECTION.
 
        COPY "CONTROL.RD".
@@ -1196,16 +1212,7 @@
       DISPLAY WS-BLNK78 AT 1402 WITH FOREGROUND-COLOR Cyan.
             DISPLAY "Account no:" AT 1420.
 
-      DISPLAY "F1" AT 5002
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       "=Help,"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-       "F2" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       " to do Creditor Lookup "
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-       "Esc" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       " to exit"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+      DISPLAY S55.
              ACCEPT S19 AT 1434.
     IF USER-FUNC
         EVALUATE KEY-CODE-1
@@ -1215,9 +1222,9 @@
    WHEN F1-KEY
        PERFORM HELP-ROUTINE
    WHEN F2-KEY
-       PERFORM AA50
+       PERFORM AA50-LOOKUP
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO FA80
         END-EVALUATE
         DISPLAY S19 AT 1434
@@ -1288,17 +1295,17 @@
        FA999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -1307,20 +1314,19 @@
              COPY "FUNCTION.PRO".
 
        ZA05.
-             MOVE LS-COMPANY     TO W60-COMPANY.
-             MOVE 2              TO WS-NETKEY.
+             MOVE 2                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-            PERFORM ERASE-SCREEN.
+             PERFORM ERASE-SCREEN.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
-
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
        ZA999-EXIT.
              EXIT.

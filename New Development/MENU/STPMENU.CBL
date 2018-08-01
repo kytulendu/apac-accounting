@@ -64,7 +64,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -583,7 +583,10 @@
                PERFORM ERROR-MESSAGE
            ELSE
            IF LS0-STOCK = "N"
-               MOVE "Not Authorised" TO WS-ERR-MES
+      *
+      *      Insufficient security level
+      *
+               MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
            ELSE
                PERFORM BA000.
@@ -658,10 +661,8 @@
 
        COPY "FUNCTION.SCR".
 
-      *    *************************************************************
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
-      *    D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      *            D I S P L A Y   E R R O R   M E S S A G E S
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -669,6 +670,12 @@
       *    Ё line 20) Move the line number which must be used as the   Ё
       *    Ё top line to WS-MES-LINE. The message to be displayed must Ё
       *    Ё be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё                  ERROR-MESSAGE (2 LINES)                  Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё See above for details of the first line and the second    Ё
+      *    Ё line of the message must be in WS-ERR-MES-2.              Ё
+      *    Ё               PERFORM ERROR-MESSAGE-2.                    Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "ERROR.SCR".
@@ -704,6 +711,9 @@
       *    Ё                                                           Ё
       *    Ё To change the time on the screen:                         Ё
       *    Ё    PERFORM CHANGE-TIME                                    Ё
+      *    Ё                                                           Ё
+      *    Ё To clear lines 46 and 50:                                 Ё
+      *    Ё    PERFORM CLEAR-L46-AND-50                               Ё
       *    Ё                                                           Ё
       *    Ё To clear line 50:                                         Ё
       *    Ё    PERFORM CLEAR-L50                                      Ё
@@ -2302,7 +2312,7 @@
                DISPLAY ". (N/A)" AT 1842 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Cyan
                DISPLAY "(N/A)"   AT 2240 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Cyan
                DISPLAY "(N/A)"   AT 2344 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Cyan
-               DISPLAY "(N/A)"   AT 2544 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Cyan.
+               DISPLAY "(N/A)"   AT 5044 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Cyan.
            IF LS0-LEV < 2
                DISPLAY " (N/A)"  AT 2443 WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Cyan.
              DISPLAY MENU-INSTRUCT.

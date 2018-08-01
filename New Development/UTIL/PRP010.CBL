@@ -21,7 +21,7 @@
        AUTHOR.         J.W.LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
                 
@@ -430,6 +430,8 @@
        AA49.
              EXIT PROGRAM.
 
+       COPY "AA900.ALM".
+
        COPY "LOCKED.RC2".
 
       *    
@@ -534,7 +536,7 @@
                  WHEN ESC-KEY
                       GO TO BA999
                  WHEN OTHER
-                      CALL X"E5"
+                      PERFORM AA900-ALARM
                       GO TO BA05
                END-EVALUATE.
              CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
@@ -549,7 +551,7 @@
                GO TO BA999.
              GO TO BA00.
        BA999.
-      EXIT.
+             EXIT.
 
        YA000        SECTION 5.
        YA425-TRAN-CODES.
@@ -602,7 +604,7 @@
                       MOVE W46-T-GL  TO W15-ACCOUNT
                       PERFORM AA350
                  WHEN OTHER
-                      CALL X"E5"
+                      PERFORM AA900-ALARM
                       GO TO YA440
                END-EVALUATE
                MOVE W15-ACCOUNT    TO W46-T-GL
@@ -652,10 +654,10 @@
              DISPLAY "Busy Printing" AT 1212 WITH FOREGROUND-COLOR Brown HIGHLIGHT BLINK.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
-      * *   * *   * *   **  *   *   * *   *  *  **  *   *   *     * *
+      * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
       * *   * ****  ***   * * *   ****  ****   *  * * *   *   ***   ****
-      * *   * *     *   *  **   *     *   *  *  *  **   *   *     * *
-      *  ***  *     ***** *   *   *     *   * *** *   *   *   ***** * *
+      * *   * *     *     *  **   *     *   *  *  *  **   *   *     *   *
+      *  ***  *     ***** *   *   *     *   * *** *   *   *   ***** *   *
       *
              PERFORM OPEN-PRINTER.
              MOVE "P"              TO WS-COMMAND.
@@ -729,8 +731,10 @@
              PERFORM CALL-PRINTUTL.
 
        YB999.
-      EXIT.
-      /
+             EXIT.
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.

@@ -13,7 +13,7 @@
       *                                                                *
       *     B U S I N E S S   S Y S T E M   M E N U   P R O G R A M    *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
@@ -59,7 +59,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1993 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 

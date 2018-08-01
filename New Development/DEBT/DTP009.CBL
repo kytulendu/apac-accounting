@@ -15,7 +15,7 @@
       *                                                                *
       *     D E B T O R   C R E D I T   N O T E   A N A L I S E D      *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -53,7 +53,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -808,6 +808,9 @@
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *
        AY000           SECTION.
+      *    *************************************************************
+      *    ****             P A R A M E T E R   F I L E             ****
+      *    *************************************************************
        AY01.
              MOVE 01                 TO REC-FILE.
              MOVE WS-PARKEY          TO REC-KEY.
@@ -870,7 +873,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
-
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё         W R I T E   R E C O V E R Y   R E C O R D         Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -884,27 +889,26 @@
 
        AY59.
              EXIT.
-      *
-      *    ****    Start processing transaction
-      *
+      *    *************************************************************
+      *    ****        Start processing transaction
+      *    *************************************************************
        AY60.
              MOVE 1                  TO WS-COUNT.
              MOVE 5                  TO WS-SHARED.
              PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-      *      MOVE SHR-STOCK          TO WS-STOCK.
-      *
+      *    *************************************************************
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
-      *
+      *    *************************************************************
              MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
            IF PAR-USERS < 24
                MOVE 1                TO WS-SUB
                MOVE ZERO             TO WS-WAIT
                GO TO AY62.
-      *
+      *    *************************************************************
       *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
-      *
+      *    *************************************************************
              DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
              COMMIT.
              ACCEPT WS-STIME FROM TIME.
@@ -1756,7 +1760,8 @@
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -1775,12 +1780,12 @@
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-DISCOUNT       TO W05-DISCOUNT.
-      MOVE 1   TO W05-V-RATE.
+             MOVE 1                  TO W05-V-RATE.
 
        ZA05-VAT.
              MOVE W05-VAT-CODE       TO DPT-CODE.
@@ -1811,43 +1816,25 @@
       *    ****    S E T   U P   A G E   D A T E S
       *
              MOVE W12-T-YMD      TO W22-DTE2.
-       ZA47.
-           IF W22-MM2 > 01
-               SUBTRACT 1        FROM W22-MM2
-           ELSE
-               MOVE 12           TO W22-MM2
-           IF W22-YY2 > ZERO
-               SUBTRACT 1  FROM W22-YY2
-           ELSE
-               SUBTRACT 1  FROM W22-CC2
-               MOVE 99  TO W22-YY2.
-           IF W22-MM2 = 02
-               MOVE 28           TO W22-DD2
-           ELSE
-           IF W22-MM2 = 04 OR 06 OR 09 OR 11
-               MOVE 30           TO W22-DD2
-           ELSE
-               MOVE 31           TO W22-DD2.
-       ZA48.
-           IF W12-MM = W22-MM2
-               IF W12-DD < W22-DD2
-                   MOVE W12-DD   TO W22-DD2.
-             MOVE W22-DTE2       TO W30-CUR.
-             PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-30.
-             PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-60.
-             PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-90.
-             PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-120.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё The month end dates are stored in the Control file in the Ё
+      *    Ё first record as Cur, 30d, 60d, 90d and 120d and the next  Ё
+      *    Ё routine is used since Ver 8.11.06.                        Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+             MOVE 1                  TO WS-NETKEY.
+             PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
+             MOVE DEB-CUR-DTE        TO W30-CUR.
+             MOVE DEB-30D-DTE        TO W30-30.
+             MOVE DEB-60D-DTE        TO W30-60.
+             MOVE DEB-90D-DTE        TO W30-90.
+             MOVE DEB-120-DTE        TO W30-120.
 
        ZA999-EXIT.
              EXIT.
       *
       *    ****    I / O   E R R O R   M E S S A G E S
       *
-       ZB000-ERROR      SECTION 81.
+       ZB000-ERROR      SECTION 8.
 
        COPY "ERRORS.PRO".
 

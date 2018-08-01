@@ -5,6 +5,7 @@
        01  CRT-HEADINGS.
       *
       *    TYPE:
+      *         4 = Clear line 46 and line 50
       *         C = Clear comment line (50)
       *         E = Clear lines (any line or lines between 5 and 46)
       *         H = Change heading

@@ -13,15 +13,22 @@
       *                                                                *
       *       C R E D I T O R ' S   D I S C O U N T   L I S T I N G    *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.      CRP028.
-       AUTHOR.               J.W. LEMMON (APAC).
-       DATE-WRITTEN.         AUGUST, 1983.
+       AUTHOR.          J.W. LEMMON (APAC).
+       DATE-WRITTEN.    AUGUST, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -142,11 +149,11 @@
       *
       *    Calling Program
       *
-           03  CRT-PROGRAM         PIC  X(15) VALUE "CRP028".
+           03  CRT-PROGRAM         PIC  X(15)           VALUE "CRP028".
       *
       *    Screen Heading
       *
-           03  CRT-HEADING         PIC  X(40) VALUE "CREDITOR - DISCOUNT LISTING".
+           03  CRT-HEADING         PIC  X(40)           VALUE "CREDITOR - DISCOUNT LISTING".
       *
       *    Company Name
       *
@@ -161,14 +168,14 @@
        COPY "WS.WS".
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
            03  W02-PRINTER         PIC  X(12).
            03  W02-PGE-LENGTH      PIC  9(03).
            03  W02-PRN-LENGTH      PIC  9(03).
            03  W02-LINAGE          PIC  9(03).
-           03  W02-PRN-STATUS      PIC  X(01) VALUE "C".
+           03  W02-PRN-STATUS      PIC  X(01)           VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -379,10 +386,13 @@
        AA000-START-UP  SECTION.
        AA000.
           IF LS0-CRLEV < 1
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA105.
-            PERFORM ZA000-INIT.
+             PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -488,6 +498,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -556,11 +569,9 @@
 
        COPY "PRINTUTL.AP4".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB00-READ SECTION.
 
        COPY "CONTROL.RD".
@@ -577,49 +588,41 @@
                       WITH FOREGROUND-COLOR Grey HIGHLIGHT.
 
        BB10.
-             DISPLAY "A" AT 0604 WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-                     "ccount or " WITH FOREGROUND-COLOR Cyan
-                     "N" WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-                     "ame sequence" WITH FOREGROUND-COLOR Cyan.
-             MOVE "N"            TO WS-SEQ.
+             DISPLAY "A"                AT 0604 WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                      "ccount or "              WITH FOREGROUND-COLOR Cyan
+                                "N"             WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                                 "ame sequence" WITH FOREGROUND-COLOR Cyan.
+             MOVE "N"                TO WS-SEQ.
 
        BB15.
-      ACCEPT WS-SEQ AT 0629
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT
-    BACKGROUND-COLOR Magenta UPDATE AUTO.
-      CALL "CBL_TOUPPER" USING WS-SEQ
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-    IF NOT(WS-SEQ = "A" OR "N")
+             ACCEPT WS-SEQ AT 0629 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta UPDATE AUTO.
+             CALL "CBL_TOUPPER" USING WS-SEQ BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF NOT(WS-SEQ = "A" OR "N")
                GO TO BB15.
              DISPLAY "Account :" AT 0804.
-            MOVE ZERO   TO WS-PAGE.
+             MOVE ZERO               TO WS-PAGE.
       *
       *    ****   1 7 C P I ( C O N D E N S E D   P R I N T )
       *
-      MOVE 0   TO WS-ADVANCE.
-      MOVE 3   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE "CREDITORS DISCOUNT LIST"
-                                 TO W60-DESC.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE 3                  TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE "CREDITORS DISCOUNT LIST" TO W60-DESC.
        BB95.
              PERFORM AA050.
-            MOVE "ACNO"  TO A-H1.
-            MOVE "CREDITORS NAME"
-     TO A-H2.
-            MOVE "CREDITORS ADDRESS"
-     TO A-H3.
-            MOVE "P/C"   TO A-H4.
-            MOVE "30 60   30D%   60D%"
-     TO A-H5.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-      MOVE "D"   TO W02-PRN-TYPE.
+             MOVE "ACNO"                TO A-H1.
+             MOVE "CREDITORS NAME"      TO A-H2.
+             MOVE "CREDITORS ADDRESS"   TO A-H3.
+             MOVE "P/C"                 TO A-H4.
+             MOVE "30 60   30D%   60D%" TO A-H5.
+             MOVE 2                     TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE "D"                TO W02-PRN-TYPE.
 
        BB100.
-             MOVE "    !"        TO P-NAME P-NUMBER.
+             MOVE "    !"            TO P-NAME P-NUMBER.
            IF WS-SEQ = "A"
                PERFORM START-AT-CRED-AC THRU READ-CREDIT-EXIT
            ELSE
@@ -630,63 +633,59 @@
              PERFORM READ-CREDIT-NEXT THRU READ-CREDIT-EXIT.
            IF NOT(WS-F-ERROR = ZERO)
                GO TO BB115.
-    IF NOT(WS-PRINTER = "S")
-        DISPLAY P-NUMBER AT 0814
-         WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-       BACKGROUND-COLOR Magenta "°"
-         P-NAME WITH FOREGROUND-COLOR Grey HIGHLIGHT
-       BACKGROUND-COLOR Magenta.
-            MOVE P-NUMBER  TO A-ACNO.
-            MOVE P-NAME  TO A-NAME.
-            MOVE P-ADDR  TO A-ADDRESS.
+           IF NOT(WS-PRINTER = "S")
+               DISPLAY P-NUMBER          AT 0814 WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta 
+                               "°" P-NAME        WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta.
+             MOVE P-NUMBER           TO A-ACNO.
+             MOVE P-NAME             TO A-NAME.
+             MOVE P-ADDR             TO A-ADDRESS.
              INSPECT A-ADDRESS REPLACING ALL "*" BY ".".
-            MOVE P-PC   TO A-PC.
-    IF NOT(P-30-DISC = ZERO)
-              MOVE "1"   TO A-30
-        MOVE P-30-DISC  TO A-30-DISC.
-    IF NOT(P-60-DISC = ZERO)
-              MOVE "1"   TO A-60
-        MOVE P-60-DISC  TO A-60-DISC.
-    IF W02-LINAGE < W02-PRN-LENGTH
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+             MOVE P-PC               TO A-PC.
+           IF NOT(P-30-DISC = ZERO)
+               MOVE "1"              TO A-30
+               MOVE P-30-DISC        TO A-30-DISC.
+           IF NOT(P-60-DISC = ZERO)
+               MOVE "1"              TO A-60
+               MOVE P-60-DISC        TO A-60-DISC.
+           IF W02-LINAGE < W02-PRN-LENGTH
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-              PERFORM BB95.
-            MOVE SPACES  TO R-DET.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               PERFORM BB95.
+             MOVE SPACES             TO R-DET.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
                GO TO BB120.
-            GO TO BB105.
+             GO TO BB105.
 
        BB115.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
+            MOVE 1                   TO WS-ADVANCE.
+            PERFORM CALL-PRINTUTL.
             MOVE "******  END REPORT  ******" TO R-DET.
 
        BB120.
-      MOVE 99   TO WS-ADVANCE.
-      MOVE "E"   TO WS-COMMAND.
-      PERFORM CALL-PRINTUTL.
-      MOVE "P"   TO WS-COMMAND.
+             MOVE 99                 TO WS-ADVANCE.
+             MOVE "E"                TO WS-COMMAND.
+             PERFORM CALL-PRINTUTL.
+             MOVE "P"                TO WS-COMMAND.
 
        BB999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -695,20 +694,20 @@
              COPY "FUNCTION.PRO".
 
        ZA05.
-             MOVE LS-COMPANY     TO W60-COMPANY.
-             MOVE 2              TO WS-NETKEY.
+             MOVE 2                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-            PERFORM ERASE-SCREEN.
+             PERFORM ERASE-SCREEN.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       *

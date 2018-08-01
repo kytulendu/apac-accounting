@@ -15,7 +15,7 @@
       *                                                                *
       *     D E B T O R   P O S T   A R R E A R   I N T E R E S T      *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -41,7 +41,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -405,11 +405,11 @@
 
        01  W75-KEYS.
            03  W75-S          PIC 9(02) COMP-5.
-           03  W75-S1         PIC 9(02) COMP-5.
+           03  W75-S1         PIC  9(02) COMP-5.
            03  W75-KEY        PIC  9(06)    COMP-5.
            03  W75-ALLOCATED  PIC S9(09)V99 COMP-3.
            03  W75-BALANCE    PIC S9(09)V99 COMP-3.
-           03  W75-DNO        PIC X(06) OCCURS 18.
+           03  W75-DNO        PIC  X(06) OCCURS 18.
 
        COPY "W75.WS".
 
@@ -478,13 +478,13 @@
                05  LINE 15 COLUMN 12 VALUE "Do you wish to continue (Y/N)?".
 
       *
-      *        *******   *******    ******    ******   ********  *******   **     **  *******    ******** 
-      *        **    **  **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **    **  **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        *******   ******    **    **  **        *****     **    **  **     **  ******     *****
-      *        **        **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        **        **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **        **    **   ******    ******   ********  *******    *******   **    **   ********
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
       *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000         SECTION.
@@ -1234,38 +1234,18 @@
       *    ****    S E T   U P   A G E   D A T E S
       *
              MOVE W12-T-YMD          TO W22-DTE2.
-      *    IF W22-DD2 > 27
-      *        ADD 1   TO W22-MM2.
-       ZA47.
-           IF W22-MM2 > 01
-               SUBTRACT 1            FROM W22-MM2
-           ELSE
-               MOVE 12               TO W22-MM2
-           IF W22-YY2 > ZERO
-               SUBTRACT 1            FROM W22-YY2
-           ELSE
-               SUBTRACT 1            FROM W22-CC2
-               MOVE 99               TO W22-YY2.
-           IF W22-MM2 = 02
-               MOVE 28               TO W22-DD2
-           ELSE
-               IF W22-MM2 = 04 OR 06 OR 09 OR 11
-                   MOVE 30           TO W22-DD2
-               ELSE
-                   MOVE 31           TO W22-DD2.
-       ZA48.
-           IF W12-MM = W22-MM2
-               IF W12-DD < W22-DD2
-                   MOVE W12-DD       TO W22-DD2.
-             MOVE W22-DTE2           TO W30-CUR.
-             PERFORM ZA47.
-             MOVE W22-DTE2           TO W30-30.
-             PERFORM ZA47.
-             MOVE W22-DTE2           TO W30-60.
-             PERFORM ZA47.
-             MOVE W22-DTE2           TO W30-90.
-             PERFORM ZA47.
-             MOVE W22-DTE2           TO W30-120.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ The month end dates are stored in the Control file in the ³
+      *    ³ first record as Cur, 30d, 60d, 90d and 120d and the next  ³
+      *    ³ routine is used since Ver 8.11.06.                        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             MOVE 1                  TO WS-NETKEY.
+             PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
+             MOVE DEB-CUR-DTE        TO W30-CUR.
+             MOVE DEB-30D-DTE        TO W30-30.
+             MOVE DEB-60D-DTE        TO W30-60.
+             MOVE DEB-90D-DTE        TO W30-90.
+             MOVE DEB-120-DTE        TO W30-120.
 
        ZA999-EXIT.
              EXIT.

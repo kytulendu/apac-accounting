@@ -1,4 +1,51 @@
       $set LINKCOUNT"512" GNT"STPREAD.GNT"
+      *
+      *       ONLY DELETE WHEN ALL BELOW IS COMPLETED  
+      *     ===========================================
+      *
+      *  Screen co-ordinates must be revised for new layout
+      *
+      *  Screen Section                            Completed  
+      *                                               ___
+      *                    Layout screen co-ordinates| x |
+      *                                               ---
+      *                                               ___
+      *                    Input screen co-ordinates | x |
+      *                                               ---
+      *                                               ___
+      *                    Output screen co-ordinates| x |
+      *                                               ---
+      *  Procedure Division 
+      *                                               ___
+      *                    Screen Heading Format     | x |
+      *                                               ---
+      *                                               ___
+      *                    Error Messages            | x |
+      *                                               ---
+      *                                               ___
+      *                    User information messages | x |
+      *                                               ---
+      *                                               ___
+      *                    Accept User options       | x |
+      *                                               ---
+      *                                               ___
+      *                    Display co-ordinates      | x |
+      *                                               ---
+      *                                               ___
+      *                    Accept co-ordinates       | x |
+      *                                               ---
+      *  Accept and Display of Stk-code allows
+      *                                               ___
+      *         Display ITM, EXT and 14 Characters   | x |
+      *                                               ---
+      *                                               ___
+      *         Accept ITM, EXT, 14 Characters and   | x |
+      *            all the Numeric Formats 3 to 14    ---
+      *
+      *  Stock file
+      *                                               ___       
+      *         Use the new layout and W10.STK       | x |
+      *                                               ---
       ******************************************************************
       *                                                                *
       *    ******  ******** *******  ******   ******   ***   ******    *
@@ -24,6 +71,7 @@
       *   LS-INSTR is used to specify which code to use:               *
       *             A = Alternate Code                                 *
       *             I = Item Code                                      *
+      *             S = Stock/Item or X-Ref Code                       *
       *             X = X-Ref Code                                     *
       *                                                                *
       * In addition to the above, LS0-INSTR is used to specify:        *
@@ -60,10 +108,10 @@
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     STPREAD.
-       AUTHOR.         J.W.LEMMON (CSS).
-       DATE-WRITTEN.   JANUARY 1982.
+       AUTHOR.         J.W.LEMMON.
+       DATE-WRITTEN.   JANUARY 2012.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2012 - 2018
                     by James William Lemmon.
                       (Id No. 4412165050082).
                 
@@ -108,6 +156,15 @@
        COPY "WSTOCK.SL".
 
        DATA DIVISION.
+      *
+      *          ********  ********  **        ******** 
+      *          **           **     **        **
+      *          **           **     **        ** 
+      *          *****        **     **        *****
+      *          **           **     **        **  
+      *          **           **     **        **
+      *          **        ********  ********  ********
+      *
        FILE SECTION.
 
        COPY "DEPART.FDE".
@@ -128,7 +185,7 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                  PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-S1                     PIC  9(04)    COMP-5.
        77  WS-S2                     PIC  9(04)    COMP-5.
        77  WS-S3                     PIC  9(04)    COMP-5.
@@ -183,8 +240,18 @@
 
        COPY "W05.RND".
 
-       COPY "W40.WS".
+      *
+      *    Date routines for accepting checking and formatting have
+      *    been removed from each program and the DateCheck program
+      *    will be called to handle these routines.
+      *
+      *    The following copy 'DateVariables' now includes the 'W12.WS'
+      *    and 'W20.WS' variables and is passed to DateCheck in the CALL
+      *    statement.
+      *
+       COPY "DateVariables.cpy".
 
+       COPY "W40.WS".
 
        COPY "W50.WS".
 
@@ -200,18 +267,13 @@
        LINKAGE SECTION.
 
        77  LS-F-ERROR                PIC  9(02) COMP-5.
-       77  W40-CODE                  PIC  X(06).
+       77  WS-EXT-STK                PIC  X(01).
 
        COPY "CHAIN.LS".
 
-       01  STOCK-READ.
-           03  W02-DEPART            PIC  X(64).
-           03  W02-PARAM             PIC  X(64).
-           03  W02-STOCKF            PIC  X(64).
-           03  W02-WSTOCK            PIC  X(64).
+       COPY "FILE.IDS".
 
        COPY "W10.STK".
-
 
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
@@ -222,20 +284,22 @@
       *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
       *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
       *
-       PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY STOCK-READ W10-STOCK LS-F-ERROR W40-CODE.
+       PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W10-STOCK WS-EXT-STK LS-F-ERROR.
        AA000-MAIN        SECTION.
        AA00.
              PERFORM SAVE-SCREEN-3.
              PERFORM ZA000-INIT.
       *
-      *      LS-INSTR:
+      *      W10-INSTR:
       *               A = Alternate Code
       *               I = Item Code
+      *               S = Stock/Item or X-Ref Code
       *               X = X-Ref Code
       *
-             EVALUATE LS-INSTR
+             EVALUATE W10-INSTR
                WHEN "A"   PERFORM CA100
                WHEN "I"   PERFORM CA000
+               WHEN "S"   PERFORM CA000
                WHEN "X"   PERFORM CA200
                WHEN OTHER
                     MOVE "Invalid parameter passed to STPREAD" TO WS-ERR-MES
@@ -300,11 +364,11 @@
 
        COPY "LOCKED.RC2".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       COPY "DATE.CNV".
+
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AC000-READ              SECTION.
 
        COPY "DEPART.RD".
@@ -328,6 +392,9 @@
            ELSE
                MOVE W10-ITEM         TO W50-DATA
                MOVE W10-ITM          TO W50-ITM.
+      *
+      *    Remove leading spaces
+      *         
            IF W50-1 = SPACE
                IF WS-EXT-STK = "Y"
                    MOVE W50-17       TO W10-EXT-ITEM
@@ -343,47 +410,46 @@
 
        CA10.
              PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-           IF WS-STATUS = "23"
-               IF LS0-INSTR = "X"
-                   MOVE W50-EXT-ITEM TO W10-EXT-CODE2
-                   PERFORM CA200
-                   IF NOT(STK-XREF = W10-EXT-ITEM)
-                       MOVE 22       TO WS-F-ERROR
-                   ELSE
-                       MOVE STK-CODE TO W10-EXT-ITEM.
-           IF WS-F-ERROR = 0
-               IF LS0-INSTR = "W"
-                   PERFORM CA600
+           IF (WS-STATUS = "23") AND (W10-INSTR = "S")
+               MOVE W50-EXT-ITEM     TO W10-EXT-CODE2
+               PERFORM CA200
+               IF NOT(STK-XREF = W10-EXT-ITEM)
+                   MOVE 22           TO WS-F-ERROR
                ELSE
-                   PERFORM CA500.
+                   MOVE STK-CODE     TO W10-EXT-ITEM.
+           IF WS-F-ERROR = 0
+               PERFORM CA500.
 
        CA99.
              EXIT.
 
       *
       *    ****   G E T   S T O C K   R E C O R D   U S I N G
-      *           A L T E R N A T E   C O D E
+      *                   A L T E R N A T E   C O D E
       *
        CA100         SECTION.
        CA101.
              MOVE 10                 TO W50-LENGTH.
+
        CA105.
              MOVE W10-ACODE          TO W50-DATA.
+      *
+      *    Remove leading spaces
+      *         
            IF W50-1 = SPACE
                MOVE W50-9            TO W10-ACODE
                GO TO CA105.
              CALL "CBL_TOUPPER" USING W50-DATA BY VALUE W50-LENGTH RETURNING W50-STATUS.
              MOVE W50-ACODE          TO STK-ACODE W10-ACODE.
+
        CA110.
              PERFORM START-AT-ALT-CODE THRU READ-STOCK-EXIT.
            IF WS-F-ERROR = 22
                GO TO CA199.
              PERFORM READ-STOCK-NEXT THRU READ-STOCK-EXIT.
            IF WS-F-ERROR = 0
-               IF LS0-INSTR = "W"
-                   PERFORM CA600
-               ELSE
-                   PERFORM CA500.
+               PERFORM CA500.
+
        CA199.
              EXIT.
 
@@ -396,6 +462,9 @@
 
        CA205.
              MOVE W10-EXT-CODE2      TO W50-DATA.
+      *
+      *    Remove leading spaces
+      *         
            IF W50-1 = SPACE
                MOVE W50-17           TO W10-EXT-CODE2
                GO TO CA205.
@@ -410,11 +479,8 @@
            IF WS-F-ERROR = 22
                GO TO CA299.
              PERFORM READ-STOCK-NEXT THRU READ-STOCK-EXIT.
-    IF NOT(STK-XREF = W50-EXT-ITEM)
-        GO TO CA299.
-         IF LS0-INSTR = "W"
-             PERFORM CA600
-         ELSE
+           IF NOT(STK-XREF = W50-EXT-ITEM)
+               GO TO CA299.
              PERFORM CA500.
 
        CA299.
@@ -433,6 +499,11 @@
              MOVE 1                  TO W50-S1.
 
        CA510.
+      *
+      *    If any of the cash or wholesale prices are zero insert the
+      *    price from the higher price (for cash - retail and for 
+      *                                   wholesale - cash)
+      *
            IF STK-WSL(W50-S1) = ZERO
                IF STK-CSH(W50-S1) NOT = ZERO
                    MOVE STK-CSH(W50-S1)  TO STK-WSL(W50-S1)
@@ -448,60 +519,43 @@
                MOVE W05-VAT(STK-TAX) TO W05-RATE.
              COMPUTE W10-VCSH(W50-S1) ROUNDED = W10-CSH(W50-S1) + (W10-CSH(W50-S1) * W05-RTE).
              COMPUTE W10-VWSL(W50-S1) ROUNDED = W10-WSL(W50-S1) + (W10-WSL(W50-S1) * W05-RTE).
-             COMPUTE W10-VSL(W50-S1) ROUNDED = W10-SL(W50-S1) + (W10-SL(W50-S1) * W05-RTE).
+             COMPUTE W10-VSL(W50-S1)  ROUNDED = W10-SL(W50-S1)  + (W10-SL(W50-S1)  * W05-RTE).
            IF W50-S1 < 4
                ADD 1                 TO W50-S1
                GO TO CA510.
            IF STK-PRC = ZERO
                MOVE 1                TO STK-PRC.
+      *
+      *    Switch the dates to DDMMCCYY format for display
+      *         
+             MOVE W10-DTE            TO W22-DTE2.
+             PERFORM SWITCH-DATE-TO-DMCY THRU SWITCH-DATE-EXIT.
+             MOVE W22-DTE3           TO W10-ODTE.
+             MOVE W10-PUR            TO W22-DTE2.
+             PERFORM SWITCH-DATE-TO-DMCY THRU SWITCH-DATE-EXIT.
+             MOVE W22-DTE3           TO W10-PURCH.
+      *
+      *    Last active date used by some programs as edited
+      *             
+           IF STK-ACT = ZERO
+               MOVE SPACE            TO W10-ACTIVE
+           ELSE
+               MOVE STK-ACT          TO W10-ADATE.
+      *
+      *    Move the record that has been read to the work area.
+      *         
+             MOVE STK-RECORD1        TO W10-STK-RECORD.  
 
        CA599.
              EXIT.
 
-      *
-      *    ****    Calculate the inclusive prices
-      *
-       CA600         SECTION.
-       CA605.
-      *
-      *   Adjust the average cost for negative or zero quantity
-      *
-           IF STK-QUANT < 0.001
-               MOVE STK-COST         TO STK-AVGE.
-           IF STK-WSALE = ZERO
-               IF STK-CASH NOT = ZERO
-                   MOVE STK-CASH     TO STK-WSALE
-               ELSE
-                   MOVE STK-SELL     TO STK-WSALE.
-           IF STK-CASH = ZERO
-               MOVE STK-SELL         TO STK-CASH.
-             MOVE STK-CASH           TO W10-CASH.
-             MOVE STK-SELL           TO W10-SELL.
-             MOVE STK-WSALE          TO W10-WSALE.
-             MOVE ZERO               TO W05-RATE.
-           IF STK-TAX > 0
-               MOVE W05-VAT(STK-TAX) TO W05-RATE.
-             COMPUTE W10-VCASH ROUNDED = W10-CASH + (W10-CASH * W05-RTE).
-             COMPUTE W10-VWSALE ROUNDED = W10-WSALE + (W10-WSALE * W05-RTE).
-             COMPUTE W10-VSELL ROUNDED = W10-SELL + (W10-SELL * W05-RTE).
-           IF STK-PRC = ZERO
-               MOVE "EA"             TO STK-PACK.
-           IF (W40-CODE = SPACES) OR (STK-IND > 1)
-               GO TO CA699.
-             MOVE W40-CODE           TO WST-WAR.
-             MOVE W10-ITEM           TO WST-CODE.
-             MOVE SPACES             TO WST-ITM.
-             PERFORM READ-WSTOCK THRU READ-WSTOCK-EXIT.
-           IF WS-F-ERROR = 52
-               MOVE ZERO             TO WST-QUANT.
-             MOVE ZERO               TO WS-F-ERROR.
-
-       CA699.
-             EXIT.
-
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION.
        ZA000-OPEN.
+             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -509,12 +563,6 @@
 
       COPY "FUNCTION.PRO".
 
-       ZA00A.
-           IF LS-USER = LS-SYS-ID
-               MOVE "SupervisorÄ"    TO CRT-WRKHD
-           ELSE
-               MOVE "Workstation"    TO CRT-WRKHD
-               MOVE LS-USER        TO CRT-WRKST.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³             Get VAT rates and rounding details.           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -545,19 +593,22 @@
 
        ZA999-EXIT.
              EXIT.
-      /
-       ZB000-ERROR        SECTION.
+      *
+      *    ****    I / O   E R R O R   M E S S A G E S
+      *
+       ZB000-ERROR      SECTION 8.
 
        COPY "ERRORS.PRO".
 
        DISPLAY-FILE-NAME.
-           IF WS-F-ERROR = 15
-               MOVE W02-PARAM        TO WS-FILE
-               MOVE WS-PARKEY        TO WS-KEY
-           ELSE
-           IF WS-F-ERROR = 22
-               MOVE W02-STOCKF       TO WS-FILE
-               MOVE ZERO             TO WS-KEY
-               MOVE STK-CODE         TO WS-KEYX.
+             MOVE ZERO               TO WS-KEY.
+             EVALUATE WS-F-ERROR
+               WHEN 15    MOVE WS-PARID     TO WS-FILE
+                          MOVE WS-PARKEY    TO WS-KEY
+               WHEN 22    MOVE W02-STOCKF   TO WS-FILE
+                          MOVE STK-CODE     TO WS-KEYX
+               WHEN OTHER MOVE "ERROR"      TO WS-FILE
+                          MOVE "STPREAD"    TO WS-KEYX
+             END-EVALUATE.
 
        COPY "DISPERR.PRO".

@@ -4,7 +4,7 @@
        AUTHOR.                JW Lemmon.
        DATE-WRITTEN.          FEB-2012.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2008 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2008 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -127,8 +127,10 @@
            END-IF.
              PERFORM DISPLAY-MESSAGE.
 
-       AA999.
+       AA99.
              EXIT PROGRAM.
+
+       COPY "AA900.ALM".
 
       *    
       *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
@@ -223,7 +225,7 @@
                                  
                  WHEN ENTER-KEY  GO TO DISPLAY-END
                  
-                 WHEN OTHER      CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER      PERFORM AA900-ALARM
                END-EVALUATE
                GO TO DISPLAY-REPLY
            END-IF.

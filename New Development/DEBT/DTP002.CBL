@@ -82,7 +82,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   March 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -173,7 +173,7 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)            VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-SUB                  PIC  9(04)    COMP-5.
        77  WS-S                    PIC  9(04)    COMP-5.
        77  WS-S1                   PIC  9(04)    COMP-5.
@@ -451,6 +451,9 @@
        AA000         SECTION.
        AA00.
            IF LS0-DBLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
@@ -473,7 +476,6 @@
        AA50-LOOKUP            SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
@@ -591,11 +593,9 @@
 
        COPY "CLEAR.CRT".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -612,11 +612,9 @@
 
        COPY "SHARED.RD".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -689,7 +687,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
-
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³         W R I T E   R E C O V E R Y   R E C O R D         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -702,27 +702,27 @@
                STOP RUN.
        AY59.
              EXIT.
-      *
-      *    ****    Start processing transaction
-      *
+      *    *************************************************************
+      *    ****        Start processing transaction
+      *    *************************************************************
        AY60.
              MOVE 1                  TO WS-COUNT.
              MOVE 5                  TO WS-SHARED.
              PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
       *      MOVE SHR-STOCK          TO WS-STOCK.
-      *
+      *    *************************************************************
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
-      *
-             MOVE 4         TO WS-PARKEY.
+      *    *************************************************************
+             MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
            IF PAR-USERS < 24
                MOVE 1                TO WS-SUB
                MOVE ZERO             TO WS-WAIT
                GO TO AY62.
-      *
-      *    ****   Q   F U L L  -  W A I T   F O R   4   S E C O N D S
-      *
+      *    *************************************************************
+      *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
+      *    *************************************************************
              DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
              COMMIT.
              ACCEPT WS-STIME FROM TIME.
@@ -890,10 +890,10 @@
                  WHEN F1-KEY     PERFORM HELP-ROUTINE
 
                  WHEN F2-KEY     MOVE SPACE     TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
 
                  WHEN F9-KEY     MOVE "A"       TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
 
                  WHEN OTHER      PERFORM AA900-ALARM
                                  GO TO CC05
@@ -1368,11 +1368,7 @@
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
              MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W22-DTE3.
-             MOVE W22-DD3            TO W22-DD2.
-             MOVE W22-MM3            TO W22-MM2.
-             MOVE W22-CC3            TO W22-CC2.
-             MOVE W22-YY3            TO W22-YY2.
-             MOVE W22-DTE2           TO TODAY-YYMMDD.
+             MOVE LS-TODAY-YYMMDD    TO TODAY-YYMMDD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -1382,7 +1378,7 @@
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-             COPY "FUNCTION.PRO".
+       COPY "FUNCTION.PRO".
 
        ZA00A-CONTINUE.
              MOVE 3                  TO WS-PARKEY.
@@ -1402,13 +1398,13 @@
              CLOSE RECOVER.
              OPEN I-O RECOVER.
              GO TO ZA999-EXIT.
-
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
        ZA999-EXIT.
              EXIT.

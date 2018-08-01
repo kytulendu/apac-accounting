@@ -13,15 +13,22 @@
       *                                                                *
       *     C R E D I T O R ' S   P O S T   D A T E D   C H E Q U E S  *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
       *                                                                *
      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
+      *                                                                *
+      ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.      CRP026.
-       AUTHOR.               J.W. LEMMON (APAC).
-       DATE-WRITTEN.         AUGUST, 1983.
+       AUTHOR.          J.W. LEMMON (APAC).
+       DATE-WRITTEN.    AUGUST, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -94,35 +101,35 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-       77  WS-NETKEY  PIC 9(04)     COMP-5 VALUE 1.
-       77  WS-PARKEY           PIC 9(04)     COMP-5 VALUE 1.
-       77  WS-ERROR            PIC 9(01)     VALUE 0.
-       77  WS-S                PIC 9(04)     COMP-5.
-       77  WS-S1               PIC 9(04)     COMP-5.
-       77  WS-S2               PIC 9(04)     COMP-5.
-       77  WS-S3               PIC 9(04)     COMP-5.
-       77  WS-S4               PIC 9(04)     COMP-5.
-       77  WS-S6               PIC 9(04)     COMP-5.
-       77  WS-IXS1             PIC 9(04)     COMP-5.
-       77  WS-IXS2             PIC 9(04)     COMP-5.
-       77  WS-IXS3             PIC 9(04)     COMP-5.
-       77  WS-IXS4             PIC 9(04)     COMP-5.
-       77  WS-KEY1             PIC 9(04)     COMP-5.
-       77  WS-CHAR1            PIC X(01).
-       77  WS-ITM1             PIC X(12).
-       77  WS-ORD              PIC X(01).
-       77  WS-SEQ              PIC X(01).
-       77  WS-OPTION           PIC X(01).
-       77  WS-LINES        PIC 9(04)     COMP-5 VALUE 0.
-       77  WS-PAGE             PIC 9(04)     COMP-5 VALUE 0.
-       77  WS-IND              PIC 9(01).
-       77  WS-PGE-LENGTH   PIC 9(02)  VALUE 66.
-       77  WS-PRN-LENGTH   PIC 9(02)  VALUE 62.
-       77  WS-H1        PIC X(05)     VALUE "DATE:".
-       77  WS-H3               PIC X(05)     VALUE "PAGE:".
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-NETKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PARKEY               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-ERROR                PIC  9(01)    VALUE 0.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-KEY1                 PIC  9(04)    COMP-5.
+       77  WS-CHAR1                PIC  X(01).
+       77  WS-ITM1                 PIC  X(12).
+       77  WS-ORD                  PIC  X(01).
+       77  WS-SEQ                  PIC  X(01).
+       77  WS-OPTION               PIC  X(01).
+       77  WS-LINES                PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-PAGE                 PIC  9(04)    COMP-5 VALUE 0.
+       77  WS-IND                  PIC  9(01).
+       77  WS-PGE-LENGTH           PIC  9(02)           VALUE 66.
+       77  WS-PRN-LENGTH           PIC  9(02)           VALUE 62.
+       77  WS-H1                   PIC  X(05)           VALUE "DATE:".
+       77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
 
       /
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
@@ -147,11 +154,11 @@
       *
       *    Calling Program
       *
-           03  CRT-PROGRAM         PIC  X(15) VALUE "CRP026".
+           03  CRT-PROGRAM         PIC  X(15)           VALUE "CRP026".
       *
       *    Screen Heading
       *
-           03  CRT-HEADING         PIC  X(40) VALUE "CREDITOR - POST DATED CHEQUES LIST".
+           03  CRT-HEADING         PIC  X(40)           VALUE "CREDITOR - POST DATED CHEQUES LIST".
       *
       *    Company Name
       *
@@ -163,18 +170,17 @@
                05  CRT-WRKHD       PIC  X(11).
                05  CRT-WRKST       PIC  X(03).
 
-
        COPY "WS.WS".
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
            03  W02-PRINTER         PIC  X(12).
            03  W02-PGE-LENGTH      PIC  9(03).
            03  W02-PRN-LENGTH      PIC  9(03).
            03  W02-LINAGE          PIC  9(03).
-           03  W02-PRN-STATUS      PIC  X(01) VALUE "C".
+           03  W02-PRN-STATUS      PIC  X(01)           VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -375,6 +381,11 @@
       *   *****    *****   **   **  ******  ******  **    **
       *
        SCREEN SECTION.
+       01  S01-SEQ.
+           03  LINE  6 COLUMN 26 VALUE "S"                              FOREGROUND-COLOR Grey HIGHLIGHT.
+           03          COLUMN 27 VALUE  "upplier or "
+           03          COLUMN 38 VALUE             "D"                  FOREGROUND-COLOR Grey HIGHLIGHT.
+           03          COLUMN 39 VALUE              "ate sequence [ ]".
 
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
@@ -389,10 +400,13 @@
        AA000-START-UP  SECTION.
        AA000.
           IF LS0-CRLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA105.
-            PERFORM ZA000-INIT.
+               PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -444,6 +458,39 @@
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "FUNCTION.SCR".
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                        OPT-MESSAGE                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine is used to allow the OPERATOR to respond to  ³
+      *    ³ a request for an option, so that the correct action can   ³
+      *    ³ be performed by the program. The routine will display the ³
+      *    ³ message in a pop-up window and allow the OPERATOR to      ³
+      *    ³ respond to the 'question'.                                ³
+      *    ³                                                           ³
+      *    ³ The option request must be placed in WS-ERR-MES and may   ³
+      *    ³ not exceed 48 characters. The message will be centred in  ³
+      *    ³ the window. An example of a message request follows:      ³
+      *    ³                                                           ³
+      *    ³   MOVE "Print transactions (Y/N) [ ]" TO WS-ERR-MES.      ³
+      *    ³   MOVE Instruction    TO WS-INSTR.                        ³
+      *    ³       [see Accptopt for instruction values]               ³
+      *    ³   PERFORM OPT-MESSAGE.                                    ³
+      *    ³                                                           ³
+      *    ³ This would be displayed as:                               ³
+      *    ³      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³
+      *    ³      ³          Print transactions (Y/N) [ ]          ³°° ³
+      *    ³      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ°° ³
+      *    ³        °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°° ³
+      *    ³                                                           ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³                                                           ³
+      *    ³ The system will display the message box with the top line ³
+      *    ³ as the value of WS-MES-LINE. If WS-MES-LINE is zero the   ³
+      *    ³ default will be 20.                                       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+       COPY "OPTION.CRT".
 
       *           T H I S   R O U T I N E   I S   U S E D   T O
       *            D I S P L A Y   E R R O R   M E S S A G E S
@@ -497,6 +544,9 @@
       *    ³                                                           ³
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
       *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
@@ -566,11 +616,9 @@
 
        COPY "PRINTUTL.AP4".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB00-READ SECTION.
 
        COPY "CONTROL.RD".
@@ -598,253 +646,231 @@
       /
        EA000      SECTION 5.
        EA00.
-             PERFORM ERASE-SCREEN.
-      MOVE ZERO   TO WS-PAGE W25-V1 W25-V2.
-            DISPLAY "POST DATED CHEQUE REPORTS" AT 0228
-              WITH FOREGROUND-COLOR Grey HIGHLIGHT.
-      DISPLAY "S" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "upplier or "
-       "D" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "ate sequence > <".
-      MOVE "D"   TO WS-SEQ.
-       EA05.
-      ACCEPT WS-SEQ AT 0839
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT
-    BACKGROUND-COLOR Magenta UPDATE AUTO.
-      CALL "CBL_TOUPPER" USING WS-SEQ
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-    IF NOT(WS-SEQ = "D" OR "S")
-        GO TO EA05.
+             MOVE ZERO               TO WS-PAGE W25-V1 W25-V2.
+             MOVE "D"                TO WS-OPTION.
+             MOVE "g"                TO WS-INSTR.
+             DISPLAY S01-SEQ.
+             MOVE 6                  TO WS-MES-LINE.
+             MOVE 53                 TO WS-MES-COL.
+      *
+      *      ACCEPT the option at the position specified above
+      *
+             MOVE X"FA"              TO WS-MES-CHAR(48).
+             PERFORM OPT-MESSAGE.
+             MOVE WS-OPTION          TO WS-SEQ.
+
        EA10.
-            MOVE SPACES  TO R-DET.
-            MOVE WS-H1   TO PD-H1.
-            MOVE W60-COMPANY  TO PD-H2.
-            MOVE WS-H3   TO PD-H3.
-            ADD 1   TO WS-PAGE.
-            MOVE TODAY-DDMMYY  TO PD-DTE1.
-            MOVE WS-PAGE  TO PD-PGE.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-    IF WS-SEQ = "D"
-        MOVE "POST DATED CHEQUES - DATE SEQUENCE"
-     TO PD-H2
-    ELSE
-        MOVE "POST DATED CHEQUES - SUPPLIER SEQUENCE"
-     TO PD-H2.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-    IF WS-SEQ = "D"
-        MOVE "  DATE"  TO PD-H4
-        MOVE "AC.NO"  TO PD-H7
-        MOVE "SUPPLIER NAME"
-     TO PD-H8
-    ELSE
-        MOVE "AC.NO"  TO PD-H4
-        MOVE "SUPPLIER NAME"
-     TO PD-H5
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        MOVE SPACES  TO R-DET
-        MOVE "DATE"  TO PD-H6
-        MOVE "NARRATIVE"  TO PD-H8.
-      MOVE "CHEQ NO"  TO PD-H9.
-      MOVE "VALUE"  TO PD-H10.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
+             MOVE SPACES             TO R-DET.
+             MOVE WS-H1              TO PD-H1.
+             MOVE CRT-COMPANY        TO PD-H2.
+             MOVE WS-H3              TO PD-H3.
+             ADD 1                   TO WS-PAGE.
+             MOVE TODAY-DDMMYY       TO PD-DTE1.
+             MOVE WS-PAGE            TO PD-PGE.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+           IF WS-SEQ = "D"
+               MOVE "POST DATED CHEQUES - DATE SEQUENCE" TO PD-H2
+           ELSE
+               MOVE "POST DATED CHEQUES - SUPPLIER SEQUENCE" TO PD-H2.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+           IF WS-SEQ = "D"
+               MOVE "  DATE"         TO PD-H4
+               MOVE "AC.NO"          TO PD-H7
+               MOVE "SUPPLIER NAME"  TO PD-H8
+           ELSE
+               MOVE "AC.NO"          TO PD-H4
+               MOVE "SUPPLIER NAME"  TO PD-H5
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               MOVE SPACES           TO R-DET
+               MOVE "DATE"           TO PD-H6
+               MOVE "NARRATIVE"      TO PD-H8.
+             MOVE "CHEQ NO"          TO PD-H9.
+             MOVE "VALUE"            TO PD-H10.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
 
        EA15.
-      MOVE ZERO   TO W25-V1 W25-V2.
-      INITIALIZE PDT-REC.
-    IF WS-SEQ = "D"
-        GO TO EA45.
-      MOVE "    !"  TO PDT-AC W15-ACNO.
-      PERFORM START-AT-PDCHEQ-AC THRU READ-PDCHEQ-EXIT.
-    IF WS-F-ERROR = 44
-        GO TO EA80.
+             MOVE ZERO               TO W25-V1 W25-V2.
+             INITIALIZE PDT-REC.
+           IF WS-SEQ = "D"
+               GO TO EA45.
+             MOVE "    !"            TO PDT-AC W15-ACNO.
+             PERFORM START-AT-PDCHEQ-AC THRU READ-PDCHEQ-EXIT.
+           IF WS-F-ERROR = 44
+               GO TO EA80.
 
        EA20.
-      PERFORM READ-PDCHEQ-NEXT THRU READ-PDCHEQ-EXIT.
-    IF WS-F-ERROR = 44
-        PERFORM EA26
-        GO TO EA75.
-      DISPLAY PDT-KEY AT 1028
-       WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-     BACKGROUND-COLOR Magenta.
-    IF PDT-AC NOT = W15-ACNO
-        PERFORM EA25 THRU EA40.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
-        GO TO EA85.
-      MOVE PDT-DATE  TO PD-DATE2.
-      MOVE PDT-NAR  TO PD-SUPP-NAR.
-      MOVE PDT-REFER  TO PD-REF.
-      MOVE PDT-VAL  TO PD-VAL.
-      ADD PDT-VAL  TO W25-V1 W25-V2.
-    IF W02-LINAGE < W02-PRN-LENGTH
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+             PERFORM READ-PDCHEQ-NEXT THRU READ-PDCHEQ-EXIT.
+           IF WS-F-ERROR = 44
+               PERFORM EA26
+               GO TO EA75.
+             DISPLAY PDT-KEY AT 1028 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Cyan HIGHLIGHT.
+           IF PDT-AC NOT = W15-ACNO
+               PERFORM EA25 THRU EA40.
+             PERFORM PRINT-ABORT.
+           IF(WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+              MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
+              GO TO EA85.
+             MOVE PDT-DATE           TO PD-DATE2.
+             MOVE PDT-NAR            TO PD-SUPP-NAR.
+             MOVE PDT-REFER          TO PD-REF.
+             MOVE PDT-VAL            TO PD-VAL.
+             ADD PDT-VAL             TO W25-V1 W25-V2.
+           IF W02-LINAGE < W02-PRN-LENGTH
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        PERFORM EA10
-        PERFORM EA35 THRU EA40.
-      MOVE SPACES  TO R-DET.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
-        GO TO EA85.
-      GO TO EA20.
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               PERFORM EA10
+               PERFORM EA35 THRU EA40.
+             MOVE SPACES              TO R-DET.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
+               GO TO EA85.
+             GO TO EA20.
 
        EA25.
-    IF W15-ACNO = "    !"
-        GO TO EA30.
+           IF W15-ACNO = "    !"
+               GO TO EA30.
 
        EA26.
-      MOVE "TOTAL FOR SUPPLIER"
-     TO PD-SUPP-NAR.
-      MOVE W25-V1  TO PD-VAL.
-      MOVE ZERO   TO W25-V1.
-    IF W02-LINAGE < (W02-PRN-LENGTH - 4)
-        MOVE 2   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+             MOVE "TOTAL FOR SUPPLIER" TO PD-SUPP-NAR.
+             MOVE W25-V1             TO PD-VAL.
+             MOVE ZERO               TO W25-V1.
+           IF W02-LINAGE < (W02-PRN-LENGTH - 4)
+               MOVE 2                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        PERFORM EA10.
-      MOVE SPACES  TO R-DET.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
-        GO TO EA85.
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               PERFORM EA10.
+             MOVE SPACES             TO R-DET.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
+               GO TO EA85.
 
        EA30.
-      MOVE PDT-AC  TO W15-ACNO.
-      PERFORM AE155-GET-CREDITOR.
-    IF NOT(WS-ERROR = ZERO)
-        MOVE "**** NOT ON FILE ****"
-     TO P-NAME.
+             MOVE PDT-AC             TO W15-ACNO.
+             PERFORM AE155-GET-CREDITOR.
+           IF NOT(WS-ERROR = ZERO)
+               MOVE "**** NOT ON FILE ****" TO P-NAME.
 
        EA35.
-      MOVE W15-ACNO  TO PD-AC.
-      MOVE P-NAME  TO PD-SUPPLIER.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
+             MOVE W15-ACNO           TO PD-AC.
+             MOVE P-NAME             TO PD-SUPPLIER.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
 
        EA40.
-      EXIT.
+             EXIT.
 
        EA45.
-      MOVE ZERO   TO PDT-DATE W15-DATE.
-      PERFORM START-AT-PDCHEQ-KEY THRU READ-PDCHEQ-EXIT.
-    IF WS-F-ERROR = 44
-        GO TO EA80.
+             MOVE ZERO               TO PDT-DATE W15-DATE.
+             PERFORM START-AT-PDCHEQ-KEY THRU READ-PDCHEQ-EXIT.
+           IF WS-F-ERROR = 44
+               GO TO EA80.
 
        EA50.
-      PERFORM READ-PDCHEQ-NEXT THRU READ-PDCHEQ-EXIT.
-    IF WS-F-ERROR = 44
-        PERFORM EA56
-        GO TO EA75.
-      DISPLAY PDT-KEY AT 1028
-       WITH FOREGROUND-COLOR Cyan HIGHLIGHT
-     BACKGROUND-COLOR Magenta.
-    IF PDT-DATE NOT = W15-DATE
-        PERFORM EA55 THRU EA70.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
-        GO TO EA85.
-      MOVE PDT-AC  TO PD-AC2.
-      MOVE PDT-NAR  TO PD-SUPP-NAR.
-      MOVE PDT-REFER  TO PD-REF.
-      MOVE PDT-VAL  TO PD-VAL.
-      ADD PDT-VAL  TO W25-V1 W25-V2.
-    IF W02-LINAGE < W02-PRN-LENGTH
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+             PERFORM READ-PDCHEQ-NEXT THRU READ-PDCHEQ-EXIT.
+           IF WS-F-ERROR = 44
+               PERFORM EA56
+               GO TO EA75.
+             DISPLAY PDT-KEY AT 1028
+              WITH FOREGROUND-COLOR Cyan HIGHLIGHT BACKGROUND-COLOR Magenta.
+           IF PDT-DATE NOT = W15-DATE
+               PERFORM EA55 THRU EA70.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+              MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
+              GO TO EA85.
+             MOVE PDT-AC             TO PD-AC2.
+             MOVE PDT-NAR            TO PD-SUPP-NAR.
+             MOVE PDT-REFER          TO PD-REF.
+             MOVE PDT-VAL            TO PD-VAL.
+             ADD PDT-VAL             TO W25-V1 W25-V2.
+           IF W02-LINAGE < W02-PRN-LENGTH
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        PERFORM EA10
-        PERFORM EA65 THRU EA70.
-      MOVE SPACES  TO R-DET.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
-        GO TO EA85.
-      GO TO EA50.
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               PERFORM EA10
+               PERFORM EA65 THRU EA70.
+             MOVE SPACES             TO R-DET.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
+               GO TO EA85.
+             GO TO EA50.
 
        EA55.
-    IF W15-DATE = ZERO
-        GO TO EA60.
+           IF W15-DATE = ZERO
+               GO TO EA60.
 
        EA56.
-      MOVE "TOTAL FOR DAY"
-     TO PD-SUPP-NAR.
-      MOVE W25-V1  TO PD-VAL.
-      MOVE ZERO   TO W25-V1.
-    IF W02-LINAGE < (W02-PRN-LENGTH - 4)
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+             MOVE "TOTAL FOR DAY"    TO PD-SUPP-NAR.
+             MOVE W25-V1             TO PD-VAL.
+             MOVE ZERO               TO W25-V1.
+           IF W02-LINAGE < (W02-PRN-LENGTH - 4)
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        PERFORM EA10.
-      MOVE SPACES  TO R-DET.
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               PERFORM EA10.
+             MOVE SPACES             TO R-DET.
 
        EA60.
-      MOVE PDT-DATE  TO W15-DATE.
+             MOVE PDT-DATE           TO W15-DATE.
 
        EA65.
-      MOVE W15-DATE  TO PD-DATE1.
+             MOVE W15-DATE           TO PD-DATE1.
 
        EA70.
-      EXIT.
+             EXIT.
        EA75.
-      MOVE "**** TOTAL POST DATED CHEQUES ****"
-     TO PD-SUPP-NAR.
-      MOVE W25-V2  TO PD-VAL.
-      MOVE 99   TO WS-ADVANCE.
-      MOVE "E"   TO WS-COMMAND.
-      PERFORM CALL-PRINTUTL.
-      MOVE "P"   TO WS-COMMAND.
-      MOVE SPACES  TO R-DET.
-      GO TO EA999.
+             MOVE "**** TOTAL POST DATED CHEQUES ****" TO PD-SUPP-NAR.
+             MOVE W25-V2             TO PD-VAL.
+             MOVE 99                 TO WS-ADVANCE.
+             MOVE "E"                TO WS-COMMAND.
+             PERFORM CALL-PRINTUTL.
+             MOVE "P"                TO WS-COMMAND.
+             MOVE SPACES             TO R-DET.
+             GO TO EA999.
 
        EA80.
-      MOVE "***  N O   P O S T   D A T E D   C H E Q U E S  ***"
-     TO R-DET.
+             MOVE "***  N O   P O S T   D A T E D   C H E Q U E S  ***" TO R-DET.
 
        EA85.
-      MOVE 99   TO WS-ADVANCE.
-      MOVE "E"   TO WS-COMMAND.
-      PERFORM CALL-PRINTUTL.
-      MOVE "P"   TO WS-COMMAND.
-      MOVE SPACES  TO R-DET.
+             MOVE 99                 TO WS-ADVANCE.
+             MOVE "E"                TO WS-COMMAND.
+             PERFORM CALL-PRINTUTL.
+             MOVE "P"                TO WS-COMMAND.
+             MOVE SPACES             TO R-DET.
 
        EA999.
-      EXIT.
-      /
+             EXIT.
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -853,20 +879,20 @@
              COPY "FUNCTION.PRO".
 
        ZA05.
-             MOVE LS-COMPANY     TO W60-COMPANY.
              MOVE 2              TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-            PERFORM ERASE-SCREEN.
+      *      PERFORM ERASE-SCREEN.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       *

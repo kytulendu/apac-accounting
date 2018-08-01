@@ -13,7 +13,7 @@
       *                                                                *
       *     D A Y - E N D   S A L E S   R E P O R T   P R O G R A M    *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
        AUTHOR.         James William Lemmon.
        DATE-WRITTEN.   AUGUST 1982.
 
-               COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+               COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                  by James William Lemmon.
                                    (Id No. 4412165050082).
                
@@ -562,7 +562,7 @@
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY PEND-FILE-IDS.
        AA00M    SECTION.
        AA00.
-            PERFORM ZA00-INIT.
+            PERFORM ZA000-INIT.
       *
       *  ***  ****  ***** *   *   ****  ****  *** *   * ***** ***** ****
       * *   * *   * *     **  *   *   * *   *  *  **  *   *   *     *   *
@@ -631,7 +631,7 @@
        AA65.
              EXIT.
 
-
+       COPY "AA900.ALM".
 
       * COPY "DATE.CHK".
 
@@ -961,12 +961,13 @@
       *    *************************************************************
       *                 I N I T I A L I S E   P R O G R A M
       *    *************************************************************
-       ZA00-INIT       SECTION 8.
+       ZA000-INIT       SECTION 8.
        ZA00-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              MOVE LS-PARID           TO WS-PARID.
              MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
@@ -1016,11 +1017,11 @@
                MOVE 7                TO WS-F-ERROR
                PERFORM OPEN-ERROR.
        ZA10.
-            MOVE 1   TO WS-PARKEY.
+             MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-            MOVE PAR-DMY  TO W12-TODAY.
-            MOVE PAR-YMD  TO W12-T-YMD.
-            MOVE PAR-COMPANY  TO CRT-COMP.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
+             MOVE PAR-COMPANY        TO CRT-COMP.
       *
       *   As this version of the system includes all modules the
       *   following tests are no longer required. 

@@ -1,4 +1,51 @@
       $set LINKCOUNT"512" GNT"STP053.GNT"
+      *
+      *       ONLY DELETE WHEN ALL BELOW IS COMPLETED  
+      *     ===========================================
+      *
+      *  Screen co-ordinates must be revised for new layout
+      *
+      *  Screen Section                            Completed  
+      *                                               ___
+      *                    Layout screen co-ordinates|   |
+      *                                               ---
+      *                                               ___
+      *                    Input screen co-ordinates |   |
+      *                                               ---
+      *                                               ___
+      *                    Output screen co-ordinates|   |
+      *                                               ---
+      *  Procedure Division 
+      *                                               ___
+      *                    Screen Heading Format     |   |
+      *                                               ---
+      *                                               ___
+      *                    Error Messages            |   |
+      *                                               ---
+      *                                               ___
+      *                    User information messages |   |
+      *                                               ---
+      *                                               ___
+      *                    Accept User options       |   |
+      *                                               ---
+      *                                               ___
+      *                    Display co-ordinates      |   |
+      *                                               ---
+      *                                               ___
+      *                    Accept co-ordinates       |   |
+      *                                               ---
+      *  Accept and Display of Stk-code allows
+      *                                               ___
+      *         Display ITM, EXT and 14 Characters   |   |
+      *                                               ---
+      *                                               ___
+      *         Accept ITM, EXT, 14 Characters and   |   |
+      *            all the Numeric Formats 3 to 14    ---
+      *
+      *  Stock file
+      *                                               ___       
+      *         Use the new layout and W10.STK       |   |
+      *                                               ---
       ******************************************************************
       *                                                                *
       *    ******   ********  *******     ****    ********   ******    *
@@ -15,15 +62,41 @@
       *                                                                *
       *     SPECIAL SPARES VERSION        WEEKLY TOTALS & X-REF        *
       *                                                                *
-      *       Version 9.04.01 - September 2016                         *
+      *       Version 9.04.03 - September 2017                         *
+
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * August 2008   - New file (STKALT) - Stock alternate index      *
+      *                 included for lookups, using any word con-      *
+      *                 tained in the Stock description.               *
+      *                                                                *
+      * November 2009 - Include words from Description 2 and from      *
+      *                 the Item code (Some item codes are comprised   *
+      *                 of individual words and these will be          *
+      *                 included in the alternate Index)               *
+      *                                                                *
+      * Jan 2010  - Allow for two discounts for a Debtor on the same   *
+      *             Sales Ledger code. Included two additional Debtor  *
+      *             discount codes (11 and 12) each with a field to    *
+      *             define which debtor discount code uses this as an  *
+      *             alternate discount. The relevant Stock Item will   *
+      *             have an indicator field to instruct the system to  *
+      *             use the alternate discount. The alternate discount *
+      *             is only applicable if the discount code for which  *
+      *             this alternate discount is applicable is the code  *
+      *             on the Debtor account record.                      *
+      *                                                                *
+      * Feb 2017 - Increased the number of Memo entries, of 60 bytes,  *
+      *            allowed from 12 to 34 per stock record.             *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     STP053.
-       AUTHOR.         J.W.LEMMON (JWL Software).
+       AUTHOR.         J.W.LEMMON.
        DATE-WRITTEN.   APRIL 1990.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -117,7 +190,7 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-S1     PIC 9(04)   COMP-5.
        77  WS-S2            PIC 9(04)     COMP-5.
        77  WS-S3            PIC 9(04)     COMP-5.
@@ -162,6 +235,8 @@
        77  WS-EXTEND     PIC S9(09)V99 COMP-3.
        77  WS-TCOST     PIC S9(09)V99 COMP-3.
        77  WS-TSELL     PIC S9(09)V99 COMP-3.
+       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
+       77  PRG-CRED-LUP            PIC  X(12)           VALUE "CRP\CRPLOOK".
        77  WS-DEPT     PIC X(04).
        77  WS-WEEK          PIC 9(01).
        77  WS-LABCDE        PIC X(08).
@@ -210,78 +285,21 @@
                05  CRT-WRKHD       PIC  X(11).
                05  CRT-WRKST       PIC  X(03).
 
-       01  WS-DB-LINE.
-           03  WS-TOP-LNE.
-               05  WS-TCHR PIC X(01) OCCURS 80.
-           03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-TOP-LNE2.
-               05  WS-TCH  PIC X(01) OCCURS 80.
-           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-              05  FILLER      PIC  X(23).
-        05  WS-WRKHD    PIC  X(11).
-              05  FILLER      PIC  X(01).
-        05  WS-WRKST    PIC  X(03).
-              05  FILLER      PIC  X(01).
-          03  WS-MD-LNE.
-               05  WS-MCR  PIC X(01) OCCURS 80.
-    03  WS-MDCR-LNE REDEFINES WS-MD-LNE.
-        05  WS-MCR1     PIC  X(01).
-        05  WS-MCR78    PIC  X(78).
-        05  WS-MCR80    PIC  X(01).
-          03  WS-MID-LNE.
-               05  WS-MCHR PIC X(01) OCCURS 80.
-    03  WS-MST-LNE REDEFINES WS-MID-LNE.
-        05  WS-MST1     PIC  X(01).
-        05  WS-MST78    PIC  X(78).
-        05  WS-MST80    PIC  X(01).
-          03  WS-MID-LNE2.
-        05  FILLER      PIC  X(01) VALUE "³".
-        05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-        05  FILLER      PIC  X(01) VALUE "³".
-          03  WS-BOT-LNE.
-               05  WS-BCHR PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-BOT-LNE2.
-               05  WS-BCH  PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE2.
-               05  FILLER  PIC X(01).
-               05  WS-MEM-LINE.
-                  07  WS-SRT-LINE
-                           PIC X(50).
-                  07  FILLER
-                           PIC X(10).
-               05  FILLER  PIC X(19).
-           03  WS-MM-LINE.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-               05  FILLER  PIC  X(60) VALUE SPACES.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-           03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
-
        COPY "WS.WS".
 
        01  WS-HELP.
-    03  WS-MODULE       PIC  X(03) VALUE "STP".
-    03  WS-PROG        PIC  X(03) VALUE "053".
+           03  WS-MODULE           PIC  X(03)           VALUE "STP".
+           03  WS-PROG             PIC  X(03)           VALUE "053".
 
        01  WS-PARID.
-          03  WS-SYS-ID       PIC  X(03).
+           03  WS-SYS-ID           PIC  X(03).
 
        01  W02-PRINTER-DETAILS.
            03  W02-PRINTER         PIC  X(12).
            03  W02-PGE-LENGTH      PIC  9(02).
            03  W02-PRN-LENGTH      PIC  9(02).
            03  W02-LINAGE          PIC  9(02).
-           03  W02-PRN-STATUS      PIC  X(01) VALUE "C".
+           03  W02-PRN-STATUS      PIC  X(01)           VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -543,42 +561,23 @@
 
        COPY "W05.VAT".
 
-       COPY "W12.WS".
+      *
+      *    Date routines for accepting checking and formatting have
+      *    been removed from each program and the DateCheck program
+      *    will be called to handle these routines.
+      *
+      *    The following copy 'DateVariables' now includes the 'W12.WS'
+      *    and 'W20.WS' variables and is passed to DateCheck in the CALL
+      *    statement.
+      *
+       COPY "DateVariables.cpy".
 
        01  W15-INPUT-AREA.
           03  W15-ACNO      PIC  X(06).
           03  W15-NAME.
                05  W15-NCHAR PIC  X(01) OCCURS 40.
 
-       01  W22-DATES.
-          03  W22-DTE1        PIC  9(08).
-          03  W22-DTE2        PIC  9(08).
-           03  W22-DATE2 REDEFINES W22-DTE2.
-        05  W22-CC2     PIC  9(02).
-              05  W22-YY2     PIC  9(02).
-              05  W22-MM2     PIC  9(02).
-              05  W22-DD2     PIC  9(02).
-          03  W22-DATE3 REDEFINES W22-DTE2.
-        05  W22-CY2     PIC  9(04).
-        05  FILLER      PIC  9(04).
-          03  W22-DTE3        PIC  9(08).
-           03  W22-DATE3 REDEFINES W22-DTE3.
-              05  W22-DD3     PIC  9(02).
-              05  W22-MM3     PIC  9(02).
-        05  W22-CC3     PIC  9(02).
-              05  W22-YY3     PIC  9(02).
-
-       01  W25-CALCS.
-           03  W25-RESULT      PIC 9(05)V99.
-           03  W25-RESULT1 REDEFINES W25-RESULT.
-               05  W25-WHOLE   PIC 9(05).
-               05  W25-DECIMAL PIC 9(02).
-           03  W25-RESULT2 REDEFINES W25-RESULT.
-               05  W25-KEY     PIC 9(04).
-               05  W25-SUB     PIC 9(01).
-               05  FILLER      PIC 9(02).
-           03  W25-VALUE          PIC S9(07)V9(04) COMP-3.
-           03  W25-TOTAL          PIC S9(07)V9(04) COMP-3.
+       COPY "W25.STK".
 
        01  W30-COST-CODE.
            03  W30-CODE           PIC X(01) OCCURS 10.
@@ -639,23 +638,6 @@
            03  W100-V5 REDEFINES W100-V2.
                05  W100-QNT    PIC Z(05)9.99-.
 
-       01  W200-MEMO.
-           03  W200-MEM-FLDS.
-               05  W200-MEM1   PIC  X(60).
-               05  W200-MEM2   PIC  X(60).
-               05  W200-MEM3   PIC  X(60).
-               05  W200-MEM4   PIC  X(60).
-               05  W200-MEM5   PIC  X(60).
-               05  W200-MEM6   PIC  X(60).
-               05  W200-MEM7   PIC  X(60).
-               05  W200-MEM8   PIC  X(60).
-               05  W200-MEM9   PIC  X(60).
-               05  W200-MEM10  PIC  X(60).
-               05  W200-MEM11  PIC  X(60).
-               05  W200-MEM12  PIC  X(60).
-           03  W200-MEM-FOC REDEFINES W200-MEM-FLDS.
-               05  W200-MEM    PIC  X(60) OCCURS 12.
-
       *
       *    **       ******  **    **  **   **    ***     *****   ******
       *    **         **    ***   **  **  **    ** **   **   **  **
@@ -681,8 +663,6 @@
       *   *****    *****   **   **  ******  ******  **    **
       *
        SCREEN SECTION.
-
-       COPY "BLANK.CRT".
 
        01  S03.
           03  LINE 16 COLUMN 26 FOREGROUND-COLOR Cyan HIGHLIGHT
@@ -723,118 +703,19 @@
        01  S15.
            03  LINE 16 COLUMN 12 VALUE "Stock record:".
 
-       COPY CRDLUP.CRT.
+       01  S55.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+      *                                             1         2         3         4      
+      *                                    1234567890123456789012345678901234567890123456
+      *
+               05  LINE 50 COLUMN  2 VALUE "F1"                                           FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                   FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Creditor Lookup ".
+               05          COLUMN 35 VALUE                                  "Esc"         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 38 VALUE                                     " to exit".
 
-       01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey VALUE
-           "   M E M O / R E M A R K S / C O R R E S P O N D E N C E   ".
-           03          COLUMN 78 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR Black
-     BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(01) USING WS-G12.
-       01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR Black
-                                 BACKGROUND-COLOR Grey
-                                 PIC X(60) USING W200-MEM12 AUTO.
+       COPY "CRDLUP.CRT".
 
        COPY "ERROR.CRT".
 
@@ -852,7 +733,13 @@
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA00M   SECTION.
        AA00.
+      *
+      *   **** Check the User's security level for Stock/Inventory
+      *
            IF LS0-STLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
@@ -876,15 +763,9 @@
        AA49.
              EXIT PROGRAM.
 
-       AA50-LOOKUP     SECTION.
-       AA50.
-            PERFORM SAVE-SCREEN.
-      *      MOVE 4                  TO W44-FUNCTION.
-            PERFORM SCREEN-CONTENTS.
-      PERFORM CREDITOR-LOOKUP.
-            PERFORM RESTORE-SCREEN.
-       AA99.
-             EXIT.
+       COPY "AA50C.LUP".
+       
+       COPY "AA900.ALM".
 
        COPY "DATE.CNV".
 
@@ -907,10 +788,8 @@
 
        COPY "FUNCTION.SCR".
 
-      *    *************************************************************
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
-      *    D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      *            D I S P L A Y   E R R O R   M E S S A G E S
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                      ERROR-MESSAGE                        ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -918,6 +797,12 @@
       *    ³ line 20) Move the line number which must be used as the   ³
       *    ³ top line to WS-MES-LINE. The message to be displayed must ³
       *    ³ be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³                  ERROR-MESSAGE (2 LINES)                  ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ See above for details of the first line and the second    ³
+      *    ³ line of the message must be in WS-ERR-MES-2.              ³
+      *    ³               PERFORM ERROR-MESSAGE-2.                    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "ERROR.SCR".
@@ -951,6 +836,12 @@
       *    ³ The system will display the message box with the top line ³
       *    ³ as the value of WS-MES-LINE. If WS-MES-LINE is zero the   ³
       *    ³ default will be 20.                                       ³
+      *    ³                                                           ³
+      *    ³ If character 48 of the message contains a value of X"FA"  ³
+      *    ³ then do not display the message in a window, only get the ³
+      *    ³ User reponse at the position specified by WS-MES-LINE and ³
+      *    ³ WS-MES-COL.                                               ³
+      *    ³                                                           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "OPTION.CRT".
@@ -988,6 +879,9 @@
       *    ³                                                           ³
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
       *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
@@ -1067,11 +961,9 @@
 
        AB40.
              EXIT.
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
         AC000-READ              SECTION.
 
        COPY "CONTROL.RD".
@@ -1092,95 +984,73 @@
 
        COPY "STOCK.1ST".
 
-       COPY "CREDIT.LUP".
+      *COPY "CREDIT.LUP".
 
        COPY "APAC.HLP".
 
        BE00S        SECTION.
        BE30.
-            PERFORM ERASE-SCREEN.
-            DISPLAY S05.
-            MOVE SPACES  TO W15-ACNO.
+             PERFORM ERASE-SCREEN.
+             DISPLAY S05.
+             MOVE SPACES             TO W15-ACNO.
 
        BE35.
-      DISPLAY "F1" AT 2502
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       "=Help,"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT
-       "F2" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       " to do Creditor Lookup "
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT
-       "Esc" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       " to exit"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
-            ACCEPT S06A.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY
-       MOVE SPACES TO W15-ACNO
-       GO TO BE999
-   WHEN F1-KEY
-       PERFORM HELP-ROUTINE
-   WHEN F2-KEY
-       PERFORM AA50
-   WHEN OTHER
-       CALL X"E5"
-       GO TO BE35
-        END-EVALUATE
-        DISPLAY S06A
-        IF W15-ACNO = SPACES
-           GO TO BE35.
-      PERFORM CLEAR-L50.
+             DISPLAY S55.
+             ACCEPT S06A.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY  MOVE SPACES TO W15-ACNO
+                               GO TO BE999
+                 WHEN F1-KEY   PERFORM HELP-ROUTINE
+                 WHEN F2-KEY   PERFORM AA50
+                 WHEN OTHER    PERFORM AA900-ALARM
+                               GO TO BE35
+               END-EVALUATE
+               DISPLAY S06A
+               IF W15-ACNO = SPACES
+                  GO TO BE35.
+             PERFORM CLEAR-L50.
            IF W15-ACNO = SPACES
-              GO TO BE999.
-      MOVE 5   TO WS-LENGTH.
-      CALL "CBL_TOUPPER" USING W15-ACNO
-                                BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-      MOVE 1   TO WS-LENGTH.
-            MOVE W15-ACNO  TO P-NUMBER.
+               GO TO BE999.
+             MOVE 5                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W15-ACNO BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+             MOVE W15-ACNO           TO P-NUMBER.
              PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
            IF WS-F-ERROR = 3
-              MOVE 1   TO WS-ERROR
+               MOVE 1                TO WS-ERROR
            ELSE
            IF P-NUMBER NOT = W15-ACNO
-              MOVE 2   TO WS-ERROR
+               MOVE 2                TO WS-ERROR
            ELSE
-              MOVE 0   TO WS-ERROR.
+               MOVE 0                TO WS-ERROR.
            IF NOT(WS-ERROR = ZERO)
-              MOVE "No Record"  TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-              GO TO BE35.
+               MOVE "No Record"      TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO BE35.
 
        BE40.
-            PERFORM CLEAR-L50.
-             MOVE P-NAME         TO W15-NAME.
-      DISPLAY W15-NAME AT 0630
-       WITH HIGHLIGHT BACKGROUND-COLOR Magenta.
+             PERFORM CLEAR-L50.
+             MOVE P-NAME             TO W15-NAME.
+             DISPLAY W15-NAME AT 0630 WITH HIGHLIGHT BACKGROUND-COLOR Magenta.
 
        BE45.
-      MOVE "'C'ontinue or 'R'ekey" TO WS-OPT-MES.
-      MOVE SPACE   TO WS-OPTION.
-      PERFORM OPT-MESSAGE.
-    IF NOT(WS-OPTION = "R" OR "C")
-        GO TO BE45.
+             MOVE "'C'ontinue or 'R'ekey" TO WS-OPT-MES.
+             MOVE SPACE              TO WS-OPTION.
+             MOVE "9"                TO WS-INSTR.
+             PERFORM OPT-MESSAGE.
            IF WS-OPTION = "R"
-        GO TO BE30.
-      MOVE ZERO   TO WS-PAGE WS-TCOST WS-TSELL.
+               GO TO BE30.
+             MOVE ZERO               TO WS-PAGE WS-TCOST WS-TSELL.
 
        BE50.
-      DISPLAY "'D'escription or 'C'ode sequence  [C]".
-      MOVE "C"   TO WS-OPTION.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY
-       GO TO BE30
-   WHEN OTHER  CALL X"E5"
-       GO TO BE50
-        END-EVALUATE.
-      MOVE WS-OPTION  TO WS-SEQ.
-    IF NOT(WS-SEQ = "D" OR "C")
-        GO TO BE50.
+             MOVE "'D'escription or 'C'ode sequence  [C]" TO WS-OPT-MES.
+             MOVE "C"                TO WS-OPTION.
+             MOVE "h"                TO WS-INSTR.
+             PERFORM OPT-MESSAGE.
+           IF WS-OPTION = X"EC"
+               GO TO BE30.
+             MOVE WS-OPTION          TO WS-SEQ.
 
        BE55.
              DISPLAY S06.
@@ -1270,8 +1140,8 @@
                COMPUTE WS-SSELL = (STK-SELL + STK-CASH) / 2.000 + .005.
              COMPUTE DEP-GP ROUNDED = ((WS-SSELL - WS-SCOST)
                                       * 100.000) / WS-SSELL.
-            MOVE STK-ACT  TO W22-DTE2.
-      PERFORM SWITCH-DATE-TO-DMCY.
+             MOVE STK-ACT            TO W22-DTE2.
+             PERFORM SWITCH-DATE-TO-DMCY THRU SWITCH-DATE-EXIT.
       MOVE W22-DTE3  TO DEP-ACT.
     IF W02-LINAGE < W02-PRN-LENGTH
         MOVE 1   TO WS-ADVANCE
@@ -1389,35 +1259,35 @@
       MOVE 1   TO W05-V-RATE.
 
        ZA05-VAT.
-      MOVE W05-VAT-CODE  TO DPT-CODE.
-      PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-      MOVE DPT-R-DATE  TO WS-VAT-DATE(W05-V-RATE).
-      MOVE DPT-RATE  TO W05-VAT(W05-V-RATE).
-      ADD 6 W05-V-RATE  GIVING WS-S1.
-      MOVE DPT-P-RATE  TO W05-VAT(WS-S1).
-    IF W05-V-RATE < 6
-        ADD 1   TO W05-V-RATE
-        GO TO ZA05-VAT.
+             MOVE W05-VAT-CODE       TO DPT-CODE.
+             PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+             MOVE DPT-R-DATE         TO WS-VAT-DATE(W05-V-RATE).
+             MOVE DPT-RATE           TO W05-VAT(W05-V-RATE).
+             ADD 6 W05-V-RATE        GIVING WS-S1.
+             MOVE DPT-P-RATE         TO W05-VAT(WS-S1).
+           IF W05-V-RATE < 6
+               ADD 1                 TO W05-V-RATE
+               GO TO ZA05-VAT.
             MOVE 3   TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
             MOVE STK-WEEK  TO WS-WEEK.
              MOVE STK-LABCDE     TO WS-LABCDE.
-            MOVE 8   TO WS-PARKEY.
+             MOVE 8                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-    IF NOT(PAR-DESC-H1 = X"0000000000000000000000000000")
-        MOVE PAR-DESC-H1  TO WS-DESC-H1.
-    IF NOT(PAR-DESC-H2 = X"0000000000000000000000000000")
-        MOVE PAR-DESC-H2  TO WS-DESC-H2.
-    IF NOT(PAR-WS-HD = X"00000000000000000000")
-        MOVE PAR-WS-HD  TO WS-WS-HD.
-    IF NOT(PAR-CS-HD = X"00000000000000000000")
-        MOVE PAR-CS-HD  TO WS-CS-HD.
-    IF NOT(PAR-RT-HD = X"00000000000000000000")
-        MOVE PAR-RT-HD  TO WS-RT-HD.
-      INSPECT WS-CS-HD REPLACING LEADING "-" BY " ".
-      INSPECT WS-WS-HD REPLACING LEADING "-" BY " ".
-      INSPECT WS-RT-HD REPLACING LEADING "-" BY " ".
-            MOVE 1   TO WS-PARKEY.
+           IF NOT(PAR-DESC-H1 = X"0000000000000000000000000000")
+               MOVE PAR-DESC-H1      TO WS-DESC-H1.
+           IF NOT(PAR-DESC-H2 = X"0000000000000000000000000000")
+               MOVE PAR-DESC-H2      TO WS-DESC-H2.
+           IF NOT(PAR-WS-HD = X"00000000000000000000")
+               MOVE PAR-WS-HD        TO WS-WS-HD.
+           IF NOT(PAR-CS-HD = X"00000000000000000000")
+               MOVE PAR-CS-HD        TO WS-CS-HD.
+           IF NOT(PAR-RT-HD = X"00000000000000000000")
+               MOVE PAR-RT-HD        TO WS-RT-HD.
+             INSPECT WS-CS-HD REPLACING LEADING "-" BY " ".
+             INSPECT WS-WS-HD REPLACING LEADING "-" BY " ".
+             INSPECT WS-RT-HD REPLACING LEADING "-" BY " ".
+             MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-DMY        TO W12-TODAY.
              MOVE PAR-YMD        TO W40-DATE1 W40-DATE2.
@@ -1465,22 +1335,24 @@
        DISPLAY-FILE-NAME.
              MOVE ZERO               TO WS-KEY.
              EVALUATE WS-F-ERROR
-               WHEN 2          MOVE W02-NETWORK  TO WS-FILE
-                               MOVE WS-NETKEY    TO WS-KEY
-               WHEN 3          MOVE W02-CREDIT   TO WS-FILE
-                               MOVE P-NUMBER     TO WS-KEYX
-               WHEN 7          MOVE W02-DEPART   TO WS-FILE
-                               MOVE DPT-CODE     TO WS-KEYX
-               WHEN 14         MOVE W02-CRDMEM    TO WS-FILE
-                               MOVE CME-KEY       TO WS-KEYX
-               WHEN 15         MOVE WS-PARID     TO WS-FILE
-                               MOVE WS-PARKEY    TO WS-KEY
-               WHEN 21         MOVE W02-SPARTS   TO WS-FILE
-                               MOVE PRT-ITEM     TO WS-KEYX
-               WHEN 22         MOVE W02-STOCKF   TO WS-FILE
-                               MOVE STK-CODE     TO WS-KEYX
-               WHEN 25         MOVE W02-STKMEM   TO WS-FILE
-                               MOVE SME-KEY      TO WS-KEYX
+               WHEN 2     MOVE W02-NETWORK  TO WS-FILE
+                          MOVE WS-NETKEY    TO WS-KEY
+               WHEN 3     MOVE W02-CREDIT   TO WS-FILE
+                          MOVE P-NUMBER     TO WS-KEYX
+               WHEN 7     MOVE W02-DEPART   TO WS-FILE
+                          MOVE DPT-CODE     TO WS-KEYX
+               WHEN 14    MOVE W02-CRDMEM   TO WS-FILE
+                          MOVE CME-KEY      TO WS-KEYX
+               WHEN 15    MOVE WS-PARID     TO WS-FILE
+                          MOVE WS-PARKEY    TO WS-KEY
+               WHEN 21    MOVE W02-SPARTS   TO WS-FILE
+                          MOVE PRT-ITEM     TO WS-KEYX
+               WHEN 22    MOVE W02-STOCKF   TO WS-FILE
+                          MOVE STK-CODE     TO WS-KEYX
+               WHEN 25    MOVE W02-STKMEM   TO WS-FILE
+                          MOVE SME-KEY      TO WS-KEYX
+               WHEN OTHER MOVE "ERROR"      TO WS-FILE
+                          MOVE "STP053"     TO WS-KEYX
              END-EVALUATE.
 
        COPY "DISPERR.PRO".

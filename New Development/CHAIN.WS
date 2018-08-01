@@ -22,16 +22,17 @@
            03  WS-OK               PIC  X(01) VALUE "N".
            03  WS-RET              PIC  X(01) VALUE " ".
            03  TODAY-DDMMYY        PIC  9(08) COMP-5.
-           03  WS-CUR-YR           PIC  X(01) COMP-X.
-           03  WS-CUR-CEN          PIC  X(01) COMP-X.
-           03  WS-PRV-CEN          PIC  X(01) COMP-X.
-           03  WS-NXT-CEN          PIC  X(01) COMP-X.
+           03  TODAY-YYMMDD        PIC  9(08) COMP-5.
+      *    03  WS-CUR-YR           PIC  X(01) COMP-X.
+      *    03  WS-CUR-CEN          PIC  X(01) COMP-X.
+      *    03  WS-PRV-CEN          PIC  X(01) COMP-X.
+      *    03  WS-NXT-CEN          PIC  X(01) COMP-X.
            03  WS-SLS-ORDNO.
                05  WS-SLS-JOBNO    PIC  X(08) VALUE SPACES.
            03  WS-CARDEX           PIC  X(01).
            03  WS-DSKDRV           PIC  X(01) VALUE "N".
            03  WS-APAC-SYSTEM      PIC  X(12) VALUE "BUS-PREMIUM".
-           03  WS-APAC-VERSION     PIC  X(04) VALUE "2015".
+           03  WS-APAC-VERSION     PIC  X(04) VALUE "2017".
            03  WS-PRG-NAME         PIC  X(08) VALUE "APAC-POS".
            03  WS-L-OR-N           PIC  X(08) VALUE "SYSTEMS\".
 

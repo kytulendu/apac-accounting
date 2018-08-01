@@ -60,7 +60,7 @@
                05  WS-MES-CHAR-2                 REDEFINES WS-DSP-MES-2 PIC  X(01) OCCURS 48.
            03  WS-MES-LINE           PIC  9(02)  VALUE 0.
 
-       01  WS-CONSOLE                PIC  9(02)  COMP-X.
+       01  WS-CONSOLE                PIC  X(01)  COMP-X.
 
        01  WS-LENGTH                 PIC  9(08)  COMP-5 VALUE 1.
 

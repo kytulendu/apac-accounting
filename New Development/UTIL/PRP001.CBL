@@ -21,7 +21,7 @@
        AUTHOR.         J.W.LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
                 
@@ -589,7 +589,9 @@
 
        YA999.
              EXIT.
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.

@@ -56,7 +56,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   February 1990.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -100,7 +100,7 @@
 
        COPY "MEMDEB.SL".
 
-       COPY "PARAM.SL".
+      *COPY "PARAM.SL".
 
        DATA DIVISION.
       *
@@ -122,7 +122,7 @@
 
        COPY "MEMDEB.FDE".
 
-       COPY "PARAM.FDE".
+      *COPY "PARAM.FDE".
 
       *
       *         **        **    *****    ******    **   **
@@ -134,7 +134,7 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-SUB                  PIC  9(04)    COMP-5.
        77  WS-S                    PIC  9(04)    COMP-5.
        77  WS-S1                   PIC  9(04)    COMP-5.
@@ -164,20 +164,20 @@
        77  WS-NTP                  PIC  X(01).
        77  WS-KEYSTR               PIC  9(06)    COMP-5.
        77  WS-OPTION               PIC  X(01).
-       77  WS-SKIP                 PIC  X(01)    VALUE "N".
+       77  WS-SKIP                 PIC  X(01)           VALUE "N".
        77  WS-TAX                  PIC  X(01).
        77  WS-TYPE                 PIC  X(01).
-       77  WS-ERROR                PIC  9(01)    VALUE ZERO.
+       77  WS-ERROR                PIC  9(01)           VALUE ZERO.
        77  WS-EKEY                 PIC  9(06)    COMP-5.
        77  WS-COMP                 PIC  9(01).
-       77  WS-RT-HD                PIC  X(10)    VALUE "-Retail   ".
-       77  WS-WS-HD                PIC  X(10)    VALUE "-Wholesale".
-       77  WS-CS-HD                PIC  X(10)    VALUE "-Cash sale".
-       77  WS-ERR1                 PIC  X(22)    VALUE "Invalid Account Number".
-       77  WS-ERR2                 PIC  X(09)    VALUE "No Record".
-       77  WS-E                    PIC  X(15)    VALUE "**END** - ENTER".
-       77  WS-AC                   PIC  X(07)    VALUE "ACCOUNT".
-       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
+       77  WS-RT-HD                PIC  X(10)           VALUE "-Retail   ".
+       77  WS-WS-HD                PIC  X(10)           VALUE "-Wholesale".
+       77  WS-CS-HD                PIC  X(10)           VALUE "-Cash sale".
+       77  WS-ERR1                 PIC  X(22)           VALUE "Invalid Account Number".
+       77  WS-ERR2                 PIC  X(09)           VALUE "No Record".
+       77  WS-E                    PIC  X(15)           VALUE "**END** - ENTER".
+       77  WS-AC                   PIC  X(07)           VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)           VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
        77  WS-USUB                 PIC  9(04)    COMP-5.
 
@@ -548,6 +548,34 @@
        01  SD-SEQ.
            03  FOREGROUND-COLOR Green BACKGROUND-COLOR Grey PIC ZZ9 USING W200-MSQ(WS-S2) AUTO.
 
+       01  SD-MEM-OPT.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN 03 VALUE " "                                                       FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 06 VALUE   ",".
+               05          COLUMN 07 VALUE    "PgUp"                                                       FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 11 VALUE        "/".
+               05          COLUMN 12 VALUE         "PgDn"                                                  FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 16 VALUE             ",".
+               05          COLUMN 17 VALUE              "Esc"                                              FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 20 VALUE                 "ape,".
+               05          COLUMN 24 VALUE                     "F2"                                        FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 26 VALUE                       "=Insert line,".
+               05          COLUMN 39 VALUE                                    "F3"                         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 41 VALUE                                      "=Delete line,".
+               05          COLUMN 54 VALUE                                                   "F10"         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 57 VALUE                                                       "=Update" .
+               
+       01  SD-OPTIONS.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN 02 VALUE "F1"                                                                     FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 04 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                                             FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Account Lookup,".
+               05          COLUMN 34 VALUE                                 "F9"                                     FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 36 VALUE                                   " Debtor Lookup (Any Word),".
+               05          COLUMN 62 VALUE                                                             "Esc"        FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 65 VALUE                                                               " to exit".
+
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
       *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
@@ -561,6 +589,9 @@
        AA000         SECTION.
        AA00.
            IF LS0-DBLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
@@ -582,7 +613,6 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
@@ -685,17 +715,18 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -706,13 +737,11 @@
 
        COPY "MEMDEB.RD".
 
-       COPY "PARAM.RD".
+      *COPY "PARAM.RD".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -723,7 +752,7 @@
 
        COPY "MEMDEB.WR".
 
-       COPY "PARAM.WR".
+      *COPY "PARAM.WR".
 
        COPY "APAC.HLP".
 
@@ -759,14 +788,7 @@
              MOVE SPACES             TO W80-ACNO.
 
        CJ05.
-             DISPLAY "F1"                                                             AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                       "=Help,"                                                               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                             "F2"                                                             WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                               " to do Account Lookup,"                                       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                                                     "F9"                                     WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                                       " Debtor Lookup (Any Word),"           WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                                                                                 "Esc"        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                                                                   " to exit" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             DISPLAY SD-OPTIONS.
              ACCEPT S36 AT 0612.
            IF USER-FUNC
                EVALUATE KEY-CODE-1
@@ -776,10 +798,10 @@
                  WHEN F1-KEY     PERFORM HELP-ROUTINE
 
                  WHEN F2-KEY     MOVE SPACE     TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
 
                  WHEN F9-KEY     MOVE "A"       TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
 
                  WHEN OTHER      PERFORM AA900-ALARM
                                  GO TO CJ05
@@ -913,20 +935,7 @@
 
        CJ40.
              DISPLAY SD-MEM.
-             DISPLAY " "                                                 AT 5003 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                       ","                                                           WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                        "PgUp"                                                       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                            "/"                                                      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                             "PgDn"                                                  WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                 ","                                                 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                                  "Esc"                                              WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                     "ape,"                                          WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                                         "F2"                                        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                           "=Insert line,"                           WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                                                        "F3"                         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                                          "=Delete line,"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-                                                                       "F10"         WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-                                                                           "=Update" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             DISPLAY SD-MEM-OPT.
 
        CJ45.
       *
@@ -1341,9 +1350,10 @@
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
-             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-COMPANY         TO CRT-COMPANY W95-COMP.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *
@@ -1357,18 +1367,7 @@
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-             COPY "FUNCTION.PRO".
-
-             MOVE 1                  TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
-             MOVE 8                  TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-WS-HD          TO WS-WS-HD.
-             MOVE PAR-CS-HD          TO WS-CS-HD.
-             MOVE PAR-RT-HD          TO WS-RT-HD.
+       COPY "FUNCTION.PRO".
 
        ZA999-EXIT.
              EXIT.
@@ -1388,8 +1387,8 @@
                WHEN 6          MOVE W02-DEBTOR   TO WS-FILE
                                MOVE DEB-ACNO     TO WS-KEYX
 
-               WHEN 15         MOVE W02-PARAM    TO WS-FILE
-                               MOVE WS-PARKEY    TO WS-KEY
+      *        WHEN 15         MOVE W02-PARAM    TO WS-FILE
+      *                        MOVE WS-PARKEY    TO WS-KEY
 
                WHEN 27         MOVE W02-DEBMEM   TO WS-FILE
                                MOVE DME-KEY      TO WS-KEYX

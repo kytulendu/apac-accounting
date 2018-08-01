@@ -1,4 +1,51 @@
       $SET LINKCOUNT"512" GNT"DTP006.GNT"
+      *
+      *     ONLY DELETE WHEN ALL THE BELOW IS COMPLETED
+      *     ===========================================
+      *
+      *  Screen co-ordinates must be revised for new layout
+      *
+      *  Screen Section                            Completed  
+      *                                               ___
+      *                    Layout screen co-ordinates|   |
+      *                                               ---
+      *                                               ___
+      *                    Input screen co-ordinates |   |
+      *                                               ---
+      *                                               ___
+      *                    Output screen co-ordinates|   |
+      *                                               ---
+      *  Procedure Division 
+      *                                               ___
+      *                    Screen Heading Format     |   |
+      *                                               ---
+      *                                               ___
+      *                    Error Messages            |   |
+      *                                               ---
+      *                                               ___
+      *                    User information messages |   |
+      *                                               ---
+      *                                               ___
+      *                    Accept User options       |   |
+      *                                               ---
+      *                                               ___
+      *                    Display co-ordinates      |   |
+      *                                               ---
+      *                                               ___
+      *                    Accept co-ordinates       |   |
+      *                                               ---
+      *  Lookups and Memo
+      *                                               ___       
+      *         Change to the new method and Calls   |   |
+      *                                               ---
+      *  Data Division.
+      *                                               ___
+      *         Line up Pic, Comp, Redefines etc.    | x |
+      *                                               ---
+      *                                               ___
+      *         Remove unused variables and insert   | x |
+      *            all the New Layouts                ---
+      *
       ******************************************************************
       *                                                                *
       *   *******   ********  *******     ****      ****     ******    *
@@ -15,7 +62,7 @@
       *                                                                *
       *       D E B T O R   A G E   A C C O U N T S   P R O G R A M    *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -53,7 +100,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   March 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                   by James William Lemmon.
                                      (Id No. 4412165050082).
 
@@ -156,55 +203,55 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                  PIC  X(18)    VALUE "aeWlimemnomLalismJ".
-       77  WS-SUB                    PIC  9(04)    COMP-5.
-       77  WS-S                      PIC  9(04)    COMP-5.
-       77  WS-S1                     PIC  9(04)    COMP-5.
-       77  WS-S2                     PIC  9(04)    COMP-5.
-       77  WS-S3                     PIC  9(04)    COMP-5.
-       77  WS-S4                     PIC  9(04)    COMP-5.
-       77  WS-S5                     PIC  9(04)    COMP-5.
-       77  WS-S6                     PIC  9(04)    COMP-5.
-       77  WS-S7                     PIC  9(04)    COMP-5.
-       77  WS-S8                     PIC  9(04)    COMP-5.
-       77  WS-S9                     PIC  9(04)    COMP-5.
-       77  WS-IXS1                   PIC  9(04)    COMP-5.
-       77  WS-IXS2                   PIC  9(04)    COMP-5.
-       77  WS-IXS3                   PIC  9(04)    COMP-5.
-       77  WS-IXS4                   PIC  9(04)    COMP-5.
-       77  WS-ENQPOS                 PIC  9(06)    COMP-5.
-       77  WS-ENQEND                 PIC  9(06)    COMP-5.
-       77  WS-NETKEY                 PIC  9(06)    COMP-5.
-       77  WS-PARKEY                 PIC  9(06)    COMP-5.
-       77  WS-RECKEY                 PIC  9(06)    COMP-5.
-       77  WS-RECOVER                PIC  9(06)    COMP-5.
-       77  WS-SHARED                 PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-TRANS                  PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-GST-RATE               PIC S9(03)V99 COMP-3.
-       77  WS-FIN-RATE               PIC S9(03)V99 COMP-3.
-       77  WS-PERIOD                 PIC  9(02).
-       77  WS-NTP                    PIC  X(01).
-       77  WS-KEYSTR                 PIC  9(06)    COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-SUB                  PIC  9(04)    COMP-5.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S5                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S7                   PIC  9(04)    COMP-5.
+       77  WS-S8                   PIC  9(04)    COMP-5.
+       77  WS-S9                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-ENQPOS               PIC  9(06)    COMP-5.
+       77  WS-ENQEND               PIC  9(06)    COMP-5.
+       77  WS-NETKEY               PIC  9(06)    COMP-5.
+       77  WS-PARKEY               PIC  9(06)    COMP-5.
+       77  WS-RECKEY               PIC  9(06)    COMP-5.
+       77  WS-RECOVER              PIC  9(06)    COMP-5.
+       77  WS-SHARED               PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-TRANS                PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-GST-RATE             PIC S9(03)V99 COMP-3.
+       77  WS-FIN-RATE             PIC S9(03)V99 COMP-3.
+       77  WS-PERIOD               PIC  9(02).
+       77  WS-NTP                  PIC  X(01).
+       77  WS-KEYSTR               PIC  9(06)    COMP-5.
        77  WS-INSTR                PIC  X(01).
-       77  WS-OPTION                 PIC  X(01).
-       77  WS-SKIP                   PIC  X(01)    VALUE "N".
-       77  WS-TAX                    PIC  X(01).
-       77  WS-REPLY                  PIC  X(01).
-       77  WS-REST                   PIC  X(01).
-       77  WS-TYPE                   PIC  X(01).
-       77  WS-ERROR                  PIC  9(01)    VALUE ZERO.
-       77  WS-EKEY                   PIC  9(06)    COMP-5.
-       77  WS-CHAR1                  PIC  X(01).
-       77  WS-CHAR2                  PIC  X(01).
-       77  WS-COMP                   PIC  9(01).
-       77  WS-BATCH                  PIC  9(06)    COMP-5.
-       77  WS-ERR1                   PIC  X(22)    VALUE "Invalid Account Number".
-       77  WS-ERR2                   PIC  X(09)    VALUE "No Record".
-       77  WS-E                      PIC  X(15)    VALUE "**END** - ENTER".
-       77  WS-AC                     PIC  X(07)    VALUE "ACCOUNT".
-       77  PRG-DEBT-LUP              PIC  X(12)    VALUE "DTP\DTPLOOK".
-       77  TODAY-DDMMYY              PIC  9(08)    COMP-5.
-       77  WS-USUB                   PIC  9(04)    COMP-5.
+       77  WS-OPTION               PIC  X(01).
+       77  WS-SKIP                 PIC  X(01)           VALUE "N".
+       77  WS-TAX                  PIC  X(01).
+       77  WS-REPLY                PIC  X(01).
+       77  WS-REST                 PIC  X(01).
+       77  WS-TYPE                 PIC  X(01).
+       77  WS-ERROR                PIC  9(01)           VALUE ZERO.
+       77  WS-EKEY                 PIC  9(06)    COMP-5.
+       77  WS-CHAR1                PIC  X(01).
+       77  WS-CHAR2                PIC  X(01).
+       77  WS-COMP                 PIC  9(01).
+       77  WS-BATCH                PIC  9(06)    COMP-5.
+       77  WS-ERR1                 PIC  X(22)           VALUE "Invalid Account Number".
+       77  WS-ERR2                 PIC  X(09)           VALUE "No Record".
+       77  WS-E                    PIC  X(15)           VALUE "**END** - ENTER".
+       77  WS-AC                   PIC  X(07)           VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)           VALUE "DTP\DTPLOOK".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
       *
       *    здддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё Used by calling program (WORKING-STORAGE) and called program Ё
@@ -386,6 +433,21 @@
       *   *****    *****   **   **  ******  ******  **    **
       *
        SCREEN SECTION.
+       01  S25.
+           03  BACKGROUND-COLOR Magenta  FOREGROUND-COLOR Magenta.
+               05  LINE  9 COLUMN 14 VALUE "здддддддддддддддддддддддддддддддддддддддддддддддддддд"                         HIGHLIGHT
+               05          COLUMN 67 VALUE                                                      "©" FOREGROUND-COLOR Black.
+               05  LINE 10 COLUMN 14 VALUE "Ё               "                                                              HIGHLIGHT.
+               05          COLUMN 30 VALUE                 "CREATING HISTORY FILES"                 FOREGROUND-COLOR Grey  HIGHLIGHT.
+               05          COLUMN 52 VALUE                                       "               Ё" FOREGROUND-COLOR Black.
+               05  LINE 11 COLUMN 14 VALUE "Ё"                                                                             HIGHLIGHT.
+               05          COLUMN 15 VALUE  "Account: "                                             FOREGROUND-COLOR Green HIGHLIGHT.
+               05          COLUMN 24 VALUE           "                                           Ё" FOREGROUND-COLOR Black.
+               05  LINE 12 COLUMN 14 VALUE "Ё"                                                                             HIGHLIGHT.
+               05          COLUMN 15 VALUE  "Transaction: "                                         FOREGROUND-COLOR Green HIGHLIGHT.
+               05          COLUMN 29 VALUE               "                                       Ё" FOREGROUND-COLOR Black.
+               05  LINE 13 COLUMN 14 VALUE "ю"                                                                             HIGHLIGHT.
+               05          COLUMN 15 VALUE  "дддддддддддддддддддддддддддддддддддддддддддддддддддды" FOREGROUND-COLOR Black.
 
        01  S27.
            03  BACKGROUND-COLOR Red  FOREGROUND-COLOR Grey HIGHLIGHT.
@@ -435,7 +497,6 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
@@ -476,10 +537,8 @@
 
        COPY "FUNCTION.SCR".
 
-      *    *************************************************************
-      *    ****   T H I S   R O U T I N E   I S   U S E D   T O
-      *    D I S P L A Y   E R R O R   M E S S A G E S
-      *    *************************************************************
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      *            D I S P L A Y   E R R O R   M E S S A G E S
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё                      ERROR-MESSAGE                        Ё
       *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
@@ -487,6 +546,12 @@
       *    Ё line 20) Move the line number which must be used as the   Ё
       *    Ё top line to WS-MES-LINE. The message to be displayed must Ё
       *    Ё be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё                  ERROR-MESSAGE (2 LINES)                  Ё
+      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё See above for details of the first line and the second    Ё
+      *    Ё line of the message must be in WS-ERR-MES-2.              Ё
+      *    Ё               PERFORM ERROR-MESSAGE-2.                    Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "ERROR.SCR".
@@ -583,9 +648,9 @@
 
        COPY "SHARED.RD".
 
-      *
-      *      REWRITE AND WRITE FILES ROUTINES
-      *
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -634,6 +699,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё         W R I T E   R E C O V E R Y   R E C O R D         Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -644,26 +712,26 @@
                STOP RUN.
        AY59.
              EXIT.
-      *
-      *      Start processing transaction
-      *
+      *    *************************************************************
+      *    ****        Start processing transaction
+      *    *************************************************************
        AY60.
              MOVE 1                  TO WS-COUNT.
              MOVE 5                  TO WS-SHARED.
              PERFORM READ-SHARED-LOCK THRU READ-SHARED-EXIT.
-      *
-      *      Read PARAM record 4 - Lock record and start recovery file
-      *      procedure.
-      *
+      *    *************************************************************
+      *    ****    Read PARAM record 4 - Lock record and start recovery
+      *            file procedure.
+      *    *************************************************************
              MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
            IF PAR-USERS < 24
                MOVE 1                TO WS-SUB
                MOVE ZERO             TO WS-WAIT
                GO TO AY62.
-      *
-      *     Q   F U L L  -  W A I T   F O R   4   S E C O N D S
-      *
+      *    *************************************************************
+      *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
+      *    *************************************************************
              DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
              COMMIT.
              ACCEPT WS-STIME FROM TIME.
@@ -1161,10 +1229,10 @@
                  WHEN F1-KEY   PERFORM HELP-ROUTINE
 
                  WHEN F2-KEY   MOVE SPACE        TO W40-LUP
-                               PERFORM AA50
+                               PERFORM AA50-LOOKUP
 
                  WHEN F9-KEY   MOVE "A"          TO W40-LUP
-                               PERFORM AA50
+                               PERFORM AA50-LOOKUP
 
                  WHEN OTHER    PERFORM AA900-ALARM
                                GO TO CI95
@@ -1204,7 +1272,8 @@
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -1220,8 +1289,8 @@
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
       *    *************************************************************
       *    ****    Create paths and file names for history files    ****
       *    *************************************************************
@@ -1264,7 +1333,7 @@
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё Check if the history files were created on a previous     Ё
       *    Ё execution of this program. The details will have been     Ё
-      *    Ё changed and so can not be created again.         Ё
+      *    Ё changed and so can not be created again.                  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        ZA10.
              MOVE 2                  TO WS-PARKEY.
@@ -1286,24 +1355,12 @@
              MOVE 16                 TO SHADE-COL.
              MOVE 52                 TO SHADE-WIDTH.
              MOVE 4                  TO SHADE-LINES.
-             DISPLAY "здддддддддддддддддддддддддддддддддддддддддддддддддддд" AT 0914 WITH FOREGROUND-COLOR Magenta HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "©"                                                             WITH FOREGROUND-COLOR Black             BACKGROUND-COLOR Magenta.
-             DISPLAY "Ё               "                                      AT 1014 WITH FOREGROUND-COLOR Magenta HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "CREATING HISTORY FILES"                                        WITH FOREGROUND-COLOR Grey    HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "       Ё"                                                      WITH FOREGROUND-COLOR Black             BACKGROUND-COLOR Magenta.
-             DISPLAY "Ё"                                                     AT 1114 WITH FOREGROUND-COLOR Magenta HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "Account: "                                                     WITH FOREGROUND-COLOR Green   HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "                                           Ё"                  WITH FOREGROUND-COLOR Black             BACKGROUND-COLOR Magenta.
-             DISPLAY "Ё"                                                     AT 1214 WITH FOREGROUND-COLOR Magenta HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "Transaction: "                                                 WITH FOREGROUND-COLOR Green   HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "                   Ё"                                          WITH FOREGROUND-COLOR Black             BACKGROUND-COLOR Magenta.
-             DISPLAY "ю"                                                     AT 1314 WITH FOREGROUND-COLOR Magenta HIGHLIGHT BACKGROUND-COLOR Magenta
-                     "дддддддддддддддддддддддддддддддддддддддддддддддддддды"         WITH FOREGROUND-COLOR Black             BACKGROUND-COLOR Magenta.
+             DISPLAY S25.
              PERFORM SCREEN-SHADOW.
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё  Ceate a dummy account on history file with details for   Ё
       *    Ё  printing copy statements and other reports. This will be Ё
-      *    Ё  first record in the history account file.         Ё
+      *    Ё  first record in the history account file.                Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
              INITIALIZE DBH-RECORD1.
              MOVE "  !"              TO DBH-NAME.

@@ -34,7 +34,7 @@
        AUTHOR.         J.W.LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -340,13 +340,13 @@
        SCREEN SECTION.
 
        01  S10.
-           03  LINE  6 COLUMN 31 VALUE "SALES LEDGER OPTIONS"          FOREGROUND-COLOR Grey  HIGHLIGHT.
-           03  LINE  8 COLUMN 12 VALUE "M"                             FOREGROUND-COLOR Brown HIGHLIGHT.
-           03          COLUMN 13 VALUE  "aintain, ".
-           03          COLUMN 22 VALUE           "P"                   FOREGROUND-COLOR Brown HIGHLIGHT.
-           03          COLUMN 23 VALUE            "rint or ".
-           03          COLUMN 31 VALUE                    "E"          FOREGROUND-COLOR Brown HIGHLIGHT.
-           03          COLUMN 32 VALUE                     "xit ? > <".
+           03  LINE  5 COLUMN 31 VALUE "SALES LEDGER OPTIONS" FOREGROUND-COLOR Grey HIGHLIGHT.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Black.
+               05  LINE  7 COLUMN 12 VALUE " aintain,  rint or  xit ? > <".
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE "M".
+               05          COLUMN 22 VALUE           "P".
+               05          COLUMN 31 VALUE                    "E".
 
        01  S12.
            03  LINE  6 COLUMN 35 VALUE                              "SALES LEDGER" FOREGROUND-COLOR Grey HIGHLIGHT.
@@ -597,18 +597,15 @@
              PERFORM ERASE-SCREEN.
              DISPLAY S10.
              MOVE "M"                TO WS-OPTION.
-
-       BA05.
-             ACCEPT WS-OPTION AT 0839 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta UPDATE AUTO.
-           IF USER-FUNC
-               EVALUATE KEY-CODE-1
-                 WHEN ESC-KEY    GO TO BA999
-                 WHEN OTHER      PERFORM AA900-ALARM
-                                 GO TO BA05
-               END-EVALUATE.
-             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
-           IF NOT(WS-OPTION = "E" OR "M" OR "P")
-               GO TO BA05.
+             MOVE 7                  TO WS-MES-LINE.
+             MOVE 39                 TO WS-MES-COL.
+      *
+      *      ACCEPT the option at the position specified above
+      *
+             MOVE X"FA"              TO WS-MES-CHAR(48).
+             MOVE "d"                TO WS-INSTR.
+           IF WS-OPTION = X"EC"
+               GO TO BA999.
            IF WS-OPTION = "M"
                PERFORM YA000
            ELSE
@@ -905,9 +902,8 @@
        YA130.
              MOVE "Delete department (Y/N)?  [N]"  TO WS-OPT-MES.
              MOVE "N"                TO WS-OPTION.
+             MOVE 1                  TO LS-INSTR.
              PERFORM OPT-MESSAGE.
-           IF NOT(WS-OPTION = "N" OR "Y")
-               GO TO YA125.
            IF WS-OPTION = "N"
                GO TO YA80.
              DELETE DEPART.
@@ -1111,13 +1107,16 @@
        YB999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              MOVE LS-PARID           TO WS-PARID.
              MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�

@@ -32,7 +32,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   February 1985.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -355,7 +355,7 @@
        77  WS-IND    PIC 9(01).
        77  WS-TYPE         PIC X(01).
        77  WS-HEAD         PIC X(01).
-       77  WS-BATCH    PIC 9(05).
+       77  WS-BATCH        PIC 9(05).
        77  WS-MESS         PIC X(02).
        77  WS-ACNO         PIC X(06).
        77  WS-S1           PIC 9(04)     COMP-5.
@@ -366,7 +366,7 @@
        77  WS-S6           PIC 9(04)     COMP-5.
        77  WS-S7           PIC 9(04)     COMP-5.
        77  WS-S8           PIC 9(04)     COMP-5.
-       77  WS-ERR1    PIC X(22)   VALUE
+       77  WS-ERR1         PIC X(22)   VALUE
                            "Invalid account number".
        77  WS-ERR2         PIC X(09) VALUE "No record".
        77  WS-A            PIC X(19) VALUE "Any key to continue".
@@ -386,8 +386,7 @@
                            PIC X(78).
                05  FILLER  PIC X(01).
            03  WS-TOP-LNE2.
-              05  WS-TCH  PIC X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-      -        "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
+              05  WS-TCH  PIC X(80) VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
     03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
                05  FILLER      PIC  X(01).
                05  WS-TOP-COMP PIC  X(40).
@@ -432,10 +431,10 @@
        COPY "WS.WS".
 
        01  WS-HELP.
-    03  WS-MODULE       PIC  X(03) VALUE "DTP".
-    03  WS-PROG        PIC  X(03) VALUE "001".
+           03  WS-MODULE       PIC  X(03) VALUE "DTP".
+           03  WS-PROG        PIC  X(03) VALUE "035".
 
-       COPY "LEDTRF.WS.
+       COPY "LEDTRF.WS".
 
        01  W00-TRAN-CODES.
            03  W00-T-VAT   PIC  9(09)V99 COMP-3.
@@ -456,7 +455,7 @@
 
        01  W02-FILE-IDS.
            03  W02-PRINTER.
-        05  W02-REPORT PIC X(07) VALUE "DTP035.".
+               05  W02-REPORT PIC X(07) VALUE "DTP035.".
                05  W02-USER   PIC X(05) VALUE SPACES.
 
        01  W05-LIST.
@@ -469,19 +468,19 @@
        COPY "W05.VAT".
 
        01  W05-DISC.
-          03  W05-DISCOUNT.
+           03  W05-DISCOUNT.
                05  W05-DSETT   PIC S9(03)V99 COMP-3 OCCURS 10.
 
        01  W08-EXPD.
-          03  W08-DEC        PIC 9(03) OCCURS 6.
+           03  W08-DEC             PIC 9(03) OCCURS 6.
 
        01  W10-SPARES.
-          03  W10-DATE        PIC X(10).
-           03  W10-RDATE REDEFINES W10-DATE.
-        05  W10-DTE     PIC 99/99/9999.
+           03  W10-DATE            PIC X(10).
+           03  W10-RDATE                         REDEFINES W10-DATE.
+               05  W10-DTE         PIC 99/99/9999.
 
        01  W10-REF.
-           03  W10-NUM         PIC  9(08).
+           03  W10-NUM             PIC  9(08).
 
       *
       *    Date routines for accepting checking and formatting have
@@ -496,51 +495,51 @@
 
        COPY "W15.WS".
 
-           03  W15-END-CYMD REDEFINES W15-E-YMD.
-               05  W15-ECY     PIC  9(04).
-               05  FILLER      PIC  9(04).
+           03  W15-END-CYMD                      REDEFINES W15-E-YMD.
+               05  W15-ECY         PIC  9(04).
+               05  FILLER          PIC  9(04).
 
        01  W25-CALCS.
-           03  W25-RESULT      PIC 9(05)V99.
-           03  W25-RESULT1 REDEFINES W25-RESULT.
-               05  W25-WHOLE   PIC 9(05).
-               05  W25-DECIMAL PIC 9(02).
-           03  W25-RESULT2 REDEFINES W25-RESULT.
-               05  W25-KEY    PIC 9(04).
-               05  W25-SUB    PIC 9(01).
-               05  FILLER     PIC 9(02).
-           03  W25-TOTAL       PIC S9(07)V99 COMP-3.
-           03  W25-VALUE       PIC S9(07)V99 COMP-3.
+           03  W25-RESULT          PIC  9(05)V99.
+           03  W25-RESULT1                       REDEFINES W25-RESULT.
+               05  W25-WHOLE       PIC  9(05).
+               05  W25-DECIMAL     PIC  9(02).
+           03  W25-RESULT2                       REDEFINES W25-RESULT.
+               05  W25-KEY         PIC  9(04).
+               05  W25-SUB         PIC  9(01).
+               05  FILLER          PIC  9(02).
+           03  W25-TOTAL           PIC S9(07)V99 COMP-3.
+           03  W25-VALUE           PIC S9(07)V99 COMP-3.
 
        01  W30-DBFOTO.
-    03  W30-KEY.
-              05  W30-AC      PIC  X(06).
-        05  W30-CONT    PIC  X(08).
-    03  W30-DESC        PIC  X(30).
-          03  W30-DATE        PIC  9(08)     COMP-3.
-    03  W30-RENTAL      PIC S9(07)V99  COMP-3.
-    03  W30-TYPE        PIC  X(01).
-    03  W30-FREQ        PIC  X(01).
-    03  W30-ADATE       PIC  9(08)     COMP-3.
-    03  W30-ESC        PIC  9(03)V99  COMP-3.
-    03  W30-RATE        PIC S9(06)V999 COMP-3.
-          03  W30-RDTE        PIC  9(08)     COMP-3.
-          03  W30-STRDNG      PIC  9(08)     COMP-5.
-          03  W30-LSTRDNG     PIC  9(08)     COMP-5.
-          03  W30-READING     PIC  9(08)     COMP-5.
-          03  W30-VALUE       PIC S9(07)V99  COMP-3.
-          03  W30-TAX        PIC S9(05)V99  COMP-3.
-    03  W30-TCODE       PIC  X(01)     COMP-X.
-    03  W30-VG.
-        05  W30-VAT     PIC  9(01).
-    03  FILLER        PIC  X(15).
+           03  W30-KEY.
+               05  W30-AC          PIC  X(06).
+               05  W30-CONT        PIC  X(08).
+           03  W30-DESC            PIC  X(30).
+           03  W30-DATE            PIC  9(08)     COMP-3.
+           03  W30-RENTAL          PIC S9(07)V99  COMP-3.
+           03  W30-TYPE            PIC  X(01).
+           03  W30-FREQ            PIC  X(01).
+           03  W30-ADATE           PIC  9(08)     COMP-3.
+           03  W30-ESC             PIC  9(03)V99  COMP-3.
+           03  W30-RATE            PIC S9(06)V999 COMP-3.
+           03  W30-RDTE            PIC  9(08)     COMP-3.
+           03  W30-STRDNG          PIC  9(08)     COMP-5.
+           03  W30-LSTRDNG         PIC  9(08)     COMP-5.
+           03  W30-READING         PIC  9(08)     COMP-5.
+           03  W30-VALUE           PIC S9(07)V99  COMP-3.
+           03  W30-TAX             PIC S9(05)V99  COMP-3.
+           03  W30-TCODE           PIC  X(01)     COMP-X.
+           03  W30-VG.
+               05  W30-VAT         PIC  9(01).
+           03  FILLER              PIC  X(15).
 
        01  W30-AGE-DATES.
-           03  W30-120         PIC  9(06) COMP-3.
-           03  W30-90          PIC  9(06) COMP-3.
-           03  W30-60          PIC  9(06) COMP-3.
-           03  W30-30          PIC  9(06) COMP-3.
-           03  W30-CUR         PIC  9(06) COMP-3.
+           03  W30-120             PIC  9(06) COMP-3.
+           03  W30-90              PIC  9(06) COMP-3.
+           03  W30-60              PIC  9(06) COMP-3.
+           03  W30-30              PIC  9(06) COMP-3.
+           03  W30-CUR             PIC  9(06) COMP-3.
 
        COPY "W40.DBT".
 
@@ -569,9 +568,9 @@
            03  W75-S          PIC 9(02) COMP-5.
            03  W75-S1         PIC 9(02) COMP-5.
            03  W75-KEY        PIC  9(06)    COMP-5.
-    03  W75-ALLOCATED  PIC S9(09)V99 COMP-3.
+           03  W75-ALLOCATED  PIC S9(09)V99 COMP-3.
            03  W75-BALANCE    PIC S9(09)V99 COMP-3.
-    03  W75-DNO       PIC X(06) OCCURS 18.
+           03  W75-DNO        PIC X(06) OCCURS 18.
 
        01  W75-TITLES.
            03  W75-DESCRIP.
@@ -594,18 +593,18 @@
            03  W80-ACNO        PIC X(06).
            03  W80-NUMD REDEFINES W80-ACNO.
                05  W80-SERIAL  PIC 9(06).
-          03  W80-TYPE        PIC 9(01).
+           03  W80-TYPE        PIC 9(01).
 
        01  W85-BATCHES.
                05  W85-BATCH   PIC 9(05).
 
        COPY "W90.DBT".
 
-    03  W90-PRICE       PIC S9(08)V999 COMP-3.
-    03  W90-UNITS       PIC  9(08)    COMP-3.
-    03  W90-DEXC        PIC S9(09)V99 COMP-3.
-    03  W90-DTAX        PIC S9(09)V99 COMP-3.
-    03  W90-DTOT        PIC S9(09)V99 COMP-3.
+           03  W90-PRICE       PIC S9(08)V999 COMP-3.
+           03  W90-UNITS       PIC  9(08)    COMP-3.
+           03  W90-DEXC        PIC S9(09)V99 COMP-3.
+           03  W90-DTAX        PIC S9(09)V99 COMP-3.
+           03  W90-DTOT        PIC S9(09)V99 COMP-3.
 
        01  W95-STM.
            03  W95-COMP            PIC X(40).
@@ -646,35 +645,60 @@
            03  W200-MEM-FOC REDEFINES W200-MEM-FLDS.
                05  W200-MEM    PIC  X(60) OCCURS 12.
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
        COPY "FILE.IDS".
 
-      /
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
 
        01  S27.
-          03  LINE  5 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 4
+          03  LINE  5 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Red
                                  VALUE "This routine does not include a
       -                          "recovery procedure. Security".
-          03  LINE  6 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 4
+          03  LINE  6 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Red
                                  VALUE "copies  of the data files should
       -                          " be made as a power  failure".
-          03  LINE  7 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 4
+          03  LINE  7 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Red
                                  VALUE "or any other problem during this
       -                          " procedure would require the".
-          03  LINE  8 COLUMN 12 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 4
+          03  LINE  8 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Red
                                  VALUE "DATA FILES from the previous bac
       -                          "kup to be restored !!!      ".
            03  LINE 10 COLUMN 12 VALUE "Do you wish to continue (Y/N)?".
 
-      /
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA00-MAIN       SECTION.
        AA00-INIT.
@@ -821,8 +845,8 @@
              WRITE REC-RECORD.
            IF WS-STATUS NOT = "00"
                DISPLAY "Write error Recovery file - Status " AT 2212
-                        WITH FOREGROUND-COLOR 14 WS-STATUS
-                        WITH FOREGROUND-COLOR 15
+                        WITH FOREGROUND-COLOR Brown HIGHLIGHT WS-STATUS
+                        WITH FOREGROUND-COLOR Grey HIGHLIGHT
                STOP RUN.
        AY59.
              EXIT.
@@ -850,13 +874,13 @@
       *    ****   Q   F U L L  -  W A I T   F O R   4 S E C O N D S
       *
             DISPLAY "WAITING" AT 5051
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 12.
+        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
             COMMIT.
       ACCEPT WS-STIME FROM TIME.
       MOVE 400   TO WS-WAIT.
             PERFORM LOCK-REC-LOOP.
             DISPLAY SPACE AT 5051
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
              GO TO AY60.
 
        AY61.
@@ -926,16 +950,16 @@
     IF WS-WAIT > ZERO
         COMMIT
         DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 14 BLINK
+   WITH BACKGROUND-COLOR Cyan
+        FOREGROUND-COLOR Brown HIGHLIGHT BLINK
         ACCEPT WS-STIME FROM TIME
         PERFORM LOCK-REC-LOOP
         DISPLAY "Waiting" AT 5072
-   WITH BACKGROUND-COLOR 3
-        FOREGROUND-COLOR 14 BLINK
+   WITH BACKGROUND-COLOR Cyan
+        FOREGROUND-COLOR Brown HIGHLIGHT BLINK
         GO TO AY60.
             DISPLAY SPACE AT 5072
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
 
        AY63.
             MOVE WS-SUB  TO WS-USUB.
@@ -988,55 +1012,50 @@
       /
        BB050        SECTION.
        BB50.
-             MOVE SPACES         TO REP-DETAIL2.
-      WRITE INV-L1 BEFORE 2 LINES.
-      MOVE X"0E"   TO INV-EXP2.
-      MOVE "TAX INVOICE/BELASTING FAKTUUR"
-     TO INV-INVOICE.
-      WRITE INV-L1 BEFORE 0 LINES.
-      WRITE INV-L1 BEFORE 2 LINES.
-             MOVE SPACES         TO REP-DETAIL2.
-      MOVE X"0E"   TO INV-EXP2.
-      MOVE "  RENTAL,SERVICE/HUUR,DIENS"
-     TO INV-INVOICE.
-      WRITE INV-L1 BEFORE 0 LINES.
-      WRITE INV-L1 BEFORE 2 LINES.
-             MOVE SPACES         TO REP-DETAIL2.
-      MOVE X"0E"   TO INV-EXP.
-            MOVE W95-COMP  TO INV-EXPNAME.
-            WRITE INV-L1 BEFORE 1 LINES.
-      MOVE WS-ECAN  TO REP-DETAIL2.
-      WRITE INV-L1 BEFORE 0 LINES.
-      MOVE SPACES  TO REP-DETAIL2.
-            MOVE W95-ADD1  TO INV-NADD.
-          IF W05-VATNO NOT = SPACES
-              MOVE "VAT No/BTW Nr :"
-     TO INV-H2
-               MOVE W05-VATNO    TO INV-GNO.
+             MOVE SPACES             TO REP-DETAIL2.
+             WRITE INV-L1 BEFORE 2 LINES.
+             MOVE X"0E"              TO INV-EXP2.
+             MOVE "TAX INVOICE/BELASTING FAKTUUR" TO INV-INVOICE.
+             WRITE INV-L1 BEFORE 0 LINES.
+             WRITE INV-L1 BEFORE 2 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE X"0E"              TO INV-EXP2.
+             MOVE "  RENTAL,SERVICE/HUUR,DIENS" TO INV-INVOICE.
+             WRITE INV-L1 BEFORE 0 LINES.
+             WRITE INV-L1 BEFORE 2 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE X"0E"              TO INV-EXP.
+             MOVE W95-COMP           TO INV-EXPNAME.
              WRITE INV-L1 BEFORE 1 LINES.
-             MOVE SPACES         TO REP-DETAIL2.
-             MOVE W95-ADD2       TO INV-NADD.
-          IF W95-TEL NOT = SPACES
-              MOVE "TELEPHONE/FOON:"
-     TO INV-H2
-               MOVE W95-TEL      TO INV-TEL.
+             MOVE WS-ECAN            TO REP-DETAIL2.
+             WRITE INV-L1 BEFORE 0 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W95-ADD1           TO INV-NADD.
+           IF W05-VATNO NOT = SPACES
+               MOVE "VAT No/BTW Nr :" TO INV-H2
+               MOVE W05-VATNO        TO INV-GNO.
              WRITE INV-L1 BEFORE 1 LINES.
-      MOVE SPACES  TO REP-DETAIL2.
-             MOVE W95-ADD3       TO INV-NADD.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W95-ADD2           TO INV-NADD.
+           IF W95-TEL NOT = SPACES
+               MOVE "TELEPHONE/FOON:" TO INV-H2
+               MOVE W95-TEL          TO INV-TEL.
              WRITE INV-L1 BEFORE 1 LINES.
-             MOVE W95-ADD4       TO INV-NADD.
-            WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W95-ADD3           TO INV-NADD.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE W95-ADD4           TO INV-NADD.
+             WRITE INV-L1 BEFORE 1 LINES.
+
        BB55.
-             MOVE SPACES         TO REP-DETAIL2.
-             MOVE W95-PC         TO INV-PC.
-            WRITE INV-L1 BEFORE 2 LINES.
-             MOVE SPACES         TO REP-DETAIL2.
-      MOVE "All items appearing on this invoice will be shown on
-      -    "the statement as they are for individual contracts"
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W95-PC             TO INV-PC.
+             WRITE INV-L1 BEFORE 2 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE "All items appearing on this invoice will be shown on the statement as they are for individual contracts"
      TO BAL-REP.
             WRITE INV-L1 BEFORE 1 LINES.
-      MOVE "Alle items wat op hierdie faktuur verskyn sal ook op
-      -        "die staat verskyn omdat hulle verskulende kontrakte is"
+            MOVE "Alle items wat op hierdie faktuur verskyn sal ook op die staat verskyn omdat hulle verskulende kontrakte is"
      TO BAL-REP.
             WRITE INV-L1 BEFORE 2 LINES.
       MOVE SPACES  TO REP-DETAIL2.
@@ -1196,13 +1215,13 @@
        DA00.
              PERFORM ERASE-SCREEN.
       DISPLAY "POST RENTAL AND SERVICE CONTRACT DEBITS" AT 0221
-        WITH FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH FOREGROUND-COLOR Grey HIGHLIGHT.
             DISPLAY S27.
 
        DA05.
             ACCEPT WS-OPTION AT 1043
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta AUTO.
     IF USER-FUNC
         EVALUATE KEY-CODE-1
    WHEN ESC-KEY
@@ -1231,338 +1250,319 @@
                                     W90-120 W40-SDISC.
 
        DA08.
-      MOVE WS-17CPI  TO REP-DETAIL1.
-      WRITE REP-LINE1 BEFORE 0 LINES.
+             MOVE WS-17CPI           TO REP-DETAIL1.
+             WRITE REP-LINE1 BEFORE 0 LINES.
 
        DA10.
-      MOVE SPACES  TO W80-ACNO DEB-ACNO.
-             MOVE ZERO           TO W90-CODE.
-            MOVE W12-TODAY  TO W90-DTE W90-DATE W10-DTE.
-      PERFORM CHECK-DATE.
+             MOVE SPACES             TO W80-ACNO DEB-ACNO.
+             MOVE ZERO               TO W90-CODE.
+             MOVE W12-TODAY          TO W90-DTE W90-DATE TO W22-DATE.
+             PERFORM DATE-CHECK THRU CHECK-DATE-EXIT.
+      *
+      *    ****  As W12-TODAY was checked at the start of the session
+      *          it will be assumed to be correct and the above routine
+      *          will have switched the date to CCYYMMDD in W20-DTE.
+      *
+      *    IF NOT(W22-ERROR = 0)
+      *        EVALUATE W22-ERROR
+      *          WHEN 1  MOVE "Invalid Order DATE"  TO WS-ERR-MES
+      *          WHEN 2  MOVE "Invalid Order DAY"   TO WS-ERR-MES
+      *          WHEN 3  MOVE "Invalid Order MONTH" TO WS-ERR-MES
+      *        END-EVALUATE
+      *        PERFORM ERROR-MESSAGE
 
        DA15.
-            MOVE ZERO   TO W90-DB W90-CR W90-EX.
-            MOVE SPACES  TO W90-REF W90-REG.
-      MOVE 1   TO WS-S9.
+             MOVE ZERO               TO W90-DB W90-CR W90-EX.
+             MOVE SPACES             TO W90-REF W90-REG.
+             MOVE 1                  TO WS-S9.
 
        DA17.
-            MOVE ZERO   TO W90-VAT(WS-S9) W90-TAXVAL(WS-S9).
-    IF WS-S9 < 12
-        ADD 1   TO WS-S9
-        GO TO DA17.
-      MOVE " !"   TO DBF-AC
-        DBF-CONT.
-      PERFORM START-AT-DBFT-KEY THRU READ-DBFOTO-EXIT.
-    IF WS-F-ERROR = 42
-        GO TO DA999.
+             MOVE ZERO               TO W90-VAT(WS-S9) W90-TAXVAL(WS-S9).
+           IF WS-S9 < 12
+               ADD 1                 TO WS-S9
+               GO TO DA17.
+             MOVE " !"               TO DBF-AC DBF-CONT.
+             PERFORM START-AT-DBFT-KEY THRU READ-DBFOTO-EXIT.
+           IF WS-F-ERROR = 42
+               GO TO DA999.
 
        DA20.
-      PERFORM READ-DBFOTO-NEXT THRU READ-DBFOTO-EXIT.
-    IF WS-F-ERROR = 42
-        IF NOT (W80-ACNO = SPACES)
-     PERFORM DA50
-        END-IF
-        GO TO DA100.
-      MOVE DBF-RECORD1  TO W30-DBFOTO.
-    IF (W30-VG < "0" OR > "6")
-        MOVE 0   TO W30-VAT.
-      MOVE W30-RDTE  TO W15-START.
-      MOVE W15-SDAY  TO W15-SDD.
-      MOVE W15-SMNTH  TO W15-SMM.
-      MOVE W15-SCENT  TO W15-SCC.
-      MOVE W15-SYEAR  TO W15-SYY.
-    IF (W12-T-YMD < W15-S-YMD) AND
-       ((W12-MM < W15-SMM) OR (W12-YY < W15-SYY))
-        GO TO DA20.
-       DISPLAY DBF-AC AT 1225
-        WITH FOREGROUND-COLOR 3 HIGHLIGHT
-      BACKGROUND-COLOR 5.
-       DISPLAY DBF-CONT AT 1625
-        WITH FOREGROUND-COLOR 6 HIGHLIGHT
-      BACKGROUND-COLOR 5.
-    IF DBF-AC = DEB-ACNO
-        GO TO DA25.
-    IF NOT (W80-ACNO = SPACES)
-        PERFORM DA50.
-            MOVE 0   TO WS-PAGE.
-      MOVE ZERO   TO W90-DEXC W90-DTAX W90-DTOT W90-EX.
-      MOVE DBF-AC  TO W80-ACNO DEB-ACNO.
-      PERFORM CA155-GET-DEBTOR.
-    IF WS-ERROR = 1 OR 2
-        GO TO DA20.
-      MOVE DEB-ACNO  TO W40-ACNO.
-            MOVE DEB-NAME  TO W40-NAME.
+             PERFORM READ-DBFOTO-NEXT THRU READ-DBFOTO-EXIT.
+           IF WS-F-ERROR = 42
+               IF NOT(W80-ACNO = SPACES)
+            PERFORM DA50
+               END-IF
+               GO TO DA100.
+             MOVE DBF-RECORD1        TO W30-DBFOTO.
+           IF (W30-VG < "0" OR > "6")
+               MOVE 0                TO W30-VAT.
+             MOVE W30-RDTE           TO W15-START.
+             MOVE W15-SDAY           TO W15-SDD.
+             MOVE W15-SMNTH          TO W15-SMM.
+             MOVE W15-SCENT          TO W15-SCC.
+             MOVE W15-SYEAR          TO W15-SYY.
+           IF (W12-T-YMD < W15-S-YMD) AND ((W12-MM < W15-SMM) OR (W12-YY < W15-SYY))
+               GO TO DA20.
+             DISPLAY DBF-AC   AT 1225 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Cyan HIGHLIGHT.
+             DISPLAY DBF-CONT AT 1625 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Brown HIGHLIGHT.
+           IF DBF-AC = DEB-ACNO
+               GO TO DA25.
+           IF NOT(W80-ACNO = SPACES)
+               PERFORM DA50.
+             MOVE 0                  TO WS-PAGE.
+             MOVE ZERO               TO W90-DEXC W90-DTAX W90-DTOT W90-EX.
+             MOVE DBF-AC             TO W80-ACNO DEB-ACNO.
+             PERFORM CA155-GET-DEBTOR.
+           IF WS-ERROR = 1 OR 2
+               GO TO DA20.
+             MOVE DEB-ACNO           TO W40-ACNO.
+             MOVE DEB-NAME           TO W40-NAME.
            IF W80-TYPE = 1
                INSPECT W40-NAME REPLACING ALL "*" BY " "
                INSPECT W40-NAME REPLACING FIRST "!" BY " ".
-            DISPLAY W40-NAME AT 1232
-       WITH FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5.
-      PERFORM BC000.
-      PERFORM BB050.
-            MOVE 1   TO WS-NETKEY.
+             DISPLAY W40-NAME AT 1232 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Cyan HIGHLIGHT.
+             PERFORM BC000.
+             PERFORM BB050.
+             MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
-            MOVE DEB-INVOICE  TO W90-REF.
-            DISPLAY W90-REF AT 1425
-       WITH FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 5.
-          IF DEB-INVOICE = 99999999
-              MOVE 1   TO DEB-INVOICE
+             MOVE DEB-INVOICE        TO W90-REF.
+             DISPLAY W90-REF AT 1425 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Brown HIGHLIGHT.
+           IF DEB-INVOICE = 99999999
+               MOVE 1                TO DEB-INVOICE
            ELSE
-              ADD 1   TO DEB-INVOICE.
+               ADD 1                 TO DEB-INVOICE.
              PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
-      PERFORM DA40.
+             PERFORM DA40.
 
        DA25.
-      MOVE ZERO   TO W30-VALUE W30-TAX.
-      MOVE W30-TCODE  TO W90-CODE.
-      PERFORM GET-DEBTOR-TRAN-DESC.
+             MOVE ZERO               TO W30-VALUE W30-TAX.
+             MOVE W30-TCODE          TO W90-CODE.
+             PERFORM GET-DEBTOR-TRAN-DESC.
            IF W00-T-CODE = ZERO
-              GO TO DA20.
-             MOVE W00-E-DESC     TO W90-DESC.
-      MOVE W30-CONT  TO W90-REG.
-    IF W30-RENTAL > ZERO
-        MOVE W30-RENTAL  TO W90-VAL W90-PRICE
-        MOVE 1   TO W90-UNITS
-        PERFORM CG000
-        ADD W90-DB  TO W30-VALUE W90-DTOT
-        ADD W90-VAT(WS-VAT-SUB)
-     TO W30-TAX W90-DTAX
-        ADD W90-VAL  TO W90-DEXC.
-    IF W30-READING = ZERO
-        GO TO DA35.
-      SUBTRACT W30-LSTRDNG FROM W30-READING
-     GIVING W90-UNITS.
-      COMPUTE W90-VAL ROUNDED = W30-RATE * W90-UNITS.
-    IF W90-VAL = ZERO
-        GO TO DA35.
-      MOVE W30-RATE  TO W90-PRICE.
-      PERFORM CG000.
-      ADD W90-DB   TO W30-VALUE W90-DTOT.
-      ADD W90-VAT(WS-VAT-SUB)
-     TO W30-TAX W90-DTAX.
-      ADD W90-VAL  TO W90-DEXC.
+               GO TO DA20.
+             MOVE W00-E-DESC         TO W90-DESC.
+             MOVE W30-CONT           TO W90-REG.
+           IF W30-RENTAL > ZERO
+               MOVE W30-RENTAL       TO W90-VAL W90-PRICE
+               MOVE 1                TO W90-UNITS
+               PERFORM CG000
+               ADD W90-DB            TO W30-VALUE W90-DTOT
+               ADD W90-VAT(WS-VAT-SUB) TO W30-TAX W90-DTAX
+               ADD W90-VAL           TO W90-DEXC.
+           IF W30-READING = ZERO
+               GO TO DA35.
+             SUBTRACT W30-LSTRDNG FROM W30-READING GIVING W90-UNITS.
+             COMPUTE W90-VAL ROUNDED = W30-RATE * W90-UNITS.
+           IF W90-VAL = ZERO
+               GO TO DA35.
+             MOVE W30-RATE           TO W90-PRICE.
+             PERFORM CG000.
+             ADD W90-DB              TO W30-VALUE W90-DTOT.
+             ADD W90-VAT(WS-VAT-SUB) TO W30-TAX W90-DTAX.
+             ADD W90-VAL             TO W90-DEXC.
 
        DA35.
-      MOVE W30-RDTE  TO W15-START.
-    IF W30-FREQ = "A"
-        ADD 1   TO W15-SYEAR
-    ELSE
-        MOVE W30-FREQ  TO WS-NTP
-        ADD WS-NTP  TO W15-SMNTH.
-    IF W15-SMNTH > 12
-        SUBTRACT 12  FROM W15-SMNTH
-        ADD 1   TO W15-SYEAR.
-      MOVE W15-START  TO W30-RDTE.
-      MOVE W30-ADATE  TO W15-START.
-      MOVE W15-SDAY  TO W15-SDD.
-      MOVE W15-SMNTH  TO W15-SMM.
-      MOVE W15-SCENT  TO W15-SCC.
-      MOVE W15-SYEAR  TO W15-SYY.
-      MOVE W12-T-YMD  TO W15-E-YMD.
-      MOVE ZERO   TO W15-EDD.
-      ADD 1   TO W15-EMM.
-    IF W15-EMM > 12
-        SUBTRACT 12  FROM W15-EMM
-        ADD 1   TO W15-ECY.
-    IF W15-E-YMD NOT < W15-S-YMD
-        IF W30-ESC NOT = ZERO
-     COMPUTE W30-RENTAL ROUNDED = W30-RENTAL +
-      (W30-RENTAL * (W30-ESC / 100.0000))
-     ADD 1  TO W15-SYEAR
-     MOVE W15-START
-     TO W30-ADATE.
-      MOVE W30-READING  TO W30-LSTRDNG.
-      MOVE W30-DBFOTO  TO DBF-RECORD1.
-      PERFORM REWRITE-DBFOTO THRU WRITE-DBFOTO-EXIT.
-      GO TO DA20.
+             MOVE W30-RDTE           TO W15-START.
+           IF W30-FREQ = "A"
+               ADD 1                 TO W15-SYEAR
+           ELSE
+               MOVE W30-FREQ         TO WS-NTP
+             ADD WS-NTP              TO W15-SMNTH.
+           IF W15-SMNTH > 12
+               SUBTRACT 12           FROM W15-SMNTH
+               ADD 1                 TO W15-SYEAR.
+             MOVE W15-START          TO W30-RDTE.
+             MOVE W30-ADATE          TO W15-START.
+             MOVE W15-SDAY           TO W15-SDD.
+             MOVE W15-SMNTH          TO W15-SMM.
+             MOVE W15-SCENT          TO W15-SCC.
+             MOVE W15-SYEAR          TO W15-SYY.
+             MOVE W12-T-YMD          TO W15-E-YMD.
+             MOVE ZERO               TO W15-EDD.
+             ADD 1                   TO W15-EMM.
+           IF W15-EMM > 12
+               SUBTRACT 12           FROM W15-EMM
+               ADD 1                 TO W15-ECY.
+           IF NOT(W15-E-YMD < W15-S-YMD)
+               IF W30-ESC NOT = ZERO
+                   COMPUTE W30-RENTAL ROUNDED = W30-RENTAL + (W30-RENTAL * (W30-ESC / 100.0000))
+             ADD 1                   TO W15-SYEAR
+             MOVE W15-START          TO W30-ADATE.
+             MOVE W30-READING        TO W30-LSTRDNG.
+             MOVE W30-DBFOTO         TO DBF-RECORD1.
+             PERFORM REWRITE-DBFOTO THRU WRITE-DBFOTO-EXIT.
+             GO TO DA20.
 
        DA40.
       *
       *    ****    P R I N T   I N V O I C E   H E A D I N G S
       *
-             MOVE SPACES         TO REP-DETAIL2.
-      MOVE X"0E"   TO INV-EXP.
-      MOVE "REF No:"  TO INV-H14.
-             MOVE W90-REF        TO INV-REF.
-            WRITE INV-L1 BEFORE 0 LINES.
-            WRITE INV-L1 BEFORE 2 LINES.
-             MOVE SPACES         TO REP-DETAIL2.
-      MOVE X"0E"   TO INV-EXP.
-      MOVE "DATE  :"  TO INV-H14.
-             MOVE W12-TODAY      TO INV-DTE.
-            WRITE INV-L1 BEFORE 0 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE X"0E"              TO INV-EXP.
+             MOVE "REF No:"          TO INV-H14.
+             MOVE W90-REF            TO INV-REF.
+             WRITE INV-L1 BEFORE 0 LINES.
+             WRITE INV-L1 BEFORE 2 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE X"0E"              TO INV-EXP.
+             MOVE "DATE  :"          TO INV-H14.
+             MOVE W12-TODAY          TO INV-DTE.
+             WRITE INV-L1 BEFORE 0 LINES.
              WRITE INV-L1 BEFORE 1 LINES.
-      MOVE WS-ECAN  TO REP-DETAIL2.
-      WRITE INV-L1 BEFORE 0 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
-      MOVE "DELIVERY / AFLEWRING"
-     TO INV-DADD2.
+             MOVE WS-ECAN            TO REP-DETAIL2.
+             WRITE INV-L1 BEFORE 0 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE "DELIVERY / AFLEWRING" TO INV-DADD2.
              WRITE INV-L1 BEFORE 1 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
-             MOVE W40-NAME       TO INV-NAME.
-      MOVE "PAGE / BLADSY"
-     TO INV-H4.
-      ADD 1   TO WS-PAGE.
-      MOVE WS-PAGE  TO INV-PGE.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W40-NAME           TO INV-NAME.
+             MOVE "PAGE / BLADSY"    TO INV-H4.
+             ADD 1                   TO WS-PAGE.
+             MOVE WS-PAGE            TO INV-PGE.
              WRITE INV-L1 BEFORE 1 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
-             MOVE W40-ADD1       TO INV-NAME.
-            MOVE W40-PADD1  TO INV-DADD2.
-            WRITE INV-L1 BEFORE 1 LINES.
-             MOVE W40-ADD2       TO INV-NAME.
-            MOVE W40-PADD2  TO INV-DADD2.
-      MOVE "ACCOUNT / REKENING"
-     TO INV-H4.
-            MOVE W80-ACNO  TO INV-AC.
-            WRITE INV-L1 BEFORE 1 LINES.
-             MOVE SPACES         TO REP-DETAIL2.
-             MOVE W40-ADD3       TO INV-NAME.
-            MOVE W40-PADD3  TO INV-DADD2.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W40-ADD1           TO INV-NAME.
+             MOVE W40-PADD1          TO INV-DADD2.
              WRITE INV-L1 BEFORE 1 LINES.
-             MOVE SPACES         TO REP-DETAIL2.
-             MOVE W40-ADD4       TO INV-NAME.
-            MOVE W40-PADD4  TO INV-DADD2.
+             MOVE W40-ADD2           TO INV-NAME.
+             MOVE W40-PADD2          TO INV-DADD2.
+             MOVE "ACCOUNT / REKENING" TO INV-H4.
+             MOVE W80-ACNO           TO INV-AC.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W40-ADD3           TO INV-NAME.
+             MOVE W40-PADD3          TO INV-DADD2.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W40-ADD4           TO INV-NAME.
+             MOVE W40-PADD4          TO INV-DADD2.
       *
       *    ****    P R I N T   T E R M S   O N   T H E   I N V O I C E
       *
-      MOVE "TERMS / TERME"
-     TO INV-H4.
-          IF DEB-TERMS = "0"
-              MOVE "7 Days/Dae" TO INV-TERMS
-          ELSE
-          IF DEB-TERMS = "2"
-              MOVE "60 Days/Dae"
-     TO INV-TERMS
-          ELSE
-          IF DEB-TERMS = "1"
-              MOVE "30 Days/Dae"
-     TO INV-TERMS
-          ELSE
-              MOVE "COD/KBA"  TO INV-TERMS.
-            WRITE INV-L1 BEFORE 1 LINES.
-      MOVE SPACES  TO REP-DETAIL2.
-             MOVE W40-PC1        TO INV-PC1.
-            MOVE W40-PC2  TO INV-PC2.
-            WRITE INV-L1 BEFORE 2 LINES.
-      MOVE SPACES  TO REP-DETAIL2.
-      MOVE "CONTRACT NUMBER"
-     TO INV-H5.
-      MOVE "  QUANTITY"  TO INV-H7.
-      MOVE "DISCOUNT"  TO INV-H9.
-      MOVE "EXCLUSIVE"  TO INV-H10.
-      MOVE "NETT AMOUNT"  TO INV-H12.
-            WRITE INV-L1 BEFORE 0 LINES.
-            WRITE INV-L1 BEFORE 1 LINES.
-      MOVE SPACES  TO REP-DETAIL2.
-      MOVE " KONTRAK NOMMER"
-     TO INV-H5.
-      MOVE "DESCRIPTION/BESRYWING"
-     TO INV-H6.
-      MOVE "HOEWEELHEID"  TO INV-H7.
-      MOVE "PRICE/PRYS"  TO INV-H8.
-      MOVE " AFSLAG"  TO INV-H9.
-      MOVE "EKSKLUSIEF"  TO INV-H10.
-      MOVE "VAT/BTW"  TO INV-H11.
-      MOVE "NETO BEDRAG"  TO INV-H12.
-            WRITE INV-L1 BEFORE 0 LINES.
-            WRITE INV-L1 BEFORE 2 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
+             MOVE "TERMS / TERME"    TO INV-H4.
+           IF DEB-TERMS = "0"
+               MOVE "7 Days/Dae"     TO INV-TERMS
+           ELSE
+           IF DEB-TERMS = "2"
+               MOVE "60 Days/Dae"    TO INV-TERMS
+           ELSE
+           IF DEB-TERMS = "1"
+               MOVE "30 Days/Dae"    TO INV-TERMS
+           ELSE
+               MOVE "COD/KBA"        TO INV-TERMS.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE W40-PC1            TO INV-PC1.
+             MOVE W40-PC2            TO INV-PC2.
+             WRITE INV-L1 BEFORE 2 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE "CONTRACT NUMBER"  TO INV-H5.
+             MOVE "  QUANTITY"       TO INV-H7.
+             MOVE "DISCOUNT"         TO INV-H9.
+             MOVE "EXCLUSIVE"        TO INV-H10.
+             MOVE "NETT AMOUNT"      TO INV-H12.
+             WRITE INV-L1 BEFORE 0 LINES.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE " KONTRAK NOMMER"  TO INV-H5.
+             MOVE "DESCRIPTION/BESRYWING" TO INV-H6.
+             MOVE "HOEWEELHEID"      TO INV-H7.
+             MOVE "PRICE/PRYS"       TO INV-H8.
+             MOVE " AFSLAG"          TO INV-H9.
+             MOVE "EKSKLUSIEF"       TO INV-H10.
+             MOVE "VAT/BTW"          TO INV-H11.
+             MOVE "NETO BEDRAG"      TO INV-H12.
+             WRITE INV-L1 BEFORE 0 LINES.
+             WRITE INV-L1 BEFORE 2 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
 
        DA45.
-      EXIT.
+             EXIT.
 
        DA50.
-      SUBTRACT LINAGE-COUNTER FROM WS-PRN-LENGTH
-     GIVING WS-LINES.
-      MOVE SPACES  TO REP-DETAIL2.
-      WRITE INV-L1 BEFORE WS-LINES LINES.
-            MOVE ALL "-"  TO INV-LINE.
+             SUBTRACT LINAGE-COUNTER FROM WS-PRN-LENGTH GIVING WS-LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             WRITE INV-L1 BEFORE WS-LINES LINES.
+             MOVE ALL "-"            TO INV-LINE.
       *
       *    ****    P R I N T   S U B - T O T A L
       *
-      MOVE "Please check your invoice."
-     TO INV-REMKS.
-            WRITE INV-L1 BEFORE 1 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
-      MOVE "TOTAL/TOTAAL" TO INV-H13.
-      MOVE "Gaan asseblief u faktuur na."
-     TO INV-REMKS.
-      MOVE W90-DEXC  TO INV-EXTEND.
-      MOVE W90-DTAX  TO INV-TAX.
-      MOVE W90-DTOT  TO INV-VAL.
-            WRITE INV-L1 BEFORE 0 LINES.
-      MOVE SPACES  TO INV-REMKS.
-            WRITE INV-L1 BEFORE 1 LINES.
-      MOVE SPACES  TO REP-DETAIL2.
-      MOVE ALL "="  TO INV-LINE.
-            WRITE INV-L1 BEFORE PAGE.
+             MOVE "Please check your invoice." TO INV-REMKS.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE "TOTAL/TOTAAL"     TO INV-H13.
+             MOVE "Gaan asseblief u faktuur na." TO INV-REMKS.
+             MOVE W90-DEXC           TO INV-EXTEND.
+             MOVE W90-DTAX           TO INV-TAX.
+             MOVE W90-DTOT           TO INV-VAL.
+             WRITE INV-L1 BEFORE 0 LINES.
+             MOVE SPACES             TO INV-REMKS.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE ALL "="            TO INV-LINE.
+             WRITE INV-L1 BEFORE PAGE.
       *      WRITE INV-L1 BEFORE 3 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
-      MOVE SPACES  TO W80-ACNO.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE SPACES             TO W80-ACNO.
 
        DA55.
-      EXIT.
+             EXIT.
 
        DA60.
-            WRITE INV-L1 BEFORE 1 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
-            MOVE "C/FWD - OORGEDRA"
-           TO INV-DADD2.
-      MOVE W90-DEXC  TO INV-EXTEND.
-      MOVE W90-DTAX  TO INV-TAX.
-      MOVE W90-DTOT  TO INV-VAL.
-            WRITE INV-L1 BEFORE 1 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
-      MOVE "Please check your invoice."
-     TO INV-REMKS.
-            WRITE INV-L1 BEFORE 1 LINES.
-      MOVE "Gaan aseblief u faktuur na."
-     TO INV-REMKS.
-            WRITE INV-L1 BEFORE 4 LINES.
-            PERFORM BB050.
-      PERFORM DA40.
-            MOVE "B/FWD - O/B"  TO INV-DESC.
-      MOVE W90-DEXC  TO INV-EXTEND.
-      MOVE W90-DTAX  TO INV-TAX.
-      MOVE W90-DTOT  TO INV-VAL.
-            WRITE INV-L1 BEFORE 1 LINES.
-            MOVE SPACES  TO REP-DETAIL2.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE "C/FWD - OORGEDRA" TO INV-DADD2.
+             MOVE W90-DEXC           TO INV-EXTEND.
+             MOVE W90-DTAX           TO INV-TAX.
+             MOVE W90-DTOT           TO INV-VAL.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
+             MOVE "Please check your invoice." TO INV-REMKS.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE "Gaan aseblief u faktuur na." TO INV-REMKS.
+             WRITE INV-L1 BEFORE 4 LINES.
+             PERFORM BB050.
+             PERFORM DA40.
+             MOVE "B/FWD - O/B"      TO INV-DESC.
+             MOVE W90-DEXC           TO INV-EXTEND.
+             MOVE W90-DTAX           TO INV-TAX.
+             MOVE W90-DTOT           TO INV-VAL.
+             WRITE INV-L1 BEFORE 1 LINES.
+             MOVE SPACES             TO REP-DETAIL2.
 
        DA100.
-            MOVE 0   TO WS-PAGE.
-             MOVE WS-12CPI       TO R-DET1.
+             MOVE 0                  TO WS-PAGE.
+             MOVE WS-12CPI           TO R-DET1.
              WRITE R-L1 BEFORE 0 LINES.
-             MOVE SPACES         TO R-DET1.
-             MOVE "PAGE:"        TO R-PAGE.
-             MOVE "DATE:"        TO R-DATE.
-             ADD 1               TO WS-PAGE.
-             MOVE W12-TODAY      TO R-DTE.
-             MOVE WS-PAGE        TO R-P-NO.
-            MOVE "DEBTOR RENTAL AND SERVICE CONTRACTS"
-                                 TO R-H5.
+             MOVE SPACES             TO R-DET1.
+             MOVE "PAGE:"            TO R-PAGE.
+             MOVE "DATE:"            TO R-DATE.
+             ADD 1                   TO WS-PAGE.
+             MOVE W12-TODAY          TO R-DTE.
+             MOVE WS-PAGE            TO R-P-NO.
+             MOVE "DEBTOR RENTAL AND SERVICE CONTRACTS" TO R-H5.
              WRITE R-L1 BEFORE 2 LINES.
-             MOVE SPACES         TO R-DET1.
-             MOVE WS-EXPP        TO R-L1.
+             MOVE SPACES             TO R-DET1.
+             MOVE WS-EXPP            TO R-L1.
              WRITE R-L1 BEFORE 0 LINES.
-             MOVE SPACES         TO R-DET1.
-             MOVE W95-COMP       TO R-CO.
+             MOVE SPACES             TO R-DET1.
+             MOVE W95-COMP           TO R-CO.
              WRITE R-L1 BEFORE 0 LINES.
              WRITE R-L1 BEFORE 0 LINES.
-             MOVE WS-ECAN        TO R-L1.
+             MOVE WS-ECAN            TO R-L1.
              WRITE R-L1 BEFORE 2 LINES.
-      MOVE "Exclusive"  TO R-H12.
-      MOVE "V.A.T."  TO R-H13.
-      MOVE "Inclusive"  TO R-H14.
-            WRITE R-L1 BEFORE 1 LINES.
-             MOVE "Total"        TO R-TDESC.
-            COMPUTE R-VAL = W90-DEBIT - W90-VATTOT.
-             MOVE W90-VATTOT     TO R-TAX.
-            MOVE W90-DEBIT  TO R-TOT.
+             MOVE "Exclusive"        TO R-H12.
+             MOVE "V.A.T."           TO R-H13.
+             MOVE "Inclusive"        TO R-H14.
+             WRITE R-L1 BEFORE 1 LINES.
+             MOVE "Total"            TO R-TDESC.
+             COMPUTE R-VAL = W90-DEBIT - W90-VATTOT.
+             MOVE W90-VATTOT         TO R-TAX.
+             MOVE W90-DEBIT          TO R-TOT.
              WRITE R-L8 BEFORE PAGE.
 
        DA999.
-      EXIT.
+             EXIT.
 
        CG000        SECTION 6.
        CG00.
@@ -1688,8 +1688,9 @@
 
        CG999.
       EXIT.
-
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA00-INIT       SECTION 9.
        ZA00-OPEN.
              PERFORM ZA55 THRU ZA60.
@@ -1709,11 +1710,11 @@
             MOVE 3                   TO WS-PARKEY.
             PERFORM READ-PARAM MTHRU READ-PARAM-EXIT.
             MOVE PAR-VAT-REG  TO W05-VATNO.
-            OPEN OUTPUT RECOVER.
+             OPEN OUTPUT RECOVER.
              CLOSE RECOVER.
              OPEN I-O RECOVER.
-            OPEN I-O DBFOTO.
-          IF RUNTIME-ERROR
+             OPEN I-O DBFOTO.
+           IF RUNTIME-ERROR
                IF FLE-LOCKED
                    GO TO ZA200
                ELSE
@@ -1721,194 +1722,158 @@
                    GO TO ZA49
                ELSE
                IF IDX-CORRUPT
-     MOVE 42  TO WS-F-ERROR
+                   MOVE 42           TO WS-F-ERROR
                    GO TO ZA50.
-    IF LS-USER NUMERIC
-        IF LS-USE > ZERO AND < 110
-     MOVE LS-USE  TO WS-USUB
+           IF LS-USER NUMERIC
+               IF LS-USE > ZERO AND < 110
+                   MOVE LS-USE       TO WS-USUB
                    GO TO ZA01A.
-             MOVE 110            TO WS-USUB.
+             MOVE 110                TO WS-USUB.
 
        ZA01A.
-             ADD 2549 WS-USUB    GIVING W25-RESULT.
-             MOVE W25-KEY        TO WS-PARKEY.
-             ADD 1 W25-SUB       GIVING WS-S6.
+             ADD 2549 WS-USUB        GIVING W25-RESULT.
+             MOVE W25-KEY            TO WS-PARKEY.
+             ADD 1 W25-SUB           GIVING WS-S6.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-    IF TRM-STDP (WS-S6) = 1
-               MOVE "LPT1"       TO W02-PRINTER
-        MOVE ZERO  TO WS-PRN-NO
+           IF TRM-STDP (WS-S6) = 1
+               MOVE "LPT1"           TO W02-PRINTER
+               MOVE ZERO             TO WS-PRN-NO
            ELSE
            IF TRM-STDP (WS-S6) = 2
-               MOVE "LPT2"       TO W02-PRINTER
-        MOVE 1   TO WS-PRN-NO
+               MOVE "LPT2"           TO W02-PRINTER
+               MOVE 1                TO WS-PRN-NO
            ELSE
            IF TRM-STDP (WS-S6) = 3
-               MOVE "LPT3"       TO W02-PRINTER
-        MOVE 2   TO WS-PRN-NO
+               MOVE "LPT3"           TO W02-PRINTER
+               MOVE 2                TO WS-PRN-NO
            ELSE
            IF TRM-STDP (WS-S6) = 4
-               MOVE "COM1"       TO W02-PRINTER
+               MOVE "COM1"           TO W02-PRINTER
            ELSE
            IF TRM-STDP (WS-S6) = 5
-               MOVE "COM2"       TO W02-PRINTER
+               MOVE "COM2"           TO W02-PRINTER
            ELSE
            IF TRM-STDP (WS-S6) = 9
-        MOVE LS-USER  TO W02-USER.
-      ADD 501 TRM-PRN4 (WS-S6)
-                                 GIVING W25-RESULT.
-             DIVIDE W25-RESULT BY 2
-                                 GIVING WS-PARKEY
-                                 REMAINDER WS-S6.
-             ADD 1               TO WS-S6.
+               MOVE LS-USER          TO W02-USER.
+             ADD 501 TRM-PRN4(WS-S6) GIVING W25-RESULT.
+             DIVIDE W25-RESULT BY 2  GIVING WS-PARKEY REMAINDER WS-S6.
+             ADD 1                   TO WS-S6.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-      MOVE TRM-CONP (WS-S6)
-     TO WS-COND.
-             MOVE TRM-NORP (WS-S6)
-     TO WS-NORM.
-             MOVE TRM-EXPP (WS-S6)
-     TO WS-EXPP W08-EXPD.
-             MOVE TRM-ECAN (WS-S6)
-     TO WS-ECAN.
-             MOVE TRM-8LPI (WS-S6)
-     TO WS-8LPI.
-             MOVE TRM-6LPI (WS-S6)
-     TO WS-6LPI.
-             MOVE TRM-10CPI (WS-S6)
-     TO WS-10CPI.
-             MOVE TRM-12CPI (WS-S6)
-     TO WS-12CPI.
-             MOVE TRM-17CPI (WS-S6)
-     TO WS-17CPI.
-      MOVE TRM-LENGTH (WS-S6)
-     TO WS-PRN-LENGTH.
-      MOVE TRM-PAGE (WS-S6)
-     TO
-     WS-PGE-LENGTH.
-    IF TRM-PRN-TYPE (WS-S6) = "H"
-        MOVE WS-12CPI  TO WS-ECAN
-        MOVE 048   TO W08-DEC (4)
-        MOVE 054   TO W08-DEC (5)
-        MOVE W08-EXPD  TO WS-EXPP.
+             MOVE TRM-CONP(WS-S6)    TO WS-COND.
+             MOVE TRM-NORP(WS-S6)    TO WS-NORM.
+             MOVE TRM-EXPP(WS-S6)    TO WS-EXPP W08-EXPD.
+             MOVE TRM-ECAN(WS-S6)    TO WS-ECAN.
+             MOVE TRM-8LPI(WS-S6)    TO WS-8LPI.
+             MOVE TRM-6LPI(WS-S6)    TO WS-6LPI.
+             MOVE TRM-10CPI(WS-S6)   TO WS-10CPI.
+             MOVE TRM-12CPI(WS-S6)   TO WS-12CPI.
+             MOVE TRM-17CPI(WS-S6)   TO WS-17CPI.
+             MOVE TRM-LENGTH(WS-S6)  TO WS-PRN-LENGTH.
+             MOVE TRM-PAGE(WS-S6)    TO WS-PGE-LENGTH.
+           IF TRM-PRN-TYPE (WS-S6) = "H"
+               MOVE WS-12CPI         TO WS-ECAN
+               MOVE 048              TO W08-DEC(4)
+               MOVE 054              TO W08-DEC(5)
+               MOVE W08-EXPD         TO WS-EXPP.
 
        ZA02.
-      MOVE 4   TO WS-PARKEY.
+             MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-      MOVE PAR-AGE  TO WS-AGE.
-            MOVE 1   TO WS-PARKEY.
+             MOVE PAR-AGE            TO WS-AGE.
+             MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-            MOVE PAR-COMPANY  TO W95-COMP.
-             MOVE PAR-TELEPHONE  TO W95-TEL.
-            MOVE PAR-DMY  TO W12-TODAY.
-            MOVE PAR-YMD  TO W12-T-YMD.
-            ADD 1   TO WS-PARKEY.
+             MOVE PAR-COMPANY        TO W95-COMP.
+             MOVE PAR-TELEPHONE      TO W95-TEL.
+             MOVE PAR-DMY            TO W12-TODAY.
+             MOVE PAR-YMD            TO W12-T-YMD.
+             ADD 1                   TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-ADDRESS1   TO W95-ADD1.
-             MOVE PAR-ADDRESS2   TO W95-ADD2.
-             MOVE PAR-ADDRESS3   TO W95-ADD3.
-             MOVE PAR-ADDRESS4   TO W95-ADD4.
-             MOVE PAR-POST-CDE   TO W95-POST.
+             MOVE PAR-ADDRESS1       TO W95-ADD1.
+             MOVE PAR-ADDRESS2       TO W95-ADD2.
+             MOVE PAR-ADDRESS3       TO W95-ADD3.
+             MOVE PAR-ADDRESS4       TO W95-ADD4.
+             MOVE PAR-POST-CDE       TO W95-POST.
            IF W95-ADD4 = SPACES
-               MOVE W95-PC       TO W95-ADD4
-               MOVE SPACES       TO W95-PC.
+               MOVE W95-PC           TO W95-ADD4
+               MOVE SPACES           TO W95-PC.
            IF W95-ADD3 = SPACES
-               MOVE W95-ADD4     TO W95-ADD3
-               MOVE SPACES       TO W95-ADD4.
+               MOVE W95-ADD4         TO W95-ADD3
+               MOVE SPACES           TO W95-ADD4.
            IF W95-ADD2 = SPACES
-               MOVE W95-ADD3     TO W95-ADD2
-               MOVE SPACES       TO W95-ADD3.
+               MOVE W95-ADD3         TO W95-ADD2
+               MOVE SPACES           TO W95-ADD3.
            IF W95-ADD1 = SPACES
-               MOVE W95-ADD2     TO W95-ADD1
-               MOVE SPACES       TO W95-ADD2.
-            MOVE 5   TO WS-PARKEY.
+               MOVE W95-ADD2         TO W95-ADD1
+               MOVE SPACES           TO W95-ADD2.
+             MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-DISCOUNT   TO W05-DISCOUNT.
-      MOVE 1   TO W05-V-RATE.
+             MOVE PAR-DISCOUNT       TO W05-DISCOUNT.
+             MOVE 1                  TO W05-V-RATE.
 
        ZA05-VAT.
-      MOVE W05-VAT-CODE  TO DPT-CODE.
-      PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-      MOVE DPT-R-DATE  TO WS-VAT-DATE(W05-V-RATE).
-      MOVE DPT-RATE  TO W05-VAT(W05-V-RATE).
-      ADD 6 W05-V-RATE  GIVING WS-S1.
-      MOVE DPT-P-RATE  TO W05-VAT(WS-S1).
-    IF W05-V-RATE < 6
-        ADD 1   TO W05-V-RATE
-        GO TO ZA05-VAT.
-            MOVE 6   TO WS-PARKEY.
+             MOVE W05-VAT-CODE       TO DPT-CODE.
+             PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+             MOVE DPT-R-DATE         TO WS-VAT-DATE(W05-V-RATE).
+             MOVE DPT-RATE           TO W05-VAT(W05-V-RATE).
+             ADD 6 W05-V-RATE        GIVING WS-S1.
+             MOVE DPT-P-RATE         TO W05-VAT(WS-S1).
+           IF W05-V-RATE < 6
+               ADD 1                 TO W05-V-RATE
+               GO TO ZA05-VAT.
+             MOVE 6                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
            IF PAR-INTEGRATE NOT = "Y"
-               MOVE "N"          TO WX-INT
+               MOVE "N"              TO WX-INT
            ELSE
-               MOVE "Y"          TO WX-INT.
-             MOVE PAR-DEBGL      TO WX-DEBGL.
-             MOVE PAR-CREGL      TO WX-CREGL.
-             MOVE PAR-INTGL      TO WX-INTGL.
-             MOVE PAR-BNKGL      TO WX-BNKGL.
-             MOVE PAR-UNPROF     TO WX-UNPROF.
-             MOVE PAR-REDGL      TO WX-REDGL.
-             MOVE PAR-ADJGL      TO WX-ADJGL.
-             MOVE PAR-RLGL       TO WX-RLGL.
-             MOVE PAR-DSGL       TO WX-DSGL.
-            MOVE 1 TO WS-NETKEY.
+               MOVE "Y"              TO WX-INT.
+             MOVE PAR-DEBGL          TO WX-DEBGL.
+             MOVE PAR-CREGL          TO WX-CREGL.
+             MOVE PAR-INTGL          TO WX-INTGL.
+             MOVE PAR-BNKGL          TO WX-BNKGL.
+             MOVE PAR-UNPROF         TO WX-UNPROF.
+             MOVE PAR-REDGL          TO WX-REDGL.
+             MOVE PAR-ADJGL          TO WX-ADJGL.
+             MOVE PAR-RLGL           TO WX-RLGL.
+             MOVE PAR-DSGL           TO WX-DSGL.
+             MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-      DISPLAY "Waiting for printer response" AT 1412
-                      WITH FOREGROUND-COLOR 14 BLINK.
+             DISPLAY "Waiting for printer response" AT 1412 WITH FOREGROUND-COLOR Brown HIGHLIGHT BLINK.
              OPEN OUTPUT PRNREP.
-      CALL X"91" USING X91-RES X91-FUN PRNREP.
-      MOVE WS-10CPI  TO REP-DETAIL1.
-      WRITE REP-LINE1 BEFORE 0 LINES.
-      MOVE SPACES  TO REP-DETAIL1.
+             CALL X"91" USING X91-RES X91-FUN PRNREP.
+             MOVE WS-10CPI           TO REP-DETAIL1.
+             WRITE REP-LINE1 BEFORE 0 LINES.
+             MOVE SPACES             TO REP-DETAIL1.
       *
       *    ****    S E T   U P   A G E   D A T E S
       *
              MOVE W12-T-YMD      TO W22-DTE2.
-    IF W22-DD2 > 27
-                ADD 1            TO W22-MM2.
-       ZA47.
-           IF W22-MM2 > 01
-               SUBTRACT 1        FROM W22-MM2
-           ELSE
-               MOVE 12           TO W22-MM2
-        IF W22-YY2 > ZERO
-     SUBTRACT 1  FROM W22-YY2
-        ELSE
-     MOVE 99  TO W22-YY2.
-    IF W22-MM2 = 02
-               MOVE 28           TO W22-DD2
-           ELSE
-           IF W22-MM2 = 04 OR 06 OR 09 OR 11
-               MOVE 30           TO W22-DD2
-           ELSE
-               MOVE 31           TO W22-DD2.
-       ZA48.
-           IF W12-MM = W22-MM2
-               IF W12-DD < W22-DD2
-                   MOVE W12-DD   TO W22-DD2.
-             MOVE W22-DTE2       TO W30-CUR.
-      PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-30.
-      PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-60.
-      PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-90.
-      PERFORM ZA47.
-             MOVE W22-DTE2       TO W30-120.
-            GO TO ZA999-EXIT.
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ The month end dates are stored in the Control file in the ³
+      *    ³ first record as Cur, 30d, 60d, 90d and 120d and the next  ³
+      *    ³ routine is used since Ver 8.11.06.                        ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+             MOVE 1                  TO WS-NETKEY.
+             PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
+             MOVE DEB-CUR-DTE        TO W30-CUR.
+             MOVE DEB-30D-DTE        TO W30-30.
+             MOVE DEB-60D-DTE        TO W30-60.
+             MOVE DEB-90D-DTE        TO W30-90.
+             MOVE DEB-120-DTE        TO W30-120.
+             GO TO ZA999-EXIT.
+
        ZA49.
              DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
              DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
+             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
              GO TO ZA205.
        ZA50.
-          IF WS-F-ERROR = 42
-              MOVE "RENTAL file"
-     TO WS-FILE.
-             DISPLAY "Rebuild " AT 0812
-                      WS-FILE WITH FOREGROUND-COLOR 14.
+           IF WS-F-ERROR = 42
+               MOVE "RENTAL file"    TO WS-FILE.
+             DISPLAY "Rebuild " AT 0812 WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Press any key to continue" AT 1012.
-      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
        ZA51.
              EXIT PROGRAM.
        ZA55.
@@ -1916,39 +1881,37 @@
             MOVE SPACES  TO WS-MID-LNE.
        ZA60.
             MOVE WS-G1   TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
-      MOVE WS-G8   TO WS-BCH(WS-S1).
+            MOVE WS-G8   TO WS-BCH(WS-S1).
            IF WS-S1 < 80
                ADD 1             TO WS-S1
                GO TO ZA60.
-      MOVE WS-G11  TO WS-BCH  (1).
+      MOVE WS-G11  TO WS-BCH (1) .
              MOVE WS-G12         TO WS-BCH  (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
+             MOVE WS-G14         TO WS-TCHR(1)   WS-BCHR(1) .
              MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
              MOVE WS-G2          TO WS-TCHR (8)  WS-TCHR (49)
                                     WS-TCHR (61) WS-TCHR (72).
              MOVE WS-G3          TO WS-MCHR (8)  WS-MCHR (49)
                                     WS-MCHR (61) WS-MCHR (72)
-              WS-MCHR (1)  WS-MCHR (80).
+              WS-MCHR(1)   WS-MCHR (80).
              MOVE WS-G4          TO WS-BCHR (8)  WS-BCHR (49)
                                     WS-BCHR (61) WS-BCHR (72).
              MOVE WS-G13         TO WS-TCHR (80) WS-BCHR (80).
-             MOVE WS-G14         TO WS-TCHR (1)  WS-BCHR (1).
+             MOVE WS-G14         TO WS-TCHR(1)   WS-BCHR(1) .
       MOVE LS-COMPANY  TO WS-TOP-COMP.
     IF LS-USER = LS-SYS-ID
         MOVE "SupervisorÄ"  TO WS-WRKHD
     ELSE
         MOVE "Workstation"  TO WS-WRKHD
         MOVE LS-USER    TO WS-WRKST.
+
        ZA200.
-             DISPLAY "Files locked - Try later" AT 2312
-                      WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
-            DISPLAY "Press any key" AT 5012
-              WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
-            ACCEPT WS-OPTION AT 5026
-      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+
+       COPY "LOCKED.PRO".
+
        ZA205.
              EXIT PROGRAM.
+
        ZA999-EXIT.
              EXIT.
       /
@@ -1956,23 +1919,22 @@
 
        OPEN-ERROR.
              PERFORM ERASE-SCREEN.
-             DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
+             DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              PERFORM DISPLAY-FILE-NAME.
 
        READ-ERROR.
              PERFORM ERASE-SCREEN.
-             DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
+             DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              PERFORM DISPLAY-FILE-NAME.
 
        WRITE-ERROR.
              PERFORM ERASE-SCREEN.
-             DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
+             DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              PERFORM DISPLAY-FILE-NAME.
 
        DISPLAY-FILE-NAME.
-           IF WS-F-ERROR = 2
-               MOVE W02-NETWORK  TO WS-FILE
-               MOVE WS-NETKEY    TO WS-KEY
+               WHEN 2     MOVE W02-NETWORK  TO WS-FILE
+                          MOVE WS-NETKEY    TO WS-KEY
           ELSE
            IF WS-F-ERROR = 5
                MOVE W02-DBTRAN TO WS-FILE
@@ -2032,14 +1994,14 @@
            ELSE
            IF WS-STATUS = "94"
                MOVE "FILE locked" TO WS-STAT-MESSAGE.
-             DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
+             DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
              DISPLAY "Status " AT 1212
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
+                      WS-STATUS WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
            IF WS-STATUS NOT = "94"
                DISPLAY "Key    " AT 1412
-                        WS-KEY WITH FOREGROUND-COLOR 11
-                        " " WS-KEYX WITH FOREGROUND-COLOR 11
+                        WS-KEY WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                        " " WS-KEYX WITH FOREGROUND-COLOR Cyan HIGHLIGHT
                DISPLAY "Reverse backup or contact program Support"
                         AT 1612.
                DISPLAY "Please make a note of these details" AT 1812.

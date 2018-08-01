@@ -21,7 +21,7 @@
        AUTHOR.         J.W.LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -516,7 +516,6 @@
              MOVE "d"                TO WS-INSTR.
            IF WS-OPTION = X"EC"
                GO TO BA999.
-             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
            IF WS-OPTION = "M"
                PERFORM YA000
            ELSE
@@ -642,7 +641,9 @@
 
        YB999.
              EXIT.
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.

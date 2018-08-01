@@ -1,51 +1,52 @@
       $set LINKCOUNT"256" GNT"CRPEXP.GNT"
       ******************************************************************
       *                                                                *
-      *    ******   *******   ******* ********  ** **  *******    *
-      *   ** **  **   **  **    ** **    **  **   **   **   *
-      *   **     **   **  **    ** **     ****    **   **   *
-      *   **     *******   ******* *****      **     *******    *
-      *   **     **  **   ** **     ****    **        *
-      *   ** **  **   **  ** **    **  **   **        *
-      *    ******   **   **  ** ********  ** **  **        *
+      *    ******   *******   *******   ********  **    **  *******    *
+      *   **    **  **    **  **    **  **         **  **   **    **   *
+      *   **        **    **  **    **  **          ****    **    **   *
+      *   **        *******   *******   *****        **     *******    *
+      *   **        **   **   **        **          ****    **         *
+      *   **    **  **    **  **        **         **  **   **         *
+      *    ******   **    **  **        ********  **    **  **         *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
-      *     C R E D I T O R   E X P O R T   P R O G R A M        *
+      *     C R E D I T O R   E X P O R T   P R O G R A M              *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012          *
-      *               *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     CRPEXP.
        AUTHOR.         J W LEMMON (CSS).
        DATE-WRITTEN.   SEPTEMBER 1992.
 
-     COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2016
-         by James William Lemmon.
-           (Id No. 4412165050082).
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1992 - 2017
+                                  by James William Lemmon.
+                                    (Id No. 4412165050082).
 
-     All rights reserved.
+                All rights reserved.
 
-     e-mail jwlemmon@gmail.com.
+                e-mail jwlemmon@gmail.com.
 
        SECURITY.
-     This program is free software; you can redistribute
-     it and/or modify it under the terms of the GNU General
-     Public License as published by the Free Software
-     Foundation; either version 2 of the License, or (at
-     your option) any later version.
+                This program is free software; you can redistribute
+                it and/or modify it under the terms of the GNU General
+                Public License as published by the Free Software
+                Foundation; either version 3 of the License, or (at
+                your option) any later version.
 
-     This program is distributed in the hope that it will
-     be useful, but WITHOUT ANY WARRANTY; without even the
-     implied warranty of MERCHANTABILITY or FITNESS FOR A
-     PARTICULAR PURPOSE. See the GNU General Public License
-     for more details.
+                This program is distributed in the hope that it will
+                be useful, but WITHOUT ANY WARRANTY; without even the
+                implied warranty of MERCHANTABILITY or FITNESS FOR A
+                PARTICULAR PURPOSE. See the GNU General Public License
+                for more details.
 
-     You should have received a copy of the GNU General
-     Public License along with this program; if not, write
-     to the Free Software Foundation, Inc., 59 Temple Place
-     - Suite 330, Boston, MA 02111-1307, USA.
+                You should have received a copy of the GNU General
+                Public License along with this program. If not, see
+                <http://www.gnu.org/licenses/>.
+
+       INSTALLATION.          APAC.
 
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -149,72 +150,46 @@
        77  WS-PRINT         PIC 9(01).
        77  WS-PASS          PIC X(08).
        77  TODAY-DDMMYY    PIC 9(08) COMP-5.
+       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
+       77  PRG-CRED-LUP            PIC  X(12)           VALUE "CRP\CRPLOOK".
        77  WS-USUB    PIC 9(04) COMP-5.
-      /
-       01  WS-DB-LINE.
-           03  WS-TOP-LNE.
-               05  WS-TCHR PIC X(01) OCCURS 80.
-           03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-TOP-LNE2.
-               05  WS-TCH  PIC X(01) OCCURS 80.
-           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-              05  FILLER      PIC  X(23).
-        05  WS-WRKHD    PIC  X(11).
-              05  FILLER      PIC  X(01).
-        05  WS-WRKST    PIC  X(03).
-              05  FILLER      PIC  X(01).
-          03  WS-MID-LNE.
-               05  WS-MCHR PIC X(01) OCCURS 80.
-           03  WS-MID-LNE2.
-        05  FILLER      PIC  X(01) VALUE "³".
-        05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-        05  FILLER      PIC  X(01) VALUE "³".
-          03  WS-BOT-LNE.
-               05  WS-BCHR PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-BOT-LNE2.
-               05  WS-BCH  PIC X(01) OCCURS 80.
-          03  WS-B-LNE REDEFINES WS-BOT-LNE2.
-               05  FILLER  PIC X(01).
-               05  WS-MEM-LINE.
-                  07  WS-SRT-LINE
-                           PIC X(50).
-                  07  FILLER
-                           PIC X(10).
-               05  FILLER  PIC X(19).
-          03  WS-TP-LNE.
-               05  WS-TCR  PIC X(01) OCCURS 80.
-    03  WS-TPCR-LNE REDEFINES WS-TP-LNE.
-        05  WS-TCR1     PIC  X(01).
-        05  WS-TCR78    PIC  X(78).
-        05  WS-TCR80    PIC  X(01).
-          03  WS-MD-LNE.
-               05  WS-MCR  PIC X(01) OCCURS 80.
-    03  WS-MDCR-LNE REDEFINES WS-MD-LNE.
-        05  WS-MCR1     PIC  X(01).
-        05  WS-MCR78    PIC  X(78).
-        05  WS-MCR80    PIC  X(01).
-          03  WS-BT-LNE.
-               05  WS-BCR  PIC X(01) OCCURS 80.
-    03  WS-BTCR-LNE REDEFINES WS-BT-LNE.
-        05  WS-BCR1     PIC  X(01).
-        05  WS-BCR78    PIC  X(78).
-        05  WS-BCR80    PIC  X(01).
-    03  WS-MM-LINE.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-               05  FILLER  PIC  X(60) VALUE SPACES.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-    03  WS-HME-LINE PIC X(60) VALUE ALL X"CD".
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *         C = Clear comment line (50)
+      *         E = Clear lines (any line or lines between 5 and 46)
+      *         H = Change heading
+      *         S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15)           VALUE "CRPEXP".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40)           VALUE "CREDITOR - EXPORT PROGRAM".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD       PIC  X(11).
+               05  CRT-WRKST       PIC  X(03).
 
        COPY "WS.WS".
 
@@ -435,116 +410,133 @@
            03  W200-MEM-FOC REDEFINES W200-MEM-FLDS.
                05  W200-MEM    PIC  X(60) OCCURS 12.
 
+      *
+      *    **       ******  **    **  **   **    ***     *****   ******
+      *    **         **    ***   **  **  **    ** **   **   **  **
+      *    **         **    ****  **  ** **    **   **  **       ** 
+      *    **         **    ** ** **  ****     *******  **       *****
+      *    **         **    **  ****  ** **    **   **  **  ***  **  
+      *    **         **    **   ***  **  **   **   **  **   **  **
+      *    *******  ******  **    **  **   **  **   **   *****   ******
+      *
        LINKAGE SECTION.
 
        COPY "CHAIN.LS".
 
        COPY "FILE.IDS".
 
-      /
+      * 
+      *   *****    *****   ******   ******  ******  **    **
+      *  **   **  **   **  **   **  **      **      ***   **
+      *  **       **       **  **   **      **      ****  **
+      *   *****   **       *****    *****   *****   ** ** **
+      *       **  **       **  **   **      **      **  ****
+      *  **   **  **   **  **   **  **      **      **   ***
+      *   *****    *****   **   **  ******  ******  **    **
+      *
        SCREEN SECTION.
 
        01  MENU-INSTRUCT.
-    03  LINE 25 COLUMN  2 BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 1
+    03  LINE 25 COLUMN  2 BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Blue
      VALUE "Use ".
     03        COLUMN  6 HIGHLIGHT
-     BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 6
+     BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Brown
      VALUE "".
-    03        COLUMN  7 BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 1
+    03        COLUMN  7 BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Blue
      VALUE " or ".
     03        COLUMN 11 HIGHLIGHT
-     BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 6
+     BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Brown
      VALUE "".
-    03        COLUMN 12 BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 1
+    03        COLUMN 12 BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Blue
      VALUE " to point to an item, and ".
     03        COLUMN 38 HIGHLIGHT
-     BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 6
+     BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Brown
      VALUE "<Enter>".
-    03        COLUMN 45 BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 1
+    03        COLUMN 45 BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Blue
      VALUE " to Select ".
     03        COLUMN 56 HIGHLIGHT
-     BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 6
+     BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Brown
      VALUE "<Esc>".
-    03        COLUMN 61 BACKGROUND-COLOR 3
-     FOREGROUND-COLOR 1
+    03        COLUMN 61 BACKGROUND-COLOR Cyan
+     FOREGROUND-COLOR Blue
      VALUE " to Exit".
 
        01  S-PROG.
-          03  LINE  2 COLUMN 29 FOREGROUND-COLOR 7 HIGHLIGHT
+          03  LINE  2 COLUMN 29 FOREGROUND-COLOR Grey HIGHLIGHT
      VALUE "CREDITOR EXPORT PROGRAM".
 
        01  S-MENU.
-    03  LINE  6 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+    03  LINE  6 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ".
-    03        COLUMN 52 BACKGROUND-COLOR 2 FOREGROUND-COLOR 0
+    03        COLUMN 52 BACKGROUND-COLOR Green FOREGROUND-COLOR Black
      VALUE "¿".
-    03  LINE  7 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+    03  LINE  7 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "³    ".
-    03        COLUMN 34 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 7 HIGHLIGHT
+    03        COLUMN 34 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Grey HIGHLIGHT
      VALUE "EXPORT OPTIONS".
-    03        COLUMN 48 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 0
+    03        COLUMN 48 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Black
      VALUE "    ³".
-    03  LINE  8 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+    03  LINE  8 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "³ ".
-    03        COLUMN 31 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 7 HIGHLIGHT
+    03        COLUMN 31 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Grey HIGHLIGHT
      VALUE "1".
-    03        COLUMN 32 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 0
+    03        COLUMN 32 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Black
      VALUE " No, Name & Address ³".
-    03  LINE  9 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+    03  LINE  9 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "³ ".
-    03        COLUMN 31 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 7 HIGHLIGHT
+    03        COLUMN 31 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Grey HIGHLIGHT
      VALUE "2".
-    03        COLUMN 32 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 0
+    03        COLUMN 32 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Black
      VALUE " All Fields      ³".
-          03  LINE 10 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+          03  LINE 10 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "³ ".
-    03        COLUMN 31 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 7 HIGHLIGHT
+    03        COLUMN 31 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Grey HIGHLIGHT
      VALUE "3".
-    03        COLUMN 32 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 0
+    03        COLUMN 32 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Black
      VALUE " Selected Fields    ³".
-          03  LINE 11 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+          03  LINE 11 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "³ ".
-    03        COLUMN 31 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 7 HIGHLIGHT
+    03        COLUMN 31 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Grey HIGHLIGHT
      VALUE "4".
-    03        COLUMN 32 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 0
+    03        COLUMN 32 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Black
      VALUE " Field Separator    ³".
-          03  LINE 12 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+          03  LINE 12 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "³ ".
-    03        COLUMN 31 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 7 HIGHLIGHT
+    03        COLUMN 31 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Grey HIGHLIGHT
      VALUE "0".
-    03        COLUMN 32 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 0
+    03        COLUMN 32 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Black
      VALUE " Exit               ³".
-    03  LINE 13 COLUMN 29 BACKGROUND-COLOR 2
-     FOREGROUND-COLOR 2 HIGHLIGHT
+    03  LINE 13 COLUMN 29 BACKGROUND-COLOR Green
+     FOREGROUND-COLOR Green HIGHLIGHT
      VALUE "À".
-    03        COLUMN 30 BACKGROUND-COLOR 2 FOREGROUND-COLOR 0
+    03        COLUMN 30 BACKGROUND-COLOR Green FOREGROUND-COLOR Black
      VALUE "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
 
        01  S03.
@@ -560,243 +552,249 @@
 
        01  S06.
            03  LINE  8 COLUMN  2 VALUE "Fields:".
-    03        COLUMN 10 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 10 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (1).
-    03        COLUMN 13 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 13 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (2).
-    03        COLUMN 16 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 16 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (3).
-    03        COLUMN 19 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 19 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (4).
-    03        COLUMN 22 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 22 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (5).
-    03        COLUMN 25 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 25 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (6).
-    03        COLUMN 28 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 28 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (7).
-    03        COLUMN 31 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 31 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (8).
-    03        COLUMN 34 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 34 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (9).
-    03        COLUMN 37 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 37 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (10).
-    03        COLUMN 40 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 40 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (11).
-    03        COLUMN 43 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 43 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (12).
-    03        COLUMN 46 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 46 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (13).
-    03        COLUMN 49 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 49 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (14).
-    03        COLUMN 52 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 52 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (15).
-    03        COLUMN 55 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 55 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (16).
-    03        COLUMN 58 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 58 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (17).
-    03        COLUMN 61 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 61 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (18).
-    03        COLUMN 64 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 64 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (19).
-    03        COLUMN 67 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 67 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (20).
-    03        COLUMN 70 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 70 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (21).
-    03        COLUMN 73 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 73 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (22).
-    03  LINE 10 COLUMN 10 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE 10 COLUMN 10 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (23).
-    03        COLUMN 13 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 13 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (24).
-    03        COLUMN 16 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 16 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (25).
-    03        COLUMN 19 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 19 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (26).
-    03        COLUMN 22 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 22 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (27).
-    03        COLUMN 25 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 25 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (28).
-    03        COLUMN 28 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 28 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (29).
-    03        COLUMN 31 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 31 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC ZZ FROM W60-FNO (30).
 
        01  S07.
            03  LINE 16 COLUMN  2 VALUE "Exporting:".
 
        01  S08.
-    03  LINE 16 COLUMN 13 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE 16 COLUMN 13 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
      PIC  X(05) FROM P-NUMBER.
-    03        COLUMN 20 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 20 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
      PIC  X(40) FROM P-NAME.
 
        01  S09.
-    03  LINE  6 COLUMN 10 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03  LINE  6 COLUMN 10 FOREGROUND-COLOR Cyan HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC 99 FROM W65-S.
-    03        COLUMN 13 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+    03        COLUMN 13 FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
                                  PIC  X(21) FROM W65-FIELD.
        01  S10.
-    03  LINE  4 COLUMN  2 FOREGROUND-COLOR 3 HIGHLIGHT
+    03  LINE  4 COLUMN  2 FOREGROUND-COLOR Cyan HIGHLIGHT
      VALUE "Change Field Separator".
     03  LINE  6 COLUMN  2 VALUE "Character Used:".
 
        COPY "CRDLUP.CRT".
 
        01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  7 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
-    "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
-      -    "".
-    03        COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey VALUE
+                               "   M E M O / R E M A R K S / C O R R E S P O N D E N C E".
+    03        COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  8 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 21 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G12.
        01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM12 AUTO.
 
-      /
+      *
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
+      *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000-MAIN        SECTION.
        AA000-INIT.
-          IF LS0-CRLEV < 9
-        MOVE "Not Authorised"
-     TO WS-ERR-STRING
-              PERFORM ERROR-MESSAGE
-        GO TO AA49.
+           IF LS0-CRLEV < 9
+               MOVE X"FF"            TO WS-OPTION
+               PERFORM ERROR-MESSAGE
+               GO TO AA49.
             PERFORM ZA000-INIT.
            IF WS-STATUS NOT = "00"
                PERFORM OPEN-ERROR.
@@ -805,19 +803,95 @@
        AA49.
              EXIT PROGRAM.
 
-       AA50-LOOKUP     SECTION.
-       AA50.
-      PERFORM SAVE-SCREEN.
-            MOVE 4   TO W44-FUNCTION.
-            PERFORM SCREEN-CONTENTS.
-      PERFORM CREDITOR-LOOKUP.
-      PERFORM RESTORE-SCREEN.
-       AA99.
-             EXIT.
+       COPY "AA50C.LUP".
+       
+      *    
+      *            ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
+      *           S C R E E N ,   K E Y B O A R D   &   M O U S E
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³      SAVE-SCREEN /-2/-3  and  RESTORE-SCREEN /-2/-3       ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      SCREEN-SHADOW                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To routine is used to display a shadow down the right and ³
+      *    ³ along the bottom of a pop-up box. The parameters that are ³
+      *    ³ required:                                                 ³
+      *    ³          SHADE-ROW   - Top line of the box.               ³
+      *    ³          SHADE-COL   - Left line of box.                  ³
+      *    ³          SHADE-WIDTH - Width of the box.                  ³
+      *    ³          SHADE-LINES - Height of box.                     ³
+      *    ÆÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍµ
+      *    ³                      CHECK-CORRECT                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ This routine displays a pop-up window with the message    ³
+      *    ³           "Press Y if correct - N if incorrect"           ³
+      *    ³                                                           ³
+      *    ³ The response is returned in WS-OPTION (in upper case).    ³
+      *    ³                                                           ³
+      *    ³ To start with the pop-up window higher or lower than row  ³
+      *    ³ 20 (default); move another value to WS-MES-LINE.          ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *            T H I S   R O U T I N E   I S   U S E D   T O
+      *       D I S P L A Y   I N F O R M A T I O N   M E S S A G E S
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³  Move the message to WS-DSP-MES and the top line of the   ³
+      *    ³  message box to WS-MES-LINE. If WS-MES-LINE is zero the   ³
+      *    ³  default will be 20.                                      ³
+      *    ³                  PERFORM DISPLAY-MESSAGE                  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *           T H I S   R O U T I N E   I S   U S E D   T O
+      *            D I S P L A Y   E R R O R   M E S S A G E S
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³                      ERROR-MESSAGE                        ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ To display the error message higher or lower (default is  ³
+      *    ³ line 20) Move the line number which must be used as the   ³
+      *    ³ top line to WS-MES-LINE. The message to be displayed must ³
+      *    ³ be in WS-ERR-MES. PERFORM ERROR-MESSAGE.                  ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "FUNCTION.CRT".
 
        COPY "LOCKED.RC2".
+
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³           ERASE SCREEN FROM SPECIFIED LOCATION            ³
+      *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+      *    ³ Uses CRT-START as starting line and increases and CRT-END ³
+      *    ³ as the ending line. The screen is cleared with Column 1   ³
+      *    ³ and 80 containing "³" and columns 2 to 79 containing      ³
+      *    ³ spaces.                                                   ³
+      *    ³                                                           ³
+      *    ³  eg.                                                      ³
+      *    ³   MOVE 8         TO CRT-START.                            ³
+      *    ³   MOVE 28        TO CRT-END.                              ³
+      *    ³   PERFORM ERASE-SCREEN.                                   ³
+      *    ³                                                           ³
+      *    ³ To clear the entire screen and Display a new screen with  ³
+      *    ³ headings (program/date/time/company):                     ³
+      *    ³                                                           ³
+      *    ³    CRT-PROGRAM (calling program)                          ³
+      *    ³    CRT-HEADING (Screen heading)                           ³
+      *    ³    CRT-COMPANY (Company name)                             ³
+      *    ³    CRT-TERMINAL (consists of two fields:                  ³
+      *    ³                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    ³
+      *    ³    These fields should be populated at the start of the   ³
+      *    ³    program.                                               ³
+      *    ³    PERFORM HEADING-AND-CLEAR-SCREEN.                      ³
+      *    ³                                                           ³
+      *    ³ To change the screen heading:                             ³
+      *    ³    MOVE "The new heading" TO CRT-HEADING.                 ³
+      *    ³    PERFORM CHANGE-HEADING.                                ³
+      *    ³                                                           ³
+      *    ³ To change the time on the screen:                         ³
+      *    ³    PERFORM CHANGE-TIME                                    ³
+      *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
+      *    ³ To clear line 50:                                         ³
+      *    ³    PERFORM CLEAR-L50                                      ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
 
@@ -827,21 +901,21 @@
        AA100           SECTION.
        AA101.
       DISPLAY "Keyin the <" AT 2202
-       "pathname" WITH FOREGROUND-COLOR 6 HIGHLIGHT ">/<"
-       "filename" WITH FOREGROUND-COLOR 6 HIGHLIGHT ">".
+       "pathname" WITH FOREGROUND-COLOR Brown HIGHLIGHT ">/<"
+       "filename" WITH FOREGROUND-COLOR Brown HIGHLIGHT ">".
              DISPLAY "EXPORT file :" AT 2302.
              MOVE ZERO           TO WS-ERROR.
        AA105.
              ACCEPT W02-EXPORT AT 2316
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
     IF USER-FUNC
         EVALUATE KEY-CODE-1
    WHEN ESC-KEY
        MOVE 9  TO WS-ERROR
        GO TO AA199
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO AA105
         END-EVALUATE.
       MOVE 64   TO WS-LENGTH.
@@ -850,8 +924,8 @@
     RETURNING WS-STATUS.
              MOVE 1              TO WS-LENGTH.
              DISPLAY W02-EXPORT AT 2316
-       WITH FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5.
+       WITH FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta.
       PERFORM CLEAR-L50.
             PERFORM CHECK-CORRECT.
           IF WS-OPTION = "N"
@@ -1116,6 +1190,9 @@
         GO TO AA605.
        AA699.
              EXIT.
+
+       COPY "AA900.ALM".
+
       /
       *    ****    READ FILES ROUTINES
       *
@@ -1141,7 +1218,7 @@
        WRITE-CRDDET-EXIT.
              EXIT.
 
-       COPY "CREDIT.LUP".
+      *COPY "CREDIT.LUP".
 
        COPY "APAC.HLP".
 
@@ -1171,7 +1248,7 @@
       DISPLAY S-MENU.
     IF LS0-LEV < 3
         DISPLAY "(N/A)" AT 1049
-   WITH FOREGROUND-COLOR 0 BACKGROUND-COLOR 2.
+   WITH FOREGROUND-COLOR Black BACKGROUND-COLOR Green.
       DISPLAY MENU-INSTRUCT.
       PERFORM SCREEN-SHADOW.
        BA02.
@@ -1215,7 +1292,7 @@
          END-IF
      END-IF
    WHEN ENTER-KEY  GO TO BA15
-   WHEN OTHER  CALL X"E5"
+   WHEN OTHER  PERFORM AA900-ALARM
         END-EVALUATE
         GO TO BA05
     ELSE
@@ -1226,24 +1303,24 @@
    WHEN ESC-KEY
        MOVE "0"  TO WS-OPTION
        GO TO BA18
-   WHEN OTHER  CALL X"E5"
+   WHEN OTHER  PERFORM AA900-ALARM
         END-EVALUATE
         GO TO BA05
     ELSE
     IF DATA-8BIT
         MOVE KEY-CODE-1X  TO WS-OPTION
         IF WS-OPTION < 0 OR > 4
-     CALL X"E5"
+     PERFORM AA900-ALARM
      GO TO BA05
         END-IF
         GO TO BA16
     ELSE
-        CALL X"E5"
+        PERFORM AA900-ALARM
         GO TO BA05.
 
        BA15.
     IF SCREEN-LIN < 7
-        CALL X"E5"
+        PERFORM AA900-ALARM
         GO TO BA05
     ELSE
     IF SCREEN-LIN = 7
@@ -1304,20 +1381,20 @@
       GO TO BA00.
        BA999.
       EXIT.
-      /
-       CA155-GET-CREDITOR      SECTION.
-       CA155-ACCOUNT.
-             MOVE W15-ACNO       TO P-NUMBER.
-             PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
-           IF WS-F-ERROR = 3
-              MOVE 1   TO WS-ERROR
-           ELSE
-           IF P-NUMBER NOT = W15-ACNO
-              MOVE 2   TO WS-ERROR
-           ELSE
-              MOVE 0   TO WS-ERROR.
-       CA160-EXIT.
-             EXIT.
+      *
+      *CA155-GET-CREDITOR      SECTION.
+      *CA155-ACCOUNT.
+      *      MOVE W15-ACNO       TO P-NUMBER.
+      *      PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
+      *    IF WS-F-ERROR = 3
+      *       MOVE 1   TO WS-ERROR
+      *    ELSE
+      *    IF P-NUMBER NOT = W15-ACNO
+      *       MOVE 2   TO WS-ERROR
+      *    ELSE
+      *       MOVE 0   TO WS-ERROR.
+      *CA160-EXIT.
+      *      EXIT.
       /
       *    ****    E X P O R T :
       *
@@ -1418,15 +1495,15 @@
                GO TO FA999.
       INITIALIZE W60-FIELDS.
              MOVE 1              TO W60-S.
-001020      DISPLAY " " AT 1803 WITH FOREGROUND-COLOR 14
+001020      DISPLAY " " AT 1803 WITH FOREGROUND-COLOR Brown HIGHLIGHT
                      " to view the fields available "
-                      WITH FOREGROUND-COLOR 7
-                     "S" WITH FOREGROUND-COLOR 14
-                     "elect/" WITH FOREGROUND-COLOR 7
-                     "A" WITH FOREGROUND-COLOR 14
-       "ccept - " WITH FOREGROUND-COLOR 7
-                     "Esc" WITH FOREGROUND-COLOR 14
-                     "ape" WITH FOREGROUND-COLOR 7.
+                      WITH FOREGROUND-COLOR Grey
+                     "S" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "elect/" WITH FOREGROUND-COLOR Grey
+                     "A" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+       "ccept - " WITH FOREGROUND-COLOR Grey
+                     "Esc" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     "ape" WITH FOREGROUND-COLOR Grey.
              MOVE 1              TO W65-S.
        FA10.
              MOVE W65-FLD (W65-S)
@@ -1436,7 +1513,7 @@
       DISPLAY "°" AT 1859.
       CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
       DISPLAY SPACE AT 5041
-       WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 3.
+       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
     IF ADIS-FUNC
         EVALUATE KEY-CODE-1
    WHEN UP-KEY
@@ -1452,7 +1529,7 @@
     ADD 1  TO W65-S
     GO TO FA10
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
         END-EVALUATE
         GO TO FA15
     ELSE
@@ -1461,7 +1538,7 @@
    WHEN ESC-KEY
        GO TO FA05
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
         END-EVALUATE
         GO TO FA15
     ELSE
@@ -1474,7 +1551,7 @@
     BY VALUE WS-LENGTH
     RETURNING WS-STATUS.
            IF NOT (WS-OPTION = "A" OR "S")
-        CALL X"E5"
+        PERFORM AA900-ALARM
                GO TO FA15.
            IF WS-OPTION = "A"
                GO TO FA30.
@@ -1525,28 +1602,29 @@
       DISPLAY S10.
        GA05.
       ACCEPT W50-EXP AT 0618
-      WITH FOREGROUND-COLOR 7 HIGHLIGHT
-    BACKGROUND-COLOR 5 UPDATE AUTO.
+      WITH FOREGROUND-COLOR Grey HIGHLIGHT
+    BACKGROUND-COLOR Magenta UPDATE AUTO.
        GA999.
       EXIT.
 
-      /
-       ZA000-INIT        SECTION 8.
-       ZA000-OPEN.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
+       ZA000-INIT    SECTION 8.
+       ZA000-START.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-             COPY "FUNCTION.PRO".
+       COPY "FUNCTION.PRO".
 
             MOVE 1   TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
@@ -1559,10 +1637,10 @@
 
        ZA49.
              DISPLAY "Too many files OPEN" AT 0812
-                      WITH FOREGROUND-COLOR 14.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Check the FILES option in CONFIG.SYS" AT 1012.
              DISPLAY "Press any key to continue" AT 1212.
-             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR 15.
+             ACCEPT WS-OPTION AT 1238 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
              GO TO ZA205.
       *
       *    ****    S E T U P   T H E   S C R E E N   G R A P H I C S
@@ -1598,12 +1676,12 @@
         MOVE LS-USER    TO WS-WRKST.
        ZA200.
              DISPLAY "Files locked - Try later" AT 2312
-                      WITH FOREGROUND-COLOR 14
-                     " " WS-STATUS WITH FOREGROUND-COLOR 15.
+                      WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                     " " WS-STATUS WITH FOREGROUND-COLOR Grey HIGHLIGHT.
             DISPLAY "Press any key" AT 5012
-              WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 14.
+              WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT.
             ACCEPT WS-OPTION AT 5026
-      WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 15 AUTO.
+      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
        ZA205.
              EXIT PROGRAM.
        ZA999-EXIT.
@@ -1613,17 +1691,17 @@
 
        OPEN-ERROR.
              PERFORM ERASE-SCREEN.
-             DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR 14.
+             DISPLAY "Open error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              GO TO DISPLAY-FILE-NAME.
 
        READ-ERROR.
              PERFORM ERASE-SCREEN.
-             DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR 14.
+             DISPLAY "Read error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              GO TO DISPLAY-FILE-NAME.
 
        WRITE-ERROR.
              PERFORM ERASE-SCREEN.
-             DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR 14.
+             DISPLAY "Write error" AT 0812 WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              GO TO DISPLAY-FILE-NAME.
 
        DISPLAY-FILE-NAME.
@@ -1656,13 +1734,13 @@
            ELSE
            IF WS-STATUS = "94"
                MOVE "FILE locked" TO WS-STAT-MESSAGE.
-             DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR 11.
+             DISPLAY "File - " AT 1012 WS-FILE WITH FOREGROUND-COLOR Cyan HIGHLIGHT.
              DISPLAY "Status " AT 1212
-                      WS-STATUS WITH FOREGROUND-COLOR 11
-                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR 14.
+                      WS-STATUS WITH FOREGROUND-COLOR Cyan HIGHLIGHT
+                     ": " WS-STAT-MESSAGE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
            IF WS-STATUS NOT = "94"
                DISPLAY "Key    " AT 1412
-                        WS-KEY WITH FOREGROUND-COLOR 11
+                        WS-KEY WITH FOREGROUND-COLOR Cyan HIGHLIGHT
                DISPLAY "Reverse backup or contact program Support"
                         AT 1612.
                DISPLAY "Please make a note of these details" AT 1812.

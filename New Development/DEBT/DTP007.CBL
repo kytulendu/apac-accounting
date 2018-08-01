@@ -53,7 +53,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2017
                                   by James William Lemmon.
                                      (Id No. 4412165050082).
 
@@ -140,7 +140,7 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-SUB                  PIC  9(04)    COMP-5.
        77  WS-S                    PIC  9(04)    COMP-5.
        77  WS-S1                   PIC  9(04)    COMP-5.
@@ -170,20 +170,20 @@
        77  WS-NTP                  PIC  X(01).
        77  WS-KEYSTR               PIC  9(06)    COMP-5.
        77  WS-OPTION               PIC  X(01).
-       77  WS-SKIP                 PIC  X(01)    VALUE "N".
+       77  WS-SKIP                 PIC  X(01)           VALUE "N".
        77  WS-TAX                  PIC  X(01).
        77  WS-TYPE                 PIC  X(01).
-       77  WS-ERROR                PIC  9(01)    VALUE ZERO.
+       77  WS-ERROR                PIC  9(01)           VALUE ZERO.
        77  WS-EKEY                 PIC  9(06)    COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-CHAR2                PIC  X(01).
        77  WS-COMP                 PIC  9(01).
       *77  WS-BATCH                PIC  9(06)    COMP-5.
-       77  WS-ERR1                 PIC  X(22)    VALUE "Invalid Account Number".
-       77  WS-ERR2                 PIC  X(09)    VALUE "No Record".
-       77  WS-E                    PIC  X(15)    VALUE "**END** - ENTER".
-       77  WS-AC                   PIC  X(07)    VALUE "ACCOUNT".
-       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
+       77  WS-ERR1                 PIC  X(22)           VALUE "Invalid Account Number".
+       77  WS-ERR2                 PIC  X(09)           VALUE "No Record".
+       77  WS-E                    PIC  X(15)           VALUE "**END** - ENTER".
+       77  WS-AC                   PIC  X(07)           VALUE "ACCOUNT".
+       77  PRG-DEBT-LUP            PIC  X(12)           VALUE "DTP\DTPLOOK".
        77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
        77  WS-USUB                 PIC  9(04)    COMP-5.
       *
@@ -385,6 +385,9 @@
        AA000         SECTION.
        AA00.
            IF LS0-DBLEV < 4
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
@@ -406,7 +409,6 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-      *      MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              CALL PRG-DEBT-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
                   ON EXCEPTION GO TO AA55
@@ -425,6 +427,8 @@
 
        AA99.
              EXIT.
+
+       COPY "AA900.ALM".
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                       DEBTOR-MEMO                         ³
@@ -549,7 +553,7 @@
        COPY "CLEARW.CRT".
 
       *
-      *      READ FILES ROUTINES
+      *    ****    R E A D   F I L E S   R O U T I N E S
       *
        AC000              SECTION.
 
@@ -565,9 +569,9 @@
 
        COPY "SHARED.RD".
 
-      *
-      *      REWRITE AND WRITE FILES ROUTINES
-      *
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -583,8 +587,20 @@
        COPY "APAC.HLP".
 
       *
-      *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
-      *
+      *       ****   *****  ***    ***   *   *  *****  ****   *   *
+      *       *   *  *     *   *  *   *  *   *  *      *   *  *   *
+      *       ****   ***   *      *   *  *   *  ***    ****    * *
+      *       *   *  *     *   *  *   *   * *   *      *   *    *
+      *       *   *  *****  ***    ***     *    *****  *   *    *
+      *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+      *          THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
+      *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+      *        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *        ³ ORIGINAL ACTION (REC-TYPE)  ÄÄ  RECOVERY PROCESS ³
+      *        ³ 0 = RECORD CHANGED          ÄÄ      (REWRITE)    ³
+      *        ³ 1 = RECORD WAS ADDED        ÄÄ      (DELETE)     ³
+      *        ³ 2 = RECORD WAS DELETED      ÄÄ      (WRITE)      ³
+      *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY000           SECTION.
        AY02.
              MOVE 02                 TO REC-FILE.
@@ -621,7 +637,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
-
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³         W R I T E   R E C O V E R Y   R E C O R D         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -847,12 +865,12 @@
                  WHEN F1-KEY     PERFORM HELP-ROUTINE
 
                  WHEN F2-KEY     MOVE SPACE     TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
 
                  WHEN F9-KEY     MOVE "A"       TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
 
-                 WHEN OTHER      CALL X"E5" CALL X"E5" CALL X"E5"
+                 WHEN OTHER      PERFORM AA900-ALARM
                                  GO TO CN05
                END-EVALUATE
                DISPLAY S36 AT 0614
@@ -1046,7 +1064,8 @@
              MOVE LS-PARID           TO WS-PARID.
       *      MOVE LS-L-OR-N          TO W02-L-OR-N.
       *      MOVE WS-SYS-ID          TO W02-SYSID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -1069,8 +1088,8 @@
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-DISCOUNT       TO W05-DISCOUNT.

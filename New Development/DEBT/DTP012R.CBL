@@ -41,7 +41,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   JULY 2004.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2004 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2004 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -913,6 +913,9 @@
       *    THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *    *************************************************************
        AY000             SECTION.
+      *    *************************************************************
+      *    ****             P A R A M E T E R   F I L E             ****
+      *    *************************************************************
        AY01.
              MOVE 01                 TO REC-FILE.
              MOVE WS-PARKEY          TO REC-KEY.
@@ -994,7 +997,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
-
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё         W R I T E   R E C O V E R Y   R E C O R D         Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -1010,7 +1015,7 @@
        AY59.
              EXIT.
       *    *************************************************************
-      *    ****    Start processing transaction
+      *    ****        Start processing transaction
       *    *************************************************************
        AY60.
              MOVE 1                  TO WS-COUNT.
@@ -1620,7 +1625,8 @@
        ZA000-INIT        SECTION 88.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-DRAW            TO WS-DRAW.
              MOVE LS-COMPANY         TO CRT-COMPANY.
@@ -1740,8 +1746,8 @@
                DISPLAY "Setup cash slip headings - press ENTER" AT 1212 WITH FOREGROUND-COLOR Brown HIGHLIGHT
                ACCEPT WS-OPTION AT 1251 WITH AUTO
                GO TO ZA205.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
              MOVE PAR-CSHEAD         TO W15-COMP.
              MOVE PAR-CSHADD         TO W15-ADD.
              MOVE PAR-TELEPHONE      TO W15-TEL.

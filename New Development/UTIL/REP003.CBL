@@ -13,7 +13,7 @@
       *                                                                *
       *       Y E A R - E N D   C L E A R   P R O G R A M              *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
        AUTHOR.         James William Lemmon.
        DATE-WRITTEN.   AUGUST 1982.
 
-               COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+               COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                  by James William Lemmon.
                                    (Id No. 4412165050082).
                
@@ -254,7 +254,7 @@
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY PEND-FILE-IDS.
        AA00M    SECTION.
        AA00.
-             PERFORM ZA00-INIT.
+             PERFORM ZA000-INIT.
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё      P E R F O R M   Y E A R - E N D   S E C T I O N      Ё
@@ -270,6 +270,8 @@
 
        AA55.
              EXIT PROGRAM.
+
+       COPY "AA900.ALM".
 
       *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
       *    Ё           ERASE SCREEN FROM SPECIFIED LOCATION            Ё
@@ -308,6 +310,8 @@
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "CLEAR.CRT".
+
+       COPY "DATE.CHK".
 
       *    *************************************************************
       *            T H I S   R O U T I N E   I S   U S E D   T O
@@ -758,7 +762,7 @@
                                       END-IF
                                   END-IF
                  WHEN ENTER-KEY   GO TO DA00A-15
-                 WHEN OTHER       CALL X"E5"
+                 WHEN OTHER       PERFORM AA900-ALARM
                END-EVALUATE
                GO TO DA00A-5
            ELSE
@@ -766,7 +770,7 @@
                EVALUATE KEY-CODE-1
                  WHEN ESC-KEY  MOVE "0"  TO WS-OPTION
                      GO TO DA00AF
-                 WHEN OTHER  CALL X"E5"
+                 WHEN OTHER  PERFORM AA900-ALARM
                END-EVALUATE
                GO TO DA00A-5
            ELSE
@@ -774,12 +778,12 @@
                MOVE KEY-CODE-1X      TO WS-OPTION
                CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS
                IF WS-OPTION < "0" OR > "8"
-                   CALL X"E5"
+                   PERFORM AA900-ALARM
                    GO TO DA00A-5
                END-IF
                GO TO DA00A-16
            ELSE
-               CALL X"E5"
+               PERFORM AA900-ALARM
                GO TO DA00A-5.
 
        DA00A-15.
@@ -1083,7 +1087,10 @@
        DA50.
              DISPLAY "Order No:" AT 1608.
              MOVE 1467               TO DATEPOS.
-             CALL "UTP\DateCheck" USING W-DATES.
+             PERFORM DATE-CHECK-ACCEPT-PLUS THRU CHECK-DATE-EXIT.
+      *      CALL "UTP\DateCheck" USING W-DATES.
+           IF W22-INSTR = X"EC"
+               GO TO DA999
              MOVE W20-DTE            TO W15-E-YMD.
              MOVE "00000001"         TO SOR-REF
              MOVE ZERO               TO SOR-SEQ
@@ -1097,7 +1104,7 @@
        DA58.
            IF NOT(SOR-TYPE = ZERO)
                GO TO DA55.
-      DISPLAY SOR-REF AT 1618 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
+             DISPLAY SOR-REF AT 1618 WITH FOREGROUND-COLOR Grey HIGHLIGHT.
            IF SOR-DOC = WS-TYPE
                IF SOR-DTE < W15-E-YMD
                    MOVE SOR-REF  TO WS-REF
@@ -1165,7 +1172,7 @@
       *    *************************************************************
       *                 I N I T I A L I S E   P R O G R A M
       *    *************************************************************
-       ZA00-INIT       SECTION 8.
+       ZA000-INIT       SECTION 8.
        ZA00-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -1324,8 +1331,8 @@
        ZA10.
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
              MOVE PAR-COMPANY        TO CRT-COMP.
       *
       *   As this version of the system includes all modules the

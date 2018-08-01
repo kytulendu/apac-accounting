@@ -1,65 +1,65 @@
       $SET LINKCOUNT"640" GNT"DTPSLD.GNT"
       ******************************************************************
       *                                                                *
-      *   *******   ********  *******  ******   **     *******    *
-      *   ** **     **     **    ** **    **  **     **   **   *
-      *   ** **     **     **    ** **   **     **   **   *
-      *   ** **     **     *******  ******   **     **   **   *
-      *   ** **     **     **       **  **     **   **   *
-      *   ** **     **     ** **    **  **     **   **   *
-      *   *******      **     **  ******   ********  *******    *
+      *    *******   ********  *******   ******   **        *******    *
+      *    **    **     **     **    ** **    **  **        **    **   *
+      *    **    **     **     **    ** **        **        **    **   *
+      *    **    **     **     *******   ******   **        **    **   *
+      *    **    **     **     **             **  **        **    **   *
+      *    **    **     **     **       **    **  **        **    **   *
+      *    *******      **     **        ******   ********  *******    *
       *                                                                *
       *     ENGLISH                                                    *
       *                                                                *
       *  D E B T O R ' S   S A L E S   P E R   D E P T A R T M E N T   *
       *                                                                *
-      *     VERSION 9.00.00 - August 2012          *
-      *               *
+      *     VERSION 9.00.00 - August 2012                              *
+      *                                                                *
       ******************************************************************
-      *               *
+      *                                                                *
       *  May 2010    - This report has been included to get statistics *
-      *         of sales per department for a selected account. *
-      *         Used mainly for compititions between dealers    *
-      *         that are held by distributors.         *
-      *               *
+      *                of sales per department for a selected account. *
+      *                Used mainly for compititions between dealers    *
+      *                that are held by distributors.                  *
+      *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     DTPSLD.
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   MAY 2010.
 
-     COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2016
-         by James William Lemmon.
-           (Id No. 4412165050082).
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2018
+                                  by James William Lemmon.
+                                    (Id No. 4412165050082).
 
-     All rights reserved.
+                All rights reserved.
 
-     e-mail jwlemmon@gmail.com.
+                e-mail jwlemmon@gmail.com.
 
        SECURITY.
-     This program is free software; you can redistribute
-     it and/or modify it under the terms of the GNU General
-     Public License as published by the Free Software
-     Foundation; either version 2 of the License, or (at
-     your option) any later version.
+                This program is free software; you can redistribute
+                it and/or modify it under the terms of the GNU General
+                Public License as published by the Free Software
+                Foundation; either version 2 of the License, or (at
+                your option) any later version.
 
-     This program is distributed in the hope that it will
-     be useful, but WITHOUT ANY WARRANTY; without even the
-     implied warranty of MERCHANTABILITY or FITNESS FOR A
-     PARTICULAR PURPOSE. See the GNU General Public License
-     for more details.
+                This program is distributed in the hope that it will
+                be useful, but WITHOUT ANY WARRANTY; without even the
+                implied warranty of MERCHANTABILITY or FITNESS FOR A
+                PARTICULAR PURPOSE. See the GNU General Public License
+                for more details.
 
-     You should have received a copy of the GNU General
-     Public License along with this program; if not, write
-     to the Free Software Foundation, Inc., 59 Temple Place
-     - Suite 330, Boston, MA 02111-1307, USA.
+                You should have received a copy of the GNU General
+                Public License along with this program; if not, write
+                to the Free Software Foundation, Inc., 59 Temple Place
+                - Suite 330, Boston, MA 02111-1307, USA.
 
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        SPECIAL-NAMES.
-               CURSOR IS CSTART
-               CONSOLE IS CRT
-         CRT STATUS IS KEY-STATUS.
+                         CURSOR IS CSTART
+                         CONSOLE IS CRT
+                         CRT STATUS IS KEY-STATUS.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
 
@@ -84,6 +84,15 @@
        COPY "STOCK.SL".
 
        DATA DIVISION.
+      *
+      *          ********  ********  **        ******** 
+      *          **           **     **        **
+      *          **           **     **        ** 
+      *          *****        **     **        *****
+      *          **           **     **        **  
+      *          **           **     **        **
+      *          **        ********  ********  ********
+      *
        FILE SECTION.
 
        COPY "CARDEX.FDE".
@@ -106,7 +115,7 @@
 
        COPY "STOCK.FDE".
 
-      /
+      *
       *         **         **    ******    *******    **    **
       *         **         **   **    **   **    **   **   **
       *         **    *    **   **    **   **   **    **  **
@@ -116,39 +125,39 @@
       *            *     *       ******    **    **   **    **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK    PIC X(18)  VALUE
-      "aeWlimemnomLalismJ".
-       77  WS-SUB    PIC 9(04)  COMP-5.
-       77  WS-S            PIC  9(04)    COMP-5.
-       77  WS-S1           PIC  9(04)    COMP-5.
-       77  WS-S2           PIC  9(04)    COMP-5.
-       77  WS-S3           PIC  9(04)    COMP-5.
-       77  WS-S4           PIC  9(04)    COMP-5.
-       77  WS-S5           PIC  9(04)    COMP-5.
-       77  WS-S6           PIC  9(04)    COMP-5.
-       77  WS-S7           PIC  9(04)    COMP-5.
-       77  WS-S8           PIC  9(04)    COMP-5.
-       77  WS-S9           PIC  9(04)    COMP-5.
-       77  WS-IXS1         PIC  9(04)    COMP-5.
-       77  WS-CRDX    PIC 9(04)  COMP-5.
-       77  WS-NETKEY    PIC 9(06)  COMP-5.
-       77  WS-PARKEY       PIC  9(06)    COMP-5.
-       77  WS-RECKEY       PIC  9(06)    COMP-5.
-       77  WS-SHARED    PIC 9(06)  COMP-5.
-       77  WS-TRANS        PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-PAGE    PIC 9(04)  COMP-5.
-       77  WS-OPTION       PIC  X(01).
-       77  WS-RESTRICT    PIC X(01).
-       77  WS-RESTCODE    PIC X(01).
-       77  WS-RTYPE    PIC X(01).
-       77  WS-TYP    PIC X(01).
-       77  WS-WRT    PIC X(01).
-       77  WS-LEDG    PIC X(04).
-       77  WS-ERROR    PIC 9(01) VALUE ZERO.
-       77  WS-ERR1    PIC X(22) VALUE "Invalid Account Number".
-       77  WS-ERR2         PIC  X(09) VALUE "No Record".
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-CHECK                PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-SUB                  PIC  9(04)    COMP-5.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S5                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S7                   PIC  9(04)    COMP-5.
+       77  WS-S8                   PIC  9(04)    COMP-5.
+       77  WS-S9                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-CRDX                 PIC  9(04)    COMP-5.
+       77  WS-NETKEY               PIC  9(06)    COMP-5.
+       77  WS-PARKEY               PIC  9(06)    COMP-5.
+       77  WS-RECKEY               PIC  9(06)    COMP-5.
+       77  WS-SHARED               PIC  9(06)    COMP-5.
+       77  WS-TRANS                PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PAGE                 PIC  9(04)    COMP-5.
+       77  WS-OPTION               PIC  X(01).
+       77  WS-RESTRICT             PIC  X(01).
+       77  WS-RESTCODE             PIC  X(01).
+       77  WS-RTYPE                PIC  X(01).
+       77  WS-TYP                  PIC  X(01).
+       77  WS-WRT                  PIC  X(01).
+       77  WS-LEDG                 PIC  X(04).
+       77  WS-ERROR                PIC  9(01)            VALUE ZERO.
+       77  WS-ERR1                 PIC  X(22)            VALUE "Invalid Account Number".
+       77  WS-ERR2                 PIC  X(09)            VALUE "No Record".
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
+
        01  WS-DB-LINE.
            03  WS-TOP-LNE.
                05  WS-TCHR PIC X(01) OCCURS 80.
@@ -169,14 +178,14 @@
               05  FILLER      PIC  X(01).
           03  WS-MID-LNE.
               05  WS-MCHR  PIC  X(80) VALUE "³                ³
-      -        "                      ³          ³         ³         ³".
+      -        "                      ³          ³         ³         ³.
     03  WS-MST-LNE REDEFINES WS-MID-LNE.
         05  WS-MST1     PIC  X(01).
         05  WS-MST78    PIC  X(78).
         05  WS-MST80    PIC  X(01).
           03  WS-MD-LNE.
               05  WS-MCH   PIC  X(80) VALUE "³      ³
-      -        "                      ³           ³          ³       ³".
+      -        "                      ³           ³          ³       ³.
     03  WS-MDDT-LNE REDEFINES WS-MD-LNE.
         05  WS-MDT1     PIC  X(01).
         05  WS-MDT78    PIC  X(78).
@@ -211,8 +220,8 @@
        COPY "WS.WS".
 
        01  WS-HELP.
-    03  WS-MODULE       PIC  X(03) VALUE "DTP".
-    03  WS-PROG        PIC  X(03) VALUE "SLD".
+           03  WS-MODULE       PIC  X(03) VALUE "DTP".
+           03  WS-PROG        PIC  X(03) VALUE "SLD".
 
        01  WS-PARID.
           03  WS-SYS-ID       PIC  X(03).
@@ -354,46 +363,46 @@
                05  W15-EDD     PIC 9(02).
 
        01  W25-CALCS.
-          03  W25-RESULT      PIC  9(05)V99.
-           03  W25-RESULT1 REDEFINES W25-RESULT.
-              05  W25-WHOLE   PIC  9(05).
-              05  W25-DECIMAL PIC  9(02).
-           03  W25-RESULT2 REDEFINES W25-RESULT.
-        05  W25-KEY     PIC  9(04).
-        05  W25-SUB     PIC  9(01).
-        05  FILLER      PIC  9(02).
-           03  W25-TOTAL       PIC S9(09)V99 COMP-3.
-           03  W25-VALUE       PIC S9(09)V99 COMP-3.
-          03  W25-TIME        PIC  9(08).
-           03  W25-TRED REDEFINES  W25-TIME.
-              05  FILLER      PIC  9(02).
-              05  W25-FACT    PIC  9(06).
-    03  W25-DATE REDEFINES W25-TRED.
-        05  W25-YY      PIC  9(04).
-        05  W25-MM      PIC  9(02).
-        05  W25-DD      PIC  9(02).
-    03  W25-CUR-CC      PIC  9(02) COMP-5.
-    03  W25-PRV-CC      PIC  9(02) COMP-5.
-    03  W25-NXT-CC      PIC  9(02) COMP-5.
-    03  W25-QNT        PIC S9(09)V99  COMP-3.
-          03  W25-COST        PIC S9(09)V99  COMP-3.
-          03  W25-SELL        PIC S9(09)V99  COMP-3.
+           03  W25-RESULT          PIC  9(05)V99.
+           03  W25-RESULT1                       REDEFINES W25-RESULT.
+               05  W25-WHOLE       PIC  9(05).
+               05  W25-DECIMAL     PIC  9(02).
+           03  W25-RESULT2                       REDEFINES W25-RESULT.
+               05  W25-KEY         PIC  9(04).
+               05  W25-SUB         PIC  9(01).
+               05  FILLER          PIC  9(02).
+           03  W25-TOTAL           PIC S9(09)V99 COMP-3.
+           03  W25-VALUE           PIC S9(09)V99 COMP-3.
+           03  W25-TIME            PIC  9(08).
+           03  W25-TRED                          REDEFINES  W25-TIME.
+               05  FILLER          PIC  9(02).
+               05  W25-FACT        PIC  9(06).
+           03  W25-DATE                          REDEFINES W25-TRED.
+               05  W25-YY          PIC  9(04).
+               05  W25-MM          PIC  9(02).
+               05  W25-DD          PIC  9(02).
+           03  W25-CUR-CC          PIC  9(02)    COMP-5.
+           03  W25-PRV-CC          PIC  9(02)    COMP-5.
+           03  W25-NXT-CC          PIC  9(02)    COMP-5.
+           03  W25-QNT             PIC S9(09)V99 COMP-3.
+           03  W25-COST            PIC S9(09)V99 COMP-3.
+           03  W25-SELL            PIC S9(09)V99 COMP-3.
 
        01  W30-DISPLAY.
-    03  W30-SP        PIC  ZZ9        BLANK WHEN ZERO.
-    03  FILLER        PIC  X(02).
-    03  W30-CODE        PIC  X(14).
-    03  FILLER        PIC  X(01).
-    03  W30-DESC        PIC  X(30).
-    03  FILLER        PIC  X(01).
-    03  W30-QUANT       PIC  Z(06)9.99- BLANK WHEN ZERO.
-    03  FILLER        PIC  X(01).
-    03  W30-VALUE       PIC  Z(07)9.99- BLANK WHEN ZERO.
+           03  W30-SP              PIC  ZZ9        BLANK WHEN ZERO.
+           03  FILLER              PIC  X(02).
+           03  W30-CODE            PIC  X(14).
+           03  FILLER              PIC  X(01).
+           03  W30-DESC            PIC  X(30).
+           03  FILLER              PIC  X(01).
+           03  W30-QUANT           PIC  Z(06)9.99- BLANK WHEN ZERO.
+           03  FILLER              PIC  X(01).
+           03  W30-VALUE           PIC  Z(07)9.99- BLANK WHEN ZERO.
 
        01  W35-DEALER.
-    03  W35-NO        PIC  9(06).
-    03  W35-END        PIC  9(06).
-    03  W35-ACNO        PIC  X(06).
+           03  W35-NO              PIC  9(06).
+           03  W35-END             PIC  9(06).
+           03  W35-ACNO            PIC  X(06).
 
        COPY "W40.WS".
 
@@ -530,138 +539,83 @@
        SCREEN SECTION.
 
        01  S-PROG.
-          03  LINE  2 COLUMN 27 FOREGROUND-COLOR 7 HIGHLIGHT VALUE
-               "TRANSACTIONS PER SALESPERSON".
+          03  LINE  2 COLUMN 27 FOREGROUND-COLOR Grey HIGHLIGHT VALUE
+               "TRANSACTIONS PER SALES PERSON".
 
        01  S03.
-    03  LINE  4 COLUMN 20 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-        "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-    03  LINE  5 COLUMN 20 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-    "³    ".
-    03        COLUMN 25 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-    "DEBTOR ACCOUNT RANGE SELECTION".
-    03        COLUMN 55 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-     "    ³".
-    03  LINE  6 COLUMN 20 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-    "³ ".
-    03        COLUMN 22 FOREGROUND-COLOR 3 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-         "Printed from highest to lowest value".
-    03        COLUMN 58 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-    " ³" .
-    03  LINE  7 COLUMN 20 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-        "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-    03  LINE  8 COLUMN 20 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-        "³ Number of accounts for report:       ³".
-    03  LINE  9 COLUMN 20 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE
-        "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Brown FOREGROUND-COLOR Brown HIGHLIGHT.
+               05  LINE  4 COLUMN 20 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
+               05  LINE  5 COLUMN 20 VALUE "³    ".
+               05          COLUMN 25 VALUE      "DEBTOR ACCOUNT RANGE SELECTION"      FOREGROUND-COLOR Grey HIGHLIGHT.
+               05          COLUMN 55 VALUE                                    "    ³".
+               05  LINE  6 COLUMN 20 VALUE "³ ".
+               05          COLUMN 22 VALUE   "Printed from highest to lowest value"   FOREGROUND-COLOR Magenta HIGHLIGHT.
+               05          COLUMN 58 VALUE                                       " ³" .
+               05  LINE  7 COLUMN 20 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
+               05  LINE  8 COLUMN 20 VALUE "³ Number of accounts for report:       ³".
+               05  LINE  9 COLUMN 20 VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
 
        01  S04.
-    03  LINE  8 COLUMN 53 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
-     PIC  Z(04)9 USING W35-NO AUTO.
+           03  LINE  8 COLUMN 53 FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta PIC  Z(04)9 USING W35-NO AUTO.
 
        01  S05D.
-          03  LINE  2 COLUMN 27 FOREGROUND-COLOR 7 HIGHLIGHT VALUE
-               "SALES PERFORMANCE REPORTING".
-    03  LINE  4 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-    03  LINE  5 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "³   Transactions for Period.   ³".
-    03  LINE  6 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-    03  LINE  7 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "³   Starting Date :            ³".
-    03  LINE  8 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "³   Ending Date   :            ³".
-    03  LINE  9 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-    03  LINE 10 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "³Dates to be keyed in as ".
-    03        COLUMN 50 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE "DDMMYY".
-    03        COLUMN 56 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6 VALUE "³".
-    03  LINE 11 COLUMN 25 FOREGROUND-COLOR 6 HIGHLIGHT
-     BACKGROUND-COLOR 6
-         VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  LINE  2 COLUMN 27 FOREGROUND-COLOR Grey HIGHLIGHT VALUE "SALES PERFORMANCE REPORTING".
+           03  BACKGROUND-COLOR Brown FOREGROUND-COLOR Brown HIGHLIGHT.
+               05  LINE  4 COLUMN 25 VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
+               05  LINE  5 COLUMN 25 VALUE "³   Transactions for Period.   ³".
+               05  LINE  6 COLUMN 25 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
+               05  LINE  7 COLUMN 25 VALUE "³   Starting Date :            ³".
+               05  LINE  8 COLUMN 25 VALUE "³   Ending Date   :            ³".
+               05  LINE  9 COLUMN 25 VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
+               05  LINE 10 COLUMN 25 VALUE "³Dates to be keyed in as ".
+               05          COLUMN 50 VALUE                          "DDMMYY".
+               05          COLUMN 56 VALUE                                "³".
+               05  LINE 11 COLUMN 25 VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+
        01  S05A.
-    03  LINE  7 COLUMN 45 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
-     PIC 99/99/9999 USING W15-START AUTO.
-    03  LINE  8 COLUMN 45 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
-     PIC 99/99/9999 USING W15-END AUTO.
+           03  LINE  7 COLUMN 45 FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta PIC 99/99/9999 USING W15-START AUTO.
+           03  LINE  8 COLUMN 45 FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta PIC 99/99/9999 USING W15-END AUTO.
 
        01  S06.
-    03  LINE  4 COLUMN  2 FOREGROUND-COLOR 7 HIGHLIGHT VALUE
-        "Debtor/Dept transactions for the period:- ".
-    03        COLUMN 44 FOREGROUND-COLOR 6 HIGHLIGHT
-     PIC Z9/99/9999 FROM W15-START.
-    03        COLUMN 54 FOREGROUND-COLOR 7 HIGHLIGHT
-     VALUE " to ".
-    03        COLUMN 58 FOREGROUND-COLOR 6 HIGHLIGHT
-     PIC Z9/99/9999 FROM W15-END.
-    03  LINE  5 COLUMN  3 FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
-        VALUE "S/P. Item Code      Stock Description
-      -       "   Quantity        Value ".
+           03  LINE  4 COLUMN  2 FOREGROUND-COLOR Grey HIGHLIGHT VALUE "Debtor/Dept transactions for the period:- ".
+           03          COLUMN 44 FOREGROUND-COLOR Brown HIGHLIGHT PIC                                             Z9/99/9999 FROM W15-START.
+           03          COLUMN 54 FOREGROUND-COLOR Grey HIGHLIGHT VALUE                                                     " to ".
+           03          COLUMN 58 FOREGROUND-COLOR Brown HIGHLIGHT PIC                                                           Z9/99/9999 FROM W15-END.
+           03  LINE  5 COLUMN  3 FOREGROUND-COLOR Blue BACKGROUND-COLOR Magenta VALUE "S/P. Item Code      Stock Description                Quantity        Value ".
 
        01  S08.
-    03  LINE 14 COLUMN 10 FOREGROUND-COLOR 2 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-      -           "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-    03  LINE 15 COLUMN 10 FOREGROUND-COLOR 2 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "³                      ".
-    03        COLUMN 33 FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "SALES LEDGER".
-    03        COLUMN 45 FOREGROUND-COLOR 2 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "                       ³".
-    03  LINE 16 COLUMN 10 FOREGROUND-COLOR 2 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-      -     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
-    03  LINE 17 COLUMN 10 FOREGROUND-COLOR 2 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "³".
-    03        COLUMN 11 FOREGROUND-COLOR 0
-     BACKGROUND-COLOR 2
-     VALUE "Ledger No      Description  ".
-    03        COLUMN 39 FOREGROUND-COLOR 2 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "                             ³".
-    03  LINE 18 COLUMN 10 FOREGROUND-COLOR 2 HIGHLIGHT
-     BACKGROUND-COLOR 2
-     VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
-      -     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
+           03  LINE 14 COLUMN 10 FOREGROUND-COLOR Green VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" HIGHLIGHT BACKGROUND-COLOR Green.
+           03  LINE 15 COLUMN 10 FOREGROUND-COLOR Green HIGHLIGHT BACKGROUND-COLOR Green
+            VALUE "³                      ".
+           03        COLUMN 33 FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Green
+            VALUE "SALES LEDGER".
+           03        COLUMN 45 FOREGROUND-COLOR Green HIGHLIGHT BACKGROUND-COLOR Green
+            VALUE "                       ³".
+           03  LINE 16 COLUMN 10 FOREGROUND-COLOR Green HIGHLIGHT
+            BACKGROUND-COLOR Green
+            VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´".
+           03  LINE 17 COLUMN 10 FOREGROUND-COLOR Green HIGHLIGHT
+            BACKGROUND-COLOR Green
+            VALUE "³".
+           03        COLUMN 11 FOREGROUND-COLOR Black
+            BACKGROUND-COLOR Green
+            VALUE "Ledger No      Description  ".
+           03        COLUMN 39 FOREGROUND-COLOR Green HIGHLIGHT
+            BACKGROUND-COLOR Green
+            VALUE "                             ³".
+           03  LINE 18 COLUMN 10 FOREGROUND-COLOR Green HIGHLIGHT
+            BACKGROUND-COLOR Green
+            VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ"
+             -     "ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ".
 
        01  S10.
           03  S10A.
-              05  LINE 17 COLUMN 21 FOREGROUND-COLOR 7 HIGHLIGHT
-         BACKGROUND-COLOR 2
+              05  LINE 17 COLUMN 21 FOREGROUND-COLOR Grey HIGHLIGHT
+         BACKGROUND-COLOR Green
                PIC X(04) USING W10-LEDG AUTO.
           03  S10B.
-              05  LINE 17 COLUMN 38 FOREGROUND-COLOR 7 HIGHLIGHT
-         BACKGROUND-COLOR 2
+              05  LINE 17 COLUMN 38 FOREGROUND-COLOR Grey HIGHLIGHT
+         BACKGROUND-COLOR Green
                PIC X(30) USING DPT-DESC AUTO.
 
        COPY "DEPART1.CRT".
@@ -671,126 +625,126 @@
        COPY "DEBTOR.CRT".
 
        01  S36.
-          03  FOREGROUND-COLOR 7 HIGHLIGHT
-     BACKGROUND-COLOR 5
+          03  FOREGROUND-COLOR Grey HIGHLIGHT
+     BACKGROUND-COLOR Magenta
      PIC X(06) USING W80-ACNO AUTO.
 
        01  S-DEB-MEM.
-           03  LINE  7 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
+           03  LINE  7 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey VALUE
            "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
       -    "".
 
        01  S-MEM.
-           03  LINE  6 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  6 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G9.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G10.
-           03  LINE  7 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  7 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G3.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7 VALUE
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey VALUE
            "   M E M O / R E M A R K S / C O R R E S P O N D E N C E
       -    "".
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G3.
-           03  LINE  8 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  8 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G14.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-HME-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G13.
-           03  LINE  9 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 10 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 11 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 12 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 13 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 14 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 15 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 16 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 17 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 18 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 19 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 20 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(62) USING WS-MM-LINE.
-           03  LINE 21 COLUMN 17 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 21 COLUMN 17 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G11.
-           03          COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING WS-MEM-LINE.
-           03          COLUMN 78 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03          COLUMN 78 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(01) USING WS-G12.
        01  SA-MEM.
-           03  LINE  9 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE  9 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM1 AUTO.
-           03  LINE 10 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 10 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM2 AUTO.
-           03  LINE 11 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 11 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM3 AUTO.
-           03  LINE 12 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 12 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM4 AUTO.
-           03  LINE 13 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 13 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM5 AUTO.
-           03  LINE 14 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 14 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM6 AUTO.
-           03  LINE 15 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 15 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM7 AUTO.
-           03  LINE 16 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 16 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM8 AUTO.
-           03  LINE 17 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 17 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM9 AUTO.
-           03  LINE 18 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 18 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM10 AUTO.
-           03  LINE 19 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 19 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM11 AUTO.
-           03  LINE 20 COLUMN 18 FOREGROUND-COLOR 0
-                                 BACKGROUND-COLOR 7
+           03  LINE 20 COLUMN 18 FOREGROUND-COLOR Black
+                                 BACKGROUND-COLOR Grey
                                  PIC X(60) USING W200-MEM12 AUTO.
 
       /
@@ -945,173 +899,154 @@
                  MOVE 1          TO WS-ERROR.
        CA180-EXIT.
              EXIT.
-      /
+      *
       *  **  S A L E S  A C C O U N T  /   D E P A R T M E N T
       *
        BA000         SECTION 50.
-            PERFORM ERASE-SCREEN.
-      MOVE 5   TO SHADE-ROW.
-      MOVE 27   TO SHADE-COL.
-      MOVE 30   TO SHADE-WIDTH.
-      MOVE 7   TO SHADE-LINES.
-      DISPLAY S05D.
-      PERFORM SCREEN-SHADOW.
-      MOVE W12-TODAY  TO W15-START W15-END.
+             PERFORM ERASE-SCREEN.
+             MOVE 5                  TO SHADE-ROW.
+             MOVE 27                 TO SHADE-COL.
+             MOVE 30                 TO SHADE-WIDTH.
+             MOVE 7                  TO SHADE-LINES.
+             DISPLAY S05D.
+             PERFORM SCREEN-SHADOW.
+             MOVE W12-TODAY  TO W15-START W15-END.
 
        BA05.
-      DISPLAY "Press " AT 5052
-        WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
-       "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-    BACKGROUND-COLOR 3
-       "ape to Exit"
-        WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3.
-      ACCEPT S05A.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY
-       GO TO BA999
-   WHEN OTHER  CALL X"E5"
-       GO TO BA05
-        END-EVALUATE.
-      PERFORM CHECK-CORRECT.
-          IF WS-OPTION = "N"
-        GO TO BA05.
-      PERFORM CLEAR-L50.
-      MOVE W15-START  TO W10-EDTE.
+             DISPLAY "Press "       AT 5052 WITH FOREGROUND-COLOR Blue BACKGROUND-COLOR Magenta
+                           "Esc"            WITH FOREGROUND-COLOR Brown HIGHLIGHT BACKGROUND-COLOR Magenta
+                              "ape to Exit" WITH FOREGROUND-COLOR Blue BACKGROUND-COLOR Magenta.
+             ACCEPT S05A.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY  GO TO BA999
+                 WHEN OTHER    CALL X"E5"
+                               GO TO BA05
+               END-EVALUATE.
+             PERFORM CHECK-CORRECT.
+           IF WS-OPTION = "N"
+               GO TO BA05.
+             PERFORM CLEAR-L50.
+             MOVE W15-START          TO W10-EDTE.
              PERFORM CHECK-DATE.
            IF WS-ERROR = 1
-              MOVE "Start date" TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        GO TO BA05.
-             MOVE W20-DTE        TO W15-S-YMD.
-      MOVE W15-END  TO W10-EDTE.
+               MOVE "Start date"     TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO BA05.
+             MOVE W20-DTE            TO W15-S-YMD.
+             MOVE W15-END            TO W10-EDTE.
              PERFORM CHECK-DATE.
            IF WS-ERROR = 1
-              MOVE "End date"  TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        GO TO BA05.
-             MOVE W20-DTE        TO W15-E-YMD.
-    IF W15-E-YMD < W15-S-YMD
-        MOVE "End date is before start date"
-     TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        GO TO BA05.
+               MOVE "End date"       TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO BA05.
+             MOVE W20-DTE            TO W15-E-YMD.
+           IF W15-E-YMD < W15-S-YMD
+               MOVE "End date is before start date" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO BA05.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Get the Department Code for the Department details that  ³
       *    ³  are to extracted for the report.          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      PERFORM BA100 THRU BA199.
+             PERFORM BA100 THRU BA199.
 
        BA08.
-      MOVE ZERO   TO WS-ERROR.
-      MOVE "Print 'D'etail or 'T'otals (D/T) [ ]"
-     TO WS-ERR-MES.
-      PERFORM OPT-MESSAGE TEST AFTER
-       UNTIL WS-OPTION = "D" OR "T".
-      MOVE WS-OPTION  TO WS-RTYPE.
-      MOVE W15-SMM  TO WS-CRDX.
-      MOVE W15-START  TO W22-DTE1.
-             MOVE W15-END        TO W22-DTE2.
-      MOVE 13   TO SHADE-ROW.
-      MOVE 28   TO SHADE-COL.
-      MOVE 28   TO SHADE-WIDTH.
-      MOVE 3   TO SHADE-LINES.
-      DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 1226
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
-      DISPLAY "³Extracting details requested³" AT 1326
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
-      DISPLAY "³Reading:                    ³" AT 1426
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
-      DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1526
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
-      PERFORM SCREEN-SHADOW.
-      MOVE W15-S-YMD  TO CRD-DTE.
-      MOVE SPACES  TO CRD-EXT-CODE.
-      PERFORM START-AT-CRDX-DSTK THRU READ-CARDEX-EXIT.
-          IF WS-F-ERROR = 43
-        MOVE "No data for time period selected"
-     TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        MOVE 9   TO WS-ERROR
-        GO TO BA15.
-      MOVE SPACES  TO DEL-ACCNT.
-    IF WS-RTYPE = "T"
-        GO TO BA40.
+             MOVE ZERO               TO WS-ERROR.
+             MOVE "Print 'D'etail or 'T'otals (D/T) [ ]" TO WS-ERR-MES.
+             PERFORM OPT-MESSAGE TEST AFTER UNTIL WS-OPTION = "D" OR "T".
+             MOVE WS-OPTION          TO WS-RTYPE.
+             MOVE W15-SMM            TO WS-CRDX.
+             MOVE W15-START          TO W22-DTE1.
+             MOVE W15-END            TO W22-DTE2.
+             MOVE 13                 TO SHADE-ROW.
+             MOVE 28                 TO SHADE-COL.
+             MOVE 28                 TO SHADE-WIDTH.
+             MOVE 3                  TO SHADE-LINES.
+             DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 1226 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
+             DISPLAY "³Extracting details requested³" AT 1326 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
+             DISPLAY "³Reading:                    ³" AT 1426 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
+             DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1526 WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Grey HIGHLIGHT.
+             PERFORM SCREEN-SHADOW.
+             MOVE W15-S-YMD          TO CRD-DTE.
+             MOVE SPACES             TO CRD-EXT-CODE.
+             PERFORM START-AT-CRDX-DSTK THRU READ-CARDEX-EXIT.
+           IF WS-F-ERROR = 43
+               MOVE "No data for time period selected" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               MOVE 9                TO WS-ERROR
+               GO TO BA15.
+             MOVE SPACES             TO DEL-ACCNT.
+           IF WS-RTYPE = "T"
+               GO TO BA40.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Extract the Debtor details from the CARDEX file and write ³
-      *    ³ to DEALER file.            ³
+      *    ³ to DEALER file.                                           ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        BA10.
-            PERFORM READ-CARDEX-NEXT THRU READ-CARDEX-EXIT.
-    IF WS-F-ERROR = 43
-        GO TO BA15.
-    IF NOT(CRD-DEPT = W10-LEDG)
-        GO TO BA10.
-    IF CRD-DTE > W15-E-YMD
-        GO TO BA15.
-      DISPLAY CRD-EXT-CODE AT 1436
-       WITH BACKGROUND-COLOR 5
-     FOREGROUND-COLOR 3 HIGHLIGHT.
-      MOVE CRD-AC  TO DEL-ACCNT.
+             PERFORM READ-CARDEX-NEXT THRU READ-CARDEX-EXIT.
+           IF WS-F-ERROR = 43
+               GO TO BA15.
+           IF NOT(CRD-DEPT = W10-LEDG)
+               GO TO BA10.
+           IF CRD-DTE > W15-E-YMD
+               GO TO BA15.
+             DISPLAY CRD-EXT-CODE AT 1436 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Magenta HIGHLIGHT.
+             MOVE CRD-AC             TO DEL-ACCNT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Move Item Code to STK-CODE (STOCK FILE) which will be     ³
-      *    ³ used as the key to read the stock description.        ³
+      *    ³ used as the key to read the stock description.            ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      MOVE CRD-EXT-CODE  TO DEL-CODE STK-CODE.
-      MOVE CRD-DTE  TO DEL-DTE.
-      MOVE ZERO   TO DEL-SEQ.
-      MOVE CRD-REF  TO DEL-REF.
-      MOVE CRD-SMAN  TO DEL-SMAN.
-      MOVE CRD-QNT  TO DEL-QNT.
+             MOVE CRD-EXT-CODE       TO DEL-CODE STK-CODE.
+             MOVE CRD-DTE            TO DEL-DTE.
+             MOVE ZERO               TO DEL-SEQ.
+             MOVE CRD-REF            TO DEL-REF.
+             MOVE CRD-SMAN           TO DEL-SMAN.
+             MOVE CRD-QNT            TO DEL-QNT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ There are occassions when the Quantity is negative that   ³
       *    ³ either the cost or selling values are positive on the     ³
       *    ³ CARDEX file record and the following has been inserted to ³
-      *    ³ correct the error before doing any calculations.        ³
+      *    ³ correct the error before doing any calculations.          ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-    IF CRD-QNT < ZERO
-        MOVE "N"   TO WS-WRT
-        IF NOT(CRD-SELL < ZERO)
-     MULTIPLY -1  BY CRD-SELL
-     MOVE "Y"  TO WS-WRT
-        END-IF
-        IF NOT(CRD-COST < ZERO)
-     MULTIPLY -1  BY CRD-COST
-     MOVE "Y"  TO WS-WRT
-        END-IF
-        IF WS-WRT = "Y"
-     REWRITE CRD-REC1.
-    IF CRD-QNT < ZERO
-        COMPUTE DEL-COST = (CRD-QNT * CRD-COST) * -1
-        COMPUTE DEL-SELL = (CRD-QNT * CRD-SELL) * -1
-    ELSE
-        COMPUTE DEL-COST = (CRD-QNT * CRD-COST)
-        COMPUTE DEL-SELL = (CRD-QNT * CRD-SELL).
-      MOVE CRD-NAME  TO DEL-NAME.
-      PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-    IF WS-F-ERROR = 22
-        MOVE "No Stock Details for this Code"
-     TO STK-DESC
-        MOVE "ZZZZ"  TO STK-LDG.
-      MOVE STK-DESC  TO DEL-DESC.
-      MOVE STK-LDG  TO DEL-LEDG.
+           IF CRD-QNT < ZERO
+               MOVE "N"              TO WS-WRT
+               IF NOT(CRD-SELL < ZERO)
+                   MULTIPLY -1       BY CRD-SELL
+                   MOVE "Y"          TO WS-WRT
+               END-IF
+               IF NOT(CRD-COST < ZERO)
+                   MULTIPLY -1       BY CRD-COST
+                   MOVE "Y"          TO WS-WRT
+               END-IF
+               IF WS-WRT = "Y"
+                   REWRITE CRD-REC1.
+           IF CRD-QNT < ZERO
+               COMPUTE DEL-COST = (CRD-QNT * CRD-COST) * -1
+               COMPUTE DEL-SELL = (CRD-QNT * CRD-SELL) * -1
+           ELSE
+               COMPUTE DEL-COST = (CRD-QNT * CRD-COST)
+               COMPUTE DEL-SELL = (CRD-QNT * CRD-SELL).
+             MOVE CRD-NAME           TO DEL-NAME.
+             PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+           IF WS-F-ERROR = 22
+               MOVE "No Stock Details for this Code" TO STK-DESC
+               MOVE "ZZZZ"           TO STK-LDG.
+             MOVE STK-DESC           TO DEL-DESC.
+             MOVE STK-LDG            TO DEL-LEDG.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Move Dept Code to DPT-CODE (DEPARTMENT FILE) which will   ³
       *    ³ be used as the key to read the department description.    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      MOVE CRD-DEPT  TO DEL-LEDG DPT-CODE.
-      PERFORM READ-DEPART THRU READ-DEPART-EXIT.
-      MOVE DPT-DESC  TO DEL-DESC.
+             MOVE CRD-DEPT           TO DEL-LEDG DPT-CODE.
+             PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+             MOVE DPT-DESC           TO DEL-DESC.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Write details to extract file (DEALER)         ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-      PERFORM WRITE-DEALER THRU WRITE-DEALER-EXIT.
-      MOVE DEL-ACCNT  TO DET-ACCNT.
-      MOVE DEL-LEDG  TO DET-LEDG.
+             PERFORM WRITE-DEALER THRU WRITE-DEALER-EXIT.
+             MOVE DEL-ACCNT          TO DET-ACCNT.
+             MOVE DEL-LEDG           TO DET-LEDG.
       *    ÕÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¸
       *    ³  ACCUMULATE THE TOTALS FOR THE DEBTOR/SALES LEDGER.    ³
       *    ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
@@ -1163,11 +1098,11 @@
       DISPLAY S03.
       PERFORM SCREEN-SHADOW.
       DISPLAY "Press " AT 5002
-        WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3
-       "Esc" WITH FOREGROUND-COLOR 6 HIGHLIGHT
-    BACKGROUND-COLOR 3
+        WITH FOREGROUND-COLOR Blue BACKGROUND-COLOR Magenta
+       "Esc" WITH FOREGROUND-COLOR Brown HIGHLIGHT
+    BACKGROUND-COLOR Magenta
        "ape to Exit"
-        WITH FOREGROUND-COLOR 1 BACKGROUND-COLOR 3.
+        WITH FOREGROUND-COLOR Blue BACKGROUND-COLOR Magenta.
 
        BA25.
       ACCEPT S04.
@@ -1236,8 +1171,8 @@
     IF NOT(CRD-DEPT = W10-LEDG)
         GO TO BA40.
       DISPLAY CRD-EXT-CODE AT 1436
-       WITH BACKGROUND-COLOR 5
-     FOREGROUND-COLOR 3 HIGHLIGHT.
+       WITH BACKGROUND-COLOR Magenta
+     FOREGROUND-COLOR Magenta HIGHLIGHT.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ There are occassions when the Quantity is negative while  ³
       *    ³ either the Cost or Selling values are positive on the     ³
@@ -1350,10 +1285,10 @@
       DISPLAY S08.
       PERFORM SCREEN-SHADOW.
             DISPLAY "F2" AT 5002
-        WITH BACKGROUND-COLOR 3
-      FOREGROUND-COLOR 6 HIGHLIGHT
+        WITH BACKGROUND-COLOR Magenta
+      FOREGROUND-COLOR Brown HIGHLIGHT
              "=Sales Ledger Lookup"
-        WITH BACKGROUND-COLOR 3 FOREGROUND-COLOR 1.
+        WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Blue.
 
        BA105.
       ACCEPT S10A.
@@ -1400,26 +1335,26 @@
       MOVE W15-START  TO W100-START.
       MOVE W15-END  TO W100-END.
       DISPLAY "Debtors/Dept transactions for the period:- "
-        AT 0404 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-        W100-START WITH FOREGROUND-COLOR 6 HIGHLIGHT
-       " to " WITH FOREGROUND-COLOR 7 HIGHLIGHT
-        W100-END WITH FOREGROUND-COLOR 6 HIGHLIGHT.
+        AT 0404 WITH FOREGROUND-COLOR Grey HIGHLIGHT
+        W100-START WITH FOREGROUND-COLOR Brown HIGHLIGHT
+       " to " WITH FOREGROUND-COLOR Grey HIGHLIGHT
+        W100-END WITH FOREGROUND-COLOR Brown HIGHLIGHT.
       MOVE 11   TO SHADE-ROW.
       MOVE 27   TO SHADE-COL.
       MOVE 29   TO SHADE-WIDTH.
       MOVE 3   TO SHADE-LINES.
       DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 1025
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       DISPLAY "³ Reading Transaction Details ³" AT 1125
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       DISPLAY "³                             ³" AT 1225
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1325
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       PERFORM SCREEN-SHADOW.
             MOVE ZERO   TO WS-PAGE W25-COST W25-QNT
         W35-END W25-SELL.
@@ -1536,17 +1471,17 @@
       MOVE DEL-DTE  TO W95-DTE.
     IF NOT(WS-PRINTER = "S")
         DISPLAY DEL-SMAN AT 1227
-         WITH FOREGROUND-COLOR 3 HIGHLIGHT
-       BACKGROUND-COLOR 5
+         WITH FOREGROUND-COLOR Magenta HIGHLIGHT
+       BACKGROUND-COLOR Magenta
         DISPLAY W95-DTE AT 1230
-         WITH FOREGROUND-COLOR 3 HIGHLIGHT
-       BACKGROUND-COLOR 5
+         WITH FOREGROUND-COLOR Magenta HIGHLIGHT
+       BACKGROUND-COLOR Magenta
         DISPLAY DEL-REF AT 1239
-         WITH FOREGROUND-COLOR 3 HIGHLIGHT
-       BACKGROUND-COLOR 5
+         WITH FOREGROUND-COLOR Magenta HIGHLIGHT
+       BACKGROUND-COLOR Magenta
         DISPLAY DEL-ACCNT AT 1248
-         WITH FOREGROUND-COLOR 3 HIGHLIGHT
-       BACKGROUND-COLOR 5.
+         WITH FOREGROUND-COLOR Magenta HIGHLIGHT
+       BACKGROUND-COLOR Magenta.
             MOVE DEL-ITEM  TO DRP-ITEM.
             MOVE DEL-DESC  TO DRP-DESC.
             MOVE DEL-QNT  TO DRP-QUANT.
@@ -1692,26 +1627,26 @@
       MOVE W15-START  TO W100-START.
       MOVE W15-END  TO W100-END.
       DISPLAY "Debtors/Dept transactions for the period:- "
-        AT 0404 WITH FOREGROUND-COLOR 7 HIGHLIGHT
-        W100-START WITH FOREGROUND-COLOR 6 HIGHLIGHT
-       " to " WITH FOREGROUND-COLOR 7 HIGHLIGHT
-        W100-END WITH FOREGROUND-COLOR 6 HIGHLIGHT.
+        AT 0404 WITH FOREGROUND-COLOR Grey HIGHLIGHT
+        W100-START WITH FOREGROUND-COLOR Brown HIGHLIGHT
+       " to " WITH FOREGROUND-COLOR Grey HIGHLIGHT
+        W100-END WITH FOREGROUND-COLOR Brown HIGHLIGHT.
       MOVE 11   TO SHADE-ROW.
       MOVE 27   TO SHADE-COL.
       MOVE 29   TO SHADE-WIDTH.
       MOVE 3   TO SHADE-LINES.
       DISPLAY "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿" AT 1025
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       DISPLAY "³ Reading Debtor Sales Totals ³" AT 1125
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       DISPLAY "³                             ³" AT 1225
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       DISPLAY "ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ" AT 1325
-        WITH BACKGROUND-COLOR 7
-      FOREGROUND-COLOR 7 HIGHLIGHT.
+        WITH BACKGROUND-COLOR Grey
+      FOREGROUND-COLOR Grey HIGHLIGHT.
       PERFORM SCREEN-SHADOW.
             MOVE ZERO   TO WS-PAGE W25-COST W25-QNT
         W35-END W25-SELL.
@@ -1795,11 +1730,11 @@
               GO TO BB999.
     IF NOT(WS-PRINTER = "S")
         DISPLAY DET-ACCNT AT 1227
-         WITH FOREGROUND-COLOR 3 HIGHLIGHT
-       BACKGROUND-COLOR 5
+         WITH FOREGROUND-COLOR Magenta HIGHLIGHT
+       BACKGROUND-COLOR Magenta
         DISPLAY DET-DISP AT 1234
-         WITH FOREGROUND-COLOR 3 HIGHLIGHT
-       BACKGROUND-COLOR 5.
+         WITH FOREGROUND-COLOR Magenta HIGHLIGHT
+       BACKGROUND-COLOR Magenta.
             MOVE DET-ACCNT  TO DRP-ACNO.
             MOVE DET-NAME  TO DRP-AC-NAME.
       MOVE DET-QNT  TO DRP-TOT-QNT.
@@ -1906,29 +1841,29 @@
               MOVE 45   TO WS-F-ERROR
               PERFORM OPEN-ERROR.
       CLOSE DEATOT.
-      OPEN I-O DEATOT.
+             OPEN I-O DEATOT.
       *    *************************************************************
       *    ****       S A L E S   -   C A R D E X   F I L E     ****
       *    *************************************************************
-            OPEN I-O CARDEX.
-          IF RUNTIME-ERROR
-               IF FLE-LOCKED
-                   GO TO ZA200
+             OPEN I-O CARDEX.
+           IF RUNTIME-ERROR
+                IF FLE-LOCKED
+                    GO TO ZA200
+                ELSE
+                IF FLE-LIMIT
+                    GO TO ZA49
                ELSE
-               IF FLE-LIMIT
-           GO TO ZA49
-               ELSE
-        IF IDX-CORRUPT
-     MOVE 43  TO WS-F-ERROR
-     GO TO ZA50.
+               IF IDX-CORRUPT
+                   MOVE 43           TO WS-F-ERROR
+                   GO TO ZA50.
            IF WS-STATUS NOT = "00"
-              MOVE 43   TO WS-F-ERROR
-        IF WS-STATUS = "39"
-           GO TO ZA50
-        ELSE
-        IF NOT(WS-STATUS = "41")
-           PERFORM OPEN-ERROR.
-            OPEN I-O STOCK.
+               MOVE 43               TO WS-F-ERROR
+               IF WS-STATUS = "39"
+                  GO TO ZA50
+               ELSE
+               IF NOT(WS-STATUS = "41")
+                  PERFORM OPEN-ERROR.
+             OPEN I-O STOCK.
            IF RUNTIME-ERROR
                IF FLE-LOCKED
                    GO TO ZA200
@@ -1936,28 +1871,27 @@
                IF FLE-LIMIT
                    GO TO ZA49
                ELSE
-              IF IDX-CORRUPT
+               IF IDX-CORRUPT
                    MOVE 22       TO WS-F-ERROR
                    GO TO ZA50.
            IF WS-STATUS NOT = "00"
                MOVE 22           TO WS-F-ERROR
-        IF WS-STATUS = "39"
-           GO TO ZA50
-        ELSE
-        IF NOT(WS-STATUS = "41")
-           PERFORM OPEN-ERROR.
-            GO TO ZA999-EXIT.
+               IF WS-STATUS = "39"
+                  GO TO ZA50
+               ELSE
+               IF NOT(WS-STATUS = "41")
+                  PERFORM OPEN-ERROR.
+             GO TO ZA999-EXIT.
 
        COPY "ZA49.PRO".
 
        ZA50.
-          IF WS-F-ERROR = 43
-              MOVE "SALES CARDEX"
-     TO WS-FILE.
-             DISPLAY "Rebuild " AT 0812
-              WS-FILE WITH FOREGROUND-COLOR 6 HIGHLIGHT.
+           IF WS-F-ERROR = 43
+               MOVE "SALES CARDEX" TO WS-FILE.
+               DISPLAY "Rebuild " AT 0812
+               WS-FILE WITH FOREGROUND-COLOR Brown HIGHLIGHT.
              DISPLAY "Press any key to continue" AT 1012.
-      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
        ZA51.
              EXIT PROGRAM.
 
@@ -1965,8 +1899,8 @@
              MOVE 1              TO WS-S1.
 
        ZA60.
-            MOVE WS-G1   TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
-      MOVE WS-G8   TO WS-TCH(WS-S1)  WS-BCH(WS-S1).
+             MOVE WS-G1   TO WS-TCHR(WS-S1) WS-BCHR(WS-S1).
+             MOVE WS-G8   TO WS-TCH(WS-S1)  WS-BCH(WS-S1).
            IF WS-S1 < 80
                ADD 1             TO WS-S1
                GO TO ZA60.

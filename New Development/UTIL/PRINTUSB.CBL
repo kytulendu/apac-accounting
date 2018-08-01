@@ -13,7 +13,8 @@
       *                                                                *
       *    P R I N T   U T I L I T Y   P R O G R A M                   *
       *                                                                *
-      *       Version 9.04.01 - September 2016                         *
+      *       Version 9.04.05 - June 2018                              *
+
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -51,7 +52,7 @@
            spool or display the report.
 
       ******************************************************************
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2009 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2009 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -1478,7 +1479,7 @@
       *    ³  font that is being used.                                 ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
              perform Get-Printer-Info.
-             move PageRowsCurrentFont  to L02-PGE-LENGTH.
+             move PageRowsCurrentFont to L02-PGE-LENGTH.
              compute L02-PRN-LENGTH = (PageRowsCurrentFont - 4).
              move zero               to L02-LINAGE.
       *
@@ -2662,3 +2663,17 @@
            end-evaluate
 
            stop run.
+
+      *
+      *    ****    I / O   E R R O R   M E S S A G E S
+      *   
+       ZB000-ERROR      SECTION 9.
+      
+       COPY "ERRORS.PRO".
+
+       DISPLAY-FILE-NAME.
+          IF WS-F-ERROR = 15
+              MOVE W02-PARAM         TO WS-FILE
+              MOVE WS-PARKEY         TO WS-KEY.
+
+       COPY "DISPERR.PRO".

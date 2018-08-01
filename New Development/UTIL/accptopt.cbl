@@ -13,7 +13,7 @@
       *                                                                *
       *  A P A C   S Y S T E M :  A C C E P T   U S E R   O P T I O N  *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
@@ -21,7 +21,7 @@
        AUTHOR.                JW Lemmon.
        DATE-WRITTEN.          FEB-2012.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2012 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2012 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -85,6 +85,8 @@
       *
       *                     0 = "0" OR "1" OR "2" OR "3"
       *
+      *         (Hex 6B)    k = "A" OR "1" OR "2" OR "3"
+      *
       *                     A = "A" OR "C"
       *
       *         (Hex 62)    b = "A" OR "C" OR "3" OR "6" OR "7"
@@ -115,6 +117,11 @@
       *
       *                     Y = "B" OR "S"
       *
+      *         (Hex 69)    i = "C"
+      *
+      *         (Hex 68)    h = "C" "D" OR "E"
+      *                          Allow for the Escape key.
+      *
       *                     V = "C" OR "E"
       *
       *                     W = "C" "E" "L" "P" OR "R"
@@ -136,23 +143,34 @@
       *
       *         (Hex 61)    a = "C" OR "S"
       *
+      *         (Hex 6D)    m = "D" OR "E" OR "N" OR "P" OR "X"
+      *
+      *         (Hex 6E)    n = "D" OR "E" OR "P"
+      *
       *                     U = "D" OR "I"
       *
       *                     S = "D" OR "N"
       *
+      *         (Hex 67)    g = "D" OR "S"
+      *
       *                     E = "E"
+      *
+      *         (Hex 6C)    l = "E" OR "F"
       *
       *                     K = "E", "H" OR "S"
       *
       *                     4 = "E", "I" OR "N"
       *
-      *                     G = "E" OR "I" OR "X"
+      *                     G = "E", "I" OR "X"
       *                          Allow for Escape key
       *
-      *         (Hex 64)    d = "E" OR "M" OR "P"
+      *         (Hex 64)    d = "E", "M" OR "P"
       *                          Allow for Escape key
       *
       *                     I = "E" OR "N"
+      *
+      *         (Hex 6A)    j = "E" OR "N"
+      *                          Allow for Escape key
       *
       *                     B = "E", "N" OR "R"
       *
@@ -233,6 +251,14 @@
            88  OPT-64                              VALUES "E" "M" "P".
            88  OPT-65                              VALUES "A" "S".
            88  OPT-66                              VALUES "A" "E".
+           88  OPT-67                              VALUES "D" "S".
+           88  OPT-68                              VALUES "C" "D" "E".
+           88  OPT-69                              VALUES "C".
+           88  OPT-6A                              VALUES "E" "N".
+           88  OPT-6B                              VALUES "A" "1" "2" "3".
+           88  OPT-6C                              VALUES "E" "F".
+           88  OPT-6D                              VALUES "D" "E" "N" "P" "X".
+           88  OPT-6D                              VALUES "D" "E" "P".
 
        COPY "HEADING.CRT".
 
@@ -481,7 +507,7 @@
            ELSE
            IF USER-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z" OR "d"
+                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z" OR "d" OR "h" OR "j"
                                      MOVE X"EC"  TO WS-OPTION
                                      GO TO OPT-END
                                  ELSE
@@ -537,6 +563,14 @@
                WHEN "d"    IF OPT-64 GO TO OPT-END
                WHEN "e"    IF OPT-65 GO TO OPT-END
                WHEN "f"    IF OPT-66 GO TO OPT-END
+               WHEN "g"    IF OPT-67 GO TO OPT-END
+               WHEN "h"    IF OPT-68 GO TO OPT-END
+               WHEN "i"    IF OPT-69 GO TO OPT-END
+               WHEN "j"    IF OPT-6A GO TO OPT-END
+               WHEN "k"    IF OPT-6B GO TO OPT-END
+               WHEN "l"    IF OPT-6C GO TO OPT-END
+               WHEN "m"    IF OPT-6D GO TO OPT-END
+               WHEN "n"    IF OPT-6E GO TO OPT-END
                WHEN OTHER  GO TO OPT-END
              END-EVALUATE.
              MOVE L-LINE             TO SLIN.
@@ -636,7 +670,7 @@
            ELSE
            IF USER-FUNC
                EVALUATE KEY-CODE-1
-                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z" OR "d"
+                 WHEN ESC-KEY    IF WS-INSTR = "G" OR "J" OR "T" OR "Z" OR "d" OR "h" OR "j"
                                      MOVE X"EC"  TO WS-OPTION
                                      GO TO GET-END
                                  ELSE
@@ -692,6 +726,14 @@
                WHEN "d"    IF OPT-64 GO TO GET-END
                WHEN "e"    IF OPT-65 GO TO GET-END
                WHEN "f"    IF OPT-66 GO TO GET-END
+               WHEN "g"    IF OPT-67 GO TO GET-END
+               WHEN "h"    IF OPT-68 GO TO GET-END
+               WHEN "i"    IF OPT-69 GO TO GET-END
+               WHEN "j"    IF OPT-6A GO TO GET-END
+               WHEN "k"    IF OPT-6B GO TO GET-END
+               WHEN "l"    IF OPT-6C GO TO GET-END
+               WHEN "m"    IF OPT-6D GO TO GET-END
+               WHEN "n"    IF OPT-6E GO TO GET-END
                WHEN OTHER  GO TO GET-END
              END-EVALUATE.
              GO TO GET-INPUT.

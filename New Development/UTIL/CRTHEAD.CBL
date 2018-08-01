@@ -13,7 +13,7 @@
       *                                                                *
       *     S E T U P   S C R E E N   H E A D I N G S                  *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -75,7 +75,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   NOVEMBER 2012.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2012 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2012 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -220,6 +220,10 @@
                                 
        AA05.
              EVALUATE CRT-TYPE
+               WHEN "4"         MOVE 4601      TO CPOS
+                                DISPLAY CLR-LINE AT CPOS
+                                DISPLAY CLEAR-L50
+                                
                WHEN "C"         DISPLAY CLEAR-L50
                
                WHEN "E"         IF CRT-START < 5
@@ -254,6 +258,7 @@
                                 
                WHEN "T"         DISPLAY CLR-TIME
              END-EVALUATE.
+             MOVE SPACE              TO CRT-TYPE.
              MOVE 5                  TO CRT-START.
              MOVE 46                 TO CRT-END.
 

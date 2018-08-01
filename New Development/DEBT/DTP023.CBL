@@ -648,19 +648,34 @@
       *    Ё spaces.                                                   Ё
       *    Ё                                                           Ё
       *    Ё  eg.                                                      Ё
-      *    Ё     MOVE 8              TO CRT-START.                     Ё
-      *    Ё     MOVE 28             TO CRT-END.                       Ё
-      *    Ё     PERFORM ERASE-SCREEN.                                 Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    Ё             CLEAR MESSAGE LINE (Line 50)                  Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё   MOVE 8         TO CRT-START.                            Ё
+      *    Ё   MOVE 28        TO CRT-END.                              Ё
+      *    Ё   PERFORM ERASE-SCREEN.                                   Ё
       *    Ё                                                           Ё
-      *    Ё     PERFORM CLEAR-L50                                     Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
-      *    Ё             CHANGE THE TIME ON THE SCREEN                 Ё
-      *    цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+      *    Ё To clear the entire screen and Display a new screen with  Ё
+      *    Ё headings (program/date/time/company):                     Ё
       *    Ё                                                           Ё
-      *    Ё     PERFORM CHANGE-TIME.                                  Ё
+      *    Ё    CRT-PROGRAM (calling program)                          Ё
+      *    Ё    CRT-HEADING (Screen heading)                           Ё
+      *    Ё    CRT-COMPANY (Company name)                             Ё
+      *    Ё    CRT-TERMINAL (consists of two fields:                  Ё
+      *    Ё                  CRT-WRKHD and CRT-WRKST. See CRTHEAD)    Ё
+      *    Ё    These fields should be populated at the start of the   Ё
+      *    Ё    program.                                               Ё
+      *    Ё    PERFORM HEADING-AND-CLEAR-SCREEN.                      Ё
+      *    Ё                                                           Ё
+      *    Ё To change the screen heading:                             Ё
+      *    Ё    MOVE "The new heading" TO CRT-HEADING.                 Ё
+      *    Ё    PERFORM CHANGE-HEADING.                                Ё
+      *    Ё                                                           Ё
+      *    Ё To change the time on the screen:                         Ё
+      *    Ё    PERFORM CHANGE-TIME                                    Ё
+      *    Ё                                                           Ё
+      *    Ё To clear lines 46 and 50:                                 Ё
+      *    Ё    PERFORM CLEAR-L46-AND-50                               Ё
+      *    Ё                                                           Ё
+      *    Ё To clear line 50:                                         Ё
+      *    Ё    PERFORM CLEAR-L50                                      Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
        COPY "CLEAR.CRT".

@@ -12,7 +12,11 @@
              MOVE "P"              TO WS-PRINTER.
              MOVE ZERO             TO WS-ADVANCE WS-REPORT WS-SCREEN.
              MOVE 1                TO WS-REPORT.
-
+             call "UTP\PRINTNUM" using ws-parid ls-user-id data-file-ids ws-screen-print
+             ON EXCEPTION
+                GO TO OPEN-PRINTER-ERROR
+             end-call.
+             cancel "UTP\PRINTNUM".
       *
       *    ****   C A L L   T H E   P R I N T / S P O O L   U T I L I T Y
       *

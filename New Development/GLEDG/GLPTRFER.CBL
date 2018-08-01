@@ -1,4 +1,4 @@
-      $set LINKCOUNT"512"
+      $set LINKCOUNT"512" GNT"GLPTRFER.GNT"
       ******************************************************************
       *                                                                *
       *  ******  **       *******  ******** *******  **    ** ******** *
@@ -13,7 +13,7 @@
       *                                                                *
       *     T R A N S F E R   G / L   T R A N S A C T I O N S          *
       *                                                                *
-      *       Version 9.04.02 - October 2016                           *
+      *       Version 9.04.02 - June 2017                              *
       *                                                                *
       ******************************************************************
       * NB -- To do list: (Audit)                                      *
@@ -25,7 +25,7 @@
        AUTHOR.         James William Lemmon.
        DATE-WRITTEN.        December 2009.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2009 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2009 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -227,6 +227,8 @@
        77  WS-ER5          PIC  X(13) VALUE "Cheque Number".
        77  WS-ER6          PIC  X(09) VALUE "No Record".
        77  WS-ER7          PIC  X(13) VALUE "Group Heading".
+       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
+       77  PRG-GLED-LUP            PIC  X(12)           VALUE "GLP\GLPLOOK".
        77  WS-DATE-CHK    PIC 9(08) COMP-5.
        77  TODAY-DDMMYY    PIC 9(08) COMP-5.
        77  WS-USUB    PIC 9(04) COMP-5.
@@ -324,44 +326,43 @@
     03  WT-BATCH        PIC  9(06)    COMP-3.
     03  FILLER        PIC  X(03).
 
-      /
-       01  WS-DB-LINE.
-           03  WS-TOP-LNE.
-               05  WS-TCHR PIC X(01) OCCURS 80.
-           03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-TOP-LNE2.
-               05  WS-TCH  PIC X(01) OCCURS 80.
-           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-              05  FILLER      PIC  X(23).
-        05  WS-WRKHD    PIC  X(11).
-              05  FILLER      PIC  X(01).
-        05  WS-WRKST    PIC  X(03).
-              05  FILLER      PIC  X(01).
-          03  WS-MID-LNE.
-               05  WS-MCHR PIC X(01) OCCURS 80.
-    03  WS-MDGL-LNE REDEFINES WS-MID-LNE.
-        05  WS-MGL1     PIC X(01).
-        05  WS-MGL78    PIC X(78).
-        05  WS-MGL80    PIC X(01).
-          03  WS-MID-LNE2.
-        05  FILLER      PIC  X(01) VALUE "Ё".
-        05  WS-BLNK78   PIC  X(78) VALUE ALL "╟".
-        05  FILLER      PIC  X(01) VALUE "Ё".
-          03  WS-BOT-LNE.
-               05  WS-BCHR PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-BOT-LNE2.
-               05  WS-BCH  PIC X(01) OCCURS 80.
+      *    здддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё Used by calling program (WORKING-STORAGE) and called program Ё
+      *    Ё (LINKAGE SECTION) for Main screen layout and headings.       Ё
+      *    юдддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *         C =  Clear comment line (50)
+      *         E =  Clear lines (any line or lines between 5 and 46)
+      *         H =  Change heading
+      *         S =  Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15) VALUE "GLPTRFER".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40) VALUE "GENERAL LEDGER -TRANSFER TRANSACTIONS".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD       PIC  X(11).
+               05  CRT-WRKST       PIC  X(03).
 
        COPY "WS.WS".
 
@@ -696,6 +697,8 @@
        AA49.
       EXIT PROGRAM.
 
+       COPY "AA900.ALM".
+
       /    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
       *     S C R E E N ,   K E Y B O A R D   &  M O U S E
@@ -814,19 +817,40 @@
 
        COPY "CLEAR.CRT".
 
+      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+      *    Ё This routine is used to call  the General Ledger Accounts Ё
+      *    Ё lookup program and cancel it when control is returned.    Ё
+      *    Ё The  relevant  error  message  will be  displayed  if  an Ё
+      *    Ё exception occurs. The usual  parameters are passed to the Ё
+      *    Ё lookup program as well W15-GLEDGER which will contain the Ё
+      *    Ё details of the account that has been selected when controlЁ
+      *    Ё is returned to the calling program.                       Ё
+      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
        AA350-LOOKUP    SECTION.
        AA350.
-            PERFORM SAVE-SCREEN.
-      *      MOVE 4                  TO W44-FUNCTION.
-            PERFORM SCREEN-CONTENTS.
-      PERFORM GACCNT-LOOKUP.
-            PERFORM RESTORE-SCREEN.
+             PERFORM SAVE-SCREEN.
+             MOVE 4              TO W44-FUNCTION.
+             PERFORM SCREEN-CONTENTS.
+             CALL PRG-GLED-LUP USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W15-GLEDGER
+                  ON EXCEPTION GO TO AA355
+             END-CALL.
+             CANCEL PRG-GLED-LUP.
+             GO TO AA358.
+
+       AA355.
+             MOVE SPACE              TO WS-ERR-MES.
+             STRING "Program- " DELIMITED SIZE PRG-GLED-LUP DELIMITED " " " not on disk, press ANY key" DELIMITED SIZE INTO WS-ERR-MES.
+             PERFORM ERROR-MESSAGE.
+
+       AA358.
+             PERFORM RESTORE-SCREEN.
+
        AA399.
              EXIT.
 
-      /    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё        R E A D  F I L E S   R O U T I N E S        Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB000        SECTION.
 
        COPY "CONTROL.RD".
@@ -837,9 +861,9 @@
 
        COPY "GLTRAN.RD".
 
-      /    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    ЁR E W R I T E   & W R I T E   F I L E S R O U T I N E SЁ
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AC000        SECTION.
 
        COPY "CONTROL.WR".
@@ -908,7 +932,7 @@
    WHEN F2-KEY
        PERFORM AA350
    WHEN OTHER
-       CALL X"E5" CALL X"E5" CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO EA05
         END-EVALUATE
         DISPLAY S17 AT 0513
@@ -964,7 +988,7 @@
    WHEN F2-KEY
        PERFORM AA350
    WHEN OTHER
-       CALL X"E5" CALL X"E5" CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO EA11
         END-EVALUATE
         DISPLAY S17 AT 0813
@@ -1135,11 +1159,11 @@
         EVALUATE KEY-CODE-1
    WHEN ESC-KEY  GO TO EA05
    WHEN OTHER
-       CALL X"E5" CALL X"E5" CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO EA35
         END-EVALUATE.
     IF NOT(WS-OPTION = "Y" OR "N")
-        CALL X"E5" CALL X"E5" CALL X"E5"
+        PERFORM AA900-ALARM
         GO TO EA30.
     IF WS-OPTION = "N"
         GO TO EA20.
@@ -1178,7 +1202,9 @@
        EA999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000      SECTION 9.
        ZA00.
       MOVE LS-PARID  TO WS-PARID.

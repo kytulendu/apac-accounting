@@ -15,7 +15,7 @@
       *                                                                *
       *   D E B T O R   T R A N S A C T I O N S   U S I N G   C O D E  *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.02 - August 2017                            *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -53,7 +53,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -151,60 +151,60 @@
       *            *     *       ******    **    **   **    **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
-       77  WS-SUB                  PIC  9(04)    COMP-5.
-       77  WS-S                    PIC  9(04)    COMP-5.
-       77  WS-S1                   PIC  9(04)    COMP-5.
-       77  WS-S2                   PIC  9(04)    COMP-5.
-       77  WS-S3                   PIC  9(04)    COMP-5.
-       77  WS-S4                   PIC  9(04)    COMP-5.
-       77  WS-S5                   PIC  9(04)    COMP-5.
-       77  WS-S6                   PIC  9(04)    COMP-5.
-       77  WS-S7                   PIC  9(04)    COMP-5.
-       77  WS-S8                   PIC  9(04)    COMP-5.
-       77  WS-S9                   PIC  9(04)    COMP-5.
-       77  WS-IXS1                 PIC  9(04)    COMP-5.
-       77  WS-IXS2                 PIC  9(04)    COMP-5.
-       77  WS-IXS3                 PIC  9(04)    COMP-5.
-       77  WS-IXS4                 PIC  9(04)    COMP-5.
-       77  WS-ENQPOS               PIC  9(06)    COMP-5.
-       77  WS-ENQEND               PIC  9(06)    COMP-5.
-       77  WS-DBTKEY               PIC  9(06)    COMP-5.
-       77  WS-NETKEY               PIC  9(06)    COMP-5.
-       77  WS-PARKEY               PIC  9(06)    COMP-5.
-       77  WS-RECKEY               PIC  9(06)    COMP-5.
-       77  WS-RECOVER              PIC  9(06)    COMP-5.
-       77  WS-SHARED               PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-TRANS                PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-CHECK                PIC  X(18)         VALUE "aeWlimemnomLalismJ".
+       77  WS-SUB                  PIC  9(04)  COMP-5.
+       77  WS-S                    PIC  9(04)  COMP-5.
+       77  WS-S1                   PIC  9(04)  COMP-5.
+       77  WS-S2                   PIC  9(04)  COMP-5.
+       77  WS-S3                   PIC  9(04)  COMP-5.
+       77  WS-S4                   PIC  9(04)  COMP-5.
+       77  WS-S5                   PIC  9(04)  COMP-5.
+       77  WS-S6                   PIC  9(04)  COMP-5.
+       77  WS-S7                   PIC  9(04)  COMP-5.
+       77  WS-S8                   PIC  9(04)  COMP-5.
+       77  WS-S9                   PIC  9(04)  COMP-5.
+       77  WS-IXS1                 PIC  9(04)  COMP-5.
+       77  WS-IXS2                 PIC  9(04)  COMP-5.
+       77  WS-IXS3                 PIC  9(04)  COMP-5.
+       77  WS-IXS4                 PIC  9(04)  COMP-5.
+       77  WS-ENQPOS               PIC  9(06)  COMP-5.
+       77  WS-ENQEND               PIC  9(06)  COMP-5.
+       77  WS-DBTKEY               PIC  9(06)  COMP-5.
+       77  WS-NETKEY               PIC  9(06)  COMP-5.
+       77  WS-PARKEY               PIC  9(06)  COMP-5.
+       77  WS-RECKEY               PIC  9(06)  COMP-5.
+       77  WS-RECOVER              PIC  9(06)  COMP-5.
+       77  WS-SHARED               PIC  9(04)  COMP-5 VALUE 1.
+       77  WS-TRANS                PIC  9(04)  COMP-5 VALUE 1.
        77  WS-PERIOD               PIC  9(02).
        77  WS-NTP                  PIC  X(01).
-       77  WS-MTHEND               PIC  9(02)    COMP-5.
-       77  WS-PAGE                 PIC  9(04)    COMP-5.
-      *77  WS-PGE-LENGTH           PIC  9(02)    VALUE 66.
-      *77  WS-PRN-LENGTH           PIC  9(02)    VALUE 62.
-       77  WS-KEYSTR               PIC  9(06)    COMP-5.
+       77  WS-MTHEND               PIC  9(02)  COMP-5.
+       77  WS-PAGE                 PIC  9(04)  COMP-5.
+      *77  WS-PGE-LENGTH           PIC  9(02)  VALUE 66.
+      *77  WS-PRN-LENGTH           PIC  9(02)  VALUE 62.
+       77  WS-KEYSTR               PIC  9(06)  COMP-5.
        77  WS-INSTR                PIC  X(01).
        77  WS-OPTION               PIC  X(01).
-       77  WS-ALLOCATE             PIC  X(01)           VALUE "M".
-       77  WS-SKIP                 PIC  X(01)           VALUE "N".
+       77  WS-ALLOCATE             PIC  X(01)         VALUE "M".
+       77  WS-SKIP                 PIC  X(01)         VALUE "N".
        77  WS-TAX                  PIC  X(01).
        77  WS-TYPE                 PIC  X(01).
-       77  WS-ERROR                PIC  9(01)           VALUE ZERO.
-       77  WS-EKEY                 PIC  9(06)    COMP-5.
+       77  WS-ERROR                PIC  9(01)         VALUE ZERO.
+       77  WS-EKEY                 PIC  9(06)  COMP-5.
        77  WS-CHAR1                PIC  X(01).
        77  WS-CHAR2                PIC  X(01).
        77  WS-COMP                 PIC  9(01).
-       77  WS-BATCH                PIC  9(06)    COMP-5.
+       77  WS-BATCH                PIC  9(06)  COMP-5.
        77  WS-VAT-CODE             PIC  X(04).
        77  WS-VAT-VALUE            PIC S9(09)V99 COMP-3.
-       77  WS-ERR1                 PIC  X(22)           VALUE "Invalid Account Number".
-       77  WS-ERR2                 PIC  X(09)           VALUE "No Record".
-       77  WS-E                    PIC  X(15)           VALUE "**END** - ENTER".
-       77  WS-AC                   PIC  X(07)           VALUE "ACCOUNT".
-       77  PRG-NAME                PIC  X(12)           VALUE SPACES.
-       77  PRG-DEBT-LUP            PIC  X(12)           VALUE "DTP\DTPLOOK".
-       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
-       77  WS-USUB                 PIC  9(04)    COMP-5.
+       77  WS-ERR1                 PIC  X(22)         VALUE "Invalid Account Number".
+       77  WS-ERR2                 PIC  X(09)         VALUE "No Record".
+       77  WS-E                    PIC  X(15)         VALUE "**END** - ENTER".
+       77  WS-AC                   PIC  X(07)         VALUE "ACCOUNT".
+       77  PRG-NAME                PIC  X(12)         VALUE SPACES.
+       77  PRG-DEBT-LUP            PIC  X(12)         VALUE "DTP\DTPLOOK".
+       77  TODAY-DDMMYY            PIC  9(08)  COMP-5.
+       77  WS-USUB                 PIC  9(04)  COMP-5.
       *
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ Used by calling program (WORKING-STORAGE) and called program ³
@@ -525,8 +525,8 @@
 
        01 S26-DATA.
           03  FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta.
-              05  S26-DTE.
-                  07  LINE  9 COLUMN  9 PIC 99/99/9999 USING W90-DATE AUTO.
+      *       05  S26-DTE.
+      *           07  LINE  9 COLUMN  9 PIC 99/99/9999 USING W90-DATE AUTO.
 
               05  S26-DT.
                   07  LINE  9 COLUMN 68 PIC Z(08)9.99 USING W90-DB AUTO.
@@ -623,13 +623,13 @@
                05  COLUMN 65 PIC Z(08)9.99  USING DBT-ALLOC AUTO.
 
       *
-      *        *******   *******    ******    ******   ********  *******   **     **  *******    ******** 
-      *        **    **  **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **    **  **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        *******   ******    **    **  **        *****     **    **  **     **  ******     *****
-      *        **        **   **   **    **  **        **        **    **  **     **  **   **    **
-      *        **        **    **  **    **  **    **  **        **    **  **     **  **    **   **
-      *        **        **    **   ******    ******   ********  *******    *******   **    **   ********
+      *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
+      *      **   **  **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **   **  **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      ******   *****    **   **  **       *****   **   **  **   **  *****     *****
+      *      **       **  **   **   **  **       **      **   **  **   **  **  **    **
+      *      **       **   **  **   **  **   **  **      **   **  **   **  **   **   **
+      *      **       **   **   *****    *****   ******  ******    *****   **   **   ******
       *
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000         SECTION.
@@ -691,6 +691,8 @@
 
        AA99.
              EXIT.
+
+       COPY "AA900.ALM".
 
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³                       DEBTOR-MEMO                         ³
@@ -816,11 +818,16 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
        COPY "CLEAR.CRT".
+
+       COPY "DATE.CHK".
 
       *    
       *          G E T   D E T A I L S   F O R   A   D E B T O R   
@@ -956,6 +963,9 @@
       *          THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
       *    *************************************************************
        AY000           SECTION.
+      *    *************************************************************
+      *    ****             P A R A M E T E R   F I L E             ****
+      *    *************************************************************
        AY01.
              MOVE 01                 TO REC-FILE.
              MOVE WS-PARKEY          TO REC-KEY.
@@ -978,17 +988,26 @@
              MOVE WS-ACTION          TO REC-TYPE.
              MOVE TRA-RECORD1        TO REC-DBTRAN.
              GO TO AY50.
-
+      *    *************************************************************
+      *    ****       V A L U E   A D D E D   T A X   F I L E       ****
+      *    *************************************************************
        AY19.
              MOVE 19                 TO REC-FILE.
              MOVE ZERO               TO REC-KEY.
              MOVE WS-ACTION          TO REC-TYPE.
              MOVE TAX-RECORD1        TO REC-TXTRAN.
              GO TO AY50.
-
+      *    *************************************************************
+      *    ****            D E P A R T M E N T   F I L E            ****
+      *    *************************************************************
        AY38.
              MOVE 38                 TO REC-FILE.
-             MOVE ZERO               TO REC-KEY REC-TYPE.
+             MOVE ZERO               TO REC-KEY.
+             MOVE ZERO               TO REC-TYPE.
+             PERFORM READ-DEPART THRU READ-DEPART-EXIT.
+           IF WS-F-ERROR = 7
+               MOVE "XXXX"           TO DPT-CODE
+               GO TO AY38.
              MOVE DPT-RECORD         TO REC-DEPART.
              GO TO AY50.
              
@@ -997,7 +1016,9 @@
              MOVE WS-NETKEY          TO REC-KEY.
              MOVE NET-RECORD         TO REC-NETWORK.
              GO TO AY50.
-
+      *    *************************************************************
+      *    ****           I N T E G R A T I O N   F I L E           ****
+      *    *************************************************************
        AY40.
              MOVE 40                 TO REC-FILE.
              MOVE ZERO               TO REC-KEY.
@@ -1024,7 +1045,9 @@
                OPEN I-O RECOVER
                MOVE ZERO             TO WS-RECOVER.
              GO TO AY59.
-
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³         W R I T E   R E C O V E R Y   R E C O R D         ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY50.
              ADD 1                   TO WS-RECOVER.
              MOVE WS-RECOVER         TO WS-RECKEY.
@@ -1120,7 +1143,7 @@
              PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
              GO TO AY62-CHECK.
       *    *************************************************************
-      *    ****   S E T   W A I T   P E R I O D
+      *    ****           S E T   W A I T   P E R I O D
       *    *************************************************************
        AY62-WAIT.
              MOVE 300                TO WS-WAIT.
@@ -1327,24 +1350,13 @@
              DISPLAY S55.
              
        CG45-ACCEPT.
-             ACCEPT S26-DTE.
-           IF USER-FUNC
-               EVALUATE KEY-CODE-1
-                 WHEN ESC-KEY    MOVE 9    TO CRT-START CRT-END
-                                 PERFORM ERASE-SCREEN
-                                 GO TO CG35
-                                 
-                 WHEN OTHER      PERFORM AA900-ALARM
-                                 GO TO CG45-ACCEPT
-               END-EVALUATE.
-             MOVE W90-DATE           TO W22-DATE.
-             MOVE "V"                TO W22-INSTR.
-             CALL "UTP\DateCheck" USING W-DATES.
-           IF NOT(W22-ERROR = 0)
-               MOVE "Date"           TO WS-ERR-MES
-               PERFORM ERROR-MESSAGE
-               GO TO CG45-ACCEPT.
-           IF W20-DTE < WS-VAT-DATE(WS-VAT-SUB)
+             MOVE 0909               TO DATEPOS.
+             PERFORM DATE-CHECK-ACCEPT-PLUS THRU CHECK-DATE-EXIT.
+           IF W22-INSTR = X"EC"
+               MOVE 9                TO CRT-START CRT-END
+               PERFORM ERASE-SCREEN
+               GO TO CG35.
+           IF W20-DATE < WS-VAT-DATE(WS-VAT-SUB)
                ADD 6                 TO WS-VAT-SUB.
 
        CG50-ACCEPT.
@@ -1435,27 +1447,31 @@
                DISPLAY S26-DT
            ELSE
                EVALUATE WS-TAX
+      *                                      CALCULATE TAX
                  WHEN "C"  ACCEPT S26-VAL
                            PERFORM CG110
                            ADD W90-VAL W90-VAT(WS-VAT-SUB) GIVING W90-DB
                            DISPLAY S26-VAT
                            DISPLAY S26-DT
+      *                                      INCLUSIVE TAX
                  WHEN "I"  ACCEPT S26-DT
                            PERFORM CG105
                            DISPLAY S26-VAL
                            DISPLAY S26-VAT
+      *                                      KEY IN THE TAX
                  WHEN "K"  ACCEPT S26-VAL
                            ACCEPT S26-VAT
                            MOVE WS-VAT-VALUE TO W90-VAT(WS-VAT-SUB)
                            ADD W90-VAL WS-VAT-VALUE  GIVING W90-DB
                            DISPLAY S26-DT
+      *                                      NO TAX
                  WHEN  "N" ACCEPT S26-DT
                            MOVE W90-DB  TO W90-VAL W90-EX
                            DISPLAY S26-VAL
                 END-EVALUATE.
            IF W90-DB = ZERO
                GO TO CG125-CORRECT.
-           IF NOT ((W90-CODE = 01) AND (DEB-SDISC NOT = ZERO))
+           IF NOT((W90-CODE = 01) AND (DEB-SDISC NOT = ZERO))
                GO TO CG100.
 
        CG95.
@@ -1499,26 +1515,27 @@
                DISPLAY S26-CR
            ELSE
                EVALUATE WS-TAX
-                 WHEN "N"        ACCEPT S26-CR
-                                 MOVE W90-CR       TO W90-VAL W90-EX
-                                 DISPLAY S26-VAL
-                                 
-                 WHEN "C"        ACCEPT S26-VAL
-                                 PERFORM CG110
-                                 ADD W90-VAL W90-VAT(WS-VAT-SUB) GIVING W90-CR
-                                 DISPLAY S26-VAT
-                                 DISPLAY S26-CR
-                                 
-                 WHEN "K"        ACCEPT S26-VAL
-                                 ACCEPT S26-VAT
-                                 MOVE WS-VAT-VALUE TO W90-VAT(WS-VAT-SUB)
-                                 ADD W90-VAL WS-VAT-VALUE  GIVING W90-CR
-                                 DISPLAY S26-CR
-                                 
-                 WHEN "I"        ACCEPT S26-CR
-                                 PERFORM CG115
-                                 DISPLAY S26-VAL
-                                 DISPLAY S26-VAT
+      *                                      CALCULATE TAX
+                 WHEN "C"  ACCEPT S26-VAL
+                           PERFORM CG110
+                           ADD W90-VAL W90-VAT(WS-VAT-SUB) GIVING W90-CR
+                           DISPLAY S26-VAT
+                           DISPLAY S26-CR
+      *                                      INCLUSIVE TAX
+                 WHEN "I"  ACCEPT S26-CR
+                           PERFORM CG115
+                           DISPLAY S26-VAL
+                           DISPLAY S26-VAT
+      *                                      KEY IN THE TAX
+                 WHEN "K"  ACCEPT S26-VAL
+                           ACCEPT S26-VAT
+                           MOVE WS-VAT-VALUE TO W90-VAT(WS-VAT-SUB)
+                           ADD W90-VAL WS-VAT-VALUE  GIVING W90-CR
+                           DISPLAY S26-CR
+      *                                      NO TAX
+                 WHEN "N"  ACCEPT S26-CR
+                           MOVE W90-CR       TO W90-VAL W90-EX
+                           DISPLAY S26-VAL
                END-EVALUATE.
 
        CG125-CORRECT.
@@ -2090,15 +2107,11 @@
        ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
-      *    IF LS-USER = LS-SYS-ID
-      *        MOVE "SupervisorÄ"    TO CRT-WRKHD
-      *    ELSE
-      *        MOVE "Workstation"    TO CRT-WRKHD
-      *        MOVE LS-USER          TO CRT-WRKST.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
@@ -2114,8 +2127,8 @@
              MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 5                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-DISCOUNT       TO W05-DISCOUNT.
@@ -2131,7 +2144,7 @@
            IF W05-V-RATE < 6
                ADD 1                 TO W05-V-RATE
                GO TO ZA05-VAT.
-             MOVE 6   TO WS-PARKEY.
+             MOVE 6                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
            IF PAR-INTEGRATE NOT = "Y"
                MOVE "N"              TO WX-INT

@@ -13,7 +13,7 @@
       *                                                                *
       *     ( A P A C )   T E R M I N A L   S T A R T   &   I N I T    *
       *                                                                *
-      *       Version 9.04.01 - May 2016                               *
+      *       Version 9.04.04 - February/March 2018                    *
       *                                                                *
       ******************************************************************
       *                                                                *
@@ -63,10 +63,10 @@
       *
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     BUP001.
-       AUTHOR.         J W LEMMON  (APAC).
+       AUTHOR.         J.W.LEMMON.
        DATE-WRITTEN.   OCTOBER 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1990 - 2018
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -630,19 +630,17 @@
                MOVE "Disk error - AD01 (PARAM)" TO WS-ERR-MES
                PERFORM ERROR-MESSAGE
                STOP RUN.
-             MOVE PAR-CUR-YR   TO WS-CUR-YR.
-             MOVE PAR-CUR-CEN  TO WS-CUR-CEN.
-             MOVE PAR-PRV-CEN  TO WS-PRV-CEN.
-             MOVE PAR-NXT-CEN  TO WS-NXT-CEN.
+      *      MOVE PAR-CUR-YR         TO WS-CUR-YR.
+      *      MOVE PAR-CUR-CEN        TO WS-CUR-CEN.
+      *      MOVE PAR-PRV-CEN        TO WS-PRV-CEN.
+      *      MOVE PAR-NXT-CEN        TO WS-NXT-CEN.
       *
       *    ****    G E T   R U N   D A T E
       *
-            MOVE 1   TO WS-PARKEY.
-            READ PARAM IGNORE LOCK.
-            MOVE PAR-DMY  TO W12-TODAY
-        WS-DATE
-        TODAY-DDMMYY.
-             MOVE PAR-YMD        TO W12-T-YMD.
+             MOVE 1                  TO WS-PARKEY.
+             READ PARAM IGNORE LOCK.
+             MOVE PAR-DMY            TO W12-TODAY WS-DATE TODAY-DDMMYY.
+             MOVE PAR-YMD            TO W12-T-YMD.
       *
       *    ****    CHECK IF LAST RUN ENDED CORRECTLY
       *
@@ -715,20 +713,18 @@
              REWRITE PAR-RECORD1.
              UNLOCK PARAM.
              CLOSE PARAM.
-          IF NOT WS-STAT1 = "0"
-              MOVE "User file error"
-     TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        STOP RUN.
-      GO TO AD999.
+           IF NOT WS-STAT1 = "0"
+               MOVE "User file error" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               STOP RUN.
+             GO TO AD999.
 
        AD10.
-      PERFORM WITH TEST AFTER UNTIL WS-OPTION = "C" OR "N" OR "E"
-        ACCEPT WS-OPTION AT 1430 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Brown HIGHLIGHT AUTO
-        CALL "CBL_TOUPPER" USING WS-OPTION
-      BY VALUE WS-LENGTH
-      RETURNING WS-STATUS
-      END-PERFORM.
+             PERFORM WITH TEST AFTER UNTIL WS-OPTION = "C" OR "N" OR "E"
+               ACCEPT WS-OPTION AT 1430 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Brown HIGHLIGHT AUTO
+               CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH
+                                        RETURNING WS-STATUS
+             END-PERFORM.
            IF NOT(WS-OPTION = "N")
                GO TO AD99.
              MOVE 1                  TO WS-PARKEY.
@@ -763,8 +759,22 @@
              MOVE 1654               TO DATEPOS.
              MOVE SPACE              TO W22-INSTR.
              CALL "UTP\DateCheck" USING W-DATES.
-             MOVE W22-DATE-DMY       TO W12-TODAY TODAY-DDMMYY SEC-DATE.
-             MOVE W22-DATE-YMD       TO W12-T-YMD.
+      *
+      *    If the Escape key is pressed, the program exits with the 
+      *    value X"EC" in W22-INSTR.
+      *
+      *                            OR
+      *
+      *    On exiting, the valid date will be in W20-DATE [9(08)] and
+      *    W22-DATE-YMD [9999/99/99] in CCYYMMDD format, while W21-DATE
+      *    [9(08)] and W22-DATE-DMY [99/99/9999] will have the date in
+      *    DDMMCCYY format.
+      *
+           IF (W22-INSTR = X"EC")
+               MOVE "E"              TO WS-OPTION
+               GO TO AD99.
+             MOVE W22-DTE            TO W12-TODAY TODAY-DDMMYY SEC-DATE.
+             MOVE W20-DTE            TO W12-T-YMD TODAY-YYMMDD.
              MOVE 18                 TO CRT-START.
              MOVE 20                 TO CRT-END.
              PERFORM ERASE-SCREEN.

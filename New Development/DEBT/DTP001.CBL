@@ -82,7 +82,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   March 1982.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -165,7 +165,7 @@
       *            *     *       ******    **    **   **    **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK                PIC  X(18)            VALUE "aeWlimemnomLalismJ".
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
        77  WS-SUB                  PIC  9(04)    COMP-5.
        77  WS-S                    PIC  9(04)    COMP-5.
        77  WS-S1                   PIC  9(04)    COMP-5.
@@ -225,11 +225,11 @@
        01  CRT-HEADINGS.
       *
       *    TYPE:
-      *       C = Clear comment line (50)
-      *       E = Clear lines (any line or lines between 5 and 46)
-      *       H = Change heading
-      *       S = Clear the screen and display headings
-      *       T = Change the time
+      *         C = Clear comment line (50)
+      *         E = Clear lines (any line or lines between 5 and 46)
+      *         H = Change heading
+      *         S = Clear the screen and display headings
+      *         T = Change the time
       *
            03  CRT-TYPE            PIC  X(01).
       *
@@ -504,7 +504,6 @@
        AA50-LOOKUP     SECTION.
        AA50.
              PERFORM SAVE-SCREEN.
-             MOVE 4                  TO W44-FUNCTION.
              PERFORM SCREEN-CONTENTS.
              MOVE PRG-DEBT-LUP       TO PRG-NAME.
              CALL PRG-NAME USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS W40-COMPANY
@@ -614,11 +613,9 @@
 
        COPY "CLEAR.CRT".
 
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё                                                           Ё
-      *    Ё           R E A D   F I L E S   R O U T I N E S           Ё
-      *    Ё                                                           Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AC000              SECTION.
 
        COPY "CONTROL.RD".
@@ -629,11 +626,9 @@
 
        COPY "SHARED.RD".
 
-      *    зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
-      *    Ё                                                           Ё
-      *    ЁR E W R I T E   &   W R I T E   F I L E S   R O U T I N E SЁ
-      *    Ё                                                           Ё
-      *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -920,14 +915,14 @@
                  WHEN F1-KEY     PERFORM HELP-ROUTINE
                  
                  WHEN F2-KEY     MOVE SPACE      TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
                                  
                  WHEN F3-KEY     MOVE "Y"        TO WS-ASSIGN
                                  PERFORM CLEAR-L50
                                  GO TO CB10
                                  
                  WHEN F9-KEY     MOVE "A"        TO W40-LUP
-                                 PERFORM AA50
+                                 PERFORM AA50-LOOKUP
                                  
                  WHEN OTHER      PERFORM AA900-ALARM
                                  GO TO CB08
@@ -1056,7 +1051,7 @@
                                  
                  WHEN F1-KEY     PERFORM HELP-ROUTINE
                  
-                 WHEN F2-KEY     PERFORM AA50
+                 WHEN F2-KEY     PERFORM AA50-LOOKUP
                  
                  WHEN F3-KEY     MOVE "Y"       TO WS-ASSIGN
                                  PERFORM CLEAR-L50
@@ -1226,7 +1221,7 @@
       *    ****  A L T E R N A T E   N A M E   I N D E X
       *
 
-           COPY "DEBTOR.NIX".
+       COPY "DEBTOR.NIX".
 
       *    *************************************************************
       *                I N I T I A L I S E   P R O G R A M
@@ -1244,7 +1239,7 @@
       *    Ё  other required user interface functions and procedures.  Ё
       *    юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
-             COPY "FUNCTION.PRO".
+       COPY "FUNCTION.PRO".
 
        ZA00A-CONTINUE.
              MOVE 3                  TO WS-PARKEY.

@@ -25,6 +25,58 @@
       *             linked to the account. Additional filler           *
       *             added for future expansion.                        *
       *                                                                *
+      *  Feb 2007 - New file (DEBDEP/AR_REST.DAT) - Debtor sales       *
+      *             restrictions file has been included which will     *
+      *             allow for departments to be excluded or only       *
+      *             selected departments allowed. This will allow the  *
+      *             user the abillity to allow or bar sales of select- *
+      *             ed departments.                                    *
+      *                                                                *
+      *  Jan 2008 - New file (DEBALT) - Debtor alternate index includ- *
+      *             ed for lookups, using any word contained in the    *
+      *             Debtor name.                                       *
+      *                                                                *
+      *  July 2012 - Added email address field - DEB-EMAIL             *
+      *              (W40-EMAIL) PIC X(64)                             *
+      *                                                                *
+      *  Nov 2012 - Changed DEB-ADDRESS and DEB-PADDR from group       *
+      *             fields with 70 characters to group fields          *
+      *             containing DEB-ADD-L1/2/3/4 and DEB-PADD-L1/2/3/4  *
+      *             respectively. Each of these new fields are defined *
+      *             as PIC X(30). As new PC's and Servers contain huge *
+      *             amounts of disk space this has been changed, which *
+      *             also results in simplifying the code for handling  *
+      *             addresses in Data capture, enquiries, reports etc. *
+      *             This also removes the restriction on the number of *
+      *             characters that an address may contain.            *
+      *                                                                *
+      *             Changed DEB-NAME from 40 characters to a group     *
+      *             name containing the following fields: DEB-SNAME,   *
+      *             DEB-1ST-NAME and DEB-2ND-NAME each defined as PIC  *
+      *             X(24) as well as DEB-INIT PIC X(08)(W40-SURNAME,   *
+      *             W40-FNAME, W40-FNAME and W40-INITIALS). This allows*
+      *             for a name of 80 characters although the screen    *
+      *             layout (due to the fact that the system is using   *
+      *             an 80 character width screen) for a Company and    *
+      *             Internal accounts is providing for only 60 charact-*
+      *             ers. This allows an additional 20 characters for   *
+      *             Company and Internal account names.                *
+      *                                                                *
+      *  Jan 2013 - Program DTPMEMO introduced to handle memo lookups  *
+      *             reducing code in all programs and removing file    *
+      *             DEBMEM from programs. Copy file 'DEBMEM.PRO' now   *
+      *             copied into all programs that require lookups for  *
+      *             memo/remarks on a Debtor account. Move the Debtor  *
+      *             code/account number to W80-ACCOUNT and then        *
+      *             PERFORM DEBTOR-MEMO. The Debtor lookup program -   *
+      *             DTPLOOK now includes a Memo Lookup so unless there *
+      *             is a requirement to lookup memo details after this *
+      *             lookup, the MEMO lookup can be removed from all    *
+      *             DEBTOR programs.                                   *
+      *                                                                *
+      *  May 2013 - Added Cell phone number field DEB-C-TEL            *
+      *             (W40-C-TEL) PIC X(14).                             *
+      *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     DTP021.
@@ -106,39 +158,39 @@
       *            *     *       ******    **    **   **    **
       *
        WORKING-STORAGE SECTION.
-       77  WS-CHECK               PIC  X(18)     VALUE "aeWlimemnomLalismJ".
-       77  WS-SUB-5                PIC  9(04)     COMP-5.
-       77  WS-SUB-6                PIC  9(04)     COMP-5.
-       77  WS-IXS1                 PIC  9(04)     COMP-5.
-       77  WS-IXS2                 PIC  9(04)     COMP-5.
-       77  WS-IXS3                 PIC  9(04)     COMP-5.
-       77  WS-IXS4                 PIC  9(04)     COMP-5.
-       77  WS-MSUB                 PIC  9(04)     COMP-5.
-       77  WS-PARKEY       PIC 9(04)     COMP-5.
-       77  WS-NETKEY    PIC 9(06)  COMP-5.
-       77  WS-SEL    PIC X(01)  VALUE "N".
-       77  WS-LINES        PIC 9(02).
-       77  WS-PAGE         PIC 9(04)     COMP-5.
-       77  WS-OPTION       PIC X(01).
-       77  WS-ACT    PIC X(01)  VALUE SPACE.
-       77  WS-SEQ          PIC X(01).
-       77  WS-CREDIT       PIC X(01).
-       77  WS-ERROR        PIC 9(01).
-       77  WS-COMP    PIC 9(01).
-       77  WS-TYPE         PIC X(01).
-       77  WS-HEAD         PIC X(01).
-       77  WS-MESS    PIC X(02).
-       77  WS-S1    PIC 9(04)  COMP-5.
-       77  WS-S2           PIC 9(04)     COMP-5.
-       77  WS-S3           PIC 9(04)     COMP-5.
-       77  WS-S4           PIC 9(04)     COMP-5.
-       77  WS-S5           PIC 9(04)     COMP-5.
-       77  WS-S6           PIC 9(04)     COMP-5.
-       77  WS-S7           PIC 9(04)     COMP-5.
-       77  WS-S8           PIC 9(04)     COMP-5.
-       77  PRG-DEBT-LUP            PIC  X(12)    VALUE "DTP\DTPLOOK".
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-CHECK                PIC  X(18)           VALUE "aeWlimemnomLalismJ".
+       77  WS-SUB-5                PIC  9(04)    COMP-5.
+       77  WS-SUB-6                PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-MSUB                 PIC  9(04)    COMP-5.
+       77  WS-PARKEY               PIC  9(04)    COMP-5.
+       77  WS-NETKEY               PIC  9(06)    COMP-5.
+       77  WS-SEL                  PIC  X(01)           VALUE "N".
+       77  WS-LINES                PIC  9(02).
+       77  WS-PAGE                 PIC  9(04)    COMP-5.
+       77  WS-OPTION               PIC  X(01).
+       77  WS-ACT                  PIC  X(01)           VALUE SPACE.
+       77  WS-SEQ                  PIC  X(01).
+       77  WS-CREDIT               PIC  X(01).
+       77  WS-ERROR                PIC  9(01).
+       77  WS-COMP                 PIC  9(01).
+       77  WS-TYPE                 PIC  X(01).
+       77  WS-HEAD                 PIC  X(01).
+       77  WS-MESS                 PIC  X(02).
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S5                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S7                   PIC  9(04)    COMP-5.
+       77  WS-S8                   PIC  9(04)    COMP-5.
+       77  PRG-DEBT-LUP            PIC  X(12)           VALUE "DTP\DTPLOOK".
+       77  TODAY-DDMMYY            PIC  9(08) COMP-5.
+       77  WS-USUB                 PIC  9(04) COMP-5.
       *
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴커
       *    � Used by calling program (WORKING-STORAGE) and called program �
@@ -147,6 +199,7 @@
        01  CRT-HEADINGS.
       *
       *    TYPE:
+      *         4 = Clear line 46 and line 50
       *         C = Clear comment line (50)
       *         E = Clear lines (any line or lines between 5 and 46)
       *         H = Change heading
@@ -1001,12 +1054,13 @@
 
 
       /
-       ZA00-INIT              SECTION 90.
+       ZA00-INIT              SECTION 9.
        ZA00-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO TODAY-YYMMDD W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
-             MOVE LS-COMPANY         TO CRT-COMPANY.
+             MOVE LS-COMPANY         TO CRT-COMPANY W95-COMP.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
              PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
@@ -1023,21 +1077,16 @@
              COPY "FUNCTION.PRO".
 
        ZA25.
-             MOVE 1                  TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
              MOVE 1                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
              GO TO ZA999-EXIT.
-
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-       ZA205.
-             EXIT PROGRAM.
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
        ZA999-EXIT.
              EXIT.

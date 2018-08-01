@@ -77,7 +77,7 @@
        AUTHOR.         J W LEMMON (APAC).
        DATE-WRITTEN.   MARCH 2010.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 2010 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -1023,10 +1023,13 @@
                PERFORM ERROR-MESSAGE
                GO TO AA49.
            IF LS0-DBLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA49.
-             PERFORM ZA00-INIT.
+             PERFORM ZA000-INIT.
              PERFORM YA000.
              PERFORM XB000.
            IF PREVIOUS-STATEMENT
@@ -2650,12 +2653,14 @@
 
        YA999.
             EXIT.
-               
-      *
-       ZA00-INIT       SECTION 9.
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
+       ZA000-INIT       SECTION 9.
        ZA00-OPEN.
              MOVE LS-PARID           TO WS-PARID.
-             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
              MOVE LS-USUB            TO WS-USUB.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.
@@ -2722,11 +2727,10 @@
              MOVE 4                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
              MOVE PAR-AGE            TO WS-AGE.
-             MOVE 1                  TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-COMPANY        TO W95-COMP.
-             MOVE PAR-DMY            TO W12-TODAY.
-             MOVE PAR-YMD            TO W12-T-YMD.
+      *      MOVE 1                  TO WS-PARKEY.
+      *      PERFORM READ-PARAM THRU READ-PARAM-EXIT.
+      *      MOVE PAR-DMY            TO W12-TODAY.
+      *      MOVE PAR-YMD            TO W12-T-YMD.
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³ The use of letter heads is not yet available in this ver- ³
       *    ³ sion and will be included later.                          ³
@@ -2762,10 +2766,10 @@
              MOVE G-BANK-NAME        TO WS-BNK-NME.
              MOVE G-BANK-AC-TYP      TO WS-ACT-TYP.
              MOVE G-BANK-CDE         TO WS-BR-CODE.
-           IF G-BNK-AC-LNGTH = 10
-               MOVE G-BANK-AC2       TO WS-ACT-NO
-           ELSE
-               MOVE G-BANK-AC        TO WS-ACT-NO.
+      *    IF G-BNK-AC-LNGTH = 10
+      *        MOVE G-BANK-AC2       TO WS-ACT-NO
+      *    ELSE
+               MOVE G-BANK-AC-NO     TO WS-ACT-NO.
            IF WS-ACT-TYP = "C" OR "T" OR "S" OR "R"
                MOVE "Y"              TO WS-PRINT-BNK
                EVALUATE WS-AC-TYP

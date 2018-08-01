@@ -13,15 +13,22 @@
       *                                                                *
       *       C R E D I T O R   D E L E T E   O R D E R S              *
       *                                                                *
-      *       Version 9.04.01 - September 2016                         *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.     CRP094.
        AUTHOR.         J W LEMMON (APAC).
-       DATE-WRITTEN.   OCTOBER 1982.
+       DATE-WRITTEN.   OCTOBER 1985.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1982 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1985 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -67,6 +74,15 @@
        COPY "STOCK.SL".
 
        DATA DIVISION.
+      *
+      *          ********  ********  **        ******** 
+      *          **           **     **        **
+      *          **           **     **        ** 
+      *          *****        **     **        *****
+      *          **           **     **        **  
+      *          **           **     **        **
+      *          **        ********  ********  ********
+      *
        FILE SECTION.
 
        COPY "CONTROL.FDE".
@@ -89,93 +105,79 @@
       *            *    *       *****    **   **   **   **
       *
        WORKING-STORAGE SECTION.
-       77  WS-COPYRIGHT    PIC X(18)  VALUE
-      "aeWlimemnomLalismJ".
-       77  WS-SUB    PIC 9(04)  COMP-5.
-       77  WS-S            PIC  9(04)    COMP-5.
-       77  WS-S1           PIC  9(04)    COMP-5.
-       77  WS-S2           PIC  9(04)    COMP-5.
-       77  WS-S3           PIC  9(04)    COMP-5.
-       77  WS-S4           PIC  9(04)    COMP-5.
-       77  WS-S5           PIC  9(04)    COMP-5.
-       77  WS-S6           PIC  9(04)    COMP-5.
-       77  WS-S7           PIC  9(04)    COMP-5.
-       77  WS-S8           PIC  9(04)    COMP-5.
-       77  WS-S9           PIC  9(04)    COMP-5.
-       77  WS-IXS1         PIC  9(04)    COMP-5.
-       77  WS-IXS2         PIC  9(04)    COMP-5.
-       77  WS-IXS3         PIC  9(04)    COMP-5.
-       77  WS-IXS4         PIC  9(04)    COMP-5.
-       77  WS-ENQPOS    PIC 9(06)  COMP-5.
-       77  WS-ENQEND       PIC  9(06)    COMP-5.
-       77  WS-NETKEY       PIC  9(06)    COMP-5.
-       77  WS-PARKEY       PIC  9(06)    COMP-5.
-       77  WS-RECKEY       PIC  9(06)    COMP-5.
-       77  WS-RECOVER      PIC  9(06)    COMP-5.
-       77  WS-TRANS        PIC  9(04)    COMP-5 VALUE 1.
-       77  WS-PERIOD    PIC 9(02).
-       77  WS-NTP          PIC  X(01).
-       77  WS-KEYSTR    PIC 9(06)  COMP-5.
-       77  WS-OPTION       PIC  X(01).
-       77  WS-SKIP         PIC  X(01) VALUE "N".
-       77  WS-TAX          PIC  X(01).
-       77  WS-TYPE         PIC  X(01).
-       77  WS-ERROR        PIC  9(01) VALUE ZERO.
-       77  WS-EKEY         PIC  9(06)    COMP-5.
-       77  WS-COMP    PIC 9(01).
-       77  TODAY-DDMMYY    PIC 9(08) COMP-5.
-       77  WS-USUB    PIC 9(04) COMP-5.
+       77  WS-COPYRIGHT            PIC  X(18)    VALUE "aeWlimemnomLalismJ".
+       77  WS-SUB                  PIC  9(04)    COMP-5.
+       77  WS-S                    PIC  9(04)    COMP-5.
+       77  WS-S1                   PIC  9(04)    COMP-5.
+       77  WS-S2                   PIC  9(04)    COMP-5.
+       77  WS-S3                   PIC  9(04)    COMP-5.
+       77  WS-S4                   PIC  9(04)    COMP-5.
+       77  WS-S5                   PIC  9(04)    COMP-5.
+       77  WS-S6                   PIC  9(04)    COMP-5.
+       77  WS-S7                   PIC  9(04)    COMP-5.
+       77  WS-S8                   PIC  9(04)    COMP-5.
+       77  WS-S9                   PIC  9(04)    COMP-5.
+       77  WS-IXS1                 PIC  9(04)    COMP-5.
+       77  WS-IXS2                 PIC  9(04)    COMP-5.
+       77  WS-IXS3                 PIC  9(04)    COMP-5.
+       77  WS-IXS4                 PIC  9(04)    COMP-5.
+       77  WS-ENQPOS               PIC  9(06)    COMP-5.
+       77  WS-ENQEND               PIC  9(06)    COMP-5.
+       77  WS-NETKEY               PIC  9(06)    COMP-5.
+       77  WS-PARKEY               PIC  9(06)    COMP-5.
+       77  WS-RECKEY               PIC  9(06)    COMP-5.
+       77  WS-RECOVER              PIC  9(06)    COMP-5.
+       77  WS-TRANS                PIC  9(04)    COMP-5 VALUE 1.
+       77  WS-PERIOD               PIC  9(02).
+       77  WS-NTP                  PIC  X(01).
+       77  WS-KEYSTR               PIC  9(06)    COMP-5.
+       77  WS-OPTION               PIC  X(01).
+       77  WS-SKIP                 PIC  X(01)    VALUE "N".
+       77  WS-TAX                  PIC  X(01).
+       77  WS-TYPE                 PIC  X(01).
+       77  WS-ERROR                PIC  9(01)    VALUE ZERO.
+       77  WS-EKEY                 PIC  9(06)    COMP-5.
+       77  WS-COMP                 PIC  9(01).
+       77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
+       77  WS-USUB                 PIC  9(04)    COMP-5.
       /
-       01  WS-DB-LINE.
-           03  WS-TOP-LNE.
-               05  WS-TCHR PIC X(01) OCCURS 80.
-           03  WS-T-LINE REDEFINES WS-TOP-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-H-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-TOP-LNE2.
-               05  WS-TCH  PIC X(01) OCCURS 80.
-           03  WS-TP-LINE2 REDEFINES WS-TOP-LNE2.
-               05  FILLER      PIC  X(01).
-               05  WS-TOP-COMP PIC  X(40).
-              05  FILLER      PIC  X(23).
-        05  WS-WRKHD    PIC  X(11).
-              05  FILLER      PIC  X(01).
-        05  WS-WRKST    PIC  X(03).
-              05  FILLER      PIC  X(01).
-          03  WS-MID-LNE.
-               05  WS-MCHR PIC X(01) OCCURS 80.
-    03  WS-MDDT-LNE REDEFINES WS-MID-LNE.
-        05  WS-MDT1     PIC  X(01).
-        05  WS-MDT78    PIC  X(78).
-        05  WS-MDT80    PIC  X(01).
-          03  WS-MID-LNE2.
-        05  FILLER      PIC  X(01) VALUE "³".
-        05  WS-BLNK78   PIC  X(78) VALUE ALL "°".
-        05  FILLER      PIC  X(01) VALUE "³".
-          03  WS-BOT-LNE.
-               05  WS-BCHR PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE.
-               05  FILLER  PIC X(01).
-               05  WS-F-LINE
-                           PIC X(78).
-               05  FILLER  PIC X(01).
-           03  WS-BOT-LNE2.
-               05  WS-BCH  PIC X(01) OCCURS 80.
-           03  WS-B-LINE REDEFINES WS-BOT-LNE2.
-               05  FILLER  PIC X(01).
-               05  WS-MEM-LINE.
-                  07  WS-SRT-LINE
-                           PIC X(50).
-                  07  FILLER
-                           PIC X(10).
-               05  FILLER  PIC X(19).
-           03  WS-MM-LINE.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-               05  FILLER  PIC  X(60) VALUE SPACES.
-               05  FILLER  PIC  X(01) VALUE X"B3".
-           03  WS-HME-LINE PIC  X(60) VALUE ALL X"CD".
+      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *    ³ Used by calling program (WORKING-STORAGE) and called program ³
+      *    ³ (LINKAGE SECTION) for Main screen layout and headings.       ³
+      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+       01  CRT-HEADINGS.
+      *
+      *    TYPE:
+      *         C = Clear comment line (50)
+      *         E = Clear lines (any line or lines between 5 and 46)
+      *         H = Change heading
+      *         S = Clear the screen and display headings
+      *
+           03  CRT-TYPE            PIC  X(01).
+      *
+      *    The following two fields are used for clearing a portion of
+      *    the screen. (Start line and end line)
+      *
+           03  CRT-START           PIC  9(02).
+           03  CRT-END             PIC  9(02).
+      *
+      *    Calling Program
+      *
+           03  CRT-PROGRAM         PIC  X(15)           VALUE "CRP032".
+      *
+      *    Screen Heading
+      *
+           03  CRT-HEADING         PIC  X(40)           VALUE "CREDITOR - DELETE ORDERS".
+      *
+      *    Company Name
+      *
+           03  CRT-COMPANY         PIC  X(40).
+      *
+      *    WorkStation / Supervisor
+      *
+           03  CRT-TERMINAL.
+               05  CRT-WRKHD       PIC  X(11).
+               05  CRT-WRKST       PIC  X(03).
 
        COPY "WS.WS".
 
@@ -322,29 +324,12 @@
        SCREEN SECTION.
 
        01  S27.
-          03  LINE  5 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "This routine does not include a
-      -                          "recovery procedure. Security".
-          03  LINE  6 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "copies  of the data files should
-      -                          " be made as a power  failure".
-          03  LINE  7 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "or any other problem during this
-      -                          " procedure would require the".
-          03  LINE  8 COLUMN 12 FOREGROUND-COLOR Grey HIGHLIGHT
-     BACKGROUND-COLOR Red
-                                 VALUE "DATA FILES from the previous bac
-      -                          "kup to be restored !!!      ".
-          03  LINE 10 COLUMN 12 VALUE "Do you wish to continue (".
-    03        COLUMN 37 FOREGROUND-COLOR Brown HIGHLIGHT
-     VALUE "Y".
-    03        COLUMN 38 VALUE "/".
-    03        COLUMN 39 FOREGROUND-COLOR Brown HIGHLIGHT
-     VALUE "N".
-    03        COLUMN 40 VALUE ")?".
+           03  BACKGROUND-COLOR Red  FOREGROUND-COLOR Grey HIGHLIGHT.
+               05  LINE  6 COLUMN 12 VALUE "This routine does not include a recovery procedure. Security".
+               05  LINE  7 COLUMN 12 VALUE "copies  of the data files should be made as a power  failure".
+               05  LINE  8 COLUMN 12 VALUE "or any other problem during this procedure would require the".
+               05  LINE  9 COLUMN 12 VALUE "DATA FILES from the previous backup to be restored !!!      ".
+               05  LINE 11 COLUMN 12 VALUE "Do you wish to continue (Y/N)?".
 
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
@@ -358,12 +343,15 @@
        PROCEDURE DIVISION USING LS-PARID LS-USER-ID LS0-PROGRAMS LS0-SECURITY DATA-FILE-IDS.
        AA000         SECTION.
        AA00.
-          IF LS0-CRLEV < 9
+           IF LS0-CRLEV < 9
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
-        GO TO AA49.
-            PERFORM ZA000-INIT.
-      PERFORM CM000.
+               GO TO AA49.
+             PERFORM ZA000-INIT.
+             PERFORM CM000.
 
        AA49.
              EXIT PROGRAM.
@@ -436,6 +424,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -443,7 +434,7 @@
        COPY "CLEAR.CRT".
 
       /
-      *    ****    READ FILES ROUTINES
+      *    ****    R E A D   F I L E S   R O U T I N E S
       *
        AC000              SECTION.
 
@@ -459,9 +450,9 @@
 
        COPY "STOCK.RD".
 
-      /
-      *    ****    REWRITE AND WRITE FILES ROUTINES
-      *
+      *                                                                 
+      *     R E W R I T E   &   W R I T E   F I L E S   R O U T I N E S 
+      *                                                                 
        AD000             SECTION.
 
        COPY "CONTROL.WR".
@@ -474,87 +465,102 @@
 
        COPY "STOCK.WR".
 
-      /
-      *    THIS ROUTINE LOCKS THE CONTROL FILE DEBTOR RECORD
       *
+      *       ****   *****  ***    ***   *   *  *****  ****   *   *
+      *       *   *  *     *   *  *   *  *   *  *      *   *  *   *
+      *       ****   ***   *      *   *  *   *  ***    ****    * *
+      *       *   *  *     *   *  *   *   * *   *      *   *    *
+      *       *   *  *****  ***    ***     *    *****  *   *    *
+      *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+      *          THIS ROUTINE GENERATES THE RECOVERY FILE RECORDS
+      *    ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ
+      *        ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+      *        ³ ORIGINAL ACTION (REC-TYPE)  ÄÄ  RECOVERY PROCESS ³
+      *        ³ 0 = RECORD CHANGED          ÄÄ      (REWRITE)    ³
+      *        ³ 1 = RECORD WAS ADDED        ÄÄ      (DELETE)     ³
+      *        ³ 2 = RECORD WAS DELETED      ÄÄ      (WRITE)      ³
+      *        ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
        AY000           SECTION.
        AY60.
       *
       *    ****    Read PARAM record 4 - Lock record and start recovery
       *            file procedure.
       *
-             MOVE 4              TO WS-PARKEY.
-             MOVE 3              TO WS-COUNT.
+             MOVE 4                  TO WS-PARKEY.
+             MOVE 3                  TO WS-COUNT.
              PERFORM READ-PARAM-LOCK THRU READ-PARAM-EXIT.
            IF PAR-USERS < 24
-               MOVE 1            TO WS-SUB
+               MOVE 1                TO WS-SUB
                GO TO AY62.
-            DISPLAY "WAITING" AT 5051
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
+      *
+      *    ****   Q   F U L L  -  W A I T   F O R   2   S E C O N D S
+      *
+             DISPLAY "WAITING" AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Red HIGHLIGHT.
              UNLOCK PARAM.
-      ACCEPT WS-STIME FROM TIME.
-      MOVE 200   TO WS-WAIT.
-      PERFORM LOCK-REC-LOOP.
-      DISPLAY SPACE AT 5051
-       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
+             ACCEPT WS-STIME FROM TIME.
+             MOVE 200                TO WS-WAIT.
+             PERFORM LOCK-REC-LOOP.
+             DISPLAY SPACE AT 5051 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Cyan.
              GO TO AY60.
+
        AY61.
-            MOVE "CR"   TO PAR-PROG (WS-USUB).
-      MOVE LS-USER  TO PAR-USR (WS-USUB).
-            PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
+      *
+      *    ****    Updating Creditor Files
+      *
+             MOVE "CR"               TO PAR-PROG(WS-USUB).
+             MOVE LS-USER            TO PAR-USR(WS-USUB).
+             PERFORM REWRITE-PARAM-UNLOCK THRU WRITE-PARAM-EXIT.
       *
       *    ****    Read the CREDITOR control record in the NETWORK file
-      *     and lock it.
+      *            and lock it.
       *
-            MOVE 2   TO WS-NETKEY.
+             MOVE 2                  TO WS-NETKEY.
              PERFORM READ-CONTROL-LOCK THRU READ-CONTROL-EXIT.
              GO TO AY999.
        AY62.
-    IF PAR-PROG (WS-SUB) = "CR" OR "CS" OR "CG"
+           IF PAR-PROG(WS-SUB) = "CR" OR "CS" OR "CG"
       *
       *    ****    Test if this is a program error first
       *
-        IF LS-USER = PAR-USR (WS-USUB)
-                   SUBTRACT 1    FROM PAR-USERS
-                   MOVE SPACES   TO PAR-PROG (WS-USUB)
-                                    PAR-USR (WS-USUB)
+               IF LS-USER = PAR-USR(WS-USUB)
+                   SUBTRACT 1        FROM PAR-USERS
+                   MOVE SPACES       TO PAR-PROG(WS-USUB) PAR-USR (WS-USUB)
                ELSE
                    UNLOCK PARAM
-     DISPLAY "Waiting" AT 5072 WITH
-       BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT BLINK
-     ACCEPT WS-STIME FROM TIME
-     MOVE 200  TO WS-WAIT
-     PERFORM LOCK-REC-LOOP
-     DISPLAY "Waiting" AT 5072 WITH
-       BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT BLINK
+                   DISPLAY "Waiting" AT 5072 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT BLINK
+                   ACCEPT WS-STIME FROM TIME
+                   MOVE 200          TO WS-WAIT
+                   PERFORM LOCK-REC-LOOP
+                   DISPLAY "Waiting" AT 5072 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT BLINK
                    GO TO AY60.
            IF WS-SUB < 24
-               ADD 1             TO WS-SUB
+               ADD 1                 TO WS-SUB
                GO TO AY62.
-      DISPLAY SPACE AT 5072
-       WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
-             MOVE 1              TO WS-SUB.
+             DISPLAY SPACE AT 5072 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue HIGHLIGHT.
+             MOVE 1                  TO WS-SUB.
+
        AY63.
-           IF PAR-USR (WS-SUB) = SPACES
-               MOVE WS-SUB       TO WS-USUB
-               ADD 1             TO PAR-USERS
+           IF PAR-USR(WS-SUB) = SPACES
+               MOVE WS-SUB           TO WS-USUB
+               ADD 1                 TO PAR-USERS
                GO TO AY61.
-             ADD 1               TO WS-SUB.
+             ADD 1                   TO WS-SUB.
              GO TO AY63.
+
        AY70.
-            MOVE 4   TO WS-PARKEY.
-             MOVE 1              TO WS-COUNT.
+             MOVE 4                  TO WS-PARKEY.
+             MOVE 1                  TO WS-COUNT.
              PERFORM READ-PARAM-LOCK-END THRU READ-PARAM-EXIT.
       *
       *    ****    Write links back and unlock PARAM record 4 and
-      *     NETWORK record 2.
+      *            NETWORK record 2.
       *
-            PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
-            MOVE SPACES  TO PAR-PROG (WS-USUB)
-                                    PAR-USR (WS-USUB).
-             SUBTRACT 1          FROM PAR-USERS.
-            PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
+             PERFORM REWRITE-CONTROL THRU WRITE-CONTROL-EXIT.
+             MOVE SPACES             TO PAR-PROG(WS-USUB) PAR-USR(WS-USUB).
+             SUBTRACT 1              FROM PAR-USERS.
+             PERFORM REWRITE-PARAM THRU WRITE-PARAM-EXIT.
              COMMIT.
+
        AY999.
              EXIT.
       /
@@ -658,31 +664,25 @@
       PERFORM AY70 THRU AY999.
        CM999.
              EXIT.
-      /
-      *    ****    I N I T I A L I Z E   P R O G R A M
-      *
-       ZA000-INIT        SECTION 8.
-       ZA000-OPEN.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
+       ZA000-INIT    SECTION 8.
+       ZA000-START.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-TODAY-YYMMDD    TO W12-T-YMD.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W95-COMP.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-             COPY "FUNCTION.PRO".
+       COPY "FUNCTION.PRO".
 
-            MOVE 1   TO WS-PARKEY.
-             PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-COMPANY    TO W95-COMP.
-             MOVE PAR-DMY        TO W12-TODAY.
-             MOVE PAR-YMD        TO W12-T-YMD.
       *
       *    ****    S E T   U P   A G E   D A T E S
       *

@@ -21,7 +21,7 @@
        AUTHOR.         J.W.LEMMON (APAC).
        DATE-WRITTEN.   JANUARY 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
                 
@@ -418,6 +418,8 @@
        AA49.
              EXIT PROGRAM.
 
+       COPY "AA900.ALM".
+
        COPY "LOCKED.RC2".
 
       *    
@@ -523,7 +525,7 @@
    WHEN ESC-KEY
        GO TO BA999
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO BA05
         END-EVALUATE.
       CALL "CBL_TOUPPER" USING WS-OPTION
@@ -568,7 +570,7 @@
              PERFORM RESTORE-SCREEN
        GO TO YA95-ACCEPT
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO YA95-ACCEPT
         END-EVALUATE.
       PERFORM CLEAR-L50.
@@ -635,7 +637,7 @@
      TO W15-ACCOUNT
        PERFORM AA350
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO YA105
         END-EVALUATE
         MOVE W15-ACCOUNT  TO W45-T-GL
@@ -798,8 +800,10 @@
 
        YB999.
       EXIT.
-      /
-       ZA000-INIT        SECTION 80.
+      *    *************************************************************
+      *                I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
+       ZA000-INIT        SECTION 8.
        ZA000-OPEN.
              MOVE LS-COMPANY         TO CRT-COMPANY.
              MOVE LS-TERMINAL        TO CRT-TERMINAL.

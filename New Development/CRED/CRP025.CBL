@@ -13,15 +13,22 @@
       *                                                                *
       *     C R E D I T O R ' S   O U T S T A N D I N G   O R D E R S  *
       *                                                                *
-      *       Version 9.04.01 - June 2016                              *
+      *       Version 9.04.05 - June 2018                              *
+      *                                                                *
+      ******************************************************************
+      *                                                                *
+      * June 2018 - Added program CRPRDWR to handle IO for Creditor    *
+      *             file and COPY file CA155.CRP to call and handlw IO *
+      *             for the CREDITOR file. SEE CA155.CRP and CRPRDWR   *
+      *             for details.                                       *
       *                                                                *
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID.      CRP025.
-       AUTHOR.               J.W. LEMMON (APAC).
-       DATE-WRITTEN.         AUGUST, 1983.
+       AUTHOR.          J.W. LEMMON (APAC).
+       DATE-WRITTEN.    AUGUST, 1983.
 
-                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2016
+                COPYRIGHT NOTICE: COPYRIGHT (C) 1983 - 2017
                                   by James William Lemmon.
                                     (Id No. 4412165050082).
 
@@ -131,6 +138,8 @@
        77  WS-H3                   PIC  X(05)           VALUE "PAGE:".
        77  WS-HDNG                 PIC  X(118)          VALUE "ORD ITEM CODE           QUANTITY  X-REF/BAR CODE     DESCRIPTION                     UNIT COST     TOTAL COST CONTACT".
        77  WS-HDNG2                PIC  X(128)          VALUE " ORD NUMBER ITEM CODE          QUANTITY X-REF/BAR CODE     DESCRIPTION                       UNIT COST   TOTAL COST ORDERED BY".
+       77  WS-CRD-ORD              PIC  X(36)           VALUE "CREDITOR - OUTSTANDING ORDERS REPORT".
+       77  WS-SEL-ORD              PIC  X(33)           VALUE "CREDITOR - PRINT SELECTIVE ORDERS"
        77  WS-ER1                  PIC  X(09)           VALUE "No record".
        77  TODAY-DDMMYY            PIC  9(08)    COMP-5.
        77  WS-USUB                 PIC  9(04)    COMP-5.
@@ -158,11 +167,11 @@
       *
       *    Calling Program
       *
-           03  CRT-PROGRAM         PIC  X(15) VALUE "CRP025".
+           03  CRT-PROGRAM         PIC  X(15)           VALUE "CRP025".
       *
       *    Screen Heading
       *
-           03  CRT-HEADING         PIC  X(40) VALUE "CREDITOR - OUTSTANDING ORDERS REPORT".
+           03  CRT-HEADING         PIC  X(40)           VALUE "CREDITOR - OUTSTANDING ORDERS REPORT".
       *
       *    Company Name
       *
@@ -177,8 +186,8 @@
        COPY "WS.WS".
 
        01  WS-HELP.
-           03  WS-MODULE           PIC  X(03) VALUE "ORD".
-           03  WS-PROG             PIC  X(03) VALUE "PRN".
+           03  WS-MODULE           PIC  X(03)           VALUE "ORD".
+           03  WS-PROG             PIC  X(03)           VALUE "PRN".
 
        01  WS-PARID.
            03  WS-SYS-ID           PIC  X(03).
@@ -188,7 +197,7 @@
            03  W02-PGE-LENGTH      PIC  9(03).
            03  W02-PRN-LENGTH      PIC  9(03).
            03  W02-LINAGE          PIC  9(03).
-           03  W02-PRN-STATUS      PIC  X(01) VALUE "C".
+           03  W02-PRN-STATUS      PIC  X(01)           VALUE "C".
       *
       *    ****    D  =  Detail line
       *            C  =  Condensed print
@@ -554,14 +563,14 @@
        COPY "W70CRED.WS".
 
        01  W75-KEYS.
-    03  W75-S        PIC 9(02) COMP-5.
-    03  W75-S1        PIC 9(02) COMP-5.
-    03  W75-S2        PIC 9(02) COMP-5.
-    03  W75-CNO        PIC X(06) OCCURS 18.
-           03  W75-ITEMS OCCURS 18.
-        05  W75-CODE.
-     07  W75-POR PIC  9(10).
-     07  FILLER  PIC  X(08).
+           03  W75-S               PIC 9(02) COMP-5.
+           03  W75-S1              PIC 9(02) COMP-5.
+           03  W75-S2              PIC 9(02) COMP-5.
+           03  W75-CNO             PIC X(06) OCCURS 32.
+           03  W75-ITEMS                     OCCURS 32.
+               05  W75-CODE.
+                   07  W75-POR     PIC  9(10).
+                   07  FILLER      PIC  X(08).
 
        01  W90-TABLE.
            03  W90-ENTRIES.
@@ -581,7 +590,6 @@
                05  W90-80       PIC X(120).
 
        01  W95-STM.
-           03  W95-COMP        PIC X(40).
            03  W95-ADD1        PIC X(30).
            03  W95-ADD2        PIC X(30).
            03  W95-ADD3        PIC X(30).
@@ -617,38 +625,70 @@
        SCREEN SECTION.
 
        01  S21.
-          03  FOREGROUND-COLOR Grey HIGHLIGHT
-        BACKGROUND-COLOR Magenta PIC Z(07)9 USING W15-OPREF AUTO.
+          03  PIC Z(07)9 USING W15-OPREF BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
 
        01  S22.
-          03  FOREGROUND-COLOR Grey HIGHLIGHT
-        BACKGROUND-COLOR Magenta PIC 99 USING W15-OSUB AUTO.
+          03  PIC 99 USING W15-OSUB BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT AUTO.
 
-       COPY "CRDLUP.CRT".
+       01  S55.
+           03  BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+               05  LINE 50 COLUMN  2 VALUE "F1"                                           FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN  4 VALUE   "=Help,".
+               05          COLUMN 10 VALUE         "F2"                                   FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 12 VALUE           " to do Creditor Lookup ".
+               05          COLUMN 35 VALUE                                  "Esc"         FOREGROUND-COLOR Brown HIGHLIGHT.
+               05          COLUMN 38 VALUE                                     " to exit".
+
+      *COPY "CRDLUP.CRT".
 
        01  S-POR.
-           03  LINE  6 COLUMN 9 FOREGROUND-COLOR Black
-                                BACKGROUND-COLOR Grey VALUE "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
-           03  LINE  7 COLUMN 9 FOREGROUND-COLOR Black
-                                BACKGROUND-COLOR Grey VALUE "³                     O R D E R   L O O K U P                      ³".
-           03  LINE  8 COLUMN 9 FOREGROUND-COLOR Black
-                                BACKGROUND-COLOR Grey VALUE "ÃÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄ´".
-           03  LINE 21 COLUMN 9 FOREGROUND-COLOR Black
-                                BACKGROUND-COLOR Grey VALUE "ÀÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÙ".
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Black.
+               05  LINE  8 COLUMN 9 VALUE     "ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿".
+               05  LINE  9 COLUMN 9 VALUE     "³                     O R D E R   L O O K U P                      ³".
+               05  LINE 10 COLUMN 9 VALUE     "ÃÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄ´".
+               05  S-DET.
+                   07  LINE 11 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 12 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 13 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 14 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 15 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 16 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 17 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 18 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 19 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 20 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 21 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 22 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 23 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 24 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 25 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 26 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 27 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 28 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 29 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 30 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 31 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 32 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 33 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 34 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 35 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 36 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 37 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 38 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 39 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 40 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 41 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+                   07  LINE 42 COLUMN 9 VALUE "³           ³              ³                              ³        ³".
+               05  LINE 43 COLUMN 9 VALUE     "ÀÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÙ".
 
        01  SD-POR.
-    03  COLUMN 10 FOREGROUND-COLOR Magenta
-    BACKGROUND-COLOR Grey PIC Z(07)9 FROM ORD-ORD.
-    03  COLUMN 18 FOREGROUND-COLOR Black BACKGROUND-COLOR Grey
-    VALUE "/".
-    03  COLUMN 19 FOREGROUND-COLOR Magenta BACKGROUND-COLOR Grey
-    PIC 99 FROM ORD-LINE.
-    03  COLUMN 22 FOREGROUND-COLOR Magenta BACKGROUND-COLOR Grey
-    PIC X(14) FROM STK-CODE.
-    03  COLUMN 37 FOREGROUND-COLOR Magenta BACKGROUND-COLOR Grey
-    PIC X(30) FROM STK-DESC.
-    03  COLUMN 68 FOREGROUND-COLOR Magenta BACKGROUND-COLOR Grey
-    PIC Z(04)9.99 FROM ORD-QUANT.
+           03  BACKGROUND-COLOR Grey FOREGROUND-COLOR Magenta.
+               05  COLUMN 10 PIC Z(07)9    FROM ORD-ORD.
+               05  COLUMN 18 VALUE "/"                   FOREGROUND-COLOR Black.
+               05  COLUMN 19 PIC 99        FROM ORD-LINE.
+               05  COLUMN 22 PIC X(14)     FROM STK-CODE.
+               05  COLUMN 37 PIC X(30)     FROM STK-DESC.
+               05  COLUMN 68 PIC Z(04)9.99 FROM ORD-QUANT.
 
       *
       *      ******   ******    *****    *****   ******  ******   **   **  ******    ****** 
@@ -663,6 +703,9 @@
        AA000-START-UP  SECTION.
        AA000.
            IF LS0-CRLEV < 2
+      *
+      *      Insufficient security level
+      *
                MOVE X"FF"            TO WS-OPTION
                PERFORM ERROR-MESSAGE
                GO TO AA105.
@@ -700,6 +743,8 @@
        AA105.
              CLOSE SYSUSER.
              EXIT PROGRAM.
+
+       COPY "AA900.ALM".
 
       *    *************************************************************
       *    ****    ROUTINES TO HANDLE VARIOUS FUNCTIONS FOR THE
@@ -786,6 +831,9 @@
       *    ³ To change the time on the screen:                         ³
       *    ³    PERFORM CHANGE-TIME                                    ³
       *    ³                                                           ³
+      *    ³ To clear lines 46 and 50:                                 ³
+      *    ³    PERFORM CLEAR-L46-AND-50                               ³
+      *    ³                                                           ³
       *    ³ To clear line 50:                                         ³
       *    ³    PERFORM CLEAR-L50                                      ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
@@ -854,11 +902,9 @@
 
        COPY "PRINTUTL.AP4".
 
-      *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³                                                           ³
-      *    ³           R E A D   F I L E S   R O U T I N E S           ³
-      *    ³                                                           ³
-      *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+      *
+      *    ****    R E A D   F I L E S   R O U T I N E S
+      *
        AB00-READ SECTION.
 
        COPY "CONTROL.RD".
@@ -879,75 +925,68 @@
 
        BB010        SECTION.
        BB10.
-      MOVE W15-N29-30  TO W10-N1-2.
-      MOVE W15-N1-2  TO W10-N3-4.
-      MOVE W15-N27-28  TO W10-N5-6.
-      MOVE W15-N3-4  TO W10-N7-8.
-      MOVE W15-N25-26  TO W10-N9-10.
-      MOVE W15-N5-6  TO W10-N11-12.
-      MOVE W15-N23-24  TO W10-N13-14.
-      MOVE W15-N7-8  TO W10-N15-16.
-      MOVE W15-N21-22  TO W10-N17-18.
-      MOVE W15-N9-10  TO W10-N19-20.
-      MOVE W15-N19-20  TO W10-N21-22.
-      MOVE W15-N11-12  TO W10-N23-24.
-      MOVE W15-N17-18  TO W10-N25-26.
-      MOVE W15-N13-14  TO W10-N27-28.
-      MOVE W15-N15-16  TO W10-N29-30.
+             MOVE W15-N29-30  TO W10-N1-2.
+             MOVE W15-N1-2  TO W10-N3-4.
+             MOVE W15-N27-28  TO W10-N5-6.
+             MOVE W15-N3-4  TO W10-N7-8.
+             MOVE W15-N25-26  TO W10-N9-10.
+             MOVE W15-N5-6  TO W10-N11-12.
+             MOVE W15-N23-24  TO W10-N13-14.
+             MOVE W15-N7-8  TO W10-N15-16.
+             MOVE W15-N21-22  TO W10-N17-18.
+             MOVE W15-N9-10  TO W10-N19-20.
+             MOVE W15-N19-20  TO W10-N21-22.
+             MOVE W15-N11-12  TO W10-N23-24.
+             MOVE W15-N17-18  TO W10-N25-26.
+             MOVE W15-N13-14  TO W10-N27-28.
+             MOVE W15-N15-16  TO W10-N29-30.
 
        BB15.
-      EXIT.
+             EXIT.
 
       /
        GA000      SECTION 5.
        GA00.
-             PERFORM ERASE-SCREEN.
-             DISPLAY "OUTSTANDING ORDERS" AT 0231
-                      WITH FOREGROUND-COLOR Grey HIGHLIGHT.
-      DISPLAY "C" AT 0412 WITH FOREGROUND-COLOR Brown HIGHLIGHT
-                     "reditor or " WITH FOREGROUND-COLOR Grey
-                     "O" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "rder no. sequence or " WITH FOREGROUND-COLOR Grey
-       "S" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "elective per Creditor" WITH FOREGROUND-COLOR Grey.
-      MOVE "S"   TO WS-OPTION.
-      DISPLAY "Esc" AT 5002
-        WITH FOREGROUND-COLOR Brown HIGHLIGHT
-      BACKGROUND-COLOR Cyan
-       "ape to Exit" WITH FOREGROUND-COLOR Blue
-     BACKGROUND-COLOR Cyan.
+             PERFORM HEADING-AND-CLEAR-SCREEN.
+             DISPLAY "C"                                                AT 0612 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                      "reditor or "                                             WITH FOREGROUND-COLOR Grey
+                                 "O"                                            WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                                  "rder no. sequence or "                       WITH FOREGROUND-COLOR Grey
+                                                       "S"                      WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                                                        "elective per Creditor" WITH FOREGROUND-COLOR Grey.
+             MOVE "S"                TO WS-OPTION.
+             DISPLAY "Esc"    AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                        "ape to Exit" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
        GA00A.
-      ACCEPT WS-OPTION AT 0469
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT
-    BACKGROUND-COLOR Magenta UPDATE AUTO.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY  GO TO GA999
-   WHEN OTHER
-       CALL X"E5"
-       GO TO GA00A
-        END-EVALUATE.
-      CALL "CBL_TOUPPER" USING WS-OPTION
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-    IF NOT(WS-OPTION = "C" OR "O" OR "S")
+             ACCEPT WS-OPTION AT 0669
+             WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta UPDATE AUTO.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY  GO TO GA999
+                 WHEN OTHER    PERFORM AA900-ALARM
+                               GO TO GA00A
+               END-EVALUATE.
+             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF NOT(WS-OPTION = "C" OR "O" OR "S")
                GO TO GA00A.
-    IF WS-OPTION = "C" OR "O"
-             DISPLAY "Busy printing outstanding orders" AT 0612.
+           IF WS-OPTION = "C" OR "O"
+               DISPLAY "Busy printing outstanding orders" AT 0612.
            IF WS-OPTION = "O"
-               DISPLAY "Order No." AT 0812
-    ELSE
-    IF WS-OPTION = "C"
-        PERFORM GC000
-        GO TO GA00
-    ELSE
-        PERFORM GB000
-        GO TO GA00.
+               DISPLAY "Order No." AT 1012
+           ELSE
+           IF WS-OPTION = "C"
+               PERFORM GC000
+               GO TO GA00
+           ELSE
+               PERFORM GB000
+               MOVE WS-CRD-ORD       CRT-HEADING
+               PERFORM HEADING-AND-CLEAR-SCREEN
+               GO TO GA00.
              MOVE WS-OPTION          TO WS-ORD.
              MOVE ZERO               TO WS-PAGE.
              MOVE ZERO               TO W25-V1 W25-V2.
       *
-      *    ****   1 7 C P I ( C O N D E N S E D   P R I N T )
+      *    ****   1 7   C P I   ( C O N D E N S E D   P R I N T )
       *
              MOVE 0                  TO WS-ADVANCE.
              MOVE 3                  TO W02-PRN-TYPE.
@@ -1018,7 +1057,7 @@
       MOVE ORD-CRED  TO P-NUMBER W15-ACNO.
              PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
            IF WS-ORD = "C"
-        DISPLAY P-NUMBER AT 0822
+        DISPLAY P-NUMBER AT 1022
          WITH FOREGROUND-COLOR Cyan HIGHLIGHT
        BACKGROUND-COLOR Magenta "°"
          P-NAME WITH FOREGROUND-COLOR Grey HIGHLIGHT
@@ -1054,7 +1093,7 @@
              MOVE ORD-TERMS      TO W15-SETT.
             MOVE W15-ORD  TO OR-ORD.
            IF WS-ORD = "O"
-        DISPLAY OR-ORD AT 0822
+        DISPLAY OR-ORD AT 1022
          WITH FOREGROUND-COLOR Cyan HIGHLIGHT
        BACKGROUND-COLOR Magenta.
             MOVE W15-EXT-ITEM  TO OR-DESC.
@@ -1134,503 +1173,435 @@
 
        GB000      SECTION.
        GB00.
-            PERFORM ERASE-SCREEN.
-      DISPLAY "PRINT SELECTIVE ORDERS" AT 0230
-        WITH FOREGROUND-COLOR Grey HIGHLIGHT.
-      DISPLAY "Creditor No." AT 0404.
-      MOVE SPACES  TO W15-ACNO.
-      DISPLAY "F1" AT 5002
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       "=Help,"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-       "F2" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       " to do Creditor Lookup "
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-       "Esc" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       " to exit"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
-      MOVE ZERO   TO W25-V1 W25-V2.
+             MOVE WS-SEL-ORD         TO CRT-HEADING.
+             PERFORM HEADING-AND-CLEAR-SCREEN.
+             DISPLAY "Creditor No." AT 0604.
+             MOVE SPACES             TO W15-ACNO.
+             DISPLAY S55.
+             MOVE ZERO   TO W25-V1 W25-V2.
 
        GB05.
-      ACCEPT W15-ACNO AT 0417
-      WITH BACKGROUND-COLOR Magenta
-    FOREGROUND-COLOR Grey HIGHLIGHT
-    UPDATE AUTO.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY  GO TO GB999
-   WHEN F1-KEY
-       PERFORM HELP-ROUTINE
-   WHEN F2-KEY
-             PERFORM SAVE-SCREEN
-      *      MOVE 4                  TO W44-FUNCTION.
-             PERFORM SCREEN-CONTENTS
-             PERFORM CREDITOR-LOOKUP
-             PERFORM RESTORE-SCREEN
-   WHEN OTHER
-       CALL X"E5"
-       GO TO GB05
-        END-EVALUATE
-              DISPLAY W15-ACNO AT 0417
-         WITH BACKGROUND-COLOR Magenta
-       FOREGROUND-COLOR Grey HIGHLIGHT
-              IF W15-ACNO = SPACES
-           GO TO GB05.
-      MOVE 5   TO WS-LENGTH.
-      CALL "CBL_TOUPPER" USING W15-ACNO
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-      MOVE 1   TO WS-LENGTH.
-    IF W15-ACNO = SPACES
-        GO TO GB999.
-      PERFORM CLEAR-L50.
-      MOVE W15-ACNO  TO P-NUMBER.
-            PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
-    IF WS-F-ERROR = 3
-        MOVE WS-ER1  TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        GO TO GB05.
-      DISPLAY P-NAME AT 0424
-       WITH BACKGROUND-COLOR Magenta
-     FOREGROUND-COLOR Cyan HIGHLIGHT.
-            PERFORM CHECK-CORRECT.
-          IF WS-OPTION = "N"
-              GO TO GB00.
-      DISPLAY "A" AT 0604 WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "ll or " WITH FOREGROUND-COLOR Grey
-       "S" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "elective orders" WITH FOREGROUND-COLOR Grey.
-      MOVE "A"   TO WS-OPTION.
-      DISPLAY "Esc" AT 5002
-        WITH FOREGROUND-COLOR Brown HIGHLIGHT
-      BACKGROUND-COLOR Cyan
-       "ape to Exit" WITH FOREGROUND-COLOR Blue
-     BACKGROUND-COLOR Cyan.
+             ACCEPT W15-ACNO AT 0617 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT UPDATE AUTO.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY  GO TO GB999
+                 WHEN F1-KEY   PERFORM HELP-ROUTINE
+                 WHEN F2-KEY   PERFORM SAVE-SCREEN
+                               PERFORM SCREEN-CONTENTS
+                               PERFORM CREDITOR-LOOKUP
+                               PERFORM RESTORE-SCREEN
+                 WHEN OTHER    PERFORM AA900-ALARM
+                               GO TO GB05
+               END-EVALUATE
+               DISPLAY W15-ACNO AT 0617 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT
+               IF W15-ACNO = SPACES
+                   GO TO GB05.
+             MOVE 5                  TO WS-LENGTH.
+             CALL "CBL_TOUPPER" USING W15-ACNO BY VALUE WS-LENGTH RETURNING WS-STATUS.
+             MOVE 1                  TO WS-LENGTH.
+           IF W15-ACNO = SPACES
+               GO TO GB999.
+             PERFORM CLEAR-L50.
+             MOVE W15-ACNO           TO P-NUMBER.
+             PERFORM READ-CREDIT THRU READ-CREDIT-EXIT.
+           IF WS-F-ERROR = 3
+               MOVE WS-ER1           TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO GB05.
+             DISPLAY P-NAME AT 0624 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Cyan HIGHLIGHT.
+             PERFORM CHECK-CORRECT.
+           IF WS-OPTION = "N"
+               GO TO GB00.
+             DISPLAY "A" AT               0804 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                      "ll or "                 WITH FOREGROUND-COLOR Grey
+                            "S"                WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                             "elective orders" WITH FOREGROUND-COLOR Grey.
+             MOVE "A"                TO WS-OPTION.
+             DISPLAY "Esc"    AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                        "ape to Exit" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
 
        GB06.
-      ACCEPT WS-OPTION AT 0628
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT
-    BACKGROUND-COLOR Magenta UPDATE AUTO.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY  GO TO GB999
-   WHEN OTHER
-       CALL X"E5"
-       GO TO GB06
-        END-EVALUATE.
-      CALL "CBL_TOUPPER" USING WS-OPTION
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-    IF NOT(WS-OPTION = "A" OR "S")
-        GO TO GB06.
-      PERFORM CLEAR-L50.
-    IF WS-OPTION = "A"
-        MOVE P-NUMBER  TO ORD-CRED
-        MOVE SPACES  TO ORD-EXT-ITEM
-        GO TO GB30.
-      DISPLAY "Order No.   " AT 0804.
+             ACCEPT WS-OPTION AT 0828 WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta UPDATE AUTO.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY  GO TO GB999
+                 WHEN OTHER    PERFORM AA900-ALARM
+                               GO TO GB06
+               END-EVALUATE.
+             CALL "CBL_TOUPPER" USING WS-OPTION BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF NOT(WS-OPTION = "A" OR "S")
+               GO TO GB06.
+             PERFORM CLEAR-L50.
+           IF WS-OPTION = "A"
+               MOVE P-NUMBER         TO ORD-CRED
+               MOVE SPACES           TO ORD-EXT-ITEM
+               GO TO GB30.
+             DISPLAY "Order No.   " AT 1004.
 
        GB10.
-      MOVE ZERO   TO W15-OPREF.
-      DISPLAY  "F2" AT 5002 WITH BACKGROUND-COLOR Cyan
-     FOREGROUND-COLOR Brown HIGHLIGHT
-        "=View Orders or "
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-       "Esc" WITH BACKGROUND-COLOR Cyan
-    FOREGROUND-COLOR Brown HIGHLIGHT
-       "ape to exit"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
-            ACCEPT S21 AT 0817.
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY
-       MOVE ZERO  TO W15-ORD
-       DISPLAY "        " AT 0817
-         WITH FOREGROUND-COLOR Grey HIGHLIGHT
-       BACKGROUND-COLOR Magenta
-   WHEN F2-KEY
-             PERFORM PORDER-LOOKUP
-       IF W15-ORD = ZERO
-    GO TO GB10
-       END-IF
-             DISPLAY S21 AT 0817
-   WHEN OTHER
-       CALL X"E5"
-       GO TO GB10
-        END-EVALUATE.
-          IF W15-OPREF = ZERO
-        GO TO GB00.
-            PERFORM CLEAR-L50.
-      MOVE W15-OPREF  TO ORD-ORD.
-      MOVE ZERO   TO ORD-LINE.
-      PERFORM START-AT-ORDER-NO THRU READ-PORDER-EXIT.
+             MOVE ZERO   TO W15-OPREF.
+             DISPLAY  "F2"                       AT 5002 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                        "=View Orders or "               WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                                        "Esc"            WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                                           "ape to exit" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             ACCEPT S21 AT 1017.
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY  MOVE ZERO  TO W15-ORD
+                               DISPLAY "        " AT 1017 WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey HIGHLIGHT
+                 WHEN F2-KEY   PERFORM PORDER-LOOKUP
+                               IF W15-ORD = ZERO
+                                   GO TO GB10
+                               END-IF
+                               DISPLAY S21 AT 1017
+                 WHEN OTHER    PERFORM AA900-ALARM
+                               GO TO GB10
+               END-EVALUATE.
+           IF W15-OPREF = ZERO
+               GO TO GB00.
+             PERFORM CLEAR-L50.
+             MOVE W15-OPREF          TO ORD-ORD.
+             MOVE ZERO               TO ORD-LINE.
+             PERFORM START-AT-ORDER-NO THRU READ-PORDER-EXIT.
            IF WS-F-ERROR = 16
-              MOVE WS-ER1  TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-              GO TO GB10.
-      PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
-    IF NOT(W15-OPREF = ORD-ORD)
-        MOVE WS-ER1  TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-              GO TO GB10.
-    IF NOT(P-NUMBER = ORD-CRED)
-        MOVE "Invalid order number" TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        GO TO GB10.
-            UNSTRING P-ADDR DELIMITED BY "*"
-           INTO W40-ADD1
-                W40-ADD2
-                W40-ADD3
-                W40-ADD4
-             OVERFLOW
-                 MOVE 1          TO WS-ERROR.
-      MOVE P-TEL   TO W40-TEL.
-      MOVE P-FAX   TO W40-FAX.
+               MOVE WS-ER1           TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO GB10.
+             PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
+           IF NOT(W15-OPREF = ORD-ORD)
+               MOVE WS-ER1           TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO GB10.
+           IF NOT(P-NUMBER = ORD-CRED)
+               MOVE "Invalid order number" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO GB10.
+             UNSTRING P-ADDR DELIMITED BY "*" INTO W40-ADD1 W40-ADD2 W40-ADD3 W40-ADD4
+               OVERFLOW MOVE 1       TO WS-ERROR.
+             MOVE P-TEL              TO W40-TEL.
+             MOVE P-FAX              TO W40-FAX.
 
        GB15.
-      MOVE ORD-ORD  TO W15-OPREF.
-      MOVE ZERO   TO W15-OSUB.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE SPACES  TO R-DET.
-            MOVE "PURCHASE ORDER NUMBER:"
-                                 TO REP-H1.
-      MOVE W15-OPREF  TO REP-REF.
-      MOVE 0   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE W95-COMP  TO REP-EXPNAME.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      MOVE SPACES  TO R-DET.
-            MOVE W95-ADD1  TO REP-NADD.
-          IF W05-VATNO NOT = SPACES
-              MOVE "VAT No/BTW Nr :"
-     TO REP-H2
-              MOVE W05-VATNO  TO REP-GNO.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W95-ADD2  TO REP-NADD.
-          IF W95-TEL NOT = SPACES
-              MOVE "TELEPHONE/FOON:"
-     TO REP-H2
-              MOVE W95-TEL  TO REP-TEL.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-            MOVE W95-ADD3  TO REP-NADD.
-      MOVE "ORD.BY/BEST.DR:"
-     TO REP-H2.
-      MOVE ORD-DRATE  TO USE-NO.
-    IF NOT(USE-NO = ZERO)
-        PERFORM READ-SYSUSER-LOCK THRU READ-SYSUSER-EXIT
-        MOVE USE-NAME  TO W15-USER
-        PERFORM BB010
-        MOVE W10-NAME  TO REP-SMAN.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W95-ADD4  TO REP-NADD.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W95-PC  TO REP-PC.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      MOVE "DATE  :"  TO REP-H14.
-            MOVE ORD-DATE  TO W15-YMD.
-      MOVE W15-DY  TO W15-DD.
-      MOVE W15-MT  TO W15-MM.
-      MOVE W15-CN  TO W15-CC.
-      MOVE W15-YR  TO W15-YY.
-      MOVE W15-DATE  TO REP-DTE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE SPACES  TO R-DET.
-            MOVE P-NAME  TO REP-NAME.
-      MOVE "SUPPLIER NUMBER : "
-     TO REP-H4.
-            MOVE ORD-CRED  TO REP-AC.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W40-ADD1  TO REP-NAME.
-      MOVE "SUPPLIER TEL.NO : "
-     TO REP-H4.
-      MOVE W40-TEL  TO REP-STEL.
-      PERFORM CALL-PRINTUTL.
-            MOVE W40-ADD2  TO REP-NAME.
-      MOVE "SUPPLIER FAX.NO : "
-     TO REP-H4.
-      MOVE W40-FAX  TO REP-STEL.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W40-ADD3  TO REP-NAME.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W40-ADD4  TO REP-NAME.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-            MOVE P-PC   TO REP-PC1.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-      MOVE WS-HDNG  TO O-HDNG.
-      MOVE 0   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-      MOVE SPACES  TO W15-CONTACT.
+             MOVE ORD-ORD            TO W15-OPREF.
+             MOVE ZERO               TO W15-OSUB.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE "PURCHASE ORDER NUMBER:" TO REP-H1.
+             MOVE W15-OPREF          TO REP-REF.
+             MOVE 0                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE W60-COMPANY        TO REP-EXPNAME.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD1           TO REP-NADD.
+           IF W05-VATNO NOT = SPACES
+               MOVE "VAT No/BTW Nr :" TO REP-H2
+               MOVE W05-VATNO        TO REP-GNO.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD2           TO REP-NADD.
+           IF W95-TEL NOT = SPACES
+               MOVE "TELEPHONE/FOON:" TO REP-H2
+               MOVE W95-TEL          TO REP-TEL.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD3           TO REP-NADD.
+             MOVE "ORD.BY/BEST.DR:"  TO REP-H2.
+             MOVE ORD-DRATE          TO USE-NO.
+           IF NOT(USE-NO = ZERO)
+               PERFORM READ-SYSUSER-LOCK THRU READ-SYSUSER-EXIT
+               MOVE USE-NAME         TO W15-USER
+               PERFORM BB010
+               MOVE W10-NAME         TO REP-SMAN.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD4           TO REP-NADD.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-PC             TO REP-PC.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE "DATE  :"          TO REP-H14.
+             MOVE ORD-DATE           TO W15-YMD.
+             MOVE W15-DY             TO W15-DD.
+             MOVE W15-MT             TO W15-MM.
+             MOVE W15-CN             TO W15-CC.
+             MOVE W15-YR             TO W15-YY.
+             MOVE W15-DATE           TO REP-DTE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE P-NAME             TO REP-NAME.
+             MOVE "SUPPLIER NUMBER : " TO REP-H4.
+             MOVE ORD-CRED           TO REP-AC.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W40-ADD1           TO REP-NAME.
+             MOVE "SUPPLIER TEL.NO : " TO REP-H4.
+             MOVE W40-TEL            TO REP-STEL.
+             PERFORM CALL-PRINTUTL.
+             MOVE W40-ADD2           TO REP-NAME.
+             MOVE "SUPPLIER FAX.NO : " TO REP-H4.
+             MOVE W40-FAX            TO REP-STEL.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W40-ADD3           TO REP-NAME.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W40-ADD4           TO REP-NAME.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE P-PC               TO REP-PC1.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE WS-HDNG            TO O-HDNG.
+             MOVE 0                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE SPACES             TO W15-CONTACT.
 
        GB20.
-      MOVE ORD-LINE  TO O-LINE.
-      MOVE ORD-EXT-ITEM  TO O-EXT-ITEM STK-CODE.
-      PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-      MOVE STK-DESC  TO O-DESC.
-      MOVE STK-XREF  TO O-XREF.
-      MOVE ORD-QUANT  TO O-QNT.
-      MOVE ORD-UCOST  TO O-COST.
-      COMPUTE O-EXT = ORD-QUANT * ORD-UCOST.
-      ADD ORD-QUANT  TO W25-V1.
-      COMPUTE W25-V2 = W25-V2 + (ORD-QUANT * ORD-UCOST).
-    IF NOT(ORD-CONTACT = W15-CONTACT)
-        MOVE ORD-CONTACT  TO O-CONTACT W15-CONTACT.
-    IF W02-LINAGE < W02-PRN-LENGTH
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        MOVE ZERO  TO WS-IND
+             MOVE ORD-LINE           TO O-LINE.
+             MOVE ORD-EXT-ITEM       TO O-EXT-ITEM STK-CODE.
+             PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+             MOVE STK-DESC           TO O-DESC.
+             MOVE STK-XREF           TO O-XREF.
+             MOVE ORD-QUANT          TO O-QNT.
+             MOVE ORD-UCOST          TO O-COST.
+             COMPUTE O-EXT = ORD-QUANT * ORD-UCOST.
+             ADD ORD-QUANT           TO W25-V1.
+             COMPUTE W25-V2 = W25-V2 + (ORD-QUANT * ORD-UCOST).
+           IF NOT(ORD-CONTACT = W15-CONTACT)
+               MOVE ORD-CONTACT      TO O-CONTACT W15-CONTACT.
+           IF W02-LINAGE < W02-PRN-LENGTH
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               MOVE ZERO             TO WS-IND
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        MOVE 1   TO WS-IND.
-      MOVE SPACES  TO R-DET.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-     TO R-DET
-              GO TO GB25.
-      PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
-    IF WS-F-ERROR = 16
-        GO TO GB25.
-    IF NOT(W15-OPREF = ORD-ORD)
-        GO TO GB22.
-    IF WS-IND = 1
-        PERFORM GB15.
-      GO TO GB20.
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               MOVE 1                TO WS-IND.
+             MOVE SPACES             TO R-DET.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
+               GO TO GB25.
+             PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
+           IF WS-F-ERROR = 16
+               GO TO GB25.
+           IF NOT(W15-OPREF = ORD-ORD)
+               GO TO GB22.
+           IF WS-IND = 1
+               PERFORM GB15.
+             GO TO GB20.
 
        GB22.
-      MOVE SPACES  TO R-DET.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "**** Total for Order"
-     TO O-DESC.
-      MOVE W25-V1  TO O-QNT.
-      MOVE W25-V2  TO O-EXT.
-      MOVE 0   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE ZERO   TO W25-V1 W25-V2.
+             MOVE SPACES             TO R-DET.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "**** Total for Order" TO O-DESC.
+             MOVE W25-V1             TO O-QNT.
+             MOVE W25-V2             TO O-EXT.
+             MOVE 0                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE ZERO               TO W25-V1 W25-V2.
 
        GB25.
-      MOVE 99   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO WS-COMMAND.
-      GO TO GB00.
+             MOVE 99                 TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO WS-COMMAND.
+             GO TO GB00.
 
        GB30.
-      MOVE SPACES  TO W15-CONTACT.
-      MOVE ZERO   TO WS-PAGE.
-      PERFORM START-AT-ORD-CRED THRU READ-PORDER-EXIT.
-    IF WS-F-ERROR = 16
-        GO TO GB50.
-            UNSTRING P-ADDR DELIMITED BY "*"
-           INTO W40-ADD1
-                W40-ADD2
-                W40-ADD3
-                W40-ADD4
-             OVERFLOW
-                 MOVE 1          TO WS-ERROR.
-      MOVE P-TEL   TO W40-TEL.
-      MOVE P-FAX   TO W40-FAX.
+             MOVE SPACES  TO W15-CONTACT.
+             MOVE ZERO   TO WS-PAGE.
+             PERFORM START-AT-ORD-CRED THRU READ-PORDER-EXIT.
+           IF WS-F-ERROR = 16
+               GO TO GB50.
+             UNSTRING P-ADDR DELIMITED BY "*" INTO W40-ADD1 W40-ADD2 W40-ADD3 W40-ADD4
+               OVERFLOW MOVE 1       TO WS-ERROR.
+             MOVE P-TEL              TO W40-TEL.
+             MOVE P-FAX              TO W40-FAX.
 
        GB35.
-      PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
-    IF WS-F-ERROR = 16
-        GO TO GB50.
-    IF NOT(ORD-CRED = P-NUMBER)
-        GO TO GB50.
-    IF (WS-PAGE = ZERO) OR
-       (WS-IND = 1)
-        PERFORM GB45.
+             PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
+           IF WS-F-ERROR = 16
+               GO TO GB50.
+           IF NOT(ORD-CRED = P-NUMBER)
+               GO TO GB50.
+           IF (WS-PAGE = ZERO) OR (WS-IND = 1)
+               PERFORM GB45.
 
        GB40.
-      MOVE ORD-ORD  TO O2-ORD.
-      MOVE "/"   TO O2-SL.
-      MOVE ORD-LINE  TO O2-LINE.
-      MOVE ORD-EXT-ITEM  TO O2-EXT-ITEM STK-CODE.
-      PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-      MOVE STK-XREF  TO O2-XREF.
-      MOVE STK-DESC  TO O2-DESC.
-      MOVE ORD-QUANT  TO O2-QNT.
-      MOVE ORD-UCOST  TO O2-COST.
-      COMPUTE O2-EXT = ORD-QUANT * ORD-UCOST.
-      MOVE ORD-DRATE  TO USE-NO.
-      ADD ORD-QUANT  TO W25-V1.
-      COMPUTE W25-V2 = W25-V2 + (ORD-QUANT * ORD-UCOST).
-    IF NOT(USE-NO = ZERO)
-        PERFORM READ-SYSUSER-LOCK THRU READ-SYSUSER-EXIT
-        MOVE USE-NAME  TO W15-NAME
-        PERFORM BB010
-        IF NOT(W10-NAME = W15-CONTACT)
-     MOVE W10-NAME TO O2-SMAN W15-CONTACT.
-    IF W02-LINAGE < W02-PRN-LENGTH
-        MOVE 1   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        MOVE ZERO  TO WS-IND
+             MOVE ORD-ORD            TO O2-ORD.
+             MOVE "/"                TO O2-SL.
+             MOVE ORD-LINE           TO O2-LINE.
+             MOVE ORD-EXT-ITEM       TO O2-EXT-ITEM STK-CODE.
+             PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+             MOVE STK-XREF           TO O2-XREF.
+             MOVE STK-DESC           TO O2-DESC.
+             MOVE ORD-QUANT          TO O2-QNT.
+             MOVE ORD-UCOST          TO O2-COST.
+             COMPUTE O2-EXT = ORD-QUANT * ORD-UCOST.
+             MOVE ORD-DRATE          TO USE-NO.
+             ADD ORD-QUANT           TO W25-V1.
+             COMPUTE W25-V2 = W25-V2 + (ORD-QUANT * ORD-UCOST).
+           IF NOT(USE-NO = ZERO)
+               PERFORM READ-SYSUSER-LOCK THRU READ-SYSUSER-EXIT
+               MOVE USE-NAME         TO W15-NAME
+               PERFORM BB010
+               IF NOT(W10-NAME = W15-CONTACT)
+             MOVE W10-NAME           TO O2-SMAN W15-CONTACT.
+           IF W02-LINAGE < W02-PRN-LENGTH
+               MOVE 1                TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
+               MOVE ZERO             TO WS-IND
            ELSE
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
-        MOVE 1   TO WS-IND.
-      MOVE SPACES  TO R-DET.
-      PERFORM PRINT-ABORT.
-    IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
-              MOVE "**** PRINT ABORTED BY OPERATOR ****"
-                                 TO R-DET
-        MOVE SPACES  TO WS-COMMAND
-              GO TO GB55.
-      GO TO GB35.
+             MOVE 99                 TO WS-ADVANCE
+             PERFORM CALL-PRINTUTL
+             MOVE 1                  TO WS-IND.
+             MOVE SPACES             TO R-DET.
+             PERFORM PRINT-ABORT.
+           IF (WS-OPTION = "Y") OR (WS-COMMAND = "Z")
+               MOVE "**** PRINT ABORTED BY OPERATOR ****" TO R-DET
+               MOVE SPACES           TO WS-COMMAND
+               GO TO GB55.
+             GO TO GB35.
 
        GB45.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE SPACES  TO R-DET.
-            MOVE "OUTSTANDING ORDERS"
-                                 TO REP-H1.
-      PERFORM CALL-PRINTUTL.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE W95-COMP  TO REP-EXPNAME.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      MOVE SPACES  TO R-DET.
-            MOVE W95-ADD1  TO REP-NADD.
-          IF W05-VATNO NOT = SPACES
-              MOVE "VAT No/BTW Nr :"
-     TO REP-H2
-              MOVE W05-VATNO  TO REP-GNO.
-            MOVE WS-H3   TO O2-PAGE.
-            ADD 1   TO WS-PAGE.
-            MOVE WS-PAGE  TO O2-PGNO.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W95-ADD2  TO REP-NADD.
-          IF W95-TEL NOT = SPACES
-              MOVE "TELEPHONE/FOON:"
-     TO REP-H2
-              MOVE W95-TEL  TO REP-TEL.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-            MOVE W95-ADD3  TO REP-NADD.
-      PERFORM CALL-PRINTUTL.
-            MOVE W95-ADD4  TO REP-NADD.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W95-PC  TO REP-PC.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      MOVE "DATE  :"  TO REP-H14.
-            MOVE ORD-DATE  TO W15-YMD.
-      MOVE W15-DY  TO W15-DD.
-      MOVE W15-MT  TO W15-MM.
-      MOVE W15-CN  TO W15-CC.
-      MOVE W15-YR  TO W15-YY.
-      MOVE W15-DATE  TO REP-DTE.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE SPACES  TO R-DET.
-            MOVE P-NAME  TO REP-NAME.
-      MOVE "SUPPLIER NUMBER : "
-     TO REP-H4.
-            MOVE ORD-CRED  TO REP-AC.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W40-ADD1  TO REP-NAME.
-      MOVE "SUPPLIER TEL.NO : "
-     TO REP-H4.
-      MOVE W40-TEL  TO REP-STEL.
-      PERFORM CALL-PRINTUTL.
-            MOVE W40-ADD2  TO REP-NAME.
-      MOVE "SUPPLIER FAX.NO : "
-     TO REP-H4.
-      MOVE W40-FAX  TO REP-STEL.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W40-ADD3  TO REP-NAME.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W40-ADD4  TO REP-NAME.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-            MOVE P-PC   TO REP-PC1.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-      MOVE WS-HDNG2  TO O2-HDNG.
-      MOVE 0   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE "OUTSTANDING ORDERS" TO REP-H1.
+             PERFORM CALL-PRINTUTL.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE W60-COMPANY        TO REP-EXPNAME.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD1           TO REP-NADD.
+           IF W05-VATNO NOT = SPACES
+               MOVE "VAT No/BTW Nr :" TO REP-H2
+               MOVE W05-VATNO        TO REP-GNO.
+             MOVE WS-H3              TO O2-PAGE.
+             ADD 1                   TO WS-PAGE.
+             MOVE WS-PAGE            TO O2-PGNO.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD2           TO REP-NADD.
+           IF W95-TEL NOT = SPACES
+               MOVE "TELEPHONE/FOON:" TO REP-H2
+               MOVE W95-TEL          TO REP-TEL.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD3           TO REP-NADD.
+             PERFORM CALL-PRINTUTL.
+             MOVE W95-ADD4           TO REP-NADD.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-PC             TO REP-PC.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE "DATE  :"          TO REP-H14.
+             MOVE ORD-DATE           TO W15-YMD.
+             MOVE W15-DY             TO W15-DD.
+             MOVE W15-MT             TO W15-MM.
+             MOVE W15-CN             TO W15-CC.
+             MOVE W15-YR             TO W15-YY.
+             MOVE W15-DATE           TO REP-DTE.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE P-NAME             TO REP-NAME.
+             MOVE "SUPPLIER NUMBER : " TO REP-H4.
+             MOVE ORD-CRED           TO REP-AC.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W40-ADD1           TO REP-NAME.
+             MOVE "SUPPLIER TEL.NO : " TO REP-H4.
+             MOVE W40-TEL            TO REP-STEL.
+             PERFORM CALL-PRINTUTL.
+             MOVE W40-ADD2           TO REP-NAME.
+             MOVE "SUPPLIER FAX.NO : " TO REP-H4.
+             MOVE W40-FAX            TO REP-STEL.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W40-ADD3           TO REP-NAME.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W40-ADD4           TO REP-NAME.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE P-PC               TO REP-PC1.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE WS-HDNG2           TO O2-HDNG.
+             MOVE 0                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
 
        GB50.
-    IF WS-PAGE = ZERO
-        MOVE "No outstanding orders" TO WS-ERR-MES
-              PERFORM ERROR-MESSAGE
-        GO TO GB00.
-      MOVE SPACES  TO R-DET.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "**** Total for Supplier"
-     TO O-DESC.
-      MOVE W25-V1  TO O-QNT.
-      MOVE W25-V2  TO O-EXT.
-      MOVE 0   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE ZERO   TO W25-V1 W25-V2.
+           IF WS-PAGE = ZERO
+               MOVE "No outstanding orders" TO WS-ERR-MES
+               PERFORM ERROR-MESSAGE
+               GO TO GB00.
+             MOVE SPACES             TO R-DET.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "**** Total for Supplier" TO O-DESC.
+             MOVE W25-V1             TO O-QNT.
+             MOVE W25-V2             TO O-EXT.
+             MOVE 0                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE ZERO               TO W25-V1 W25-V2.
 
        GB55.
-            MOVE SPACES  TO R-DET
-      MOVE 99   TO WS-ADVANCE
-      PERFORM CALL-PRINTUTL
-            GO TO GB00.
+             MOVE SPACES             TO R-DET
+             MOVE 99                 TO WS-ADVANCE
+             PERFORM CALL-PRINTUTL
+             GO TO GB00.
 
        GB999.
              EXIT.
@@ -1638,72 +1609,71 @@
       /
        PORDER-LOOKUP  SECTION 5.
        PORDER-LUP-SCREEN.
-            PERFORM SAVE-SCREEN.
-      DISPLAY S-POR.
+             PERFORM SAVE-SCREEN.
+             DISPLAY S-POR.
 
-       PORDER-LUP-PERFORM ERASE-SCREEN.
-      MOVE 0909   TO CPOS.
-      PERFORM PORDER-CRT-EDGE UNTIL CLIN = 21.
-      MOVE 7   TO SHADE-ROW.
-      MOVE 11   TO SHADE-COL.
-      MOVE 66   TO SHADE-WIDTH.
-      MOVE 15   TO SHADE-LINES.
-      PERFORM SCREEN-SHADOW.
-            PERFORM CLEAR-L50.
-            MOVE 9   TO CLIN.
-            MOVE 1   TO W75-S W75-S1.
+       PORDER-LUP-CLR-SCREEN.
+             DISPLAY S-DET.
+             MOVE 8                  TO SHADE-ROW.
+             MOVE 9                  TO SHADE-COL.
+             MOVE 68                 TO SHADE-WIDTH.
+             MOVE 36                 TO SHADE-LINES.
+             PERFORM SCREEN-SHADOW.
+             PERFORM CLEAR-L50.
+             MOVE 11                 TO CLIN.
+             MOVE 1                  TO W75-S W75-S1.
 
        PORDER-LUP-TAB-LOOP.
-      MOVE ZEROES  TO W75-POR (W75-S1).
-           IF W75-S1 < 18
-               ADD 1             TO W75-S1
-        GO TO PORDER-LUP-TAB-LOOP.
-             MOVE ZERO           TO W75-S1.
-      MOVE P-NUMBER  TO ORD-CRED.
-      PERFORM START-AT-ORD-CRED THRU READ-PORDER-EXIT.
-    IF WS-F-ERROR = 16
-        GO TO PORDER-NO-RECORD.
+             MOVE ZEROES  TO W75-POR (W75-S1).
+           IF W75-S1 < 32
+               ADD 1                 TO W75-S1
+               GO TO PORDER-LUP-TAB-LOOP.
+             MOVE ZERO               TO W75-S1.
+             MOVE P-NUMBER           TO ORD-CRED.
+             PERFORM START-AT-ORD-CRED THRU READ-PORDER-EXIT.
+           IF WS-F-ERROR = 16
+               GO TO PORDER-NO-RECORD.
 
        PORDER-GET-ORD-RECORD.
-    IF WS-OPTION = "J"
-               MOVE SPACE        TO WS-OPTION
-        GO TO PORDER-SKIP-ORD-READ.
-            PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
-    IF WS-F-ERROR = 16
-               SUBTRACT 1        FROM W75-S
-        GO TO PORDER-FULL-SCREEN.
-    IF NOT(ORD-CRED = P-NUMBER)
-        SUBTRACT 1  FROM W75-S
-        GO TO PORDER-FULL-SCREEN.
+           IF WS-OPTION = "J"
+               MOVE SPACE            TO WS-OPTION
+               GO TO PORDER-SKIP-ORD-READ.
+             PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
+           IF WS-F-ERROR = 16
+               SUBTRACT 1            FROM W75-S
+               GO TO PORDER-FULL-SCREEN.
+           IF NOT(ORD-CRED = P-NUMBER)
+               SUBTRACT 1            FROM W75-S
+               GO TO PORDER-FULL-SCREEN.
 
        PORDER-SKIP-ORD-READ.
-      MOVE ORD-KEY  TO W75-CODE (W75-S).
-      MOVE ORD-EXT-ITEM  TO STK-CODE.
-      PERFORM READ-STOCK THRU READ-STOCK-EXIT.
-    IF WS-F-ERROR = 22
-        SUBTRACT 1  FROM W75-S
-        GO TO PORDER-GET-ORD-RECORD.
-      DISPLAY SD-POR AT LINE CLIN.
-          IF CLIN < 20
-               ADD 1 TO CLIN W75-S
-              GO TO PORDER-GET-ORD-RECORD.
+             MOVE ORD-KEY            TO W75-CODE (W75-S).
+             MOVE ORD-EXT-ITEM       TO STK-CODE.
+             PERFORM READ-STOCK THRU READ-STOCK-EXIT.
+           IF WS-F-ERROR = 22
+               SUBTRACT 1            FROM W75-S
+               GO TO PORDER-GET-ORD-RECORD.
+             DISPLAY SD-POR AT LINE CLIN.
+           IF CLIN < 42
+               ADD 1                 TO CLIN W75-S
+               GO TO PORDER-GET-ORD-RECORD.
 
        PORDER-FULL-SCREEN.
-            DISPLAY " " AT 5003 WITH FOREGROUND-COLOR Brown HIGHLIGHT
-             " highlight - " WITH FOREGROUND-COLOR Grey
-       "PgUp" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-                     "/" WITH FOREGROUND-COLOR Grey
-       "PgDn" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       " - " WITH FOREGROUND-COLOR Grey
-             "ENTER" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-             " select - " WITH FOREGROUND-COLOR Grey
-             "Esc" WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "ape" WITH FOREGROUND-COLOR Grey.
+            DISPLAY " "                                     AT 5003 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                         " highlight - "                                  WITH FOREGROUND-COLOR Grey
+                                      "PgUp"                              WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                                          "/"                             WITH FOREGROUND-COLOR Grey
+                                           "PgDn"                         WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                                               " - "                      WITH FOREGROUND-COLOR Grey
+                                                  "ENTER"                 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                                                       " select - "       WITH FOREGROUND-COLOR Grey
+                                                                 "Esc"    WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                                                                    "ape" WITH FOREGROUND-COLOR Grey.
 
-       PORDER-SAVE-FULL-SCREEN.
-      PERFORM SAVE-SCREEN-2.
-      MOVE 0   TO W75-S1.
-      MOVE 0910   TO CPOS.
+             PORDER-SAVE-FULL-SCREEN.
+             PERFORM SAVE-SCREEN-2.
+             MOVE 0                  TO W75-S1.
+             MOVE 0910               TO CPOS.
 
        PORDER-CRT-ATTRIB.
              MOVE 3920               TO W41-LENGTH.
@@ -1711,112 +1681,93 @@
              MOVE 4000               TO W41-LENGTH.
 
        PORDER-GET-USER-OPT.
-      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-      PERFORM CLEAR-L50.
-    IF ADIS-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN UP-KEY
-       GO TO PORDER-ADJ-NO-KEYS
-   WHEN DOWN-KEY
-             GO TO PORDER-CHK-NO-KEYS
-   WHEN ENTER-KEY
-   WHEN CR-KEY
-       GO TO PORDER-CHK-SELECT
-   WHEN OTHER  CALL X"E5"
-        END-EVALUATE
-        GO TO PORDER-GET-USER-OPT
-    ELSE
-    IF USER-FUNC
-        EVALUATE KEY-CODE-1
-   WHEN ESC-KEY
-       MOVE SPACES TO W15-ACNO
-       GO TO PORDER-RESTORE-SCREEN
-   WHEN PAGE-DOWN
-             GO TO PORDER-GET-NEXT-PAGE
-   WHEN PAGE-UP
-             GO TO PORDER-GET-PREV-PAGE
-   WHEN OTHER  CALL X"E5"
-        END-EVALUATE
-        GO TO PORDER-GET-USER-OPT.
-      CALL X"E5".
-            GO TO PORDER-GET-USER-OPT.
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             PERFORM CLEAR-L50.
+           IF ADIS-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN UP-KEY    GO TO PORDER-ADJ-NO-KEYS
+                 WHEN DOWN-KEY  GO TO PORDER-CHK-NO-KEYS
+                 WHEN ENTER-KEY
+                 WHEN CR-KEY    GO TO PORDER-CHK-SELECT
+                 WHEN OTHER     PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO PORDER-GET-USER-OPT
+           ELSE
+           IF USER-FUNC
+               EVALUATE KEY-CODE-1
+                 WHEN ESC-KEY   MOVE SPACES TO W15-ACNO
+                                GO TO PORDER-RESTORE-SCREEN
+                 WHEN PAGE-DOWN GO TO PORDER-GET-NEXT-PAGE
+                 WHEN PAGE-UP   GO TO PORDER-GET-PREV-PAGE
+                 WHEN OTHER     PERFORM AA900-ALARM
+               END-EVALUATE
+               GO TO PORDER-GET-USER-OPT.
+             PERFORM AA900-ALARM.
+             GO TO PORDER-GET-USER-OPT.
 
        PORDER-GET-NEXT-PAGE.
-    IF W75-S < 12
-        GO TO PORDER-GET-USER-OPT.
+           IF W75-S < 12
+               GO TO PORDER-GET-USER-OPT.
 
        PORDER-NEW-PAGE.
-      MOVE 0909   TO CPOS.
-      PERFORM PORDER-CRT-EDGE UNTIL CLIN = 21.
-      MOVE 9   TO CLIN.
-      MOVE LOW-VALUES  TO W75-KEYS.
-      MOVE 1   TO W75-S W75-S1.
-      PERFORM PORDER-LUP-TAB-LOOP.
-            GO TO PORDER-GET-ORD-RECORD.
+             MOVE 0909               TO CPOS.
+             DISPLAY S-DET.
+             MOVE 11                 TO CLIN.
+             MOVE LOW-VALUES         TO W75-KEYS.
+             MOVE 1                  TO W75-S W75-S1.
+             PERFORM PORDER-LUP-TAB-LOOP.
+             GO TO PORDER-GET-ORD-RECORD.
 
        PORDER-GET-PREV-PAGE.
-             MOVE 1              TO WS-IXS1.
+             MOVE 1                  TO WS-IXS1.
       *
       *    ****    SET OPTION TO BYPASS THE READ NEXT
       *
-             MOVE "J"            TO WS-OPTION.
+             MOVE "J"                TO WS-OPTION.
 
        PORDER-GET-PREV-LOOP.
-      PERFORM READ-PORDER-PREV THRU READ-PORDER-EXIT.
-    IF WS-F-ERROR = 16
-        MOVE SPACE  TO WS-OPTION
-        GO TO PORDER-NEW-PAGE.
-    IF WS-IXS1 < 24
-               ADD 1             TO WS-IXS1
-        GO TO PORDER-GET-PREV-LOOP.
-      GO TO PORDER-NEW-PAGE.
-
-
-      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-      GO TO PORDER-RESTORE-SCREEN.
+             PERFORM READ-PORDER-PREV THRU READ-PORDER-EXIT.
+           IF WS-F-ERROR = 16
+               MOVE SPACE            TO WS-OPTION
+               GO TO PORDER-NEW-PAGE.
+           IF WS-IXS1 < 24
+               ADD 1                 TO WS-IXS1
+               GO TO PORDER-GET-PREV-LOOP.
+             GO TO PORDER-NEW-PAGE.
 
        PORDER-NO-RECORD.
-            DISPLAY "No outstandig orders - Press " AT 5012
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
-       "ANY" WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
-       " key"
-        WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
-      CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
-      GO TO PORDER-RESTORE-SCREEN.
+            DISPLAY "No outstandig orders - Press " AT 5012 WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue
+                                                 "ANY"      WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Brown HIGHLIGHT
+                                                    " key"  WITH BACKGROUND-COLOR Cyan FOREGROUND-COLOR Blue.
+             CALL X"AF" USING GET-SINGLE-CHAR, KEY-STATUS.
+             GO TO PORDER-RESTORE-SCREEN.
 
        PORDER-ADJ-NO-KEYS.
            IF W75-S1 > 1
-               SUBTRACT 1 FROM W75-S1 CLIN.
-      GO TO PORDER-HIGHLIGHT.
+               SUBTRACT 1            FROM W75-S1 CLIN.
+               GO TO PORDER-HIGHLIGHT.
 
        PORDER-CHK-NO-KEYS.
-    IF W75-S1 = ZERO
-        MOVE 1   TO W75-S1
-        GO TO PORDER-HIGHLIGHT.
+           IF W75-S1 = ZERO
+               MOVE 1                TO W75-S1
+               GO TO PORDER-HIGHLIGHT.
            IF W75-S1 < W75-S
-        ADD 1   TO W75-S1 CLIN.
+               ADD 1                 TO W75-S1 CLIN.
 
        PORDER-HIGHLIGHT.
-      PERFORM PORDER-CRT-ATTRIB.
-      DISPLAY W43-DET2 (CLIN) AT CPOS
-       WITH BACKGROUND-COLOR Magenta
-     FOREGROUND-COLOR Grey.
-      GO TO PORDER-GET-USER-OPT.
+             PERFORM PORDER-CRT-ATTRIB.
+             DISPLAY W43-DET2 (CLIN) AT CPOS WITH BACKGROUND-COLOR Magenta FOREGROUND-COLOR Grey.
+             GO TO PORDER-GET-USER-OPT.
 
        PORDER-CHK-SELECT.
            IF W75-S1 = ZERO
-        GO TO PORDER-GET-USER-OPT.
-      MOVE CSTART  TO WS1-CURSOR.
-      MOVE W75-CODE (W75-S1)
-     TO ORD-KEY.
-      PERFORM READ-PORDER THRU READ-PORDER-EXIT.
-      MOVE ZERO   TO COL-AND-LINE.
-      MOVE ORD-KEY  TO W15-ORD.
-      GO TO PORDER-RESTORE-SCREEN.
-
-       PORDER-CRT-EDGE.
-            DISPLAY "³           ³              ³                              ³        ³" AT CPOS WITH BACKGROUND-COLOR Grey FOREGROUND-COLOR Black
-            ADD 1   TO CLIN.
+               GO TO PORDER-GET-USER-OPT.
+             MOVE CSTART             TO WS1-CURSOR.
+             MOVE W75-CODE(W75-S1)   TO ORD-KEY.
+             PERFORM READ-PORDER THRU READ-PORDER-EXIT.
+             MOVE ZERO               TO COL-AND-LINE.
+             MOVE ORD-KEY            TO W15-ORD.
+             GO TO PORDER-RESTORE-SCREEN.
 
        PORDER-RESTORE-SCREEN.
             PERFORM RESTORE-SCREEN.
@@ -1826,68 +1777,62 @@
 
        GC000      SECTION 5.
        GC00.
-      DISPLAY "Creditor" AT 0812.
-      DISPLAY "A" AT 1012
-        WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "ll or " "S"
-        WITH FOREGROUND-COLOR Brown HIGHLIGHT
-       "elective".
-      MOVE "A"   TO WS-SEQ.
+             DISPLAY "Creditor" AT 0812.
+             DISPLAY "A"           AT 1012 WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                      "ll or " "S"         WITH FOREGROUND-COLOR Brown HIGHLIGHT
+                                "elective".
+             MOVE "A"                TO WS-SEQ.
 
        GC02.
-      ACCEPT WS-SEQ AT 1029
-      WITH FOREGROUND-COLOR Grey HIGHLIGHT
-    BACKGROUND-COLOR Magenta UPDATE AUTO.
-      CALL "CBL_TOUPPER" USING WS-SEQ
-    BY VALUE WS-LENGTH
-    RETURNING WS-STATUS.
-    IF NOT(WS-SEQ = "A" OR "S")
-        GO TO GC02.
-      DISPLAY WS-BLNK78 AT 1002 WITH FOREGROUND-COLOR Cyan.
-      MOVE ZERO   TO W25-V1 W25-V2 W25-TV1 W25-TV2.
-    IF WS-SEQ = "S"
-        GO TO GC16.
-      MOVE "     !"  TO ORD-CRED.
+             ACCEPT WS-SEQ AT 1029
+             WITH FOREGROUND-COLOR Grey HIGHLIGHT BACKGROUND-COLOR Magenta UPDATE AUTO.
+             CALL "CBL_TOUPPER" USING WS-SEQ BY VALUE WS-LENGTH RETURNING WS-STATUS.
+           IF NOT(WS-SEQ = "A" OR "S")
+               GO TO GC02.
+             DISPLAY WS-BLNK78 AT 1002 WITH FOREGROUND-COLOR Cyan.
+             MOVE ZERO   TO W25-V1 W25-V2 W25-TV1 W25-TV2.
+           IF WS-SEQ = "S"
+               GO TO GC16.
+             MOVE "     !"           TO ORD-CRED.
             PERFORM START-AT-ORD-CRED THRU READ-PORDER-EXIT.
           IF NOT(WS-F-ERROR = ZERO)
               GO TO GC20.
-             MOVE SPACES         TO W15-ACNO.
-      MOVE ZERO   TO WS-IND.
+             MOVE SPACES             TO W15-ACNO.
+             MOVE ZERO               TO WS-IND.
 
        GC05.
              PERFORM READ-PORDER-NEXT THRU READ-PORDER-EXIT.
            IF NOT(WS-F-ERROR = ZERO)
       *    *************************************************************
-      *    ****   PERFORM Print the Supplier Totals.     ****
+      *    ****         PERFORM Print the Supplier Totals.          ****
       *    *************************************************************
-        PERFORM GC06
-              MOVE SPACES  TO R-DET
-        MOVE 99   TO WS-ADVANCE
-        PERFORM CALL-PRINTUTL
+               PERFORM GC06
+               MOVE SPACES           TO R-DET
+               MOVE 99               TO WS-ADVANCE
+               PERFORM CALL-PRINTUTL
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-      *    ³  If printing all suppliers, print the grand totals.    ³
+      *    ³     If printing all suppliers, print the grand totals.    ³
       *    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-        IF WS-SEQ = "A"
-     PERFORM GC10
-     MOVE SPACES  TO R-DET
-     MOVE WS-HDNG2 TO O2-HDNG
-     MOVE 0  TO WS-ADVANCE
-     PERFORM CALL-PRINTUTL
-     MOVE 2  TO WS-ADVANCE
-     PERFORM CALL-PRINTUTL
-     MOVE SPACES  TO R-DET
-     MOVE "**** Total purchase orders"
-     TO O2-DESC
-     MOVE W25-TV1  TO O2-QNT
-     MOVE W25-TV2  TO O2-EXT
-     MOVE 0  TO WS-ADVANCE
-     PERFORM CALL-PRINTUTL
-     MOVE 99  TO WS-ADVANCE
-     PERFORM CALL-PRINTUTL
-        END-IF
-              GO TO GC999.
+               IF WS-SEQ = "A"
+                   PERFORM GC10
+                   MOVE SPACES       TO R-DET
+                   MOVE WS-HDNG2     TO O2-HDNG
+                   MOVE 0            TO WS-ADVANCE
+                   PERFORM CALL-PRINTUTL
+                   MOVE 2            TO WS-ADVANCE
+                   PERFORM CALL-PRINTUTL
+                   MOVE SPACES       TO R-DET
+                   MOVE "**** Total purchase orders" TO O2-DESC
+                   MOVE W25-TV1      TO O2-QNT
+                   MOVE W25-TV2      TO O2-EXT
+                   MOVE 0            TO WS-ADVANCE
+                   PERFORM CALL-PRINTUTL
+                   MOVE 99           TO WS-ADVANCE
+                   PERFORM CALL-PRINTUTL
+               END-IF
+               GO TO GC999.
            IF ORD-CRED = W15-ACNO
-        GO TO GC15.
+               GO TO GC15.
 
        GC06.
     IF NOT(W15-ACNO = SPACES)
@@ -1943,68 +1888,65 @@
                  MOVE 1          TO WS-ERROR.
 
        GC10.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE SPACES  TO R-DET.
-            MOVE "OUTSTANDING ORDERS"
-                                 TO REP-H1.
-      PERFORM CALL-PRINTUTL.
-      MOVE 2   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE W95-COMP  TO REP-EXPNAME.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      MOVE SPACES  TO R-DET.
-            MOVE W95-ADD1  TO REP-NADD.
-          IF W05-VATNO NOT = SPACES
-              MOVE "VAT No/BTW Nr :"
-     TO REP-H2
-              MOVE W05-VATNO  TO REP-GNO.
-            MOVE WS-H3   TO O2-PAGE.
-            ADD 1   TO WS-PAGE.
-            MOVE WS-PAGE  TO O2-PGNO.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W95-ADD2  TO REP-NADD.
-          IF W95-TEL NOT = SPACES
-              MOVE "TELEPHONE/FOON:"
-     TO REP-H2
-              MOVE W95-TEL  TO REP-TEL.
-      PERFORM CALL-PRINTUTL.
-      MOVE SPACES  TO R-DET.
-            MOVE W95-ADD3  TO REP-NADD.
-      PERFORM CALL-PRINTUTL.
-            MOVE W95-ADD4  TO REP-NADD.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-            MOVE W95-PC  TO REP-PC.
-      PERFORM CALL-PRINTUTL.
-            MOVE SPACES  TO R-DET.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "E"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-      MOVE "DATE  :"  TO REP-H14.
-            MOVE ORD-DATE  TO W15-YMD.
-      MOVE W15-DY  TO W15-DD.
-      MOVE W15-MT  TO W15-MM.
-      MOVE W15-CN  TO W15-CC.
-      MOVE W15-YR  TO W15-YY.
-      MOVE W15-DATE  TO REP-DTE.
-      MOVE 1   TO WS-ADVANCE.
-      PERFORM CALL-PRINTUTL.
-      MOVE 0   TO WS-ADVANCE.
-      MOVE "X"   TO W02-PRN-TYPE.
-      PERFORM CALL-PRINTUTL.
-      MOVE "D"   TO W02-PRN-TYPE.
-            MOVE SPACES  TO R-DET.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE "OUTSTANDING ORDERS" TO REP-H1.
+             PERFORM CALL-PRINTUTL.
+             MOVE 2                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE W60-COMPANY        TO REP-EXPNAME.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD1           TO REP-NADD.
+           IF W05-VATNO NOT = SPACES
+               MOVE "VAT No/BTW Nr :" TO REP-H2
+               MOVE W05-VATNO        TO REP-GNO.
+             MOVE WS-H3              TO O2-PAGE.
+             ADD 1                   TO WS-PAGE.
+             MOVE WS-PAGE            TO O2-PGNO.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD2           TO REP-NADD.
+           IF W95-TEL NOT = SPACES
+               MOVE "TELEPHONE/FOON:" TO REP-H2
+               MOVE W95-TEL          TO REP-TEL.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-ADD3           TO REP-NADD.
+             PERFORM CALL-PRINTUTL.
+             MOVE W95-ADD4           TO REP-NADD.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE W95-PC             TO REP-PC.
+             PERFORM CALL-PRINTUTL.
+             MOVE SPACES             TO R-DET.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "E"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE "DATE  :"          TO REP-H14.
+             MOVE ORD-DATE           TO W15-YMD.
+             MOVE W15-DY             TO W15-DD.
+             MOVE W15-MT             TO W15-MM.
+             MOVE W15-CN             TO W15-CC.
+             MOVE W15-YR             TO W15-YY.
+             MOVE W15-DATE           TO REP-DTE.
+             MOVE 1                  TO WS-ADVANCE.
+             PERFORM CALL-PRINTUTL.
+             MOVE 0                  TO WS-ADVANCE.
+             MOVE "X"                TO W02-PRN-TYPE.
+             PERFORM CALL-PRINTUTL.
+             MOVE "D"                TO W02-PRN-TYPE.
+             MOVE SPACES             TO R-DET.
 
        GC12.
             MOVE P-NAME  TO REP-NAME.
@@ -2088,7 +2030,7 @@
         EVALUATE KEY-CODE-1
    WHEN ESC-KEY  GO TO GC999
    WHEN OTHER
-       CALL X"E5"
+       PERFORM AA900-ALARM
        GO TO GC17
         END-EVALUATE.
       MOVE 6   TO WS-LENGTH.
@@ -2131,17 +2073,17 @@
        GC999.
              EXIT.
 
-      /
+      *    *************************************************************
+      *                 I N I T I A L I S E   P R O G R A M
+      *    *************************************************************
        ZA000-INIT    SECTION 8.
        ZA000-START.
-             PERFORM ZA55 THRU ZA60.
-      MOVE LS-PARID  TO WS-PARID.
-      MOVE LS-L-OR-N  TO W02-L-OR-N.
-      MOVE WS-SYS-ID  TO W02-SYSID.
-      MOVE LS-TODAY-DDMMYY
-     TO TODAY-DDMMYY.
-      MOVE LS-USUB  TO WS-USUB.
-            PERFORM ERASE-SCREEN.
+             MOVE LS-PARID           TO WS-PARID.
+             MOVE LS-TODAY-DDMMYY    TO TODAY-DDMMYY W12-TODAY.
+             MOVE LS-USUB            TO WS-USUB.
+             MOVE LS-COMPANY         TO CRT-COMPANY W60-COMPANY.
+             MOVE LS-TERMINAL        TO CRT-TERMINAL.
+             PERFORM HEADING-AND-CLEAR-SCREEN.      
       *    ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
       *    ³  Setup various keys and the mouse for use with menus and  ³
       *    ³  other required user interface functions and procedures.  ³
@@ -2150,45 +2092,45 @@
              COPY "FUNCTION.PRO".
 
        ZA05.
-             MOVE LS-COMPANY     TO W60-COMPANY W95-COMP.
-             MOVE 1              TO WS-PARKEY.
+             MOVE 1                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-TELEPHONE  TO W95-TEL.
-            ADD 1   TO WS-PARKEY.
+             MOVE PAR-TELEPHONE      TO W95-TEL.
+             ADD 1                   TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-             MOVE PAR-ADDRESS1   TO W95-ADD1.
-             MOVE PAR-ADDRESS2   TO W95-ADD2.
-             MOVE PAR-ADDRESS3   TO W95-ADD3.
-             MOVE PAR-ADDRESS4   TO W95-ADD4.
-             MOVE PAR-POST-CDE   TO W95-POST.
+             MOVE PAR-ADDRESS1       TO W95-ADD1.
+             MOVE PAR-ADDRESS2       TO W95-ADD2.
+             MOVE PAR-ADDRESS3       TO W95-ADD3.
+             MOVE PAR-ADDRESS4       TO W95-ADD4.
+             MOVE PAR-POST-CDE       TO W95-POST.
            IF W95-ADD4 = SPACES
-               MOVE W95-PC       TO W95-ADD4
-               MOVE SPACES       TO W95-PC.
+               MOVE W95-PC           TO W95-ADD4
+               MOVE SPACES           TO W95-PC.
            IF W95-ADD3 = SPACES
-               MOVE W95-ADD4     TO W95-ADD3
-               MOVE SPACES       TO W95-ADD4.
+               MOVE W95-ADD4         TO W95-ADD3
+               MOVE SPACES           TO W95-ADD4.
            IF W95-ADD2 = SPACES
-               MOVE W95-ADD3     TO W95-ADD2
-               MOVE SPACES       TO W95-ADD3.
+               MOVE W95-ADD3         TO W95-ADD2
+               MOVE SPACES           TO W95-ADD3.
            IF W95-ADD1 = SPACES
-               MOVE W95-ADD2     TO W95-ADD1
-               MOVE SPACES       TO W95-ADD2.
-            MOVE 3   TO WS-PARKEY.
+               MOVE W95-ADD2         TO W95-ADD1
+               MOVE SPACES           TO W95-ADD2.
+             MOVE 3                  TO WS-PARKEY.
              PERFORM READ-PARAM THRU READ-PARAM-EXIT.
-            MOVE PAR-VAT-REG  TO W05-VATNO.
-      MOVE 2   TO WS-NETKEY.
+             MOVE PAR-VAT-REG  TO W05-VATNO.
+             MOVE 2                  TO WS-NETKEY.
              PERFORM READ-CONTROL THRU READ-CONTROL-EXIT.
-            PERFORM ERASE-SCREEN.
+             PERFORM CHANGE-TIME.
              GO TO ZA999-EXIT.
 
-       COPY "ZA49.PRO".
+      *COPY "ZA49.PRO".
+      *
+      *ZA200.
+      *
+      *COPY "LOCKED.PRO".
+      *
+      *ZA205.
+      *      EXIT PROGRAM.
 
-       ZA200.
-
-       COPY "LOCKED.PRO".
-
-      ZA205.
-             EXIT PROGRAM.
        ZA999-EXIT.
              EXIT.
       *
